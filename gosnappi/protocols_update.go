@@ -17,6 +17,7 @@ type protocolsUpdate struct {
 	marshaller   marshalProtocolsUpdate
 	unMarshaller unMarshalProtocolsUpdate
 	isisHolder   UpdateProtocolConfigIsis
+	ospfv2Holder UpdateProtocolConfigOspfv2
 }
 
 func NewProtocolsUpdate() ProtocolsUpdate {
@@ -245,6 +246,7 @@ func (obj *protocolsUpdate) Clone() (ProtocolsUpdate, error) {
 
 func (obj *protocolsUpdate) setNil() {
 	obj.isisHolder = nil
+	obj.ospfv2Holder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -293,6 +295,14 @@ type ProtocolsUpdate interface {
 	SetIsis(value UpdateProtocolConfigIsis) ProtocolsUpdate
 	// HasIsis checks if Isis has been set in ProtocolsUpdate
 	HasIsis() bool
+	// Ospfv2 returns UpdateProtocolConfigOspfv2, set in ProtocolsUpdate.
+	// UpdateProtocolConfigOspfv2 is a container for OSPFv2 properties to be updated. Presence of this object indicates that one or more OSPFv2 properties require updating.
+	Ospfv2() UpdateProtocolConfigOspfv2
+	// SetOspfv2 assigns UpdateProtocolConfigOspfv2 provided by user to ProtocolsUpdate.
+	// UpdateProtocolConfigOspfv2 is a container for OSPFv2 properties to be updated. Presence of this object indicates that one or more OSPFv2 properties require updating.
+	SetOspfv2(value UpdateProtocolConfigOspfv2) ProtocolsUpdate
+	// HasOspfv2 checks if Ospfv2 has been set in ProtocolsUpdate
+	HasOspfv2() bool
 	setNil()
 }
 
@@ -324,6 +334,34 @@ func (obj *protocolsUpdate) SetIsis(value UpdateProtocolConfigIsis) ProtocolsUpd
 	return obj
 }
 
+// OSPFv2 protocol attribute updates to apply.
+// Ospfv2 returns a UpdateProtocolConfigOspfv2
+func (obj *protocolsUpdate) Ospfv2() UpdateProtocolConfigOspfv2 {
+	if obj.obj.Ospfv2 == nil {
+		obj.obj.Ospfv2 = NewUpdateProtocolConfigOspfv2().msg()
+	}
+	if obj.ospfv2Holder == nil {
+		obj.ospfv2Holder = &updateProtocolConfigOspfv2{obj: obj.obj.Ospfv2}
+	}
+	return obj.ospfv2Holder
+}
+
+// OSPFv2 protocol attribute updates to apply.
+// Ospfv2 returns a UpdateProtocolConfigOspfv2
+func (obj *protocolsUpdate) HasOspfv2() bool {
+	return obj.obj.Ospfv2 != nil
+}
+
+// OSPFv2 protocol attribute updates to apply.
+// SetOspfv2 sets the UpdateProtocolConfigOspfv2 value in the ProtocolsUpdate object
+func (obj *protocolsUpdate) SetOspfv2(value UpdateProtocolConfigOspfv2) ProtocolsUpdate {
+
+	obj.ospfv2Holder = nil
+	obj.obj.Ospfv2 = value.msg()
+
+	return obj
+}
+
 func (obj *protocolsUpdate) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -332,6 +370,11 @@ func (obj *protocolsUpdate) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Isis != nil {
 
 		obj.Isis().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Ospfv2 != nil {
+
+		obj.Ospfv2().validateObj(vObj, set_default)
 	}
 
 }

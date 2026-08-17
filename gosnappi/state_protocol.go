@@ -333,10 +333,10 @@ type StateProtocol interface {
 	// HasIsis checks if Isis has been set in StateProtocol
 	HasIsis() bool
 	// Ospfv2 returns StateProtocolOspfv2, set in StateProtocol.
-	// StateProtocolOspfv2 is sets state of configured OSPFv2 routers.
+	// StateProtocolOspfv2 is sets state of configured OSPFv2 routers and Links.
 	Ospfv2() StateProtocolOspfv2
 	// SetOspfv2 assigns StateProtocolOspfv2 provided by user to StateProtocol.
-	// StateProtocolOspfv2 is sets state of configured OSPFv2 routers.
+	// StateProtocolOspfv2 is sets state of configured OSPFv2 routers and Links.
 	SetOspfv2(value StateProtocolOspfv2) StateProtocol
 	// HasOspfv2 checks if Ospfv2 has been set in StateProtocol
 	HasOspfv2() bool

@@ -3426,10 +3426,6 @@ message IsisSRv6AdjSid {
   // x-constraint:
   // - /components/schemas/IsisSRv6.Locator/properties/locator_name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/IsisSRv6.Locator/properties/locator_name
-  // 
   optional string custom_locator_reference = 11;
 
   // The Function part of this adjacency SID expressed as a hex string, occupying the
@@ -9612,7 +9608,11 @@ message Ospfv2InterfaceAdvanced {
   // default = 40
   optional uint32 dead_interval = 2;
 
-  // Routing metric associated with the interface..
+  // Routing metric (interface output cost) associated with the interface.
+  // It is advertised as the 16-bit TOS 0 metric of the corresponding link in the
+  // Router-LSA (RFC 2328 Appendix A.4.2); the interface output cost has a valid
+  // range of 1 to 65535 (RFC 2328 Section C.3). This applies equally to emulated
+  // and simulated OSPFv2 interfaces.
   // default = 10
   optional uint32 routing_metric = 3;
 
@@ -15929,6 +15929,9 @@ message ProtocolsUpdate {
 
   // IS-IS protocol attribute updates to apply.
   UpdateProtocolConfigIsis isis = 1;
+
+  // OSPFv2 protocol attribute updates to apply.
+  UpdateProtocolConfigOspfv2 ospfv2 = 2;
 }
 
 // A container for IS-IS properties to be updated. Presence of this object indicates
@@ -16007,6 +16010,91 @@ message UpdateProtocolConfigIsisInterfaceAttribute {
   // on-the-fly metric update may not be supported. In that case the implementation
   // should return a warning, disable the session, re-enable it with the updated
   // metric, and reflect the new value in the LSP once the session comes back up.
+  // default = 10
+  optional uint32 metric = 2;
+}
+
+// A container for OSPFv2 properties to be updated. Presence of this object indicates
+// that one or more OSPFv2 properties require updating.
+message UpdateProtocolConfigOspfv2 {
+
+  // List of OSPFv2 interface update groups. One update group targets one or more OSPFv2
+  // interfaces.
+  // Use multiple update groups to handle asymmetric changes across different subsets
+  // of interfaces.
+  // 
+  // All interfaces listed in names in each update group receive every attribute update
+  // specified in the attributes list.
+  // 
+  // If the session is up but true on-the-fly update is not supported for an attribute
+  // (e.g. metric change on an emulated interface),
+  // a warning is returned indicating that the session will be disabled and re-enabled,
+  // and the updated attribute will be reflected
+  // once the session comes back up.
+  // 
+  // An error should be returned if any provided name is not found in the current configuration's
+  // list of OSPFv2 interface names.
+  repeated UpdateProtocolConfigOspfv2InterfaceUpdateGroup interfaces = 1;
+}
+
+// An update group targeting one or more OSPFv2 interfaces. All interfaces listed in
+// names receive every attribute update specified in the attributes list. Use multiple
+// update groups to apply different updates to different subsets of interfaces (asymmetric
+// updates).
+// If the session is up but true on-the-fly update is not supported for an attribute
+// (e.g. metric change on an emulated interface): a warning is returned indicating that
+// the session will be disabled and re-enabled,
+// and the updated attribute will be reflected once the session comes back up. An error
+// should be returned if any provided name is not found in the current configuration's
+// list of OSPFv2 interface names.
+message UpdateProtocolConfigOspfv2InterfaceUpdateGroup {
+
+  // The names of the OSPFv2 interfaces to which all attribute updates in this group will
+  // be applied.
+  // 
+  // x-constraint:
+  // - /components/schemas/Ospfv2.Interface/properties/name
+  // 
+  repeated string names = 1;
+
+  // The list of interface attribute updates to apply. Each entry selects one attribute
+  // via the choice discriminator. Multiple attributes can be updated in a single group
+  // without repeating the names list.
+  repeated UpdateProtocolConfigOspfv2InterfaceAttribute attributes = 2;
+}
+
+// A single OSPFv2 interface attribute update. The choice field identifies which attribute
+// is being changed.
+message UpdateProtocolConfigOspfv2InterfaceAttribute {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      metric = 1;
+    }
+  }
+  // The interface attribute to be updated.
+  optional Choice.Enum choice = 1;
+
+  // The routing metric (interface output cost) to be updated on the OSPFv2
+  // interface. It is advertised as the 16-bit TOS 0 metric of the corresponding
+  // link in the Router-LSA (RFC 2328 Appendix A.4.2); the interface output cost
+  // has a valid range of 1 to 65535 (RFC 2328 Section C.3). This applies equally
+  // to emulated and simulated OSPFv2 interfaces, since a simulated router
+  // originates its own Router-LSA carrying the same 16-bit link metric.
+  // 
+  // On a simulated OSPFv2 interface (no real adjacency with the DUT; the interface
+  // belongs to a simulated router inside a simulated topology), updating the metric
+  // is a true on-the-fly operation: the OSPFv2 session remains in the Up state and
+  // the simulated router re-originates its Router-LSA (with an incremented LS
+  // Sequence Number) carrying the new metric, which neighbors receive without any
+  // session interruption.
+  // 
+  // On an emulated OSPFv2 interface (real adjacency with the DUT), a true
+  // on-the-fly metric update may not be supported. In that case the implementation
+  // should return a warning, disable the session, re-enable it with the updated
+  // metric, and reflect the new value in the Router-LSA once the session comes
+  // back up.
   // default = 10
   optional uint32 metric = 2;
 }
@@ -16473,13 +16561,14 @@ message StateProtocolIsisRouters {
   optional State.Enum state = 2;
 }
 
-// Sets state of configured OSPFv2 routers.
+// Sets state of configured OSPFv2 routers and Links.
 message StateProtocolOspfv2 {
 
   message Choice {
     enum Enum {
       unspecified = 0;
       routers = 1;
+      simulated_links = 2;
     }
   }
   // Description missing in models
@@ -16488,6 +16577,9 @@ message StateProtocolOspfv2 {
 
   // Description missing in models
   StateProtocolOspfv2Routers routers = 2;
+
+  // Description missing in models
+  StateProtocolOspfv2SimLinks simulated_links = 3;
 }
 
 // Sets state of configured OSPFv2 routers.
@@ -16513,6 +16605,60 @@ message StateProtocolOspfv2Routers {
   // configured. If the desired state is 'down', would bring down OSPFv2 session(s) with
   // respective peer(s).
   // required = true
+  optional State.Enum state = 2;
+}
+
+// Sets the state of one or more configured OSPFv2 Simulated Links (Interfaces).
+message StateProtocolOspfv2SimLinks {
+
+  // The names of OSPFv2 Simulated Links to control. If no names are specified then all
+  // OSPFv2 Simulated Links in the configuration will be affected.
+  // 
+  // x-constraint:
+  // - /components/schemas/Ospfv2.Interface/properties/name
+  // 
+  repeated string names = 1;
+
+  message State {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // Sets the Control State of one or more Simulated Links to UP or DOWN.
+  // The state change is applied bidirectionally - a link between OSPFv2 Routers A and
+  // B is affected
+  // in both directions simultaneously.
+  // Setting Control State to DOWN transitions the selected Simulated Links to a disconnected
+  // state.
+  // Both the Simulated/Emulated Router hosting the link and the neighboring router at
+  // the far end
+  // will remove the link from their Router-LSA (Type 1 LSA, RFC 2328 Section 12.4.1)
+  // in their next
+  // LSA re-origination (with an incremented LS Sequence Number), and flood the updated
+  // Router-LSA so
+  // all routers in the area recompute the SPF tree.
+  // Setting Control State to UP reconnects the selected Simulated Links.
+  // Both routers will re-advertise the adjacency as a link in their next Router-LSA update.
+  // 
+  // Example:
+  // Suppose Emulated Router ER is connected to Simulated Routers:
+  // ST1, ST2 and ST3 in a ring topology.
+  // 
+  // ER <--> ST1 <--> ST2(A) <--> ST3(B) <--> ER
+  // 
+  // Before the AB Link Down operation between ST2 & ST3 the neighbors of ST2 & ST3 will
+  // be seen
+  // as link entries in their Router-LSA (Type 1 LSA) information in Get State:
+  // Router-LSA of ST2: links to ST1 and ST3
+  // Router-LSA of ST3: links to ST2 and ER
+  // 
+  // After the AB Link Down operation between ST2 & ST3 the neighbors of ST2 & ST3 will
+  // be seen
+  // as link entries in their Router-LSA (Type 1 LSA) information in Get State:
+  // Router-LSA of ST2: links to ST1
+  // Router-LSA of ST3: links to ER
   optional State.Enum state = 2;
 }
 

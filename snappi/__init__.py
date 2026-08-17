@@ -1532,6 +1532,11 @@ from .snappi import UpdateProtocolConfigIsisInterfaceUpdateGroup
 from .snappi import UpdateProtocolConfigIsisInterfaceAttribute
 from .snappi import UpdateProtocolConfigIsisInterfaceAttributeIter
 from .snappi import UpdateProtocolConfigIsisInterfaceUpdateGroupIter
+from .snappi import UpdateProtocolConfigOspfv2
+from .snappi import UpdateProtocolConfigOspfv2InterfaceUpdateGroup
+from .snappi import UpdateProtocolConfigOspfv2InterfaceAttribute
+from .snappi import UpdateProtocolConfigOspfv2InterfaceAttributeIter
+from .snappi import UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter
 from .snappi import ConfigAppend
 from .snappi import ConfigAppendResources
 from .snappi import ConfigAppendResourcesIter
@@ -1555,6 +1560,7 @@ from .snappi import StateProtocolIsisRouters
 from .snappi import StateProtocolIsisSimLinks
 from .snappi import StateProtocolOspfv2
 from .snappi import StateProtocolOspfv2Routers
+from .snappi import StateProtocolOspfv2SimLinks
 from .snappi import StateProtocolOspfv3
 from .snappi import StateProtocolOspfv3Routers
 from .snappi import StateProtocolRocev2

@@ -15264,7 +15264,7 @@ class IsisSRv6AdjSid(OpenApiObject):
         # type: () -> str
         """custom_locator_reference getter
 
-        Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".. x-constraint:. /components/schemas/IsisSRv6.Locator/properties/locator_name. . x-constraint:. /components/schemas/IsisSRv6.Locator/properties/locator_name.
+        Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".. x-constraint:. /components/schemas/IsisSRv6.Locator/properties/locator_name.
 
         Returns: str
         """
@@ -15274,7 +15274,7 @@ class IsisSRv6AdjSid(OpenApiObject):
     def custom_locator_reference(self, value):
         """custom_locator_reference setter
 
-        Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".. x-constraint:. /components/schemas/IsisSRv6.Locator/properties/locator_name. . x-constraint:. /components/schemas/IsisSRv6.Locator/properties/locator_name.
+        Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".. x-constraint:. /components/schemas/IsisSRv6.Locator/properties/locator_name.
 
         value: str
         """
@@ -46787,7 +46787,7 @@ class Ospfv2InterfaceAdvanced(OpenApiObject):
         # type: () -> int
         """routing_metric getter
 
-        Routing metric associated with the interface..
+        Routing metric (interface output cost) associated with the interface.. It is advertised as the 16-bit TOS metric of the corresponding link in the. Router-LSA (RFC 2328 Appendix A.4.2); the interface output cost has valid. range of to 65535 (RFC 2328 Section C.3). This applies equally to emulated. and simulated OSPFv2 interfaces.
 
         Returns: int
         """
@@ -46797,7 +46797,7 @@ class Ospfv2InterfaceAdvanced(OpenApiObject):
     def routing_metric(self, value):
         """routing_metric setter
 
-        Routing metric associated with the interface..
+        Routing metric (interface output cost) associated with the interface.. It is advertised as the 16-bit TOS metric of the corresponding link in the. Router-LSA (RFC 2328 Appendix A.4.2); the interface output cost has valid. range of to 65535 (RFC 2328 Section C.3). This applies equally to emulated. and simulated OSPFv2 interfaces.
 
         value: int
         """
@@ -167659,6 +167659,7 @@ class ProtocolsUpdate(OpenApiObject):
 
     _TYPES = {
         "isis": {"type": "UpdateProtocolConfigIsis"},
+        "ospfv2": {"type": "UpdateProtocolConfigOspfv2"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -167681,6 +167682,17 @@ class ProtocolsUpdate(OpenApiObject):
         Returns: UpdateProtocolConfigIsis
         """
         return self._get_property("isis", UpdateProtocolConfigIsis)
+
+    @property
+    def ospfv2(self):
+        # type: () -> UpdateProtocolConfigOspfv2
+        """ospfv2 getter
+
+        A container for OSPFv2 properties to be updated. Presence of this object indicates that one or more OSPFv2 properties require updating.A container for OSPFv2 properties to be updated. Presence of this object indicates that one or more OSPFv2 properties require updating.A container for OSPFv2 properties to be updated. Presence of this object indicates that one or more OSPFv2 properties require updating.A container for OSPFv2 properties to be updated. Presence of this object indicates that one or more OSPFv2 properties require updating.OSPFv2 protocol attribute updates to apply.
+
+        Returns: UpdateProtocolConfigOspfv2
+        """
+        return self._get_property("ospfv2", UpdateProtocolConfigOspfv2)
 
 
 class UpdateProtocolConfigIsis(OpenApiObject):
@@ -167986,6 +167998,315 @@ class UpdateProtocolConfigIsisInterfaceUpdateGroupIter(OpenApiIter):
         Returns: UpdateProtocolConfigIsisInterfaceUpdateGroup
         """
         item = UpdateProtocolConfigIsisInterfaceUpdateGroup(
+            parent=self._parent, names=names
+        )
+        self._add(item)
+        return item
+
+
+class UpdateProtocolConfigOspfv2(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "interfaces": {"type": "UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(UpdateProtocolConfigOspfv2, self).__init__()
+        self._parent = parent
+
+    @property
+    def interfaces(self):
+        # type: () -> UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter
+        """interfaces getter
+
+        List of OSPFv2 interface update groups. One update group targets one or more OSPFv2 interfaces.. Use multiple update groups to handle asymmetric changes across different subsets of interfaces.. All interfaces listed in names in each update group receive every attribute update specified in the attributes list.. If the session is up but true on-the-fly update is not supported for an attribute (e.g. metric change on an emulated interface),. warning is returned indicating that the session will be disabled and re-enabled, and the updated attribute will be reflected. once the session comes back up.. An error should be returned if any provided name is not found in the current configuration's list of OSPFv2 interface names.
+
+        Returns: UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter
+        """
+        return self._get_property(
+            "interfaces",
+            UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class UpdateProtocolConfigOspfv2InterfaceUpdateGroup(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "names": {
+            "type": list,
+            "itemtype": str,
+        },
+        "attributes": {"type": "UpdateProtocolConfigOspfv2InterfaceAttributeIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, names=None):
+        super(UpdateProtocolConfigOspfv2InterfaceUpdateGroup, self).__init__()
+        self._parent = parent
+        self._set_property("names", names)
+
+    def set(self, names=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def names(self):
+        # type: () -> List[str]
+        """names getter
+
+        The names of the OSPFv2 interfaces to which all attribute updates in this group will be applied.. x-constraint:. /components/schemas/Ospfv2.Interface/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("names")
+
+    @names.setter
+    def names(self, value):
+        """names setter
+
+        The names of the OSPFv2 interfaces to which all attribute updates in this group will be applied.. x-constraint:. /components/schemas/Ospfv2.Interface/properties/name.
+
+        value: List[str]
+        """
+        self._set_property("names", value)
+
+    @property
+    def attributes(self):
+        # type: () -> UpdateProtocolConfigOspfv2InterfaceAttributeIter
+        """attributes getter
+
+        The list of interface attribute updates to apply. Each entry selects one attribute via the choice discriminator. Multiple attributes can be updated in single group without repeating the names list.
+
+        Returns: UpdateProtocolConfigOspfv2InterfaceAttributeIter
+        """
+        return self._get_property(
+            "attributes",
+            UpdateProtocolConfigOspfv2InterfaceAttributeIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class UpdateProtocolConfigOspfv2InterfaceAttribute(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "metric",
+            ],
+        },
+        "metric": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "metric": 10,
+    }  # type: Dict[str, Union(type)]
+
+    METRIC = "metric"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, metric=10):
+        super(UpdateProtocolConfigOspfv2InterfaceAttribute, self).__init__()
+        self._parent = parent
+        self._set_property("metric", metric)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, metric=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["metric"]]
+        """choice getter
+
+        The interface attribute to be updated.
+
+        Returns: Union[Literal["metric"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The interface attribute to be updated.
+
+        value: Union[Literal["metric"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def metric(self):
+        # type: () -> int
+        """metric getter
+
+        The routing metric (interface output cost) to be updated on the OSPFv2. interface. It is advertised as the 16-bit TOS metric of the corresponding. link in the Router-LSA (RFC 2328 Appendix A.4.2); the interface output cost. has valid range of to 65535 (RFC 2328 Section C.3). This applies equally. to emulated and simulated OSPFv2 interfaces, since simulated router. originates its own Router-LSA carrying the same 16-bit link metric.. On simulated OSPFv2 interface (no real adjacency with the DUT; the interface. belongs to simulated router inside simulated topology), updating the metric. is true on-the-fly operation: the OSPFv2 session remains in the Up state and. the simulated router re-originates its Router-LSA (with an incremented LS. Sequence Number) carrying the new metric, which neighbors receive without any. session interruption.. On an emulated OSPFv2 interface (real adjacency with the DUT), true. on-the-fly metric update may not be supported. In that case the implementation. should return warning, disable the session, re-enable it with the updated. metric, and reflect the new value in the Router-LSA once the session comes. back up.
+
+        Returns: int
+        """
+        return self._get_property("metric")
+
+    @metric.setter
+    def metric(self, value):
+        """metric setter
+
+        The routing metric (interface output cost) to be updated on the OSPFv2. interface. It is advertised as the 16-bit TOS metric of the corresponding. link in the Router-LSA (RFC 2328 Appendix A.4.2); the interface output cost. has valid range of to 65535 (RFC 2328 Section C.3). This applies equally. to emulated and simulated OSPFv2 interfaces, since simulated router. originates its own Router-LSA carrying the same 16-bit link metric.. On simulated OSPFv2 interface (no real adjacency with the DUT; the interface. belongs to simulated router inside simulated topology), updating the metric. is true on-the-fly operation: the OSPFv2 session remains in the Up state and. the simulated router re-originates its Router-LSA (with an incremented LS. Sequence Number) carrying the new metric, which neighbors receive without any. session interruption.. On an emulated OSPFv2 interface (real adjacency with the DUT), true. on-the-fly metric update may not be supported. In that case the implementation. should return warning, disable the session, re-enable it with the updated. metric, and reflect the new value in the Router-LSA once the session comes. back up.
+
+        value: int
+        """
+        self._set_property("metric", value, "metric")
+
+
+class UpdateProtocolConfigOspfv2InterfaceAttributeIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(UpdateProtocolConfigOspfv2InterfaceAttributeIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[UpdateProtocolConfigOspfv2InterfaceAttribute]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> UpdateProtocolConfigOspfv2InterfaceAttributeIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> UpdateProtocolConfigOspfv2InterfaceAttribute
+        return self._next()
+
+    def next(self):
+        # type: () -> UpdateProtocolConfigOspfv2InterfaceAttribute
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, UpdateProtocolConfigOspfv2InterfaceAttribute):
+            raise Exception(
+                "Item is not an instance of UpdateProtocolConfigOspfv2InterfaceAttribute"
+            )
+
+    def attribute(self, metric=10):
+        # type: (int) -> UpdateProtocolConfigOspfv2InterfaceAttributeIter
+        """Factory method that creates an instance of the UpdateProtocolConfigOspfv2InterfaceAttribute class
+
+        A single OSPFv2 interface attribute update. The choice field identifies which attribute is being changed.
+
+        Returns: UpdateProtocolConfigOspfv2InterfaceAttributeIter
+        """
+        item = UpdateProtocolConfigOspfv2InterfaceAttribute(
+            parent=self._parent, choice=self._choice, metric=metric
+        )
+        self._add(item)
+        return self
+
+    def add(self, metric=10):
+        # type: (int) -> UpdateProtocolConfigOspfv2InterfaceAttribute
+        """Add method that creates and returns an instance of the UpdateProtocolConfigOspfv2InterfaceAttribute class
+
+        A single OSPFv2 interface attribute update. The choice field identifies which attribute is being changed.
+
+        Returns: UpdateProtocolConfigOspfv2InterfaceAttribute
+        """
+        item = UpdateProtocolConfigOspfv2InterfaceAttribute(
+            parent=self._parent, choice=self._choice, metric=metric
+        )
+        self._add(item)
+        return item
+
+
+class UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[UpdateProtocolConfigOspfv2InterfaceUpdateGroup]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> UpdateProtocolConfigOspfv2InterfaceUpdateGroup
+        return self._next()
+
+    def next(self):
+        # type: () -> UpdateProtocolConfigOspfv2InterfaceUpdateGroup
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, UpdateProtocolConfigOspfv2InterfaceUpdateGroup):
+            raise Exception(
+                "Item is not an instance of UpdateProtocolConfigOspfv2InterfaceUpdateGroup"
+            )
+
+    def updategroup(self, names=None):
+        # type: (List[str]) -> UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter
+        """Factory method that creates an instance of the UpdateProtocolConfigOspfv2InterfaceUpdateGroup class
+
+        An update group targeting one or more OSPFv2 interfaces. All interfaces listed in names receive every attribute update specified in the attributes list. Use multiple update groups to apply different updates to different subsets of interfaces (asymmetric updates).. If the session is up but true on-the-fly update is not supported for an attribute (e.g. metric change on an emulated interface): warning is returned indicating that the session will be disabled and re-enabled,. and the updated attribute will be reflected once the session comes back up. An error should be returned if any provided name is not found in the current configuration's list of OSPFv2 interface names.
+
+        Returns: UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter
+        """
+        item = UpdateProtocolConfigOspfv2InterfaceUpdateGroup(
+            parent=self._parent, names=names
+        )
+        self._add(item)
+        return self
+
+    def add(self, names=None):
+        # type: (List[str]) -> UpdateProtocolConfigOspfv2InterfaceUpdateGroup
+        """Add method that creates and returns an instance of the UpdateProtocolConfigOspfv2InterfaceUpdateGroup class
+
+        An update group targeting one or more OSPFv2 interfaces. All interfaces listed in names receive every attribute update specified in the attributes list. Use multiple update groups to apply different updates to different subsets of interfaces (asymmetric updates).. If the session is up but true on-the-fly update is not supported for an attribute (e.g. metric change on an emulated interface): warning is returned indicating that the session will be disabled and re-enabled,. and the updated attribute will be reflected once the session comes back up. An error should be returned if any provided name is not found in the current configuration's list of OSPFv2 interface names.
+
+        Returns: UpdateProtocolConfigOspfv2InterfaceUpdateGroup
+        """
+        item = UpdateProtocolConfigOspfv2InterfaceUpdateGroup(
             parent=self._parent, names=names
         )
         self._add(item)
@@ -168791,7 +169112,7 @@ class StateProtocol(OpenApiObject):
         # type: () -> StateProtocolOspfv2
         """Factory property that returns an instance of the StateProtocolOspfv2 class
 
-        Sets state of configured OSPFv2 routers.
+        Sets state of configured OSPFv2 routers and Links.
 
         Returns: StateProtocolOspfv2
         """
@@ -169633,9 +169954,11 @@ class StateProtocolOspfv2(OpenApiObject):
             "type": str,
             "enum": [
                 "routers",
+                "simulated_links",
             ],
         },
         "routers": {"type": "StateProtocolOspfv2Routers"},
+        "simulated_links": {"type": "StateProtocolOspfv2SimLinks"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("choice",)  # type: tuple(str)
@@ -169643,6 +169966,7 @@ class StateProtocolOspfv2(OpenApiObject):
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
     ROUTERS = "routers"  # type: str
+    SIMULATED_LINKS = "simulated_links"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -169672,13 +169996,26 @@ class StateProtocolOspfv2(OpenApiObject):
         )
 
     @property
+    def simulated_links(self):
+        # type: () -> StateProtocolOspfv2SimLinks
+        """Factory property that returns an instance of the StateProtocolOspfv2SimLinks class
+
+        Sets the state of one or more configured OSPFv2 Simulated Links (Interfaces).
+
+        Returns: StateProtocolOspfv2SimLinks
+        """
+        return self._get_property(
+            "simulated_links", StateProtocolOspfv2SimLinks, self, "simulated_links"
+        )
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["routers"]]
+        # type: () -> Union[Literal["routers"], Literal["simulated_links"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["routers"]]
+        Returns: Union[Literal["routers"], Literal["simulated_links"]]
         """
         return self._get_property("choice")
 
@@ -169688,7 +170025,7 @@ class StateProtocolOspfv2(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["routers"]]
+        value: Union[Literal["routers"], Literal["simulated_links"]]
         """
         if value is None:
             raise TypeError("Cannot set required property choice as None")
@@ -169774,6 +170111,86 @@ class StateProtocolOspfv2Routers(OpenApiObject):
         """
         if value is None:
             raise TypeError("Cannot set required property state as None")
+        self._set_property("state", value)
+
+
+class StateProtocolOspfv2SimLinks(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "names": {
+            "type": list,
+            "itemtype": str,
+        },
+        "state": {
+            "type": str,
+            "enum": [
+                "down",
+                "up",
+            ],
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    DOWN = "down"  # type: str
+    UP = "up"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, names=None, state=None):
+        super(StateProtocolOspfv2SimLinks, self).__init__()
+        self._parent = parent
+        self._set_property("names", names)
+        self._set_property("state", state)
+
+    def set(self, names=None, state=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def names(self):
+        # type: () -> List[str]
+        """names getter
+
+        The names of OSPFv2 Simulated Links to control. If no names are specified then all OSPFv2 Simulated Links in the configuration will be affected.. x-constraint:. /components/schemas/Ospfv2.Interface/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("names")
+
+    @names.setter
+    def names(self, value):
+        """names setter
+
+        The names of OSPFv2 Simulated Links to control. If no names are specified then all OSPFv2 Simulated Links in the configuration will be affected.. x-constraint:. /components/schemas/Ospfv2.Interface/properties/name.
+
+        value: List[str]
+        """
+        self._set_property("names", value)
+
+    @property
+    def state(self):
+        # type: () -> Union[Literal["down"], Literal["up"]]
+        """state getter
+
+        Sets the Control State of one or more Simulated Links to UP or DOWN.. The state change is applied bidirectionally a link between OSPFv2 Routers and is affected. in both directions simultaneously.. Setting Control State to DOWN transitions the selected Simulated Links to disconnected state.. Both the Simulated/Emulated Router hosting the link and the neighboring router at the far end. will remove the link from their Router-LSA (Type LSA, RFC 2328 Section 12.4.1) in their next. LSA re-origination (with an incremented LS Sequence Number), and flood the updated Router-LSA so. all routers in the area recompute the SPF tree.. Setting Control State to UP reconnects the selected Simulated Links.. Both routers will re-advertise the adjacency as link in their next Router-LSA update.. Example:. Suppose Emulated Router ER is connected to Simulated Routers:. ST1, ST2 and ST3 in ring topology.. ER <--> ST1 <--> ST2(A) <--> ST3(B) <--> ER. Before the AB Link Down operation between ST2 ST3 the neighbors of ST2 ST3 will be seen. as link entries in their Router-LSA (Type LSA) information in Get State:. Router-LSA of ST2: links to ST1 and ST3. Router-LSA of ST3: links to ST2 and ER. After the AB Link Down operation between ST2 ST3 the neighbors of ST2 ST3 will be seen. as link entries in their Router-LSA (Type LSA) information in Get State:. Router-LSA of ST2: links to ST1. Router-LSA of ST3: links to ER
+
+        Returns: Union[Literal["down"], Literal["up"]]
+        """
+        return self._get_property("state")
+
+    @state.setter
+    def state(self, value):
+        """state setter
+
+        Sets the Control State of one or more Simulated Links to UP or DOWN.. The state change is applied bidirectionally a link between OSPFv2 Routers and is affected. in both directions simultaneously.. Setting Control State to DOWN transitions the selected Simulated Links to disconnected state.. Both the Simulated/Emulated Router hosting the link and the neighboring router at the far end. will remove the link from their Router-LSA (Type LSA, RFC 2328 Section 12.4.1) in their next. LSA re-origination (with an incremented LS Sequence Number), and flood the updated Router-LSA so. all routers in the area recompute the SPF tree.. Setting Control State to UP reconnects the selected Simulated Links.. Both routers will re-advertise the adjacency as link in their next Router-LSA update.. Example:. Suppose Emulated Router ER is connected to Simulated Routers:. ST1, ST2 and ST3 in ring topology.. ER <--> ST1 <--> ST2(A) <--> ST3(B) <--> ER. Before the AB Link Down operation between ST2 ST3 the neighbors of ST2 ST3 will be seen. as link entries in their Router-LSA (Type LSA) information in Get State:. Router-LSA of ST2: links to ST1 and ST3. Router-LSA of ST3: links to ST2 and ER. After the AB Link Down operation between ST2 ST3 the neighbors of ST2 ST3 will be seen. as link entries in their Router-LSA (Type LSA) information in Get State:. Router-LSA of ST2: links to ST1. Router-LSA of ST3: links to ER
+
+        value: Union[Literal["down"], Literal["up"]]
+        """
         self._set_property("state", value)
 
 

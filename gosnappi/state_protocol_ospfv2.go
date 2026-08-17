@@ -13,10 +13,11 @@ import (
 // ***** StateProtocolOspfv2 *****
 type stateProtocolOspfv2 struct {
 	validation
-	obj           *otg.StateProtocolOspfv2
-	marshaller    marshalStateProtocolOspfv2
-	unMarshaller  unMarshalStateProtocolOspfv2
-	routersHolder StateProtocolOspfv2Routers
+	obj                  *otg.StateProtocolOspfv2
+	marshaller           marshalStateProtocolOspfv2
+	unMarshaller         unMarshalStateProtocolOspfv2
+	routersHolder        StateProtocolOspfv2Routers
+	simulatedLinksHolder StateProtocolOspfv2SimLinks
 }
 
 func NewStateProtocolOspfv2() StateProtocolOspfv2 {
@@ -245,12 +246,13 @@ func (obj *stateProtocolOspfv2) Clone() (StateProtocolOspfv2, error) {
 
 func (obj *stateProtocolOspfv2) setNil() {
 	obj.routersHolder = nil
+	obj.simulatedLinksHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// StateProtocolOspfv2 is sets state of configured OSPFv2 routers.
+// StateProtocolOspfv2 is sets state of configured OSPFv2 routers and Links.
 type StateProtocolOspfv2 interface {
 	Validation
 	// msg marshals StateProtocolOspfv2 to protobuf object *otg.StateProtocolOspfv2
@@ -284,6 +286,14 @@ type StateProtocolOspfv2 interface {
 	SetRouters(value StateProtocolOspfv2Routers) StateProtocolOspfv2
 	// HasRouters checks if Routers has been set in StateProtocolOspfv2
 	HasRouters() bool
+	// SimulatedLinks returns StateProtocolOspfv2SimLinks, set in StateProtocolOspfv2.
+	// StateProtocolOspfv2SimLinks is sets the state of one or more configured OSPFv2 Simulated Links (Interfaces).
+	SimulatedLinks() StateProtocolOspfv2SimLinks
+	// SetSimulatedLinks assigns StateProtocolOspfv2SimLinks provided by user to StateProtocolOspfv2.
+	// StateProtocolOspfv2SimLinks is sets the state of one or more configured OSPFv2 Simulated Links (Interfaces).
+	SetSimulatedLinks(value StateProtocolOspfv2SimLinks) StateProtocolOspfv2
+	// HasSimulatedLinks checks if SimulatedLinks has been set in StateProtocolOspfv2
+	HasSimulatedLinks() bool
 	setNil()
 }
 
@@ -291,9 +301,11 @@ type StateProtocolOspfv2ChoiceEnum string
 
 // Enum of Choice on StateProtocolOspfv2
 var StateProtocolOspfv2Choice = struct {
-	ROUTERS StateProtocolOspfv2ChoiceEnum
+	ROUTERS         StateProtocolOspfv2ChoiceEnum
+	SIMULATED_LINKS StateProtocolOspfv2ChoiceEnum
 }{
-	ROUTERS: StateProtocolOspfv2ChoiceEnum("routers"),
+	ROUTERS:         StateProtocolOspfv2ChoiceEnum("routers"),
+	SIMULATED_LINKS: StateProtocolOspfv2ChoiceEnum("simulated_links"),
 }
 
 func (obj *stateProtocolOspfv2) Choice() StateProtocolOspfv2ChoiceEnum {
@@ -309,11 +321,17 @@ func (obj *stateProtocolOspfv2) setChoice(value StateProtocolOspfv2ChoiceEnum) S
 	}
 	enumValue := otg.StateProtocolOspfv2_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.SimulatedLinks = nil
+	obj.simulatedLinksHolder = nil
 	obj.obj.Routers = nil
 	obj.routersHolder = nil
 
 	if value == StateProtocolOspfv2Choice.ROUTERS {
 		obj.obj.Routers = NewStateProtocolOspfv2Routers().msg()
+	}
+
+	if value == StateProtocolOspfv2Choice.SIMULATED_LINKS {
+		obj.obj.SimulatedLinks = NewStateProtocolOspfv2SimLinks().msg()
 	}
 
 	return obj
@@ -347,6 +365,34 @@ func (obj *stateProtocolOspfv2) SetRouters(value StateProtocolOspfv2Routers) Sta
 	return obj
 }
 
+// description is TBD
+// SimulatedLinks returns a StateProtocolOspfv2SimLinks
+func (obj *stateProtocolOspfv2) SimulatedLinks() StateProtocolOspfv2SimLinks {
+	if obj.obj.SimulatedLinks == nil {
+		obj.setChoice(StateProtocolOspfv2Choice.SIMULATED_LINKS)
+	}
+	if obj.simulatedLinksHolder == nil {
+		obj.simulatedLinksHolder = &stateProtocolOspfv2SimLinks{obj: obj.obj.SimulatedLinks}
+	}
+	return obj.simulatedLinksHolder
+}
+
+// description is TBD
+// SimulatedLinks returns a StateProtocolOspfv2SimLinks
+func (obj *stateProtocolOspfv2) HasSimulatedLinks() bool {
+	return obj.obj.SimulatedLinks != nil
+}
+
+// description is TBD
+// SetSimulatedLinks sets the StateProtocolOspfv2SimLinks value in the StateProtocolOspfv2 object
+func (obj *stateProtocolOspfv2) SetSimulatedLinks(value StateProtocolOspfv2SimLinks) StateProtocolOspfv2 {
+	obj.setChoice(StateProtocolOspfv2Choice.SIMULATED_LINKS)
+	obj.simulatedLinksHolder = nil
+	obj.obj.SimulatedLinks = value.msg()
+
+	return obj
+}
+
 func (obj *stateProtocolOspfv2) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -362,6 +408,11 @@ func (obj *stateProtocolOspfv2) validateObj(vObj *validation, set_default bool) 
 		obj.Routers().validateObj(vObj, set_default)
 	}
 
+	if obj.obj.SimulatedLinks != nil {
+
+		obj.SimulatedLinks().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *stateProtocolOspfv2) setDefault() {
@@ -371,6 +422,11 @@ func (obj *stateProtocolOspfv2) setDefault() {
 	if obj.obj.Routers != nil {
 		choices_set += 1
 		choice = StateProtocolOspfv2Choice.ROUTERS
+	}
+
+	if obj.obj.SimulatedLinks != nil {
+		choices_set += 1
+		choice = StateProtocolOspfv2Choice.SIMULATED_LINKS
 	}
 	if choices_set == 1 && choice != "" {
 		if obj.obj.Choice != nil {
