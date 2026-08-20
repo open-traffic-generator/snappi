@@ -255,7 +255,7 @@ func (obj *ospfv2OpaqueLsa) setNil() {
 // Ospfv2OpaqueLsa is contents of OSPFv2 Opaque LSA - Type 9/10/11 (RFC 5250).
 // The Link State ID of an Opaque LSA is not a plain IPv4 address; it is split into
 // an Opaque Type (most significant octet) and an Opaque ID (remaining three octets),
-// decoded here as type and id (RFC 5250 Section 3). header.lsa_id carries
+// decoded here as tlv_information and id (RFC 5250 Section 3). header.lsa_id carries
 // the raw, undecoded Link State ID value.
 type Ospfv2OpaqueLsa interface {
 	Validation
@@ -286,18 +286,18 @@ type Ospfv2OpaqueLsa interface {
 	SetHeader(value Ospfv2LsaHeader) Ospfv2OpaqueLsa
 	// HasHeader checks if Header has been set in Ospfv2OpaqueLsa
 	HasHeader() bool
-	// Scope returns Ospfv2OpaqueLsaScopeEnum, set in Ospfv2OpaqueLsa
-	Scope() Ospfv2OpaqueLsaScopeEnum
-	// SetScope assigns Ospfv2OpaqueLsaScopeEnum provided by user to Ospfv2OpaqueLsa
-	SetScope(value Ospfv2OpaqueLsaScopeEnum) Ospfv2OpaqueLsa
-	// HasScope checks if Scope has been set in Ospfv2OpaqueLsa
-	HasScope() bool
 	// Type returns Ospfv2OpaqueLsaTypeEnum, set in Ospfv2OpaqueLsa
 	Type() Ospfv2OpaqueLsaTypeEnum
 	// SetType assigns Ospfv2OpaqueLsaTypeEnum provided by user to Ospfv2OpaqueLsa
 	SetType(value Ospfv2OpaqueLsaTypeEnum) Ospfv2OpaqueLsa
 	// HasType checks if Type has been set in Ospfv2OpaqueLsa
 	HasType() bool
+	// TlvInformation returns Ospfv2OpaqueLsaTlvInformationEnum, set in Ospfv2OpaqueLsa
+	TlvInformation() Ospfv2OpaqueLsaTlvInformationEnum
+	// SetTlvInformation assigns Ospfv2OpaqueLsaTlvInformationEnum provided by user to Ospfv2OpaqueLsa
+	SetTlvInformation(value Ospfv2OpaqueLsaTlvInformationEnum) Ospfv2OpaqueLsa
+	// HasTlvInformation checks if TlvInformation has been set in Ospfv2OpaqueLsa
+	HasTlvInformation() bool
 	// Id returns uint32, set in Ospfv2OpaqueLsa.
 	Id() uint32
 	// SetId assigns uint32 provided by user to Ospfv2OpaqueLsa
@@ -337,81 +337,27 @@ func (obj *ospfv2OpaqueLsa) SetHeader(value Ospfv2LsaHeader) Ospfv2OpaqueLsa {
 	return obj
 }
 
-type Ospfv2OpaqueLsaScopeEnum string
-
-// Enum of Scope on Ospfv2OpaqueLsa
-var Ospfv2OpaqueLsaScope = struct {
-	LOCAL  Ospfv2OpaqueLsaScopeEnum
-	AREA   Ospfv2OpaqueLsaScopeEnum
-	DOMAIN Ospfv2OpaqueLsaScopeEnum
-}{
-	LOCAL:  Ospfv2OpaqueLsaScopeEnum("local"),
-	AREA:   Ospfv2OpaqueLsaScopeEnum("area"),
-	DOMAIN: Ospfv2OpaqueLsaScopeEnum("domain"),
-}
-
-func (obj *ospfv2OpaqueLsa) Scope() Ospfv2OpaqueLsaScopeEnum {
-	return Ospfv2OpaqueLsaScopeEnum(obj.obj.Scope.Enum().String())
-}
-
-// The flooding scope of the Opaque LSA, determined by the LSA's LS Type
-// (RFC 5250 Section 4): local (Type 9, not flooded beyond the local link),
-// area (Type 10, flooded throughout the area) or domain (Type 11, flooded
-// throughout the Autonomous System, excluding stub areas).
-// Scope returns a string
-func (obj *ospfv2OpaqueLsa) HasScope() bool {
-	return obj.obj.Scope != nil
-}
-
-func (obj *ospfv2OpaqueLsa) SetScope(value Ospfv2OpaqueLsaScopeEnum) Ospfv2OpaqueLsa {
-	intValue, ok := otg.Ospfv2OpaqueLsa_Scope_Enum_value[string(value)]
-	if !ok {
-		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
-			"%s is not a valid choice on Ospfv2OpaqueLsaScopeEnum", string(value)))
-		return obj
-	}
-	enumValue := otg.Ospfv2OpaqueLsa_Scope_Enum(intValue)
-	obj.obj.Scope = &enumValue
-
-	return obj
-}
-
 type Ospfv2OpaqueLsaTypeEnum string
 
 // Enum of Type on Ospfv2OpaqueLsa
 var Ospfv2OpaqueLsaType = struct {
-	TRAFFIC_ENGINEERING       Ospfv2OpaqueLsaTypeEnum
-	SYCAMORE_OPTICAL_TOPOLOGY Ospfv2OpaqueLsaTypeEnum
-	GRACE                     Ospfv2OpaqueLsaTypeEnum
-	ROUTER_INFORMATION        Ospfv2OpaqueLsaTypeEnum
-	L1VPN                     Ospfv2OpaqueLsaTypeEnum
-	INTER_AS_TE_V2            Ospfv2OpaqueLsaTypeEnum
-	EXTENDED_PREFIX           Ospfv2OpaqueLsaTypeEnum
-	EXTENDED_LINK             Ospfv2OpaqueLsaTypeEnum
-	TTZ                       Ospfv2OpaqueLsaTypeEnum
-	DYNAMIC_FLOODING          Ospfv2OpaqueLsaTypeEnum
-	EXTENDED_INTER_AREA_ASBR  Ospfv2OpaqueLsaTypeEnum
+	LOCAL  Ospfv2OpaqueLsaTypeEnum
+	AREA   Ospfv2OpaqueLsaTypeEnum
+	DOMAIN Ospfv2OpaqueLsaTypeEnum
 }{
-	TRAFFIC_ENGINEERING:       Ospfv2OpaqueLsaTypeEnum("traffic_engineering"),
-	SYCAMORE_OPTICAL_TOPOLOGY: Ospfv2OpaqueLsaTypeEnum("sycamore_optical_topology"),
-	GRACE:                     Ospfv2OpaqueLsaTypeEnum("grace"),
-	ROUTER_INFORMATION:        Ospfv2OpaqueLsaTypeEnum("router_information"),
-	L1VPN:                     Ospfv2OpaqueLsaTypeEnum("l1vpn"),
-	INTER_AS_TE_V2:            Ospfv2OpaqueLsaTypeEnum("inter_as_te_v2"),
-	EXTENDED_PREFIX:           Ospfv2OpaqueLsaTypeEnum("extended_prefix"),
-	EXTENDED_LINK:             Ospfv2OpaqueLsaTypeEnum("extended_link"),
-	TTZ:                       Ospfv2OpaqueLsaTypeEnum("ttz"),
-	DYNAMIC_FLOODING:          Ospfv2OpaqueLsaTypeEnum("dynamic_flooding"),
-	EXTENDED_INTER_AREA_ASBR:  Ospfv2OpaqueLsaTypeEnum("extended_inter_area_asbr"),
+	LOCAL:  Ospfv2OpaqueLsaTypeEnum("local"),
+	AREA:   Ospfv2OpaqueLsaTypeEnum("area"),
+	DOMAIN: Ospfv2OpaqueLsaTypeEnum("domain"),
 }
 
 func (obj *ospfv2OpaqueLsa) Type() Ospfv2OpaqueLsaTypeEnum {
 	return Ospfv2OpaqueLsaTypeEnum(obj.obj.Type.Enum().String())
 }
 
-// The Opaque Type, decoded from the most significant octet of the LSA's Link
-// State ID (RFC 5250 Section 3). Identifies the type of information carried in
-// the tlvs (IANA Opaque LSA Option Types registry).
+// The flooding scope of the Opaque LSA, determined by the LSA's LS Type
+// (RFC 5250 Section 4): local (Type 9, not flooded beyond the local link),
+// area (Type 10, flooded throughout the area) or domain (Type 11, flooded
+// throughout the Autonomous System, excluding stub areas).
 // Type returns a string
 func (obj *ospfv2OpaqueLsa) HasType() bool {
 	return obj.obj.Type != nil
@@ -426,6 +372,60 @@ func (obj *ospfv2OpaqueLsa) SetType(value Ospfv2OpaqueLsaTypeEnum) Ospfv2OpaqueL
 	}
 	enumValue := otg.Ospfv2OpaqueLsa_Type_Enum(intValue)
 	obj.obj.Type = &enumValue
+
+	return obj
+}
+
+type Ospfv2OpaqueLsaTlvInformationEnum string
+
+// Enum of TlvInformation on Ospfv2OpaqueLsa
+var Ospfv2OpaqueLsaTlvInformation = struct {
+	TRAFFIC_ENGINEERING       Ospfv2OpaqueLsaTlvInformationEnum
+	SYCAMORE_OPTICAL_TOPOLOGY Ospfv2OpaqueLsaTlvInformationEnum
+	GRACE                     Ospfv2OpaqueLsaTlvInformationEnum
+	ROUTER_INFORMATION        Ospfv2OpaqueLsaTlvInformationEnum
+	L1VPN                     Ospfv2OpaqueLsaTlvInformationEnum
+	INTER_AS_TE_V2            Ospfv2OpaqueLsaTlvInformationEnum
+	EXTENDED_PREFIX           Ospfv2OpaqueLsaTlvInformationEnum
+	EXTENDED_LINK             Ospfv2OpaqueLsaTlvInformationEnum
+	TTZ                       Ospfv2OpaqueLsaTlvInformationEnum
+	DYNAMIC_FLOODING          Ospfv2OpaqueLsaTlvInformationEnum
+	EXTENDED_INTER_AREA_ASBR  Ospfv2OpaqueLsaTlvInformationEnum
+}{
+	TRAFFIC_ENGINEERING:       Ospfv2OpaqueLsaTlvInformationEnum("traffic_engineering"),
+	SYCAMORE_OPTICAL_TOPOLOGY: Ospfv2OpaqueLsaTlvInformationEnum("sycamore_optical_topology"),
+	GRACE:                     Ospfv2OpaqueLsaTlvInformationEnum("grace"),
+	ROUTER_INFORMATION:        Ospfv2OpaqueLsaTlvInformationEnum("router_information"),
+	L1VPN:                     Ospfv2OpaqueLsaTlvInformationEnum("l1vpn"),
+	INTER_AS_TE_V2:            Ospfv2OpaqueLsaTlvInformationEnum("inter_as_te_v2"),
+	EXTENDED_PREFIX:           Ospfv2OpaqueLsaTlvInformationEnum("extended_prefix"),
+	EXTENDED_LINK:             Ospfv2OpaqueLsaTlvInformationEnum("extended_link"),
+	TTZ:                       Ospfv2OpaqueLsaTlvInformationEnum("ttz"),
+	DYNAMIC_FLOODING:          Ospfv2OpaqueLsaTlvInformationEnum("dynamic_flooding"),
+	EXTENDED_INTER_AREA_ASBR:  Ospfv2OpaqueLsaTlvInformationEnum("extended_inter_area_asbr"),
+}
+
+func (obj *ospfv2OpaqueLsa) TlvInformation() Ospfv2OpaqueLsaTlvInformationEnum {
+	return Ospfv2OpaqueLsaTlvInformationEnum(obj.obj.TlvInformation.Enum().String())
+}
+
+// The Opaque Type, decoded from the most significant octet of the LSA's Link
+// State ID (RFC 5250 Section 3). Identifies the type of information carried in
+// the tlvs (IANA Opaque LSA Option Types registry).
+// TlvInformation returns a string
+func (obj *ospfv2OpaqueLsa) HasTlvInformation() bool {
+	return obj.obj.TlvInformation != nil
+}
+
+func (obj *ospfv2OpaqueLsa) SetTlvInformation(value Ospfv2OpaqueLsaTlvInformationEnum) Ospfv2OpaqueLsa {
+	intValue, ok := otg.Ospfv2OpaqueLsa_TlvInformation_Enum_value[string(value)]
+	if !ok {
+		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
+			"%s is not a valid choice on Ospfv2OpaqueLsaTlvInformationEnum", string(value)))
+		return obj
+	}
+	enumValue := otg.Ospfv2OpaqueLsa_TlvInformation_Enum(intValue)
+	obj.obj.TlvInformation = &enumValue
 
 	return obj
 }

@@ -22507,14 +22507,14 @@ message Ospfv2NssaLsa {
 // Contents of OSPFv2 Opaque LSA - Type 9/10/11 (RFC 5250).
 // The Link State ID of an Opaque LSA is not a plain IPv4 address; it is split into
 // an Opaque Type (most significant octet) and an Opaque ID (remaining three octets),
-// decoded here as type and id (RFC 5250 Section 3). header.lsa_id carries
+// decoded here as tlv_information and id (RFC 5250 Section 3). header.lsa_id carries
 // the raw, undecoded Link State ID value.
 message Ospfv2OpaqueLsa {
 
   // Contents of the LSA header.
   Ospfv2LsaHeader header = 1;
 
-  message Scope {
+  message Type {
     enum Enum {
       unspecified = 0;
       local = 1;
@@ -22526,9 +22526,9 @@ message Ospfv2OpaqueLsa {
   // (RFC 5250 Section 4): local (Type 9, not flooded beyond the local link),
   // area (Type 10, flooded throughout the area) or domain (Type 11, flooded
   // throughout the Autonomous System, excluding stub areas).
-  optional Scope.Enum scope = 2;
+  optional Type.Enum type = 2;
 
-  message Type {
+  message TlvInformation {
     enum Enum {
       unspecified = 0;
       traffic_engineering = 1;
@@ -22547,7 +22547,7 @@ message Ospfv2OpaqueLsa {
   // The Opaque Type, decoded from the most significant octet of the LSA's Link
   // State ID (RFC 5250 Section 3). Identifies the type of information carried in
   // the tlvs (IANA Opaque LSA Option Types registry).
-  optional Type.Enum type = 3;
+  optional TlvInformation.Enum tlv_information = 3;
 
   // The Opaque ID, decoded from the least significant three octets of the LSA's Link
   // State ID (RFC 5250 Section 3). Used to further distinguish LSAs of the same Opaque
@@ -22603,8 +22603,8 @@ message Ospfv2OpaqueLsaTlv {
       extended_inter_area_asbr_tlv = 35;
     }
   }
-  // The TLV Type field. Its meaning is scoped by the parent LSA's type
-  // (IANA OSPFv2 TLV registries).
+  // The TLV Type field. Its meaning is scoped by the parent LSA's
+  // tlv_information (IANA OSPFv2 TLV registries).
   optional Type.Enum type = 1;
 
   // The TLV Length field, in octets, of the value field.

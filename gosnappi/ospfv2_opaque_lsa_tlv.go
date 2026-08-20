@@ -376,8 +376,8 @@ func (obj *ospfv2OpaqueLsaTlv) Type() Ospfv2OpaqueLsaTlvTypeEnum {
 	return Ospfv2OpaqueLsaTlvTypeEnum(obj.obj.Type.Enum().String())
 }
 
-// The TLV Type field. Its meaning is scoped by the parent LSA's type
-// (IANA OSPFv2 TLV registries).
+// The TLV Type field. Its meaning is scoped by the parent LSA's
+// tlv_information (IANA OSPFv2 TLV registries).
 // Type returns a string
 func (obj *ospfv2OpaqueLsaTlv) HasType() bool {
 	return obj.obj.Type != nil
