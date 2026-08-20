@@ -209718,7 +209718,7 @@ class Ospfv2OpaqueLsa(OpenApiObject):
 
     _TYPES = {
         "header": {"type": "Ospfv2LsaHeader"},
-        "type": {
+        "scope": {
             "type": str,
             "enum": [
                 "local",
@@ -209726,6 +209726,27 @@ class Ospfv2OpaqueLsa(OpenApiObject):
                 "domain",
             ],
         },
+        "opaque_type": {
+            "type": str,
+            "enum": [
+                "traffic_engineering",
+                "sycamore_optical_topology",
+                "grace",
+                "router_information",
+                "l1vpn",
+                "inter_as_te_v2",
+                "extended_prefix",
+                "extended_link",
+                "ttz",
+                "dynamic_flooding",
+                "extended_inter_area_asbr",
+            ],
+        },
+        "opaque_id": {
+            "type": int,
+            "format": "uint32",
+        },
+        "tlvs": {"type": "Ospfv2OpaqueLsaTlvIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -209736,14 +209757,28 @@ class Ospfv2OpaqueLsa(OpenApiObject):
     AREA = "area"  # type: str
     DOMAIN = "domain"  # type: str
 
+    TRAFFIC_ENGINEERING = "traffic_engineering"  # type: str
+    SYCAMORE_OPTICAL_TOPOLOGY = "sycamore_optical_topology"  # type: str
+    GRACE = "grace"  # type: str
+    ROUTER_INFORMATION = "router_information"  # type: str
+    L1VPN = "l1vpn"  # type: str
+    INTER_AS_TE_V2 = "inter_as_te_v2"  # type: str
+    EXTENDED_PREFIX = "extended_prefix"  # type: str
+    EXTENDED_LINK = "extended_link"  # type: str
+    TTZ = "ttz"  # type: str
+    DYNAMIC_FLOODING = "dynamic_flooding"  # type: str
+    EXTENDED_INTER_AREA_ASBR = "extended_inter_area_asbr"  # type: str
+
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, type=None):
+    def __init__(self, parent=None, scope=None, opaque_type=None, opaque_id=None):
         super(Ospfv2OpaqueLsa, self).__init__()
         self._parent = parent
-        self._set_property("type", type)
+        self._set_property("scope", scope)
+        self._set_property("opaque_type", opaque_type)
+        self._set_property("opaque_id", opaque_id)
 
-    def set(self, type=None):
+    def set(self, scope=None, opaque_type=None, opaque_id=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -209760,13 +209795,196 @@ class Ospfv2OpaqueLsa(OpenApiObject):
         return self._get_property("header", Ospfv2LsaHeader)
 
     @property
-    def type(self):
+    def scope(self):
         # type: () -> Union[Literal["area"], Literal["domain"], Literal["local"]]
-        """type getter
+        """scope getter
 
-        The scope of the Opaque LSA.
+        The flooding scope of the Opaque LSA, determined by the LSA's LS Type. (RFC 5250 Section 4): local (Type 9, not flooded beyond the local link),. area (Type 10, flooded throughout the area) or domain (Type 11, flooded. throughout the Autonomous System, excluding stub areas).
 
         Returns: Union[Literal["area"], Literal["domain"], Literal["local"]]
+        """
+        return self._get_property("scope")
+
+    @scope.setter
+    def scope(self, value):
+        """scope setter
+
+        The flooding scope of the Opaque LSA, determined by the LSA's LS Type. (RFC 5250 Section 4): local (Type 9, not flooded beyond the local link),. area (Type 10, flooded throughout the area) or domain (Type 11, flooded. throughout the Autonomous System, excluding stub areas).
+
+        value: Union[Literal["area"], Literal["domain"], Literal["local"]]
+        """
+        self._set_property("scope", value)
+
+    @property
+    def opaque_type(self):
+        # type: () -> Union[Literal["dynamic_flooding"], Literal["extended_inter_area_asbr"], Literal["extended_link"], Literal["extended_prefix"], Literal["grace"], Literal["inter_as_te_v2"], Literal["l1vpn"], Literal["router_information"], Literal["sycamore_optical_topology"], Literal["traffic_engineering"], Literal["ttz"]]
+        """opaque_type getter
+
+        The Opaque Type, decoded from the most significant octet of the LSA's Link. State ID (RFC 5250 Section 3). Identifies the type of information carried in. the tlvs (IANA Opaque LSA Option Types registry).
+
+        Returns: Union[Literal["dynamic_flooding"], Literal["extended_inter_area_asbr"], Literal["extended_link"], Literal["extended_prefix"], Literal["grace"], Literal["inter_as_te_v2"], Literal["l1vpn"], Literal["router_information"], Literal["sycamore_optical_topology"], Literal["traffic_engineering"], Literal["ttz"]]
+        """
+        return self._get_property("opaque_type")
+
+    @opaque_type.setter
+    def opaque_type(self, value):
+        """opaque_type setter
+
+        The Opaque Type, decoded from the most significant octet of the LSA's Link. State ID (RFC 5250 Section 3). Identifies the type of information carried in. the tlvs (IANA Opaque LSA Option Types registry).
+
+        value: Union[Literal["dynamic_flooding"], Literal["extended_inter_area_asbr"], Literal["extended_link"], Literal["extended_prefix"], Literal["grace"], Literal["inter_as_te_v2"], Literal["l1vpn"], Literal["router_information"], Literal["sycamore_optical_topology"], Literal["traffic_engineering"], Literal["ttz"]]
+        """
+        self._set_property("opaque_type", value)
+
+    @property
+    def opaque_id(self):
+        # type: () -> int
+        """opaque_id getter
+
+        The Opaque ID, decoded from the least significant three octets of the LSA's Link State ID (RFC 5250 Section 3). Used to further distinguish LSAs of the same Opaque Type originated by the same router.
+
+        Returns: int
+        """
+        return self._get_property("opaque_id")
+
+    @opaque_id.setter
+    def opaque_id(self, value):
+        """opaque_id setter
+
+        The Opaque ID, decoded from the least significant three octets of the LSA's Link State ID (RFC 5250 Section 3). Used to further distinguish LSAs of the same Opaque Type originated by the same router.
+
+        value: int
+        """
+        self._set_property("opaque_id", value)
+
+    @property
+    def tlvs(self):
+        # type: () -> Ospfv2OpaqueLsaTlvIter
+        """tlvs getter
+
+        The raw, undecoded TLVs carried in the body of the Opaque LSA, in the generic. type/length/value TLV format used by all OSPFv2 Opaque LSAs (RFC 7770 Section 2,. RFC 8665, RFC 9492).
+
+        Returns: Ospfv2OpaqueLsaTlvIter
+        """
+        return self._get_property(
+            "tlvs", Ospfv2OpaqueLsaTlvIter, self._parent, self._choice
+        )
+
+
+class Ospfv2OpaqueLsaTlv(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "type": {
+            "type": str,
+            "enum": [
+                "te_router_address",
+                "te_link",
+                "te_router_ipv6_address",
+                "te_link_local",
+                "te_node_attribute",
+                "te_optical_node_property",
+                "ri_informational_capabilities",
+                "ri_functional_capabilities",
+                "ri_te_mesh_group_ipv4",
+                "ri_te_mesh_group_ipv6",
+                "ri_te_node_capability_descriptor",
+                "ri_pced",
+                "ri_dynamic_hostname",
+                "ri_sr_algorithm",
+                "ri_sid_label_range",
+                "ri_node_admin_tag",
+                "ri_sbfd_discriminator",
+                "ri_node_msd",
+                "ri_tunnel_encapsulations",
+                "ri_sr_local_block",
+                "ri_srms_preference",
+                "ri_flexible_algorithm_definition",
+                "ri_area_leader",
+                "ri_dynamic_flooding",
+                "ri_srv6_capabilities",
+                "ri_ip_algorithm",
+                "extended_prefix_tlv",
+                "extended_prefix_range_tlv",
+                "extended_link_tlv",
+                "ttz_id",
+                "ttz_router",
+                "ttz_options",
+                "dynamic_flooding_area_router_ids",
+                "dynamic_flooding_path",
+                "extended_inter_area_asbr_tlv",
+            ],
+        },
+        "length": {
+            "type": int,
+            "format": "uint32",
+        },
+        "value": {"type": str},
+        "sub_tlvs": {"type": "Ospfv2OpaqueLsaSubTlvIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    TE_ROUTER_ADDRESS = "te_router_address"  # type: str
+    TE_LINK = "te_link"  # type: str
+    TE_ROUTER_IPV6_ADDRESS = "te_router_ipv6_address"  # type: str
+    TE_LINK_LOCAL = "te_link_local"  # type: str
+    TE_NODE_ATTRIBUTE = "te_node_attribute"  # type: str
+    TE_OPTICAL_NODE_PROPERTY = "te_optical_node_property"  # type: str
+    RI_INFORMATIONAL_CAPABILITIES = "ri_informational_capabilities"  # type: str
+    RI_FUNCTIONAL_CAPABILITIES = "ri_functional_capabilities"  # type: str
+    RI_TE_MESH_GROUP_IPV4 = "ri_te_mesh_group_ipv4"  # type: str
+    RI_TE_MESH_GROUP_IPV6 = "ri_te_mesh_group_ipv6"  # type: str
+    RI_TE_NODE_CAPABILITY_DESCRIPTOR = "ri_te_node_capability_descriptor"  # type: str
+    RI_PCED = "ri_pced"  # type: str
+    RI_DYNAMIC_HOSTNAME = "ri_dynamic_hostname"  # type: str
+    RI_SR_ALGORITHM = "ri_sr_algorithm"  # type: str
+    RI_SID_LABEL_RANGE = "ri_sid_label_range"  # type: str
+    RI_NODE_ADMIN_TAG = "ri_node_admin_tag"  # type: str
+    RI_SBFD_DISCRIMINATOR = "ri_sbfd_discriminator"  # type: str
+    RI_NODE_MSD = "ri_node_msd"  # type: str
+    RI_TUNNEL_ENCAPSULATIONS = "ri_tunnel_encapsulations"  # type: str
+    RI_SR_LOCAL_BLOCK = "ri_sr_local_block"  # type: str
+    RI_SRMS_PREFERENCE = "ri_srms_preference"  # type: str
+    RI_FLEXIBLE_ALGORITHM_DEFINITION = "ri_flexible_algorithm_definition"  # type: str
+    RI_AREA_LEADER = "ri_area_leader"  # type: str
+    RI_DYNAMIC_FLOODING = "ri_dynamic_flooding"  # type: str
+    RI_SRV6_CAPABILITIES = "ri_srv6_capabilities"  # type: str
+    RI_IP_ALGORITHM = "ri_ip_algorithm"  # type: str
+    EXTENDED_PREFIX_TLV = "extended_prefix_tlv"  # type: str
+    EXTENDED_PREFIX_RANGE_TLV = "extended_prefix_range_tlv"  # type: str
+    EXTENDED_LINK_TLV = "extended_link_tlv"  # type: str
+    TTZ_ID = "ttz_id"  # type: str
+    TTZ_ROUTER = "ttz_router"  # type: str
+    TTZ_OPTIONS = "ttz_options"  # type: str
+    DYNAMIC_FLOODING_AREA_ROUTER_IDS = "dynamic_flooding_area_router_ids"  # type: str
+    DYNAMIC_FLOODING_PATH = "dynamic_flooding_path"  # type: str
+    EXTENDED_INTER_AREA_ASBR_TLV = "extended_inter_area_asbr_tlv"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, type=None, length=None, value=None):
+        super(Ospfv2OpaqueLsaTlv, self).__init__()
+        self._parent = parent
+        self._set_property("type", type)
+        self._set_property("length", length)
+        self._set_property("value", value)
+
+    def set(self, type=None, length=None, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def type(self):
+        # type: () -> Union[Literal["dynamic_flooding_area_router_ids"], Literal["dynamic_flooding_path"], Literal["extended_inter_area_asbr_tlv"], Literal["extended_link_tlv"], Literal["extended_prefix_range_tlv"], Literal["extended_prefix_tlv"], Literal["ri_area_leader"], Literal["ri_dynamic_flooding"], Literal["ri_dynamic_hostname"], Literal["ri_flexible_algorithm_definition"], Literal["ri_functional_capabilities"], Literal["ri_informational_capabilities"], Literal["ri_ip_algorithm"], Literal["ri_node_admin_tag"], Literal["ri_node_msd"], Literal["ri_pced"], Literal["ri_sbfd_discriminator"], Literal["ri_sid_label_range"], Literal["ri_sr_algorithm"], Literal["ri_sr_local_block"], Literal["ri_srms_preference"], Literal["ri_srv6_capabilities"], Literal["ri_te_mesh_group_ipv4"], Literal["ri_te_mesh_group_ipv6"], Literal["ri_te_node_capability_descriptor"], Literal["ri_tunnel_encapsulations"], Literal["te_link"], Literal["te_link_local"], Literal["te_node_attribute"], Literal["te_optical_node_property"], Literal["te_router_address"], Literal["te_router_ipv6_address"], Literal["ttz_id"], Literal["ttz_options"], Literal["ttz_router"]]
+        """type getter
+
+        The TLV Type field. Its meaning is scoped by the parent LSA's opaque_type. (IANA OSPFv2 TLV registries).
+
+        Returns: Union[Literal["dynamic_flooding_area_router_ids"], Literal["dynamic_flooding_path"], Literal["extended_inter_area_asbr_tlv"], Literal["extended_link_tlv"], Literal["extended_prefix_range_tlv"], Literal["extended_prefix_tlv"], Literal["ri_area_leader"], Literal["ri_dynamic_flooding"], Literal["ri_dynamic_hostname"], Literal["ri_flexible_algorithm_definition"], Literal["ri_functional_capabilities"], Literal["ri_informational_capabilities"], Literal["ri_ip_algorithm"], Literal["ri_node_admin_tag"], Literal["ri_node_msd"], Literal["ri_pced"], Literal["ri_sbfd_discriminator"], Literal["ri_sid_label_range"], Literal["ri_sr_algorithm"], Literal["ri_sr_local_block"], Literal["ri_srms_preference"], Literal["ri_srv6_capabilities"], Literal["ri_te_mesh_group_ipv4"], Literal["ri_te_mesh_group_ipv6"], Literal["ri_te_node_capability_descriptor"], Literal["ri_tunnel_encapsulations"], Literal["te_link"], Literal["te_link_local"], Literal["te_node_attribute"], Literal["te_optical_node_property"], Literal["te_router_address"], Literal["te_router_ipv6_address"], Literal["ttz_id"], Literal["ttz_options"], Literal["ttz_router"]]
         """
         return self._get_property("type")
 
@@ -209774,11 +209992,673 @@ class Ospfv2OpaqueLsa(OpenApiObject):
     def type(self, value):
         """type setter
 
-        The scope of the Opaque LSA.
+        The TLV Type field. Its meaning is scoped by the parent LSA's opaque_type. (IANA OSPFv2 TLV registries).
 
-        value: Union[Literal["area"], Literal["domain"], Literal["local"]]
+        value: Union[Literal["dynamic_flooding_area_router_ids"], Literal["dynamic_flooding_path"], Literal["extended_inter_area_asbr_tlv"], Literal["extended_link_tlv"], Literal["extended_prefix_range_tlv"], Literal["extended_prefix_tlv"], Literal["ri_area_leader"], Literal["ri_dynamic_flooding"], Literal["ri_dynamic_hostname"], Literal["ri_flexible_algorithm_definition"], Literal["ri_functional_capabilities"], Literal["ri_informational_capabilities"], Literal["ri_ip_algorithm"], Literal["ri_node_admin_tag"], Literal["ri_node_msd"], Literal["ri_pced"], Literal["ri_sbfd_discriminator"], Literal["ri_sid_label_range"], Literal["ri_sr_algorithm"], Literal["ri_sr_local_block"], Literal["ri_srms_preference"], Literal["ri_srv6_capabilities"], Literal["ri_te_mesh_group_ipv4"], Literal["ri_te_mesh_group_ipv6"], Literal["ri_te_node_capability_descriptor"], Literal["ri_tunnel_encapsulations"], Literal["te_link"], Literal["te_link_local"], Literal["te_node_attribute"], Literal["te_optical_node_property"], Literal["te_router_address"], Literal["te_router_ipv6_address"], Literal["ttz_id"], Literal["ttz_options"], Literal["ttz_router"]]
         """
         self._set_property("type", value)
+
+    @property
+    def length(self):
+        # type: () -> int
+        """length getter
+
+        The TLV Length field, in octets, of the value field.
+
+        Returns: int
+        """
+        return self._get_property("length")
+
+    @length.setter
+    def length(self, value):
+        """length setter
+
+        The TLV Length field, in octets, of the value field.
+
+        value: int
+        """
+        self._set_property("length", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        The TLV Value field, returned as lowercase hexadecimal string.
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        The TLV Value field, returned as lowercase hexadecimal string.
+
+        value: str
+        """
+        self._set_property("value", value)
+
+    @property
+    def sub_tlvs(self):
+        # type: () -> Ospfv2OpaqueLsaSubTlvIter
+        """sub_tlvs getter
+
+        The sub-TLVs nested within this TLV's value, in the generic type/length/value format (e.g. RFC 8665 Extended Prefix/Link Opaque LSA sub-TLVs).
+
+        Returns: Ospfv2OpaqueLsaSubTlvIter
+        """
+        return self._get_property(
+            "sub_tlvs", Ospfv2OpaqueLsaSubTlvIter, self._parent, self._choice
+        )
+
+
+class Ospfv2OpaqueLsaSubTlv(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "type": {
+            "type": str,
+            "enum": [
+                "te_link_type",
+                "te_link_id",
+                "te_local_interface_ip_address",
+                "te_remote_interface_ip_address",
+                "te_metric",
+                "te_maximum_bandwidth",
+                "te_maximum_reservable_bandwidth",
+                "te_unreserved_bandwidth",
+                "te_administrative_group",
+                "te_local_remote_te_router_id",
+                "te_link_local_remote_identifiers",
+                "te_link_protection_type",
+                "te_interface_switching_capability_descriptor",
+                "te_shared_risk_link_group",
+                "te_bandwidth_constraints",
+                "te_extended_administrative_group",
+                "te_unidirectional_link_delay",
+                "te_min_max_unidirectional_link_delay",
+                "te_unidirectional_delay_variation",
+                "te_unidirectional_link_loss",
+                "te_unidirectional_residual_bandwidth",
+                "te_unidirectional_available_bandwidth",
+                "te_unidirectional_utilized_bandwidth",
+                "te_network_to_router_metric",
+                "te_generic_metric",
+                "extended_prefix_sid_label",
+                "extended_prefix_sid",
+                "extended_prefix_flexible_algorithm_prefix_metric",
+                "extended_prefix_source_ospf_router_id",
+                "extended_prefix_source_router_address",
+                "extended_prefix_ip_algorithm_prefix_reachability",
+                "extended_prefix_ip_forwarding_address",
+                "extended_prefix_bier",
+                "extended_prefix_bier_mpls_encapsulation",
+                "extended_prefix_extended_flags",
+                "extended_prefix_bier_php_request",
+                "extended_prefix_administrative_tag",
+                "extended_link_sid_label",
+                "extended_link_adj_sid",
+                "extended_link_lan_adj_sid_label",
+                "extended_link_network_to_router_metric",
+                "extended_link_rtm_capability",
+                "extended_link_msd",
+                "extended_link_graceful_link_shutdown",
+                "extended_link_remote_ipv4_address",
+                "extended_link_local_remote_interface_id",
+                "extended_link_asla",
+                "extended_link_srlg",
+                "extended_link_unidirectional_link_delay",
+                "extended_link_min_max_unidirectional_link_delay",
+                "extended_link_unidirectional_delay_variation",
+                "extended_link_unidirectional_link_loss",
+                "extended_link_unidirectional_residual_bandwidth",
+                "extended_link_unidirectional_available_bandwidth",
+                "extended_link_unidirectional_utilized_bandwidth",
+                "extended_link_administrative_group",
+                "extended_link_extended_administrative_group",
+                "extended_link_attributes_bits",
+                "extended_link_te_metric",
+                "extended_link_maximum_link_bandwidth",
+                "extended_link_l2_bundle_member_attributes",
+                "extended_link_generic_metric",
+                "fad_exclude_admin_group",
+                "fad_include_any_admin_group",
+                "fad_include_all_admin_group",
+                "fad_flags",
+                "fad_exclude_srlg",
+                "fad_exclude_minimum_bandwidth",
+                "fad_exclude_maximum_delay",
+                "fad_reference_bandwidth",
+                "fad_bandwidth_threshold",
+                "fad_exclude_reverse_admin_group",
+                "fad_include_any_reverse_admin_group",
+                "fad_include_all_reverse_admin_group",
+                "eia_asbr_flexible_algorithm_asbr_metric",
+                "eia_asbr_ip_flexible_algorithm_asbr_metric",
+            ],
+        },
+        "length": {
+            "type": int,
+            "format": "uint32",
+        },
+        "value": {"type": str},
+        "asla": {"type": "Ospfv2OpaqueLsaAslaIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    TE_LINK_TYPE = "te_link_type"  # type: str
+    TE_LINK_ID = "te_link_id"  # type: str
+    TE_LOCAL_INTERFACE_IP_ADDRESS = "te_local_interface_ip_address"  # type: str
+    TE_REMOTE_INTERFACE_IP_ADDRESS = "te_remote_interface_ip_address"  # type: str
+    TE_METRIC = "te_metric"  # type: str
+    TE_MAXIMUM_BANDWIDTH = "te_maximum_bandwidth"  # type: str
+    TE_MAXIMUM_RESERVABLE_BANDWIDTH = "te_maximum_reservable_bandwidth"  # type: str
+    TE_UNRESERVED_BANDWIDTH = "te_unreserved_bandwidth"  # type: str
+    TE_ADMINISTRATIVE_GROUP = "te_administrative_group"  # type: str
+    TE_LOCAL_REMOTE_TE_ROUTER_ID = "te_local_remote_te_router_id"  # type: str
+    TE_LINK_LOCAL_REMOTE_IDENTIFIERS = "te_link_local_remote_identifiers"  # type: str
+    TE_LINK_PROTECTION_TYPE = "te_link_protection_type"  # type: str
+    TE_INTERFACE_SWITCHING_CAPABILITY_DESCRIPTOR = (
+        "te_interface_switching_capability_descriptor"
+    )  # type: str
+    TE_SHARED_RISK_LINK_GROUP = "te_shared_risk_link_group"  # type: str
+    TE_BANDWIDTH_CONSTRAINTS = "te_bandwidth_constraints"  # type: str
+    TE_EXTENDED_ADMINISTRATIVE_GROUP = "te_extended_administrative_group"  # type: str
+    TE_UNIDIRECTIONAL_LINK_DELAY = "te_unidirectional_link_delay"  # type: str
+    TE_MIN_MAX_UNIDIRECTIONAL_LINK_DELAY = (
+        "te_min_max_unidirectional_link_delay"
+    )  # type: str
+    TE_UNIDIRECTIONAL_DELAY_VARIATION = "te_unidirectional_delay_variation"  # type: str
+    TE_UNIDIRECTIONAL_LINK_LOSS = "te_unidirectional_link_loss"  # type: str
+    TE_UNIDIRECTIONAL_RESIDUAL_BANDWIDTH = (
+        "te_unidirectional_residual_bandwidth"
+    )  # type: str
+    TE_UNIDIRECTIONAL_AVAILABLE_BANDWIDTH = (
+        "te_unidirectional_available_bandwidth"
+    )  # type: str
+    TE_UNIDIRECTIONAL_UTILIZED_BANDWIDTH = (
+        "te_unidirectional_utilized_bandwidth"
+    )  # type: str
+    TE_NETWORK_TO_ROUTER_METRIC = "te_network_to_router_metric"  # type: str
+    TE_GENERIC_METRIC = "te_generic_metric"  # type: str
+    EXTENDED_PREFIX_SID_LABEL = "extended_prefix_sid_label"  # type: str
+    EXTENDED_PREFIX_SID = "extended_prefix_sid"  # type: str
+    EXTENDED_PREFIX_FLEXIBLE_ALGORITHM_PREFIX_METRIC = (
+        "extended_prefix_flexible_algorithm_prefix_metric"
+    )  # type: str
+    EXTENDED_PREFIX_SOURCE_OSPF_ROUTER_ID = (
+        "extended_prefix_source_ospf_router_id"
+    )  # type: str
+    EXTENDED_PREFIX_SOURCE_ROUTER_ADDRESS = (
+        "extended_prefix_source_router_address"
+    )  # type: str
+    EXTENDED_PREFIX_IP_ALGORITHM_PREFIX_REACHABILITY = (
+        "extended_prefix_ip_algorithm_prefix_reachability"
+    )  # type: str
+    EXTENDED_PREFIX_IP_FORWARDING_ADDRESS = (
+        "extended_prefix_ip_forwarding_address"
+    )  # type: str
+    EXTENDED_PREFIX_BIER = "extended_prefix_bier"  # type: str
+    EXTENDED_PREFIX_BIER_MPLS_ENCAPSULATION = (
+        "extended_prefix_bier_mpls_encapsulation"
+    )  # type: str
+    EXTENDED_PREFIX_EXTENDED_FLAGS = "extended_prefix_extended_flags"  # type: str
+    EXTENDED_PREFIX_BIER_PHP_REQUEST = "extended_prefix_bier_php_request"  # type: str
+    EXTENDED_PREFIX_ADMINISTRATIVE_TAG = (
+        "extended_prefix_administrative_tag"
+    )  # type: str
+    EXTENDED_LINK_SID_LABEL = "extended_link_sid_label"  # type: str
+    EXTENDED_LINK_ADJ_SID = "extended_link_adj_sid"  # type: str
+    EXTENDED_LINK_LAN_ADJ_SID_LABEL = "extended_link_lan_adj_sid_label"  # type: str
+    EXTENDED_LINK_NETWORK_TO_ROUTER_METRIC = (
+        "extended_link_network_to_router_metric"
+    )  # type: str
+    EXTENDED_LINK_RTM_CAPABILITY = "extended_link_rtm_capability"  # type: str
+    EXTENDED_LINK_MSD = "extended_link_msd"  # type: str
+    EXTENDED_LINK_GRACEFUL_LINK_SHUTDOWN = (
+        "extended_link_graceful_link_shutdown"
+    )  # type: str
+    EXTENDED_LINK_REMOTE_IPV4_ADDRESS = "extended_link_remote_ipv4_address"  # type: str
+    EXTENDED_LINK_LOCAL_REMOTE_INTERFACE_ID = (
+        "extended_link_local_remote_interface_id"
+    )  # type: str
+    EXTENDED_LINK_ASLA = "extended_link_asla"  # type: str
+    EXTENDED_LINK_SRLG = "extended_link_srlg"  # type: str
+    EXTENDED_LINK_UNIDIRECTIONAL_LINK_DELAY = (
+        "extended_link_unidirectional_link_delay"
+    )  # type: str
+    EXTENDED_LINK_MIN_MAX_UNIDIRECTIONAL_LINK_DELAY = (
+        "extended_link_min_max_unidirectional_link_delay"
+    )  # type: str
+    EXTENDED_LINK_UNIDIRECTIONAL_DELAY_VARIATION = (
+        "extended_link_unidirectional_delay_variation"
+    )  # type: str
+    EXTENDED_LINK_UNIDIRECTIONAL_LINK_LOSS = (
+        "extended_link_unidirectional_link_loss"
+    )  # type: str
+    EXTENDED_LINK_UNIDIRECTIONAL_RESIDUAL_BANDWIDTH = (
+        "extended_link_unidirectional_residual_bandwidth"
+    )  # type: str
+    EXTENDED_LINK_UNIDIRECTIONAL_AVAILABLE_BANDWIDTH = (
+        "extended_link_unidirectional_available_bandwidth"
+    )  # type: str
+    EXTENDED_LINK_UNIDIRECTIONAL_UTILIZED_BANDWIDTH = (
+        "extended_link_unidirectional_utilized_bandwidth"
+    )  # type: str
+    EXTENDED_LINK_ADMINISTRATIVE_GROUP = (
+        "extended_link_administrative_group"
+    )  # type: str
+    EXTENDED_LINK_EXTENDED_ADMINISTRATIVE_GROUP = (
+        "extended_link_extended_administrative_group"
+    )  # type: str
+    EXTENDED_LINK_ATTRIBUTES_BITS = "extended_link_attributes_bits"  # type: str
+    EXTENDED_LINK_TE_METRIC = "extended_link_te_metric"  # type: str
+    EXTENDED_LINK_MAXIMUM_LINK_BANDWIDTH = (
+        "extended_link_maximum_link_bandwidth"
+    )  # type: str
+    EXTENDED_LINK_L2_BUNDLE_MEMBER_ATTRIBUTES = (
+        "extended_link_l2_bundle_member_attributes"
+    )  # type: str
+    EXTENDED_LINK_GENERIC_METRIC = "extended_link_generic_metric"  # type: str
+    FAD_EXCLUDE_ADMIN_GROUP = "fad_exclude_admin_group"  # type: str
+    FAD_INCLUDE_ANY_ADMIN_GROUP = "fad_include_any_admin_group"  # type: str
+    FAD_INCLUDE_ALL_ADMIN_GROUP = "fad_include_all_admin_group"  # type: str
+    FAD_FLAGS = "fad_flags"  # type: str
+    FAD_EXCLUDE_SRLG = "fad_exclude_srlg"  # type: str
+    FAD_EXCLUDE_MINIMUM_BANDWIDTH = "fad_exclude_minimum_bandwidth"  # type: str
+    FAD_EXCLUDE_MAXIMUM_DELAY = "fad_exclude_maximum_delay"  # type: str
+    FAD_REFERENCE_BANDWIDTH = "fad_reference_bandwidth"  # type: str
+    FAD_BANDWIDTH_THRESHOLD = "fad_bandwidth_threshold"  # type: str
+    FAD_EXCLUDE_REVERSE_ADMIN_GROUP = "fad_exclude_reverse_admin_group"  # type: str
+    FAD_INCLUDE_ANY_REVERSE_ADMIN_GROUP = (
+        "fad_include_any_reverse_admin_group"
+    )  # type: str
+    FAD_INCLUDE_ALL_REVERSE_ADMIN_GROUP = (
+        "fad_include_all_reverse_admin_group"
+    )  # type: str
+    EIA_ASBR_FLEXIBLE_ALGORITHM_ASBR_METRIC = (
+        "eia_asbr_flexible_algorithm_asbr_metric"
+    )  # type: str
+    EIA_ASBR_IP_FLEXIBLE_ALGORITHM_ASBR_METRIC = (
+        "eia_asbr_ip_flexible_algorithm_asbr_metric"
+    )  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, type=None, length=None, value=None):
+        super(Ospfv2OpaqueLsaSubTlv, self).__init__()
+        self._parent = parent
+        self._set_property("type", type)
+        self._set_property("length", length)
+        self._set_property("value", value)
+
+    def set(self, type=None, length=None, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def type(self):
+        # type: () -> Union[Literal["eia_asbr_flexible_algorithm_asbr_metric"], Literal["eia_asbr_ip_flexible_algorithm_asbr_metric"], Literal["extended_link_adj_sid"], Literal["extended_link_administrative_group"], Literal["extended_link_asla"], Literal["extended_link_attributes_bits"], Literal["extended_link_extended_administrative_group"], Literal["extended_link_generic_metric"], Literal["extended_link_graceful_link_shutdown"], Literal["extended_link_l2_bundle_member_attributes"], Literal["extended_link_lan_adj_sid_label"], Literal["extended_link_local_remote_interface_id"], Literal["extended_link_maximum_link_bandwidth"], Literal["extended_link_min_max_unidirectional_link_delay"], Literal["extended_link_msd"], Literal["extended_link_network_to_router_metric"], Literal["extended_link_remote_ipv4_address"], Literal["extended_link_rtm_capability"], Literal["extended_link_sid_label"], Literal["extended_link_srlg"], Literal["extended_link_te_metric"], Literal["extended_link_unidirectional_available_bandwidth"], Literal["extended_link_unidirectional_delay_variation"], Literal["extended_link_unidirectional_link_delay"], Literal["extended_link_unidirectional_link_loss"], Literal["extended_link_unidirectional_residual_bandwidth"], Literal["extended_link_unidirectional_utilized_bandwidth"], Literal["extended_prefix_administrative_tag"], Literal["extended_prefix_bier"], Literal["extended_prefix_bier_mpls_encapsulation"], Literal["extended_prefix_bier_php_request"], Literal["extended_prefix_extended_flags"], Literal["extended_prefix_flexible_algorithm_prefix_metric"], Literal["extended_prefix_ip_algorithm_prefix_reachability"], Literal["extended_prefix_ip_forwarding_address"], Literal["extended_prefix_sid"], Literal["extended_prefix_sid_label"], Literal["extended_prefix_source_ospf_router_id"], Literal["extended_prefix_source_router_address"], Literal["fad_bandwidth_threshold"], Literal["fad_exclude_admin_group"], Literal["fad_exclude_maximum_delay"], Literal["fad_exclude_minimum_bandwidth"], Literal["fad_exclude_reverse_admin_group"], Literal["fad_exclude_srlg"], Literal["fad_flags"], Literal["fad_include_all_admin_group"], Literal["fad_include_all_reverse_admin_group"], Literal["fad_include_any_admin_group"], Literal["fad_include_any_reverse_admin_group"], Literal["fad_reference_bandwidth"], Literal["te_administrative_group"], Literal["te_bandwidth_constraints"], Literal["te_extended_administrative_group"], Literal["te_generic_metric"], Literal["te_interface_switching_capability_descriptor"], Literal["te_link_id"], Literal["te_link_local_remote_identifiers"], Literal["te_link_protection_type"], Literal["te_link_type"], Literal["te_local_interface_ip_address"], Literal["te_local_remote_te_router_id"], Literal["te_maximum_bandwidth"], Literal["te_maximum_reservable_bandwidth"], Literal["te_metric"], Literal["te_min_max_unidirectional_link_delay"], Literal["te_network_to_router_metric"], Literal["te_remote_interface_ip_address"], Literal["te_shared_risk_link_group"], Literal["te_unidirectional_available_bandwidth"], Literal["te_unidirectional_delay_variation"], Literal["te_unidirectional_link_delay"], Literal["te_unidirectional_link_loss"], Literal["te_unidirectional_residual_bandwidth"], Literal["te_unidirectional_utilized_bandwidth"], Literal["te_unreserved_bandwidth"]]
+        """type getter
+
+        The sub-TLV Type field. Its meaning is scoped by the parent TLV (IANA. OSPFv2 sub-TLV registries).
+
+        Returns: Union[Literal["eia_asbr_flexible_algorithm_asbr_metric"], Literal["eia_asbr_ip_flexible_algorithm_asbr_metric"], Literal["extended_link_adj_sid"], Literal["extended_link_administrative_group"], Literal["extended_link_asla"], Literal["extended_link_attributes_bits"], Literal["extended_link_extended_administrative_group"], Literal["extended_link_generic_metric"], Literal["extended_link_graceful_link_shutdown"], Literal["extended_link_l2_bundle_member_attributes"], Literal["extended_link_lan_adj_sid_label"], Literal["extended_link_local_remote_interface_id"], Literal["extended_link_maximum_link_bandwidth"], Literal["extended_link_min_max_unidirectional_link_delay"], Literal["extended_link_msd"], Literal["extended_link_network_to_router_metric"], Literal["extended_link_remote_ipv4_address"], Literal["extended_link_rtm_capability"], Literal["extended_link_sid_label"], Literal["extended_link_srlg"], Literal["extended_link_te_metric"], Literal["extended_link_unidirectional_available_bandwidth"], Literal["extended_link_unidirectional_delay_variation"], Literal["extended_link_unidirectional_link_delay"], Literal["extended_link_unidirectional_link_loss"], Literal["extended_link_unidirectional_residual_bandwidth"], Literal["extended_link_unidirectional_utilized_bandwidth"], Literal["extended_prefix_administrative_tag"], Literal["extended_prefix_bier"], Literal["extended_prefix_bier_mpls_encapsulation"], Literal["extended_prefix_bier_php_request"], Literal["extended_prefix_extended_flags"], Literal["extended_prefix_flexible_algorithm_prefix_metric"], Literal["extended_prefix_ip_algorithm_prefix_reachability"], Literal["extended_prefix_ip_forwarding_address"], Literal["extended_prefix_sid"], Literal["extended_prefix_sid_label"], Literal["extended_prefix_source_ospf_router_id"], Literal["extended_prefix_source_router_address"], Literal["fad_bandwidth_threshold"], Literal["fad_exclude_admin_group"], Literal["fad_exclude_maximum_delay"], Literal["fad_exclude_minimum_bandwidth"], Literal["fad_exclude_reverse_admin_group"], Literal["fad_exclude_srlg"], Literal["fad_flags"], Literal["fad_include_all_admin_group"], Literal["fad_include_all_reverse_admin_group"], Literal["fad_include_any_admin_group"], Literal["fad_include_any_reverse_admin_group"], Literal["fad_reference_bandwidth"], Literal["te_administrative_group"], Literal["te_bandwidth_constraints"], Literal["te_extended_administrative_group"], Literal["te_generic_metric"], Literal["te_interface_switching_capability_descriptor"], Literal["te_link_id"], Literal["te_link_local_remote_identifiers"], Literal["te_link_protection_type"], Literal["te_link_type"], Literal["te_local_interface_ip_address"], Literal["te_local_remote_te_router_id"], Literal["te_maximum_bandwidth"], Literal["te_maximum_reservable_bandwidth"], Literal["te_metric"], Literal["te_min_max_unidirectional_link_delay"], Literal["te_network_to_router_metric"], Literal["te_remote_interface_ip_address"], Literal["te_shared_risk_link_group"], Literal["te_unidirectional_available_bandwidth"], Literal["te_unidirectional_delay_variation"], Literal["te_unidirectional_link_delay"], Literal["te_unidirectional_link_loss"], Literal["te_unidirectional_residual_bandwidth"], Literal["te_unidirectional_utilized_bandwidth"], Literal["te_unreserved_bandwidth"]]
+        """
+        return self._get_property("type")
+
+    @type.setter
+    def type(self, value):
+        """type setter
+
+        The sub-TLV Type field. Its meaning is scoped by the parent TLV (IANA. OSPFv2 sub-TLV registries).
+
+        value: Union[Literal["eia_asbr_flexible_algorithm_asbr_metric"], Literal["eia_asbr_ip_flexible_algorithm_asbr_metric"], Literal["extended_link_adj_sid"], Literal["extended_link_administrative_group"], Literal["extended_link_asla"], Literal["extended_link_attributes_bits"], Literal["extended_link_extended_administrative_group"], Literal["extended_link_generic_metric"], Literal["extended_link_graceful_link_shutdown"], Literal["extended_link_l2_bundle_member_attributes"], Literal["extended_link_lan_adj_sid_label"], Literal["extended_link_local_remote_interface_id"], Literal["extended_link_maximum_link_bandwidth"], Literal["extended_link_min_max_unidirectional_link_delay"], Literal["extended_link_msd"], Literal["extended_link_network_to_router_metric"], Literal["extended_link_remote_ipv4_address"], Literal["extended_link_rtm_capability"], Literal["extended_link_sid_label"], Literal["extended_link_srlg"], Literal["extended_link_te_metric"], Literal["extended_link_unidirectional_available_bandwidth"], Literal["extended_link_unidirectional_delay_variation"], Literal["extended_link_unidirectional_link_delay"], Literal["extended_link_unidirectional_link_loss"], Literal["extended_link_unidirectional_residual_bandwidth"], Literal["extended_link_unidirectional_utilized_bandwidth"], Literal["extended_prefix_administrative_tag"], Literal["extended_prefix_bier"], Literal["extended_prefix_bier_mpls_encapsulation"], Literal["extended_prefix_bier_php_request"], Literal["extended_prefix_extended_flags"], Literal["extended_prefix_flexible_algorithm_prefix_metric"], Literal["extended_prefix_ip_algorithm_prefix_reachability"], Literal["extended_prefix_ip_forwarding_address"], Literal["extended_prefix_sid"], Literal["extended_prefix_sid_label"], Literal["extended_prefix_source_ospf_router_id"], Literal["extended_prefix_source_router_address"], Literal["fad_bandwidth_threshold"], Literal["fad_exclude_admin_group"], Literal["fad_exclude_maximum_delay"], Literal["fad_exclude_minimum_bandwidth"], Literal["fad_exclude_reverse_admin_group"], Literal["fad_exclude_srlg"], Literal["fad_flags"], Literal["fad_include_all_admin_group"], Literal["fad_include_all_reverse_admin_group"], Literal["fad_include_any_admin_group"], Literal["fad_include_any_reverse_admin_group"], Literal["fad_reference_bandwidth"], Literal["te_administrative_group"], Literal["te_bandwidth_constraints"], Literal["te_extended_administrative_group"], Literal["te_generic_metric"], Literal["te_interface_switching_capability_descriptor"], Literal["te_link_id"], Literal["te_link_local_remote_identifiers"], Literal["te_link_protection_type"], Literal["te_link_type"], Literal["te_local_interface_ip_address"], Literal["te_local_remote_te_router_id"], Literal["te_maximum_bandwidth"], Literal["te_maximum_reservable_bandwidth"], Literal["te_metric"], Literal["te_min_max_unidirectional_link_delay"], Literal["te_network_to_router_metric"], Literal["te_remote_interface_ip_address"], Literal["te_shared_risk_link_group"], Literal["te_unidirectional_available_bandwidth"], Literal["te_unidirectional_delay_variation"], Literal["te_unidirectional_link_delay"], Literal["te_unidirectional_link_loss"], Literal["te_unidirectional_residual_bandwidth"], Literal["te_unidirectional_utilized_bandwidth"], Literal["te_unreserved_bandwidth"]]
+        """
+        self._set_property("type", value)
+
+    @property
+    def length(self):
+        # type: () -> int
+        """length getter
+
+        The sub-TLV Length field, in octets, of the value field.
+
+        Returns: int
+        """
+        return self._get_property("length")
+
+    @length.setter
+    def length(self, value):
+        """length setter
+
+        The sub-TLV Length field, in octets, of the value field.
+
+        value: int
+        """
+        self._set_property("length", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        The sub-TLV Value field, returned as lowercase hexadecimal string.
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        The sub-TLV Value field, returned as lowercase hexadecimal string.
+
+        value: str
+        """
+        self._set_property("value", value)
+
+    @property
+    def asla(self):
+        # type: () -> Ospfv2OpaqueLsaAslaIter
+        """asla getter
+
+        Application-Specific Link Attributes nested within this sub-TLV, present when. this is an ASLA sub-TLV (RFC 9492).
+
+        Returns: Ospfv2OpaqueLsaAslaIter
+        """
+        return self._get_property(
+            "asla", Ospfv2OpaqueLsaAslaIter, self._parent, self._choice
+        )
+
+
+class Ospfv2OpaqueLsaAsla(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "type": {
+            "type": str,
+            "enum": [
+                "rsvp_te",
+                "segment_routing_policy",
+                "loop_free_alternate",
+                "flexible_algorithm",
+                "shared_risk_link_group",
+                "unidirectional_link_delay",
+                "min_max_unidirectional_link_delay",
+                "unidirectional_delay_variation",
+                "unidirectional_link_loss",
+                "unidirectional_residual_bandwidth",
+                "unidirectional_available_bandwidth",
+                "unidirectional_utilized_bandwidth",
+                "administrative_group",
+                "extended_administrative_group",
+                "te_metric",
+                "maximum_link_bandwidth",
+                "generic_metric",
+            ],
+        },
+        "value": {"type": str},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    RSVP_TE = "rsvp_te"  # type: str
+    SEGMENT_ROUTING_POLICY = "segment_routing_policy"  # type: str
+    LOOP_FREE_ALTERNATE = "loop_free_alternate"  # type: str
+    FLEXIBLE_ALGORITHM = "flexible_algorithm"  # type: str
+    SHARED_RISK_LINK_GROUP = "shared_risk_link_group"  # type: str
+    UNIDIRECTIONAL_LINK_DELAY = "unidirectional_link_delay"  # type: str
+    MIN_MAX_UNIDIRECTIONAL_LINK_DELAY = "min_max_unidirectional_link_delay"  # type: str
+    UNIDIRECTIONAL_DELAY_VARIATION = "unidirectional_delay_variation"  # type: str
+    UNIDIRECTIONAL_LINK_LOSS = "unidirectional_link_loss"  # type: str
+    UNIDIRECTIONAL_RESIDUAL_BANDWIDTH = "unidirectional_residual_bandwidth"  # type: str
+    UNIDIRECTIONAL_AVAILABLE_BANDWIDTH = (
+        "unidirectional_available_bandwidth"
+    )  # type: str
+    UNIDIRECTIONAL_UTILIZED_BANDWIDTH = "unidirectional_utilized_bandwidth"  # type: str
+    ADMINISTRATIVE_GROUP = "administrative_group"  # type: str
+    EXTENDED_ADMINISTRATIVE_GROUP = "extended_administrative_group"  # type: str
+    TE_METRIC = "te_metric"  # type: str
+    MAXIMUM_LINK_BANDWIDTH = "maximum_link_bandwidth"  # type: str
+    GENERIC_METRIC = "generic_metric"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, type=None, value=None):
+        super(Ospfv2OpaqueLsaAsla, self).__init__()
+        self._parent = parent
+        self._set_property("type", type)
+        self._set_property("value", value)
+
+    def set(self, type=None, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def type(self):
+        # type: () -> Union[Literal["administrative_group"], Literal["extended_administrative_group"], Literal["flexible_algorithm"], Literal["generic_metric"], Literal["loop_free_alternate"], Literal["maximum_link_bandwidth"], Literal["min_max_unidirectional_link_delay"], Literal["rsvp_te"], Literal["segment_routing_policy"], Literal["shared_risk_link_group"], Literal["te_metric"], Literal["unidirectional_available_bandwidth"], Literal["unidirectional_delay_variation"], Literal["unidirectional_link_delay"], Literal["unidirectional_link_loss"], Literal["unidirectional_residual_bandwidth"], Literal["unidirectional_utilized_bandwidth"]]
+        """type getter
+
+        The Application-Specific Link Attribute Type field: either Link Attribute. Application Identifier bit (RFC 9479), or the type of nested link-attribute. sub-TLV reusing the OSPFv2 Extended Link TLV Sub-TLV type space (RFC 9492).
+
+        Returns: Union[Literal["administrative_group"], Literal["extended_administrative_group"], Literal["flexible_algorithm"], Literal["generic_metric"], Literal["loop_free_alternate"], Literal["maximum_link_bandwidth"], Literal["min_max_unidirectional_link_delay"], Literal["rsvp_te"], Literal["segment_routing_policy"], Literal["shared_risk_link_group"], Literal["te_metric"], Literal["unidirectional_available_bandwidth"], Literal["unidirectional_delay_variation"], Literal["unidirectional_link_delay"], Literal["unidirectional_link_loss"], Literal["unidirectional_residual_bandwidth"], Literal["unidirectional_utilized_bandwidth"]]
+        """
+        return self._get_property("type")
+
+    @type.setter
+    def type(self, value):
+        """type setter
+
+        The Application-Specific Link Attribute Type field: either Link Attribute. Application Identifier bit (RFC 9479), or the type of nested link-attribute. sub-TLV reusing the OSPFv2 Extended Link TLV Sub-TLV type space (RFC 9492).
+
+        value: Union[Literal["administrative_group"], Literal["extended_administrative_group"], Literal["flexible_algorithm"], Literal["generic_metric"], Literal["loop_free_alternate"], Literal["maximum_link_bandwidth"], Literal["min_max_unidirectional_link_delay"], Literal["rsvp_te"], Literal["segment_routing_policy"], Literal["shared_risk_link_group"], Literal["te_metric"], Literal["unidirectional_available_bandwidth"], Literal["unidirectional_delay_variation"], Literal["unidirectional_link_delay"], Literal["unidirectional_link_loss"], Literal["unidirectional_residual_bandwidth"], Literal["unidirectional_utilized_bandwidth"]]
+        """
+        self._set_property("type", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        The Application-Specific Link Attribute Value field, returned as lowercase hexadecimal string.
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        The Application-Specific Link Attribute Value field, returned as lowercase hexadecimal string.
+
+        value: str
+        """
+        self._set_property("value", value)
+
+
+class Ospfv2OpaqueLsaAslaIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2OpaqueLsaAslaIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2OpaqueLsaAsla]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2OpaqueLsaAslaIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2OpaqueLsaAsla
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2OpaqueLsaAsla
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2OpaqueLsaAsla):
+            raise Exception("Item is not an instance of Ospfv2OpaqueLsaAsla")
+
+    def asla(self, type=None, value=None):
+        # type: (Union[Literal["administrative_group"], Literal["extended_administrative_group"], Literal["flexible_algorithm"], Literal["generic_metric"], Literal["loop_free_alternate"], Literal["maximum_link_bandwidth"], Literal["min_max_unidirectional_link_delay"], Literal["rsvp_te"], Literal["segment_routing_policy"], Literal["shared_risk_link_group"], Literal["te_metric"], Literal["unidirectional_available_bandwidth"], Literal["unidirectional_delay_variation"], Literal["unidirectional_link_delay"], Literal["unidirectional_link_loss"], Literal["unidirectional_residual_bandwidth"], Literal["unidirectional_utilized_bandwidth"]],str) -> Ospfv2OpaqueLsaAslaIter
+        """Factory method that creates an instance of the Ospfv2OpaqueLsaAsla class
+
+        An Application-Specific Link Attribute carried within an ASLA sub-TLV (RFC 9492).
+
+        Returns: Ospfv2OpaqueLsaAslaIter
+        """
+        item = Ospfv2OpaqueLsaAsla(parent=self._parent, type=type, value=value)
+        self._add(item)
+        return self
+
+    def add(self, type=None, value=None):
+        # type: (Union[Literal["administrative_group"], Literal["extended_administrative_group"], Literal["flexible_algorithm"], Literal["generic_metric"], Literal["loop_free_alternate"], Literal["maximum_link_bandwidth"], Literal["min_max_unidirectional_link_delay"], Literal["rsvp_te"], Literal["segment_routing_policy"], Literal["shared_risk_link_group"], Literal["te_metric"], Literal["unidirectional_available_bandwidth"], Literal["unidirectional_delay_variation"], Literal["unidirectional_link_delay"], Literal["unidirectional_link_loss"], Literal["unidirectional_residual_bandwidth"], Literal["unidirectional_utilized_bandwidth"]],str) -> Ospfv2OpaqueLsaAsla
+        """Add method that creates and returns an instance of the Ospfv2OpaqueLsaAsla class
+
+        An Application-Specific Link Attribute carried within an ASLA sub-TLV (RFC 9492).
+
+        Returns: Ospfv2OpaqueLsaAsla
+        """
+        item = Ospfv2OpaqueLsaAsla(parent=self._parent, type=type, value=value)
+        self._add(item)
+        return item
+
+
+class Ospfv2OpaqueLsaSubTlvIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2OpaqueLsaSubTlvIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2OpaqueLsaSubTlv]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2OpaqueLsaSubTlvIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2OpaqueLsaSubTlv
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2OpaqueLsaSubTlv
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2OpaqueLsaSubTlv):
+            raise Exception("Item is not an instance of Ospfv2OpaqueLsaSubTlv")
+
+    def subtlv(self, type=None, length=None, value=None):
+        # type: (Union[Literal["eia_asbr_flexible_algorithm_asbr_metric"], Literal["eia_asbr_ip_flexible_algorithm_asbr_metric"], Literal["extended_link_adj_sid"], Literal["extended_link_administrative_group"], Literal["extended_link_asla"], Literal["extended_link_attributes_bits"], Literal["extended_link_extended_administrative_group"], Literal["extended_link_generic_metric"], Literal["extended_link_graceful_link_shutdown"], Literal["extended_link_l2_bundle_member_attributes"], Literal["extended_link_lan_adj_sid_label"], Literal["extended_link_local_remote_interface_id"], Literal["extended_link_maximum_link_bandwidth"], Literal["extended_link_min_max_unidirectional_link_delay"], Literal["extended_link_msd"], Literal["extended_link_network_to_router_metric"], Literal["extended_link_remote_ipv4_address"], Literal["extended_link_rtm_capability"], Literal["extended_link_sid_label"], Literal["extended_link_srlg"], Literal["extended_link_te_metric"], Literal["extended_link_unidirectional_available_bandwidth"], Literal["extended_link_unidirectional_delay_variation"], Literal["extended_link_unidirectional_link_delay"], Literal["extended_link_unidirectional_link_loss"], Literal["extended_link_unidirectional_residual_bandwidth"], Literal["extended_link_unidirectional_utilized_bandwidth"], Literal["extended_prefix_administrative_tag"], Literal["extended_prefix_bier"], Literal["extended_prefix_bier_mpls_encapsulation"], Literal["extended_prefix_bier_php_request"], Literal["extended_prefix_extended_flags"], Literal["extended_prefix_flexible_algorithm_prefix_metric"], Literal["extended_prefix_ip_algorithm_prefix_reachability"], Literal["extended_prefix_ip_forwarding_address"], Literal["extended_prefix_sid"], Literal["extended_prefix_sid_label"], Literal["extended_prefix_source_ospf_router_id"], Literal["extended_prefix_source_router_address"], Literal["fad_bandwidth_threshold"], Literal["fad_exclude_admin_group"], Literal["fad_exclude_maximum_delay"], Literal["fad_exclude_minimum_bandwidth"], Literal["fad_exclude_reverse_admin_group"], Literal["fad_exclude_srlg"], Literal["fad_flags"], Literal["fad_include_all_admin_group"], Literal["fad_include_all_reverse_admin_group"], Literal["fad_include_any_admin_group"], Literal["fad_include_any_reverse_admin_group"], Literal["fad_reference_bandwidth"], Literal["te_administrative_group"], Literal["te_bandwidth_constraints"], Literal["te_extended_administrative_group"], Literal["te_generic_metric"], Literal["te_interface_switching_capability_descriptor"], Literal["te_link_id"], Literal["te_link_local_remote_identifiers"], Literal["te_link_protection_type"], Literal["te_link_type"], Literal["te_local_interface_ip_address"], Literal["te_local_remote_te_router_id"], Literal["te_maximum_bandwidth"], Literal["te_maximum_reservable_bandwidth"], Literal["te_metric"], Literal["te_min_max_unidirectional_link_delay"], Literal["te_network_to_router_metric"], Literal["te_remote_interface_ip_address"], Literal["te_shared_risk_link_group"], Literal["te_unidirectional_available_bandwidth"], Literal["te_unidirectional_delay_variation"], Literal["te_unidirectional_link_delay"], Literal["te_unidirectional_link_loss"], Literal["te_unidirectional_residual_bandwidth"], Literal["te_unidirectional_utilized_bandwidth"], Literal["te_unreserved_bandwidth"]],int,str) -> Ospfv2OpaqueLsaSubTlvIter
+        """Factory method that creates an instance of the Ospfv2OpaqueLsaSubTlv class
+
+        A sub-TLV nested within top-level Opaque LSA TLV (RFC 8665).
+
+        Returns: Ospfv2OpaqueLsaSubTlvIter
+        """
+        item = Ospfv2OpaqueLsaSubTlv(
+            parent=self._parent, type=type, length=length, value=value
+        )
+        self._add(item)
+        return self
+
+    def add(self, type=None, length=None, value=None):
+        # type: (Union[Literal["eia_asbr_flexible_algorithm_asbr_metric"], Literal["eia_asbr_ip_flexible_algorithm_asbr_metric"], Literal["extended_link_adj_sid"], Literal["extended_link_administrative_group"], Literal["extended_link_asla"], Literal["extended_link_attributes_bits"], Literal["extended_link_extended_administrative_group"], Literal["extended_link_generic_metric"], Literal["extended_link_graceful_link_shutdown"], Literal["extended_link_l2_bundle_member_attributes"], Literal["extended_link_lan_adj_sid_label"], Literal["extended_link_local_remote_interface_id"], Literal["extended_link_maximum_link_bandwidth"], Literal["extended_link_min_max_unidirectional_link_delay"], Literal["extended_link_msd"], Literal["extended_link_network_to_router_metric"], Literal["extended_link_remote_ipv4_address"], Literal["extended_link_rtm_capability"], Literal["extended_link_sid_label"], Literal["extended_link_srlg"], Literal["extended_link_te_metric"], Literal["extended_link_unidirectional_available_bandwidth"], Literal["extended_link_unidirectional_delay_variation"], Literal["extended_link_unidirectional_link_delay"], Literal["extended_link_unidirectional_link_loss"], Literal["extended_link_unidirectional_residual_bandwidth"], Literal["extended_link_unidirectional_utilized_bandwidth"], Literal["extended_prefix_administrative_tag"], Literal["extended_prefix_bier"], Literal["extended_prefix_bier_mpls_encapsulation"], Literal["extended_prefix_bier_php_request"], Literal["extended_prefix_extended_flags"], Literal["extended_prefix_flexible_algorithm_prefix_metric"], Literal["extended_prefix_ip_algorithm_prefix_reachability"], Literal["extended_prefix_ip_forwarding_address"], Literal["extended_prefix_sid"], Literal["extended_prefix_sid_label"], Literal["extended_prefix_source_ospf_router_id"], Literal["extended_prefix_source_router_address"], Literal["fad_bandwidth_threshold"], Literal["fad_exclude_admin_group"], Literal["fad_exclude_maximum_delay"], Literal["fad_exclude_minimum_bandwidth"], Literal["fad_exclude_reverse_admin_group"], Literal["fad_exclude_srlg"], Literal["fad_flags"], Literal["fad_include_all_admin_group"], Literal["fad_include_all_reverse_admin_group"], Literal["fad_include_any_admin_group"], Literal["fad_include_any_reverse_admin_group"], Literal["fad_reference_bandwidth"], Literal["te_administrative_group"], Literal["te_bandwidth_constraints"], Literal["te_extended_administrative_group"], Literal["te_generic_metric"], Literal["te_interface_switching_capability_descriptor"], Literal["te_link_id"], Literal["te_link_local_remote_identifiers"], Literal["te_link_protection_type"], Literal["te_link_type"], Literal["te_local_interface_ip_address"], Literal["te_local_remote_te_router_id"], Literal["te_maximum_bandwidth"], Literal["te_maximum_reservable_bandwidth"], Literal["te_metric"], Literal["te_min_max_unidirectional_link_delay"], Literal["te_network_to_router_metric"], Literal["te_remote_interface_ip_address"], Literal["te_shared_risk_link_group"], Literal["te_unidirectional_available_bandwidth"], Literal["te_unidirectional_delay_variation"], Literal["te_unidirectional_link_delay"], Literal["te_unidirectional_link_loss"], Literal["te_unidirectional_residual_bandwidth"], Literal["te_unidirectional_utilized_bandwidth"], Literal["te_unreserved_bandwidth"]],int,str) -> Ospfv2OpaqueLsaSubTlv
+        """Add method that creates and returns an instance of the Ospfv2OpaqueLsaSubTlv class
+
+        A sub-TLV nested within top-level Opaque LSA TLV (RFC 8665).
+
+        Returns: Ospfv2OpaqueLsaSubTlv
+        """
+        item = Ospfv2OpaqueLsaSubTlv(
+            parent=self._parent, type=type, length=length, value=value
+        )
+        self._add(item)
+        return item
+
+
+class Ospfv2OpaqueLsaTlvIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2OpaqueLsaTlvIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2OpaqueLsaTlv]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2OpaqueLsaTlvIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2OpaqueLsaTlv
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2OpaqueLsaTlv
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2OpaqueLsaTlv):
+            raise Exception("Item is not an instance of Ospfv2OpaqueLsaTlv")
+
+    def tlv(self, type=None, length=None, value=None):
+        # type: (Union[Literal["dynamic_flooding_area_router_ids"], Literal["dynamic_flooding_path"], Literal["extended_inter_area_asbr_tlv"], Literal["extended_link_tlv"], Literal["extended_prefix_range_tlv"], Literal["extended_prefix_tlv"], Literal["ri_area_leader"], Literal["ri_dynamic_flooding"], Literal["ri_dynamic_hostname"], Literal["ri_flexible_algorithm_definition"], Literal["ri_functional_capabilities"], Literal["ri_informational_capabilities"], Literal["ri_ip_algorithm"], Literal["ri_node_admin_tag"], Literal["ri_node_msd"], Literal["ri_pced"], Literal["ri_sbfd_discriminator"], Literal["ri_sid_label_range"], Literal["ri_sr_algorithm"], Literal["ri_sr_local_block"], Literal["ri_srms_preference"], Literal["ri_srv6_capabilities"], Literal["ri_te_mesh_group_ipv4"], Literal["ri_te_mesh_group_ipv6"], Literal["ri_te_node_capability_descriptor"], Literal["ri_tunnel_encapsulations"], Literal["te_link"], Literal["te_link_local"], Literal["te_node_attribute"], Literal["te_optical_node_property"], Literal["te_router_address"], Literal["te_router_ipv6_address"], Literal["ttz_id"], Literal["ttz_options"], Literal["ttz_router"]],int,str) -> Ospfv2OpaqueLsaTlvIter
+        """Factory method that creates an instance of the Ospfv2OpaqueLsaTlv class
+
+        A top-level TLV carried in the body of an OSPFv2 Opaque LSA (RFC 7770 Section 2).
+
+        Returns: Ospfv2OpaqueLsaTlvIter
+        """
+        item = Ospfv2OpaqueLsaTlv(
+            parent=self._parent, type=type, length=length, value=value
+        )
+        self._add(item)
+        return self
+
+    def add(self, type=None, length=None, value=None):
+        # type: (Union[Literal["dynamic_flooding_area_router_ids"], Literal["dynamic_flooding_path"], Literal["extended_inter_area_asbr_tlv"], Literal["extended_link_tlv"], Literal["extended_prefix_range_tlv"], Literal["extended_prefix_tlv"], Literal["ri_area_leader"], Literal["ri_dynamic_flooding"], Literal["ri_dynamic_hostname"], Literal["ri_flexible_algorithm_definition"], Literal["ri_functional_capabilities"], Literal["ri_informational_capabilities"], Literal["ri_ip_algorithm"], Literal["ri_node_admin_tag"], Literal["ri_node_msd"], Literal["ri_pced"], Literal["ri_sbfd_discriminator"], Literal["ri_sid_label_range"], Literal["ri_sr_algorithm"], Literal["ri_sr_local_block"], Literal["ri_srms_preference"], Literal["ri_srv6_capabilities"], Literal["ri_te_mesh_group_ipv4"], Literal["ri_te_mesh_group_ipv6"], Literal["ri_te_node_capability_descriptor"], Literal["ri_tunnel_encapsulations"], Literal["te_link"], Literal["te_link_local"], Literal["te_node_attribute"], Literal["te_optical_node_property"], Literal["te_router_address"], Literal["te_router_ipv6_address"], Literal["ttz_id"], Literal["ttz_options"], Literal["ttz_router"]],int,str) -> Ospfv2OpaqueLsaTlv
+        """Add method that creates and returns an instance of the Ospfv2OpaqueLsaTlv class
+
+        A top-level TLV carried in the body of an OSPFv2 Opaque LSA (RFC 7770 Section 2).
+
+        Returns: Ospfv2OpaqueLsaTlv
+        """
+        item = Ospfv2OpaqueLsaTlv(
+            parent=self._parent, type=type, length=length, value=value
+        )
+        self._add(item)
+        return item
 
 
 class Ospfv2OpaqueLsaIter(OpenApiIter):
@@ -209811,27 +210691,37 @@ class Ospfv2OpaqueLsaIter(OpenApiIter):
         if not isinstance(item, Ospfv2OpaqueLsa):
             raise Exception("Item is not an instance of Ospfv2OpaqueLsa")
 
-    def opaquelsa(self, type=None):
-        # type: (Union[Literal["area"], Literal["domain"], Literal["local"]]) -> Ospfv2OpaqueLsaIter
+    def opaquelsa(self, scope=None, opaque_type=None, opaque_id=None):
+        # type: (Union[Literal["area"], Literal["domain"], Literal["local"]],Union[Literal["dynamic_flooding"], Literal["extended_inter_area_asbr"], Literal["extended_link"], Literal["extended_prefix"], Literal["grace"], Literal["inter_as_te_v2"], Literal["l1vpn"], Literal["router_information"], Literal["sycamore_optical_topology"], Literal["traffic_engineering"], Literal["ttz"]],int) -> Ospfv2OpaqueLsaIter
         """Factory method that creates an instance of the Ospfv2OpaqueLsa class
 
-        Contents of OSPFv2 Opaque LSA Type 9/10/11.
+        Contents of OSPFv2 Opaque LSA Type 9/10/11 (RFC 5250).. The Link State ID of an Opaque LSA is not plain IPv4 address; it is split into. an Opaque Type (most significant octet) and an Opaque ID (remaining three octets),. decoded here as opaque_type and opaque_id (RFC 5250 Section 3). header.lsa_id carries. the raw, undecoded Link State ID value.
 
         Returns: Ospfv2OpaqueLsaIter
         """
-        item = Ospfv2OpaqueLsa(parent=self._parent, type=type)
+        item = Ospfv2OpaqueLsa(
+            parent=self._parent,
+            scope=scope,
+            opaque_type=opaque_type,
+            opaque_id=opaque_id,
+        )
         self._add(item)
         return self
 
-    def add(self, type=None):
-        # type: (Union[Literal["area"], Literal["domain"], Literal["local"]]) -> Ospfv2OpaqueLsa
+    def add(self, scope=None, opaque_type=None, opaque_id=None):
+        # type: (Union[Literal["area"], Literal["domain"], Literal["local"]],Union[Literal["dynamic_flooding"], Literal["extended_inter_area_asbr"], Literal["extended_link"], Literal["extended_prefix"], Literal["grace"], Literal["inter_as_te_v2"], Literal["l1vpn"], Literal["router_information"], Literal["sycamore_optical_topology"], Literal["traffic_engineering"], Literal["ttz"]],int) -> Ospfv2OpaqueLsa
         """Add method that creates and returns an instance of the Ospfv2OpaqueLsa class
 
-        Contents of OSPFv2 Opaque LSA Type 9/10/11.
+        Contents of OSPFv2 Opaque LSA Type 9/10/11 (RFC 5250).. The Link State ID of an Opaque LSA is not plain IPv4 address; it is split into. an Opaque Type (most significant octet) and an Opaque ID (remaining three octets),. decoded here as opaque_type and opaque_id (RFC 5250 Section 3). header.lsa_id carries. the raw, undecoded Link State ID value.
 
         Returns: Ospfv2OpaqueLsa
         """
-        item = Ospfv2OpaqueLsa(parent=self._parent, type=type)
+        item = Ospfv2OpaqueLsa(
+            parent=self._parent,
+            scope=scope,
+            opaque_type=opaque_type,
+            opaque_id=opaque_id,
+        )
         self._add(item)
         return item
 

@@ -1860,6 +1860,12 @@ from .snappi import Ospfv2ExternalAsLsaIter
 from .snappi import Ospfv2NssaLsa
 from .snappi import Ospfv2NssaLsaIter
 from .snappi import Ospfv2OpaqueLsa
+from .snappi import Ospfv2OpaqueLsaTlv
+from .snappi import Ospfv2OpaqueLsaSubTlv
+from .snappi import Ospfv2OpaqueLsaAsla
+from .snappi import Ospfv2OpaqueLsaAslaIter
+from .snappi import Ospfv2OpaqueLsaSubTlvIter
+from .snappi import Ospfv2OpaqueLsaTlvIter
 from .snappi import Ospfv2OpaqueLsaIter
 from .snappi import Ospfv2LsaStateIter
 from .snappi import Ospfv3LsaState

@@ -22504,13 +22504,17 @@ message Ospfv2NssaLsa {
   Ospfv2LsaPrefixSid prefix_sid = 6;
 }
 
-// Contents of OSPFv2 Opaque LSA - Type 9/10/11.
+// Contents of OSPFv2 Opaque LSA - Type 9/10/11 (RFC 5250).
+// The Link State ID of an Opaque LSA is not a plain IPv4 address; it is split into
+// an Opaque Type (most significant octet) and an Opaque ID (remaining three octets),
+// decoded here as opaque_type and opaque_id (RFC 5250 Section 3). header.lsa_id carries
+// the raw, undecoded Link State ID value.
 message Ospfv2OpaqueLsa {
 
   // Contents of the LSA header.
   Ospfv2LsaHeader header = 1;
 
-  message Type {
+  message Scope {
     enum Enum {
       unspecified = 0;
       local = 1;
@@ -22518,8 +22522,234 @@ message Ospfv2OpaqueLsa {
       domain = 3;
     }
   }
-  // The scope of the Opaque LSA.
-  optional Type.Enum type = 2;
+  // The flooding scope of the Opaque LSA, determined by the LSA's LS Type
+  // (RFC 5250 Section 4): local (Type 9, not flooded beyond the local link),
+  // area (Type 10, flooded throughout the area) or domain (Type 11, flooded
+  // throughout the Autonomous System, excluding stub areas).
+  optional Scope.Enum scope = 2;
+
+  message OpaqueType {
+    enum Enum {
+      unspecified = 0;
+      traffic_engineering = 1;
+      sycamore_optical_topology = 2;
+      grace = 3;
+      router_information = 4;
+      l1vpn = 5;
+      inter_as_te_v2 = 6;
+      extended_prefix = 7;
+      extended_link = 8;
+      ttz = 9;
+      dynamic_flooding = 10;
+      extended_inter_area_asbr = 11;
+    }
+  }
+  // The Opaque Type, decoded from the most significant octet of the LSA's Link
+  // State ID (RFC 5250 Section 3). Identifies the type of information carried in
+  // the tlvs (IANA Opaque LSA Option Types registry).
+  optional OpaqueType.Enum opaque_type = 3;
+
+  // The Opaque ID, decoded from the least significant three octets of the LSA's Link
+  // State ID (RFC 5250 Section 3). Used to further distinguish LSAs of the same Opaque
+  // Type originated by the same router.
+  optional uint32 opaque_id = 4;
+
+  // The raw, undecoded TLVs carried in the body of the Opaque LSA, in the generic
+  // type/length/value TLV format used by all OSPFv2 Opaque LSAs (RFC 7770 Section 2,
+  // RFC 8665, RFC 9492).
+  repeated Ospfv2OpaqueLsaTlv tlvs = 5;
+}
+
+// A top-level TLV carried in the body of an OSPFv2 Opaque LSA (RFC 7770 Section 2).
+message Ospfv2OpaqueLsaTlv {
+
+  message Type {
+    enum Enum {
+      unspecified = 0;
+      te_router_address = 1;
+      te_link = 2;
+      te_router_ipv6_address = 3;
+      te_link_local = 4;
+      te_node_attribute = 5;
+      te_optical_node_property = 6;
+      ri_informational_capabilities = 7;
+      ri_functional_capabilities = 8;
+      ri_te_mesh_group_ipv4 = 9;
+      ri_te_mesh_group_ipv6 = 10;
+      ri_te_node_capability_descriptor = 11;
+      ri_pced = 12;
+      ri_dynamic_hostname = 13;
+      ri_sr_algorithm = 14;
+      ri_sid_label_range = 15;
+      ri_node_admin_tag = 16;
+      ri_sbfd_discriminator = 17;
+      ri_node_msd = 18;
+      ri_tunnel_encapsulations = 19;
+      ri_sr_local_block = 20;
+      ri_srms_preference = 21;
+      ri_flexible_algorithm_definition = 22;
+      ri_area_leader = 23;
+      ri_dynamic_flooding = 24;
+      ri_srv6_capabilities = 25;
+      ri_ip_algorithm = 26;
+      extended_prefix_tlv = 27;
+      extended_prefix_range_tlv = 28;
+      extended_link_tlv = 29;
+      ttz_id = 30;
+      ttz_router = 31;
+      ttz_options = 32;
+      dynamic_flooding_area_router_ids = 33;
+      dynamic_flooding_path = 34;
+      extended_inter_area_asbr_tlv = 35;
+    }
+  }
+  // The TLV Type field. Its meaning is scoped by the parent LSA's opaque_type
+  // (IANA OSPFv2 TLV registries).
+  optional Type.Enum type = 1;
+
+  // The TLV Length field, in octets, of the value field.
+  optional uint32 length = 2;
+
+  // The TLV Value field, returned as a lowercase hexadecimal string.
+  optional string value = 3;
+
+  // The sub-TLVs nested within this TLV's value, in the generic type/length/value format
+  // (e.g. RFC 8665 Extended Prefix/Link Opaque LSA sub-TLVs).
+  repeated Ospfv2OpaqueLsaSubTlv sub_tlvs = 4;
+}
+
+// A sub-TLV nested within a top-level Opaque LSA TLV (RFC 8665).
+message Ospfv2OpaqueLsaSubTlv {
+
+  message Type {
+    enum Enum {
+      unspecified = 0;
+      te_link_type = 1;
+      te_link_id = 2;
+      te_local_interface_ip_address = 3;
+      te_remote_interface_ip_address = 4;
+      te_metric = 5;
+      te_maximum_bandwidth = 6;
+      te_maximum_reservable_bandwidth = 7;
+      te_unreserved_bandwidth = 8;
+      te_administrative_group = 9;
+      te_local_remote_te_router_id = 10;
+      te_link_local_remote_identifiers = 11;
+      te_link_protection_type = 12;
+      te_interface_switching_capability_descriptor = 13;
+      te_shared_risk_link_group = 14;
+      te_bandwidth_constraints = 15;
+      te_extended_administrative_group = 16;
+      te_unidirectional_link_delay = 17;
+      te_min_max_unidirectional_link_delay = 18;
+      te_unidirectional_delay_variation = 19;
+      te_unidirectional_link_loss = 20;
+      te_unidirectional_residual_bandwidth = 21;
+      te_unidirectional_available_bandwidth = 22;
+      te_unidirectional_utilized_bandwidth = 23;
+      te_network_to_router_metric = 24;
+      te_generic_metric = 25;
+      extended_prefix_sid_label = 26;
+      extended_prefix_sid = 27;
+      extended_prefix_flexible_algorithm_prefix_metric = 28;
+      extended_prefix_source_ospf_router_id = 29;
+      extended_prefix_source_router_address = 30;
+      extended_prefix_ip_algorithm_prefix_reachability = 31;
+      extended_prefix_ip_forwarding_address = 32;
+      extended_prefix_bier = 33;
+      extended_prefix_bier_mpls_encapsulation = 34;
+      extended_prefix_extended_flags = 35;
+      extended_prefix_bier_php_request = 36;
+      extended_prefix_administrative_tag = 37;
+      extended_link_sid_label = 38;
+      extended_link_adj_sid = 39;
+      extended_link_lan_adj_sid_label = 40;
+      extended_link_network_to_router_metric = 41;
+      extended_link_rtm_capability = 42;
+      extended_link_msd = 43;
+      extended_link_graceful_link_shutdown = 44;
+      extended_link_remote_ipv4_address = 45;
+      extended_link_local_remote_interface_id = 46;
+      extended_link_asla = 47;
+      extended_link_srlg = 48;
+      extended_link_unidirectional_link_delay = 49;
+      extended_link_min_max_unidirectional_link_delay = 50;
+      extended_link_unidirectional_delay_variation = 51;
+      extended_link_unidirectional_link_loss = 52;
+      extended_link_unidirectional_residual_bandwidth = 53;
+      extended_link_unidirectional_available_bandwidth = 54;
+      extended_link_unidirectional_utilized_bandwidth = 55;
+      extended_link_administrative_group = 56;
+      extended_link_extended_administrative_group = 57;
+      extended_link_attributes_bits = 58;
+      extended_link_te_metric = 59;
+      extended_link_maximum_link_bandwidth = 60;
+      extended_link_l2_bundle_member_attributes = 61;
+      extended_link_generic_metric = 62;
+      fad_exclude_admin_group = 63;
+      fad_include_any_admin_group = 64;
+      fad_include_all_admin_group = 65;
+      fad_flags = 66;
+      fad_exclude_srlg = 67;
+      fad_exclude_minimum_bandwidth = 68;
+      fad_exclude_maximum_delay = 69;
+      fad_reference_bandwidth = 70;
+      fad_bandwidth_threshold = 71;
+      fad_exclude_reverse_admin_group = 72;
+      fad_include_any_reverse_admin_group = 73;
+      fad_include_all_reverse_admin_group = 74;
+      eia_asbr_flexible_algorithm_asbr_metric = 75;
+      eia_asbr_ip_flexible_algorithm_asbr_metric = 76;
+    }
+  }
+  // The sub-TLV Type field. Its meaning is scoped by the parent TLV (IANA
+  // OSPFv2 sub-TLV registries).
+  optional Type.Enum type = 1;
+
+  // The sub-TLV Length field, in octets, of the value field.
+  optional uint32 length = 2;
+
+  // The sub-TLV Value field, returned as a lowercase hexadecimal string.
+  optional string value = 3;
+
+  // Application-Specific Link Attributes nested within this sub-TLV, present when
+  // this is an ASLA sub-TLV (RFC 9492).
+  repeated Ospfv2OpaqueLsaAsla asla = 4;
+}
+
+// An Application-Specific Link Attribute carried within an ASLA sub-TLV (RFC 9492).
+message Ospfv2OpaqueLsaAsla {
+
+  message Type {
+    enum Enum {
+      unspecified = 0;
+      rsvp_te = 1;
+      segment_routing_policy = 2;
+      loop_free_alternate = 3;
+      flexible_algorithm = 4;
+      shared_risk_link_group = 5;
+      unidirectional_link_delay = 6;
+      min_max_unidirectional_link_delay = 7;
+      unidirectional_delay_variation = 8;
+      unidirectional_link_loss = 9;
+      unidirectional_residual_bandwidth = 10;
+      unidirectional_available_bandwidth = 11;
+      unidirectional_utilized_bandwidth = 12;
+      administrative_group = 13;
+      extended_administrative_group = 14;
+      te_metric = 15;
+      maximum_link_bandwidth = 16;
+      generic_metric = 17;
+    }
+  }
+  // The Application-Specific Link Attribute Type field: either a Link Attribute
+  // Application Identifier bit (RFC 9479), or the type of a nested link-attribute
+  // sub-TLV reusing the OSPFv2 Extended Link TLV Sub-TLV type space (RFC 9492).
+  optional Type.Enum type = 1;
+
+  // The Application-Specific Link Attribute Value field, returned as a lowercase hexadecimal
+  // string.
+  optional string value = 2;
 }
 
 // Attributes in LSA Header.
