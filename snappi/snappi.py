@@ -209718,7 +209718,7 @@ class Ospfv2OpaqueLsa(OpenApiObject):
 
     _TYPES = {
         "header": {"type": "Ospfv2LsaHeader"},
-        "scope": {
+        "type": {
             "type": str,
             "enum": [
                 "local",
@@ -209726,7 +209726,7 @@ class Ospfv2OpaqueLsa(OpenApiObject):
                 "domain",
             ],
         },
-        "type": {
+        "tlv_information": {
             "type": str,
             "enum": [
                 "traffic_engineering",
@@ -209771,14 +209771,14 @@ class Ospfv2OpaqueLsa(OpenApiObject):
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, scope=None, type=None, id=None):
+    def __init__(self, parent=None, type=None, tlv_information=None, id=None):
         super(Ospfv2OpaqueLsa, self).__init__()
         self._parent = parent
-        self._set_property("scope", scope)
         self._set_property("type", type)
+        self._set_property("tlv_information", tlv_information)
         self._set_property("id", id)
 
-    def set(self, scope=None, type=None, id=None):
+    def set(self, type=None, tlv_information=None, id=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -209795,34 +209795,13 @@ class Ospfv2OpaqueLsa(OpenApiObject):
         return self._get_property("header", Ospfv2LsaHeader)
 
     @property
-    def scope(self):
+    def type(self):
         # type: () -> Union[Literal["area"], Literal["domain"], Literal["local"]]
-        """scope getter
+        """type getter
 
         The flooding scope of the Opaque LSA, determined by the LSA's LS Type. (RFC 5250 Section 4): local (Type 9, not flooded beyond the local link),. area (Type 10, flooded throughout the area) or domain (Type 11, flooded. throughout the Autonomous System, excluding stub areas).
 
         Returns: Union[Literal["area"], Literal["domain"], Literal["local"]]
-        """
-        return self._get_property("scope")
-
-    @scope.setter
-    def scope(self, value):
-        """scope setter
-
-        The flooding scope of the Opaque LSA, determined by the LSA's LS Type. (RFC 5250 Section 4): local (Type 9, not flooded beyond the local link),. area (Type 10, flooded throughout the area) or domain (Type 11, flooded. throughout the Autonomous System, excluding stub areas).
-
-        value: Union[Literal["area"], Literal["domain"], Literal["local"]]
-        """
-        self._set_property("scope", value)
-
-    @property
-    def type(self):
-        # type: () -> Union[Literal["dynamic_flooding"], Literal["extended_inter_area_asbr"], Literal["extended_link"], Literal["extended_prefix"], Literal["grace"], Literal["inter_as_te_v2"], Literal["l1vpn"], Literal["router_information"], Literal["sycamore_optical_topology"], Literal["traffic_engineering"], Literal["ttz"]]
-        """type getter
-
-        The Opaque Type, decoded from the most significant octet of the LSA's Link. State ID (RFC 5250 Section 3). Identifies the type of information carried in. the tlvs (IANA Opaque LSA Option Types registry).
-
-        Returns: Union[Literal["dynamic_flooding"], Literal["extended_inter_area_asbr"], Literal["extended_link"], Literal["extended_prefix"], Literal["grace"], Literal["inter_as_te_v2"], Literal["l1vpn"], Literal["router_information"], Literal["sycamore_optical_topology"], Literal["traffic_engineering"], Literal["ttz"]]
         """
         return self._get_property("type")
 
@@ -209830,11 +209809,32 @@ class Ospfv2OpaqueLsa(OpenApiObject):
     def type(self, value):
         """type setter
 
+        The flooding scope of the Opaque LSA, determined by the LSA's LS Type. (RFC 5250 Section 4): local (Type 9, not flooded beyond the local link),. area (Type 10, flooded throughout the area) or domain (Type 11, flooded. throughout the Autonomous System, excluding stub areas).
+
+        value: Union[Literal["area"], Literal["domain"], Literal["local"]]
+        """
+        self._set_property("type", value)
+
+    @property
+    def tlv_information(self):
+        # type: () -> Union[Literal["dynamic_flooding"], Literal["extended_inter_area_asbr"], Literal["extended_link"], Literal["extended_prefix"], Literal["grace"], Literal["inter_as_te_v2"], Literal["l1vpn"], Literal["router_information"], Literal["sycamore_optical_topology"], Literal["traffic_engineering"], Literal["ttz"]]
+        """tlv_information getter
+
+        The Opaque Type, decoded from the most significant octet of the LSA's Link. State ID (RFC 5250 Section 3). Identifies the type of information carried in. the tlvs (IANA Opaque LSA Option Types registry).
+
+        Returns: Union[Literal["dynamic_flooding"], Literal["extended_inter_area_asbr"], Literal["extended_link"], Literal["extended_prefix"], Literal["grace"], Literal["inter_as_te_v2"], Literal["l1vpn"], Literal["router_information"], Literal["sycamore_optical_topology"], Literal["traffic_engineering"], Literal["ttz"]]
+        """
+        return self._get_property("tlv_information")
+
+    @tlv_information.setter
+    def tlv_information(self, value):
+        """tlv_information setter
+
         The Opaque Type, decoded from the most significant octet of the LSA's Link. State ID (RFC 5250 Section 3). Identifies the type of information carried in. the tlvs (IANA Opaque LSA Option Types registry).
 
         value: Union[Literal["dynamic_flooding"], Literal["extended_inter_area_asbr"], Literal["extended_link"], Literal["extended_prefix"], Literal["grace"], Literal["inter_as_te_v2"], Literal["l1vpn"], Literal["router_information"], Literal["sycamore_optical_topology"], Literal["traffic_engineering"], Literal["ttz"]]
         """
-        self._set_property("type", value)
+        self._set_property("tlv_information", value)
 
     @property
     def id(self):
@@ -209982,7 +209982,7 @@ class Ospfv2OpaqueLsaTlv(OpenApiObject):
         # type: () -> Union[Literal["dynamic_flooding_area_router_ids"], Literal["dynamic_flooding_path"], Literal["extended_inter_area_asbr_tlv"], Literal["extended_link_tlv"], Literal["extended_prefix_range_tlv"], Literal["extended_prefix_tlv"], Literal["ri_area_leader"], Literal["ri_dynamic_flooding"], Literal["ri_dynamic_hostname"], Literal["ri_flexible_algorithm_definition"], Literal["ri_functional_capabilities"], Literal["ri_informational_capabilities"], Literal["ri_ip_algorithm"], Literal["ri_node_admin_tag"], Literal["ri_node_msd"], Literal["ri_pced"], Literal["ri_sbfd_discriminator"], Literal["ri_sid_label_range"], Literal["ri_sr_algorithm"], Literal["ri_sr_local_block"], Literal["ri_srms_preference"], Literal["ri_srv6_capabilities"], Literal["ri_te_mesh_group_ipv4"], Literal["ri_te_mesh_group_ipv6"], Literal["ri_te_node_capability_descriptor"], Literal["ri_tunnel_encapsulations"], Literal["te_link"], Literal["te_link_local"], Literal["te_node_attribute"], Literal["te_optical_node_property"], Literal["te_router_address"], Literal["te_router_ipv6_address"], Literal["ttz_id"], Literal["ttz_options"], Literal["ttz_router"]]
         """type getter
 
-        The TLV Type field. Its meaning is scoped by the parent LSA's type. (IANA OSPFv2 TLV registries).
+        The TLV Type field. Its meaning is scoped by the parent LSA's. tlv_information (IANA OSPFv2 TLV registries).
 
         Returns: Union[Literal["dynamic_flooding_area_router_ids"], Literal["dynamic_flooding_path"], Literal["extended_inter_area_asbr_tlv"], Literal["extended_link_tlv"], Literal["extended_prefix_range_tlv"], Literal["extended_prefix_tlv"], Literal["ri_area_leader"], Literal["ri_dynamic_flooding"], Literal["ri_dynamic_hostname"], Literal["ri_flexible_algorithm_definition"], Literal["ri_functional_capabilities"], Literal["ri_informational_capabilities"], Literal["ri_ip_algorithm"], Literal["ri_node_admin_tag"], Literal["ri_node_msd"], Literal["ri_pced"], Literal["ri_sbfd_discriminator"], Literal["ri_sid_label_range"], Literal["ri_sr_algorithm"], Literal["ri_sr_local_block"], Literal["ri_srms_preference"], Literal["ri_srv6_capabilities"], Literal["ri_te_mesh_group_ipv4"], Literal["ri_te_mesh_group_ipv6"], Literal["ri_te_node_capability_descriptor"], Literal["ri_tunnel_encapsulations"], Literal["te_link"], Literal["te_link_local"], Literal["te_node_attribute"], Literal["te_optical_node_property"], Literal["te_router_address"], Literal["te_router_ipv6_address"], Literal["ttz_id"], Literal["ttz_options"], Literal["ttz_router"]]
         """
@@ -209992,7 +209992,7 @@ class Ospfv2OpaqueLsaTlv(OpenApiObject):
     def type(self, value):
         """type setter
 
-        The TLV Type field. Its meaning is scoped by the parent LSA's type. (IANA OSPFv2 TLV registries).
+        The TLV Type field. Its meaning is scoped by the parent LSA's. tlv_information (IANA OSPFv2 TLV registries).
 
         value: Union[Literal["dynamic_flooding_area_router_ids"], Literal["dynamic_flooding_path"], Literal["extended_inter_area_asbr_tlv"], Literal["extended_link_tlv"], Literal["extended_prefix_range_tlv"], Literal["extended_prefix_tlv"], Literal["ri_area_leader"], Literal["ri_dynamic_flooding"], Literal["ri_dynamic_hostname"], Literal["ri_flexible_algorithm_definition"], Literal["ri_functional_capabilities"], Literal["ri_informational_capabilities"], Literal["ri_ip_algorithm"], Literal["ri_node_admin_tag"], Literal["ri_node_msd"], Literal["ri_pced"], Literal["ri_sbfd_discriminator"], Literal["ri_sid_label_range"], Literal["ri_sr_algorithm"], Literal["ri_sr_local_block"], Literal["ri_srms_preference"], Literal["ri_srv6_capabilities"], Literal["ri_te_mesh_group_ipv4"], Literal["ri_te_mesh_group_ipv6"], Literal["ri_te_node_capability_descriptor"], Literal["ri_tunnel_encapsulations"], Literal["te_link"], Literal["te_link_local"], Literal["te_node_attribute"], Literal["te_optical_node_property"], Literal["te_router_address"], Literal["te_router_ipv6_address"], Literal["ttz_id"], Literal["ttz_options"], Literal["ttz_router"]]
         """
@@ -210691,27 +210691,31 @@ class Ospfv2OpaqueLsaIter(OpenApiIter):
         if not isinstance(item, Ospfv2OpaqueLsa):
             raise Exception("Item is not an instance of Ospfv2OpaqueLsa")
 
-    def opaquelsa(self, scope=None, type=None, id=None):
+    def opaquelsa(self, type=None, tlv_information=None, id=None):
         # type: (Union[Literal["area"], Literal["domain"], Literal["local"]],Union[Literal["dynamic_flooding"], Literal["extended_inter_area_asbr"], Literal["extended_link"], Literal["extended_prefix"], Literal["grace"], Literal["inter_as_te_v2"], Literal["l1vpn"], Literal["router_information"], Literal["sycamore_optical_topology"], Literal["traffic_engineering"], Literal["ttz"]],int) -> Ospfv2OpaqueLsaIter
         """Factory method that creates an instance of the Ospfv2OpaqueLsa class
 
-        Contents of OSPFv2 Opaque LSA Type 9/10/11 (RFC 5250).. The Link State ID of an Opaque LSA is not plain IPv4 address; it is split into. an Opaque Type (most significant octet) and an Opaque ID (remaining three octets),. decoded here as type and id (RFC 5250 Section 3). header.lsa_id carries. the raw, undecoded Link State ID value.
+        Contents of OSPFv2 Opaque LSA Type 9/10/11 (RFC 5250).. The Link State ID of an Opaque LSA is not plain IPv4 address; it is split into. an Opaque Type (most significant octet) and an Opaque ID (remaining three octets),. decoded here as tlv_information and id (RFC 5250 Section 3). header.lsa_id carries. the raw, undecoded Link State ID value.
 
         Returns: Ospfv2OpaqueLsaIter
         """
-        item = Ospfv2OpaqueLsa(parent=self._parent, scope=scope, type=type, id=id)
+        item = Ospfv2OpaqueLsa(
+            parent=self._parent, type=type, tlv_information=tlv_information, id=id
+        )
         self._add(item)
         return self
 
-    def add(self, scope=None, type=None, id=None):
+    def add(self, type=None, tlv_information=None, id=None):
         # type: (Union[Literal["area"], Literal["domain"], Literal["local"]],Union[Literal["dynamic_flooding"], Literal["extended_inter_area_asbr"], Literal["extended_link"], Literal["extended_prefix"], Literal["grace"], Literal["inter_as_te_v2"], Literal["l1vpn"], Literal["router_information"], Literal["sycamore_optical_topology"], Literal["traffic_engineering"], Literal["ttz"]],int) -> Ospfv2OpaqueLsa
         """Add method that creates and returns an instance of the Ospfv2OpaqueLsa class
 
-        Contents of OSPFv2 Opaque LSA Type 9/10/11 (RFC 5250).. The Link State ID of an Opaque LSA is not plain IPv4 address; it is split into. an Opaque Type (most significant octet) and an Opaque ID (remaining three octets),. decoded here as type and id (RFC 5250 Section 3). header.lsa_id carries. the raw, undecoded Link State ID value.
+        Contents of OSPFv2 Opaque LSA Type 9/10/11 (RFC 5250).. The Link State ID of an Opaque LSA is not plain IPv4 address; it is split into. an Opaque Type (most significant octet) and an Opaque ID (remaining three octets),. decoded here as tlv_information and id (RFC 5250 Section 3). header.lsa_id carries. the raw, undecoded Link State ID value.
 
         Returns: Ospfv2OpaqueLsa
         """
-        item = Ospfv2OpaqueLsa(parent=self._parent, scope=scope, type=type, id=id)
+        item = Ospfv2OpaqueLsa(
+            parent=self._parent, type=type, tlv_information=tlv_information, id=id
+        )
         self._add(item)
         return item
 
