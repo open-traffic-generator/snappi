@@ -30762,7 +30762,7 @@ components:
         Contents of OSPFv2 Opaque LSA - Type 9/10/11 (RFC 5250).
         The Link State ID of an Opaque LSA is not a plain IPv4 address; it is split into
         an Opaque Type (most significant octet) and an Opaque ID (remaining three octets),
-        decoded here as opaque_type and opaque_id (RFC 5250 Section 3). header.lsa_id carries
+        decoded here as type and id (RFC 5250 Section 3). header.lsa_id carries
         the raw, undecoded Link State ID value.
       type: object
       properties:
@@ -30790,7 +30790,7 @@ components:
           - local
           - area
           - domain
-        opaque_type:
+        type:
           description: |-
             The Opaque Type, decoded from the most significant octet of the LSA's Link
             State ID (RFC 5250 Section 3). Identifies the type of information carried in
@@ -30854,7 +30854,7 @@ components:
           - ttz
           - dynamic_flooding
           - extended_inter_area_asbr
-        opaque_id:
+        id:
           description: |-
             The Opaque ID, decoded from the least significant three octets of the LSA's Link State ID (RFC 5250 Section 3). Used to further distinguish LSAs of the same Opaque Type originated by the same router.
           type: integer
@@ -30876,14 +30876,14 @@ components:
       properties:
         type:
           description: |-
-            The TLV Type field. Its meaning is scoped by the parent LSA's opaque_type
+            The TLV Type field. Its meaning is scoped by the parent LSA's type
             (IANA OSPFv2 TLV registries).
           type: string
           x-field-uid: 1
           x-enum:
             te_router_address:
               description: |-
-                Router Address, TE LSA (opaque_type traffic_engineering) TLV type 1 (RFC 3630).
+                Router Address, TE LSA (type traffic_engineering) TLV type 1 (RFC 3630).
               x-field-uid: 1
             te_link:
               description: |-
@@ -30907,7 +30907,7 @@ components:
               x-field-uid: 6
             ri_informational_capabilities:
               description: |-
-                Router Informational Capabilities, RI LSA (opaque_type router_information) TLV type 1 (RFC 7770).
+                Router Informational Capabilities, RI LSA (type router_information) TLV type 1 (RFC 7770).
               x-field-uid: 7
             ri_functional_capabilities:
               description: |-
@@ -30987,7 +30987,7 @@ components:
               x-field-uid: 26
             extended_prefix_tlv:
               description: |-
-                OSPFv2 Extended Prefix TLV, Extended Prefix Opaque LSA (opaque_type extended_prefix) TLV type 1 (RFC 7684).
+                OSPFv2 Extended Prefix TLV, Extended Prefix Opaque LSA (type extended_prefix) TLV type 1 (RFC 7684).
               x-field-uid: 27
             extended_prefix_range_tlv:
               description: |-
@@ -30995,11 +30995,11 @@ components:
               x-field-uid: 28
             extended_link_tlv:
               description: |-
-                OSPFv2 Extended Link TLV, Extended Link Opaque LSA (opaque_type extended_link) TLV type 1 (RFC 7684).
+                OSPFv2 Extended Link TLV, Extended Link Opaque LSA (type extended_link) TLV type 1 (RFC 7684).
               x-field-uid: 29
             ttz_id:
               description: |-
-                TTZ ID TLV, TTZ LSA (opaque_type ttz) TLV type 1 (RFC 8099).
+                TTZ ID TLV, TTZ LSA (type ttz) TLV type 1 (RFC 8099).
               x-field-uid: 30
             ttz_router:
               description: |-
@@ -31011,7 +31011,7 @@ components:
               x-field-uid: 32
             dynamic_flooding_area_router_ids:
               description: |-
-                OSPF Area Router IDs, Dynamic Flooding Opaque LSA (opaque_type dynamic_flooding) TLV type 1 (RFC 9667).
+                OSPF Area Router IDs, Dynamic Flooding Opaque LSA (type dynamic_flooding) TLV type 1 (RFC 9667).
               x-field-uid: 33
             dynamic_flooding_path:
               description: |-
@@ -31019,7 +31019,7 @@ components:
               x-field-uid: 34
             extended_inter_area_asbr_tlv:
               description: |-
-                Extended Inter-Area ASBR, EIA-ASBR LSA (opaque_type extended_inter_area_asbr) TLV type 1 (RFC 9350 Section 10.1).
+                Extended Inter-Area ASBR, EIA-ASBR LSA (type extended_inter_area_asbr) TLV type 1 (RFC 9350 Section 10.1).
               x-field-uid: 35
           enum:
           - te_router_address
