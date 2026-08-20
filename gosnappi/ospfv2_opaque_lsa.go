@@ -255,7 +255,7 @@ func (obj *ospfv2OpaqueLsa) setNil() {
 // Ospfv2OpaqueLsa is contents of OSPFv2 Opaque LSA - Type 9/10/11 (RFC 5250).
 // The Link State ID of an Opaque LSA is not a plain IPv4 address; it is split into
 // an Opaque Type (most significant octet) and an Opaque ID (remaining three octets),
-// decoded here as opaque_type and opaque_id (RFC 5250 Section 3). header.lsa_id carries
+// decoded here as type and id (RFC 5250 Section 3). header.lsa_id carries
 // the raw, undecoded Link State ID value.
 type Ospfv2OpaqueLsa interface {
 	Validation
@@ -292,18 +292,18 @@ type Ospfv2OpaqueLsa interface {
 	SetScope(value Ospfv2OpaqueLsaScopeEnum) Ospfv2OpaqueLsa
 	// HasScope checks if Scope has been set in Ospfv2OpaqueLsa
 	HasScope() bool
-	// OpaqueType returns Ospfv2OpaqueLsaOpaqueTypeEnum, set in Ospfv2OpaqueLsa
-	OpaqueType() Ospfv2OpaqueLsaOpaqueTypeEnum
-	// SetOpaqueType assigns Ospfv2OpaqueLsaOpaqueTypeEnum provided by user to Ospfv2OpaqueLsa
-	SetOpaqueType(value Ospfv2OpaqueLsaOpaqueTypeEnum) Ospfv2OpaqueLsa
-	// HasOpaqueType checks if OpaqueType has been set in Ospfv2OpaqueLsa
-	HasOpaqueType() bool
-	// OpaqueId returns uint32, set in Ospfv2OpaqueLsa.
-	OpaqueId() uint32
-	// SetOpaqueId assigns uint32 provided by user to Ospfv2OpaqueLsa
-	SetOpaqueId(value uint32) Ospfv2OpaqueLsa
-	// HasOpaqueId checks if OpaqueId has been set in Ospfv2OpaqueLsa
-	HasOpaqueId() bool
+	// Type returns Ospfv2OpaqueLsaTypeEnum, set in Ospfv2OpaqueLsa
+	Type() Ospfv2OpaqueLsaTypeEnum
+	// SetType assigns Ospfv2OpaqueLsaTypeEnum provided by user to Ospfv2OpaqueLsa
+	SetType(value Ospfv2OpaqueLsaTypeEnum) Ospfv2OpaqueLsa
+	// HasType checks if Type has been set in Ospfv2OpaqueLsa
+	HasType() bool
+	// Id returns uint32, set in Ospfv2OpaqueLsa.
+	Id() uint32
+	// SetId assigns uint32 provided by user to Ospfv2OpaqueLsa
+	SetId(value uint32) Ospfv2OpaqueLsa
+	// HasId checks if Id has been set in Ospfv2OpaqueLsa
+	HasId() bool
 	// Tlvs returns Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIterIter, set in Ospfv2OpaqueLsa
 	Tlvs() Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter
 	setNil()
@@ -376,79 +376,79 @@ func (obj *ospfv2OpaqueLsa) SetScope(value Ospfv2OpaqueLsaScopeEnum) Ospfv2Opaqu
 	return obj
 }
 
-type Ospfv2OpaqueLsaOpaqueTypeEnum string
+type Ospfv2OpaqueLsaTypeEnum string
 
-// Enum of OpaqueType on Ospfv2OpaqueLsa
-var Ospfv2OpaqueLsaOpaqueType = struct {
-	TRAFFIC_ENGINEERING       Ospfv2OpaqueLsaOpaqueTypeEnum
-	SYCAMORE_OPTICAL_TOPOLOGY Ospfv2OpaqueLsaOpaqueTypeEnum
-	GRACE                     Ospfv2OpaqueLsaOpaqueTypeEnum
-	ROUTER_INFORMATION        Ospfv2OpaqueLsaOpaqueTypeEnum
-	L1VPN                     Ospfv2OpaqueLsaOpaqueTypeEnum
-	INTER_AS_TE_V2            Ospfv2OpaqueLsaOpaqueTypeEnum
-	EXTENDED_PREFIX           Ospfv2OpaqueLsaOpaqueTypeEnum
-	EXTENDED_LINK             Ospfv2OpaqueLsaOpaqueTypeEnum
-	TTZ                       Ospfv2OpaqueLsaOpaqueTypeEnum
-	DYNAMIC_FLOODING          Ospfv2OpaqueLsaOpaqueTypeEnum
-	EXTENDED_INTER_AREA_ASBR  Ospfv2OpaqueLsaOpaqueTypeEnum
+// Enum of Type on Ospfv2OpaqueLsa
+var Ospfv2OpaqueLsaType = struct {
+	TRAFFIC_ENGINEERING       Ospfv2OpaqueLsaTypeEnum
+	SYCAMORE_OPTICAL_TOPOLOGY Ospfv2OpaqueLsaTypeEnum
+	GRACE                     Ospfv2OpaqueLsaTypeEnum
+	ROUTER_INFORMATION        Ospfv2OpaqueLsaTypeEnum
+	L1VPN                     Ospfv2OpaqueLsaTypeEnum
+	INTER_AS_TE_V2            Ospfv2OpaqueLsaTypeEnum
+	EXTENDED_PREFIX           Ospfv2OpaqueLsaTypeEnum
+	EXTENDED_LINK             Ospfv2OpaqueLsaTypeEnum
+	TTZ                       Ospfv2OpaqueLsaTypeEnum
+	DYNAMIC_FLOODING          Ospfv2OpaqueLsaTypeEnum
+	EXTENDED_INTER_AREA_ASBR  Ospfv2OpaqueLsaTypeEnum
 }{
-	TRAFFIC_ENGINEERING:       Ospfv2OpaqueLsaOpaqueTypeEnum("traffic_engineering"),
-	SYCAMORE_OPTICAL_TOPOLOGY: Ospfv2OpaqueLsaOpaqueTypeEnum("sycamore_optical_topology"),
-	GRACE:                     Ospfv2OpaqueLsaOpaqueTypeEnum("grace"),
-	ROUTER_INFORMATION:        Ospfv2OpaqueLsaOpaqueTypeEnum("router_information"),
-	L1VPN:                     Ospfv2OpaqueLsaOpaqueTypeEnum("l1vpn"),
-	INTER_AS_TE_V2:            Ospfv2OpaqueLsaOpaqueTypeEnum("inter_as_te_v2"),
-	EXTENDED_PREFIX:           Ospfv2OpaqueLsaOpaqueTypeEnum("extended_prefix"),
-	EXTENDED_LINK:             Ospfv2OpaqueLsaOpaqueTypeEnum("extended_link"),
-	TTZ:                       Ospfv2OpaqueLsaOpaqueTypeEnum("ttz"),
-	DYNAMIC_FLOODING:          Ospfv2OpaqueLsaOpaqueTypeEnum("dynamic_flooding"),
-	EXTENDED_INTER_AREA_ASBR:  Ospfv2OpaqueLsaOpaqueTypeEnum("extended_inter_area_asbr"),
+	TRAFFIC_ENGINEERING:       Ospfv2OpaqueLsaTypeEnum("traffic_engineering"),
+	SYCAMORE_OPTICAL_TOPOLOGY: Ospfv2OpaqueLsaTypeEnum("sycamore_optical_topology"),
+	GRACE:                     Ospfv2OpaqueLsaTypeEnum("grace"),
+	ROUTER_INFORMATION:        Ospfv2OpaqueLsaTypeEnum("router_information"),
+	L1VPN:                     Ospfv2OpaqueLsaTypeEnum("l1vpn"),
+	INTER_AS_TE_V2:            Ospfv2OpaqueLsaTypeEnum("inter_as_te_v2"),
+	EXTENDED_PREFIX:           Ospfv2OpaqueLsaTypeEnum("extended_prefix"),
+	EXTENDED_LINK:             Ospfv2OpaqueLsaTypeEnum("extended_link"),
+	TTZ:                       Ospfv2OpaqueLsaTypeEnum("ttz"),
+	DYNAMIC_FLOODING:          Ospfv2OpaqueLsaTypeEnum("dynamic_flooding"),
+	EXTENDED_INTER_AREA_ASBR:  Ospfv2OpaqueLsaTypeEnum("extended_inter_area_asbr"),
 }
 
-func (obj *ospfv2OpaqueLsa) OpaqueType() Ospfv2OpaqueLsaOpaqueTypeEnum {
-	return Ospfv2OpaqueLsaOpaqueTypeEnum(obj.obj.OpaqueType.Enum().String())
+func (obj *ospfv2OpaqueLsa) Type() Ospfv2OpaqueLsaTypeEnum {
+	return Ospfv2OpaqueLsaTypeEnum(obj.obj.Type.Enum().String())
 }
 
 // The Opaque Type, decoded from the most significant octet of the LSA's Link
 // State ID (RFC 5250 Section 3). Identifies the type of information carried in
 // the tlvs (IANA Opaque LSA Option Types registry).
-// OpaqueType returns a string
-func (obj *ospfv2OpaqueLsa) HasOpaqueType() bool {
-	return obj.obj.OpaqueType != nil
+// Type returns a string
+func (obj *ospfv2OpaqueLsa) HasType() bool {
+	return obj.obj.Type != nil
 }
 
-func (obj *ospfv2OpaqueLsa) SetOpaqueType(value Ospfv2OpaqueLsaOpaqueTypeEnum) Ospfv2OpaqueLsa {
-	intValue, ok := otg.Ospfv2OpaqueLsa_OpaqueType_Enum_value[string(value)]
+func (obj *ospfv2OpaqueLsa) SetType(value Ospfv2OpaqueLsaTypeEnum) Ospfv2OpaqueLsa {
+	intValue, ok := otg.Ospfv2OpaqueLsa_Type_Enum_value[string(value)]
 	if !ok {
 		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
-			"%s is not a valid choice on Ospfv2OpaqueLsaOpaqueTypeEnum", string(value)))
+			"%s is not a valid choice on Ospfv2OpaqueLsaTypeEnum", string(value)))
 		return obj
 	}
-	enumValue := otg.Ospfv2OpaqueLsa_OpaqueType_Enum(intValue)
-	obj.obj.OpaqueType = &enumValue
+	enumValue := otg.Ospfv2OpaqueLsa_Type_Enum(intValue)
+	obj.obj.Type = &enumValue
 
 	return obj
 }
 
 // The Opaque ID, decoded from the least significant three octets of the LSA's Link State ID (RFC 5250 Section 3). Used to further distinguish LSAs of the same Opaque Type originated by the same router.
-// OpaqueId returns a uint32
-func (obj *ospfv2OpaqueLsa) OpaqueId() uint32 {
+// Id returns a uint32
+func (obj *ospfv2OpaqueLsa) Id() uint32 {
 
-	return *obj.obj.OpaqueId
+	return *obj.obj.Id
 
 }
 
 // The Opaque ID, decoded from the least significant three octets of the LSA's Link State ID (RFC 5250 Section 3). Used to further distinguish LSAs of the same Opaque Type originated by the same router.
-// OpaqueId returns a uint32
-func (obj *ospfv2OpaqueLsa) HasOpaqueId() bool {
-	return obj.obj.OpaqueId != nil
+// Id returns a uint32
+func (obj *ospfv2OpaqueLsa) HasId() bool {
+	return obj.obj.Id != nil
 }
 
 // The Opaque ID, decoded from the least significant three octets of the LSA's Link State ID (RFC 5250 Section 3). Used to further distinguish LSAs of the same Opaque Type originated by the same router.
-// SetOpaqueId sets the uint32 value in the Ospfv2OpaqueLsa object
-func (obj *ospfv2OpaqueLsa) SetOpaqueId(value uint32) Ospfv2OpaqueLsa {
+// SetId sets the uint32 value in the Ospfv2OpaqueLsa object
+func (obj *ospfv2OpaqueLsa) SetId(value uint32) Ospfv2OpaqueLsa {
 
-	obj.obj.OpaqueId = &value
+	obj.obj.Id = &value
 	return obj
 }
 
