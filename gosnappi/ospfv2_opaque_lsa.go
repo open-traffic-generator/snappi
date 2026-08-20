@@ -17,6 +17,7 @@ type ospfv2OpaqueLsa struct {
 	marshaller   marshalOspfv2OpaqueLsa
 	unMarshaller unMarshalOspfv2OpaqueLsa
 	headerHolder Ospfv2LsaHeader
+	tlvsHolder   Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter
 }
 
 func NewOspfv2OpaqueLsa() Ospfv2OpaqueLsa {
@@ -245,12 +246,17 @@ func (obj *ospfv2OpaqueLsa) Clone() (Ospfv2OpaqueLsa, error) {
 
 func (obj *ospfv2OpaqueLsa) setNil() {
 	obj.headerHolder = nil
+	obj.tlvsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Ospfv2OpaqueLsa is contents of OSPFv2 Opaque LSA - Type 9/10/11.
+// Ospfv2OpaqueLsa is contents of OSPFv2 Opaque LSA - Type 9/10/11 (RFC 5250).
+// The Link State ID of an Opaque LSA is not a plain IPv4 address; it is split into
+// an Opaque Type (most significant octet) and an Opaque ID (remaining three octets),
+// decoded here as opaque_type and opaque_id (RFC 5250 Section 3). header.lsa_id carries
+// the raw, undecoded Link State ID value.
 type Ospfv2OpaqueLsa interface {
 	Validation
 	// msg marshals Ospfv2OpaqueLsa to protobuf object *otg.Ospfv2OpaqueLsa
@@ -280,12 +286,26 @@ type Ospfv2OpaqueLsa interface {
 	SetHeader(value Ospfv2LsaHeader) Ospfv2OpaqueLsa
 	// HasHeader checks if Header has been set in Ospfv2OpaqueLsa
 	HasHeader() bool
-	// Type returns Ospfv2OpaqueLsaTypeEnum, set in Ospfv2OpaqueLsa
-	Type() Ospfv2OpaqueLsaTypeEnum
-	// SetType assigns Ospfv2OpaqueLsaTypeEnum provided by user to Ospfv2OpaqueLsa
-	SetType(value Ospfv2OpaqueLsaTypeEnum) Ospfv2OpaqueLsa
-	// HasType checks if Type has been set in Ospfv2OpaqueLsa
-	HasType() bool
+	// Scope returns Ospfv2OpaqueLsaScopeEnum, set in Ospfv2OpaqueLsa
+	Scope() Ospfv2OpaqueLsaScopeEnum
+	// SetScope assigns Ospfv2OpaqueLsaScopeEnum provided by user to Ospfv2OpaqueLsa
+	SetScope(value Ospfv2OpaqueLsaScopeEnum) Ospfv2OpaqueLsa
+	// HasScope checks if Scope has been set in Ospfv2OpaqueLsa
+	HasScope() bool
+	// OpaqueType returns Ospfv2OpaqueLsaOpaqueTypeEnum, set in Ospfv2OpaqueLsa
+	OpaqueType() Ospfv2OpaqueLsaOpaqueTypeEnum
+	// SetOpaqueType assigns Ospfv2OpaqueLsaOpaqueTypeEnum provided by user to Ospfv2OpaqueLsa
+	SetOpaqueType(value Ospfv2OpaqueLsaOpaqueTypeEnum) Ospfv2OpaqueLsa
+	// HasOpaqueType checks if OpaqueType has been set in Ospfv2OpaqueLsa
+	HasOpaqueType() bool
+	// OpaqueId returns uint32, set in Ospfv2OpaqueLsa.
+	OpaqueId() uint32
+	// SetOpaqueId assigns uint32 provided by user to Ospfv2OpaqueLsa
+	SetOpaqueId(value uint32) Ospfv2OpaqueLsa
+	// HasOpaqueId checks if OpaqueId has been set in Ospfv2OpaqueLsa
+	HasOpaqueId() bool
+	// Tlvs returns Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIterIter, set in Ospfv2OpaqueLsa
+	Tlvs() Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter
 	setNil()
 }
 
@@ -317,39 +337,207 @@ func (obj *ospfv2OpaqueLsa) SetHeader(value Ospfv2LsaHeader) Ospfv2OpaqueLsa {
 	return obj
 }
 
-type Ospfv2OpaqueLsaTypeEnum string
+type Ospfv2OpaqueLsaScopeEnum string
 
-// Enum of Type on Ospfv2OpaqueLsa
-var Ospfv2OpaqueLsaType = struct {
-	LOCAL  Ospfv2OpaqueLsaTypeEnum
-	AREA   Ospfv2OpaqueLsaTypeEnum
-	DOMAIN Ospfv2OpaqueLsaTypeEnum
+// Enum of Scope on Ospfv2OpaqueLsa
+var Ospfv2OpaqueLsaScope = struct {
+	LOCAL  Ospfv2OpaqueLsaScopeEnum
+	AREA   Ospfv2OpaqueLsaScopeEnum
+	DOMAIN Ospfv2OpaqueLsaScopeEnum
 }{
-	LOCAL:  Ospfv2OpaqueLsaTypeEnum("local"),
-	AREA:   Ospfv2OpaqueLsaTypeEnum("area"),
-	DOMAIN: Ospfv2OpaqueLsaTypeEnum("domain"),
+	LOCAL:  Ospfv2OpaqueLsaScopeEnum("local"),
+	AREA:   Ospfv2OpaqueLsaScopeEnum("area"),
+	DOMAIN: Ospfv2OpaqueLsaScopeEnum("domain"),
 }
 
-func (obj *ospfv2OpaqueLsa) Type() Ospfv2OpaqueLsaTypeEnum {
-	return Ospfv2OpaqueLsaTypeEnum(obj.obj.Type.Enum().String())
+func (obj *ospfv2OpaqueLsa) Scope() Ospfv2OpaqueLsaScopeEnum {
+	return Ospfv2OpaqueLsaScopeEnum(obj.obj.Scope.Enum().String())
 }
 
-// The scope of the Opaque LSA.
-// Type returns a string
-func (obj *ospfv2OpaqueLsa) HasType() bool {
-	return obj.obj.Type != nil
+// The flooding scope of the Opaque LSA, determined by the LSA's LS Type
+// (RFC 5250 Section 4): local (Type 9, not flooded beyond the local link),
+// area (Type 10, flooded throughout the area) or domain (Type 11, flooded
+// throughout the Autonomous System, excluding stub areas).
+// Scope returns a string
+func (obj *ospfv2OpaqueLsa) HasScope() bool {
+	return obj.obj.Scope != nil
 }
 
-func (obj *ospfv2OpaqueLsa) SetType(value Ospfv2OpaqueLsaTypeEnum) Ospfv2OpaqueLsa {
-	intValue, ok := otg.Ospfv2OpaqueLsa_Type_Enum_value[string(value)]
+func (obj *ospfv2OpaqueLsa) SetScope(value Ospfv2OpaqueLsaScopeEnum) Ospfv2OpaqueLsa {
+	intValue, ok := otg.Ospfv2OpaqueLsa_Scope_Enum_value[string(value)]
 	if !ok {
 		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
-			"%s is not a valid choice on Ospfv2OpaqueLsaTypeEnum", string(value)))
+			"%s is not a valid choice on Ospfv2OpaqueLsaScopeEnum", string(value)))
 		return obj
 	}
-	enumValue := otg.Ospfv2OpaqueLsa_Type_Enum(intValue)
-	obj.obj.Type = &enumValue
+	enumValue := otg.Ospfv2OpaqueLsa_Scope_Enum(intValue)
+	obj.obj.Scope = &enumValue
 
+	return obj
+}
+
+type Ospfv2OpaqueLsaOpaqueTypeEnum string
+
+// Enum of OpaqueType on Ospfv2OpaqueLsa
+var Ospfv2OpaqueLsaOpaqueType = struct {
+	TRAFFIC_ENGINEERING       Ospfv2OpaqueLsaOpaqueTypeEnum
+	SYCAMORE_OPTICAL_TOPOLOGY Ospfv2OpaqueLsaOpaqueTypeEnum
+	GRACE                     Ospfv2OpaqueLsaOpaqueTypeEnum
+	ROUTER_INFORMATION        Ospfv2OpaqueLsaOpaqueTypeEnum
+	L1VPN                     Ospfv2OpaqueLsaOpaqueTypeEnum
+	INTER_AS_TE_V2            Ospfv2OpaqueLsaOpaqueTypeEnum
+	EXTENDED_PREFIX           Ospfv2OpaqueLsaOpaqueTypeEnum
+	EXTENDED_LINK             Ospfv2OpaqueLsaOpaqueTypeEnum
+	TTZ                       Ospfv2OpaqueLsaOpaqueTypeEnum
+	DYNAMIC_FLOODING          Ospfv2OpaqueLsaOpaqueTypeEnum
+	EXTENDED_INTER_AREA_ASBR  Ospfv2OpaqueLsaOpaqueTypeEnum
+}{
+	TRAFFIC_ENGINEERING:       Ospfv2OpaqueLsaOpaqueTypeEnum("traffic_engineering"),
+	SYCAMORE_OPTICAL_TOPOLOGY: Ospfv2OpaqueLsaOpaqueTypeEnum("sycamore_optical_topology"),
+	GRACE:                     Ospfv2OpaqueLsaOpaqueTypeEnum("grace"),
+	ROUTER_INFORMATION:        Ospfv2OpaqueLsaOpaqueTypeEnum("router_information"),
+	L1VPN:                     Ospfv2OpaqueLsaOpaqueTypeEnum("l1vpn"),
+	INTER_AS_TE_V2:            Ospfv2OpaqueLsaOpaqueTypeEnum("inter_as_te_v2"),
+	EXTENDED_PREFIX:           Ospfv2OpaqueLsaOpaqueTypeEnum("extended_prefix"),
+	EXTENDED_LINK:             Ospfv2OpaqueLsaOpaqueTypeEnum("extended_link"),
+	TTZ:                       Ospfv2OpaqueLsaOpaqueTypeEnum("ttz"),
+	DYNAMIC_FLOODING:          Ospfv2OpaqueLsaOpaqueTypeEnum("dynamic_flooding"),
+	EXTENDED_INTER_AREA_ASBR:  Ospfv2OpaqueLsaOpaqueTypeEnum("extended_inter_area_asbr"),
+}
+
+func (obj *ospfv2OpaqueLsa) OpaqueType() Ospfv2OpaqueLsaOpaqueTypeEnum {
+	return Ospfv2OpaqueLsaOpaqueTypeEnum(obj.obj.OpaqueType.Enum().String())
+}
+
+// The Opaque Type, decoded from the most significant octet of the LSA's Link
+// State ID (RFC 5250 Section 3). Identifies the type of information carried in
+// the tlvs (IANA Opaque LSA Option Types registry).
+// OpaqueType returns a string
+func (obj *ospfv2OpaqueLsa) HasOpaqueType() bool {
+	return obj.obj.OpaqueType != nil
+}
+
+func (obj *ospfv2OpaqueLsa) SetOpaqueType(value Ospfv2OpaqueLsaOpaqueTypeEnum) Ospfv2OpaqueLsa {
+	intValue, ok := otg.Ospfv2OpaqueLsa_OpaqueType_Enum_value[string(value)]
+	if !ok {
+		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
+			"%s is not a valid choice on Ospfv2OpaqueLsaOpaqueTypeEnum", string(value)))
+		return obj
+	}
+	enumValue := otg.Ospfv2OpaqueLsa_OpaqueType_Enum(intValue)
+	obj.obj.OpaqueType = &enumValue
+
+	return obj
+}
+
+// The Opaque ID, decoded from the least significant three octets of the LSA's Link State ID (RFC 5250 Section 3). Used to further distinguish LSAs of the same Opaque Type originated by the same router.
+// OpaqueId returns a uint32
+func (obj *ospfv2OpaqueLsa) OpaqueId() uint32 {
+
+	return *obj.obj.OpaqueId
+
+}
+
+// The Opaque ID, decoded from the least significant three octets of the LSA's Link State ID (RFC 5250 Section 3). Used to further distinguish LSAs of the same Opaque Type originated by the same router.
+// OpaqueId returns a uint32
+func (obj *ospfv2OpaqueLsa) HasOpaqueId() bool {
+	return obj.obj.OpaqueId != nil
+}
+
+// The Opaque ID, decoded from the least significant three octets of the LSA's Link State ID (RFC 5250 Section 3). Used to further distinguish LSAs of the same Opaque Type originated by the same router.
+// SetOpaqueId sets the uint32 value in the Ospfv2OpaqueLsa object
+func (obj *ospfv2OpaqueLsa) SetOpaqueId(value uint32) Ospfv2OpaqueLsa {
+
+	obj.obj.OpaqueId = &value
+	return obj
+}
+
+// The raw, undecoded TLVs carried in the body of the Opaque LSA, in the generic
+// type/length/value TLV format used by all OSPFv2 Opaque LSAs (RFC 7770 Section 2,
+// RFC 8665, RFC 9492).
+// Tlvs returns a []Ospfv2OpaqueLsaTlv
+func (obj *ospfv2OpaqueLsa) Tlvs() Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter {
+	if len(obj.obj.Tlvs) == 0 {
+		obj.obj.Tlvs = []*otg.Ospfv2OpaqueLsaTlv{}
+	}
+	if obj.tlvsHolder == nil {
+		obj.tlvsHolder = newOspfv2OpaqueLsaOspfv2OpaqueLsaTlvIter(&obj.obj.Tlvs).setMsg(obj)
+	}
+	return obj.tlvsHolder
+}
+
+type ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter struct {
+	obj                     *ospfv2OpaqueLsa
+	ospfv2OpaqueLsaTlvSlice []Ospfv2OpaqueLsaTlv
+	fieldPtr                *[]*otg.Ospfv2OpaqueLsaTlv
+}
+
+func newOspfv2OpaqueLsaOspfv2OpaqueLsaTlvIter(ptr *[]*otg.Ospfv2OpaqueLsaTlv) Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter {
+	return &ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter{fieldPtr: ptr}
+}
+
+type Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter interface {
+	setMsg(*ospfv2OpaqueLsa) Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter
+	Items() []Ospfv2OpaqueLsaTlv
+	Add() Ospfv2OpaqueLsaTlv
+	Append(items ...Ospfv2OpaqueLsaTlv) Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter
+	Set(index int, newObj Ospfv2OpaqueLsaTlv) Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter
+	Clear() Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter
+	clearHolderSlice() Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter
+	appendHolderSlice(item Ospfv2OpaqueLsaTlv) Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter
+}
+
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter) setMsg(msg *ospfv2OpaqueLsa) Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&ospfv2OpaqueLsaTlv{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter) Items() []Ospfv2OpaqueLsaTlv {
+	return obj.ospfv2OpaqueLsaTlvSlice
+}
+
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter) Add() Ospfv2OpaqueLsaTlv {
+	newObj := &otg.Ospfv2OpaqueLsaTlv{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &ospfv2OpaqueLsaTlv{obj: newObj}
+	newLibObj.setDefault()
+	obj.ospfv2OpaqueLsaTlvSlice = append(obj.ospfv2OpaqueLsaTlvSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter) Append(items ...Ospfv2OpaqueLsaTlv) Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.ospfv2OpaqueLsaTlvSlice = append(obj.ospfv2OpaqueLsaTlvSlice, item)
+	}
+	return obj
+}
+
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter) Set(index int, newObj Ospfv2OpaqueLsaTlv) Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.ospfv2OpaqueLsaTlvSlice[index] = newObj
+	return obj
+}
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter) Clear() Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.Ospfv2OpaqueLsaTlv{}
+		obj.ospfv2OpaqueLsaTlvSlice = []Ospfv2OpaqueLsaTlv{}
+	}
+	return obj
+}
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter) clearHolderSlice() Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter {
+	if len(obj.ospfv2OpaqueLsaTlvSlice) > 0 {
+		obj.ospfv2OpaqueLsaTlvSlice = []Ospfv2OpaqueLsaTlv{}
+	}
+	return obj
+}
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter) appendHolderSlice(item Ospfv2OpaqueLsaTlv) Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter {
+	obj.ospfv2OpaqueLsaTlvSlice = append(obj.ospfv2OpaqueLsaTlvSlice, item)
 	return obj
 }
 
@@ -361,6 +549,20 @@ func (obj *ospfv2OpaqueLsa) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Header != nil {
 
 		obj.Header().validateObj(vObj, set_default)
+	}
+
+	if len(obj.obj.Tlvs) != 0 {
+
+		if set_default {
+			obj.Tlvs().clearHolderSlice()
+			for _, item := range obj.obj.Tlvs {
+				obj.Tlvs().appendHolderSlice(&ospfv2OpaqueLsaTlv{obj: item})
+			}
+		}
+		for _, item := range obj.Tlvs().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
 	}
 
 }
