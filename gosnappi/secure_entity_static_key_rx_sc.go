@@ -276,8 +276,6 @@ type SecureEntityStaticKeyRxSc interface {
 	DutSciSystemId() string
 	// SetDutSciSystemId assigns string provided by user to SecureEntityStaticKeyRxSc
 	SetDutSciSystemId(value string) SecureEntityStaticKeyRxSc
-	// HasDutSciSystemId checks if DutSciSystemId has been set in SecureEntityStaticKeyRxSc
-	HasDutSciSystemId() bool
 	// DutSciPortId returns uint32, set in SecureEntityStaticKeyRxSc.
 	DutSciPortId() uint32
 	// SetDutSciPortId assigns uint32 provided by user to SecureEntityStaticKeyRxSc
@@ -301,12 +299,6 @@ func (obj *secureEntityStaticKeyRxSc) DutSciSystemId() string {
 
 	return *obj.obj.DutSciSystemId
 
-}
-
-// System ID in DUT SCI.
-// DutSciSystemId returns a string
-func (obj *secureEntityStaticKeyRxSc) HasDutSciSystemId() bool {
-	return obj.obj.DutSciSystemId != nil
 }
 
 // System ID in DUT SCI.
@@ -453,6 +445,10 @@ func (obj *secureEntityStaticKeyRxSc) validateObj(vObj *validation, set_default 
 		obj.setDefault()
 	}
 
+	// DutSciSystemId is required
+	if obj.obj.DutSciSystemId == nil {
+		vObj.validationErrors = append(vObj.validationErrors, "DutSciSystemId is required field on interface SecureEntityStaticKeyRxSc")
+	}
 	if obj.obj.DutSciSystemId != nil {
 
 		err := obj.validateMac(obj.DutSciSystemId())

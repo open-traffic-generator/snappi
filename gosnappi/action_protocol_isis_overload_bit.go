@@ -294,9 +294,6 @@ type ActionProtocolIsisOverloadBit interface {
 // x-constraint:
 // - /components/schemas/Device.IsisRouter/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.IsisRouter/properties/name
-//
 // RouterNames returns a []string
 func (obj *actionProtocolIsisOverloadBit) RouterNames() []string {
 	if obj.obj.RouterNames == nil {
@@ -306,9 +303,6 @@ func (obj *actionProtocolIsisOverloadBit) RouterNames() []string {
 }
 
 // The names of IS-IS routers on which to apply the overload bit state. If no names are specified then the action is applied to all configured IS-IS routers.
-//
-// x-constraint:
-// - /components/schemas/Device.IsisRouter/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.IsisRouter/properties/name
