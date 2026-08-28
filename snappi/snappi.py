@@ -212763,7 +212763,7 @@ class Api(object):
     def __init__(self, **kwargs):
         self._version_meta = self.version()
         self._version_meta.api_spec_version = "1.61.0"
-        self._version_meta.sdk_version = "1.61.0"
+        self._version_meta.sdk_version = "1.61.1"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False
