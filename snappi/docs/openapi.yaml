@@ -20818,11 +20818,11 @@ components:
             The interface attribute to be updated.
           type: string
           x-enum:
-            metric:
+            routing_metric:
               x-field-uid: 1
           x-field-uid: 1
           enum:
-          - metric
+          - routing_metric
         routing_metric:
           description: |-
             The routing metric (interface output cost) to be updated on the OSPFv2

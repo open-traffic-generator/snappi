@@ -16070,7 +16070,7 @@ message UpdateProtocolConfigOspfv2InterfaceAttribute {
   message Choice {
     enum Enum {
       unspecified = 0;
-      metric = 1;
+      routing_metric = 1;
     }
   }
   // The interface attribute to be updated.

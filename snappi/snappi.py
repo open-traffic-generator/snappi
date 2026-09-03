@@ -168110,7 +168110,7 @@ class UpdateProtocolConfigOspfv2InterfaceAttribute(OpenApiObject):
         "choice": {
             "type": str,
             "enum": [
-                "metric",
+                "routing_metric",
             ],
         },
         "routing_metric": {
@@ -168126,7 +168126,7 @@ class UpdateProtocolConfigOspfv2InterfaceAttribute(OpenApiObject):
         "routing_metric": 10,
     }  # type: Dict[str, Union(type)]
 
-    METRIC = "metric"  # type: str
+    ROUTING_METRIC = "routing_metric"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -168150,12 +168150,12 @@ class UpdateProtocolConfigOspfv2InterfaceAttribute(OpenApiObject):
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["metric"]]
+        # type: () -> Union[Literal["routing_metric"]]
         """choice getter
 
         The interface attribute to be updated.
 
-        Returns: Union[Literal["metric"]]
+        Returns: Union[Literal["routing_metric"]]
         """
         return self._get_property("choice")
 
@@ -168165,7 +168165,7 @@ class UpdateProtocolConfigOspfv2InterfaceAttribute(OpenApiObject):
 
         The interface attribute to be updated.
 
-        value: Union[Literal["metric"]]
+        value: Union[Literal["routing_metric"]]
         """
         self._set_property("choice", value)
 
@@ -168188,7 +168188,7 @@ class UpdateProtocolConfigOspfv2InterfaceAttribute(OpenApiObject):
 
         value: int
         """
-        self._set_property("routing_metric", value)
+        self._set_property("routing_metric", value, "routing_metric")
 
 
 class UpdateProtocolConfigOspfv2InterfaceAttributeIter(OpenApiIter):
@@ -216333,7 +216333,7 @@ class Api(object):
     def __init__(self, **kwargs):
         self._version_meta = self.version()
         self._version_meta.api_spec_version = "1.61.0"
-        self._version_meta.sdk_version = "1.61.0"
+        self._version_meta.sdk_version = "1.61.1"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False
