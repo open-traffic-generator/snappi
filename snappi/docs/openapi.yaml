@@ -20823,7 +20823,7 @@ components:
           x-field-uid: 1
           enum:
           - metric
-        metric:
+        routing_metric:
           description: |-
             The routing metric (interface output cost) to be updated on the OSPFv2
             interface. It is advertised as the 16-bit TOS 0 metric of the corresponding

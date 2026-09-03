@@ -168113,7 +168113,7 @@ class UpdateProtocolConfigOspfv2InterfaceAttribute(OpenApiObject):
                 "metric",
             ],
         },
-        "metric": {
+        "routing_metric": {
             "type": int,
             "format": "uint32",
             "maximum": 65535,
@@ -168123,17 +168123,17 @@ class UpdateProtocolConfigOspfv2InterfaceAttribute(OpenApiObject):
     _REQUIRED = ()  # type: tuple(str)
 
     _DEFAULTS = {
-        "metric": 10,
+        "routing_metric": 10,
     }  # type: Dict[str, Union(type)]
 
     METRIC = "metric"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, choice=None, metric=10):
+    def __init__(self, parent=None, choice=None, routing_metric=10):
         super(UpdateProtocolConfigOspfv2InterfaceAttribute, self).__init__()
         self._parent = parent
-        self._set_property("metric", metric)
+        self._set_property("routing_metric", routing_metric)
         if (
             "choice" in self._DEFAULTS
             and choice is None
@@ -168143,7 +168143,7 @@ class UpdateProtocolConfigOspfv2InterfaceAttribute(OpenApiObject):
         else:
             self._set_property("choice", choice)
 
-    def set(self, metric=None):
+    def set(self, routing_metric=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -168170,25 +168170,25 @@ class UpdateProtocolConfigOspfv2InterfaceAttribute(OpenApiObject):
         self._set_property("choice", value)
 
     @property
-    def metric(self):
+    def routing_metric(self):
         # type: () -> int
-        """metric getter
+        """routing_metric getter
 
         The routing metric (interface output cost) to be updated on the OSPFv2. interface. It is advertised as the 16-bit TOS metric of the corresponding. link in the Router-LSA (RFC 2328 Appendix A.4.2); the interface output cost. has valid range of to 65535 (RFC 2328 Section C.3). This applies equally. to emulated and simulated OSPFv2 interfaces, since simulated router. originates its own Router-LSA carrying the same 16-bit link metric.. On simulated OSPFv2 interface (no real adjacency with the DUT; the interface. belongs to simulated router inside simulated topology), updating the metric. is true on-the-fly operation: the OSPFv2 session remains in the Up state and. the simulated router re-originates its Router-LSA (with an incremented LS. Sequence Number) carrying the new metric, which neighbors receive without any. session interruption.. On an emulated OSPFv2 interface (real adjacency with the DUT), true. on-the-fly metric update may not be supported. In that case the implementation. should return warning, disable the session, re-enable it with the updated. metric, and reflect the new value in the Router-LSA once the session comes. back up.
 
         Returns: int
         """
-        return self._get_property("metric")
+        return self._get_property("routing_metric")
 
-    @metric.setter
-    def metric(self, value):
-        """metric setter
+    @routing_metric.setter
+    def routing_metric(self, value):
+        """routing_metric setter
 
         The routing metric (interface output cost) to be updated on the OSPFv2. interface. It is advertised as the 16-bit TOS metric of the corresponding. link in the Router-LSA (RFC 2328 Appendix A.4.2); the interface output cost. has valid range of to 65535 (RFC 2328 Section C.3). This applies equally. to emulated and simulated OSPFv2 interfaces, since simulated router. originates its own Router-LSA carrying the same 16-bit link metric.. On simulated OSPFv2 interface (no real adjacency with the DUT; the interface. belongs to simulated router inside simulated topology), updating the metric. is true on-the-fly operation: the OSPFv2 session remains in the Up state and. the simulated router re-originates its Router-LSA (with an incremented LS. Sequence Number) carrying the new metric, which neighbors receive without any. session interruption.. On an emulated OSPFv2 interface (real adjacency with the DUT), true. on-the-fly metric update may not be supported. In that case the implementation. should return warning, disable the session, re-enable it with the updated. metric, and reflect the new value in the Router-LSA once the session comes. back up.
 
         value: int
         """
-        self._set_property("metric", value, "metric")
+        self._set_property("routing_metric", value)
 
 
 class UpdateProtocolConfigOspfv2InterfaceAttributeIter(OpenApiIter):
@@ -168223,7 +168223,7 @@ class UpdateProtocolConfigOspfv2InterfaceAttributeIter(OpenApiIter):
                 "Item is not an instance of UpdateProtocolConfigOspfv2InterfaceAttribute"
             )
 
-    def attribute(self, metric=10):
+    def attribute(self, routing_metric=10):
         # type: (int) -> UpdateProtocolConfigOspfv2InterfaceAttributeIter
         """Factory method that creates an instance of the UpdateProtocolConfigOspfv2InterfaceAttribute class
 
@@ -168232,12 +168232,12 @@ class UpdateProtocolConfigOspfv2InterfaceAttributeIter(OpenApiIter):
         Returns: UpdateProtocolConfigOspfv2InterfaceAttributeIter
         """
         item = UpdateProtocolConfigOspfv2InterfaceAttribute(
-            parent=self._parent, choice=self._choice, metric=metric
+            parent=self._parent, choice=self._choice, routing_metric=routing_metric
         )
         self._add(item)
         return self
 
-    def add(self, metric=10):
+    def add(self, routing_metric=10):
         # type: (int) -> UpdateProtocolConfigOspfv2InterfaceAttribute
         """Add method that creates and returns an instance of the UpdateProtocolConfigOspfv2InterfaceAttribute class
 
@@ -168246,7 +168246,7 @@ class UpdateProtocolConfigOspfv2InterfaceAttributeIter(OpenApiIter):
         Returns: UpdateProtocolConfigOspfv2InterfaceAttribute
         """
         item = UpdateProtocolConfigOspfv2InterfaceAttribute(
-            parent=self._parent, choice=self._choice, metric=metric
+            parent=self._parent, choice=self._choice, routing_metric=routing_metric
         )
         self._add(item)
         return item

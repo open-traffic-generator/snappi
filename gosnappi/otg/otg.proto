@@ -16096,7 +16096,7 @@ message UpdateProtocolConfigOspfv2InterfaceAttribute {
   // metric, and reflect the new value in the Router-LSA once the session comes
   // back up.
   // default = 10
-  optional uint32 metric = 2;
+  optional uint32 routing_metric = 2;
 }
 
 // A container for all configuration resources of various types to be appended.
