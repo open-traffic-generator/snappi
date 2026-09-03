@@ -270,12 +270,14 @@ type UpdateProtocolConfigOspfv2InterfaceAttribute interface {
 	setChoice(value UpdateProtocolConfigOspfv2InterfaceAttributeChoiceEnum) UpdateProtocolConfigOspfv2InterfaceAttribute
 	// HasChoice checks if Choice has been set in UpdateProtocolConfigOspfv2InterfaceAttribute
 	HasChoice() bool
-	// Metric returns uint32, set in UpdateProtocolConfigOspfv2InterfaceAttribute.
-	Metric() uint32
-	// SetMetric assigns uint32 provided by user to UpdateProtocolConfigOspfv2InterfaceAttribute
-	SetMetric(value uint32) UpdateProtocolConfigOspfv2InterfaceAttribute
-	// HasMetric checks if Metric has been set in UpdateProtocolConfigOspfv2InterfaceAttribute
-	HasMetric() bool
+	// getter for Metric to set choice.
+	Metric()
+	// RoutingMetric returns uint32, set in UpdateProtocolConfigOspfv2InterfaceAttribute.
+	RoutingMetric() uint32
+	// SetRoutingMetric assigns uint32 provided by user to UpdateProtocolConfigOspfv2InterfaceAttribute
+	SetRoutingMetric(value uint32) UpdateProtocolConfigOspfv2InterfaceAttribute
+	// HasRoutingMetric checks if RoutingMetric has been set in UpdateProtocolConfigOspfv2InterfaceAttribute
+	HasRoutingMetric() bool
 }
 
 type UpdateProtocolConfigOspfv2InterfaceAttributeChoiceEnum string
@@ -289,6 +291,11 @@ var UpdateProtocolConfigOspfv2InterfaceAttributeChoice = struct {
 
 func (obj *updateProtocolConfigOspfv2InterfaceAttribute) Choice() UpdateProtocolConfigOspfv2InterfaceAttributeChoiceEnum {
 	return UpdateProtocolConfigOspfv2InterfaceAttributeChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+// getter for Metric to set choice
+func (obj *updateProtocolConfigOspfv2InterfaceAttribute) Metric() {
+	obj.setChoice(UpdateProtocolConfigOspfv2InterfaceAttributeChoice.METRIC)
 }
 
 // The interface attribute to be updated.
@@ -306,12 +313,6 @@ func (obj *updateProtocolConfigOspfv2InterfaceAttribute) setChoice(value UpdateP
 	}
 	enumValue := otg.UpdateProtocolConfigOspfv2InterfaceAttribute_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
-	obj.obj.Metric = nil
-
-	if value == UpdateProtocolConfigOspfv2InterfaceAttributeChoice.METRIC {
-		defaultValue := uint32(10)
-		obj.obj.Metric = &defaultValue
-	}
 
 	return obj
 }
@@ -335,14 +336,10 @@ func (obj *updateProtocolConfigOspfv2InterfaceAttribute) setChoice(value UpdateP
 // should return a warning, disable the session, re-enable it with the updated
 // metric, and reflect the new value in the Router-LSA once the session comes
 // back up.
-// Metric returns a uint32
-func (obj *updateProtocolConfigOspfv2InterfaceAttribute) Metric() uint32 {
+// RoutingMetric returns a uint32
+func (obj *updateProtocolConfigOspfv2InterfaceAttribute) RoutingMetric() uint32 {
 
-	if obj.obj.Metric == nil {
-		obj.setChoice(UpdateProtocolConfigOspfv2InterfaceAttributeChoice.METRIC)
-	}
-
-	return *obj.obj.Metric
+	return *obj.obj.RoutingMetric
 
 }
 
@@ -365,9 +362,9 @@ func (obj *updateProtocolConfigOspfv2InterfaceAttribute) Metric() uint32 {
 // should return a warning, disable the session, re-enable it with the updated
 // metric, and reflect the new value in the Router-LSA once the session comes
 // back up.
-// Metric returns a uint32
-func (obj *updateProtocolConfigOspfv2InterfaceAttribute) HasMetric() bool {
-	return obj.obj.Metric != nil
+// RoutingMetric returns a uint32
+func (obj *updateProtocolConfigOspfv2InterfaceAttribute) HasRoutingMetric() bool {
+	return obj.obj.RoutingMetric != nil
 }
 
 // The routing metric (interface output cost) to be updated on the OSPFv2
@@ -389,10 +386,10 @@ func (obj *updateProtocolConfigOspfv2InterfaceAttribute) HasMetric() bool {
 // should return a warning, disable the session, re-enable it with the updated
 // metric, and reflect the new value in the Router-LSA once the session comes
 // back up.
-// SetMetric sets the uint32 value in the UpdateProtocolConfigOspfv2InterfaceAttribute object
-func (obj *updateProtocolConfigOspfv2InterfaceAttribute) SetMetric(value uint32) UpdateProtocolConfigOspfv2InterfaceAttribute {
-	obj.setChoice(UpdateProtocolConfigOspfv2InterfaceAttributeChoice.METRIC)
-	obj.obj.Metric = &value
+// SetRoutingMetric sets the uint32 value in the UpdateProtocolConfigOspfv2InterfaceAttribute object
+func (obj *updateProtocolConfigOspfv2InterfaceAttribute) SetRoutingMetric(value uint32) UpdateProtocolConfigOspfv2InterfaceAttribute {
+
+	obj.obj.RoutingMetric = &value
 	return obj
 }
 
@@ -401,12 +398,12 @@ func (obj *updateProtocolConfigOspfv2InterfaceAttribute) validateObj(vObj *valid
 		obj.setDefault()
 	}
 
-	if obj.obj.Metric != nil {
+	if obj.obj.RoutingMetric != nil {
 
-		if *obj.obj.Metric > 65535 {
+		if *obj.obj.RoutingMetric > 65535 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= UpdateProtocolConfigOspfv2InterfaceAttribute.Metric <= 65535 but Got %d", *obj.obj.Metric))
+				fmt.Sprintf("0 <= UpdateProtocolConfigOspfv2InterfaceAttribute.RoutingMetric <= 65535 but Got %d", *obj.obj.RoutingMetric))
 		}
 
 	}
@@ -416,11 +413,6 @@ func (obj *updateProtocolConfigOspfv2InterfaceAttribute) validateObj(vObj *valid
 func (obj *updateProtocolConfigOspfv2InterfaceAttribute) setDefault() {
 	var choices_set int = 0
 	var choice UpdateProtocolConfigOspfv2InterfaceAttributeChoiceEnum
-
-	if obj.obj.Metric != nil {
-		choices_set += 1
-		choice = UpdateProtocolConfigOspfv2InterfaceAttributeChoice.METRIC
-	}
 	if choices_set == 1 && choice != "" {
 		if obj.obj.Choice != nil {
 			if obj.Choice() != choice {
@@ -433,8 +425,8 @@ func (obj *updateProtocolConfigOspfv2InterfaceAttribute) setDefault() {
 		}
 	}
 
-	if obj.obj.Metric == nil && choice == UpdateProtocolConfigOspfv2InterfaceAttributeChoice.METRIC {
-		obj.SetMetric(10)
+	if obj.obj.RoutingMetric == nil {
+		obj.SetRoutingMetric(10)
 	}
 
 }
