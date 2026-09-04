@@ -275,9 +275,6 @@ type Dhcpv6LeaseStateRequest interface {
 // x-constraint:
 // - /components/schemas/Device.Dhcpv6server/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Dhcpv6server/properties/name
-//
 // DhcpServerNames returns a []string
 func (obj *dhcpv6LeaseStateRequest) DhcpServerNames() []string {
 	if obj.obj.DhcpServerNames == nil {
@@ -287,9 +284,6 @@ func (obj *dhcpv6LeaseStateRequest) DhcpServerNames() []string {
 }
 
 // The names of DHCPv6 server to return results for. An empty list will return results for all DHCPv6 servers.
-//
-// x-constraint:
-// - /components/schemas/Device.Dhcpv6server/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Dhcpv6server/properties/name

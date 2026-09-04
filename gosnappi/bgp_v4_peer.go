@@ -26,6 +26,7 @@ type bgpV4Peer struct {
 	v6SrtePoliciesHolder           BgpV4PeerBgpSrteV6PolicyIter
 	gracefulRestartHolder          BgpGracefulRestart
 	replayUpdatesHolder            BgpUpdateReplay
+	l3VpnVrfsHolder                BgpV4PeerBgpL3VpnVrfIter
 }
 
 func NewBgpV4Peer() BgpV4Peer {
@@ -263,6 +264,7 @@ func (obj *bgpV4Peer) setNil() {
 	obj.v6SrtePoliciesHolder = nil
 	obj.gracefulRestartHolder = nil
 	obj.replayUpdatesHolder = nil
+	obj.l3VpnVrfsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -368,6 +370,8 @@ type BgpV4Peer interface {
 	SetReplayUpdates(value BgpUpdateReplay) BgpV4Peer
 	// HasReplayUpdates checks if ReplayUpdates has been set in BgpV4Peer
 	HasReplayUpdates() bool
+	// L3VpnVrfs returns BgpV4PeerBgpL3VpnVrfIterIter, set in BgpV4Peer
+	L3VpnVrfs() BgpV4PeerBgpL3VpnVrfIter
 	setNil()
 }
 
@@ -1094,6 +1098,93 @@ func (obj *bgpV4Peer) SetReplayUpdates(value BgpUpdateReplay) BgpV4Peer {
 	return obj
 }
 
+// BGP/MPLS Layer 3 VPN VRFs (RFC 4364) advertised over this peer. Each VRF's route ranges are advertised as VPN-IPv4 NLRI, distinct from the plain IPv4 unicast route ranges in v4_routes. Requires device.bgp.capability.ipv4_mpls_vpn to be enabled.
+// L3VpnVrfs returns a []BgpL3VpnVrf
+func (obj *bgpV4Peer) L3VpnVrfs() BgpV4PeerBgpL3VpnVrfIter {
+	if len(obj.obj.L3VpnVrfs) == 0 {
+		obj.obj.L3VpnVrfs = []*otg.BgpL3VpnVrf{}
+	}
+	if obj.l3VpnVrfsHolder == nil {
+		obj.l3VpnVrfsHolder = newBgpV4PeerBgpL3VpnVrfIter(&obj.obj.L3VpnVrfs).setMsg(obj)
+	}
+	return obj.l3VpnVrfsHolder
+}
+
+type bgpV4PeerBgpL3VpnVrfIter struct {
+	obj              *bgpV4Peer
+	bgpL3VpnVrfSlice []BgpL3VpnVrf
+	fieldPtr         *[]*otg.BgpL3VpnVrf
+}
+
+func newBgpV4PeerBgpL3VpnVrfIter(ptr *[]*otg.BgpL3VpnVrf) BgpV4PeerBgpL3VpnVrfIter {
+	return &bgpV4PeerBgpL3VpnVrfIter{fieldPtr: ptr}
+}
+
+type BgpV4PeerBgpL3VpnVrfIter interface {
+	setMsg(*bgpV4Peer) BgpV4PeerBgpL3VpnVrfIter
+	Items() []BgpL3VpnVrf
+	Add() BgpL3VpnVrf
+	Append(items ...BgpL3VpnVrf) BgpV4PeerBgpL3VpnVrfIter
+	Set(index int, newObj BgpL3VpnVrf) BgpV4PeerBgpL3VpnVrfIter
+	Clear() BgpV4PeerBgpL3VpnVrfIter
+	clearHolderSlice() BgpV4PeerBgpL3VpnVrfIter
+	appendHolderSlice(item BgpL3VpnVrf) BgpV4PeerBgpL3VpnVrfIter
+}
+
+func (obj *bgpV4PeerBgpL3VpnVrfIter) setMsg(msg *bgpV4Peer) BgpV4PeerBgpL3VpnVrfIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&bgpL3VpnVrf{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpV4PeerBgpL3VpnVrfIter) Items() []BgpL3VpnVrf {
+	return obj.bgpL3VpnVrfSlice
+}
+
+func (obj *bgpV4PeerBgpL3VpnVrfIter) Add() BgpL3VpnVrf {
+	newObj := &otg.BgpL3VpnVrf{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &bgpL3VpnVrf{obj: newObj}
+	newLibObj.setDefault()
+	obj.bgpL3VpnVrfSlice = append(obj.bgpL3VpnVrfSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *bgpV4PeerBgpL3VpnVrfIter) Append(items ...BgpL3VpnVrf) BgpV4PeerBgpL3VpnVrfIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.bgpL3VpnVrfSlice = append(obj.bgpL3VpnVrfSlice, item)
+	}
+	return obj
+}
+
+func (obj *bgpV4PeerBgpL3VpnVrfIter) Set(index int, newObj BgpL3VpnVrf) BgpV4PeerBgpL3VpnVrfIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.bgpL3VpnVrfSlice[index] = newObj
+	return obj
+}
+func (obj *bgpV4PeerBgpL3VpnVrfIter) Clear() BgpV4PeerBgpL3VpnVrfIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.BgpL3VpnVrf{}
+		obj.bgpL3VpnVrfSlice = []BgpL3VpnVrf{}
+	}
+	return obj
+}
+func (obj *bgpV4PeerBgpL3VpnVrfIter) clearHolderSlice() BgpV4PeerBgpL3VpnVrfIter {
+	if len(obj.bgpL3VpnVrfSlice) > 0 {
+		obj.bgpL3VpnVrfSlice = []BgpL3VpnVrf{}
+	}
+	return obj
+}
+func (obj *bgpV4PeerBgpL3VpnVrfIter) appendHolderSlice(item BgpL3VpnVrf) BgpV4PeerBgpL3VpnVrfIter {
+	obj.bgpL3VpnVrfSlice = append(obj.bgpL3VpnVrfSlice, item)
+	return obj
+}
+
 func (obj *bgpV4Peer) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1220,6 +1311,20 @@ func (obj *bgpV4Peer) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.ReplayUpdates != nil {
 
 		obj.ReplayUpdates().validateObj(vObj, set_default)
+	}
+
+	if len(obj.obj.L3VpnVrfs) != 0 {
+
+		if set_default {
+			obj.L3VpnVrfs().clearHolderSlice()
+			for _, item := range obj.obj.L3VpnVrfs {
+				obj.L3VpnVrfs().appendHolderSlice(&bgpL3VpnVrf{obj: item})
+			}
+		}
+		for _, item := range obj.L3VpnVrfs().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
 	}
 
 }
