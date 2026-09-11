@@ -20,6 +20,7 @@ type bgpL3VpnVrf struct {
 	routeTargetExportHolder  BgpL3VpnVrfBgpRouteTargetIter
 	routeTargetImportHolder  BgpL3VpnVrfBgpRouteTargetIter
 	v4RoutesHolder           BgpL3VpnVrfBgpV4RouteRangeIter
+	v6RoutesHolder           BgpL3VpnVrfBgpV6RouteRangeIter
 }
 
 func NewBgpL3VpnVrf() BgpL3VpnVrf {
@@ -251,6 +252,7 @@ func (obj *bgpL3VpnVrf) setNil() {
 	obj.routeTargetExportHolder = nil
 	obj.routeTargetImportHolder = nil
 	obj.v4RoutesHolder = nil
+	obj.v6RoutesHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -258,11 +260,13 @@ func (obj *bgpL3VpnVrf) setNil() {
 
 // BgpL3VpnVrf is a BGP/MPLS Layer 3 VPN VRF (RFC 4364). Binds a Route Distinguisher and
 // Route Target import/export policy to a set of customer (PE-CE learned
-// or locally originated) IPv4 route ranges, so that they are advertised
-// as VPN-IPv4 NLRI (AFI 1, SAFI 128) instead of plain IPv4 unicast NLRI.
+// or locally originated) IPv4/IPv6 route ranges, so that they are
+// advertised as VPN-IPv4 NLRI (AFI 1, SAFI 128) or VPN-IPv6 NLRI
+// (AFI 2, SAFI 128, RFC 4659) instead of plain unicast NLRI.
 //
 // The BGP capability device.bgp.capability.ipv4_mpls_vpn must be enabled
-// on the peer for VPN-IPv4 NLRI to be negotiated and advertised.
+// on the peer for VPN-IPv4 NLRI to be negotiated and advertised, and
+// device.bgp.capability.ipv6_mpls_vpn for VPN-IPv6 NLRI.
 type BgpL3VpnVrf interface {
 	Validation
 	// msg marshals BgpL3VpnVrf to protobuf object *otg.BgpL3VpnVrf
@@ -300,6 +304,8 @@ type BgpL3VpnVrf interface {
 	RouteTargetImport() BgpL3VpnVrfBgpRouteTargetIter
 	// V4Routes returns BgpL3VpnVrfBgpV4RouteRangeIterIter, set in BgpL3VpnVrf
 	V4Routes() BgpL3VpnVrfBgpV4RouteRangeIter
+	// V6Routes returns BgpL3VpnVrfBgpV6RouteRangeIterIter, set in BgpL3VpnVrf
+	V6Routes() BgpL3VpnVrfBgpV6RouteRangeIter
 	setNil()
 }
 
@@ -527,6 +533,93 @@ func (obj *bgpL3VpnVrfBgpV4RouteRangeIter) appendHolderSlice(item BgpV4RouteRang
 	return obj
 }
 
+// Emulated IPv6 customer route ranges belonging to this VRF (6VPE, RFC 4659). Each is advertised as VPN-IPv6 NLRI using this VRF's route_distinguisher and route_target_export.
+// V6Routes returns a []BgpV6RouteRange
+func (obj *bgpL3VpnVrf) V6Routes() BgpL3VpnVrfBgpV6RouteRangeIter {
+	if len(obj.obj.V6Routes) == 0 {
+		obj.obj.V6Routes = []*otg.BgpV6RouteRange{}
+	}
+	if obj.v6RoutesHolder == nil {
+		obj.v6RoutesHolder = newBgpL3VpnVrfBgpV6RouteRangeIter(&obj.obj.V6Routes).setMsg(obj)
+	}
+	return obj.v6RoutesHolder
+}
+
+type bgpL3VpnVrfBgpV6RouteRangeIter struct {
+	obj                  *bgpL3VpnVrf
+	bgpV6RouteRangeSlice []BgpV6RouteRange
+	fieldPtr             *[]*otg.BgpV6RouteRange
+}
+
+func newBgpL3VpnVrfBgpV6RouteRangeIter(ptr *[]*otg.BgpV6RouteRange) BgpL3VpnVrfBgpV6RouteRangeIter {
+	return &bgpL3VpnVrfBgpV6RouteRangeIter{fieldPtr: ptr}
+}
+
+type BgpL3VpnVrfBgpV6RouteRangeIter interface {
+	setMsg(*bgpL3VpnVrf) BgpL3VpnVrfBgpV6RouteRangeIter
+	Items() []BgpV6RouteRange
+	Add() BgpV6RouteRange
+	Append(items ...BgpV6RouteRange) BgpL3VpnVrfBgpV6RouteRangeIter
+	Set(index int, newObj BgpV6RouteRange) BgpL3VpnVrfBgpV6RouteRangeIter
+	Clear() BgpL3VpnVrfBgpV6RouteRangeIter
+	clearHolderSlice() BgpL3VpnVrfBgpV6RouteRangeIter
+	appendHolderSlice(item BgpV6RouteRange) BgpL3VpnVrfBgpV6RouteRangeIter
+}
+
+func (obj *bgpL3VpnVrfBgpV6RouteRangeIter) setMsg(msg *bgpL3VpnVrf) BgpL3VpnVrfBgpV6RouteRangeIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&bgpV6RouteRange{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpL3VpnVrfBgpV6RouteRangeIter) Items() []BgpV6RouteRange {
+	return obj.bgpV6RouteRangeSlice
+}
+
+func (obj *bgpL3VpnVrfBgpV6RouteRangeIter) Add() BgpV6RouteRange {
+	newObj := &otg.BgpV6RouteRange{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &bgpV6RouteRange{obj: newObj}
+	newLibObj.setDefault()
+	obj.bgpV6RouteRangeSlice = append(obj.bgpV6RouteRangeSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *bgpL3VpnVrfBgpV6RouteRangeIter) Append(items ...BgpV6RouteRange) BgpL3VpnVrfBgpV6RouteRangeIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.bgpV6RouteRangeSlice = append(obj.bgpV6RouteRangeSlice, item)
+	}
+	return obj
+}
+
+func (obj *bgpL3VpnVrfBgpV6RouteRangeIter) Set(index int, newObj BgpV6RouteRange) BgpL3VpnVrfBgpV6RouteRangeIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.bgpV6RouteRangeSlice[index] = newObj
+	return obj
+}
+func (obj *bgpL3VpnVrfBgpV6RouteRangeIter) Clear() BgpL3VpnVrfBgpV6RouteRangeIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.BgpV6RouteRange{}
+		obj.bgpV6RouteRangeSlice = []BgpV6RouteRange{}
+	}
+	return obj
+}
+func (obj *bgpL3VpnVrfBgpV6RouteRangeIter) clearHolderSlice() BgpL3VpnVrfBgpV6RouteRangeIter {
+	if len(obj.bgpV6RouteRangeSlice) > 0 {
+		obj.bgpV6RouteRangeSlice = []BgpV6RouteRange{}
+	}
+	return obj
+}
+func (obj *bgpL3VpnVrfBgpV6RouteRangeIter) appendHolderSlice(item BgpV6RouteRange) BgpL3VpnVrfBgpV6RouteRangeIter {
+	obj.bgpV6RouteRangeSlice = append(obj.bgpV6RouteRangeSlice, item)
+	return obj
+}
+
 func (obj *bgpL3VpnVrf) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -584,6 +677,20 @@ func (obj *bgpL3VpnVrf) validateObj(vObj *validation, set_default bool) {
 			}
 		}
 		for _, item := range obj.V4Routes().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
+	if len(obj.obj.V6Routes) != 0 {
+
+		if set_default {
+			obj.V6Routes().clearHolderSlice()
+			for _, item := range obj.obj.V6Routes {
+				obj.V6Routes().appendHolderSlice(&bgpV6RouteRange{obj: item})
+			}
+		}
+		for _, item := range obj.V6Routes().Items() {
 			item.validateObj(vObj, set_default)
 		}
 

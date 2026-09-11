@@ -37790,6 +37790,7 @@ class BgpL3vpnVrf(OpenApiObject):
         "route_target_export": {"type": "BgpRouteTargetIter"},
         "route_target_import": {"type": "BgpRouteTargetIter"},
         "v4_routes": {"type": "BgpV4RouteRangeIter"},
+        "v6_routes": {"type": "BgpV6RouteRangeIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("name", "route_distinguisher")  # type: tuple(str)
@@ -37881,6 +37882,19 @@ class BgpL3vpnVrf(OpenApiObject):
             "v4_routes", BgpV4RouteRangeIter, self._parent, self._choice
         )
 
+    @property
+    def v6_routes(self):
+        # type: () -> BgpV6RouteRangeIter
+        """v6_routes getter
+
+        Emulated IPv6 customer route ranges belonging to this VRF (6VPE, RFC 4659). Each is advertised as VPN-IPv6 NLRI using this VRF's route_distinguisher and route_target_export.
+
+        Returns: BgpV6RouteRangeIter
+        """
+        return self._get_property(
+            "v6_routes", BgpV6RouteRangeIter, self._parent, self._choice
+        )
+
 
 class BgpL3vpnVrfIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
@@ -37916,7 +37930,7 @@ class BgpL3vpnVrfIter(OpenApiIter):
         # type: (str) -> BgpL3vpnVrfIter
         """Factory method that creates an instance of the BgpL3vpnVrf class
 
-        A BGP/MPLS Layer VPN VRF (RFC 4364). Binds Route Distinguisher and. Route Target import/export policy to set of customer (PE-CE learned. or locally originated) IPv4 route ranges, so that they are advertised. as VPN-IPv4 NLRI (AFI 1, SAFI 128) instead of plain IPv4 unicast NLRI.. The BGP capability device.bgp.capability.ipv4_mpls_vpn must be enabled. on the peer for VPN-IPv4 NLRI to be negotiated and advertised.
+        A BGP/MPLS Layer VPN VRF (RFC 4364). Binds Route Distinguisher and. Route Target import/export policy to set of customer (PE-CE learned. or locally originated) IPv4/IPv6 route ranges, so that they are. advertised as VPN-IPv4 NLRI (AFI 1, SAFI 128) or VPN-IPv6 NLRI. (AFI 2, SAFI 128, RFC 4659) instead of plain unicast NLRI.. The BGP capability device.bgp.capability.ipv4_mpls_vpn must be enabled. on the peer for VPN-IPv4 NLRI to be negotiated and advertised, and. device.bgp.capability.ipv6_mpls_vpn for VPN-IPv6 NLRI.
 
         Returns: BgpL3vpnVrfIter
         """
@@ -37928,7 +37942,7 @@ class BgpL3vpnVrfIter(OpenApiIter):
         # type: (str) -> BgpL3vpnVrf
         """Add method that creates and returns an instance of the BgpL3vpnVrf class
 
-        A BGP/MPLS Layer VPN VRF (RFC 4364). Binds Route Distinguisher and. Route Target import/export policy to set of customer (PE-CE learned. or locally originated) IPv4 route ranges, so that they are advertised. as VPN-IPv4 NLRI (AFI 1, SAFI 128) instead of plain IPv4 unicast NLRI.. The BGP capability device.bgp.capability.ipv4_mpls_vpn must be enabled. on the peer for VPN-IPv4 NLRI to be negotiated and advertised.
+        A BGP/MPLS Layer VPN VRF (RFC 4364). Binds Route Distinguisher and. Route Target import/export policy to set of customer (PE-CE learned. or locally originated) IPv4/IPv6 route ranges, so that they are. advertised as VPN-IPv4 NLRI (AFI 1, SAFI 128) or VPN-IPv6 NLRI. (AFI 2, SAFI 128, RFC 4659) instead of plain unicast NLRI.. The BGP capability device.bgp.capability.ipv4_mpls_vpn must be enabled. on the peer for VPN-IPv4 NLRI to be negotiated and advertised, and. device.bgp.capability.ipv6_mpls_vpn for VPN-IPv6 NLRI.
 
         Returns: BgpL3vpnVrf
         """
@@ -38176,6 +38190,7 @@ class BgpV6Peer(OpenApiObject):
         "name": {"type": str},
         "graceful_restart": {"type": "BgpGracefulRestart"},
         "replay_updates": {"type": "BgpUpdateReplay"},
+        "l3vpn_vrfs": {"type": "BgpL3vpnVrfIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("peer_address", "as_type", "as_number", "name")  # type: tuple(str)
@@ -38469,6 +38484,19 @@ class BgpV6Peer(OpenApiObject):
         Returns: BgpUpdateReplay
         """
         return self._get_property("replay_updates", BgpUpdateReplay)
+
+    @property
+    def l3vpn_vrfs(self):
+        # type: () -> BgpL3vpnVrfIter
+        """l3vpn_vrfs getter
+
+        BGP/MPLS Layer VPN VRFs (RFC 4364/4659) advertised over this peer. Each VRF's route ranges are advertised as VPN-IPv6 NLRI, distinct from the plain IPv6 unicast route ranges in v6_routes. Requires device.bgp.capability.ipv6_mpls_vpn to be enabled.
+
+        Returns: BgpL3vpnVrfIter
+        """
+        return self._get_property(
+            "l3vpn_vrfs", BgpL3vpnVrfIter, self._parent, self._choice
+        )
 
 
 class BgpV6SegmentRouting(OpenApiObject):

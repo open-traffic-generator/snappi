@@ -10784,11 +10784,13 @@ components:
       description: |-
         A BGP/MPLS Layer 3 VPN VRF (RFC 4364). Binds a Route Distinguisher and
         Route Target import/export policy to a set of customer (PE-CE learned
-        or locally originated) IPv4 route ranges, so that they are advertised
-        as VPN-IPv4 NLRI (AFI 1, SAFI 128) instead of plain IPv4 unicast NLRI.
+        or locally originated) IPv4/IPv6 route ranges, so that they are
+        advertised as VPN-IPv4 NLRI (AFI 1, SAFI 128) or VPN-IPv6 NLRI
+        (AFI 2, SAFI 128, RFC 4659) instead of plain unicast NLRI.
 
         The BGP capability device.bgp.capability.ipv4_mpls_vpn must be enabled
-        on the peer for VPN-IPv4 NLRI to be negotiated and advertised.
+        on the peer for VPN-IPv4 NLRI to be negotiated and advertised, and
+        device.bgp.capability.ipv6_mpls_vpn for VPN-IPv6 NLRI.
       type: object
       required:
       - name
@@ -10826,6 +10828,13 @@ components:
           items:
             $ref: '#/components/schemas/Bgp.V4RouteRange'
           x-field-uid: 5
+        v6_routes:
+          description: |-
+            Emulated IPv6 customer route ranges belonging to this VRF (6VPE, RFC 4659). Each is advertised as VPN-IPv6 NLRI using this VRF's route_distinguisher and route_target_export.
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.V6RouteRange'
+          x-field-uid: 6
     Bgp.V6Peer:
       description: |-
         Configuration for BGPv6 peer settings and routes.
@@ -10944,10 +10953,17 @@ components:
           x-field-uid: 15
           $ref: '#/components/schemas/Bgp.GracefulRestart'
         replay_updates:
-          description: "BGP Updates to be sent to the peer as specified after the\
-            \ session is established. "
+          description: |-
+            BGP Updates to be sent to the peer as specified after the session is established.
           $ref: '#/components/schemas/Bgp.UpdateReplay'
           x-field-uid: 16
+        l3vpn_vrfs:
+          description: |-
+            BGP/MPLS Layer 3 VPN VRFs (RFC 4364/4659) advertised over this peer. Each VRF's route ranges are advertised as VPN-IPv6 NLRI, distinct from the plain IPv6 unicast route ranges in v6_routes. Requires device.bgp.capability.ipv6_mpls_vpn to be enabled.
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.L3vpn.Vrf'
+          x-field-uid: 17
     Bgp.V6Interface:
       description: |-
         Configuration for emulated BGPv6 peers and routes on a single IPv6 interface.
