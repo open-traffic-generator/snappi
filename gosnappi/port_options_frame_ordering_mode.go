@@ -271,10 +271,10 @@ type PortOptionsFrameOrderingMode interface {
 	setChoice(value PortOptionsFrameOrderingModeChoiceEnum) PortOptionsFrameOrderingMode
 	// HasChoice checks if Choice has been set in PortOptionsFrameOrderingMode
 	HasChoice() bool
-	// getter for Rfc2889 to set choice.
-	Rfc2889()
 	// getter for NoOrdering to set choice.
 	NoOrdering()
+	// getter for Rfc2889 to set choice.
+	Rfc2889()
 }
 
 type PortOptionsFrameOrderingModeChoiceEnum string
@@ -292,14 +292,14 @@ func (obj *portOptionsFrameOrderingMode) Choice() PortOptionsFrameOrderingModeCh
 	return PortOptionsFrameOrderingModeChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for Rfc2889 to set choice
-func (obj *portOptionsFrameOrderingMode) Rfc2889() {
-	obj.setChoice(PortOptionsFrameOrderingModeChoice.RFC2889)
-}
-
 // getter for NoOrdering to set choice
 func (obj *portOptionsFrameOrderingMode) NoOrdering() {
 	obj.setChoice(PortOptionsFrameOrderingModeChoice.NO_ORDERING)
+}
+
+// getter for Rfc2889 to set choice
+func (obj *portOptionsFrameOrderingMode) Rfc2889() {
+	obj.setChoice(PortOptionsFrameOrderingModeChoice.RFC2889)
 }
 
 // The type of frame ordering mode.
