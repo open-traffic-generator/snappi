@@ -13,13 +13,11 @@ import (
 // ***** Ospfv2RouterLsa *****
 type ospfv2RouterLsa struct {
 	validation
-	obj                *otg.Ospfv2RouterLsa
-	marshaller         marshalOspfv2RouterLsa
-	unMarshaller       unMarshalOspfv2RouterLsa
-	headerHolder       Ospfv2LsaHeader
-	linksHolder        Ospfv2RouterLsaOspfv2LinkIter
-	srCapabilityHolder Ospfv2LsaSrCapability
-	prefixSidHolder    Ospfv2LsaPrefixSid
+	obj          *otg.Ospfv2RouterLsa
+	marshaller   marshalOspfv2RouterLsa
+	unMarshaller unMarshalOspfv2RouterLsa
+	headerHolder Ospfv2LsaHeader
+	linksHolder  Ospfv2RouterLsaOspfv2LinkIter
 }
 
 func NewOspfv2RouterLsa() Ospfv2RouterLsa {
@@ -249,8 +247,6 @@ func (obj *ospfv2RouterLsa) Clone() (Ospfv2RouterLsa, error) {
 func (obj *ospfv2RouterLsa) setNil() {
 	obj.headerHolder = nil
 	obj.linksHolder = nil
-	obj.srCapabilityHolder = nil
-	obj.prefixSidHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -288,28 +284,6 @@ type Ospfv2RouterLsa interface {
 	HasHeader() bool
 	// Links returns Ospfv2RouterLsaOspfv2LinkIterIter, set in Ospfv2RouterLsa
 	Links() Ospfv2RouterLsaOspfv2LinkIter
-	// SrCapability returns Ospfv2LsaSrCapability, set in Ospfv2RouterLsa.
-	// Ospfv2LsaSrCapability is the Segment Routing capability learned from the Router Information (RI) Opaque LSA:
-	// the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV.
-	// Reference: https://datatracker.ietf.org/doc/html/rfc8665.
-	SrCapability() Ospfv2LsaSrCapability
-	// SetSrCapability assigns Ospfv2LsaSrCapability provided by user to Ospfv2RouterLsa.
-	// Ospfv2LsaSrCapability is the Segment Routing capability learned from the Router Information (RI) Opaque LSA:
-	// the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV.
-	// Reference: https://datatracker.ietf.org/doc/html/rfc8665.
-	SetSrCapability(value Ospfv2LsaSrCapability) Ospfv2RouterLsa
-	// HasSrCapability checks if SrCapability has been set in Ospfv2RouterLsa
-	HasSrCapability() bool
-	// PrefixSid returns Ospfv2LsaPrefixSid, set in Ospfv2RouterLsa.
-	// Ospfv2LsaPrefixSid is the learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of
-	// the Extended Prefix Opaque LSA (RFC 8665).
-	PrefixSid() Ospfv2LsaPrefixSid
-	// SetPrefixSid assigns Ospfv2LsaPrefixSid provided by user to Ospfv2RouterLsa.
-	// Ospfv2LsaPrefixSid is the learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of
-	// the Extended Prefix Opaque LSA (RFC 8665).
-	SetPrefixSid(value Ospfv2LsaPrefixSid) Ospfv2RouterLsa
-	// HasPrefixSid checks if PrefixSid has been set in Ospfv2RouterLsa
-	HasPrefixSid() bool
 	setNil()
 }
 
@@ -428,71 +402,6 @@ func (obj *ospfv2RouterLsaOspfv2LinkIter) appendHolderSlice(item Ospfv2Link) Osp
 	return obj
 }
 
-// The Segment Routing capability learned for this router, decoded from the Router
-// Information (RI) Opaque LSA: the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and
-// SR Local Block (SRLB) TLV (RFC 8665).
-// SrCapability returns a Ospfv2LsaSrCapability
-func (obj *ospfv2RouterLsa) SrCapability() Ospfv2LsaSrCapability {
-	if obj.obj.SrCapability == nil {
-		obj.obj.SrCapability = NewOspfv2LsaSrCapability().msg()
-	}
-	if obj.srCapabilityHolder == nil {
-		obj.srCapabilityHolder = &ospfv2LsaSrCapability{obj: obj.obj.SrCapability}
-	}
-	return obj.srCapabilityHolder
-}
-
-// The Segment Routing capability learned for this router, decoded from the Router
-// Information (RI) Opaque LSA: the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and
-// SR Local Block (SRLB) TLV (RFC 8665).
-// SrCapability returns a Ospfv2LsaSrCapability
-func (obj *ospfv2RouterLsa) HasSrCapability() bool {
-	return obj.obj.SrCapability != nil
-}
-
-// The Segment Routing capability learned for this router, decoded from the Router
-// Information (RI) Opaque LSA: the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and
-// SR Local Block (SRLB) TLV (RFC 8665).
-// SetSrCapability sets the Ospfv2LsaSrCapability value in the Ospfv2RouterLsa object
-func (obj *ospfv2RouterLsa) SetSrCapability(value Ospfv2LsaSrCapability) Ospfv2RouterLsa {
-
-	obj.srCapabilityHolder = nil
-	obj.obj.SrCapability = value.msg()
-
-	return obj
-}
-
-// The Node/Prefix-SID learned for this router, decoded from the Prefix-SID sub-TLV of
-// the OSPFv2 Extended Prefix Opaque LSA advertised for the router's own prefix (RFC 8665).
-// PrefixSid returns a Ospfv2LsaPrefixSid
-func (obj *ospfv2RouterLsa) PrefixSid() Ospfv2LsaPrefixSid {
-	if obj.obj.PrefixSid == nil {
-		obj.obj.PrefixSid = NewOspfv2LsaPrefixSid().msg()
-	}
-	if obj.prefixSidHolder == nil {
-		obj.prefixSidHolder = &ospfv2LsaPrefixSid{obj: obj.obj.PrefixSid}
-	}
-	return obj.prefixSidHolder
-}
-
-// The Node/Prefix-SID learned for this router, decoded from the Prefix-SID sub-TLV of
-// the OSPFv2 Extended Prefix Opaque LSA advertised for the router's own prefix (RFC 8665).
-// PrefixSid returns a Ospfv2LsaPrefixSid
-func (obj *ospfv2RouterLsa) HasPrefixSid() bool {
-	return obj.obj.PrefixSid != nil
-}
-
-// The Node/Prefix-SID learned for this router, decoded from the Prefix-SID sub-TLV of
-// the OSPFv2 Extended Prefix Opaque LSA advertised for the router's own prefix (RFC 8665).
-// SetPrefixSid sets the Ospfv2LsaPrefixSid value in the Ospfv2RouterLsa object
-func (obj *ospfv2RouterLsa) SetPrefixSid(value Ospfv2LsaPrefixSid) Ospfv2RouterLsa {
-
-	obj.prefixSidHolder = nil
-	obj.obj.PrefixSid = value.msg()
-
-	return obj
-}
-
 func (obj *ospfv2RouterLsa) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -515,16 +424,6 @@ func (obj *ospfv2RouterLsa) validateObj(vObj *validation, set_default bool) {
 			item.validateObj(vObj, set_default)
 		}
 
-	}
-
-	if obj.obj.SrCapability != nil {
-
-		obj.SrCapability().validateObj(vObj, set_default)
-	}
-
-	if obj.obj.PrefixSid != nil {
-
-		obj.PrefixSid().validateObj(vObj, set_default)
 	}
 
 }

@@ -13,11 +13,10 @@ import (
 // ***** Ospfv2NssaLsa *****
 type ospfv2NssaLsa struct {
 	validation
-	obj             *otg.Ospfv2NssaLsa
-	marshaller      marshalOspfv2NssaLsa
-	unMarshaller    unMarshalOspfv2NssaLsa
-	headerHolder    Ospfv2LsaHeader
-	prefixSidHolder Ospfv2LsaPrefixSid
+	obj          *otg.Ospfv2NssaLsa
+	marshaller   marshalOspfv2NssaLsa
+	unMarshaller unMarshalOspfv2NssaLsa
+	headerHolder Ospfv2LsaHeader
 }
 
 func NewOspfv2NssaLsa() Ospfv2NssaLsa {
@@ -246,7 +245,6 @@ func (obj *ospfv2NssaLsa) Clone() (Ospfv2NssaLsa, error) {
 
 func (obj *ospfv2NssaLsa) setNil() {
 	obj.headerHolder = nil
-	obj.prefixSidHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -307,16 +305,6 @@ type Ospfv2NssaLsa interface {
 	SetForwardingAddress(value string) Ospfv2NssaLsa
 	// HasForwardingAddress checks if ForwardingAddress has been set in Ospfv2NssaLsa
 	HasForwardingAddress() bool
-	// PrefixSid returns Ospfv2LsaPrefixSid, set in Ospfv2NssaLsa.
-	// Ospfv2LsaPrefixSid is the learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of
-	// the Extended Prefix Opaque LSA (RFC 8665).
-	PrefixSid() Ospfv2LsaPrefixSid
-	// SetPrefixSid assigns Ospfv2LsaPrefixSid provided by user to Ospfv2NssaLsa.
-	// Ospfv2LsaPrefixSid is the learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of
-	// the Extended Prefix Opaque LSA (RFC 8665).
-	SetPrefixSid(value Ospfv2LsaPrefixSid) Ospfv2NssaLsa
-	// HasPrefixSid checks if PrefixSid has been set in Ospfv2NssaLsa
-	HasPrefixSid() bool
 	setNil()
 }
 
@@ -436,40 +424,6 @@ func (obj *ospfv2NssaLsa) SetForwardingAddress(value string) Ospfv2NssaLsa {
 	return obj
 }
 
-// The Prefix-SID learned for this prefix, decoded from the Prefix-SID sub-TLV of the
-// OSPFv2 Extended Prefix Opaque LSA whose Extended Prefix TLV references this prefix
-// (RFC 8665).
-// PrefixSid returns a Ospfv2LsaPrefixSid
-func (obj *ospfv2NssaLsa) PrefixSid() Ospfv2LsaPrefixSid {
-	if obj.obj.PrefixSid == nil {
-		obj.obj.PrefixSid = NewOspfv2LsaPrefixSid().msg()
-	}
-	if obj.prefixSidHolder == nil {
-		obj.prefixSidHolder = &ospfv2LsaPrefixSid{obj: obj.obj.PrefixSid}
-	}
-	return obj.prefixSidHolder
-}
-
-// The Prefix-SID learned for this prefix, decoded from the Prefix-SID sub-TLV of the
-// OSPFv2 Extended Prefix Opaque LSA whose Extended Prefix TLV references this prefix
-// (RFC 8665).
-// PrefixSid returns a Ospfv2LsaPrefixSid
-func (obj *ospfv2NssaLsa) HasPrefixSid() bool {
-	return obj.obj.PrefixSid != nil
-}
-
-// The Prefix-SID learned for this prefix, decoded from the Prefix-SID sub-TLV of the
-// OSPFv2 Extended Prefix Opaque LSA whose Extended Prefix TLV references this prefix
-// (RFC 8665).
-// SetPrefixSid sets the Ospfv2LsaPrefixSid value in the Ospfv2NssaLsa object
-func (obj *ospfv2NssaLsa) SetPrefixSid(value Ospfv2LsaPrefixSid) Ospfv2NssaLsa {
-
-	obj.prefixSidHolder = nil
-	obj.obj.PrefixSid = value.msg()
-
-	return obj
-}
-
 func (obj *ospfv2NssaLsa) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -496,11 +450,6 @@ func (obj *ospfv2NssaLsa) validateObj(vObj *validation, set_default bool) {
 			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on Ospfv2NssaLsa.ForwardingAddress"))
 		}
 
-	}
-
-	if obj.obj.PrefixSid != nil {
-
-		obj.PrefixSid().validateObj(vObj, set_default)
 	}
 
 }

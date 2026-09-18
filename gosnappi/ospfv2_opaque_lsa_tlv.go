@@ -13,10 +13,10 @@ import (
 // ***** Ospfv2OpaqueLsaTlv *****
 type ospfv2OpaqueLsaTlv struct {
 	validation
-	obj           *otg.Ospfv2OpaqueLsaTlv
-	marshaller    marshalOspfv2OpaqueLsaTlv
-	unMarshaller  unMarshalOspfv2OpaqueLsaTlv
-	subTlvsHolder Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter
+	obj                  *otg.Ospfv2OpaqueLsaTlv
+	marshaller           marshalOspfv2OpaqueLsaTlv
+	unMarshaller         unMarshalOspfv2OpaqueLsaTlv
+	unknownSubTlvsHolder Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter
 }
 
 func NewOspfv2OpaqueLsaTlv() Ospfv2OpaqueLsaTlv {
@@ -244,13 +244,13 @@ func (obj *ospfv2OpaqueLsaTlv) Clone() (Ospfv2OpaqueLsaTlv, error) {
 }
 
 func (obj *ospfv2OpaqueLsaTlv) setNil() {
-	obj.subTlvsHolder = nil
+	obj.unknownSubTlvsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Ospfv2OpaqueLsaTlv is a top-level TLV carried in the body of an OSPFv2 Opaque LSA (RFC 7770 Section 2).
+// Ospfv2OpaqueLsaTlv is a top-level TLV carried in the body of an OSPFv2 Opaque LSA that is not decoded into a structured field elsewhere in the model (RFC 7770 Section 2).
 type Ospfv2OpaqueLsaTlv interface {
 	Validation
 	// msg marshals Ospfv2OpaqueLsaTlv to protobuf object *otg.Ospfv2OpaqueLsaTlv
@@ -290,8 +290,8 @@ type Ospfv2OpaqueLsaTlv interface {
 	SetValue(value string) Ospfv2OpaqueLsaTlv
 	// HasValue checks if Value has been set in Ospfv2OpaqueLsaTlv
 	HasValue() bool
-	// SubTlvs returns Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIterIter, set in Ospfv2OpaqueLsaTlv
-	SubTlvs() Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter
+	// UnknownSubTlvs returns Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIterIter, set in Ospfv2OpaqueLsaTlv
+	UnknownSubTlvs() Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter
 	setNil()
 }
 
@@ -305,8 +305,6 @@ var Ospfv2OpaqueLsaTlvType = struct {
 	TE_LINK_LOCAL                    Ospfv2OpaqueLsaTlvTypeEnum
 	TE_NODE_ATTRIBUTE                Ospfv2OpaqueLsaTlvTypeEnum
 	TE_OPTICAL_NODE_PROPERTY         Ospfv2OpaqueLsaTlvTypeEnum
-	RI_INFORMATIONAL_CAPABILITIES    Ospfv2OpaqueLsaTlvTypeEnum
-	RI_FUNCTIONAL_CAPABILITIES       Ospfv2OpaqueLsaTlvTypeEnum
 	RI_TE_MESH_GROUP_IPV4            Ospfv2OpaqueLsaTlvTypeEnum
 	RI_TE_MESH_GROUP_IPV6            Ospfv2OpaqueLsaTlvTypeEnum
 	RI_TE_NODE_CAPABILITY_DESCRIPTOR Ospfv2OpaqueLsaTlvTypeEnum
@@ -316,15 +314,12 @@ var Ospfv2OpaqueLsaTlvType = struct {
 	RI_SID_LABEL_RANGE               Ospfv2OpaqueLsaTlvTypeEnum
 	RI_NODE_ADMIN_TAG                Ospfv2OpaqueLsaTlvTypeEnum
 	RI_SBFD_DISCRIMINATOR            Ospfv2OpaqueLsaTlvTypeEnum
-	RI_NODE_MSD                      Ospfv2OpaqueLsaTlvTypeEnum
 	RI_TUNNEL_ENCAPSULATIONS         Ospfv2OpaqueLsaTlvTypeEnum
 	RI_SR_LOCAL_BLOCK                Ospfv2OpaqueLsaTlvTypeEnum
 	RI_SRMS_PREFERENCE               Ospfv2OpaqueLsaTlvTypeEnum
 	RI_FLEXIBLE_ALGORITHM_DEFINITION Ospfv2OpaqueLsaTlvTypeEnum
 	RI_AREA_LEADER                   Ospfv2OpaqueLsaTlvTypeEnum
 	RI_DYNAMIC_FLOODING              Ospfv2OpaqueLsaTlvTypeEnum
-	RI_SRV6_CAPABILITIES             Ospfv2OpaqueLsaTlvTypeEnum
-	RI_IP_ALGORITHM                  Ospfv2OpaqueLsaTlvTypeEnum
 	EXTENDED_PREFIX_TLV              Ospfv2OpaqueLsaTlvTypeEnum
 	EXTENDED_PREFIX_RANGE_TLV        Ospfv2OpaqueLsaTlvTypeEnum
 	EXTENDED_LINK_TLV                Ospfv2OpaqueLsaTlvTypeEnum
@@ -341,8 +336,6 @@ var Ospfv2OpaqueLsaTlvType = struct {
 	TE_LINK_LOCAL:                    Ospfv2OpaqueLsaTlvTypeEnum("te_link_local"),
 	TE_NODE_ATTRIBUTE:                Ospfv2OpaqueLsaTlvTypeEnum("te_node_attribute"),
 	TE_OPTICAL_NODE_PROPERTY:         Ospfv2OpaqueLsaTlvTypeEnum("te_optical_node_property"),
-	RI_INFORMATIONAL_CAPABILITIES:    Ospfv2OpaqueLsaTlvTypeEnum("ri_informational_capabilities"),
-	RI_FUNCTIONAL_CAPABILITIES:       Ospfv2OpaqueLsaTlvTypeEnum("ri_functional_capabilities"),
 	RI_TE_MESH_GROUP_IPV4:            Ospfv2OpaqueLsaTlvTypeEnum("ri_te_mesh_group_ipv4"),
 	RI_TE_MESH_GROUP_IPV6:            Ospfv2OpaqueLsaTlvTypeEnum("ri_te_mesh_group_ipv6"),
 	RI_TE_NODE_CAPABILITY_DESCRIPTOR: Ospfv2OpaqueLsaTlvTypeEnum("ri_te_node_capability_descriptor"),
@@ -352,15 +345,12 @@ var Ospfv2OpaqueLsaTlvType = struct {
 	RI_SID_LABEL_RANGE:               Ospfv2OpaqueLsaTlvTypeEnum("ri_sid_label_range"),
 	RI_NODE_ADMIN_TAG:                Ospfv2OpaqueLsaTlvTypeEnum("ri_node_admin_tag"),
 	RI_SBFD_DISCRIMINATOR:            Ospfv2OpaqueLsaTlvTypeEnum("ri_sbfd_discriminator"),
-	RI_NODE_MSD:                      Ospfv2OpaqueLsaTlvTypeEnum("ri_node_msd"),
 	RI_TUNNEL_ENCAPSULATIONS:         Ospfv2OpaqueLsaTlvTypeEnum("ri_tunnel_encapsulations"),
 	RI_SR_LOCAL_BLOCK:                Ospfv2OpaqueLsaTlvTypeEnum("ri_sr_local_block"),
 	RI_SRMS_PREFERENCE:               Ospfv2OpaqueLsaTlvTypeEnum("ri_srms_preference"),
 	RI_FLEXIBLE_ALGORITHM_DEFINITION: Ospfv2OpaqueLsaTlvTypeEnum("ri_flexible_algorithm_definition"),
 	RI_AREA_LEADER:                   Ospfv2OpaqueLsaTlvTypeEnum("ri_area_leader"),
 	RI_DYNAMIC_FLOODING:              Ospfv2OpaqueLsaTlvTypeEnum("ri_dynamic_flooding"),
-	RI_SRV6_CAPABILITIES:             Ospfv2OpaqueLsaTlvTypeEnum("ri_srv6_capabilities"),
-	RI_IP_ALGORITHM:                  Ospfv2OpaqueLsaTlvTypeEnum("ri_ip_algorithm"),
 	EXTENDED_PREFIX_TLV:              Ospfv2OpaqueLsaTlvTypeEnum("extended_prefix_tlv"),
 	EXTENDED_PREFIX_RANGE_TLV:        Ospfv2OpaqueLsaTlvTypeEnum("extended_prefix_range_tlv"),
 	EXTENDED_LINK_TLV:                Ospfv2OpaqueLsaTlvTypeEnum("extended_link_tlv"),
@@ -440,16 +430,16 @@ func (obj *ospfv2OpaqueLsaTlv) SetValue(value string) Ospfv2OpaqueLsaTlv {
 	return obj
 }
 
-// The sub-TLVs nested within this TLV's value, in the generic type/length/value format (e.g. RFC 8665 Extended Prefix/Link Opaque LSA sub-TLVs).
-// SubTlvs returns a []Ospfv2OpaqueLsaSubTlv
-func (obj *ospfv2OpaqueLsaTlv) SubTlvs() Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter {
-	if len(obj.obj.SubTlvs) == 0 {
-		obj.obj.SubTlvs = []*otg.Ospfv2OpaqueLsaSubTlv{}
+// Sub-TLVs nested within this TLV's value that are not decoded into a structured field elsewhere in the model, returned raw in the generic type/length/value format (e.g. RFC 8665 Extended Prefix/Link Opaque LSA sub-TLVs).
+// UnknownSubTlvs returns a []Ospfv2OpaqueLsaSubTlv
+func (obj *ospfv2OpaqueLsaTlv) UnknownSubTlvs() Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter {
+	if len(obj.obj.UnknownSubTlvs) == 0 {
+		obj.obj.UnknownSubTlvs = []*otg.Ospfv2OpaqueLsaSubTlv{}
 	}
-	if obj.subTlvsHolder == nil {
-		obj.subTlvsHolder = newOspfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter(&obj.obj.SubTlvs).setMsg(obj)
+	if obj.unknownSubTlvsHolder == nil {
+		obj.unknownSubTlvsHolder = newOspfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter(&obj.obj.UnknownSubTlvs).setMsg(obj)
 	}
-	return obj.subTlvsHolder
+	return obj.unknownSubTlvsHolder
 }
 
 type ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter struct {
@@ -532,15 +522,15 @@ func (obj *ospfv2OpaqueLsaTlv) validateObj(vObj *validation, set_default bool) {
 		obj.setDefault()
 	}
 
-	if len(obj.obj.SubTlvs) != 0 {
+	if len(obj.obj.UnknownSubTlvs) != 0 {
 
 		if set_default {
-			obj.SubTlvs().clearHolderSlice()
-			for _, item := range obj.obj.SubTlvs {
-				obj.SubTlvs().appendHolderSlice(&ospfv2OpaqueLsaSubTlv{obj: item})
+			obj.UnknownSubTlvs().clearHolderSlice()
+			for _, item := range obj.obj.UnknownSubTlvs {
+				obj.UnknownSubTlvs().appendHolderSlice(&ospfv2OpaqueLsaSubTlv{obj: item})
 			}
 		}
-		for _, item := range obj.SubTlvs().Items() {
+		for _, item := range obj.UnknownSubTlvs().Items() {
 			item.validateObj(vObj, set_default)
 		}
 

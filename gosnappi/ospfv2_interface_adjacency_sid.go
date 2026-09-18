@@ -331,6 +331,9 @@ func (obj *ospfv2InterfaceAdjacencySid) Choice() Ospfv2InterfaceAdjacencySidChoi
 // device.ospfv2.segment_routing.srlb_ranges.
 // - sid_indices: V-Flag and L-Flag are unset (both 0). Each Adj-SID carries a 4-octet
 // index that is an offset into the SRGB.
+// RFC 8665 Section 5 states all other V-Flag/L-Flag combinations are invalid and MUST be
+// ignored by a receiver, so V and L are intentionally coupled here rather than exposed as
+// independent properties.
 // A user needs to configure at least one entry of SID value or SID index.
 // Choice returns a string
 func (obj *ospfv2InterfaceAdjacencySid) HasChoice() bool {
@@ -527,7 +530,7 @@ func (obj *ospfv2InterfaceAdjacencySid) validateObj(vObj *validation, set_defaul
 			if item > 4294967295 {
 				vObj.validationErrors = append(
 					vObj.validationErrors,
-					fmt.Sprintf("0 <= Ospfv2InterfaceAdjacencySid.SidIndices <= 4294967295 but Got %d", item))
+					fmt.Sprintf("min(uint32) <= Ospfv2InterfaceAdjacencySid.SidIndices <= 4294967295 but Got %d", item))
 			}
 
 		}

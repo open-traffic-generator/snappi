@@ -361,22 +361,30 @@ type DeviceOspfv2Router interface {
 	// topologies by encoding paths as sequences of topological sub-paths, called "segments".
 	// In OSPFv2 the SR-specific information is advertised using Opaque LSAs. The router level
 	// Segment Routing capabilities (SR-Algorithm, SID/Label Range (SRGB), SR Local Block (SRLB))
-	// are carried in the Router Information (RI) Opaque LSA, and the router's own Node Prefix-SID
-	// is carried in the Extended Prefix Opaque LSA for the router loopback.
+	// are carried in the Router Information (RI) Opaque LSA.
 	// Reference: https://datatracker.ietf.org/doc/html/rfc8665.
 	// An implementation may advertise the SR capabilities with default values if a user does
 	// not set any of the properties of Segment Routing.
+	// A router's own Node (loopback) Prefix-SID is not a separate object here: model the
+	// loopback as an ordinary device.ospfv2.router.v4_routes entry with an
+	// Ospfv2SR.PrefixSid attached, and set n_flag on that route range's Extended Prefix flags
+	// (route_origin.<type>.flags.n_flag) to identify it as the router's own prefix
+	// (RFC 7684).
 	SegmentRouting() Ospfv2SegmentRouting
 	// SetSegmentRouting assigns Ospfv2SegmentRouting provided by user to DeviceOspfv2Router.
 	// Ospfv2SegmentRouting is segment Routing (SR) allows for a flexible definition of end-to-end paths within IGP
 	// topologies by encoding paths as sequences of topological sub-paths, called "segments".
 	// In OSPFv2 the SR-specific information is advertised using Opaque LSAs. The router level
 	// Segment Routing capabilities (SR-Algorithm, SID/Label Range (SRGB), SR Local Block (SRLB))
-	// are carried in the Router Information (RI) Opaque LSA, and the router's own Node Prefix-SID
-	// is carried in the Extended Prefix Opaque LSA for the router loopback.
+	// are carried in the Router Information (RI) Opaque LSA.
 	// Reference: https://datatracker.ietf.org/doc/html/rfc8665.
 	// An implementation may advertise the SR capabilities with default values if a user does
 	// not set any of the properties of Segment Routing.
+	// A router's own Node (loopback) Prefix-SID is not a separate object here: model the
+	// loopback as an ordinary device.ospfv2.router.v4_routes entry with an
+	// Ospfv2SR.PrefixSid attached, and set n_flag on that route range's Extended Prefix flags
+	// (route_origin.<type>.flags.n_flag) to identify it as the router's own prefix
+	// (RFC 7684).
 	SetSegmentRouting(value Ospfv2SegmentRouting) DeviceOspfv2Router
 	// HasSegmentRouting checks if SegmentRouting has been set in DeviceOspfv2Router
 	HasSegmentRouting() bool

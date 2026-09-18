@@ -9793,6 +9793,11 @@ message Ospfv2InterfaceAdjacencySid {
   // device.ospfv2.segment_routing.srlb_ranges.
   // - sid_indices: V-Flag and L-Flag are unset (both 0). Each Adj-SID carries a 4-octet
   // index that is an offset into the SRGB.
+  // RFC 8665 Section 5 states all other V-Flag/L-Flag combinations are invalid and MUST
+  // be
+  // ignored by a receiver, so V and L are intentionally coupled here rather than exposed
+  // as
+  // independent properties.
   // A user needs to configure at least one entry of SID value or SID index.
   // default = Choice.Enum.sid_values
   optional Choice.Enum choice = 1;
@@ -9958,6 +9963,12 @@ message Ospfv2V4RRExtdPrefixFlags {
 // The Prefix-SID sub-TLV is carried inside the OSPFv2 Extended Prefix TLV of the
 // Extended Prefix Opaque LSA and is associated with a specific IPv4 prefix.
 // Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-prefix-sid-sub-tlv.
+// A router's own Node (loopback) Prefix-SID is modeled the same way: attach this object
+// to
+// the route range covering the router's loopback address and set n_flag on that route
+// range's Extended Prefix flags (route_origin.<type>.flags.n_flag, RFC 7684) to identify
+// it
+// as the router's own prefix.
 message Ospfv2SRPrefixSid {
 
   message Choice {
@@ -9975,6 +9986,11 @@ message Ospfv2SRPrefixSid {
   // device.ospfv2.segment_routing.srgb_ranges.
   // - sid_values: V-Flag and L-Flag are set (both 1). Each Prefix-SID carries a 3-octet
   // local label value with local significance.
+  // RFC 8665 Section 5 states all other V-Flag/L-Flag combinations are invalid and MUST
+  // be
+  // ignored by a receiver, so V and L are intentionally coupled here rather than exposed
+  // as
+  // independent properties.
   // A user needs to configure at least one entry of SID value or SID index. If no entry
   // is
   // configured, an implementation may advertise an appropriate default SID value/index
@@ -9994,7 +10010,7 @@ message Ospfv2SRPrefixSid {
   // NP-Flag: No-PHP (No Penultimate Hop-Popping) Flag.
   // If set, then the penultimate hop MUST NOT pop the Prefix-SID before delivering the
   // packet to the node that advertised the Prefix-SID.
-  // default = True
+  // default = False
   optional bool np_flag = 4;
 
   // M-Flag: Mapping Server Flag.
@@ -10025,13 +10041,17 @@ message Ospfv2SRPrefixSid {
 // level
 // Segment Routing capabilities (SR-Algorithm, SID/Label Range (SRGB), SR Local Block
 // (SRLB))
-// are carried in the Router Information (RI) Opaque LSA, and the router's own Node
-// Prefix-SID
-// is carried in the Extended Prefix Opaque LSA for the router loopback.
+// are carried in the Router Information (RI) Opaque LSA.
 // Reference: https://datatracker.ietf.org/doc/html/rfc8665.
 // An implementation may advertise the SR capabilities with default values if a user
 // does
 // not set any of the properties of Segment Routing.
+// A router's own Node (loopback) Prefix-SID is not a separate object here: model the
+// loopback as an ordinary device.ospfv2.router.v4_routes entry with an
+// Ospfv2SR.PrefixSid attached, and set n_flag on that route range's Extended Prefix
+// flags
+// (route_origin.<type>.flags.n_flag) to identify it as the router's own prefix
+// (RFC 7684).
 message Ospfv2SegmentRouting {
 
   // The SR-Algorithm TLV, if present, carries one or more Segment Routing Algorithms
@@ -10058,12 +10078,6 @@ message Ospfv2SegmentRouting {
   // RI Opaque LSA. The SRLB contains the range of labels the node has reserved for local
   // SIDs, for example Adjacency SIDs.
   repeated Ospfv2SRSrlb srlb_ranges = 3;
-
-  // Optional Node (loopback) Prefix-SID advertised by this router in the Extended Prefix
-  // Opaque LSA for its own loopback address. The Node Prefix-SID identifies the router
-  // in
-  // the Segment Routing domain.
-  Ospfv2SRRouterNodeSid node_prefix_sid = 4;
 }
 
 // This contains the properties of a single Segment Routing Global Block (SRGB) range.
@@ -10096,79 +10110,6 @@ message Ospfv2SRSrlb {
   // zero.
   // default = 8000
   optional uint32 range = 2;
-}
-
-// The Node (loopback) Prefix-SID advertised by this router for its own loopback address.
-// It is advertised as a Prefix-SID sub-TLV inside the Extended Prefix TLV of the Extended
-// Prefix Opaque LSA, together with the one-octet Extended Prefix flags.
-// Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-prefix-sid-sub-tlv.
-message Ospfv2SRRouterNodeSid {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      sid_value = 1;
-      sid_index = 2;
-    }
-  }
-  // Choice of whether the Node Prefix-SID carries an absolute value (local label) or
-  // a
-  // relative index into the SRGB. This choice sets the V-Flag (Value/Index) and the L-Flag
-  // (Local/Global) as follows:
-  // - sid_index: V-Flag and L-Flag are unset (both 0). The SID carries a 4-octet index
-  // that
-  // is an offset into the SRGB. Please refer to device.ospfv2.segment_routing.srgb_ranges.
-  // - sid_value: V-Flag and L-Flag are set (both 1). The SID carries a 3-octet local
-  // label
-  // value with local significance.
-  // default = Choice.Enum.sid_index
-  optional Choice.Enum choice = 1;
-
-  // The Node SID/Label as an absolute local label value. Used when the choice is sid_value.
-  // default = 16
-  optional uint32 sid_value = 2;
-
-  // The Node SID/Label index, an offset into the SRGB. Used when the choice is sid_index.
-  // default = 0
-  optional uint32 sid_index = 3;
-
-  // NP-Flag: No-PHP (No Penultimate Hop-Popping) Flag.
-  // If set, then the penultimate hop MUST NOT pop the Prefix-SID before delivering the
-  // packet to this node.
-  // default = True
-  optional bool np_flag = 4;
-
-  // M-Flag: Mapping Server Flag.
-  // If set, then the SID was advertised by an SR Mapping Server. When set, the NP-Flag
-  // and
-  // the E-Flag MUST be ignored on reception.
-  // default = False
-  optional bool m_flag = 5;
-
-  // E-Flag: Explicit-Null Flag.
-  // If set, any upstream neighbor of the Prefix-SID originator MUST replace the Prefix-SID
-  // with the Explicit-NULL label before forwarding the packet.
-  // default = False
-  optional bool e_flag = 6;
-
-  // The Segment Routing Algorithm the Node Prefix-SID is associated with, e.g. 0 for
-  // SPF
-  // or 1 for Strict SPF.
-  // default = 0
-  optional uint32 algorithm = 7;
-
-  // N-Flag (Node Flag) of the Extended Prefix TLV flags. Set when the prefix identifies
-  // the
-  // advertising router, i.e. it is a host prefix advertising a globally reachable address
-  // typically associated with a loopback address. This is normally set for a Node SID.
-  // default = True
-  optional bool n_flag = 8;
-
-  // A-Flag (Attach Flag) of the Extended Prefix TLV flags. An Area Border Router (ABR)
-  // generating an OSPFv2 Extended Prefix TLV for an inter-area prefix that is locally
-  // connected or attached in another connected area SHOULD set this flag.
-  // default = False
-  optional bool a_flag = 9;
 }
 
 // A container of properties for an OSPFv3 router.
@@ -22387,7 +22328,7 @@ message Ospfv2LsaState {
   // One or more OSPFv2 NSSA-LSA - Type 7.
   repeated Ospfv2NssaLsa nssa_lsas = 7;
 
-  // One or more OSPFv2 Link-Scope Opaque-LSA - Type 9.
+  // One or more OSPFv2 Opaque LSAs - Type 9, Type 10, or Type 11.
   repeated Ospfv2OpaqueLsa opaque_lsas = 8;
 }
 
@@ -22399,17 +22340,6 @@ message Ospfv2RouterLsa {
 
   // Links that are described within the LSA.
   repeated Ospfv2Link links = 2;
-
-  // The Segment Routing capability learned for this router, decoded from the Router
-  // Information (RI) Opaque LSA: the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and
-  // SR Local Block (SRLB) TLV (RFC 8665).
-  Ospfv2LsaSrCapability sr_capability = 3;
-
-  // The Node/Prefix-SID learned for this router, decoded from the Prefix-SID sub-TLV
-  // of
-  // the OSPFv2 Extended Prefix Opaque LSA advertised for the router's own prefix (RFC
-  // 8665).
-  Ospfv2LsaPrefixSid prefix_sid = 4;
 }
 
 // Contents of the Network LSA.
@@ -22437,11 +22367,6 @@ message Ospfv2NetworkSummaryLsa {
 
   // The cost of the summary route TOS level 0 and all unspecified levels.
   optional uint32 metric = 3;
-
-  // The Prefix-SID learned for this prefix, decoded from the Prefix-SID sub-TLV of the
-  // OSPFv2 Extended Prefix Opaque LSA whose Extended Prefix TLV references this prefix
-  // (RFC 8665).
-  Ospfv2LsaPrefixSid prefix_sid = 4;
 }
 
 // Contents of OSPFv2 Autonomous System Boundary Router (ASBR) summary LSA - Type 4.
@@ -22472,11 +22397,6 @@ message Ospfv2ExternalAsLsa {
 
   // The type of metric associated with the route range.
   optional uint32 metric_type = 4;
-
-  // The Prefix-SID learned for this prefix, decoded from the Prefix-SID sub-TLV of the
-  // OSPFv2 Extended Prefix Opaque LSA whose Extended Prefix TLV references this prefix
-  // (RFC 8665).
-  Ospfv2LsaPrefixSid prefix_sid = 5;
 }
 
 // Contents of OSPFv2 NSSA LSA - Type 7.
@@ -22497,11 +22417,6 @@ message Ospfv2NssaLsa {
 
   // IPv4 Forwarding address.
   optional string forwarding_address = 5;
-
-  // The Prefix-SID learned for this prefix, decoded from the Prefix-SID sub-TLV of the
-  // OSPFv2 Extended Prefix Opaque LSA whose Extended Prefix TLV references this prefix
-  // (RFC 8665).
-  Ospfv2LsaPrefixSid prefix_sid = 6;
 }
 
 // Contents of OSPFv2 Opaque LSA - Type 9/10/11 (RFC 5250).
@@ -22509,6 +22424,16 @@ message Ospfv2NssaLsa {
 // an Opaque Type (most significant octet) and an Opaque ID (remaining three octets),
 // decoded here as tlv_information and id (RFC 5250 Section 3). header.lsa_id carries
 // the raw, undecoded Link State ID value.
+// The Segment Routing and Traffic Engineering information carried by an Opaque LSA
+// is
+// reported on this object, in the LSA it was actually advertised in, rather than on
+// the
+// Router-LSA, Summary-LSA, AS-External-LSA or NSSA-LSA that describes the router, link
+// or prefix it applies to. Exactly one of router_information, traffic_engineering,
+// extended_prefixes or extended_links is populated, selected by tlv_information; every
+// other top-level TLV of the LSA is reported raw in unknown_tlvs. Each of those objects
+// documents how to correlate it back to the LSA that advertises the router, link or
+// prefix it describes.
 message Ospfv2OpaqueLsa {
 
   // Contents of the LSA header.
@@ -22554,13 +22479,147 @@ message Ospfv2OpaqueLsa {
   // Type originated by the same router.
   optional uint32 id = 4;
 
-  // The raw, undecoded TLVs carried in the body of the Opaque LSA, in the generic
-  // type/length/value TLV format used by all OSPFv2 Opaque LSAs (RFC 7770 Section 2,
-  // RFC 8665, RFC 9492).
-  repeated Ospfv2OpaqueLsaTlv tlvs = 5;
+  // The decoded contents of a Router Information (RI) Opaque LSA, present when
+  // tlv_information is router_information (RFC 7770 Section 2).
+  // An RI Opaque LSA is originated per router, so its contents describe the router
+  // identified by header.advertising_router_id. Correlate it to the Router-LSA of that
+  // router by matching router_lsas[].header.advertising_router_id.
+  Ospfv2OpaqueLsaRouterInformation router_information = 5;
+
+  // The decoded contents of a Traffic Engineering Opaque LSA, present when
+  // tlv_information is traffic_engineering (RFC 3630 Section 2.4).
+  Ospfv2OpaqueLsaTrafficEngineering traffic_engineering = 6;
+
+  // The decoded OSPFv2 Extended Prefix TLVs of an Extended Prefix Opaque LSA, present
+  // when tlv_information is extended_prefix. One Extended Prefix Opaque LSA can carry
+  // more than one Extended Prefix TLV, each describing a different prefix
+  // (RFC 7684 Section 2.1).
+  repeated Ospfv2OpaqueLsaExtendedPrefix extended_prefixes = 7;
+
+  // The decoded OSPFv2 Extended Link TLVs of an Extended Link Opaque LSA, present when
+  // tlv_information is extended_link (RFC 7684 Section 3.1).
+  repeated Ospfv2OpaqueLsaExtendedLink extended_links = 8;
+
+  // TLVs carried in the body of the Opaque LSA that are not decoded into
+  // router_information, traffic_engineering, extended_prefixes or extended_links,
+  // returned raw in the generic type/length/value TLV format used by all OSPFv2 Opaque
+  // LSAs (RFC 7770 Section 2, RFC 8665, RFC 9492).
+  repeated Ospfv2OpaqueLsaTlv unknown_tlvs = 9;
 }
 
-// A top-level TLV carried in the body of an OSPFv2 Opaque LSA (RFC 7770 Section 2).
+// The decoded Router Information (RI) Opaque LSA contents, Opaque Type 4
+// (RFC 7770 Section 2). The RI Opaque LSA is originated once per router, so everything
+// reported here describes the router named by the parent LSA's
+// header.advertising_router_id.
+message Ospfv2OpaqueLsaRouterInformation {
+
+  // The Segment Routing capability of the advertising router, decoded from the
+  // SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV
+  // (RFC 8665 Sections 3.1, 3.2, 3.3).
+  Ospfv2LsaSrCapability sr_capability = 1;
+
+  // The Router Informational and Functional Capabilities of the advertising router,
+  // decoded from the Router Informational Capabilities TLV and the Router Functional
+  // Capabilities TLV (RFC 7770 Sections 2.5, 2.6).
+  Ospfv2LsaRiCapabilities ri_capabilities = 2;
+
+  // One or more Maximum SID Depth (MSD) values of the advertising router, decoded from
+  // the Node MSD TLV (RFC 8476 Section 2).
+  repeated Ospfv2LsaMsd node_msd = 3;
+}
+
+// The decoded Traffic Engineering Opaque LSA contents, Opaque Type 1
+// (RFC 3630 Section 2.4). A TE LSA carries a single top-level TLV: either the Router
+// Address TLV, reported as router_address, or the Link TLV, reported as link_id plus
+// link_attributes.
+message Ospfv2OpaqueLsaTrafficEngineering {
+
+  // The stable IPv4 address of the advertising router, decoded from the Router Address
+  // TLV, TLV type 1 (RFC 3630 Section 2.4.1). Present instead of link_id and
+  // link_attributes when the LSA carries a Router Address TLV.
+  optional string router_address = 1;
+
+  // The identifier of the link the Link TLV describes, decoded from its Link ID
+  // sub-TLV, sub-type 2 (RFC 3630 Section 2.5.2): the Router ID of the neighbor for a
+  // point-to-point link, or the interface address of the Designated Router for a
+  // multi-access link. Correlate the link attributes to the link they describe by
+  // matching router_lsas[].links[].id of the Router-LSA whose
+  // header.advertising_router_id equals that of this Opaque LSA.
+  optional string link_id = 2;
+
+  // The traffic engineering attributes of the link, decoded from the sub-TLVs of the
+  // Link TLV, TLV type 2 (RFC 3630 Section 2.5).
+  Ospfv2LsaLinkTrafficEngineering link_attributes = 3;
+}
+
+// A decoded OSPFv2 Extended Prefix TLV of an Extended Prefix Opaque LSA, TLV type 1
+// (RFC 7684 Section 2.1).
+// The TLV names the prefix it applies to in its own body, so no reference to another
+// LSA
+// is needed to identify it. Correlate it to the LSA that advertises that prefix by
+// matching prefix against router_lsas[].links[].id of a stub link for an intra-area
+// prefix, or against header.lsa_id of network_summary_lsas[] for an inter-area prefix,
+// external_as_lsas[] for an AS-external prefix or nssa_lsas[] for an NSSA-external
+// prefix. RFC 2328 Sections 12.4.3 and 12.4.4 define the Link State ID of a Summary-LSA
+// and of an AS-External-LSA as the prefix itself, and RFC 3101 gives the NSSA-LSA the
+// same format, so that correlation is a direct value match rather than a new lookup.
+message Ospfv2OpaqueLsaExtendedPrefix {
+
+  // The IPv4 address prefix the TLV applies to, decoded from the Address Prefix field
+  // (RFC 7684 Section 2.1).
+  optional string prefix = 1;
+
+  // The length in bits of prefix, decoded from the Prefix Length field
+  // (RFC 7684 Section 2.1).
+  optional uint32 prefix_length = 2;
+
+  // The Prefix-SID advertised for this prefix, decoded from the Prefix-SID sub-TLV,
+  // sub-type 2 (RFC 8665 Section 5).
+  Ospfv2LsaPrefixSid prefix_sid = 3;
+}
+
+// A decoded OSPFv2 Extended Link TLV of an Extended Link Opaque LSA, TLV type 1
+// (RFC 7684 Section 3.1).
+// The TLV repeats the Link Type, Link ID and Link Data of the Router-LSA link it extends,
+// so correlate it to that link by matching link_id, and link_data when the same link_id
+// is advertised more than once, against router_lsas[].links[] of the Router-LSA whose
+// header.advertising_router_id equals that of this Opaque LSA.
+message Ospfv2OpaqueLsaExtendedLink {
+
+  message LinkType {
+    enum Enum {
+      unspecified = 0;
+      point_to_point = 1;
+      transit = 2;
+      stub = 3;
+      virtual = 4;
+    }
+  }
+  // The type of the link the TLV extends, decoded from the Link Type field
+  // (RFC 7684 Section 3.1). Carries the same value as the Type field of the
+  // corresponding Router-LSA link (RFC 2328 Section A.4.2).
+  optional LinkType.Enum link_type = 1;
+
+  // The identifier of the link the TLV extends, decoded from the Link ID field
+  // (RFC 7684 Section 3.1).
+  optional string link_id = 2;
+
+  // The data of the link the TLV extends, decoded from the Link Data field
+  // (RFC 7684 Section 3.1). Distinguishes two links that share a link_id, such as
+  // parallel point-to-point links to the same neighbor.
+  optional string link_data = 3;
+
+  // The Adjacency-SID advertised for this link, decoded from the Adj-SID sub-TLV,
+  // sub-type 2, or the LAN Adj-SID sub-TLV, sub-type 3 (RFC 8665 Sections 6.1, 6.2).
+  Ospfv2LsaAdjacencySid adjacency_sid = 4;
+
+  // The link attributes advertised for this link, decoded from the application-specific
+  // and legacy link attribute sub-TLVs of the Extended Link TLV (RFC 9492 Section 6).
+  Ospfv2LsaLinkTrafficEngineering link_attributes = 5;
+}
+
+// A top-level TLV carried in the body of an OSPFv2 Opaque LSA that is not decoded into
+// a structured field elsewhere in the model (RFC 7770 Section 2).
 message Ospfv2OpaqueLsaTlv {
 
   message Type {
@@ -22572,35 +22631,30 @@ message Ospfv2OpaqueLsaTlv {
       te_link_local = 4;
       te_node_attribute = 5;
       te_optical_node_property = 6;
-      ri_informational_capabilities = 7;
-      ri_functional_capabilities = 8;
-      ri_te_mesh_group_ipv4 = 9;
-      ri_te_mesh_group_ipv6 = 10;
-      ri_te_node_capability_descriptor = 11;
-      ri_pced = 12;
-      ri_dynamic_hostname = 13;
-      ri_sr_algorithm = 14;
-      ri_sid_label_range = 15;
-      ri_node_admin_tag = 16;
-      ri_sbfd_discriminator = 17;
-      ri_node_msd = 18;
-      ri_tunnel_encapsulations = 19;
-      ri_sr_local_block = 20;
-      ri_srms_preference = 21;
-      ri_flexible_algorithm_definition = 22;
-      ri_area_leader = 23;
-      ri_dynamic_flooding = 24;
-      ri_srv6_capabilities = 25;
-      ri_ip_algorithm = 26;
-      extended_prefix_tlv = 27;
-      extended_prefix_range_tlv = 28;
-      extended_link_tlv = 29;
-      ttz_id = 30;
-      ttz_router = 31;
-      ttz_options = 32;
-      dynamic_flooding_area_router_ids = 33;
-      dynamic_flooding_path = 34;
-      extended_inter_area_asbr_tlv = 35;
+      ri_te_mesh_group_ipv4 = 7;
+      ri_te_mesh_group_ipv6 = 8;
+      ri_te_node_capability_descriptor = 9;
+      ri_pced = 10;
+      ri_dynamic_hostname = 11;
+      ri_sr_algorithm = 12;
+      ri_sid_label_range = 13;
+      ri_node_admin_tag = 14;
+      ri_sbfd_discriminator = 15;
+      ri_tunnel_encapsulations = 16;
+      ri_sr_local_block = 17;
+      ri_srms_preference = 18;
+      ri_flexible_algorithm_definition = 19;
+      ri_area_leader = 20;
+      ri_dynamic_flooding = 21;
+      extended_prefix_tlv = 22;
+      extended_prefix_range_tlv = 23;
+      extended_link_tlv = 24;
+      ttz_id = 25;
+      ttz_router = 26;
+      ttz_options = 27;
+      dynamic_flooding_area_router_ids = 28;
+      dynamic_flooding_path = 29;
+      extended_inter_area_asbr_tlv = 30;
     }
   }
   // The TLV Type field. Its meaning is scoped by the parent LSA's
@@ -22613,93 +22667,81 @@ message Ospfv2OpaqueLsaTlv {
   // The TLV Value field, returned as a lowercase hexadecimal string.
   optional string value = 3;
 
-  // The sub-TLVs nested within this TLV's value, in the generic type/length/value format
-  // (e.g. RFC 8665 Extended Prefix/Link Opaque LSA sub-TLVs).
-  repeated Ospfv2OpaqueLsaSubTlv sub_tlvs = 4;
+  // Sub-TLVs nested within this TLV's value that are not decoded into a structured field
+  // elsewhere in the model, returned raw in the generic type/length/value format (e.g.
+  // RFC 8665 Extended Prefix/Link Opaque LSA sub-TLVs).
+  repeated Ospfv2OpaqueLsaSubTlv unknown_sub_tlvs = 4;
 }
 
-// A sub-TLV nested within a top-level Opaque LSA TLV (RFC 8665).
+// A sub-TLV nested within a top-level Opaque LSA TLV that is not decoded into a structured
+// field elsewhere in the model (RFC 8665).
 message Ospfv2OpaqueLsaSubTlv {
 
   message Type {
     enum Enum {
       unspecified = 0;
-      te_link_type = 1;
-      te_link_id = 2;
-      te_local_interface_ip_address = 3;
-      te_remote_interface_ip_address = 4;
-      te_metric = 5;
-      te_maximum_bandwidth = 6;
-      te_maximum_reservable_bandwidth = 7;
-      te_unreserved_bandwidth = 8;
-      te_administrative_group = 9;
-      te_local_remote_te_router_id = 10;
-      te_link_local_remote_identifiers = 11;
-      te_link_protection_type = 12;
-      te_interface_switching_capability_descriptor = 13;
-      te_shared_risk_link_group = 14;
-      te_bandwidth_constraints = 15;
-      te_extended_administrative_group = 16;
-      te_unidirectional_link_delay = 17;
-      te_min_max_unidirectional_link_delay = 18;
-      te_unidirectional_delay_variation = 19;
-      te_unidirectional_link_loss = 20;
-      te_unidirectional_residual_bandwidth = 21;
-      te_unidirectional_available_bandwidth = 22;
-      te_unidirectional_utilized_bandwidth = 23;
-      te_network_to_router_metric = 24;
-      te_generic_metric = 25;
-      extended_prefix_sid_label = 26;
-      extended_prefix_sid = 27;
-      extended_prefix_flexible_algorithm_prefix_metric = 28;
-      extended_prefix_source_ospf_router_id = 29;
-      extended_prefix_source_router_address = 30;
-      extended_prefix_ip_algorithm_prefix_reachability = 31;
-      extended_prefix_ip_forwarding_address = 32;
-      extended_prefix_bier = 33;
-      extended_prefix_bier_mpls_encapsulation = 34;
-      extended_prefix_extended_flags = 35;
-      extended_prefix_bier_php_request = 36;
-      extended_prefix_administrative_tag = 37;
-      extended_link_sid_label = 38;
-      extended_link_adj_sid = 39;
-      extended_link_lan_adj_sid_label = 40;
-      extended_link_network_to_router_metric = 41;
-      extended_link_rtm_capability = 42;
-      extended_link_msd = 43;
-      extended_link_graceful_link_shutdown = 44;
-      extended_link_remote_ipv4_address = 45;
-      extended_link_local_remote_interface_id = 46;
-      extended_link_asla = 47;
-      extended_link_srlg = 48;
-      extended_link_unidirectional_link_delay = 49;
-      extended_link_min_max_unidirectional_link_delay = 50;
-      extended_link_unidirectional_delay_variation = 51;
-      extended_link_unidirectional_link_loss = 52;
-      extended_link_unidirectional_residual_bandwidth = 53;
-      extended_link_unidirectional_available_bandwidth = 54;
-      extended_link_unidirectional_utilized_bandwidth = 55;
-      extended_link_administrative_group = 56;
-      extended_link_extended_administrative_group = 57;
-      extended_link_attributes_bits = 58;
-      extended_link_te_metric = 59;
-      extended_link_maximum_link_bandwidth = 60;
-      extended_link_l2_bundle_member_attributes = 61;
-      extended_link_generic_metric = 62;
-      fad_exclude_admin_group = 63;
-      fad_include_any_admin_group = 64;
-      fad_include_all_admin_group = 65;
-      fad_flags = 66;
-      fad_exclude_srlg = 67;
-      fad_exclude_minimum_bandwidth = 68;
-      fad_exclude_maximum_delay = 69;
-      fad_reference_bandwidth = 70;
-      fad_bandwidth_threshold = 71;
-      fad_exclude_reverse_admin_group = 72;
-      fad_include_any_reverse_admin_group = 73;
-      fad_include_all_reverse_admin_group = 74;
-      eia_asbr_flexible_algorithm_asbr_metric = 75;
-      eia_asbr_ip_flexible_algorithm_asbr_metric = 76;
+      te_link_id = 1;
+      te_local_remote_te_router_id = 2;
+      te_link_local_remote_identifiers = 3;
+      te_link_protection_type = 4;
+      te_interface_switching_capability_descriptor = 5;
+      te_bandwidth_constraints = 6;
+      te_unidirectional_link_delay = 7;
+      te_min_max_unidirectional_link_delay = 8;
+      te_unidirectional_delay_variation = 9;
+      te_unidirectional_link_loss = 10;
+      te_unidirectional_residual_bandwidth = 11;
+      te_unidirectional_available_bandwidth = 12;
+      te_unidirectional_utilized_bandwidth = 13;
+      te_network_to_router_metric = 14;
+      te_generic_metric = 15;
+      extended_prefix_sid_label = 16;
+      extended_prefix_sid = 17;
+      extended_prefix_flexible_algorithm_prefix_metric = 18;
+      extended_prefix_source_ospf_router_id = 19;
+      extended_prefix_source_router_address = 20;
+      extended_prefix_ip_algorithm_prefix_reachability = 21;
+      extended_prefix_ip_forwarding_address = 22;
+      extended_prefix_bier = 23;
+      extended_prefix_bier_mpls_encapsulation = 24;
+      extended_prefix_extended_flags = 25;
+      extended_prefix_bier_php_request = 26;
+      extended_prefix_administrative_tag = 27;
+      extended_link_sid_label = 28;
+      extended_link_adj_sid = 29;
+      extended_link_lan_adj_sid_label = 30;
+      extended_link_network_to_router_metric = 31;
+      extended_link_rtm_capability = 32;
+      extended_link_graceful_link_shutdown = 33;
+      extended_link_remote_ipv4_address = 34;
+      extended_link_local_remote_interface_id = 35;
+      extended_link_asla = 36;
+      extended_link_unidirectional_link_delay = 37;
+      extended_link_min_max_unidirectional_link_delay = 38;
+      extended_link_unidirectional_delay_variation = 39;
+      extended_link_unidirectional_link_loss = 40;
+      extended_link_unidirectional_residual_bandwidth = 41;
+      extended_link_unidirectional_available_bandwidth = 42;
+      extended_link_unidirectional_utilized_bandwidth = 43;
+      extended_link_attributes_bits = 44;
+      extended_link_te_metric = 45;
+      extended_link_maximum_link_bandwidth = 46;
+      extended_link_l2_bundle_member_attributes = 47;
+      extended_link_generic_metric = 48;
+      fad_exclude_admin_group = 49;
+      fad_include_any_admin_group = 50;
+      fad_include_all_admin_group = 51;
+      fad_flags = 52;
+      fad_exclude_srlg = 53;
+      fad_exclude_minimum_bandwidth = 54;
+      fad_exclude_maximum_delay = 55;
+      fad_reference_bandwidth = 56;
+      fad_bandwidth_threshold = 57;
+      fad_exclude_reverse_admin_group = 58;
+      fad_include_any_reverse_admin_group = 59;
+      fad_include_all_reverse_admin_group = 60;
+      eia_asbr_flexible_algorithm_asbr_metric = 61;
+      eia_asbr_ip_flexible_algorithm_asbr_metric = 62;
     }
   }
   // The sub-TLV Type field. Its meaning is scoped by the parent TLV (IANA
@@ -22810,11 +22852,6 @@ message Ospfv2Link {
   // router's interface; for all other connections it represents
   // the local system's IP address.
   optional uint32 metric = 4;
-
-  // The Adjacency-SID learned for this link, decoded from the Adj-SID / LAN Adj-SID sub-TLV
-  // of the OSPFv2 Extended Link Opaque LSA whose Extended Link TLV references this link
-  // (RFC 8665).
-  Ospfv2LsaAdjacencySid adjacency_sid = 5;
 }
 
 // The Segment Routing capability learned from the Router Information (RI) Opaque LSA:
@@ -22935,6 +22972,117 @@ message Ospfv2LsaAdjSidFlags {
 
   // L-Flag (Local): if set, the value/index carried by the Adj-SID has local significance.
   optional bool l_flag = 5;
+}
+
+// The Router Informational Capabilities (TLV type 1) and Router Functional Capabilities
+// (TLV type 2) learned from the Router Information (RI) Opaque LSA (RFC 7770 Sections
+// 2.5,
+// 2.6).
+message Ospfv2LsaRiCapabilities {
+
+  // Informational Capabilities bit 0: the router is Graceful Restart capable (RFC 7770
+  // Section 2.5).
+  optional bool graceful_restart = 1;
+
+  // Informational Capabilities bit 1: the router is Graceful Restart Helper capable (RFC
+  // 7770 Section 2.5).
+  optional bool graceful_restart_helper = 2;
+
+  // Informational Capabilities bit 2: the router supports OSPF Stub Router functionality
+  // (RFC 7770 Section 2.5).
+  optional bool stub_router_support = 3;
+
+  // Informational Capabilities bit 3: the router supports OSPF Traffic Engineering (RFC
+  // 7770 Section 2.5).
+  optional bool traffic_engineering_support = 4;
+
+  // Informational Capabilities bit 4: the router supports point-to-point operation over
+  // LAN (RFC 7770 Section 2.5).
+  optional bool point_to_point_over_lan = 5;
+
+  // Informational Capabilities bit 5: the router supports Experimental Traffic Engineering
+  // (RFC 7770 Section 2.5).
+  optional bool experimental_te = 6;
+
+  // The raw 32-bit Router Functional Capabilities bitmask (RFC 7770 Section 2.6). No
+  // capability bits are assigned in this registry as of RFC 7770; returned raw since
+  // there
+  // are no named bits to decode.
+  optional uint32 functional_capabilities = 7;
+}
+
+// A single (MSD-Type, MSD-Value) pair from a Node MSD or Link MSD TLV/sub-TLV (RFC
+// 8476 Sections 2, 3).
+message Ospfv2LsaMsd {
+
+  // The MSD-Type, identifying the kind of Maximum SID Depth being advertised (IGP MSD-Types
+  // registry, RFC 8491).
+  optional uint32 msd_type = 1;
+
+  // The MSD-Value: the maximum number of SIDs the router or link supports in the SID
+  // stack. A value of 0 indicates no capability to impose any stack depth.
+  optional uint32 msd_value = 2;
+}
+
+// Traffic engineering attributes for a link, decoded from the Link TLV sub-TLVs of
+// the
+// Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs
+// of
+// the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).
+message Ospfv2LsaLinkTrafficEngineering {
+
+  message LinkType {
+    enum Enum {
+      unspecified = 0;
+      point_to_point = 1;
+      multi_access = 2;
+    }
+  }
+  // The Link Type sub-TLV, sub-type 1 (RFC 3630 Section 2.5.1).
+  optional LinkType.Enum link_type = 1;
+
+  // The Local Interface IP Address sub-TLV, sub-type 3 (RFC 3630 Section 2.5.3).
+  repeated string local_interface_ip_addresses = 2;
+
+  // The Remote Interface IP Address sub-TLV, sub-type 4 (RFC 3630 Section 2.5.4).
+  repeated string remote_interface_ip_addresses = 3;
+
+  // The Traffic Engineering Metric sub-TLV, sub-type 5 (RFC 3630 Section 2.5.5).
+  optional uint32 te_metric = 4;
+
+  // The Maximum Bandwidth sub-TLV, sub-type 6, in bytes per second
+  // (RFC 3630 Section 2.5.6).
+  optional float maximum_bandwidth = 5;
+
+  // The Maximum Reservable Bandwidth sub-TLV, sub-type 7, in bytes per second
+  // (RFC 3630 Section 2.5.7).
+  optional float maximum_reservable_bandwidth = 6;
+
+  // The Unreserved Bandwidth sub-TLV, sub-type 8: bandwidth reservable at each of the
+  // eight priority levels 0-7, in bytes per second (RFC 3630 Section 2.5.8).
+  repeated float unreserved_bandwidths = 7;
+
+  // The Administrative Group sub-TLV bitmask, sourced from either the TE Link TLV
+  // sub-type 9 (RFC 3630 Section 2.5.9) or the OSPFv2 Extended Link TLV sub-type 19
+  // (RFC 9492 Section 6.2).
+  optional uint32 administrative_group = 8;
+
+  // The Extended Administrative Group, sourced from either the TE Link TLV sub-type 26
+  // (RFC 7308) or the OSPFv2 Extended Link TLV sub-type 20 (RFC 9492 Section 6.3), as
+  // one
+  // or more additional 32-bit administrative-group words beyond administrative_group.
+  repeated uint32 extended_administrative_group = 9;
+
+  // The Shared Risk Link Group (SRLG) membership of this link, sourced from either the
+  // TE
+  // Link TLV sub-type 16 (RFC 4203 Section 1.3) or the OSPFv2 Extended Link TLV sub-type
+  // 11
+  // (RFC 9492 Section 6.1).
+  repeated uint32 srlg = 10;
+
+  // One or more Maximum SID Depth (MSD) values for this link, decoded from the Link MSD
+  // sub-TLV of the OSPFv2 Extended Link TLV, sub-type 6 (RFC 8476 Section 3).
+  repeated Ospfv2LsaMsd link_msd = 11;
 }
 
 // The request to retrieve OSPFv3 Link State Advertisements (LSA) information learned

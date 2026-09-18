@@ -13,11 +13,15 @@ import (
 // ***** Ospfv2OpaqueLsa *****
 type ospfv2OpaqueLsa struct {
 	validation
-	obj          *otg.Ospfv2OpaqueLsa
-	marshaller   marshalOspfv2OpaqueLsa
-	unMarshaller unMarshalOspfv2OpaqueLsa
-	headerHolder Ospfv2LsaHeader
-	tlvsHolder   Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter
+	obj                      *otg.Ospfv2OpaqueLsa
+	marshaller               marshalOspfv2OpaqueLsa
+	unMarshaller             unMarshalOspfv2OpaqueLsa
+	headerHolder             Ospfv2LsaHeader
+	routerInformationHolder  Ospfv2OpaqueLsaRouterInformation
+	trafficEngineeringHolder Ospfv2OpaqueLsaTrafficEngineering
+	extendedPrefixesHolder   Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter
+	extendedLinksHolder      Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter
+	unknownTlvsHolder        Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter
 }
 
 func NewOspfv2OpaqueLsa() Ospfv2OpaqueLsa {
@@ -246,7 +250,11 @@ func (obj *ospfv2OpaqueLsa) Clone() (Ospfv2OpaqueLsa, error) {
 
 func (obj *ospfv2OpaqueLsa) setNil() {
 	obj.headerHolder = nil
-	obj.tlvsHolder = nil
+	obj.routerInformationHolder = nil
+	obj.trafficEngineeringHolder = nil
+	obj.extendedPrefixesHolder = nil
+	obj.extendedLinksHolder = nil
+	obj.unknownTlvsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -257,6 +265,14 @@ func (obj *ospfv2OpaqueLsa) setNil() {
 // an Opaque Type (most significant octet) and an Opaque ID (remaining three octets),
 // decoded here as tlv_information and id (RFC 5250 Section 3). header.lsa_id carries
 // the raw, undecoded Link State ID value.
+// The Segment Routing and Traffic Engineering information carried by an Opaque LSA is
+// reported on this object, in the LSA it was actually advertised in, rather than on the
+// Router-LSA, Summary-LSA, AS-External-LSA or NSSA-LSA that describes the router, link
+// or prefix it applies to. Exactly one of router_information, traffic_engineering,
+// extended_prefixes or extended_links is populated, selected by tlv_information; every
+// other top-level TLV of the LSA is reported raw in unknown_tlvs. Each of those objects
+// documents how to correlate it back to the LSA that advertises the router, link or
+// prefix it describes.
 type Ospfv2OpaqueLsa interface {
 	Validation
 	// msg marshals Ospfv2OpaqueLsa to protobuf object *otg.Ospfv2OpaqueLsa
@@ -304,8 +320,40 @@ type Ospfv2OpaqueLsa interface {
 	SetId(value uint32) Ospfv2OpaqueLsa
 	// HasId checks if Id has been set in Ospfv2OpaqueLsa
 	HasId() bool
-	// Tlvs returns Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIterIter, set in Ospfv2OpaqueLsa
-	Tlvs() Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter
+	// RouterInformation returns Ospfv2OpaqueLsaRouterInformation, set in Ospfv2OpaqueLsa.
+	// Ospfv2OpaqueLsaRouterInformation is the decoded Router Information (RI) Opaque LSA contents, Opaque Type 4
+	// (RFC 7770 Section 2). The RI Opaque LSA is originated once per router, so everything
+	// reported here describes the router named by the parent LSA's
+	// header.advertising_router_id.
+	RouterInformation() Ospfv2OpaqueLsaRouterInformation
+	// SetRouterInformation assigns Ospfv2OpaqueLsaRouterInformation provided by user to Ospfv2OpaqueLsa.
+	// Ospfv2OpaqueLsaRouterInformation is the decoded Router Information (RI) Opaque LSA contents, Opaque Type 4
+	// (RFC 7770 Section 2). The RI Opaque LSA is originated once per router, so everything
+	// reported here describes the router named by the parent LSA's
+	// header.advertising_router_id.
+	SetRouterInformation(value Ospfv2OpaqueLsaRouterInformation) Ospfv2OpaqueLsa
+	// HasRouterInformation checks if RouterInformation has been set in Ospfv2OpaqueLsa
+	HasRouterInformation() bool
+	// TrafficEngineering returns Ospfv2OpaqueLsaTrafficEngineering, set in Ospfv2OpaqueLsa.
+	// Ospfv2OpaqueLsaTrafficEngineering is the decoded Traffic Engineering Opaque LSA contents, Opaque Type 1
+	// (RFC 3630 Section 2.4). A TE LSA carries a single top-level TLV: either the Router
+	// Address TLV, reported as router_address, or the Link TLV, reported as link_id plus
+	// link_attributes.
+	TrafficEngineering() Ospfv2OpaqueLsaTrafficEngineering
+	// SetTrafficEngineering assigns Ospfv2OpaqueLsaTrafficEngineering provided by user to Ospfv2OpaqueLsa.
+	// Ospfv2OpaqueLsaTrafficEngineering is the decoded Traffic Engineering Opaque LSA contents, Opaque Type 1
+	// (RFC 3630 Section 2.4). A TE LSA carries a single top-level TLV: either the Router
+	// Address TLV, reported as router_address, or the Link TLV, reported as link_id plus
+	// link_attributes.
+	SetTrafficEngineering(value Ospfv2OpaqueLsaTrafficEngineering) Ospfv2OpaqueLsa
+	// HasTrafficEngineering checks if TrafficEngineering has been set in Ospfv2OpaqueLsa
+	HasTrafficEngineering() bool
+	// ExtendedPrefixes returns Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIterIter, set in Ospfv2OpaqueLsa
+	ExtendedPrefixes() Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter
+	// ExtendedLinks returns Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIterIter, set in Ospfv2OpaqueLsa
+	ExtendedLinks() Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter
+	// UnknownTlvs returns Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIterIter, set in Ospfv2OpaqueLsa
+	UnknownTlvs() Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter
 	setNil()
 }
 
@@ -452,18 +500,268 @@ func (obj *ospfv2OpaqueLsa) SetId(value uint32) Ospfv2OpaqueLsa {
 	return obj
 }
 
-// The raw, undecoded TLVs carried in the body of the Opaque LSA, in the generic
-// type/length/value TLV format used by all OSPFv2 Opaque LSAs (RFC 7770 Section 2,
-// RFC 8665, RFC 9492).
-// Tlvs returns a []Ospfv2OpaqueLsaTlv
-func (obj *ospfv2OpaqueLsa) Tlvs() Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter {
-	if len(obj.obj.Tlvs) == 0 {
-		obj.obj.Tlvs = []*otg.Ospfv2OpaqueLsaTlv{}
+// The decoded contents of a Router Information (RI) Opaque LSA, present when
+// tlv_information is router_information (RFC 7770 Section 2).
+// An RI Opaque LSA is originated per router, so its contents describe the router
+// identified by header.advertising_router_id. Correlate it to the Router-LSA of that
+// router by matching router_lsas[].header.advertising_router_id.
+// RouterInformation returns a Ospfv2OpaqueLsaRouterInformation
+func (obj *ospfv2OpaqueLsa) RouterInformation() Ospfv2OpaqueLsaRouterInformation {
+	if obj.obj.RouterInformation == nil {
+		obj.obj.RouterInformation = NewOspfv2OpaqueLsaRouterInformation().msg()
 	}
-	if obj.tlvsHolder == nil {
-		obj.tlvsHolder = newOspfv2OpaqueLsaOspfv2OpaqueLsaTlvIter(&obj.obj.Tlvs).setMsg(obj)
+	if obj.routerInformationHolder == nil {
+		obj.routerInformationHolder = &ospfv2OpaqueLsaRouterInformation{obj: obj.obj.RouterInformation}
 	}
-	return obj.tlvsHolder
+	return obj.routerInformationHolder
+}
+
+// The decoded contents of a Router Information (RI) Opaque LSA, present when
+// tlv_information is router_information (RFC 7770 Section 2).
+// An RI Opaque LSA is originated per router, so its contents describe the router
+// identified by header.advertising_router_id. Correlate it to the Router-LSA of that
+// router by matching router_lsas[].header.advertising_router_id.
+// RouterInformation returns a Ospfv2OpaqueLsaRouterInformation
+func (obj *ospfv2OpaqueLsa) HasRouterInformation() bool {
+	return obj.obj.RouterInformation != nil
+}
+
+// The decoded contents of a Router Information (RI) Opaque LSA, present when
+// tlv_information is router_information (RFC 7770 Section 2).
+// An RI Opaque LSA is originated per router, so its contents describe the router
+// identified by header.advertising_router_id. Correlate it to the Router-LSA of that
+// router by matching router_lsas[].header.advertising_router_id.
+// SetRouterInformation sets the Ospfv2OpaqueLsaRouterInformation value in the Ospfv2OpaqueLsa object
+func (obj *ospfv2OpaqueLsa) SetRouterInformation(value Ospfv2OpaqueLsaRouterInformation) Ospfv2OpaqueLsa {
+
+	obj.routerInformationHolder = nil
+	obj.obj.RouterInformation = value.msg()
+
+	return obj
+}
+
+// The decoded contents of a Traffic Engineering Opaque LSA, present when
+// tlv_information is traffic_engineering (RFC 3630 Section 2.4).
+// TrafficEngineering returns a Ospfv2OpaqueLsaTrafficEngineering
+func (obj *ospfv2OpaqueLsa) TrafficEngineering() Ospfv2OpaqueLsaTrafficEngineering {
+	if obj.obj.TrafficEngineering == nil {
+		obj.obj.TrafficEngineering = NewOspfv2OpaqueLsaTrafficEngineering().msg()
+	}
+	if obj.trafficEngineeringHolder == nil {
+		obj.trafficEngineeringHolder = &ospfv2OpaqueLsaTrafficEngineering{obj: obj.obj.TrafficEngineering}
+	}
+	return obj.trafficEngineeringHolder
+}
+
+// The decoded contents of a Traffic Engineering Opaque LSA, present when
+// tlv_information is traffic_engineering (RFC 3630 Section 2.4).
+// TrafficEngineering returns a Ospfv2OpaqueLsaTrafficEngineering
+func (obj *ospfv2OpaqueLsa) HasTrafficEngineering() bool {
+	return obj.obj.TrafficEngineering != nil
+}
+
+// The decoded contents of a Traffic Engineering Opaque LSA, present when
+// tlv_information is traffic_engineering (RFC 3630 Section 2.4).
+// SetTrafficEngineering sets the Ospfv2OpaqueLsaTrafficEngineering value in the Ospfv2OpaqueLsa object
+func (obj *ospfv2OpaqueLsa) SetTrafficEngineering(value Ospfv2OpaqueLsaTrafficEngineering) Ospfv2OpaqueLsa {
+
+	obj.trafficEngineeringHolder = nil
+	obj.obj.TrafficEngineering = value.msg()
+
+	return obj
+}
+
+// The decoded OSPFv2 Extended Prefix TLVs of an Extended Prefix Opaque LSA, present
+// when tlv_information is extended_prefix. One Extended Prefix Opaque LSA can carry
+// more than one Extended Prefix TLV, each describing a different prefix
+// (RFC 7684 Section 2.1).
+// ExtendedPrefixes returns a []Ospfv2OpaqueLsaExtendedPrefix
+func (obj *ospfv2OpaqueLsa) ExtendedPrefixes() Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter {
+	if len(obj.obj.ExtendedPrefixes) == 0 {
+		obj.obj.ExtendedPrefixes = []*otg.Ospfv2OpaqueLsaExtendedPrefix{}
+	}
+	if obj.extendedPrefixesHolder == nil {
+		obj.extendedPrefixesHolder = newOspfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter(&obj.obj.ExtendedPrefixes).setMsg(obj)
+	}
+	return obj.extendedPrefixesHolder
+}
+
+type ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter struct {
+	obj                                *ospfv2OpaqueLsa
+	ospfv2OpaqueLsaExtendedPrefixSlice []Ospfv2OpaqueLsaExtendedPrefix
+	fieldPtr                           *[]*otg.Ospfv2OpaqueLsaExtendedPrefix
+}
+
+func newOspfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter(ptr *[]*otg.Ospfv2OpaqueLsaExtendedPrefix) Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter {
+	return &ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter{fieldPtr: ptr}
+}
+
+type Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter interface {
+	setMsg(*ospfv2OpaqueLsa) Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter
+	Items() []Ospfv2OpaqueLsaExtendedPrefix
+	Add() Ospfv2OpaqueLsaExtendedPrefix
+	Append(items ...Ospfv2OpaqueLsaExtendedPrefix) Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter
+	Set(index int, newObj Ospfv2OpaqueLsaExtendedPrefix) Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter
+	Clear() Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter
+	clearHolderSlice() Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter
+	appendHolderSlice(item Ospfv2OpaqueLsaExtendedPrefix) Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter
+}
+
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter) setMsg(msg *ospfv2OpaqueLsa) Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&ospfv2OpaqueLsaExtendedPrefix{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter) Items() []Ospfv2OpaqueLsaExtendedPrefix {
+	return obj.ospfv2OpaqueLsaExtendedPrefixSlice
+}
+
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter) Add() Ospfv2OpaqueLsaExtendedPrefix {
+	newObj := &otg.Ospfv2OpaqueLsaExtendedPrefix{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &ospfv2OpaqueLsaExtendedPrefix{obj: newObj}
+	newLibObj.setDefault()
+	obj.ospfv2OpaqueLsaExtendedPrefixSlice = append(obj.ospfv2OpaqueLsaExtendedPrefixSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter) Append(items ...Ospfv2OpaqueLsaExtendedPrefix) Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.ospfv2OpaqueLsaExtendedPrefixSlice = append(obj.ospfv2OpaqueLsaExtendedPrefixSlice, item)
+	}
+	return obj
+}
+
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter) Set(index int, newObj Ospfv2OpaqueLsaExtendedPrefix) Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.ospfv2OpaqueLsaExtendedPrefixSlice[index] = newObj
+	return obj
+}
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter) Clear() Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.Ospfv2OpaqueLsaExtendedPrefix{}
+		obj.ospfv2OpaqueLsaExtendedPrefixSlice = []Ospfv2OpaqueLsaExtendedPrefix{}
+	}
+	return obj
+}
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter) clearHolderSlice() Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter {
+	if len(obj.ospfv2OpaqueLsaExtendedPrefixSlice) > 0 {
+		obj.ospfv2OpaqueLsaExtendedPrefixSlice = []Ospfv2OpaqueLsaExtendedPrefix{}
+	}
+	return obj
+}
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter) appendHolderSlice(item Ospfv2OpaqueLsaExtendedPrefix) Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedPrefixIter {
+	obj.ospfv2OpaqueLsaExtendedPrefixSlice = append(obj.ospfv2OpaqueLsaExtendedPrefixSlice, item)
+	return obj
+}
+
+// The decoded OSPFv2 Extended Link TLVs of an Extended Link Opaque LSA, present when
+// tlv_information is extended_link (RFC 7684 Section 3.1).
+// ExtendedLinks returns a []Ospfv2OpaqueLsaExtendedLink
+func (obj *ospfv2OpaqueLsa) ExtendedLinks() Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter {
+	if len(obj.obj.ExtendedLinks) == 0 {
+		obj.obj.ExtendedLinks = []*otg.Ospfv2OpaqueLsaExtendedLink{}
+	}
+	if obj.extendedLinksHolder == nil {
+		obj.extendedLinksHolder = newOspfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter(&obj.obj.ExtendedLinks).setMsg(obj)
+	}
+	return obj.extendedLinksHolder
+}
+
+type ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter struct {
+	obj                              *ospfv2OpaqueLsa
+	ospfv2OpaqueLsaExtendedLinkSlice []Ospfv2OpaqueLsaExtendedLink
+	fieldPtr                         *[]*otg.Ospfv2OpaqueLsaExtendedLink
+}
+
+func newOspfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter(ptr *[]*otg.Ospfv2OpaqueLsaExtendedLink) Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter {
+	return &ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter{fieldPtr: ptr}
+}
+
+type Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter interface {
+	setMsg(*ospfv2OpaqueLsa) Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter
+	Items() []Ospfv2OpaqueLsaExtendedLink
+	Add() Ospfv2OpaqueLsaExtendedLink
+	Append(items ...Ospfv2OpaqueLsaExtendedLink) Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter
+	Set(index int, newObj Ospfv2OpaqueLsaExtendedLink) Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter
+	Clear() Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter
+	clearHolderSlice() Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter
+	appendHolderSlice(item Ospfv2OpaqueLsaExtendedLink) Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter
+}
+
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter) setMsg(msg *ospfv2OpaqueLsa) Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&ospfv2OpaqueLsaExtendedLink{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter) Items() []Ospfv2OpaqueLsaExtendedLink {
+	return obj.ospfv2OpaqueLsaExtendedLinkSlice
+}
+
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter) Add() Ospfv2OpaqueLsaExtendedLink {
+	newObj := &otg.Ospfv2OpaqueLsaExtendedLink{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &ospfv2OpaqueLsaExtendedLink{obj: newObj}
+	newLibObj.setDefault()
+	obj.ospfv2OpaqueLsaExtendedLinkSlice = append(obj.ospfv2OpaqueLsaExtendedLinkSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter) Append(items ...Ospfv2OpaqueLsaExtendedLink) Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.ospfv2OpaqueLsaExtendedLinkSlice = append(obj.ospfv2OpaqueLsaExtendedLinkSlice, item)
+	}
+	return obj
+}
+
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter) Set(index int, newObj Ospfv2OpaqueLsaExtendedLink) Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.ospfv2OpaqueLsaExtendedLinkSlice[index] = newObj
+	return obj
+}
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter) Clear() Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.Ospfv2OpaqueLsaExtendedLink{}
+		obj.ospfv2OpaqueLsaExtendedLinkSlice = []Ospfv2OpaqueLsaExtendedLink{}
+	}
+	return obj
+}
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter) clearHolderSlice() Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter {
+	if len(obj.ospfv2OpaqueLsaExtendedLinkSlice) > 0 {
+		obj.ospfv2OpaqueLsaExtendedLinkSlice = []Ospfv2OpaqueLsaExtendedLink{}
+	}
+	return obj
+}
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter) appendHolderSlice(item Ospfv2OpaqueLsaExtendedLink) Ospfv2OpaqueLsaOspfv2OpaqueLsaExtendedLinkIter {
+	obj.ospfv2OpaqueLsaExtendedLinkSlice = append(obj.ospfv2OpaqueLsaExtendedLinkSlice, item)
+	return obj
+}
+
+// TLVs carried in the body of the Opaque LSA that are not decoded into
+// router_information, traffic_engineering, extended_prefixes or extended_links,
+// returned raw in the generic type/length/value TLV format used by all OSPFv2 Opaque
+// LSAs (RFC 7770 Section 2, RFC 8665, RFC 9492).
+// UnknownTlvs returns a []Ospfv2OpaqueLsaTlv
+func (obj *ospfv2OpaqueLsa) UnknownTlvs() Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter {
+	if len(obj.obj.UnknownTlvs) == 0 {
+		obj.obj.UnknownTlvs = []*otg.Ospfv2OpaqueLsaTlv{}
+	}
+	if obj.unknownTlvsHolder == nil {
+		obj.unknownTlvsHolder = newOspfv2OpaqueLsaOspfv2OpaqueLsaTlvIter(&obj.obj.UnknownTlvs).setMsg(obj)
+	}
+	return obj.unknownTlvsHolder
 }
 
 type ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter struct {
@@ -551,15 +849,63 @@ func (obj *ospfv2OpaqueLsa) validateObj(vObj *validation, set_default bool) {
 		obj.Header().validateObj(vObj, set_default)
 	}
 
-	if len(obj.obj.Tlvs) != 0 {
+	if obj.obj.Id != nil {
+
+		if *obj.obj.Id > 16777215 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("0 <= Ospfv2OpaqueLsa.Id <= 16777215 but Got %d", *obj.obj.Id))
+		}
+
+	}
+
+	if obj.obj.RouterInformation != nil {
+
+		obj.RouterInformation().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.TrafficEngineering != nil {
+
+		obj.TrafficEngineering().validateObj(vObj, set_default)
+	}
+
+	if len(obj.obj.ExtendedPrefixes) != 0 {
 
 		if set_default {
-			obj.Tlvs().clearHolderSlice()
-			for _, item := range obj.obj.Tlvs {
-				obj.Tlvs().appendHolderSlice(&ospfv2OpaqueLsaTlv{obj: item})
+			obj.ExtendedPrefixes().clearHolderSlice()
+			for _, item := range obj.obj.ExtendedPrefixes {
+				obj.ExtendedPrefixes().appendHolderSlice(&ospfv2OpaqueLsaExtendedPrefix{obj: item})
 			}
 		}
-		for _, item := range obj.Tlvs().Items() {
+		for _, item := range obj.ExtendedPrefixes().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
+	if len(obj.obj.ExtendedLinks) != 0 {
+
+		if set_default {
+			obj.ExtendedLinks().clearHolderSlice()
+			for _, item := range obj.obj.ExtendedLinks {
+				obj.ExtendedLinks().appendHolderSlice(&ospfv2OpaqueLsaExtendedLink{obj: item})
+			}
+		}
+		for _, item := range obj.ExtendedLinks().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
+	if len(obj.obj.UnknownTlvs) != 0 {
+
+		if set_default {
+			obj.UnknownTlvs().clearHolderSlice()
+			for _, item := range obj.obj.UnknownTlvs {
+				obj.UnknownTlvs().appendHolderSlice(&ospfv2OpaqueLsaTlv{obj: item})
+			}
+		}
+		for _, item := range obj.UnknownTlvs().Items() {
 			item.validateObj(vObj, set_default)
 		}
 

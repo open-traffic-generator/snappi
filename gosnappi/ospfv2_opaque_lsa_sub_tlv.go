@@ -250,7 +250,7 @@ func (obj *ospfv2OpaqueLsaSubTlv) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Ospfv2OpaqueLsaSubTlv is a sub-TLV nested within a top-level Opaque LSA TLV (RFC 8665).
+// Ospfv2OpaqueLsaSubTlv is a sub-TLV nested within a top-level Opaque LSA TLV that is not decoded into a structured field elsewhere in the model (RFC 8665).
 type Ospfv2OpaqueLsaSubTlv interface {
 	Validation
 	// msg marshals Ospfv2OpaqueLsaSubTlv to protobuf object *otg.Ospfv2OpaqueLsaSubTlv
@@ -299,22 +299,12 @@ type Ospfv2OpaqueLsaSubTlvTypeEnum string
 
 // Enum of Type on Ospfv2OpaqueLsaSubTlv
 var Ospfv2OpaqueLsaSubTlvType = struct {
-	TE_LINK_TYPE                                     Ospfv2OpaqueLsaSubTlvTypeEnum
 	TE_LINK_ID                                       Ospfv2OpaqueLsaSubTlvTypeEnum
-	TE_LOCAL_INTERFACE_IP_ADDRESS                    Ospfv2OpaqueLsaSubTlvTypeEnum
-	TE_REMOTE_INTERFACE_IP_ADDRESS                   Ospfv2OpaqueLsaSubTlvTypeEnum
-	TE_METRIC                                        Ospfv2OpaqueLsaSubTlvTypeEnum
-	TE_MAXIMUM_BANDWIDTH                             Ospfv2OpaqueLsaSubTlvTypeEnum
-	TE_MAXIMUM_RESERVABLE_BANDWIDTH                  Ospfv2OpaqueLsaSubTlvTypeEnum
-	TE_UNRESERVED_BANDWIDTH                          Ospfv2OpaqueLsaSubTlvTypeEnum
-	TE_ADMINISTRATIVE_GROUP                          Ospfv2OpaqueLsaSubTlvTypeEnum
 	TE_LOCAL_REMOTE_TE_ROUTER_ID                     Ospfv2OpaqueLsaSubTlvTypeEnum
 	TE_LINK_LOCAL_REMOTE_IDENTIFIERS                 Ospfv2OpaqueLsaSubTlvTypeEnum
 	TE_LINK_PROTECTION_TYPE                          Ospfv2OpaqueLsaSubTlvTypeEnum
 	TE_INTERFACE_SWITCHING_CAPABILITY_DESCRIPTOR     Ospfv2OpaqueLsaSubTlvTypeEnum
-	TE_SHARED_RISK_LINK_GROUP                        Ospfv2OpaqueLsaSubTlvTypeEnum
 	TE_BANDWIDTH_CONSTRAINTS                         Ospfv2OpaqueLsaSubTlvTypeEnum
-	TE_EXTENDED_ADMINISTRATIVE_GROUP                 Ospfv2OpaqueLsaSubTlvTypeEnum
 	TE_UNIDIRECTIONAL_LINK_DELAY                     Ospfv2OpaqueLsaSubTlvTypeEnum
 	TE_MIN_MAX_UNIDIRECTIONAL_LINK_DELAY             Ospfv2OpaqueLsaSubTlvTypeEnum
 	TE_UNIDIRECTIONAL_DELAY_VARIATION                Ospfv2OpaqueLsaSubTlvTypeEnum
@@ -341,12 +331,10 @@ var Ospfv2OpaqueLsaSubTlvType = struct {
 	EXTENDED_LINK_LAN_ADJ_SID_LABEL                  Ospfv2OpaqueLsaSubTlvTypeEnum
 	EXTENDED_LINK_NETWORK_TO_ROUTER_METRIC           Ospfv2OpaqueLsaSubTlvTypeEnum
 	EXTENDED_LINK_RTM_CAPABILITY                     Ospfv2OpaqueLsaSubTlvTypeEnum
-	EXTENDED_LINK_MSD                                Ospfv2OpaqueLsaSubTlvTypeEnum
 	EXTENDED_LINK_GRACEFUL_LINK_SHUTDOWN             Ospfv2OpaqueLsaSubTlvTypeEnum
 	EXTENDED_LINK_REMOTE_IPV4_ADDRESS                Ospfv2OpaqueLsaSubTlvTypeEnum
 	EXTENDED_LINK_LOCAL_REMOTE_INTERFACE_ID          Ospfv2OpaqueLsaSubTlvTypeEnum
 	EXTENDED_LINK_ASLA                               Ospfv2OpaqueLsaSubTlvTypeEnum
-	EXTENDED_LINK_SRLG                               Ospfv2OpaqueLsaSubTlvTypeEnum
 	EXTENDED_LINK_UNIDIRECTIONAL_LINK_DELAY          Ospfv2OpaqueLsaSubTlvTypeEnum
 	EXTENDED_LINK_MIN_MAX_UNIDIRECTIONAL_LINK_DELAY  Ospfv2OpaqueLsaSubTlvTypeEnum
 	EXTENDED_LINK_UNIDIRECTIONAL_DELAY_VARIATION     Ospfv2OpaqueLsaSubTlvTypeEnum
@@ -354,8 +342,6 @@ var Ospfv2OpaqueLsaSubTlvType = struct {
 	EXTENDED_LINK_UNIDIRECTIONAL_RESIDUAL_BANDWIDTH  Ospfv2OpaqueLsaSubTlvTypeEnum
 	EXTENDED_LINK_UNIDIRECTIONAL_AVAILABLE_BANDWIDTH Ospfv2OpaqueLsaSubTlvTypeEnum
 	EXTENDED_LINK_UNIDIRECTIONAL_UTILIZED_BANDWIDTH  Ospfv2OpaqueLsaSubTlvTypeEnum
-	EXTENDED_LINK_ADMINISTRATIVE_GROUP               Ospfv2OpaqueLsaSubTlvTypeEnum
-	EXTENDED_LINK_EXTENDED_ADMINISTRATIVE_GROUP      Ospfv2OpaqueLsaSubTlvTypeEnum
 	EXTENDED_LINK_ATTRIBUTES_BITS                    Ospfv2OpaqueLsaSubTlvTypeEnum
 	EXTENDED_LINK_TE_METRIC                          Ospfv2OpaqueLsaSubTlvTypeEnum
 	EXTENDED_LINK_MAXIMUM_LINK_BANDWIDTH             Ospfv2OpaqueLsaSubTlvTypeEnum
@@ -376,22 +362,12 @@ var Ospfv2OpaqueLsaSubTlvType = struct {
 	EIA_ASBR_FLEXIBLE_ALGORITHM_ASBR_METRIC          Ospfv2OpaqueLsaSubTlvTypeEnum
 	EIA_ASBR_IP_FLEXIBLE_ALGORITHM_ASBR_METRIC       Ospfv2OpaqueLsaSubTlvTypeEnum
 }{
-	TE_LINK_TYPE:                                     Ospfv2OpaqueLsaSubTlvTypeEnum("te_link_type"),
 	TE_LINK_ID:                                       Ospfv2OpaqueLsaSubTlvTypeEnum("te_link_id"),
-	TE_LOCAL_INTERFACE_IP_ADDRESS:                    Ospfv2OpaqueLsaSubTlvTypeEnum("te_local_interface_ip_address"),
-	TE_REMOTE_INTERFACE_IP_ADDRESS:                   Ospfv2OpaqueLsaSubTlvTypeEnum("te_remote_interface_ip_address"),
-	TE_METRIC:                                        Ospfv2OpaqueLsaSubTlvTypeEnum("te_metric"),
-	TE_MAXIMUM_BANDWIDTH:                             Ospfv2OpaqueLsaSubTlvTypeEnum("te_maximum_bandwidth"),
-	TE_MAXIMUM_RESERVABLE_BANDWIDTH:                  Ospfv2OpaqueLsaSubTlvTypeEnum("te_maximum_reservable_bandwidth"),
-	TE_UNRESERVED_BANDWIDTH:                          Ospfv2OpaqueLsaSubTlvTypeEnum("te_unreserved_bandwidth"),
-	TE_ADMINISTRATIVE_GROUP:                          Ospfv2OpaqueLsaSubTlvTypeEnum("te_administrative_group"),
 	TE_LOCAL_REMOTE_TE_ROUTER_ID:                     Ospfv2OpaqueLsaSubTlvTypeEnum("te_local_remote_te_router_id"),
 	TE_LINK_LOCAL_REMOTE_IDENTIFIERS:                 Ospfv2OpaqueLsaSubTlvTypeEnum("te_link_local_remote_identifiers"),
 	TE_LINK_PROTECTION_TYPE:                          Ospfv2OpaqueLsaSubTlvTypeEnum("te_link_protection_type"),
 	TE_INTERFACE_SWITCHING_CAPABILITY_DESCRIPTOR:     Ospfv2OpaqueLsaSubTlvTypeEnum("te_interface_switching_capability_descriptor"),
-	TE_SHARED_RISK_LINK_GROUP:                        Ospfv2OpaqueLsaSubTlvTypeEnum("te_shared_risk_link_group"),
 	TE_BANDWIDTH_CONSTRAINTS:                         Ospfv2OpaqueLsaSubTlvTypeEnum("te_bandwidth_constraints"),
-	TE_EXTENDED_ADMINISTRATIVE_GROUP:                 Ospfv2OpaqueLsaSubTlvTypeEnum("te_extended_administrative_group"),
 	TE_UNIDIRECTIONAL_LINK_DELAY:                     Ospfv2OpaqueLsaSubTlvTypeEnum("te_unidirectional_link_delay"),
 	TE_MIN_MAX_UNIDIRECTIONAL_LINK_DELAY:             Ospfv2OpaqueLsaSubTlvTypeEnum("te_min_max_unidirectional_link_delay"),
 	TE_UNIDIRECTIONAL_DELAY_VARIATION:                Ospfv2OpaqueLsaSubTlvTypeEnum("te_unidirectional_delay_variation"),
@@ -418,12 +394,10 @@ var Ospfv2OpaqueLsaSubTlvType = struct {
 	EXTENDED_LINK_LAN_ADJ_SID_LABEL:                  Ospfv2OpaqueLsaSubTlvTypeEnum("extended_link_lan_adj_sid_label"),
 	EXTENDED_LINK_NETWORK_TO_ROUTER_METRIC:           Ospfv2OpaqueLsaSubTlvTypeEnum("extended_link_network_to_router_metric"),
 	EXTENDED_LINK_RTM_CAPABILITY:                     Ospfv2OpaqueLsaSubTlvTypeEnum("extended_link_rtm_capability"),
-	EXTENDED_LINK_MSD:                                Ospfv2OpaqueLsaSubTlvTypeEnum("extended_link_msd"),
 	EXTENDED_LINK_GRACEFUL_LINK_SHUTDOWN:             Ospfv2OpaqueLsaSubTlvTypeEnum("extended_link_graceful_link_shutdown"),
 	EXTENDED_LINK_REMOTE_IPV4_ADDRESS:                Ospfv2OpaqueLsaSubTlvTypeEnum("extended_link_remote_ipv4_address"),
 	EXTENDED_LINK_LOCAL_REMOTE_INTERFACE_ID:          Ospfv2OpaqueLsaSubTlvTypeEnum("extended_link_local_remote_interface_id"),
 	EXTENDED_LINK_ASLA:                               Ospfv2OpaqueLsaSubTlvTypeEnum("extended_link_asla"),
-	EXTENDED_LINK_SRLG:                               Ospfv2OpaqueLsaSubTlvTypeEnum("extended_link_srlg"),
 	EXTENDED_LINK_UNIDIRECTIONAL_LINK_DELAY:          Ospfv2OpaqueLsaSubTlvTypeEnum("extended_link_unidirectional_link_delay"),
 	EXTENDED_LINK_MIN_MAX_UNIDIRECTIONAL_LINK_DELAY:  Ospfv2OpaqueLsaSubTlvTypeEnum("extended_link_min_max_unidirectional_link_delay"),
 	EXTENDED_LINK_UNIDIRECTIONAL_DELAY_VARIATION:     Ospfv2OpaqueLsaSubTlvTypeEnum("extended_link_unidirectional_delay_variation"),
@@ -431,8 +405,6 @@ var Ospfv2OpaqueLsaSubTlvType = struct {
 	EXTENDED_LINK_UNIDIRECTIONAL_RESIDUAL_BANDWIDTH:  Ospfv2OpaqueLsaSubTlvTypeEnum("extended_link_unidirectional_residual_bandwidth"),
 	EXTENDED_LINK_UNIDIRECTIONAL_AVAILABLE_BANDWIDTH: Ospfv2OpaqueLsaSubTlvTypeEnum("extended_link_unidirectional_available_bandwidth"),
 	EXTENDED_LINK_UNIDIRECTIONAL_UTILIZED_BANDWIDTH:  Ospfv2OpaqueLsaSubTlvTypeEnum("extended_link_unidirectional_utilized_bandwidth"),
-	EXTENDED_LINK_ADMINISTRATIVE_GROUP:               Ospfv2OpaqueLsaSubTlvTypeEnum("extended_link_administrative_group"),
-	EXTENDED_LINK_EXTENDED_ADMINISTRATIVE_GROUP:      Ospfv2OpaqueLsaSubTlvTypeEnum("extended_link_extended_administrative_group"),
 	EXTENDED_LINK_ATTRIBUTES_BITS:                    Ospfv2OpaqueLsaSubTlvTypeEnum("extended_link_attributes_bits"),
 	EXTENDED_LINK_TE_METRIC:                          Ospfv2OpaqueLsaSubTlvTypeEnum("extended_link_te_metric"),
 	EXTENDED_LINK_MAXIMUM_LINK_BANDWIDTH:             Ospfv2OpaqueLsaSubTlvTypeEnum("extended_link_maximum_link_bandwidth"),

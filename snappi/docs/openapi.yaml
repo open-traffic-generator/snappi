@@ -12856,6 +12856,7 @@ components:
             and simulated OSPFv2 interfaces.
           type: integer
           format: uint32
+          minimum: 1
           maximum: 65535
           default: 10
           x-field-uid: 3
@@ -13066,6 +13067,9 @@ components:
               device.ospfv2.segment_routing.srlb_ranges.
             - sid_indices: V-Flag and L-Flag are unset (both 0). Each Adj-SID carries a 4-octet
               index that is an offset into the SRGB.
+            RFC 8665 Section 5 states all other V-Flag/L-Flag combinations are invalid and MUST be
+            ignored by a receiver, so V and L are intentionally coupled here rather than exposed as
+            independent properties.
             A user needs to configure at least one entry of SID value or SID index.
           type: string
           default: sid_values
@@ -13097,7 +13101,6 @@ components:
             type: integer
             format: uint32
             default: 0
-            minimum: 0
             maximum: 4294967295
           x-field-uid: 3
         b_flag:
@@ -13130,7 +13133,6 @@ components:
           type: integer
           format: uint32
           default: 0
-          minimum: 0
           maximum: 255
           x-field-uid: 7
     Ospfv2.V4RouteRange:
@@ -13318,6 +13320,10 @@ components:
         The Prefix-SID sub-TLV is carried inside the OSPFv2 Extended Prefix TLV of the
         Extended Prefix Opaque LSA and is associated with a specific IPv4 prefix.
         Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-prefix-sid-sub-tlv.
+        A router's own Node (loopback) Prefix-SID is modeled the same way: attach this object to
+        the route range covering the router's loopback address and set n_flag on that route
+        range's Extended Prefix flags (route_origin.<type>.flags.n_flag, RFC 7684) to identify it
+        as the router's own prefix.
       type: object
       properties:
         choice:
@@ -13330,6 +13336,9 @@ components:
               device.ospfv2.segment_routing.srgb_ranges.
             - sid_values: V-Flag and L-Flag are set (both 1). Each Prefix-SID carries a 3-octet
               local label value with local significance.
+            RFC 8665 Section 5 states all other V-Flag/L-Flag combinations are invalid and MUST be
+            ignored by a receiver, so V and L are intentionally coupled here rather than exposed as
+            independent properties.
             A user needs to configure at least one entry of SID value or SID index. If no entry is
             configured, an implementation may advertise an appropriate default SID value/index
             based on the choice, e.g. the first value from the SRGB range.
@@ -13363,7 +13372,6 @@ components:
             type: integer
             format: uint32
             default: 0
-            minimum: 0
             maximum: 4294967295
           x-field-uid: 3
         np_flag:
@@ -13372,7 +13380,7 @@ components:
             If set, then the penultimate hop MUST NOT pop the Prefix-SID before delivering the
             packet to the node that advertised the Prefix-SID.
           type: boolean
-          default: true
+          default: false
           x-field-uid: 4
         m_flag:
           description: |-
@@ -13398,7 +13406,6 @@ components:
           type: integer
           format: uint32
           default: 0
-          minimum: 0
           maximum: 255
           x-field-uid: 7
     Ospfv2.SegmentRouting:
@@ -13407,11 +13414,15 @@ components:
         topologies by encoding paths as sequences of topological sub-paths, called "segments".
         In OSPFv2 the SR-specific information is advertised using Opaque LSAs. The router level
         Segment Routing capabilities (SR-Algorithm, SID/Label Range (SRGB), SR Local Block (SRLB))
-        are carried in the Router Information (RI) Opaque LSA, and the router's own Node Prefix-SID
-        is carried in the Extended Prefix Opaque LSA for the router loopback.
+        are carried in the Router Information (RI) Opaque LSA.
         Reference: https://datatracker.ietf.org/doc/html/rfc8665.
         An implementation may advertise the SR capabilities with default values if a user does
         not set any of the properties of Segment Routing.
+        A router's own Node (loopback) Prefix-SID is not a separate object here: model the
+        loopback as an ordinary device.ospfv2.router.v4_routes entry with an
+        Ospfv2SR.PrefixSid attached, and set n_flag on that route range's Extended Prefix flags
+        (route_origin.<type>.flags.n_flag) to identify it as the router's own prefix
+        (RFC 7684).
       type: object
       properties:
         algorithms:
@@ -13430,7 +13441,6 @@ components:
             type: integer
             format: uint32
             default: 0
-            minimum: 0
             maximum: 255
           x-field-uid: 1
         srgb_ranges:
@@ -13452,13 +13462,6 @@ components:
           items:
             $ref: '#/components/schemas/Ospfv2SR.Srlb'
           x-field-uid: 3
-        node_prefix_sid:
-          description: |-
-            Optional Node (loopback) Prefix-SID advertised by this router in the Extended Prefix
-            Opaque LSA for its own loopback address. The Node Prefix-SID identifies the router in
-            the Segment Routing domain.
-          $ref: '#/components/schemas/Ospfv2SR.RouterNodeSid'
-          x-field-uid: 4
     Ospfv2SR.Srgb:
       description: |-
         This contains the properties of a single Segment Routing Global Block (SRGB) range.
@@ -13511,102 +13514,6 @@ components:
           maximum: 16777215
           default: 8000
           x-field-uid: 2
-    Ospfv2SR.RouterNodeSid:
-      description: |-
-        The Node (loopback) Prefix-SID advertised by this router for its own loopback address.
-        It is advertised as a Prefix-SID sub-TLV inside the Extended Prefix TLV of the Extended
-        Prefix Opaque LSA, together with the one-octet Extended Prefix flags.
-        Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-prefix-sid-sub-tlv.
-      type: object
-      properties:
-        choice:
-          description: |-
-            Choice of whether the Node Prefix-SID carries an absolute value (local label) or a
-            relative index into the SRGB. This choice sets the V-Flag (Value/Index) and the L-Flag
-            (Local/Global) as follows:
-            - sid_index: V-Flag and L-Flag are unset (both 0). The SID carries a 4-octet index that
-              is an offset into the SRGB. Please refer to device.ospfv2.segment_routing.srgb_ranges.
-            - sid_value: V-Flag and L-Flag are set (both 1). The SID carries a 3-octet local label
-              value with local significance.
-          type: string
-          default: sid_index
-          x-field-uid: 1
-          x-enum:
-            sid_value:
-              x-field-uid: 1
-            sid_index:
-              x-field-uid: 2
-          enum:
-          - sid_value
-          - sid_index
-        sid_value:
-          description: |-
-            The Node SID/Label as an absolute local label value. Used when the choice is sid_value.
-          type: integer
-          format: uint32
-          default: 16
-          minimum: 16
-          maximum: 1048575
-          x-field-uid: 2
-        sid_index:
-          description: |-
-            The Node SID/Label index, an offset into the SRGB. Used when the choice is sid_index.
-          type: integer
-          format: uint32
-          default: 0
-          minimum: 0
-          maximum: 4294967295
-          x-field-uid: 3
-        np_flag:
-          description: |-
-            NP-Flag: No-PHP (No Penultimate Hop-Popping) Flag.
-            If set, then the penultimate hop MUST NOT pop the Prefix-SID before delivering the
-            packet to this node.
-          type: boolean
-          default: true
-          x-field-uid: 4
-        m_flag:
-          description: |-
-            M-Flag: Mapping Server Flag.
-            If set, then the SID was advertised by an SR Mapping Server. When set, the NP-Flag and
-            the E-Flag MUST be ignored on reception.
-          type: boolean
-          default: false
-          x-field-uid: 5
-        e_flag:
-          description: |-
-            E-Flag: Explicit-Null Flag.
-            If set, any upstream neighbor of the Prefix-SID originator MUST replace the Prefix-SID
-            with the Explicit-NULL label before forwarding the packet.
-          type: boolean
-          default: false
-          x-field-uid: 6
-        algorithm:
-          description: |-
-            The Segment Routing Algorithm the Node Prefix-SID is associated with, e.g. 0 for SPF
-            or 1 for Strict SPF.
-          type: integer
-          format: uint32
-          default: 0
-          minimum: 0
-          maximum: 255
-          x-field-uid: 7
-        n_flag:
-          description: |-
-            N-Flag (Node Flag) of the Extended Prefix TLV flags. Set when the prefix identifies the
-            advertising router, i.e. it is a host prefix advertising a globally reachable address
-            typically associated with a loopback address. This is normally set for a Node SID.
-          type: boolean
-          default: true
-          x-field-uid: 8
-        a_flag:
-          description: |-
-            A-Flag (Attach Flag) of the Extended Prefix TLV flags. An Area Border Router (ABR)
-            generating an OSPFv2 Extended Prefix TLV for an inter-area prefix that is locally
-            connected or attached in another connected area SHOULD set this flag.
-          type: boolean
-          default: false
-          x-field-uid: 9
     Device.Ospfv3Router:
       description: |-
         A container of properties for an OSPFv3 router.
@@ -20847,6 +20754,7 @@ components:
           type: integer
           format: uint32
           default: 10
+          minimum: 1
           maximum: 65535
           x-field-uid: 2
     Config.Append:
@@ -30568,7 +30476,7 @@ components:
           x-field-uid: 7
         opaque_lsas:
           description: |-
-            One or more OSPFv2 Link-Scope Opaque-LSA - Type 9.
+            One or more OSPFv2 Opaque LSAs - Type 9, Type 10, or Type 11.
           type: array
           items:
             $ref: '#/components/schemas/Ospfv2.OpaqueLsa'
@@ -30590,19 +30498,6 @@ components:
           items:
             $ref: '#/components/schemas/Ospfv2.Link'
           x-field-uid: 2
-        sr_capability:
-          description: |-
-            The Segment Routing capability learned for this router, decoded from the Router
-            Information (RI) Opaque LSA: the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and
-            SR Local Block (SRLB) TLV (RFC 8665).
-          $ref: '#/components/schemas/Ospfv2Lsa.SrCapability'
-          x-field-uid: 3
-        prefix_sid:
-          description: |-
-            The Node/Prefix-SID learned for this router, decoded from the Prefix-SID sub-TLV of
-            the OSPFv2 Extended Prefix Opaque LSA advertised for the router's own prefix (RFC 8665).
-          $ref: '#/components/schemas/Ospfv2Lsa.PrefixSid'
-          x-field-uid: 4
     Ospfv2.NetworkLsa:
       description: |-
         Contents of the Network LSA.
@@ -30650,13 +30545,6 @@ components:
           type: integer
           format: uint32
           x-field-uid: 3
-        prefix_sid:
-          description: |-
-            The Prefix-SID learned for this prefix, decoded from the Prefix-SID sub-TLV of the
-            OSPFv2 Extended Prefix Opaque LSA whose Extended Prefix TLV references this prefix
-            (RFC 8665).
-          $ref: '#/components/schemas/Ospfv2Lsa.PrefixSid'
-          x-field-uid: 4
     Ospfv2.SummaryAsLsa:
       description: |-
         Contents of OSPFv2 Autonomous System Boundary Router (ASBR) summary LSA - Type 4.
@@ -30708,13 +30596,6 @@ components:
           type: integer
           format: uint32
           x-field-uid: 4
-        prefix_sid:
-          description: |-
-            The Prefix-SID learned for this prefix, decoded from the Prefix-SID sub-TLV of the
-            OSPFv2 Extended Prefix Opaque LSA whose Extended Prefix TLV references this prefix
-            (RFC 8665).
-          $ref: '#/components/schemas/Ospfv2Lsa.PrefixSid'
-          x-field-uid: 5
     Ospfv2.NssaLsa:
       description: |-
         Contents of OSPFv2 NSSA LSA - Type 7.
@@ -30750,13 +30631,6 @@ components:
           type: string
           format: ipv4
           x-field-uid: 5
-        prefix_sid:
-          description: |-
-            The Prefix-SID learned for this prefix, decoded from the Prefix-SID sub-TLV of the
-            OSPFv2 Extended Prefix Opaque LSA whose Extended Prefix TLV references this prefix
-            (RFC 8665).
-          $ref: '#/components/schemas/Ospfv2Lsa.PrefixSid'
-          x-field-uid: 6
     Ospfv2.OpaqueLsa:
       description: |-
         Contents of OSPFv2 Opaque LSA - Type 9/10/11 (RFC 5250).
@@ -30764,6 +30638,14 @@ components:
         an Opaque Type (most significant octet) and an Opaque ID (remaining three octets),
         decoded here as tlv_information and id (RFC 5250 Section 3). header.lsa_id carries
         the raw, undecoded Link State ID value.
+        The Segment Routing and Traffic Engineering information carried by an Opaque LSA is
+        reported on this object, in the LSA it was actually advertised in, rather than on the
+        Router-LSA, Summary-LSA, AS-External-LSA or NSSA-LSA that describes the router, link
+        or prefix it applies to. Exactly one of router_information, traffic_engineering,
+        extended_prefixes or extended_links is populated, selected by tlv_information; every
+        other top-level TLV of the LSA is reported raw in unknown_tlvs. Each of those objects
+        documents how to correlate it back to the LSA that advertises the router, link or
+        prefix it describes.
       type: object
       properties:
         header:
@@ -30859,19 +30741,211 @@ components:
             The Opaque ID, decoded from the least significant three octets of the LSA's Link State ID (RFC 5250 Section 3). Used to further distinguish LSAs of the same Opaque Type originated by the same router.
           type: integer
           format: uint32
+          minimum: 0
+          maximum: 16777215
           x-field-uid: 4
-        tlvs:
+        router_information:
           description: |-
-            The raw, undecoded TLVs carried in the body of the Opaque LSA, in the generic
-            type/length/value TLV format used by all OSPFv2 Opaque LSAs (RFC 7770 Section 2,
-            RFC 8665, RFC 9492).
+            The decoded contents of a Router Information (RI) Opaque LSA, present when
+            tlv_information is router_information (RFC 7770 Section 2).
+            An RI Opaque LSA is originated per router, so its contents describe the router
+            identified by header.advertising_router_id. Correlate it to the Router-LSA of that
+            router by matching router_lsas[].header.advertising_router_id.
+          $ref: '#/components/schemas/Ospfv2.OpaqueLsa.RouterInformation'
+          x-field-uid: 5
+        traffic_engineering:
+          description: |-
+            The decoded contents of a Traffic Engineering Opaque LSA, present when
+            tlv_information is traffic_engineering (RFC 3630 Section 2.4).
+          $ref: '#/components/schemas/Ospfv2.OpaqueLsa.TrafficEngineering'
+          x-field-uid: 6
+        extended_prefixes:
+          description: |-
+            The decoded OSPFv2 Extended Prefix TLVs of an Extended Prefix Opaque LSA, present
+            when tlv_information is extended_prefix. One Extended Prefix Opaque LSA can carry
+            more than one Extended Prefix TLV, each describing a different prefix
+            (RFC 7684 Section 2.1).
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2.OpaqueLsa.ExtendedPrefix'
+          x-field-uid: 7
+        extended_links:
+          description: |-
+            The decoded OSPFv2 Extended Link TLVs of an Extended Link Opaque LSA, present when
+            tlv_information is extended_link (RFC 7684 Section 3.1).
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2.OpaqueLsa.ExtendedLink'
+          x-field-uid: 8
+        unknown_tlvs:
+          description: |-
+            TLVs carried in the body of the Opaque LSA that are not decoded into
+            router_information, traffic_engineering, extended_prefixes or extended_links,
+            returned raw in the generic type/length/value TLV format used by all OSPFv2 Opaque
+            LSAs (RFC 7770 Section 2, RFC 8665, RFC 9492).
           type: array
           items:
             $ref: '#/components/schemas/Ospfv2.OpaqueLsa.Tlv'
+          x-field-uid: 9
+    Ospfv2.OpaqueLsa.RouterInformation:
+      description: |-
+        The decoded Router Information (RI) Opaque LSA contents, Opaque Type 4
+        (RFC 7770 Section 2). The RI Opaque LSA is originated once per router, so everything
+        reported here describes the router named by the parent LSA's
+        header.advertising_router_id.
+      type: object
+      properties:
+        sr_capability:
+          description: |-
+            The Segment Routing capability of the advertising router, decoded from the
+            SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV
+            (RFC 8665 Sections 3.1, 3.2, 3.3).
+          $ref: '#/components/schemas/Ospfv2Lsa.SrCapability'
+          x-field-uid: 1
+        ri_capabilities:
+          description: |-
+            The Router Informational and Functional Capabilities of the advertising router,
+            decoded from the Router Informational Capabilities TLV and the Router Functional
+            Capabilities TLV (RFC 7770 Sections 2.5, 2.6).
+          $ref: '#/components/schemas/Ospfv2Lsa.RiCapabilities'
+          x-field-uid: 2
+        node_msd:
+          description: |-
+            One or more Maximum SID Depth (MSD) values of the advertising router, decoded from
+            the Node MSD TLV (RFC 8476 Section 2).
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2Lsa.Msd'
+          x-field-uid: 3
+    Ospfv2.OpaqueLsa.TrafficEngineering:
+      description: |-
+        The decoded Traffic Engineering Opaque LSA contents, Opaque Type 1
+        (RFC 3630 Section 2.4). A TE LSA carries a single top-level TLV: either the Router
+        Address TLV, reported as router_address, or the Link TLV, reported as link_id plus
+        link_attributes.
+      type: object
+      properties:
+        router_address:
+          description: |-
+            The stable IPv4 address of the advertising router, decoded from the Router Address
+            TLV, TLV type 1 (RFC 3630 Section 2.4.1). Present instead of link_id and
+            link_attributes when the LSA carries a Router Address TLV.
+          type: string
+          format: ipv4
+          x-field-uid: 1
+        link_id:
+          description: |-
+            The identifier of the link the Link TLV describes, decoded from its Link ID
+            sub-TLV, sub-type 2 (RFC 3630 Section 2.5.2): the Router ID of the neighbor for a
+            point-to-point link, or the interface address of the Designated Router for a
+            multi-access link. Correlate the link attributes to the link they describe by
+            matching router_lsas[].links[].id of the Router-LSA whose
+            header.advertising_router_id equals that of this Opaque LSA.
+          type: string
+          format: ipv4
+          x-field-uid: 2
+        link_attributes:
+          description: |-
+            The traffic engineering attributes of the link, decoded from the sub-TLVs of the
+            Link TLV, TLV type 2 (RFC 3630 Section 2.5).
+          $ref: '#/components/schemas/Ospfv2Lsa.LinkTrafficEngineering'
+          x-field-uid: 3
+    Ospfv2.OpaqueLsa.ExtendedPrefix:
+      description: |-
+        A decoded OSPFv2 Extended Prefix TLV of an Extended Prefix Opaque LSA, TLV type 1
+        (RFC 7684 Section 2.1).
+        The TLV names the prefix it applies to in its own body, so no reference to another LSA
+        is needed to identify it. Correlate it to the LSA that advertises that prefix by
+        matching prefix against router_lsas[].links[].id of a stub link for an intra-area
+        prefix, or against header.lsa_id of network_summary_lsas[] for an inter-area prefix,
+        external_as_lsas[] for an AS-external prefix or nssa_lsas[] for an NSSA-external
+        prefix. RFC 2328 Sections 12.4.3 and 12.4.4 define the Link State ID of a Summary-LSA
+        and of an AS-External-LSA as the prefix itself, and RFC 3101 gives the NSSA-LSA the
+        same format, so that correlation is a direct value match rather than a new lookup.
+      type: object
+      properties:
+        prefix:
+          description: |-
+            The IPv4 address prefix the TLV applies to, decoded from the Address Prefix field
+            (RFC 7684 Section 2.1).
+          type: string
+          format: ipv4
+          x-field-uid: 1
+        prefix_length:
+          description: |-
+            The length in bits of prefix, decoded from the Prefix Length field
+            (RFC 7684 Section 2.1).
+          type: integer
+          format: uint32
+          maximum: 32
+          x-field-uid: 2
+        prefix_sid:
+          description: |-
+            The Prefix-SID advertised for this prefix, decoded from the Prefix-SID sub-TLV,
+            sub-type 2 (RFC 8665 Section 5).
+          $ref: '#/components/schemas/Ospfv2Lsa.PrefixSid'
+          x-field-uid: 3
+    Ospfv2.OpaqueLsa.ExtendedLink:
+      description: |-
+        A decoded OSPFv2 Extended Link TLV of an Extended Link Opaque LSA, TLV type 1
+        (RFC 7684 Section 3.1).
+        The TLV repeats the Link Type, Link ID and Link Data of the Router-LSA link it extends,
+        so correlate it to that link by matching link_id, and link_data when the same link_id
+        is advertised more than once, against router_lsas[].links[] of the Router-LSA whose
+        header.advertising_router_id equals that of this Opaque LSA.
+      type: object
+      properties:
+        link_type:
+          description: |-
+            The type of the link the TLV extends, decoded from the Link Type field
+            (RFC 7684 Section 3.1). Carries the same value as the Type field of the
+            corresponding Router-LSA link (RFC 2328 Section A.4.2).
+          type: string
+          x-field-uid: 1
+          x-enum:
+            point_to_point:
+              x-field-uid: 1
+            transit:
+              x-field-uid: 2
+            stub:
+              x-field-uid: 3
+            virtual:
+              x-field-uid: 4
+          enum:
+          - point_to_point
+          - transit
+          - stub
+          - virtual
+        link_id:
+          description: |-
+            The identifier of the link the TLV extends, decoded from the Link ID field
+            (RFC 7684 Section 3.1).
+          type: string
+          format: ipv4
+          x-field-uid: 2
+        link_data:
+          description: |-
+            The data of the link the TLV extends, decoded from the Link Data field
+            (RFC 7684 Section 3.1). Distinguishes two links that share a link_id, such as
+            parallel point-to-point links to the same neighbor.
+          type: string
+          format: ipv4
+          x-field-uid: 3
+        adjacency_sid:
+          description: |-
+            The Adjacency-SID advertised for this link, decoded from the Adj-SID sub-TLV,
+            sub-type 2, or the LAN Adj-SID sub-TLV, sub-type 3 (RFC 8665 Sections 6.1, 6.2).
+          $ref: '#/components/schemas/Ospfv2Lsa.AdjacencySid'
+          x-field-uid: 4
+        link_attributes:
+          description: |-
+            The link attributes advertised for this link, decoded from the application-specific
+            and legacy link attribute sub-TLVs of the Extended Link TLV (RFC 9492 Section 6).
+          $ref: '#/components/schemas/Ospfv2Lsa.LinkTrafficEngineering'
           x-field-uid: 5
     Ospfv2.OpaqueLsa.Tlv:
       description: |-
-        A top-level TLV carried in the body of an OSPFv2 Opaque LSA (RFC 7770 Section 2).
+        A top-level TLV carried in the body of an OSPFv2 Opaque LSA that is not decoded into a structured field elsewhere in the model (RFC 7770 Section 2).
       type: object
       properties:
         type:
@@ -30905,122 +30979,102 @@ components:
               description: |-
                 Optical Node Property, TE LSA TLV type 6 (RFC 7688).
               x-field-uid: 6
-            ri_informational_capabilities:
-              description: |-
-                Router Informational Capabilities, RI LSA (tlv_information router_information) TLV type 1 (RFC 7770).
-              x-field-uid: 7
-            ri_functional_capabilities:
-              description: |-
-                Router Functional Capabilities, RI LSA TLV type 2 (RFC 7770).
-              x-field-uid: 8
             ri_te_mesh_group_ipv4:
               description: |-
                 TE-MESH-GROUP TLV (IPv4), RI LSA TLV type 3 (RFC 4972).
-              x-field-uid: 9
+              x-field-uid: 7
             ri_te_mesh_group_ipv6:
               description: |-
                 TE-MESH-GROUP TLV (IPv6), RI LSA TLV type 4 (RFC 4972).
-              x-field-uid: 10
+              x-field-uid: 8
             ri_te_node_capability_descriptor:
               description: |-
                 TE Node Capability Descriptor, RI LSA TLV type 5 (RFC 5073).
-              x-field-uid: 11
+              x-field-uid: 9
             ri_pced:
               description: |-
                 PCED, RI LSA TLV type 6 (RFC 5088).
-              x-field-uid: 12
+              x-field-uid: 10
             ri_dynamic_hostname:
               description: |-
                 OSPF Dynamic Hostname, RI LSA TLV type 7 (RFC 5642).
-              x-field-uid: 13
+              x-field-uid: 11
             ri_sr_algorithm:
               description: |-
                 SR-Algorithm TLV, RI LSA TLV type 8 (RFC 8665).
-              x-field-uid: 14
+              x-field-uid: 12
             ri_sid_label_range:
               description: |-
                 SID/Label Range TLV, RI LSA TLV type 9 (RFC 8665).
-              x-field-uid: 15
+              x-field-uid: 13
             ri_node_admin_tag:
               description: |-
                 Node Admin Tag TLV, RI LSA TLV type 10 (RFC 7777).
-              x-field-uid: 16
+              x-field-uid: 14
             ri_sbfd_discriminator:
               description: |-
                 S-BFD Discriminator, RI LSA TLV type 11 (RFC 7884).
-              x-field-uid: 17
-            ri_node_msd:
-              description: |-
-                Node MSD, RI LSA TLV type 12 (RFC 8476).
-              x-field-uid: 18
+              x-field-uid: 15
             ri_tunnel_encapsulations:
               description: |-
                 Tunnel Encapsulations, RI LSA TLV type 13 (RFC 9013).
-              x-field-uid: 19
+              x-field-uid: 16
             ri_sr_local_block:
               description: |-
                 SR Local Block TLV, RI LSA TLV type 14 (RFC 8665).
-              x-field-uid: 20
+              x-field-uid: 17
             ri_srms_preference:
               description: |-
                 SRMS Preference TLV, RI LSA TLV type 15 (RFC 8665).
-              x-field-uid: 21
+              x-field-uid: 18
             ri_flexible_algorithm_definition:
               description: |-
                 Flexible Algorithm Definition (FAD) TLV, RI LSA TLV type 16 (RFC 9350 Section 5.2).
-              x-field-uid: 22
+              x-field-uid: 19
             ri_area_leader:
               description: |-
                 OSPF Area Leader, RI LSA TLV type 17 (RFC 9667).
-              x-field-uid: 23
+              x-field-uid: 20
             ri_dynamic_flooding:
               description: |-
                 OSPF Dynamic Flooding, RI LSA TLV type 18 (RFC 9667).
-              x-field-uid: 24
-            ri_srv6_capabilities:
-              description: |-
-                SRv6 Capabilities, RI LSA TLV type 20 (RFC 9513 Section 2).
-              x-field-uid: 25
-            ri_ip_algorithm:
-              description: |-
-                IP Algorithm, RI LSA TLV type 21 (RFC 9502 Section 5.2).
-              x-field-uid: 26
+              x-field-uid: 21
             extended_prefix_tlv:
               description: |-
                 OSPFv2 Extended Prefix TLV, Extended Prefix Opaque LSA (tlv_information extended_prefix) TLV type 1 (RFC 7684).
-              x-field-uid: 27
+              x-field-uid: 22
             extended_prefix_range_tlv:
               description: |-
                 OSPF Extended Prefix Range TLV, Extended Prefix Opaque LSA TLV type 2 (RFC 8665).
-              x-field-uid: 28
+              x-field-uid: 23
             extended_link_tlv:
               description: |-
                 OSPFv2 Extended Link TLV, Extended Link Opaque LSA (tlv_information extended_link) TLV type 1 (RFC 7684).
-              x-field-uid: 29
+              x-field-uid: 24
             ttz_id:
               description: |-
                 TTZ ID TLV, TTZ LSA (tlv_information ttz) TLV type 1 (RFC 8099).
-              x-field-uid: 30
+              x-field-uid: 25
             ttz_router:
               description: |-
                 TTZ Router TLV, TTZ LSA TLV type 2 (RFC 8099).
-              x-field-uid: 31
+              x-field-uid: 26
             ttz_options:
               description: |-
                 TTZ Options TLV, TTZ LSA TLV type 3 (RFC 8099).
-              x-field-uid: 32
+              x-field-uid: 27
             dynamic_flooding_area_router_ids:
               description: |-
                 OSPF Area Router IDs, Dynamic Flooding Opaque LSA (tlv_information dynamic_flooding) TLV type 1 (RFC 9667).
-              x-field-uid: 33
+              x-field-uid: 28
             dynamic_flooding_path:
               description: |-
                 OSPF Flooding Path, Dynamic Flooding Opaque LSA TLV type 2 (RFC 9667).
-              x-field-uid: 34
+              x-field-uid: 29
             extended_inter_area_asbr_tlv:
               description: |-
                 Extended Inter-Area ASBR, EIA-ASBR LSA (tlv_information extended_inter_area_asbr) TLV type 1 (RFC 9350 Section 10.1).
-              x-field-uid: 35
+              x-field-uid: 30
           enum:
           - te_router_address
           - te_link
@@ -31028,8 +31082,6 @@ components:
           - te_link_local
           - te_node_attribute
           - te_optical_node_property
-          - ri_informational_capabilities
-          - ri_functional_capabilities
           - ri_te_mesh_group_ipv4
           - ri_te_mesh_group_ipv6
           - ri_te_node_capability_descriptor
@@ -31039,15 +31091,12 @@ components:
           - ri_sid_label_range
           - ri_node_admin_tag
           - ri_sbfd_discriminator
-          - ri_node_msd
           - ri_tunnel_encapsulations
           - ri_sr_local_block
           - ri_srms_preference
           - ri_flexible_algorithm_definition
           - ri_area_leader
           - ri_dynamic_flooding
-          - ri_srv6_capabilities
-          - ri_ip_algorithm
           - extended_prefix_tlv
           - extended_prefix_range_tlv
           - extended_link_tlv
@@ -31068,16 +31117,16 @@ components:
             The TLV Value field, returned as a lowercase hexadecimal string.
           type: string
           x-field-uid: 3
-        sub_tlvs:
+        unknown_sub_tlvs:
           description: |-
-            The sub-TLVs nested within this TLV's value, in the generic type/length/value format (e.g. RFC 8665 Extended Prefix/Link Opaque LSA sub-TLVs).
+            Sub-TLVs nested within this TLV's value that are not decoded into a structured field elsewhere in the model, returned raw in the generic type/length/value format (e.g. RFC 8665 Extended Prefix/Link Opaque LSA sub-TLVs).
           type: array
           items:
             $ref: '#/components/schemas/Ospfv2.OpaqueLsa.SubTlv'
           x-field-uid: 4
     Ospfv2.OpaqueLsa.SubTlv:
       description: |-
-        A sub-TLV nested within a top-level Opaque LSA TLV (RFC 8665).
+        A sub-TLV nested within a top-level Opaque LSA TLV that is not decoded into a structured field elsewhere in the model (RFC 8665).
       type: object
       properties:
         type:
@@ -31087,327 +31136,261 @@ components:
           type: string
           x-field-uid: 1
           x-enum:
-            te_link_type:
-              description: |-
-                Link type, sub-TLV of the TE Link TLV, sub-type 1 (RFC 3630).
-              x-field-uid: 1
             te_link_id:
               description: |-
                 Link ID, sub-TLV of the TE Link TLV, sub-type 2 (RFC 3630).
-              x-field-uid: 2
-            te_local_interface_ip_address:
-              description: |-
-                Local interface IP address, sub-TLV of the TE Link TLV, sub-type 3 (RFC 3630).
-              x-field-uid: 3
-            te_remote_interface_ip_address:
-              description: |-
-                Remote interface IP address, sub-TLV of the TE Link TLV, sub-type 4 (RFC 3630).
-              x-field-uid: 4
-            te_metric:
-              description: |-
-                Traffic engineering metric, sub-TLV of the TE Link TLV, sub-type 5 (RFC 3630).
-              x-field-uid: 5
-            te_maximum_bandwidth:
-              description: |-
-                Maximum bandwidth, sub-TLV of the TE Link TLV, sub-type 6 (RFC 3630).
-              x-field-uid: 6
-            te_maximum_reservable_bandwidth:
-              description: |-
-                Maximum reservable bandwidth, sub-TLV of the TE Link TLV, sub-type 7 (RFC 3630).
-              x-field-uid: 7
-            te_unreserved_bandwidth:
-              description: |-
-                Unreserved bandwidth, sub-TLV of the TE Link TLV, sub-type 8 (RFC 3630).
-              x-field-uid: 8
-            te_administrative_group:
-              description: |-
-                Administrative group, sub-TLV of the TE Link TLV, sub-type 9 (RFC 3630).
-              x-field-uid: 9
+              x-field-uid: 1
             te_local_remote_te_router_id:
               description: |-
                 Local and Remote TE Router ID, sub-TLV of the TE Link TLV, sub-type 10 (RFC 6827).
-              x-field-uid: 10
+              x-field-uid: 2
             te_link_local_remote_identifiers:
               description: |-
                 Link Local/Remote Identifiers, sub-TLV of the TE Link TLV, sub-type 11 (RFC 4203).
-              x-field-uid: 11
+              x-field-uid: 3
             te_link_protection_type:
               description: |-
                 Link Protection Type, sub-TLV of the TE Link TLV, sub-type 14 (RFC 4203).
-              x-field-uid: 12
+              x-field-uid: 4
             te_interface_switching_capability_descriptor:
               description: |-
                 Interface Switching Capability Descriptor, sub-TLV of the TE Link TLV, sub-type 15 (RFC 4203).
-              x-field-uid: 13
-            te_shared_risk_link_group:
-              description: |-
-                Shared Risk Link Group, sub-TLV of the TE Link TLV, sub-type 16 (RFC 4203).
-              x-field-uid: 14
+              x-field-uid: 5
             te_bandwidth_constraints:
               description: |-
                 Bandwidth Constraints, sub-TLV of the TE Link TLV, sub-type 17 (RFC 4124).
-              x-field-uid: 15
-            te_extended_administrative_group:
-              description: |-
-                Extended Administrative Group, sub-TLV of the TE Link TLV, sub-type 26 (RFC 7308).
-              x-field-uid: 16
+              x-field-uid: 6
             te_unidirectional_link_delay:
               description: |-
                 Unidirectional Link Delay, sub-TLV of the TE Link TLV, sub-type 27 (RFC 7471).
-              x-field-uid: 17
+              x-field-uid: 7
             te_min_max_unidirectional_link_delay:
               description: |-
                 Min/Max Unidirectional Link Delay, sub-TLV of the TE Link TLV, sub-type 28 (RFC 7471).
-              x-field-uid: 18
+              x-field-uid: 8
             te_unidirectional_delay_variation:
               description: |-
                 Unidirectional Delay Variation, sub-TLV of the TE Link TLV, sub-type 29 (RFC 7471).
-              x-field-uid: 19
+              x-field-uid: 9
             te_unidirectional_link_loss:
               description: |-
                 Unidirectional Link Loss, sub-TLV of the TE Link TLV, sub-type 30 (RFC 7471).
-              x-field-uid: 20
+              x-field-uid: 10
             te_unidirectional_residual_bandwidth:
               description: |-
                 Unidirectional Residual Bandwidth, sub-TLV of the TE Link TLV, sub-type 31 (RFC 7471).
-              x-field-uid: 21
+              x-field-uid: 11
             te_unidirectional_available_bandwidth:
               description: |-
                 Unidirectional Available Bandwidth, sub-TLV of the TE Link TLV, sub-type 32 (RFC 7471).
-              x-field-uid: 22
+              x-field-uid: 12
             te_unidirectional_utilized_bandwidth:
               description: |-
                 Unidirectional Utilized Bandwidth, sub-TLV of the TE Link TLV, sub-type 33 (RFC 7471).
-              x-field-uid: 23
+              x-field-uid: 13
             te_network_to_router_metric:
               description: |-
                 Network-to-Router TE Metric, sub-TLV of the TE Link TLV, sub-type 35 (RFC 8042).
-              x-field-uid: 24
+              x-field-uid: 14
             te_generic_metric:
               description: |-
                 Generic Metric, sub-TLV of the TE Link TLV, sub-type 36 (RFC 9843 Section 2.2).
-              x-field-uid: 25
+              x-field-uid: 15
             extended_prefix_sid_label:
               description: |-
                 SID/Label Sub-TLV, sub-TLV of the OSPFv2 Extended Prefix TLV, sub-type 1 (RFC 8665).
-              x-field-uid: 26
+              x-field-uid: 16
             extended_prefix_sid:
               description: |-
                 Prefix-SID Sub-TLV, sub-TLV of the OSPFv2 Extended Prefix TLV, sub-type 2 (RFC 8665).
-              x-field-uid: 27
+              x-field-uid: 17
             extended_prefix_flexible_algorithm_prefix_metric:
               description: |-
                 Flexible Algorithm Prefix Metric (FAPM), sub-TLV of the OSPFv2 Extended Prefix TLV, sub-type 3 (RFC 9350 Section 9).
-              x-field-uid: 28
+              x-field-uid: 18
             extended_prefix_source_ospf_router_id:
               description: |-
                 Prefix Source OSPF Router-ID, sub-TLV of the OSPFv2 Extended Prefix TLV, sub-type 4 (RFC 9084).
-              x-field-uid: 29
+              x-field-uid: 19
             extended_prefix_source_router_address:
               description: |-
                 Prefix Source Router Address, sub-TLV of the OSPFv2 Extended Prefix TLV, sub-type 5 (RFC 9084).
-              x-field-uid: 30
+              x-field-uid: 20
             extended_prefix_ip_algorithm_prefix_reachability:
               description: |-
                 OSPFv2 IP Algorithm Prefix Reachability, sub-TLV of the OSPFv2 Extended Prefix TLV, sub-type 6 (RFC 9502 Section 6.3).
-              x-field-uid: 31
+              x-field-uid: 21
             extended_prefix_ip_forwarding_address:
               description: |-
                 OSPFv2 IP Forwarding Address, sub-TLV of the OSPFv2 Extended Prefix TLV, sub-type 7 (RFC 9502 Section 6.3.1).
-              x-field-uid: 32
+              x-field-uid: 22
             extended_prefix_bier:
               description: |-
                 BIER Sub-TLV, sub-TLV of the OSPFv2 Extended Prefix TLV, sub-type 9 (RFC 8444).
-              x-field-uid: 33
+              x-field-uid: 23
             extended_prefix_bier_mpls_encapsulation:
               description: |-
                 BIER MPLS Encapsulation Sub-TLV, sub-TLV of the OSPFv2 Extended Prefix TLV, sub-type 10 (RFC 8444).
-              x-field-uid: 34
+              x-field-uid: 24
             extended_prefix_extended_flags:
               description: |-
                 OSPFv2 Prefix Extended Flags, sub-TLV of the OSPFv2 Extended Prefix TLV, sub-type 11 (RFC 9792).
-              x-field-uid: 35
+              x-field-uid: 25
             extended_prefix_bier_php_request:
               description: |-
                 BIER PHP Request, sub-TLV of the OSPFv2 Extended Prefix TLV, sub-type 12.
-              x-field-uid: 36
+              x-field-uid: 26
             extended_prefix_administrative_tag:
               description: |-
                 Administrative Tag, sub-TLV of the OSPFv2 Extended Prefix TLV, sub-type 13 (RFC 9825).
-              x-field-uid: 37
+              x-field-uid: 27
             extended_link_sid_label:
               description: |-
                 SID/Label Sub-TLV, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 1 (RFC 8665).
-              x-field-uid: 38
+              x-field-uid: 28
             extended_link_adj_sid:
               description: |-
                 Adj-SID Sub-TLV, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 2 (RFC 8665).
-              x-field-uid: 39
+              x-field-uid: 29
             extended_link_lan_adj_sid_label:
               description: |-
                 LAN Adj-SID/Label Sub-TLV, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 3 (RFC 8665).
-              x-field-uid: 40
+              x-field-uid: 30
             extended_link_network_to_router_metric:
               description: |-
                 Network-to-Router Metric Sub-TLV, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 4 (RFC 8042).
-              x-field-uid: 41
+              x-field-uid: 31
             extended_link_rtm_capability:
               description: |-
                 RTM Capability, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 5 (RFC 8169).
-              x-field-uid: 42
-            extended_link_msd:
-              description: |-
-                OSPFv2 Link MSD, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 6 (RFC 8476).
-              x-field-uid: 43
+              x-field-uid: 32
             extended_link_graceful_link_shutdown:
               description: |-
                 Graceful-Link-Shutdown Sub-TLV, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 7 (RFC 8379).
-              x-field-uid: 44
+              x-field-uid: 33
             extended_link_remote_ipv4_address:
               description: |-
                 Remote IPv4 Address Sub-TLV, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 8 (RFC 8379).
-              x-field-uid: 45
+              x-field-uid: 34
             extended_link_local_remote_interface_id:
               description: |-
                 Local/Remote Interface ID Sub-TLV, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 9 (RFC 8379).
-              x-field-uid: 46
+              x-field-uid: 35
             extended_link_asla:
               description: |-
                 Application-Specific Link Attributes, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 10 (RFC 9492); see the asla property.
-              x-field-uid: 47
-            extended_link_srlg:
-              description: |-
-                Shared Risk Link Group, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 11 (RFC 9492).
-              x-field-uid: 48
+              x-field-uid: 36
             extended_link_unidirectional_link_delay:
               description: |-
                 Unidirectional Link Delay, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 12 (RFC 9492).
-              x-field-uid: 49
+              x-field-uid: 37
             extended_link_min_max_unidirectional_link_delay:
               description: |-
                 Min/Max Unidirectional Link Delay, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 13 (RFC 9492).
-              x-field-uid: 50
+              x-field-uid: 38
             extended_link_unidirectional_delay_variation:
               description: |-
                 Unidirectional Delay Variation, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 14 (RFC 9492).
-              x-field-uid: 51
+              x-field-uid: 39
             extended_link_unidirectional_link_loss:
               description: |-
                 Unidirectional Link Loss, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 15 (RFC 9492).
-              x-field-uid: 52
+              x-field-uid: 40
             extended_link_unidirectional_residual_bandwidth:
               description: |-
                 Unidirectional Residual Bandwidth, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 16 (RFC 9492).
-              x-field-uid: 53
+              x-field-uid: 41
             extended_link_unidirectional_available_bandwidth:
               description: |-
                 Unidirectional Available Bandwidth, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 17 (RFC 9492).
-              x-field-uid: 54
+              x-field-uid: 42
             extended_link_unidirectional_utilized_bandwidth:
               description: |-
                 Unidirectional Utilized Bandwidth, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 18 (RFC 9492).
-              x-field-uid: 55
-            extended_link_administrative_group:
-              description: |-
-                Administrative Group, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 19 (RFC 9492).
-              x-field-uid: 56
-            extended_link_extended_administrative_group:
-              description: |-
-                Extended Administrative Group, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 20 (RFC 9492).
-              x-field-uid: 57
+              x-field-uid: 43
             extended_link_attributes_bits:
               description: |-
                 OSPFv2 Link Attributes Bits, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 21 (RFC 9667).
-              x-field-uid: 58
+              x-field-uid: 44
             extended_link_te_metric:
               description: |-
                 TE Metric, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 22 (RFC 9492).
-              x-field-uid: 59
+              x-field-uid: 45
             extended_link_maximum_link_bandwidth:
               description: |-
                 Maximum link bandwidth, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 23 (RFC 9492).
-              x-field-uid: 60
+              x-field-uid: 46
             extended_link_l2_bundle_member_attributes:
               description: |-
                 L2 Bundle Member Attributes, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 24 (RFC 9356).
-              x-field-uid: 61
+              x-field-uid: 47
             extended_link_generic_metric:
               description: |-
                 Generic Metric, sub-TLV of the OSPFv2 Extended Link TLV, sub-type 25 (RFC 9843 Section 2.2).
-              x-field-uid: 62
+              x-field-uid: 48
             fad_exclude_admin_group:
               description: |-
                 Flexible Algorithm Exclude Admin Group, sub-TLV of the Flexible Algorithm Definition TLV, sub-type 1 (RFC 9350 Section 7.1).
-              x-field-uid: 63
+              x-field-uid: 49
             fad_include_any_admin_group:
               description: |-
                 Flexible Algorithm Include-Any Admin Group, sub-TLV of the Flexible Algorithm Definition TLV, sub-type 2 (RFC 9350 Section 7.2).
-              x-field-uid: 64
+              x-field-uid: 50
             fad_include_all_admin_group:
               description: |-
                 Flexible Algorithm Include-All Admin Group, sub-TLV of the Flexible Algorithm Definition TLV, sub-type 3 (RFC 9350 Section 7.3).
-              x-field-uid: 65
+              x-field-uid: 51
             fad_flags:
               description: |-
                 Flexible Algorithm Definition Flags, sub-TLV of the Flexible Algorithm Definition TLV, sub-type 4 (RFC 9350 Section 7.4).
-              x-field-uid: 66
+              x-field-uid: 52
             fad_exclude_srlg:
               description: |-
                 Flexible Algorithm Exclude SRLG, sub-TLV of the Flexible Algorithm Definition TLV, sub-type 5 (RFC 9350 Section 7.5).
-              x-field-uid: 67
+              x-field-uid: 53
             fad_exclude_minimum_bandwidth:
               description: |-
                 OSPF Exclude Minimum Bandwidth, sub-TLV of the Flexible Algorithm Definition TLV, sub-type 6 (RFC 9843 Section 3.2.1).
-              x-field-uid: 68
+              x-field-uid: 54
             fad_exclude_maximum_delay:
               description: |-
                 OSPF Exclude Maximum Delay, sub-TLV of the Flexible Algorithm Definition TLV, sub-type 7 (RFC 9843 Section 3.2.2).
-              x-field-uid: 69
+              x-field-uid: 55
             fad_reference_bandwidth:
               description: |-
                 OSPF Reference Bandwidth, sub-TLV of the Flexible Algorithm Definition TLV, sub-type 8 (RFC 9843 Section 4.1.4.1).
-              x-field-uid: 70
+              x-field-uid: 56
             fad_bandwidth_threshold:
               description: |-
                 OSPF Bandwidth Threshold, sub-TLV of the Flexible Algorithm Definition TLV, sub-type 9 (RFC 9843 Section 4.1.4.2).
-              x-field-uid: 71
+              x-field-uid: 57
             fad_exclude_reverse_admin_group:
               description: |-
                 Flexible Algorithm Exclude Reverse Admin Group, sub-TLV of the Flexible Algorithm Definition TLV, sub-type 10 (RFC 9917 Section 8).
-              x-field-uid: 72
+              x-field-uid: 58
             fad_include_any_reverse_admin_group:
               description: |-
                 Flexible Algorithm Include-Any Reverse Admin Group, sub-TLV of the Flexible Algorithm Definition TLV, sub-type 11 (RFC 9917 Section 9).
-              x-field-uid: 73
+              x-field-uid: 59
             fad_include_all_reverse_admin_group:
               description: |-
                 Flexible Algorithm Include-All Reverse Admin Group, sub-TLV of the Flexible Algorithm Definition TLV, sub-type 12 (RFC 9917 Section 10).
-              x-field-uid: 74
+              x-field-uid: 60
             eia_asbr_flexible_algorithm_asbr_metric:
               description: |-
                 OSPF Flexible Algorithm ASBR Metric, sub-TLV of the Extended Inter-Area ASBR TLV, sub-type 1 (RFC 9350).
-              x-field-uid: 75
+              x-field-uid: 61
             eia_asbr_ip_flexible_algorithm_asbr_metric:
               description: |-
                 OSPF IP Flexible Algorithm ASBR Metric, sub-TLV of the Extended Inter-Area ASBR TLV, sub-type 2 (RFC 9502 Section 6.5).
-              x-field-uid: 76
+              x-field-uid: 62
           enum:
-          - te_link_type
           - te_link_id
-          - te_local_interface_ip_address
-          - te_remote_interface_ip_address
-          - te_metric
-          - te_maximum_bandwidth
-          - te_maximum_reservable_bandwidth
-          - te_unreserved_bandwidth
-          - te_administrative_group
           - te_local_remote_te_router_id
           - te_link_local_remote_identifiers
           - te_link_protection_type
           - te_interface_switching_capability_descriptor
-          - te_shared_risk_link_group
           - te_bandwidth_constraints
-          - te_extended_administrative_group
           - te_unidirectional_link_delay
           - te_min_max_unidirectional_link_delay
           - te_unidirectional_delay_variation
@@ -31434,12 +31417,10 @@ components:
           - extended_link_lan_adj_sid_label
           - extended_link_network_to_router_metric
           - extended_link_rtm_capability
-          - extended_link_msd
           - extended_link_graceful_link_shutdown
           - extended_link_remote_ipv4_address
           - extended_link_local_remote_interface_id
           - extended_link_asla
-          - extended_link_srlg
           - extended_link_unidirectional_link_delay
           - extended_link_min_max_unidirectional_link_delay
           - extended_link_unidirectional_delay_variation
@@ -31447,8 +31428,6 @@ components:
           - extended_link_unidirectional_residual_bandwidth
           - extended_link_unidirectional_available_bandwidth
           - extended_link_unidirectional_utilized_bandwidth
-          - extended_link_administrative_group
-          - extended_link_extended_administrative_group
           - extended_link_attributes_bits
           - extended_link_te_metric
           - extended_link_maximum_link_bandwidth
@@ -31679,13 +31658,6 @@ components:
           type: integer
           format: uint32
           x-field-uid: 4
-        adjacency_sid:
-          description: |-
-            The Adjacency-SID learned for this link, decoded from the Adj-SID / LAN Adj-SID sub-TLV
-            of the OSPFv2 Extended Link Opaque LSA whose Extended Link TLV references this link
-            (RFC 8665).
-          $ref: '#/components/schemas/Ospfv2Lsa.AdjacencySid'
-          x-field-uid: 5
     Ospfv2Lsa.SrCapability:
       description: |-
         The Segment Routing capability learned from the Router Information (RI) Opaque LSA:
@@ -31773,7 +31745,6 @@ components:
             The Segment Routing algorithm the Prefix-SID is associated with.
           type: integer
           format: uint32
-          minimum: 0
           maximum: 255
           x-field-uid: 3
     Ospfv2Lsa.PrefixSidFlags:
@@ -31874,6 +31845,171 @@ components:
             L-Flag (Local): if set, the value/index carried by the Adj-SID has local significance.
           type: boolean
           x-field-uid: 5
+    Ospfv2Lsa.RiCapabilities:
+      description: |-
+        The Router Informational Capabilities (TLV type 1) and Router Functional Capabilities
+        (TLV type 2) learned from the Router Information (RI) Opaque LSA (RFC 7770 Sections 2.5,
+        2.6).
+      type: object
+      properties:
+        graceful_restart:
+          description: |-
+            Informational Capabilities bit 0: the router is Graceful Restart capable (RFC 7770 Section 2.5).
+          type: boolean
+          x-field-uid: 1
+        graceful_restart_helper:
+          description: |-
+            Informational Capabilities bit 1: the router is Graceful Restart Helper capable (RFC 7770 Section 2.5).
+          type: boolean
+          x-field-uid: 2
+        stub_router_support:
+          description: |-
+            Informational Capabilities bit 2: the router supports OSPF Stub Router functionality (RFC 7770 Section 2.5).
+          type: boolean
+          x-field-uid: 3
+        traffic_engineering_support:
+          description: |-
+            Informational Capabilities bit 3: the router supports OSPF Traffic Engineering (RFC 7770 Section 2.5).
+          type: boolean
+          x-field-uid: 4
+        point_to_point_over_lan:
+          description: |-
+            Informational Capabilities bit 4: the router supports point-to-point operation over LAN (RFC 7770 Section 2.5).
+          type: boolean
+          x-field-uid: 5
+        experimental_te:
+          description: |-
+            Informational Capabilities bit 5: the router supports Experimental Traffic Engineering (RFC 7770 Section 2.5).
+          type: boolean
+          x-field-uid: 6
+        functional_capabilities:
+          description: |-
+            The raw 32-bit Router Functional Capabilities bitmask (RFC 7770 Section 2.6). No
+            capability bits are assigned in this registry as of RFC 7770; returned raw since there
+            are no named bits to decode.
+          type: integer
+          format: uint32
+          x-field-uid: 7
+    Ospfv2Lsa.Msd:
+      description: |-
+        A single (MSD-Type, MSD-Value) pair from a Node MSD or Link MSD TLV/sub-TLV (RFC 8476 Sections 2, 3).
+      type: object
+      properties:
+        msd_type:
+          description: |-
+            The MSD-Type, identifying the kind of Maximum SID Depth being advertised (IGP MSD-Types registry, RFC 8491).
+          type: integer
+          format: uint32
+          maximum: 255
+          x-field-uid: 1
+        msd_value:
+          description: |-
+            The MSD-Value: the maximum number of SIDs the router or link supports in the SID
+            stack. A value of 0 indicates no capability to impose any stack depth.
+          type: integer
+          format: uint32
+          maximum: 255
+          x-field-uid: 2
+    Ospfv2Lsa.LinkTrafficEngineering:
+      description: |-
+        Traffic engineering attributes for a link, decoded from the Link TLV sub-TLVs of the
+        Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of
+        the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).
+      type: object
+      properties:
+        link_type:
+          description: |-
+            The Link Type sub-TLV, sub-type 1 (RFC 3630 Section 2.5.1).
+          type: string
+          x-field-uid: 1
+          x-enum:
+            point_to_point:
+              x-field-uid: 1
+            multi_access:
+              x-field-uid: 2
+          enum:
+          - point_to_point
+          - multi_access
+        local_interface_ip_addresses:
+          description: |-
+            The Local Interface IP Address sub-TLV, sub-type 3 (RFC 3630 Section 2.5.3).
+          type: array
+          items:
+            type: string
+            format: ipv4
+          x-field-uid: 2
+        remote_interface_ip_addresses:
+          description: |-
+            The Remote Interface IP Address sub-TLV, sub-type 4 (RFC 3630 Section 2.5.4).
+          type: array
+          items:
+            type: string
+            format: ipv4
+          x-field-uid: 3
+        te_metric:
+          description: |-
+            The Traffic Engineering Metric sub-TLV, sub-type 5 (RFC 3630 Section 2.5.5).
+          type: integer
+          format: uint32
+          x-field-uid: 4
+        maximum_bandwidth:
+          description: |-
+            The Maximum Bandwidth sub-TLV, sub-type 6, in bytes per second
+            (RFC 3630 Section 2.5.6).
+          type: number
+          format: float
+          x-field-uid: 5
+        maximum_reservable_bandwidth:
+          description: |-
+            The Maximum Reservable Bandwidth sub-TLV, sub-type 7, in bytes per second
+            (RFC 3630 Section 2.5.7).
+          type: number
+          format: float
+          x-field-uid: 6
+        unreserved_bandwidths:
+          description: |-
+            The Unreserved Bandwidth sub-TLV, sub-type 8: bandwidth reservable at each of the
+            eight priority levels 0-7, in bytes per second (RFC 3630 Section 2.5.8).
+          type: array
+          items:
+            type: number
+            format: float
+          x-field-uid: 7
+        administrative_group:
+          description: |-
+            The Administrative Group sub-TLV bitmask, sourced from either the TE Link TLV
+            sub-type 9 (RFC 3630 Section 2.5.9) or the OSPFv2 Extended Link TLV sub-type 19
+            (RFC 9492 Section 6.2).
+          type: integer
+          format: uint32
+          x-field-uid: 8
+        extended_administrative_group:
+          description: |-
+            The Extended Administrative Group, sourced from either the TE Link TLV sub-type 26
+            (RFC 7308) or the OSPFv2 Extended Link TLV sub-type 20 (RFC 9492 Section 6.3), as one
+            or more additional 32-bit administrative-group words beyond administrative_group.
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 9
+        srlg:
+          description: |-
+            The Shared Risk Link Group (SRLG) membership of this link, sourced from either the TE
+            Link TLV sub-type 16 (RFC 4203 Section 1.3) or the OSPFv2 Extended Link TLV sub-type 11
+            (RFC 9492 Section 6.1).
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 10
+        link_msd:
+          description: |-
+            One or more Maximum SID Depth (MSD) values for this link, decoded from the Link MSD sub-TLV of the OSPFv2 Extended Link TLV, sub-type 6 (RFC 8476 Section 3).
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2Lsa.Msd'
+          x-field-uid: 11
     Ospfv3Lsas.State.Request:
       description: |-
         The request to retrieve OSPFv3 Link State Advertisements (LSA) information learned by the routers.

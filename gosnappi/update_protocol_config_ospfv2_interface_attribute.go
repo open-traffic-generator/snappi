@@ -403,10 +403,10 @@ func (obj *updateProtocolConfigOspfv2InterfaceAttribute) validateObj(vObj *valid
 
 	if obj.obj.RoutingMetric != nil {
 
-		if *obj.obj.RoutingMetric > 65535 {
+		if *obj.obj.RoutingMetric < 1 || *obj.obj.RoutingMetric > 65535 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= UpdateProtocolConfigOspfv2InterfaceAttribute.RoutingMetric <= 65535 but Got %d", *obj.obj.RoutingMetric))
+				fmt.Sprintf("1 <= UpdateProtocolConfigOspfv2InterfaceAttribute.RoutingMetric <= 65535 but Got %d", *obj.obj.RoutingMetric))
 		}
 
 	}

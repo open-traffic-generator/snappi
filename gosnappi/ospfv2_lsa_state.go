@@ -851,7 +851,7 @@ func (obj *ospfv2LsaStateOspfv2NssaLsaIter) appendHolderSlice(item Ospfv2NssaLsa
 	return obj
 }
 
-// One or more OSPFv2 Link-Scope Opaque-LSA - Type 9.
+// One or more OSPFv2 Opaque LSAs - Type 9, Type 10, or Type 11.
 // OpaqueLsas returns a []Ospfv2OpaqueLsa
 func (obj *ospfv2LsaState) OpaqueLsas() Ospfv2LsaStateOspfv2OpaqueLsaIter {
 	if len(obj.obj.OpaqueLsas) == 0 {

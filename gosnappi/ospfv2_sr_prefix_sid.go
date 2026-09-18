@@ -246,6 +246,10 @@ func (obj *ospfv2SRPrefixSid) Clone() (Ospfv2SRPrefixSid, error) {
 // The Prefix-SID sub-TLV is carried inside the OSPFv2 Extended Prefix TLV of the
 // Extended Prefix Opaque LSA and is associated with a specific IPv4 prefix.
 // Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-prefix-sid-sub-tlv.
+// A router's own Node (loopback) Prefix-SID is modeled the same way: attach this object to
+// the route range covering the router's loopback address and set n_flag on that route
+// range's Extended Prefix flags (route_origin.<type>.flags.n_flag, RFC 7684) to identify it
+// as the router's own prefix.
 type Ospfv2SRPrefixSid interface {
 	Validation
 	// msg marshals Ospfv2SRPrefixSid to protobuf object *otg.Ospfv2SRPrefixSid
@@ -330,6 +334,9 @@ func (obj *ospfv2SRPrefixSid) Choice() Ospfv2SRPrefixSidChoiceEnum {
 // device.ospfv2.segment_routing.srgb_ranges.
 // - sid_values: V-Flag and L-Flag are set (both 1). Each Prefix-SID carries a 3-octet
 // local label value with local significance.
+// RFC 8665 Section 5 states all other V-Flag/L-Flag combinations are invalid and MUST be
+// ignored by a receiver, so V and L are intentionally coupled here rather than exposed as
+// independent properties.
 // A user needs to configure at least one entry of SID value or SID index. If no entry is
 // configured, an implementation may advertise an appropriate default SID value/index
 // based on the choice, e.g. the first value from the SRGB range.
@@ -534,7 +541,7 @@ func (obj *ospfv2SRPrefixSid) validateObj(vObj *validation, set_default bool) {
 			if item > 4294967295 {
 				vObj.validationErrors = append(
 					vObj.validationErrors,
-					fmt.Sprintf("0 <= Ospfv2SRPrefixSid.SidIndices <= 4294967295 but Got %d", item))
+					fmt.Sprintf("min(uint32) <= Ospfv2SRPrefixSid.SidIndices <= 4294967295 but Got %d", item))
 			}
 
 		}
@@ -585,7 +592,7 @@ func (obj *ospfv2SRPrefixSid) setDefault() {
 	}
 
 	if obj.obj.NpFlag == nil {
-		obj.SetNpFlag(true)
+		obj.SetNpFlag(false)
 	}
 	if obj.obj.MFlag == nil {
 		obj.SetMFlag(false)

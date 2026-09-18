@@ -13,12 +13,11 @@ import (
 // ***** Ospfv2SegmentRouting *****
 type ospfv2SegmentRouting struct {
 	validation
-	obj                 *otg.Ospfv2SegmentRouting
-	marshaller          marshalOspfv2SegmentRouting
-	unMarshaller        unMarshalOspfv2SegmentRouting
-	srgbRangesHolder    Ospfv2SegmentRoutingOspfv2SRSrgbIter
-	srlbRangesHolder    Ospfv2SegmentRoutingOspfv2SRSrlbIter
-	nodePrefixSidHolder Ospfv2SRRouterNodeSid
+	obj              *otg.Ospfv2SegmentRouting
+	marshaller       marshalOspfv2SegmentRouting
+	unMarshaller     unMarshalOspfv2SegmentRouting
+	srgbRangesHolder Ospfv2SegmentRoutingOspfv2SRSrgbIter
+	srlbRangesHolder Ospfv2SegmentRoutingOspfv2SRSrlbIter
 }
 
 func NewOspfv2SegmentRouting() Ospfv2SegmentRouting {
@@ -248,7 +247,6 @@ func (obj *ospfv2SegmentRouting) Clone() (Ospfv2SegmentRouting, error) {
 func (obj *ospfv2SegmentRouting) setNil() {
 	obj.srgbRangesHolder = nil
 	obj.srlbRangesHolder = nil
-	obj.nodePrefixSidHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -258,11 +256,15 @@ func (obj *ospfv2SegmentRouting) setNil() {
 // topologies by encoding paths as sequences of topological sub-paths, called "segments".
 // In OSPFv2 the SR-specific information is advertised using Opaque LSAs. The router level
 // Segment Routing capabilities (SR-Algorithm, SID/Label Range (SRGB), SR Local Block (SRLB))
-// are carried in the Router Information (RI) Opaque LSA, and the router's own Node Prefix-SID
-// is carried in the Extended Prefix Opaque LSA for the router loopback.
+// are carried in the Router Information (RI) Opaque LSA.
 // Reference: https://datatracker.ietf.org/doc/html/rfc8665.
 // An implementation may advertise the SR capabilities with default values if a user does
 // not set any of the properties of Segment Routing.
+// A router's own Node (loopback) Prefix-SID is not a separate object here: model the
+// loopback as an ordinary device.ospfv2.router.v4_routes entry with an
+// Ospfv2SR.PrefixSid attached, and set n_flag on that route range's Extended Prefix flags
+// (route_origin.<type>.flags.n_flag) to identify it as the router's own prefix
+// (RFC 7684).
 type Ospfv2SegmentRouting interface {
 	Validation
 	// msg marshals Ospfv2SegmentRouting to protobuf object *otg.Ospfv2SegmentRouting
@@ -292,20 +294,6 @@ type Ospfv2SegmentRouting interface {
 	SrgbRanges() Ospfv2SegmentRoutingOspfv2SRSrgbIter
 	// SrlbRanges returns Ospfv2SegmentRoutingOspfv2SRSrlbIterIter, set in Ospfv2SegmentRouting
 	SrlbRanges() Ospfv2SegmentRoutingOspfv2SRSrlbIter
-	// NodePrefixSid returns Ospfv2SRRouterNodeSid, set in Ospfv2SegmentRouting.
-	// Ospfv2SRRouterNodeSid is the Node (loopback) Prefix-SID advertised by this router for its own loopback address.
-	// It is advertised as a Prefix-SID sub-TLV inside the Extended Prefix TLV of the Extended
-	// Prefix Opaque LSA, together with the one-octet Extended Prefix flags.
-	// Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-prefix-sid-sub-tlv.
-	NodePrefixSid() Ospfv2SRRouterNodeSid
-	// SetNodePrefixSid assigns Ospfv2SRRouterNodeSid provided by user to Ospfv2SegmentRouting.
-	// Ospfv2SRRouterNodeSid is the Node (loopback) Prefix-SID advertised by this router for its own loopback address.
-	// It is advertised as a Prefix-SID sub-TLV inside the Extended Prefix TLV of the Extended
-	// Prefix Opaque LSA, together with the one-octet Extended Prefix flags.
-	// Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-prefix-sid-sub-tlv.
-	SetNodePrefixSid(value Ospfv2SRRouterNodeSid) Ospfv2SegmentRouting
-	// HasNodePrefixSid checks if NodePrefixSid has been set in Ospfv2SegmentRouting
-	HasNodePrefixSid() bool
 	setNil()
 }
 
@@ -525,40 +513,6 @@ func (obj *ospfv2SegmentRoutingOspfv2SRSrlbIter) appendHolderSlice(item Ospfv2SR
 	return obj
 }
 
-// Optional Node (loopback) Prefix-SID advertised by this router in the Extended Prefix
-// Opaque LSA for its own loopback address. The Node Prefix-SID identifies the router in
-// the Segment Routing domain.
-// NodePrefixSid returns a Ospfv2SRRouterNodeSid
-func (obj *ospfv2SegmentRouting) NodePrefixSid() Ospfv2SRRouterNodeSid {
-	if obj.obj.NodePrefixSid == nil {
-		obj.obj.NodePrefixSid = NewOspfv2SRRouterNodeSid().msg()
-	}
-	if obj.nodePrefixSidHolder == nil {
-		obj.nodePrefixSidHolder = &ospfv2SRRouterNodeSid{obj: obj.obj.NodePrefixSid}
-	}
-	return obj.nodePrefixSidHolder
-}
-
-// Optional Node (loopback) Prefix-SID advertised by this router in the Extended Prefix
-// Opaque LSA for its own loopback address. The Node Prefix-SID identifies the router in
-// the Segment Routing domain.
-// NodePrefixSid returns a Ospfv2SRRouterNodeSid
-func (obj *ospfv2SegmentRouting) HasNodePrefixSid() bool {
-	return obj.obj.NodePrefixSid != nil
-}
-
-// Optional Node (loopback) Prefix-SID advertised by this router in the Extended Prefix
-// Opaque LSA for its own loopback address. The Node Prefix-SID identifies the router in
-// the Segment Routing domain.
-// SetNodePrefixSid sets the Ospfv2SRRouterNodeSid value in the Ospfv2SegmentRouting object
-func (obj *ospfv2SegmentRouting) SetNodePrefixSid(value Ospfv2SRRouterNodeSid) Ospfv2SegmentRouting {
-
-	obj.nodePrefixSidHolder = nil
-	obj.obj.NodePrefixSid = value.msg()
-
-	return obj
-}
-
 func (obj *ospfv2SegmentRouting) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -570,7 +524,7 @@ func (obj *ospfv2SegmentRouting) validateObj(vObj *validation, set_default bool)
 			if item > 255 {
 				vObj.validationErrors = append(
 					vObj.validationErrors,
-					fmt.Sprintf("0 <= Ospfv2SegmentRouting.Algorithms <= 255 but Got %d", item))
+					fmt.Sprintf("min(uint32) <= Ospfv2SegmentRouting.Algorithms <= 255 but Got %d", item))
 			}
 
 		}
@@ -603,11 +557,6 @@ func (obj *ospfv2SegmentRouting) validateObj(vObj *validation, set_default bool)
 			item.validateObj(vObj, set_default)
 		}
 
-	}
-
-	if obj.obj.NodePrefixSid != nil {
-
-		obj.NodePrefixSid().validateObj(vObj, set_default)
 	}
 
 }
