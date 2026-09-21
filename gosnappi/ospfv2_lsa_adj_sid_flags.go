@@ -242,7 +242,9 @@ func (obj *ospfv2LsaAdjSidFlags) Clone() (Ospfv2LsaAdjSidFlags, error) {
 	return newObj, nil
 }
 
-// Ospfv2LsaAdjSidFlags is one-octet flags of the OSPFv2 Adjacency-SID sub-TLV (RFC 8665).
+// Ospfv2LsaAdjSidFlags is the one-octet Flags field of the sub-TLV this Adjacency-SID was decoded from. The
+// Adj-SID sub-TLV and the LAN Adj-SID sub-TLV define the same flags in the same bit
+// positions (RFC 8665 Sections 6.1, 6.2), so one object covers both.
 type Ospfv2LsaAdjSidFlags interface {
 	Validation
 	// msg marshals Ospfv2LsaAdjSidFlags to protobuf object *otg.Ospfv2LsaAdjSidFlags

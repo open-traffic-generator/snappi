@@ -250,8 +250,23 @@ func (obj *ospfv2LsaAdjacencySid) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Ospfv2LsaAdjacencySid is the learned OSPFv2 Adjacency-SID and its attributes, decoded from the Adj-SID / LAN Adj-SID
-// sub-TLV of the Extended Link Opaque LSA (RFC 8665).
+// Ospfv2LsaAdjacencySid is a learned OSPFv2 Adjacency-SID and its attributes.
+// One object of this type represents exactly one sub-TLV instance on the wire, and
+// that sub-TLV is either an Adj-SID sub-TLV, sub-type 2 (RFC 8665 Section 6.1), or a
+// LAN Adj-SID sub-TLV, sub-type 3 (RFC 8665 Section 6.2). The two are deliberately
+// modelled by one object because they carry the same information about the same kind
+// of thing - a SID for an adjacency over the link the parent Extended Link TLV
+// describes - and differ only in that the LAN form names the neighbor the SID is for.
+// type says which of the two sub-TLVs this object was decoded from, and is the field
+// to read before interpreting the rest: neighbor_id is present only for
+// type = lan_adj_sid, because only the LAN Adj-SID sub-TLV carries a Neighbor ID
+// field. Every other field of this object is decoded from a field that both sub-TLVs
+// carry.
+// This object is never an aggregate of several sub-TLVs: a link that advertises more
+// than one Adj-SID, or one LAN Adj-SID per neighbor, is reported as that many entries
+// of Ospfv2.OpaqueLsa.ExtendedLink/adjacency_sids, each with its own type. Both
+// sub-TLVs may appear multiple times in one Extended Link TLV (RFC 8665
+// Sections 6.1, 6.2), and the two forms may be mixed in the same list.
 type Ospfv2LsaAdjacencySid interface {
 	Validation
 	// msg marshals Ospfv2LsaAdjacencySid to protobuf object *otg.Ospfv2LsaAdjacencySid
@@ -279,15 +294,21 @@ type Ospfv2LsaAdjacencySid interface {
 	SetType(value Ospfv2LsaAdjacencySidTypeEnum) Ospfv2LsaAdjacencySid
 	// HasType checks if Type has been set in Ospfv2LsaAdjacencySid
 	HasType() bool
-	// Sids returns []uint32, set in Ospfv2LsaAdjacencySid.
-	Sids() []uint32
-	// SetSids assigns []uint32 provided by user to Ospfv2LsaAdjacencySid
-	SetSids(value []uint32) Ospfv2LsaAdjacencySid
+	// Sid returns uint32, set in Ospfv2LsaAdjacencySid.
+	Sid() uint32
+	// SetSid assigns uint32 provided by user to Ospfv2LsaAdjacencySid
+	SetSid(value uint32) Ospfv2LsaAdjacencySid
+	// HasSid checks if Sid has been set in Ospfv2LsaAdjacencySid
+	HasSid() bool
 	// Flags returns Ospfv2LsaAdjSidFlags, set in Ospfv2LsaAdjacencySid.
-	// Ospfv2LsaAdjSidFlags is one-octet flags of the OSPFv2 Adjacency-SID sub-TLV (RFC 8665).
+	// Ospfv2LsaAdjSidFlags is the one-octet Flags field of the sub-TLV this Adjacency-SID was decoded from. The
+	// Adj-SID sub-TLV and the LAN Adj-SID sub-TLV define the same flags in the same bit
+	// positions (RFC 8665 Sections 6.1, 6.2), so one object covers both.
 	Flags() Ospfv2LsaAdjSidFlags
 	// SetFlags assigns Ospfv2LsaAdjSidFlags provided by user to Ospfv2LsaAdjacencySid.
-	// Ospfv2LsaAdjSidFlags is one-octet flags of the OSPFv2 Adjacency-SID sub-TLV (RFC 8665).
+	// Ospfv2LsaAdjSidFlags is the one-octet Flags field of the sub-TLV this Adjacency-SID was decoded from. The
+	// Adj-SID sub-TLV and the LAN Adj-SID sub-TLV define the same flags in the same bit
+	// positions (RFC 8665 Sections 6.1, 6.2), so one object covers both.
 	SetFlags(value Ospfv2LsaAdjSidFlags) Ospfv2LsaAdjacencySid
 	// HasFlags checks if Flags has been set in Ospfv2LsaAdjacencySid
 	HasFlags() bool
@@ -297,6 +318,18 @@ type Ospfv2LsaAdjacencySid interface {
 	SetWeight(value uint32) Ospfv2LsaAdjacencySid
 	// HasWeight checks if Weight has been set in Ospfv2LsaAdjacencySid
 	HasWeight() bool
+	// NeighborId returns string, set in Ospfv2LsaAdjacencySid.
+	NeighborId() string
+	// SetNeighborId assigns string provided by user to Ospfv2LsaAdjacencySid
+	SetNeighborId(value string) Ospfv2LsaAdjacencySid
+	// HasNeighborId checks if NeighborId has been set in Ospfv2LsaAdjacencySid
+	HasNeighborId() bool
+	// MtId returns uint32, set in Ospfv2LsaAdjacencySid.
+	MtId() uint32
+	// SetMtId assigns uint32 provided by user to Ospfv2LsaAdjacencySid
+	SetMtId(value uint32) Ospfv2LsaAdjacencySid
+	// HasMtId checks if MtId has been set in Ospfv2LsaAdjacencySid
+	HasMtId() bool
 	setNil()
 }
 
@@ -315,7 +348,11 @@ func (obj *ospfv2LsaAdjacencySid) Type() Ospfv2LsaAdjacencySidTypeEnum {
 	return Ospfv2LsaAdjacencySidTypeEnum(obj.obj.Type.Enum().String())
 }
 
-// Adjacency-SID type: Adjacency-SID (Extended Link sub-TLV Type 2) or LAN Adjacency-SID (Type 3).
+// The sub-TLV this object was decoded from: adj_sid for the Adj-SID sub-TLV,
+// Extended Link sub-TLV type 2 (RFC 8665 Section 6.1), or lan_adj_sid for the LAN
+// Adj-SID sub-TLV, type 3 (RFC 8665 Section 6.2). It is not a property of the SID
+// itself, it names the wire encoding this object came from, and it is what tells
+// you whether to expect neighbor_id.
 // Type returns a string
 func (obj *ospfv2LsaAdjacencySid) HasType() bool {
 	return obj.obj.Type != nil
@@ -334,24 +371,25 @@ func (obj *ospfv2LsaAdjacencySid) SetType(value Ospfv2LsaAdjacencySidTypeEnum) O
 	return obj
 }
 
-// One or more SID/Label values or indices associated with the adjacency.
-// Sids returns a []uint32
-func (obj *ospfv2LsaAdjacencySid) Sids() []uint32 {
-	if obj.obj.Sids == nil {
-		obj.obj.Sids = make([]uint32, 0)
-	}
-	return obj.obj.Sids
+// The SID/Label value or index associated with the adjacency. flags.v_flag tells which of the two it is.
+// Sid returns a uint32
+func (obj *ospfv2LsaAdjacencySid) Sid() uint32 {
+
+	return *obj.obj.Sid
+
 }
 
-// One or more SID/Label values or indices associated with the adjacency.
-// SetSids sets the []uint32 value in the Ospfv2LsaAdjacencySid object
-func (obj *ospfv2LsaAdjacencySid) SetSids(value []uint32) Ospfv2LsaAdjacencySid {
+// The SID/Label value or index associated with the adjacency. flags.v_flag tells which of the two it is.
+// Sid returns a uint32
+func (obj *ospfv2LsaAdjacencySid) HasSid() bool {
+	return obj.obj.Sid != nil
+}
 
-	if obj.obj.Sids == nil {
-		obj.obj.Sids = make([]uint32, 0)
-	}
-	obj.obj.Sids = value
+// The SID/Label value or index associated with the adjacency. flags.v_flag tells which of the two it is.
+// SetSid sets the uint32 value in the Ospfv2LsaAdjacencySid object
+func (obj *ospfv2LsaAdjacencySid) SetSid(value uint32) Ospfv2LsaAdjacencySid {
 
+	obj.obj.Sid = &value
 	return obj
 }
 
@@ -383,7 +421,7 @@ func (obj *ospfv2LsaAdjacencySid) SetFlags(value Ospfv2LsaAdjSidFlags) Ospfv2Lsa
 	return obj
 }
 
-// The weight of the Adjacency-SID for the purpose of load balancing.
+// The weight of the Adjacency-SID for the purpose of load balancing, decoded from the Weight field (RFC 8665 Sections 6.1, 6.2).
 // Weight returns a uint32
 func (obj *ospfv2LsaAdjacencySid) Weight() uint32 {
 
@@ -391,17 +429,97 @@ func (obj *ospfv2LsaAdjacencySid) Weight() uint32 {
 
 }
 
-// The weight of the Adjacency-SID for the purpose of load balancing.
+// The weight of the Adjacency-SID for the purpose of load balancing, decoded from the Weight field (RFC 8665 Sections 6.1, 6.2).
 // Weight returns a uint32
 func (obj *ospfv2LsaAdjacencySid) HasWeight() bool {
 	return obj.obj.Weight != nil
 }
 
-// The weight of the Adjacency-SID for the purpose of load balancing.
+// The weight of the Adjacency-SID for the purpose of load balancing, decoded from the Weight field (RFC 8665 Sections 6.1, 6.2).
 // SetWeight sets the uint32 value in the Ospfv2LsaAdjacencySid object
 func (obj *ospfv2LsaAdjacencySid) SetWeight(value uint32) Ospfv2LsaAdjacencySid {
 
 	obj.obj.Weight = &value
+	return obj
+}
+
+// The Router ID of the neighbor the LAN Adjacency-SID is advertised for, decoded
+// from the Neighbor ID field of the LAN Adj-SID sub-TLV (RFC 8665 Section 6.2).
+// Present only when type is lan_adj_sid, and the field that tells one LAN
+// Adjacency-SID from another on the same multi-access link. The Adj-SID sub-TLV,
+// sub-type 2, has no Neighbor ID field, so it is absent when type is adj_sid:
+// the adjacency is then identified by the link the parent Extended Link TLV
+// describes.
+// NeighborId returns a string
+func (obj *ospfv2LsaAdjacencySid) NeighborId() string {
+
+	return *obj.obj.NeighborId
+
+}
+
+// The Router ID of the neighbor the LAN Adjacency-SID is advertised for, decoded
+// from the Neighbor ID field of the LAN Adj-SID sub-TLV (RFC 8665 Section 6.2).
+// Present only when type is lan_adj_sid, and the field that tells one LAN
+// Adjacency-SID from another on the same multi-access link. The Adj-SID sub-TLV,
+// sub-type 2, has no Neighbor ID field, so it is absent when type is adj_sid:
+// the adjacency is then identified by the link the parent Extended Link TLV
+// describes.
+// NeighborId returns a string
+func (obj *ospfv2LsaAdjacencySid) HasNeighborId() bool {
+	return obj.obj.NeighborId != nil
+}
+
+// The Router ID of the neighbor the LAN Adjacency-SID is advertised for, decoded
+// from the Neighbor ID field of the LAN Adj-SID sub-TLV (RFC 8665 Section 6.2).
+// Present only when type is lan_adj_sid, and the field that tells one LAN
+// Adjacency-SID from another on the same multi-access link. The Adj-SID sub-TLV,
+// sub-type 2, has no Neighbor ID field, so it is absent when type is adj_sid:
+// the adjacency is then identified by the link the parent Extended Link TLV
+// describes.
+// SetNeighborId sets the string value in the Ospfv2LsaAdjacencySid object
+func (obj *ospfv2LsaAdjacencySid) SetNeighborId(value string) Ospfv2LsaAdjacencySid {
+
+	obj.obj.NeighborId = &value
+	return obj
+}
+
+// The Multi-Topology ID the Adjacency-SID applies to, decoded from the MT-ID
+// field of either sub-TLV (RFC 8665 Sections 6.1, 6.2, RFC 4915).
+// The MT-ID field is one octet wide on the wire, but RFC 4915 Section 3.7
+// defines only 0-127 as valid MT-ID values - 128-255 are invalid and SHOULD be
+// ignored on receipt, so a value in that range is never reported here. The
+// maximum matches the range statement on the equivalent mt-id leaf of the IETF
+// OSPF Segment Routing YANG model.
+// MtId returns a uint32
+func (obj *ospfv2LsaAdjacencySid) MtId() uint32 {
+
+	return *obj.obj.MtId
+
+}
+
+// The Multi-Topology ID the Adjacency-SID applies to, decoded from the MT-ID
+// field of either sub-TLV (RFC 8665 Sections 6.1, 6.2, RFC 4915).
+// The MT-ID field is one octet wide on the wire, but RFC 4915 Section 3.7
+// defines only 0-127 as valid MT-ID values - 128-255 are invalid and SHOULD be
+// ignored on receipt, so a value in that range is never reported here. The
+// maximum matches the range statement on the equivalent mt-id leaf of the IETF
+// OSPF Segment Routing YANG model.
+// MtId returns a uint32
+func (obj *ospfv2LsaAdjacencySid) HasMtId() bool {
+	return obj.obj.MtId != nil
+}
+
+// The Multi-Topology ID the Adjacency-SID applies to, decoded from the MT-ID
+// field of either sub-TLV (RFC 8665 Sections 6.1, 6.2, RFC 4915).
+// The MT-ID field is one octet wide on the wire, but RFC 4915 Section 3.7
+// defines only 0-127 as valid MT-ID values - 128-255 are invalid and SHOULD be
+// ignored on receipt, so a value in that range is never reported here. The
+// maximum matches the range statement on the equivalent mt-id leaf of the IETF
+// OSPF Segment Routing YANG model.
+// SetMtId sets the uint32 value in the Ospfv2LsaAdjacencySid object
+func (obj *ospfv2LsaAdjacencySid) SetMtId(value uint32) Ospfv2LsaAdjacencySid {
+
+	obj.obj.MtId = &value
 	return obj
 }
 
@@ -413,6 +531,35 @@ func (obj *ospfv2LsaAdjacencySid) validateObj(vObj *validation, set_default bool
 	if obj.obj.Flags != nil {
 
 		obj.Flags().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Weight != nil {
+
+		if *obj.obj.Weight > 255 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("0 <= Ospfv2LsaAdjacencySid.Weight <= 255 but Got %d", *obj.obj.Weight))
+		}
+
+	}
+
+	if obj.obj.NeighborId != nil {
+
+		err := obj.validateIpv4(obj.NeighborId())
+		if err != nil {
+			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on Ospfv2LsaAdjacencySid.NeighborId"))
+		}
+
+	}
+
+	if obj.obj.MtId != nil {
+
+		if *obj.obj.MtId > 127 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("0 <= Ospfv2LsaAdjacencySid.MtId <= 127 but Got %d", *obj.obj.MtId))
+		}
+
 	}
 
 }

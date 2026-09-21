@@ -250,9 +250,12 @@ func (obj *ospfv2LsaLinkTrafficEngineering) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Ospfv2LsaLinkTrafficEngineering is traffic engineering attributes for a link, decoded from the Link TLV sub-TLVs of the
+// Ospfv2LsaLinkTrafficEngineering is traffic engineering attributes for a link, sourced from the Link TLV sub-TLVs of the
 // Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of
 // the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).
+// This is the attribute set of the link, not a transcription of the sub-TLVs that
+// carried it: a property here names the attribute, and the description of each names
+// the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.
 type Ospfv2LsaLinkTrafficEngineering interface {
 	Validation
 	// msg marshals Ospfv2LsaLinkTrafficEngineering to protobuf object *otg.Ospfv2LsaLinkTrafficEngineering

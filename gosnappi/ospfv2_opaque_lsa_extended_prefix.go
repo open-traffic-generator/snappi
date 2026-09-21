@@ -13,10 +13,10 @@ import (
 // ***** Ospfv2OpaqueLsaExtendedPrefix *****
 type ospfv2OpaqueLsaExtendedPrefix struct {
 	validation
-	obj             *otg.Ospfv2OpaqueLsaExtendedPrefix
-	marshaller      marshalOspfv2OpaqueLsaExtendedPrefix
-	unMarshaller    unMarshalOspfv2OpaqueLsaExtendedPrefix
-	prefixSidHolder Ospfv2LsaPrefixSid
+	obj              *otg.Ospfv2OpaqueLsaExtendedPrefix
+	marshaller       marshalOspfv2OpaqueLsaExtendedPrefix
+	unMarshaller     unMarshalOspfv2OpaqueLsaExtendedPrefix
+	prefixSidsHolder Ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter
 }
 
 func NewOspfv2OpaqueLsaExtendedPrefix() Ospfv2OpaqueLsaExtendedPrefix {
@@ -244,7 +244,7 @@ func (obj *ospfv2OpaqueLsaExtendedPrefix) Clone() (Ospfv2OpaqueLsaExtendedPrefix
 }
 
 func (obj *ospfv2OpaqueLsaExtendedPrefix) setNil() {
-	obj.prefixSidHolder = nil
+	obj.prefixSidsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -293,16 +293,8 @@ type Ospfv2OpaqueLsaExtendedPrefix interface {
 	SetPrefixLength(value uint32) Ospfv2OpaqueLsaExtendedPrefix
 	// HasPrefixLength checks if PrefixLength has been set in Ospfv2OpaqueLsaExtendedPrefix
 	HasPrefixLength() bool
-	// PrefixSid returns Ospfv2LsaPrefixSid, set in Ospfv2OpaqueLsaExtendedPrefix.
-	// Ospfv2LsaPrefixSid is the learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of
-	// the Extended Prefix Opaque LSA (RFC 8665).
-	PrefixSid() Ospfv2LsaPrefixSid
-	// SetPrefixSid assigns Ospfv2LsaPrefixSid provided by user to Ospfv2OpaqueLsaExtendedPrefix.
-	// Ospfv2LsaPrefixSid is the learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of
-	// the Extended Prefix Opaque LSA (RFC 8665).
-	SetPrefixSid(value Ospfv2LsaPrefixSid) Ospfv2OpaqueLsaExtendedPrefix
-	// HasPrefixSid checks if PrefixSid has been set in Ospfv2OpaqueLsaExtendedPrefix
-	HasPrefixSid() bool
+	// PrefixSids returns Ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIterIter, set in Ospfv2OpaqueLsaExtendedPrefix
+	PrefixSids() Ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter
 	setNil()
 }
 
@@ -356,34 +348,93 @@ func (obj *ospfv2OpaqueLsaExtendedPrefix) SetPrefixLength(value uint32) Ospfv2Op
 	return obj
 }
 
-// The Prefix-SID advertised for this prefix, decoded from the Prefix-SID sub-TLV,
-// sub-type 2 (RFC 8665 Section 5).
-// PrefixSid returns a Ospfv2LsaPrefixSid
-func (obj *ospfv2OpaqueLsaExtendedPrefix) PrefixSid() Ospfv2LsaPrefixSid {
-	if obj.obj.PrefixSid == nil {
-		obj.obj.PrefixSid = NewOspfv2LsaPrefixSid().msg()
+// The Prefix-SIDs advertised for this prefix, decoded from the Prefix-SID
+// sub-TLV, sub-type 2 (RFC 8665 Section 5). The Prefix-SID sub-TLV may appear
+// more than once in the parent TLV, one per Segment Routing algorithm, so this
+// is a list; each entry names its algorithm.
+// PrefixSids returns a []Ospfv2LsaPrefixSid
+func (obj *ospfv2OpaqueLsaExtendedPrefix) PrefixSids() Ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter {
+	if len(obj.obj.PrefixSids) == 0 {
+		obj.obj.PrefixSids = []*otg.Ospfv2LsaPrefixSid{}
 	}
-	if obj.prefixSidHolder == nil {
-		obj.prefixSidHolder = &ospfv2LsaPrefixSid{obj: obj.obj.PrefixSid}
+	if obj.prefixSidsHolder == nil {
+		obj.prefixSidsHolder = newOspfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter(&obj.obj.PrefixSids).setMsg(obj)
 	}
-	return obj.prefixSidHolder
+	return obj.prefixSidsHolder
 }
 
-// The Prefix-SID advertised for this prefix, decoded from the Prefix-SID sub-TLV,
-// sub-type 2 (RFC 8665 Section 5).
-// PrefixSid returns a Ospfv2LsaPrefixSid
-func (obj *ospfv2OpaqueLsaExtendedPrefix) HasPrefixSid() bool {
-	return obj.obj.PrefixSid != nil
+type ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter struct {
+	obj                     *ospfv2OpaqueLsaExtendedPrefix
+	ospfv2LsaPrefixSidSlice []Ospfv2LsaPrefixSid
+	fieldPtr                *[]*otg.Ospfv2LsaPrefixSid
 }
 
-// The Prefix-SID advertised for this prefix, decoded from the Prefix-SID sub-TLV,
-// sub-type 2 (RFC 8665 Section 5).
-// SetPrefixSid sets the Ospfv2LsaPrefixSid value in the Ospfv2OpaqueLsaExtendedPrefix object
-func (obj *ospfv2OpaqueLsaExtendedPrefix) SetPrefixSid(value Ospfv2LsaPrefixSid) Ospfv2OpaqueLsaExtendedPrefix {
+func newOspfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter(ptr *[]*otg.Ospfv2LsaPrefixSid) Ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter {
+	return &ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter{fieldPtr: ptr}
+}
 
-	obj.prefixSidHolder = nil
-	obj.obj.PrefixSid = value.msg()
+type Ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter interface {
+	setMsg(*ospfv2OpaqueLsaExtendedPrefix) Ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter
+	Items() []Ospfv2LsaPrefixSid
+	Add() Ospfv2LsaPrefixSid
+	Append(items ...Ospfv2LsaPrefixSid) Ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter
+	Set(index int, newObj Ospfv2LsaPrefixSid) Ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter
+	Clear() Ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter
+	clearHolderSlice() Ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter
+	appendHolderSlice(item Ospfv2LsaPrefixSid) Ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter
+}
 
+func (obj *ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter) setMsg(msg *ospfv2OpaqueLsaExtendedPrefix) Ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&ospfv2LsaPrefixSid{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter) Items() []Ospfv2LsaPrefixSid {
+	return obj.ospfv2LsaPrefixSidSlice
+}
+
+func (obj *ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter) Add() Ospfv2LsaPrefixSid {
+	newObj := &otg.Ospfv2LsaPrefixSid{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &ospfv2LsaPrefixSid{obj: newObj}
+	newLibObj.setDefault()
+	obj.ospfv2LsaPrefixSidSlice = append(obj.ospfv2LsaPrefixSidSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter) Append(items ...Ospfv2LsaPrefixSid) Ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.ospfv2LsaPrefixSidSlice = append(obj.ospfv2LsaPrefixSidSlice, item)
+	}
+	return obj
+}
+
+func (obj *ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter) Set(index int, newObj Ospfv2LsaPrefixSid) Ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.ospfv2LsaPrefixSidSlice[index] = newObj
+	return obj
+}
+func (obj *ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter) Clear() Ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.Ospfv2LsaPrefixSid{}
+		obj.ospfv2LsaPrefixSidSlice = []Ospfv2LsaPrefixSid{}
+	}
+	return obj
+}
+func (obj *ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter) clearHolderSlice() Ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter {
+	if len(obj.ospfv2LsaPrefixSidSlice) > 0 {
+		obj.ospfv2LsaPrefixSidSlice = []Ospfv2LsaPrefixSid{}
+	}
+	return obj
+}
+func (obj *ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter) appendHolderSlice(item Ospfv2LsaPrefixSid) Ospfv2OpaqueLsaExtendedPrefixOspfv2LsaPrefixSidIter {
+	obj.ospfv2LsaPrefixSidSlice = append(obj.ospfv2LsaPrefixSidSlice, item)
 	return obj
 }
 
@@ -411,9 +462,18 @@ func (obj *ospfv2OpaqueLsaExtendedPrefix) validateObj(vObj *validation, set_defa
 
 	}
 
-	if obj.obj.PrefixSid != nil {
+	if len(obj.obj.PrefixSids) != 0 {
 
-		obj.PrefixSid().validateObj(vObj, set_default)
+		if set_default {
+			obj.PrefixSids().clearHolderSlice()
+			for _, item := range obj.obj.PrefixSids {
+				obj.PrefixSids().appendHolderSlice(&ospfv2LsaPrefixSid{obj: item})
+			}
+		}
+		for _, item := range obj.PrefixSids().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
 	}
 
 }

@@ -13,10 +13,9 @@ import (
 // ***** Ospfv2OpaqueLsaTlv *****
 type ospfv2OpaqueLsaTlv struct {
 	validation
-	obj                  *otg.Ospfv2OpaqueLsaTlv
-	marshaller           marshalOspfv2OpaqueLsaTlv
-	unMarshaller         unMarshalOspfv2OpaqueLsaTlv
-	unknownSubTlvsHolder Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter
+	obj          *otg.Ospfv2OpaqueLsaTlv
+	marshaller   marshalOspfv2OpaqueLsaTlv
+	unMarshaller unMarshalOspfv2OpaqueLsaTlv
 }
 
 func NewOspfv2OpaqueLsaTlv() Ospfv2OpaqueLsaTlv {
@@ -30,7 +29,7 @@ func (obj *ospfv2OpaqueLsaTlv) msg() *otg.Ospfv2OpaqueLsaTlv {
 }
 
 func (obj *ospfv2OpaqueLsaTlv) setMsg(msg *otg.Ospfv2OpaqueLsaTlv) Ospfv2OpaqueLsaTlv {
-	obj.setNil()
+
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -113,7 +112,7 @@ func (m *unMarshalospfv2OpaqueLsaTlv) FromPbText(value string) error {
 	if retObj != nil {
 		return retObj
 	}
-	m.obj.setNil()
+
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -159,7 +158,7 @@ func (m *unMarshalospfv2OpaqueLsaTlv) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-	m.obj.setNil()
+
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -198,7 +197,7 @@ func (m *unMarshalospfv2OpaqueLsaTlv) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-	m.obj.setNil()
+
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -243,14 +242,15 @@ func (obj *ospfv2OpaqueLsaTlv) Clone() (Ospfv2OpaqueLsaTlv, error) {
 	return newObj, nil
 }
 
-func (obj *ospfv2OpaqueLsaTlv) setNil() {
-	obj.unknownSubTlvsHolder = nil
-	obj.validationErrors = nil
-	obj.warnings = nil
-	obj.constraints = make(map[string]map[string]Constraints)
-}
-
-// Ospfv2OpaqueLsaTlv is a top-level TLV carried in the body of an OSPFv2 Opaque LSA that is not decoded into a structured field elsewhere in the model (RFC 7770 Section 2).
+// Ospfv2OpaqueLsaTlv is a top-level TLV carried in the body of an OSPFv2 Opaque LSA that is not decoded
+// into a structured field elsewhere in the model, reported in the generic wire format
+// every OSPFv2 Opaque LSA TLV shares: a 2-octet Type, a 2-octet Length and the Value
+// octets (RFC 7770 Section 2.3).
+// type is the numeric wire value, so a TLV type this model has never heard of is
+// still fully representable and its content is never lost. The Value is reported as
+// one opaque blob, including for a TLV whose Value is itself a sub-TLV sequence:
+// nothing in the TLV header says the Value is a sub-TLV sequence, and a TLV reported
+// here is by definition one this model does not decode.
 type Ospfv2OpaqueLsaTlv interface {
 	Validation
 	// msg marshals Ospfv2OpaqueLsaTlv to protobuf object *otg.Ospfv2OpaqueLsaTlv
@@ -272,10 +272,10 @@ type Ospfv2OpaqueLsaTlv interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// Type returns Ospfv2OpaqueLsaTlvTypeEnum, set in Ospfv2OpaqueLsaTlv
-	Type() Ospfv2OpaqueLsaTlvTypeEnum
-	// SetType assigns Ospfv2OpaqueLsaTlvTypeEnum provided by user to Ospfv2OpaqueLsaTlv
-	SetType(value Ospfv2OpaqueLsaTlvTypeEnum) Ospfv2OpaqueLsaTlv
+	// Type returns uint32, set in Ospfv2OpaqueLsaTlv.
+	Type() uint32
+	// SetType assigns uint32 provided by user to Ospfv2OpaqueLsaTlv
+	SetType(value uint32) Ospfv2OpaqueLsaTlv
 	// HasType checks if Type has been set in Ospfv2OpaqueLsaTlv
 	HasType() bool
 	// Length returns uint32, set in Ospfv2OpaqueLsaTlv.
@@ -290,99 +290,36 @@ type Ospfv2OpaqueLsaTlv interface {
 	SetValue(value string) Ospfv2OpaqueLsaTlv
 	// HasValue checks if Value has been set in Ospfv2OpaqueLsaTlv
 	HasValue() bool
-	// UnknownSubTlvs returns Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIterIter, set in Ospfv2OpaqueLsaTlv
-	UnknownSubTlvs() Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter
-	setNil()
 }
 
-type Ospfv2OpaqueLsaTlvTypeEnum string
+// The TLV Type field, as the numeric value carried on the wire. Its meaning is
+// scoped by the parent LSA's tlv_information.choice; the authoritative list of
+// assigned TLV types is the IANA OSPFv2 parameters registry:
+// https://www.iana.org/assignments/ospfv2-parameters/ospfv2-parameters.xhtml
+// Type returns a uint32
+func (obj *ospfv2OpaqueLsaTlv) Type() uint32 {
 
-// Enum of Type on Ospfv2OpaqueLsaTlv
-var Ospfv2OpaqueLsaTlvType = struct {
-	TE_ROUTER_ADDRESS                Ospfv2OpaqueLsaTlvTypeEnum
-	TE_LINK                          Ospfv2OpaqueLsaTlvTypeEnum
-	TE_ROUTER_IPV6_ADDRESS           Ospfv2OpaqueLsaTlvTypeEnum
-	TE_LINK_LOCAL                    Ospfv2OpaqueLsaTlvTypeEnum
-	TE_NODE_ATTRIBUTE                Ospfv2OpaqueLsaTlvTypeEnum
-	TE_OPTICAL_NODE_PROPERTY         Ospfv2OpaqueLsaTlvTypeEnum
-	RI_TE_MESH_GROUP_IPV4            Ospfv2OpaqueLsaTlvTypeEnum
-	RI_TE_MESH_GROUP_IPV6            Ospfv2OpaqueLsaTlvTypeEnum
-	RI_TE_NODE_CAPABILITY_DESCRIPTOR Ospfv2OpaqueLsaTlvTypeEnum
-	RI_PCED                          Ospfv2OpaqueLsaTlvTypeEnum
-	RI_DYNAMIC_HOSTNAME              Ospfv2OpaqueLsaTlvTypeEnum
-	RI_SR_ALGORITHM                  Ospfv2OpaqueLsaTlvTypeEnum
-	RI_SID_LABEL_RANGE               Ospfv2OpaqueLsaTlvTypeEnum
-	RI_NODE_ADMIN_TAG                Ospfv2OpaqueLsaTlvTypeEnum
-	RI_SBFD_DISCRIMINATOR            Ospfv2OpaqueLsaTlvTypeEnum
-	RI_TUNNEL_ENCAPSULATIONS         Ospfv2OpaqueLsaTlvTypeEnum
-	RI_SR_LOCAL_BLOCK                Ospfv2OpaqueLsaTlvTypeEnum
-	RI_SRMS_PREFERENCE               Ospfv2OpaqueLsaTlvTypeEnum
-	RI_FLEXIBLE_ALGORITHM_DEFINITION Ospfv2OpaqueLsaTlvTypeEnum
-	RI_AREA_LEADER                   Ospfv2OpaqueLsaTlvTypeEnum
-	RI_DYNAMIC_FLOODING              Ospfv2OpaqueLsaTlvTypeEnum
-	EXTENDED_PREFIX_TLV              Ospfv2OpaqueLsaTlvTypeEnum
-	EXTENDED_PREFIX_RANGE_TLV        Ospfv2OpaqueLsaTlvTypeEnum
-	EXTENDED_LINK_TLV                Ospfv2OpaqueLsaTlvTypeEnum
-	TTZ_ID                           Ospfv2OpaqueLsaTlvTypeEnum
-	TTZ_ROUTER                       Ospfv2OpaqueLsaTlvTypeEnum
-	TTZ_OPTIONS                      Ospfv2OpaqueLsaTlvTypeEnum
-	DYNAMIC_FLOODING_AREA_ROUTER_IDS Ospfv2OpaqueLsaTlvTypeEnum
-	DYNAMIC_FLOODING_PATH            Ospfv2OpaqueLsaTlvTypeEnum
-	EXTENDED_INTER_AREA_ASBR_TLV     Ospfv2OpaqueLsaTlvTypeEnum
-}{
-	TE_ROUTER_ADDRESS:                Ospfv2OpaqueLsaTlvTypeEnum("te_router_address"),
-	TE_LINK:                          Ospfv2OpaqueLsaTlvTypeEnum("te_link"),
-	TE_ROUTER_IPV6_ADDRESS:           Ospfv2OpaqueLsaTlvTypeEnum("te_router_ipv6_address"),
-	TE_LINK_LOCAL:                    Ospfv2OpaqueLsaTlvTypeEnum("te_link_local"),
-	TE_NODE_ATTRIBUTE:                Ospfv2OpaqueLsaTlvTypeEnum("te_node_attribute"),
-	TE_OPTICAL_NODE_PROPERTY:         Ospfv2OpaqueLsaTlvTypeEnum("te_optical_node_property"),
-	RI_TE_MESH_GROUP_IPV4:            Ospfv2OpaqueLsaTlvTypeEnum("ri_te_mesh_group_ipv4"),
-	RI_TE_MESH_GROUP_IPV6:            Ospfv2OpaqueLsaTlvTypeEnum("ri_te_mesh_group_ipv6"),
-	RI_TE_NODE_CAPABILITY_DESCRIPTOR: Ospfv2OpaqueLsaTlvTypeEnum("ri_te_node_capability_descriptor"),
-	RI_PCED:                          Ospfv2OpaqueLsaTlvTypeEnum("ri_pced"),
-	RI_DYNAMIC_HOSTNAME:              Ospfv2OpaqueLsaTlvTypeEnum("ri_dynamic_hostname"),
-	RI_SR_ALGORITHM:                  Ospfv2OpaqueLsaTlvTypeEnum("ri_sr_algorithm"),
-	RI_SID_LABEL_RANGE:               Ospfv2OpaqueLsaTlvTypeEnum("ri_sid_label_range"),
-	RI_NODE_ADMIN_TAG:                Ospfv2OpaqueLsaTlvTypeEnum("ri_node_admin_tag"),
-	RI_SBFD_DISCRIMINATOR:            Ospfv2OpaqueLsaTlvTypeEnum("ri_sbfd_discriminator"),
-	RI_TUNNEL_ENCAPSULATIONS:         Ospfv2OpaqueLsaTlvTypeEnum("ri_tunnel_encapsulations"),
-	RI_SR_LOCAL_BLOCK:                Ospfv2OpaqueLsaTlvTypeEnum("ri_sr_local_block"),
-	RI_SRMS_PREFERENCE:               Ospfv2OpaqueLsaTlvTypeEnum("ri_srms_preference"),
-	RI_FLEXIBLE_ALGORITHM_DEFINITION: Ospfv2OpaqueLsaTlvTypeEnum("ri_flexible_algorithm_definition"),
-	RI_AREA_LEADER:                   Ospfv2OpaqueLsaTlvTypeEnum("ri_area_leader"),
-	RI_DYNAMIC_FLOODING:              Ospfv2OpaqueLsaTlvTypeEnum("ri_dynamic_flooding"),
-	EXTENDED_PREFIX_TLV:              Ospfv2OpaqueLsaTlvTypeEnum("extended_prefix_tlv"),
-	EXTENDED_PREFIX_RANGE_TLV:        Ospfv2OpaqueLsaTlvTypeEnum("extended_prefix_range_tlv"),
-	EXTENDED_LINK_TLV:                Ospfv2OpaqueLsaTlvTypeEnum("extended_link_tlv"),
-	TTZ_ID:                           Ospfv2OpaqueLsaTlvTypeEnum("ttz_id"),
-	TTZ_ROUTER:                       Ospfv2OpaqueLsaTlvTypeEnum("ttz_router"),
-	TTZ_OPTIONS:                      Ospfv2OpaqueLsaTlvTypeEnum("ttz_options"),
-	DYNAMIC_FLOODING_AREA_ROUTER_IDS: Ospfv2OpaqueLsaTlvTypeEnum("dynamic_flooding_area_router_ids"),
-	DYNAMIC_FLOODING_PATH:            Ospfv2OpaqueLsaTlvTypeEnum("dynamic_flooding_path"),
-	EXTENDED_INTER_AREA_ASBR_TLV:     Ospfv2OpaqueLsaTlvTypeEnum("extended_inter_area_asbr_tlv"),
+	return *obj.obj.Type
+
 }
 
-func (obj *ospfv2OpaqueLsaTlv) Type() Ospfv2OpaqueLsaTlvTypeEnum {
-	return Ospfv2OpaqueLsaTlvTypeEnum(obj.obj.Type.Enum().String())
-}
-
-// The TLV Type field. Its meaning is scoped by the parent LSA's
-// tlv_information (IANA OSPFv2 TLV registries).
-// Type returns a string
+// The TLV Type field, as the numeric value carried on the wire. Its meaning is
+// scoped by the parent LSA's tlv_information.choice; the authoritative list of
+// assigned TLV types is the IANA OSPFv2 parameters registry:
+// https://www.iana.org/assignments/ospfv2-parameters/ospfv2-parameters.xhtml
+// Type returns a uint32
 func (obj *ospfv2OpaqueLsaTlv) HasType() bool {
 	return obj.obj.Type != nil
 }
 
-func (obj *ospfv2OpaqueLsaTlv) SetType(value Ospfv2OpaqueLsaTlvTypeEnum) Ospfv2OpaqueLsaTlv {
-	intValue, ok := otg.Ospfv2OpaqueLsaTlv_Type_Enum_value[string(value)]
-	if !ok {
-		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
-			"%s is not a valid choice on Ospfv2OpaqueLsaTlvTypeEnum", string(value)))
-		return obj
-	}
-	enumValue := otg.Ospfv2OpaqueLsaTlv_Type_Enum(intValue)
-	obj.obj.Type = &enumValue
+// The TLV Type field, as the numeric value carried on the wire. Its meaning is
+// scoped by the parent LSA's tlv_information.choice; the authoritative list of
+// assigned TLV types is the IANA OSPFv2 parameters registry:
+// https://www.iana.org/assignments/ospfv2-parameters/ospfv2-parameters.xhtml
+// SetType sets the uint32 value in the Ospfv2OpaqueLsaTlv object
+func (obj *ospfv2OpaqueLsaTlv) SetType(value uint32) Ospfv2OpaqueLsaTlv {
 
+	obj.obj.Type = &value
 	return obj
 }
 
@@ -408,7 +345,7 @@ func (obj *ospfv2OpaqueLsaTlv) SetLength(value uint32) Ospfv2OpaqueLsaTlv {
 	return obj
 }
 
-// The TLV Value field, returned as a lowercase hexadecimal string.
+// The raw byte contents of the TLV Value field, as hex characters. Two hex characters per octet, so the string is twice length characters long.
 // Value returns a string
 func (obj *ospfv2OpaqueLsaTlv) Value() string {
 
@@ -416,104 +353,17 @@ func (obj *ospfv2OpaqueLsaTlv) Value() string {
 
 }
 
-// The TLV Value field, returned as a lowercase hexadecimal string.
+// The raw byte contents of the TLV Value field, as hex characters. Two hex characters per octet, so the string is twice length characters long.
 // Value returns a string
 func (obj *ospfv2OpaqueLsaTlv) HasValue() bool {
 	return obj.obj.Value != nil
 }
 
-// The TLV Value field, returned as a lowercase hexadecimal string.
+// The raw byte contents of the TLV Value field, as hex characters. Two hex characters per octet, so the string is twice length characters long.
 // SetValue sets the string value in the Ospfv2OpaqueLsaTlv object
 func (obj *ospfv2OpaqueLsaTlv) SetValue(value string) Ospfv2OpaqueLsaTlv {
 
 	obj.obj.Value = &value
-	return obj
-}
-
-// Sub-TLVs nested within this TLV's value that are not decoded into a structured field elsewhere in the model, returned raw in the generic type/length/value format (e.g. RFC 8665 Extended Prefix/Link Opaque LSA sub-TLVs).
-// UnknownSubTlvs returns a []Ospfv2OpaqueLsaSubTlv
-func (obj *ospfv2OpaqueLsaTlv) UnknownSubTlvs() Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter {
-	if len(obj.obj.UnknownSubTlvs) == 0 {
-		obj.obj.UnknownSubTlvs = []*otg.Ospfv2OpaqueLsaSubTlv{}
-	}
-	if obj.unknownSubTlvsHolder == nil {
-		obj.unknownSubTlvsHolder = newOspfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter(&obj.obj.UnknownSubTlvs).setMsg(obj)
-	}
-	return obj.unknownSubTlvsHolder
-}
-
-type ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter struct {
-	obj                        *ospfv2OpaqueLsaTlv
-	ospfv2OpaqueLsaSubTlvSlice []Ospfv2OpaqueLsaSubTlv
-	fieldPtr                   *[]*otg.Ospfv2OpaqueLsaSubTlv
-}
-
-func newOspfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter(ptr *[]*otg.Ospfv2OpaqueLsaSubTlv) Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter {
-	return &ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter{fieldPtr: ptr}
-}
-
-type Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter interface {
-	setMsg(*ospfv2OpaqueLsaTlv) Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter
-	Items() []Ospfv2OpaqueLsaSubTlv
-	Add() Ospfv2OpaqueLsaSubTlv
-	Append(items ...Ospfv2OpaqueLsaSubTlv) Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter
-	Set(index int, newObj Ospfv2OpaqueLsaSubTlv) Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter
-	Clear() Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter
-	clearHolderSlice() Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter
-	appendHolderSlice(item Ospfv2OpaqueLsaSubTlv) Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter
-}
-
-func (obj *ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter) setMsg(msg *ospfv2OpaqueLsaTlv) Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter {
-	obj.clearHolderSlice()
-	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&ospfv2OpaqueLsaSubTlv{obj: val})
-	}
-	obj.obj = msg
-	return obj
-}
-
-func (obj *ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter) Items() []Ospfv2OpaqueLsaSubTlv {
-	return obj.ospfv2OpaqueLsaSubTlvSlice
-}
-
-func (obj *ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter) Add() Ospfv2OpaqueLsaSubTlv {
-	newObj := &otg.Ospfv2OpaqueLsaSubTlv{}
-	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &ospfv2OpaqueLsaSubTlv{obj: newObj}
-	newLibObj.setDefault()
-	obj.ospfv2OpaqueLsaSubTlvSlice = append(obj.ospfv2OpaqueLsaSubTlvSlice, newLibObj)
-	return newLibObj
-}
-
-func (obj *ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter) Append(items ...Ospfv2OpaqueLsaSubTlv) Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter {
-	for _, item := range items {
-		newObj := item.msg()
-		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.ospfv2OpaqueLsaSubTlvSlice = append(obj.ospfv2OpaqueLsaSubTlvSlice, item)
-	}
-	return obj
-}
-
-func (obj *ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter) Set(index int, newObj Ospfv2OpaqueLsaSubTlv) Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter {
-	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.ospfv2OpaqueLsaSubTlvSlice[index] = newObj
-	return obj
-}
-func (obj *ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter) Clear() Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter {
-	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.Ospfv2OpaqueLsaSubTlv{}
-		obj.ospfv2OpaqueLsaSubTlvSlice = []Ospfv2OpaqueLsaSubTlv{}
-	}
-	return obj
-}
-func (obj *ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter) clearHolderSlice() Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter {
-	if len(obj.ospfv2OpaqueLsaSubTlvSlice) > 0 {
-		obj.ospfv2OpaqueLsaSubTlvSlice = []Ospfv2OpaqueLsaSubTlv{}
-	}
-	return obj
-}
-func (obj *ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter) appendHolderSlice(item Ospfv2OpaqueLsaSubTlv) Ospfv2OpaqueLsaTlvOspfv2OpaqueLsaSubTlvIter {
-	obj.ospfv2OpaqueLsaSubTlvSlice = append(obj.ospfv2OpaqueLsaSubTlvSlice, item)
 	return obj
 }
 
@@ -522,16 +372,31 @@ func (obj *ospfv2OpaqueLsaTlv) validateObj(vObj *validation, set_default bool) {
 		obj.setDefault()
 	}
 
-	if len(obj.obj.UnknownSubTlvs) != 0 {
+	if obj.obj.Type != nil {
 
-		if set_default {
-			obj.UnknownSubTlvs().clearHolderSlice()
-			for _, item := range obj.obj.UnknownSubTlvs {
-				obj.UnknownSubTlvs().appendHolderSlice(&ospfv2OpaqueLsaSubTlv{obj: item})
-			}
+		if *obj.obj.Type > 65535 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("0 <= Ospfv2OpaqueLsaTlv.Type <= 65535 but Got %d", *obj.obj.Type))
 		}
-		for _, item := range obj.UnknownSubTlvs().Items() {
-			item.validateObj(vObj, set_default)
+
+	}
+
+	if obj.obj.Length != nil {
+
+		if *obj.obj.Length > 65535 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("0 <= Ospfv2OpaqueLsaTlv.Length <= 65535 but Got %d", *obj.obj.Length))
+		}
+
+	}
+
+	if obj.obj.Value != nil {
+
+		err := obj.validateHex(obj.Value())
+		if err != nil {
+			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on Ospfv2OpaqueLsaTlv.Value"))
 		}
 
 	}

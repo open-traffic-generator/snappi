@@ -254,10 +254,14 @@ func (obj *ospfv2OpaqueLsaRouterInformation) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Ospfv2OpaqueLsaRouterInformation is the decoded Router Information (RI) Opaque LSA contents, Opaque Type 4
-// (RFC 7770 Section 2). The RI Opaque LSA is originated once per router, so everything
-// reported here describes the router named by the parent LSA's
-// header.advertising_router_id.
+// Ospfv2OpaqueLsaRouterInformation is the decoded contents of one Router Information (RI) Opaque LSA instance, Opaque
+// Type 4 (RFC 7770 Section 2).
+// Everything reported here describes the router named by the parent LSA's
+// header.advertising_router_id, but not necessarily all of it: a router may originate
+// more than one RI LSA instance, for example when its capabilities do not fit in one
+// LSA, and each instance is a separate Opaque LSA carrying its own Opaque ID
+// (RFC 7770 Section 2.1). This object therefore reports what one instance carried,
+// not the complete Router Information of the router.
 type Ospfv2OpaqueLsaRouterInformation interface {
 	Validation
 	// msg marshals Ospfv2OpaqueLsaRouterInformation to protobuf object *otg.Ospfv2OpaqueLsaRouterInformation

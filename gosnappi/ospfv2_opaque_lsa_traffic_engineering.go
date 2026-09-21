@@ -251,9 +251,11 @@ func (obj *ospfv2OpaqueLsaTrafficEngineering) setNil() {
 }
 
 // Ospfv2OpaqueLsaTrafficEngineering is the decoded Traffic Engineering Opaque LSA contents, Opaque Type 1
-// (RFC 3630 Section 2.4). A TE LSA carries a single top-level TLV: either the Router
-// Address TLV, reported as router_address, or the Link TLV, reported as link_id plus
-// link_attributes.
+// (RFC 3630 Section 2.4). A TE LSA contains one top-level TLV (RFC 3630 Section 2.4):
+// either the Router Address TLV, reported as router_address, or the Link TLV,
+// reported as link_id plus link_attributes. Only one Link TLV is carried in each LSA
+// and each of its sub-TLVs occurs at most once (RFC 3630 Section 2.4.2), so both are
+// single-valued here.
 type Ospfv2OpaqueLsaTrafficEngineering interface {
 	Validation
 	// msg marshals Ospfv2OpaqueLsaTrafficEngineering to protobuf object *otg.Ospfv2OpaqueLsaTrafficEngineering
@@ -288,14 +290,20 @@ type Ospfv2OpaqueLsaTrafficEngineering interface {
 	// HasLinkId checks if LinkId has been set in Ospfv2OpaqueLsaTrafficEngineering
 	HasLinkId() bool
 	// LinkAttributes returns Ospfv2LsaLinkTrafficEngineering, set in Ospfv2OpaqueLsaTrafficEngineering.
-	// Ospfv2LsaLinkTrafficEngineering is traffic engineering attributes for a link, decoded from the Link TLV sub-TLVs of the
+	// Ospfv2LsaLinkTrafficEngineering is traffic engineering attributes for a link, sourced from the Link TLV sub-TLVs of the
 	// Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of
 	// the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).
+	// This is the attribute set of the link, not a transcription of the sub-TLVs that
+	// carried it: a property here names the attribute, and the description of each names
+	// the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.
 	LinkAttributes() Ospfv2LsaLinkTrafficEngineering
 	// SetLinkAttributes assigns Ospfv2LsaLinkTrafficEngineering provided by user to Ospfv2OpaqueLsaTrafficEngineering.
-	// Ospfv2LsaLinkTrafficEngineering is traffic engineering attributes for a link, decoded from the Link TLV sub-TLVs of the
+	// Ospfv2LsaLinkTrafficEngineering is traffic engineering attributes for a link, sourced from the Link TLV sub-TLVs of the
 	// Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of
 	// the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).
+	// This is the attribute set of the link, not a transcription of the sub-TLVs that
+	// carried it: a property here names the attribute, and the description of each names
+	// the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.
 	SetLinkAttributes(value Ospfv2LsaLinkTrafficEngineering) Ospfv2OpaqueLsaTrafficEngineering
 	// HasLinkAttributes checks if LinkAttributes has been set in Ospfv2OpaqueLsaTrafficEngineering
 	HasLinkAttributes() bool

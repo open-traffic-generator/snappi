@@ -208506,32 +208506,13 @@ class Ospfv2OpaqueLsa(OpenApiObject):
                 "domain",
             ],
         },
-        "tlv_information": {
-            "type": str,
-            "enum": [
-                "traffic_engineering",
-                "sycamore_optical_topology",
-                "grace",
-                "router_information",
-                "l1vpn",
-                "inter_as_te_v2",
-                "extended_prefix",
-                "extended_link",
-                "ttz",
-                "dynamic_flooding",
-                "extended_inter_area_asbr",
-            ],
-        },
+        "tlv_information": {"type": "Ospfv2OpaqueLsaTlvInformation"},
         "id": {
             "type": int,
             "format": "uint32",
             "minimum": 0,
             "maximum": 16777215,
         },
-        "router_information": {"type": "Ospfv2OpaqueLsaRouterInformation"},
-        "traffic_engineering": {"type": "Ospfv2OpaqueLsaTrafficEngineering"},
-        "extended_prefixes": {"type": "Ospfv2OpaqueLsaExtendedPrefixIter"},
-        "extended_links": {"type": "Ospfv2OpaqueLsaExtendedLinkIter"},
         "unknown_tlvs": {"type": "Ospfv2OpaqueLsaTlvIter"},
     }  # type: Dict[str, str]
 
@@ -208543,28 +208524,15 @@ class Ospfv2OpaqueLsa(OpenApiObject):
     AREA = "area"  # type: str
     DOMAIN = "domain"  # type: str
 
-    TRAFFIC_ENGINEERING = "traffic_engineering"  # type: str
-    SYCAMORE_OPTICAL_TOPOLOGY = "sycamore_optical_topology"  # type: str
-    GRACE = "grace"  # type: str
-    ROUTER_INFORMATION = "router_information"  # type: str
-    L1VPN = "l1vpn"  # type: str
-    INTER_AS_TE_V2 = "inter_as_te_v2"  # type: str
-    EXTENDED_PREFIX = "extended_prefix"  # type: str
-    EXTENDED_LINK = "extended_link"  # type: str
-    TTZ = "ttz"  # type: str
-    DYNAMIC_FLOODING = "dynamic_flooding"  # type: str
-    EXTENDED_INTER_AREA_ASBR = "extended_inter_area_asbr"  # type: str
-
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, type=None, tlv_information=None, id=None):
+    def __init__(self, parent=None, type=None, id=None):
         super(Ospfv2OpaqueLsa, self).__init__()
         self._parent = parent
         self._set_property("type", type)
-        self._set_property("tlv_information", tlv_information)
         self._set_property("id", id)
 
-    def set(self, type=None, tlv_information=None, id=None):
+    def set(self, type=None, id=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -208603,24 +208571,14 @@ class Ospfv2OpaqueLsa(OpenApiObject):
 
     @property
     def tlv_information(self):
-        # type: () -> Union[Literal["dynamic_flooding"], Literal["extended_inter_area_asbr"], Literal["extended_link"], Literal["extended_prefix"], Literal["grace"], Literal["inter_as_te_v2"], Literal["l1vpn"], Literal["router_information"], Literal["sycamore_optical_topology"], Literal["traffic_engineering"], Literal["ttz"]]
+        # type: () -> Ospfv2OpaqueLsaTlvInformation
         """tlv_information getter
 
-        The Opaque Type, decoded from the most significant octet of the LSA's Link. State ID (RFC 5250 Section 3). Identifies the type of information carried in. the tlvs (IANA Opaque LSA Option Types registry).
+        The decoded body of an OSPFv2 Opaque LSA, selected by Opaque Type. (RFC 5250 Section 3).. choice names the Opaque Type of the LSA, so reading choice is enough to know what. to read next. There are two cases:. 1. The Opaque Type is decoded by this model: choice is also the name of the field. carrying the decoded payload (traffic_engineering, router_information,. extended_prefixes, extended_link).. 2. The Opaque Type is not decoded by this model: choice is unknown, the numeric. Opaque Type is reported in unknown.opaque_type, and the TLVs of the LSA are. reported raw in the parent LSA's unknown_tlvs. This is the single escape hatch for. every Opaque Type this model does not decode, whichever the reason assigned by. IANA but not decoded here (grace-LSA Opaque Type 3, L1VPN Opaque Type 5,. Inter-AS-TE-v2 Opaque Type and the rest), not assigned by IANA, reserved for. private use, or assigned by IANA after this version of the model.. The choice values are not copy of the IANA registry and are not kept in step with. it; the registry is the authoritative list of assigned Opaque Types:. https://www.iana.org/assignments/ospf-opaque-types/ospf-opaque-types.xhtml. unknown_tlvs is not limited to case 2: TLV of decoded Opaque Type that this. model does not itself decode is reported there too, which is why it stays on the. parent LSA rather than inside this object.The decoded body of an OSPFv2 Opaque LSA, selected by Opaque Type. (RFC 5250 Section 3).. choice names the Opaque Type of the LSA, so reading choice is enough to know what. to read next. There are two cases:. 1. The Opaque Type is decoded by this model: choice is also the name of the field. carrying the decoded payload (traffic_engineering, router_information,. extended_prefixes, extended_link).. 2. The Opaque Type is not decoded by this model: choice is unknown, the numeric. Opaque Type is reported in unknown.opaque_type, and the TLVs of the LSA are. reported raw in the parent LSA's unknown_tlvs. This is the single escape hatch for. every Opaque Type this model does not decode, whichever the reason assigned by. IANA but not decoded here (grace-LSA Opaque Type 3, L1VPN Opaque Type 5,. Inter-AS-TE-v2 Opaque Type and the rest), not assigned by IANA, reserved for. private use, or assigned by IANA after this version of the model.. The choice values are not copy of the IANA registry and are not kept in step with. it; the registry is the authoritative list of assigned Opaque Types:. https://www.iana.org/assignments/ospf-opaque-types/ospf-opaque-types.xhtml. unknown_tlvs is not limited to case 2: TLV of decoded Opaque Type that this. model does not itself decode is reported there too, which is why it stays on the. parent LSA rather than inside this object.The decoded body of an OSPFv2 Opaque LSA, selected by Opaque Type. (RFC 5250 Section 3).. choice names the Opaque Type of the LSA, so reading choice is enough to know what. to read next. There are two cases:. 1. The Opaque Type is decoded by this model: choice is also the name of the field. carrying the decoded payload (traffic_engineering, router_information,. extended_prefixes, extended_link).. 2. The Opaque Type is not decoded by this model: choice is unknown, the numeric. Opaque Type is reported in unknown.opaque_type, and the TLVs of the LSA are. reported raw in the parent LSA's unknown_tlvs. This is the single escape hatch for. every Opaque Type this model does not decode, whichever the reason assigned by. IANA but not decoded here (grace-LSA Opaque Type 3, L1VPN Opaque Type 5,. Inter-AS-TE-v2 Opaque Type and the rest), not assigned by IANA, reserved for. private use, or assigned by IANA after this version of the model.. The choice values are not copy of the IANA registry and are not kept in step with. it; the registry is the authoritative list of assigned Opaque Types:. https://www.iana.org/assignments/ospf-opaque-types/ospf-opaque-types.xhtml. unknown_tlvs is not limited to case 2: TLV of decoded Opaque Type that this. model does not itself decode is reported there too, which is why it stays on the. parent LSA rather than inside this object.The type of information carried in the body of the Opaque LSA, decoded from the. Opaque Type in the most significant octet of the LSA's Link State ID. (RFC 5250 Section 3), together with the decoded contents of that Opaque Type.
 
-        Returns: Union[Literal["dynamic_flooding"], Literal["extended_inter_area_asbr"], Literal["extended_link"], Literal["extended_prefix"], Literal["grace"], Literal["inter_as_te_v2"], Literal["l1vpn"], Literal["router_information"], Literal["sycamore_optical_topology"], Literal["traffic_engineering"], Literal["ttz"]]
+        Returns: Ospfv2OpaqueLsaTlvInformation
         """
-        return self._get_property("tlv_information")
-
-    @tlv_information.setter
-    def tlv_information(self, value):
-        """tlv_information setter
-
-        The Opaque Type, decoded from the most significant octet of the LSA's Link. State ID (RFC 5250 Section 3). Identifies the type of information carried in. the tlvs (IANA Opaque LSA Option Types registry).
-
-        value: Union[Literal["dynamic_flooding"], Literal["extended_inter_area_asbr"], Literal["extended_link"], Literal["extended_prefix"], Literal["grace"], Literal["inter_as_te_v2"], Literal["l1vpn"], Literal["router_information"], Literal["sycamore_optical_topology"], Literal["traffic_engineering"], Literal["ttz"]]
-        """
-        self._set_property("tlv_information", value)
+        return self._get_property("tlv_information", Ospfv2OpaqueLsaTlvInformation)
 
     @property
     def id(self):
@@ -208644,37 +208602,149 @@ class Ospfv2OpaqueLsa(OpenApiObject):
         self._set_property("id", value)
 
     @property
-    def router_information(self):
-        # type: () -> Ospfv2OpaqueLsaRouterInformation
-        """router_information getter
+    def unknown_tlvs(self):
+        # type: () -> Ospfv2OpaqueLsaTlvIter
+        """unknown_tlvs getter
 
-        The decoded Router Information (RI) Opaque LSA contents, Opaque Type 4. (RFC 7770 Section 2). The RI Opaque LSA is originated once per router, so everything. reported here describes the router named by the parent LSA's. header.advertising_router_id.The decoded Router Information (RI) Opaque LSA contents, Opaque Type 4. (RFC 7770 Section 2). The RI Opaque LSA is originated once per router, so everything. reported here describes the router named by the parent LSA's. header.advertising_router_id.The decoded Router Information (RI) Opaque LSA contents, Opaque Type 4. (RFC 7770 Section 2). The RI Opaque LSA is originated once per router, so everything. reported here describes the router named by the parent LSA's. header.advertising_router_id.The decoded contents of Router Information (RI) Opaque LSA, present when. tlv_information is router_information (RFC 7770 Section 2).. An RI Opaque LSA is originated per router, so its contents describe the router. identified by header.advertising_router_id. Correlate it to the Router-LSA of that. router by matching router_lsas[].header.advertising_router_id.
+        Top-level TLVs carried in the body of the Opaque LSA that are not decoded into. tlv_information, returned raw in the generic type/length/value TLV format used by. all OSPFv2 Opaque LSAs (RFC 7770 Section 2, RFC 8665, RFC 9492).
 
-        Returns: Ospfv2OpaqueLsaRouterInformation
+        Returns: Ospfv2OpaqueLsaTlvIter
         """
         return self._get_property(
-            "router_information", Ospfv2OpaqueLsaRouterInformation
+            "unknown_tlvs", Ospfv2OpaqueLsaTlvIter, self._parent, self._choice
         )
+
+
+class Ospfv2OpaqueLsaTlvInformation(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "traffic_engineering",
+                "router_information",
+                "extended_prefixes",
+                "extended_link",
+                "unknown",
+            ],
+        },
+        "traffic_engineering": {"type": "Ospfv2OpaqueLsaTrafficEngineering"},
+        "router_information": {"type": "Ospfv2OpaqueLsaRouterInformation"},
+        "extended_prefixes": {"type": "Ospfv2OpaqueLsaExtendedPrefixIter"},
+        "extended_link": {"type": "Ospfv2OpaqueLsaExtendedLink"},
+        "unknown": {"type": "Ospfv2OpaqueLsaUnknownOpaqueType"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    TRAFFIC_ENGINEERING = "traffic_engineering"  # type: str
+    ROUTER_INFORMATION = "router_information"  # type: str
+    EXTENDED_PREFIXES = "extended_prefixes"  # type: str
+    EXTENDED_LINK = "extended_link"  # type: str
+    UNKNOWN = "unknown"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2OpaqueLsaTlvInformation, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
 
     @property
     def traffic_engineering(self):
         # type: () -> Ospfv2OpaqueLsaTrafficEngineering
-        """traffic_engineering getter
+        """Factory property that returns an instance of the Ospfv2OpaqueLsaTrafficEngineering class
 
-        The decoded Traffic Engineering Opaque LSA contents, Opaque Type 1. (RFC 3630 Section 2.4). TE LSA carries single top-level TLV: either the Router. Address TLV, reported as router_address, or the Link TLV, reported as link_id plus. link_attributes.The decoded Traffic Engineering Opaque LSA contents, Opaque Type 1. (RFC 3630 Section 2.4). TE LSA carries single top-level TLV: either the Router. Address TLV, reported as router_address, or the Link TLV, reported as link_id plus. link_attributes.The decoded Traffic Engineering Opaque LSA contents, Opaque Type 1. (RFC 3630 Section 2.4). TE LSA carries single top-level TLV: either the Router. Address TLV, reported as router_address, or the Link TLV, reported as link_id plus. link_attributes.The decoded contents of Traffic Engineering Opaque LSA, present when. tlv_information is traffic_engineering (RFC 3630 Section 2.4).
+        The decoded Traffic Engineering Opaque LSA contents, Opaque Type 1. (RFC 3630 Section 2.4). TE LSA contains one top-level TLV (RFC 3630 Section 2.4):. either the Router Address TLV, reported as router_address, or the Link TLV,. reported as link_id plus link_attributes. Only one Link TLV is carried in each LSA. and each of its sub-TLVs occurs at most once (RFC 3630 Section 2.4.2), so both are. single-valued here.
 
         Returns: Ospfv2OpaqueLsaTrafficEngineering
         """
         return self._get_property(
-            "traffic_engineering", Ospfv2OpaqueLsaTrafficEngineering
+            "traffic_engineering",
+            Ospfv2OpaqueLsaTrafficEngineering,
+            self,
+            "traffic_engineering",
         )
+
+    @property
+    def router_information(self):
+        # type: () -> Ospfv2OpaqueLsaRouterInformation
+        """Factory property that returns an instance of the Ospfv2OpaqueLsaRouterInformation class
+
+        The decoded contents of one Router Information (RI) Opaque LSA instance, Opaque. Type (RFC 7770 Section 2).. Everything reported here describes the router named by the parent LSA's. header.advertising_router_id, but not necessarily all of it: router may originate. more than one RI LSA instance, for example when its capabilities do not fit in one. LSA, and each instance is separate Opaque LSA carrying its own Opaque ID. (RFC 7770 Section 2.1). This object therefore reports what one instance carried,. not the complete Router Information of the router.
+
+        Returns: Ospfv2OpaqueLsaRouterInformation
+        """
+        return self._get_property(
+            "router_information",
+            Ospfv2OpaqueLsaRouterInformation,
+            self,
+            "router_information",
+        )
+
+    @property
+    def extended_link(self):
+        # type: () -> Ospfv2OpaqueLsaExtendedLink
+        """Factory property that returns an instance of the Ospfv2OpaqueLsaExtendedLink class
+
+        A decoded OSPFv2 Extended Link TLV of an Extended Link Opaque LSA, TLV type 1. (RFC 7684 Section 3.1).. The TLV repeats the Link Type, Link ID and Link Data of the Router-LSA link it extends,. so correlate it to that link by matching link_id, and link_data when the same link_id. is advertised more than once, against router_lsas[].links[] of the Router-LSA whose. header.advertising_router_id equals that of this Opaque LSA.
+
+        Returns: Ospfv2OpaqueLsaExtendedLink
+        """
+        return self._get_property(
+            "extended_link", Ospfv2OpaqueLsaExtendedLink, self, "extended_link"
+        )
+
+    @property
+    def unknown(self):
+        # type: () -> Ospfv2OpaqueLsaUnknownOpaqueType
+        """Factory property that returns an instance of the Ospfv2OpaqueLsaUnknownOpaqueType class
+
+        The Opaque Type of an OSPFv2 Opaque LSA that this model does not decode. (RFC 5250 Section 3).. Reported as the numeric wire value, so an Opaque Type this model does not decode. is still fully identifiable, whichever the reason assigned by IANA but not. decoded here, not assigned by IANA, reserved for private use, or assigned by IANA. after this version of the model.
+
+        Returns: Ospfv2OpaqueLsaUnknownOpaqueType
+        """
+        return self._get_property(
+            "unknown", Ospfv2OpaqueLsaUnknownOpaqueType, self, "unknown"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["extended_link"], Literal["extended_prefixes"], Literal["router_information"], Literal["traffic_engineering"], Literal["unknown"]]
+        """choice getter
+
+        The Opaque Type carried in the most significant octet of the LSA's Link State ID (RFC 5250 Section 3), when this model decodes that Opaque Type; unknown otherwise.
+
+        Returns: Union[Literal["extended_link"], Literal["extended_prefixes"], Literal["router_information"], Literal["traffic_engineering"], Literal["unknown"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The Opaque Type carried in the most significant octet of the LSA's Link State ID (RFC 5250 Section 3), when this model decodes that Opaque Type; unknown otherwise.
+
+        value: Union[Literal["extended_link"], Literal["extended_prefixes"], Literal["router_information"], Literal["traffic_engineering"], Literal["unknown"]]
+        """
+        self._set_property("choice", value)
 
     @property
     def extended_prefixes(self):
         # type: () -> Ospfv2OpaqueLsaExtendedPrefixIter
         """extended_prefixes getter
 
-        The decoded OSPFv2 Extended Prefix TLVs of an Extended Prefix Opaque LSA, present. when tlv_information is extended_prefix. One Extended Prefix Opaque LSA can carry. more than one Extended Prefix TLV, each describing different prefix. (RFC 7684 Section 2.1).
+        The decoded OSPFv2 Extended Prefix TLVs of an Extended Prefix Opaque LSA.. One Extended Prefix Opaque LSA can carry more than one Extended Prefix TLV, each. describing different prefix (RFC 7684 Section 2.1).
 
         Returns: Ospfv2OpaqueLsaExtendedPrefixIter
         """
@@ -208685,34 +208755,558 @@ class Ospfv2OpaqueLsa(OpenApiObject):
             self._choice,
         )
 
+
+class Ospfv2OpaqueLsaTrafficEngineering(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "router_address": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "link_id": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "link_attributes": {"type": "Ospfv2LsaLinkTrafficEngineering"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, router_address=None, link_id=None):
+        super(Ospfv2OpaqueLsaTrafficEngineering, self).__init__()
+        self._parent = parent
+        self._set_property("router_address", router_address)
+        self._set_property("link_id", link_id)
+
+    def set(self, router_address=None, link_id=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
     @property
-    def extended_links(self):
-        # type: () -> Ospfv2OpaqueLsaExtendedLinkIter
-        """extended_links getter
+    def router_address(self):
+        # type: () -> str
+        """router_address getter
 
-        The decoded OSPFv2 Extended Link TLVs of an Extended Link Opaque LSA, present when. tlv_information is extended_link (RFC 7684 Section 3.1).
+        The stable IPv4 address of the advertising router, decoded from the Router Address. TLV, TLV type (RFC 3630 Section 2.4.1). Present instead of link_id and. link_attributes when the LSA carries Router Address TLV.
 
-        Returns: Ospfv2OpaqueLsaExtendedLinkIter
+        Returns: str
+        """
+        return self._get_property("router_address")
+
+    @router_address.setter
+    def router_address(self, value):
+        """router_address setter
+
+        The stable IPv4 address of the advertising router, decoded from the Router Address. TLV, TLV type (RFC 3630 Section 2.4.1). Present instead of link_id and. link_attributes when the LSA carries Router Address TLV.
+
+        value: str
+        """
+        self._set_property("router_address", value)
+
+    @property
+    def link_id(self):
+        # type: () -> str
+        """link_id getter
+
+        The identifier of the link the Link TLV describes, decoded from its Link ID. sub-TLV, sub-type (RFC 3630 Section 2.5.2): the Router ID of the neighbor for a. point-to-point link, or the interface address of the Designated Router for a. multi-access link. Correlate the link attributes to the link they describe by. matching router_lsas[].links[].id of the Router-LSA whose. header.advertising_router_id equals that of this Opaque LSA.
+
+        Returns: str
+        """
+        return self._get_property("link_id")
+
+    @link_id.setter
+    def link_id(self, value):
+        """link_id setter
+
+        The identifier of the link the Link TLV describes, decoded from its Link ID. sub-TLV, sub-type (RFC 3630 Section 2.5.2): the Router ID of the neighbor for a. point-to-point link, or the interface address of the Designated Router for a. multi-access link. Correlate the link attributes to the link they describe by. matching router_lsas[].links[].id of the Router-LSA whose. header.advertising_router_id equals that of this Opaque LSA.
+
+        value: str
+        """
+        self._set_property("link_id", value)
+
+    @property
+    def link_attributes(self):
+        # type: () -> Ospfv2LsaLinkTrafficEngineering
+        """link_attributes getter
+
+        Traffic engineering attributes for link, sourced from the Link TLV sub-TLVs of the. Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of. the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).. This is the attribute set of the link, not transcription of the sub-TLVs that. carried it: property here names the attribute, and the description of each names. the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.Traffic engineering attributes for link, sourced from the Link TLV sub-TLVs of the. Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of. the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).. This is the attribute set of the link, not transcription of the sub-TLVs that. carried it: property here names the attribute, and the description of each names. the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.Traffic engineering attributes for link, sourced from the Link TLV sub-TLVs of the. Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of. the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).. This is the attribute set of the link, not transcription of the sub-TLVs that. carried it: property here names the attribute, and the description of each names. the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.Traffic engineering attributes for link, sourced from the Link TLV sub-TLVs of the. Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of. the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).. This is the attribute set of the link, not transcription of the sub-TLVs that. carried it: property here names the attribute, and the description of each names. the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.The traffic engineering attributes of the link, decoded from the sub-TLVs of the. Link TLV, TLV type (RFC 3630 Section 2.5).
+
+        Returns: Ospfv2LsaLinkTrafficEngineering
+        """
+        return self._get_property("link_attributes", Ospfv2LsaLinkTrafficEngineering)
+
+
+class Ospfv2LsaLinkTrafficEngineering(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "link_type": {
+            "type": str,
+            "enum": [
+                "point_to_point",
+                "multi_access",
+            ],
+        },
+        "local_interface_ip_addresses": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "ipv4",
+        },
+        "remote_interface_ip_addresses": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "ipv4",
+        },
+        "te_metric": {
+            "type": int,
+            "format": "uint32",
+        },
+        "maximum_bandwidth": {
+            "type": float,
+            "format": "float",
+        },
+        "maximum_reservable_bandwidth": {
+            "type": float,
+            "format": "float",
+        },
+        "unreserved_bandwidths": {
+            "type": list,
+            "itemtype": float,
+            "itemformat": "float",
+        },
+        "administrative_group": {
+            "type": int,
+            "format": "uint32",
+        },
+        "extended_administrative_group": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "srlg": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "link_msd": {"type": "Ospfv2LsaMsdIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    POINT_TO_POINT = "point_to_point"  # type: str
+    MULTI_ACCESS = "multi_access"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        link_type=None,
+        local_interface_ip_addresses=None,
+        remote_interface_ip_addresses=None,
+        te_metric=None,
+        maximum_bandwidth=None,
+        maximum_reservable_bandwidth=None,
+        unreserved_bandwidths=None,
+        administrative_group=None,
+        extended_administrative_group=None,
+        srlg=None,
+    ):
+        super(Ospfv2LsaLinkTrafficEngineering, self).__init__()
+        self._parent = parent
+        self._set_property("link_type", link_type)
+        self._set_property("local_interface_ip_addresses", local_interface_ip_addresses)
+        self._set_property(
+            "remote_interface_ip_addresses", remote_interface_ip_addresses
+        )
+        self._set_property("te_metric", te_metric)
+        self._set_property("maximum_bandwidth", maximum_bandwidth)
+        self._set_property("maximum_reservable_bandwidth", maximum_reservable_bandwidth)
+        self._set_property("unreserved_bandwidths", unreserved_bandwidths)
+        self._set_property("administrative_group", administrative_group)
+        self._set_property(
+            "extended_administrative_group", extended_administrative_group
+        )
+        self._set_property("srlg", srlg)
+
+    def set(
+        self,
+        link_type=None,
+        local_interface_ip_addresses=None,
+        remote_interface_ip_addresses=None,
+        te_metric=None,
+        maximum_bandwidth=None,
+        maximum_reservable_bandwidth=None,
+        unreserved_bandwidths=None,
+        administrative_group=None,
+        extended_administrative_group=None,
+        srlg=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def link_type(self):
+        # type: () -> Union[Literal["multi_access"], Literal["point_to_point"]]
+        """link_type getter
+
+        The Link Type sub-TLV, sub-type (RFC 3630 Section 2.5.1).
+
+        Returns: Union[Literal["multi_access"], Literal["point_to_point"]]
+        """
+        return self._get_property("link_type")
+
+    @link_type.setter
+    def link_type(self, value):
+        """link_type setter
+
+        The Link Type sub-TLV, sub-type (RFC 3630 Section 2.5.1).
+
+        value: Union[Literal["multi_access"], Literal["point_to_point"]]
+        """
+        self._set_property("link_type", value)
+
+    @property
+    def local_interface_ip_addresses(self):
+        # type: () -> List[str]
+        """local_interface_ip_addresses getter
+
+        The Local Interface IP Address sub-TLV, sub-type (RFC 3630 Section 2.5.3).
+
+        Returns: List[str]
+        """
+        return self._get_property("local_interface_ip_addresses")
+
+    @local_interface_ip_addresses.setter
+    def local_interface_ip_addresses(self, value):
+        """local_interface_ip_addresses setter
+
+        The Local Interface IP Address sub-TLV, sub-type (RFC 3630 Section 2.5.3).
+
+        value: List[str]
+        """
+        self._set_property("local_interface_ip_addresses", value)
+
+    @property
+    def remote_interface_ip_addresses(self):
+        # type: () -> List[str]
+        """remote_interface_ip_addresses getter
+
+        The Remote Interface IP Address sub-TLV, sub-type (RFC 3630 Section 2.5.4).
+
+        Returns: List[str]
+        """
+        return self._get_property("remote_interface_ip_addresses")
+
+    @remote_interface_ip_addresses.setter
+    def remote_interface_ip_addresses(self, value):
+        """remote_interface_ip_addresses setter
+
+        The Remote Interface IP Address sub-TLV, sub-type (RFC 3630 Section 2.5.4).
+
+        value: List[str]
+        """
+        self._set_property("remote_interface_ip_addresses", value)
+
+    @property
+    def te_metric(self):
+        # type: () -> int
+        """te_metric getter
+
+        The Traffic Engineering Metric sub-TLV, sub-type (RFC 3630 Section 2.5.5).
+
+        Returns: int
+        """
+        return self._get_property("te_metric")
+
+    @te_metric.setter
+    def te_metric(self, value):
+        """te_metric setter
+
+        The Traffic Engineering Metric sub-TLV, sub-type (RFC 3630 Section 2.5.5).
+
+        value: int
+        """
+        self._set_property("te_metric", value)
+
+    @property
+    def maximum_bandwidth(self):
+        # type: () -> float
+        """maximum_bandwidth getter
+
+        The Maximum Bandwidth sub-TLV, sub-type 6, in bytes per second. (RFC 3630 Section 2.5.6).
+
+        Returns: float
+        """
+        return self._get_property("maximum_bandwidth")
+
+    @maximum_bandwidth.setter
+    def maximum_bandwidth(self, value):
+        """maximum_bandwidth setter
+
+        The Maximum Bandwidth sub-TLV, sub-type 6, in bytes per second. (RFC 3630 Section 2.5.6).
+
+        value: float
+        """
+        self._set_property("maximum_bandwidth", value)
+
+    @property
+    def maximum_reservable_bandwidth(self):
+        # type: () -> float
+        """maximum_reservable_bandwidth getter
+
+        The Maximum Reservable Bandwidth sub-TLV, sub-type 7, in bytes per second. (RFC 3630 Section 2.5.7).
+
+        Returns: float
+        """
+        return self._get_property("maximum_reservable_bandwidth")
+
+    @maximum_reservable_bandwidth.setter
+    def maximum_reservable_bandwidth(self, value):
+        """maximum_reservable_bandwidth setter
+
+        The Maximum Reservable Bandwidth sub-TLV, sub-type 7, in bytes per second. (RFC 3630 Section 2.5.7).
+
+        value: float
+        """
+        self._set_property("maximum_reservable_bandwidth", value)
+
+    @property
+    def unreserved_bandwidths(self):
+        # type: () -> List[float]
+        """unreserved_bandwidths getter
+
+        The Unreserved Bandwidth sub-TLV, sub-type 8: bandwidth reservable at each of the. eight priority levels 0-7, in bytes per second (RFC 3630 Section 2.5.8).
+
+        Returns: List[float]
+        """
+        return self._get_property("unreserved_bandwidths")
+
+    @unreserved_bandwidths.setter
+    def unreserved_bandwidths(self, value):
+        """unreserved_bandwidths setter
+
+        The Unreserved Bandwidth sub-TLV, sub-type 8: bandwidth reservable at each of the. eight priority levels 0-7, in bytes per second (RFC 3630 Section 2.5.8).
+
+        value: List[float]
+        """
+        self._set_property("unreserved_bandwidths", value)
+
+    @property
+    def administrative_group(self):
+        # type: () -> int
+        """administrative_group getter
+
+        The Administrative Group sub-TLV bitmask, sourced from either the TE Link TLV. sub-type (RFC 3630 Section 2.5.9) or the OSPFv2 Extended Link TLV sub-type 19. (RFC 9492 Section 6.2).
+
+        Returns: int
+        """
+        return self._get_property("administrative_group")
+
+    @administrative_group.setter
+    def administrative_group(self, value):
+        """administrative_group setter
+
+        The Administrative Group sub-TLV bitmask, sourced from either the TE Link TLV. sub-type (RFC 3630 Section 2.5.9) or the OSPFv2 Extended Link TLV sub-type 19. (RFC 9492 Section 6.2).
+
+        value: int
+        """
+        self._set_property("administrative_group", value)
+
+    @property
+    def extended_administrative_group(self):
+        # type: () -> List[int]
+        """extended_administrative_group getter
+
+        The Extended Administrative Group, sourced from either the TE Link TLV sub-type 26. (RFC 7308) or the OSPFv2 Extended Link TLV sub-type 20 (RFC 9492 Section 6.3), as one. or more additional 32-bit administrative-group words beyond administrative_group.
+
+        Returns: List[int]
+        """
+        return self._get_property("extended_administrative_group")
+
+    @extended_administrative_group.setter
+    def extended_administrative_group(self, value):
+        """extended_administrative_group setter
+
+        The Extended Administrative Group, sourced from either the TE Link TLV sub-type 26. (RFC 7308) or the OSPFv2 Extended Link TLV sub-type 20 (RFC 9492 Section 6.3), as one. or more additional 32-bit administrative-group words beyond administrative_group.
+
+        value: List[int]
+        """
+        self._set_property("extended_administrative_group", value)
+
+    @property
+    def srlg(self):
+        # type: () -> List[int]
+        """srlg getter
+
+        The Shared Risk Link Group (SRLG) membership of this link, sourced from either the TE. Link TLV sub-type 16 (RFC 4203 Section 1.3) or the OSPFv2 Extended Link TLV sub-type 11. (RFC 9492 Section 6.1).
+
+        Returns: List[int]
+        """
+        return self._get_property("srlg")
+
+    @srlg.setter
+    def srlg(self, value):
+        """srlg setter
+
+        The Shared Risk Link Group (SRLG) membership of this link, sourced from either the TE. Link TLV sub-type 16 (RFC 4203 Section 1.3) or the OSPFv2 Extended Link TLV sub-type 11. (RFC 9492 Section 6.1).
+
+        value: List[int]
+        """
+        self._set_property("srlg", value)
+
+    @property
+    def link_msd(self):
+        # type: () -> Ospfv2LsaMsdIter
+        """link_msd getter
+
+        One or more Maximum SID Depth (MSD) values for this link, decoded from the Link MSD sub-TLV of the OSPFv2 Extended Link TLV, sub-type (RFC 8476 Section 3).
+
+        Returns: Ospfv2LsaMsdIter
         """
         return self._get_property(
-            "extended_links",
-            Ospfv2OpaqueLsaExtendedLinkIter,
-            self._parent,
-            self._choice,
+            "link_msd", Ospfv2LsaMsdIter, self._parent, self._choice
         )
+
+
+class Ospfv2LsaMsd(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "msd_type": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "msd_value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, msd_type=None, msd_value=None):
+        super(Ospfv2LsaMsd, self).__init__()
+        self._parent = parent
+        self._set_property("msd_type", msd_type)
+        self._set_property("msd_value", msd_value)
+
+    def set(self, msd_type=None, msd_value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
 
     @property
-    def unknown_tlvs(self):
-        # type: () -> Ospfv2OpaqueLsaTlvIter
-        """unknown_tlvs getter
+    def msd_type(self):
+        # type: () -> int
+        """msd_type getter
 
-        TLVs carried in the body of the Opaque LSA that are not decoded into. router_information, traffic_engineering, extended_prefixes or extended_links,. returned raw in the generic type/length/value TLV format used by all OSPFv2 Opaque. LSAs (RFC 7770 Section 2, RFC 8665, RFC 9492).
+        The MSD-Type, identifying the kind of Maximum SID Depth being advertised (IGP MSD-Types registry, RFC 8491).
 
-        Returns: Ospfv2OpaqueLsaTlvIter
+        Returns: int
         """
-        return self._get_property(
-            "unknown_tlvs", Ospfv2OpaqueLsaTlvIter, self._parent, self._choice
-        )
+        return self._get_property("msd_type")
+
+    @msd_type.setter
+    def msd_type(self, value):
+        """msd_type setter
+
+        The MSD-Type, identifying the kind of Maximum SID Depth being advertised (IGP MSD-Types registry, RFC 8491).
+
+        value: int
+        """
+        self._set_property("msd_type", value)
+
+    @property
+    def msd_value(self):
+        # type: () -> int
+        """msd_value getter
+
+        The MSD-Value: the maximum number of SIDs the router or link supports in the SID. stack. value of indicates no capability to impose any stack depth.
+
+        Returns: int
+        """
+        return self._get_property("msd_value")
+
+    @msd_value.setter
+    def msd_value(self, value):
+        """msd_value setter
+
+        The MSD-Value: the maximum number of SIDs the router or link supports in the SID. stack. value of indicates no capability to impose any stack depth.
+
+        value: int
+        """
+        self._set_property("msd_value", value)
+
+
+class Ospfv2LsaMsdIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2LsaMsdIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2LsaMsd]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2LsaMsdIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2LsaMsd
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2LsaMsd
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2LsaMsd):
+            raise Exception("Item is not an instance of Ospfv2LsaMsd")
+
+    def msd(self, msd_type=None, msd_value=None):
+        # type: (int,int) -> Ospfv2LsaMsdIter
+        """Factory method that creates an instance of the Ospfv2LsaMsd class
+
+        A single (MSD-Type, MSD-Value) pair from Node MSD or Link MSD TLV/sub-TLV (RFC 8476 Sections 2, 3).
+
+        Returns: Ospfv2LsaMsdIter
+        """
+        item = Ospfv2LsaMsd(parent=self._parent, msd_type=msd_type, msd_value=msd_value)
+        self._add(item)
+        return self
+
+    def add(self, msd_type=None, msd_value=None):
+        # type: (int,int) -> Ospfv2LsaMsd
+        """Add method that creates and returns an instance of the Ospfv2LsaMsd class
+
+        A single (MSD-Type, MSD-Value) pair from Node MSD or Link MSD TLV/sub-TLV (RFC 8476 Sections 2, 3).
+
+        Returns: Ospfv2LsaMsd
+        """
+        item = Ospfv2LsaMsd(parent=self._parent, msd_type=msd_type, msd_value=msd_value)
+        self._add(item)
+        return item
 
 
 class Ospfv2OpaqueLsaRouterInformation(OpenApiObject):
@@ -208739,7 +209333,7 @@ class Ospfv2OpaqueLsaRouterInformation(OpenApiObject):
         # type: () -> Ospfv2LsaSrCapability
         """sr_capability getter
 
-        The Segment Routing capability learned from the Router Information (RI) Opaque LSA:. the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV.. Reference: https://datatracker.ietf.org/doc/html/rfc8665.The Segment Routing capability learned from the Router Information (RI) Opaque LSA:. the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV.. Reference: https://datatracker.ietf.org/doc/html/rfc8665.The Segment Routing capability learned from the Router Information (RI) Opaque LSA:. the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV.. Reference: https://datatracker.ietf.org/doc/html/rfc8665.The Segment Routing capability of the advertising router, decoded from the. SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV. (RFC 8665 Sections 3.1, 3.2, 3.3).
+        The Segment Routing capability learned from the Router Information (RI) Opaque LSA:. the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV.. Reference: https://datatracker.ietf.org/doc/html/rfc8665.The Segment Routing capability learned from the Router Information (RI) Opaque LSA:. the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV.. Reference: https://datatracker.ietf.org/doc/html/rfc8665.The Segment Routing capability learned from the Router Information (RI) Opaque LSA:. the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV.. Reference: https://datatracker.ietf.org/doc/html/rfc8665.The Segment Routing capability learned from the Router Information (RI) Opaque LSA:. the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV.. Reference: https://datatracker.ietf.org/doc/html/rfc8665.The Segment Routing capability of the advertising router, decoded from the. SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV. (RFC 8665 Sections 3.1, 3.2, 3.3).
 
         Returns: Ospfv2LsaSrCapability
         """
@@ -208750,7 +209344,7 @@ class Ospfv2OpaqueLsaRouterInformation(OpenApiObject):
         # type: () -> Ospfv2LsaRiCapabilities
         """ri_capabilities getter
 
-        The Router Informational Capabilities (TLV type 1) and Router Functional Capabilities. (TLV type 2) learned from the Router Information (RI) Opaque LSA (RFC 7770 Sections 2.5,. 2.6).The Router Informational Capabilities (TLV type 1) and Router Functional Capabilities. (TLV type 2) learned from the Router Information (RI) Opaque LSA (RFC 7770 Sections 2.5,. 2.6).The Router Informational Capabilities (TLV type 1) and Router Functional Capabilities. (TLV type 2) learned from the Router Information (RI) Opaque LSA (RFC 7770 Sections 2.5,. 2.6).The Router Informational and Functional Capabilities of the advertising router,. decoded from the Router Informational Capabilities TLV and the Router Functional. Capabilities TLV (RFC 7770 Sections 2.5, 2.6).
+        The Router Informational Capabilities (TLV type 1) and Router Functional Capabilities. (TLV type 2) learned from the Router Information (RI) Opaque LSA (RFC 7770 Sections 2.5,. 2.6).The Router Informational Capabilities (TLV type 1) and Router Functional Capabilities. (TLV type 2) learned from the Router Information (RI) Opaque LSA (RFC 7770 Sections 2.5,. 2.6).The Router Informational Capabilities (TLV type 1) and Router Functional Capabilities. (TLV type 2) learned from the Router Information (RI) Opaque LSA (RFC 7770 Sections 2.5,. 2.6).The Router Informational Capabilities (TLV type 1) and Router Functional Capabilities. (TLV type 2) learned from the Router Information (RI) Opaque LSA (RFC 7770 Sections 2.5,. 2.6).The Router Informational and Functional Capabilities of the advertising router,. decoded from the Router Informational Capabilities TLV and the Router Functional. Capabilities TLV (RFC 7770 Sections 2.5, 2.6).
 
         Returns: Ospfv2LsaRiCapabilities
         """
@@ -209318,559 +209912,6 @@ class Ospfv2LsaRiCapabilities(OpenApiObject):
         self._set_property("functional_capabilities", value)
 
 
-class Ospfv2LsaMsd(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "msd_type": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 255,
-        },
-        "msd_value": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 255,
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, msd_type=None, msd_value=None):
-        super(Ospfv2LsaMsd, self).__init__()
-        self._parent = parent
-        self._set_property("msd_type", msd_type)
-        self._set_property("msd_value", msd_value)
-
-    def set(self, msd_type=None, msd_value=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def msd_type(self):
-        # type: () -> int
-        """msd_type getter
-
-        The MSD-Type, identifying the kind of Maximum SID Depth being advertised (IGP MSD-Types registry, RFC 8491).
-
-        Returns: int
-        """
-        return self._get_property("msd_type")
-
-    @msd_type.setter
-    def msd_type(self, value):
-        """msd_type setter
-
-        The MSD-Type, identifying the kind of Maximum SID Depth being advertised (IGP MSD-Types registry, RFC 8491).
-
-        value: int
-        """
-        self._set_property("msd_type", value)
-
-    @property
-    def msd_value(self):
-        # type: () -> int
-        """msd_value getter
-
-        The MSD-Value: the maximum number of SIDs the router or link supports in the SID. stack. value of indicates no capability to impose any stack depth.
-
-        Returns: int
-        """
-        return self._get_property("msd_value")
-
-    @msd_value.setter
-    def msd_value(self, value):
-        """msd_value setter
-
-        The MSD-Value: the maximum number of SIDs the router or link supports in the SID. stack. value of indicates no capability to impose any stack depth.
-
-        value: int
-        """
-        self._set_property("msd_value", value)
-
-
-class Ospfv2LsaMsdIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(Ospfv2LsaMsdIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[Ospfv2LsaMsd]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> Ospfv2LsaMsdIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> Ospfv2LsaMsd
-        return self._next()
-
-    def next(self):
-        # type: () -> Ospfv2LsaMsd
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, Ospfv2LsaMsd):
-            raise Exception("Item is not an instance of Ospfv2LsaMsd")
-
-    def msd(self, msd_type=None, msd_value=None):
-        # type: (int,int) -> Ospfv2LsaMsdIter
-        """Factory method that creates an instance of the Ospfv2LsaMsd class
-
-        A single (MSD-Type, MSD-Value) pair from Node MSD or Link MSD TLV/sub-TLV (RFC 8476 Sections 2, 3).
-
-        Returns: Ospfv2LsaMsdIter
-        """
-        item = Ospfv2LsaMsd(parent=self._parent, msd_type=msd_type, msd_value=msd_value)
-        self._add(item)
-        return self
-
-    def add(self, msd_type=None, msd_value=None):
-        # type: (int,int) -> Ospfv2LsaMsd
-        """Add method that creates and returns an instance of the Ospfv2LsaMsd class
-
-        A single (MSD-Type, MSD-Value) pair from Node MSD or Link MSD TLV/sub-TLV (RFC 8476 Sections 2, 3).
-
-        Returns: Ospfv2LsaMsd
-        """
-        item = Ospfv2LsaMsd(parent=self._parent, msd_type=msd_type, msd_value=msd_value)
-        self._add(item)
-        return item
-
-
-class Ospfv2OpaqueLsaTrafficEngineering(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "router_address": {
-            "type": str,
-            "format": "ipv4",
-        },
-        "link_id": {
-            "type": str,
-            "format": "ipv4",
-        },
-        "link_attributes": {"type": "Ospfv2LsaLinkTrafficEngineering"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, router_address=None, link_id=None):
-        super(Ospfv2OpaqueLsaTrafficEngineering, self).__init__()
-        self._parent = parent
-        self._set_property("router_address", router_address)
-        self._set_property("link_id", link_id)
-
-    def set(self, router_address=None, link_id=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def router_address(self):
-        # type: () -> str
-        """router_address getter
-
-        The stable IPv4 address of the advertising router, decoded from the Router Address. TLV, TLV type (RFC 3630 Section 2.4.1). Present instead of link_id and. link_attributes when the LSA carries Router Address TLV.
-
-        Returns: str
-        """
-        return self._get_property("router_address")
-
-    @router_address.setter
-    def router_address(self, value):
-        """router_address setter
-
-        The stable IPv4 address of the advertising router, decoded from the Router Address. TLV, TLV type (RFC 3630 Section 2.4.1). Present instead of link_id and. link_attributes when the LSA carries Router Address TLV.
-
-        value: str
-        """
-        self._set_property("router_address", value)
-
-    @property
-    def link_id(self):
-        # type: () -> str
-        """link_id getter
-
-        The identifier of the link the Link TLV describes, decoded from its Link ID. sub-TLV, sub-type (RFC 3630 Section 2.5.2): the Router ID of the neighbor for a. point-to-point link, or the interface address of the Designated Router for a. multi-access link. Correlate the link attributes to the link they describe by. matching router_lsas[].links[].id of the Router-LSA whose. header.advertising_router_id equals that of this Opaque LSA.
-
-        Returns: str
-        """
-        return self._get_property("link_id")
-
-    @link_id.setter
-    def link_id(self, value):
-        """link_id setter
-
-        The identifier of the link the Link TLV describes, decoded from its Link ID. sub-TLV, sub-type (RFC 3630 Section 2.5.2): the Router ID of the neighbor for a. point-to-point link, or the interface address of the Designated Router for a. multi-access link. Correlate the link attributes to the link they describe by. matching router_lsas[].links[].id of the Router-LSA whose. header.advertising_router_id equals that of this Opaque LSA.
-
-        value: str
-        """
-        self._set_property("link_id", value)
-
-    @property
-    def link_attributes(self):
-        # type: () -> Ospfv2LsaLinkTrafficEngineering
-        """link_attributes getter
-
-        Traffic engineering attributes for link, decoded from the Link TLV sub-TLVs of the. Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of. the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).Traffic engineering attributes for link, decoded from the Link TLV sub-TLVs of the. Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of. the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).Traffic engineering attributes for link, decoded from the Link TLV sub-TLVs of the. Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of. the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).The traffic engineering attributes of the link, decoded from the sub-TLVs of the. Link TLV, TLV type (RFC 3630 Section 2.5).
-
-        Returns: Ospfv2LsaLinkTrafficEngineering
-        """
-        return self._get_property("link_attributes", Ospfv2LsaLinkTrafficEngineering)
-
-
-class Ospfv2LsaLinkTrafficEngineering(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "link_type": {
-            "type": str,
-            "enum": [
-                "point_to_point",
-                "multi_access",
-            ],
-        },
-        "local_interface_ip_addresses": {
-            "type": list,
-            "itemtype": str,
-            "itemformat": "ipv4",
-        },
-        "remote_interface_ip_addresses": {
-            "type": list,
-            "itemtype": str,
-            "itemformat": "ipv4",
-        },
-        "te_metric": {
-            "type": int,
-            "format": "uint32",
-        },
-        "maximum_bandwidth": {
-            "type": float,
-            "format": "float",
-        },
-        "maximum_reservable_bandwidth": {
-            "type": float,
-            "format": "float",
-        },
-        "unreserved_bandwidths": {
-            "type": list,
-            "itemtype": float,
-            "itemformat": "float",
-        },
-        "administrative_group": {
-            "type": int,
-            "format": "uint32",
-        },
-        "extended_administrative_group": {
-            "type": list,
-            "itemtype": int,
-            "itemformat": "uint32",
-        },
-        "srlg": {
-            "type": list,
-            "itemtype": int,
-            "itemformat": "uint32",
-        },
-        "link_msd": {"type": "Ospfv2LsaMsdIter"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    POINT_TO_POINT = "point_to_point"  # type: str
-    MULTI_ACCESS = "multi_access"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self,
-        parent=None,
-        link_type=None,
-        local_interface_ip_addresses=None,
-        remote_interface_ip_addresses=None,
-        te_metric=None,
-        maximum_bandwidth=None,
-        maximum_reservable_bandwidth=None,
-        unreserved_bandwidths=None,
-        administrative_group=None,
-        extended_administrative_group=None,
-        srlg=None,
-    ):
-        super(Ospfv2LsaLinkTrafficEngineering, self).__init__()
-        self._parent = parent
-        self._set_property("link_type", link_type)
-        self._set_property("local_interface_ip_addresses", local_interface_ip_addresses)
-        self._set_property(
-            "remote_interface_ip_addresses", remote_interface_ip_addresses
-        )
-        self._set_property("te_metric", te_metric)
-        self._set_property("maximum_bandwidth", maximum_bandwidth)
-        self._set_property("maximum_reservable_bandwidth", maximum_reservable_bandwidth)
-        self._set_property("unreserved_bandwidths", unreserved_bandwidths)
-        self._set_property("administrative_group", administrative_group)
-        self._set_property(
-            "extended_administrative_group", extended_administrative_group
-        )
-        self._set_property("srlg", srlg)
-
-    def set(
-        self,
-        link_type=None,
-        local_interface_ip_addresses=None,
-        remote_interface_ip_addresses=None,
-        te_metric=None,
-        maximum_bandwidth=None,
-        maximum_reservable_bandwidth=None,
-        unreserved_bandwidths=None,
-        administrative_group=None,
-        extended_administrative_group=None,
-        srlg=None,
-    ):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def link_type(self):
-        # type: () -> Union[Literal["multi_access"], Literal["point_to_point"]]
-        """link_type getter
-
-        The Link Type sub-TLV, sub-type (RFC 3630 Section 2.5.1).
-
-        Returns: Union[Literal["multi_access"], Literal["point_to_point"]]
-        """
-        return self._get_property("link_type")
-
-    @link_type.setter
-    def link_type(self, value):
-        """link_type setter
-
-        The Link Type sub-TLV, sub-type (RFC 3630 Section 2.5.1).
-
-        value: Union[Literal["multi_access"], Literal["point_to_point"]]
-        """
-        self._set_property("link_type", value)
-
-    @property
-    def local_interface_ip_addresses(self):
-        # type: () -> List[str]
-        """local_interface_ip_addresses getter
-
-        The Local Interface IP Address sub-TLV, sub-type (RFC 3630 Section 2.5.3).
-
-        Returns: List[str]
-        """
-        return self._get_property("local_interface_ip_addresses")
-
-    @local_interface_ip_addresses.setter
-    def local_interface_ip_addresses(self, value):
-        """local_interface_ip_addresses setter
-
-        The Local Interface IP Address sub-TLV, sub-type (RFC 3630 Section 2.5.3).
-
-        value: List[str]
-        """
-        self._set_property("local_interface_ip_addresses", value)
-
-    @property
-    def remote_interface_ip_addresses(self):
-        # type: () -> List[str]
-        """remote_interface_ip_addresses getter
-
-        The Remote Interface IP Address sub-TLV, sub-type (RFC 3630 Section 2.5.4).
-
-        Returns: List[str]
-        """
-        return self._get_property("remote_interface_ip_addresses")
-
-    @remote_interface_ip_addresses.setter
-    def remote_interface_ip_addresses(self, value):
-        """remote_interface_ip_addresses setter
-
-        The Remote Interface IP Address sub-TLV, sub-type (RFC 3630 Section 2.5.4).
-
-        value: List[str]
-        """
-        self._set_property("remote_interface_ip_addresses", value)
-
-    @property
-    def te_metric(self):
-        # type: () -> int
-        """te_metric getter
-
-        The Traffic Engineering Metric sub-TLV, sub-type (RFC 3630 Section 2.5.5).
-
-        Returns: int
-        """
-        return self._get_property("te_metric")
-
-    @te_metric.setter
-    def te_metric(self, value):
-        """te_metric setter
-
-        The Traffic Engineering Metric sub-TLV, sub-type (RFC 3630 Section 2.5.5).
-
-        value: int
-        """
-        self._set_property("te_metric", value)
-
-    @property
-    def maximum_bandwidth(self):
-        # type: () -> float
-        """maximum_bandwidth getter
-
-        The Maximum Bandwidth sub-TLV, sub-type 6, in bytes per second. (RFC 3630 Section 2.5.6).
-
-        Returns: float
-        """
-        return self._get_property("maximum_bandwidth")
-
-    @maximum_bandwidth.setter
-    def maximum_bandwidth(self, value):
-        """maximum_bandwidth setter
-
-        The Maximum Bandwidth sub-TLV, sub-type 6, in bytes per second. (RFC 3630 Section 2.5.6).
-
-        value: float
-        """
-        self._set_property("maximum_bandwidth", value)
-
-    @property
-    def maximum_reservable_bandwidth(self):
-        # type: () -> float
-        """maximum_reservable_bandwidth getter
-
-        The Maximum Reservable Bandwidth sub-TLV, sub-type 7, in bytes per second. (RFC 3630 Section 2.5.7).
-
-        Returns: float
-        """
-        return self._get_property("maximum_reservable_bandwidth")
-
-    @maximum_reservable_bandwidth.setter
-    def maximum_reservable_bandwidth(self, value):
-        """maximum_reservable_bandwidth setter
-
-        The Maximum Reservable Bandwidth sub-TLV, sub-type 7, in bytes per second. (RFC 3630 Section 2.5.7).
-
-        value: float
-        """
-        self._set_property("maximum_reservable_bandwidth", value)
-
-    @property
-    def unreserved_bandwidths(self):
-        # type: () -> List[float]
-        """unreserved_bandwidths getter
-
-        The Unreserved Bandwidth sub-TLV, sub-type 8: bandwidth reservable at each of the. eight priority levels 0-7, in bytes per second (RFC 3630 Section 2.5.8).
-
-        Returns: List[float]
-        """
-        return self._get_property("unreserved_bandwidths")
-
-    @unreserved_bandwidths.setter
-    def unreserved_bandwidths(self, value):
-        """unreserved_bandwidths setter
-
-        The Unreserved Bandwidth sub-TLV, sub-type 8: bandwidth reservable at each of the. eight priority levels 0-7, in bytes per second (RFC 3630 Section 2.5.8).
-
-        value: List[float]
-        """
-        self._set_property("unreserved_bandwidths", value)
-
-    @property
-    def administrative_group(self):
-        # type: () -> int
-        """administrative_group getter
-
-        The Administrative Group sub-TLV bitmask, sourced from either the TE Link TLV. sub-type (RFC 3630 Section 2.5.9) or the OSPFv2 Extended Link TLV sub-type 19. (RFC 9492 Section 6.2).
-
-        Returns: int
-        """
-        return self._get_property("administrative_group")
-
-    @administrative_group.setter
-    def administrative_group(self, value):
-        """administrative_group setter
-
-        The Administrative Group sub-TLV bitmask, sourced from either the TE Link TLV. sub-type (RFC 3630 Section 2.5.9) or the OSPFv2 Extended Link TLV sub-type 19. (RFC 9492 Section 6.2).
-
-        value: int
-        """
-        self._set_property("administrative_group", value)
-
-    @property
-    def extended_administrative_group(self):
-        # type: () -> List[int]
-        """extended_administrative_group getter
-
-        The Extended Administrative Group, sourced from either the TE Link TLV sub-type 26. (RFC 7308) or the OSPFv2 Extended Link TLV sub-type 20 (RFC 9492 Section 6.3), as one. or more additional 32-bit administrative-group words beyond administrative_group.
-
-        Returns: List[int]
-        """
-        return self._get_property("extended_administrative_group")
-
-    @extended_administrative_group.setter
-    def extended_administrative_group(self, value):
-        """extended_administrative_group setter
-
-        The Extended Administrative Group, sourced from either the TE Link TLV sub-type 26. (RFC 7308) or the OSPFv2 Extended Link TLV sub-type 20 (RFC 9492 Section 6.3), as one. or more additional 32-bit administrative-group words beyond administrative_group.
-
-        value: List[int]
-        """
-        self._set_property("extended_administrative_group", value)
-
-    @property
-    def srlg(self):
-        # type: () -> List[int]
-        """srlg getter
-
-        The Shared Risk Link Group (SRLG) membership of this link, sourced from either the TE. Link TLV sub-type 16 (RFC 4203 Section 1.3) or the OSPFv2 Extended Link TLV sub-type 11. (RFC 9492 Section 6.1).
-
-        Returns: List[int]
-        """
-        return self._get_property("srlg")
-
-    @srlg.setter
-    def srlg(self, value):
-        """srlg setter
-
-        The Shared Risk Link Group (SRLG) membership of this link, sourced from either the TE. Link TLV sub-type 16 (RFC 4203 Section 1.3) or the OSPFv2 Extended Link TLV sub-type 11. (RFC 9492 Section 6.1).
-
-        value: List[int]
-        """
-        self._set_property("srlg", value)
-
-    @property
-    def link_msd(self):
-        # type: () -> Ospfv2LsaMsdIter
-        """link_msd getter
-
-        One or more Maximum SID Depth (MSD) values for this link, decoded from the Link MSD sub-TLV of the OSPFv2 Extended Link TLV, sub-type (RFC 8476 Section 3).
-
-        Returns: Ospfv2LsaMsdIter
-        """
-        return self._get_property(
-            "link_msd", Ospfv2LsaMsdIter, self._parent, self._choice
-        )
-
-
 class Ospfv2OpaqueLsaExtendedPrefix(OpenApiObject):
     __slots__ = "_parent"
 
@@ -209884,7 +209925,7 @@ class Ospfv2OpaqueLsaExtendedPrefix(OpenApiObject):
             "format": "uint32",
             "maximum": 32,
         },
-        "prefix_sid": {"type": "Ospfv2LsaPrefixSid"},
+        "prefix_sids": {"type": "Ospfv2LsaPrefixSidIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -209947,31 +209988,37 @@ class Ospfv2OpaqueLsaExtendedPrefix(OpenApiObject):
         self._set_property("prefix_length", value)
 
     @property
-    def prefix_sid(self):
-        # type: () -> Ospfv2LsaPrefixSid
-        """prefix_sid getter
+    def prefix_sids(self):
+        # type: () -> Ospfv2LsaPrefixSidIter
+        """prefix_sids getter
 
-        The learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of. the Extended Prefix Opaque LSA (RFC 8665).The learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of. the Extended Prefix Opaque LSA (RFC 8665).The learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of. the Extended Prefix Opaque LSA (RFC 8665).The Prefix-SID advertised for this prefix, decoded from the Prefix-SID sub-TLV,. sub-type (RFC 8665 Section 5).
+        The Prefix-SIDs advertised for this prefix, decoded from the Prefix-SID. sub-TLV, sub-type (RFC 8665 Section 5). The Prefix-SID sub-TLV may appear. more than once in the parent TLV, one per Segment Routing algorithm, so this. is list; each entry names its algorithm.
 
-        Returns: Ospfv2LsaPrefixSid
+        Returns: Ospfv2LsaPrefixSidIter
         """
-        return self._get_property("prefix_sid", Ospfv2LsaPrefixSid)
+        return self._get_property(
+            "prefix_sids", Ospfv2LsaPrefixSidIter, self._parent, self._choice
+        )
 
 
 class Ospfv2LsaPrefixSid(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "sids": {
-            "type": list,
-            "itemtype": int,
-            "itemformat": "uint32",
+        "sid": {
+            "type": int,
+            "format": "uint32",
         },
         "flags": {"type": "Ospfv2LsaPrefixSidFlags"},
         "algorithm": {
             "type": int,
             "format": "uint32",
             "maximum": 255,
+        },
+        "mt_id": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 127,
         },
     }  # type: Dict[str, str]
 
@@ -209981,37 +210028,38 @@ class Ospfv2LsaPrefixSid(OpenApiObject):
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, sids=None, algorithm=None):
+    def __init__(self, parent=None, sid=None, algorithm=None, mt_id=None):
         super(Ospfv2LsaPrefixSid, self).__init__()
         self._parent = parent
-        self._set_property("sids", sids)
+        self._set_property("sid", sid)
         self._set_property("algorithm", algorithm)
+        self._set_property("mt_id", mt_id)
 
-    def set(self, sids=None, algorithm=None):
+    def set(self, sid=None, algorithm=None, mt_id=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
 
     @property
-    def sids(self):
-        # type: () -> List[int]
-        """sids getter
+    def sid(self):
+        # type: () -> int
+        """sid getter
 
-        One or more SID/Label values or indices associated with the IGP Prefix segment attached to the prefix.
+        The SID/Label value or index associated with the IGP Prefix segment attached to the prefix. flags.v_flag tells which of the two it is.
 
-        Returns: List[int]
+        Returns: int
         """
-        return self._get_property("sids")
+        return self._get_property("sid")
 
-    @sids.setter
-    def sids(self, value):
-        """sids setter
+    @sid.setter
+    def sid(self, value):
+        """sid setter
 
-        One or more SID/Label values or indices associated with the IGP Prefix segment attached to the prefix.
+        The SID/Label value or index associated with the IGP Prefix segment attached to the prefix. flags.v_flag tells which of the two it is.
 
-        value: List[int]
+        value: int
         """
-        self._set_property("sids", value)
+        self._set_property("sid", value)
 
     @property
     def flags(self):
@@ -210029,7 +210077,7 @@ class Ospfv2LsaPrefixSid(OpenApiObject):
         # type: () -> int
         """algorithm getter
 
-        The Segment Routing algorithm the Prefix-SID is associated with.
+        The Segment Routing algorithm the Prefix-SID is associated with, decoded from the Algorithm field (RFC 8665 Section 5).
 
         Returns: int
         """
@@ -210039,11 +210087,32 @@ class Ospfv2LsaPrefixSid(OpenApiObject):
     def algorithm(self, value):
         """algorithm setter
 
-        The Segment Routing algorithm the Prefix-SID is associated with.
+        The Segment Routing algorithm the Prefix-SID is associated with, decoded from the Algorithm field (RFC 8665 Section 5).
 
         value: int
         """
         self._set_property("algorithm", value)
+
+    @property
+    def mt_id(self):
+        # type: () -> int
+        """mt_id getter
+
+        The Multi-Topology ID the Prefix-SID applies to, decoded from the MT-ID field. (RFC 8665 Section 5, RFC 4915). Together with prefix and algorithm it. identifies the Prefix-SID: RFC 8665 Section requires all Prefix-SIDs. advertised for the same prefix, topology and algorithm to be ignored, so the. entries of prefix_sids are distinguished by this field and algorithm.. The MT-ID field is one octet wide on the wire, but RFC 4915 Section 3.7. defines only 0-127 as valid MT-ID values 128-255 are invalid and SHOULD be. ignored on receipt, so value in that range is never reported here. The. maximum matches the range statement on the equivalent mt-id leaf of the IETF. OSPF Segment Routing YANG model.
+
+        Returns: int
+        """
+        return self._get_property("mt_id")
+
+    @mt_id.setter
+    def mt_id(self, value):
+        """mt_id setter
+
+        The Multi-Topology ID the Prefix-SID applies to, decoded from the MT-ID field. (RFC 8665 Section 5, RFC 4915). Together with prefix and algorithm it. identifies the Prefix-SID: RFC 8665 Section requires all Prefix-SIDs. advertised for the same prefix, topology and algorithm to be ignored, so the. entries of prefix_sids are distinguished by this field and algorithm.. The MT-ID field is one octet wide on the wire, but RFC 4915 Section 3.7. defines only 0-127 as valid MT-ID values 128-255 are invalid and SHOULD be. ignored on receipt, so value in that range is never reported here. The. maximum matches the range statement on the equivalent mt-id leaf of the IETF. OSPF Segment Routing YANG model.
+
+        value: int
+        """
+        self._set_property("mt_id", value)
 
 
 class Ospfv2LsaPrefixSidFlags(OpenApiObject):
@@ -210191,6 +210260,65 @@ class Ospfv2LsaPrefixSidFlags(OpenApiObject):
         self._set_property("l_flag", value)
 
 
+class Ospfv2LsaPrefixSidIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2LsaPrefixSidIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2LsaPrefixSid]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2LsaPrefixSidIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2LsaPrefixSid
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2LsaPrefixSid
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2LsaPrefixSid):
+            raise Exception("Item is not an instance of Ospfv2LsaPrefixSid")
+
+    def prefixsid(self, sid=None, algorithm=None, mt_id=None):
+        # type: (int,int,int) -> Ospfv2LsaPrefixSidIter
+        """Factory method that creates an instance of the Ospfv2LsaPrefixSid class
+
+        The learned OSPFv2 Prefix-SID and its attributes, decoded from one Prefix-SID sub-TLV. of the Extended Prefix Opaque LSA (RFC 8665 Section 5). One object per Prefix-SID. sub-TLV instance.
+
+        Returns: Ospfv2LsaPrefixSidIter
+        """
+        item = Ospfv2LsaPrefixSid(
+            parent=self._parent, sid=sid, algorithm=algorithm, mt_id=mt_id
+        )
+        self._add(item)
+        return self
+
+    def add(self, sid=None, algorithm=None, mt_id=None):
+        # type: (int,int,int) -> Ospfv2LsaPrefixSid
+        """Add method that creates and returns an instance of the Ospfv2LsaPrefixSid class
+
+        The learned OSPFv2 Prefix-SID and its attributes, decoded from one Prefix-SID sub-TLV. of the Extended Prefix Opaque LSA (RFC 8665 Section 5). One object per Prefix-SID. sub-TLV instance.
+
+        Returns: Ospfv2LsaPrefixSid
+        """
+        item = Ospfv2LsaPrefixSid(
+            parent=self._parent, sid=sid, algorithm=algorithm, mt_id=mt_id
+        )
+        self._add(item)
+        return item
+
+
 class Ospfv2OpaqueLsaExtendedPrefixIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
@@ -210258,8 +210386,8 @@ class Ospfv2OpaqueLsaExtendedLink(OpenApiObject):
             "type": str,
             "enum": [
                 "point_to_point",
-                "transit",
                 "stub",
+                "transit",
                 "virtual",
             ],
         },
@@ -210271,7 +210399,7 @@ class Ospfv2OpaqueLsaExtendedLink(OpenApiObject):
             "type": str,
             "format": "ipv4",
         },
-        "adjacency_sid": {"type": "Ospfv2LsaAdjacencySid"},
+        "adjacency_sids": {"type": "Ospfv2LsaAdjacencySidIter"},
         "link_attributes": {"type": "Ospfv2LsaLinkTrafficEngineering"},
     }  # type: Dict[str, str]
 
@@ -210280,8 +210408,8 @@ class Ospfv2OpaqueLsaExtendedLink(OpenApiObject):
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
     POINT_TO_POINT = "point_to_point"  # type: str
-    TRANSIT = "transit"  # type: str
     STUB = "stub"  # type: str
+    TRANSIT = "transit"  # type: str
     VIRTUAL = "virtual"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
@@ -210362,22 +210490,24 @@ class Ospfv2OpaqueLsaExtendedLink(OpenApiObject):
         self._set_property("link_data", value)
 
     @property
-    def adjacency_sid(self):
-        # type: () -> Ospfv2LsaAdjacencySid
-        """adjacency_sid getter
+    def adjacency_sids(self):
+        # type: () -> Ospfv2LsaAdjacencySidIter
+        """adjacency_sids getter
 
-        The learned OSPFv2 Adjacency-SID and its attributes, decoded from the Adj-SID LAN Adj-SID. sub-TLV of the Extended Link Opaque LSA (RFC 8665).The learned OSPFv2 Adjacency-SID and its attributes, decoded from the Adj-SID LAN Adj-SID. sub-TLV of the Extended Link Opaque LSA (RFC 8665).The learned OSPFv2 Adjacency-SID and its attributes, decoded from the Adj-SID LAN Adj-SID. sub-TLV of the Extended Link Opaque LSA (RFC 8665).The Adjacency-SID advertised for this link, decoded from the Adj-SID sub-TLV,. sub-type 2, or the LAN Adj-SID sub-TLV, sub-type (RFC 8665 Sections 6.1, 6.2).
+        The Adjacency-SIDs advertised for this link, decoded from the Adj-SID sub-TLV,. sub-type 2, and the LAN Adj-SID sub-TLV, sub-type (RFC 8665 Sections 6.1,. 6.2). One entry per sub-TLV instance, in the order the sub-TLVs appear in the. Extended Link TLV, with entry.type naming which of the two sub-TLVs each entry. was decoded from; the two forms may be mixed in this list. Both sub-TLVs may. appear multiple times in one Extended Link TLV a router may allocate more. than one Adj-SID to an adjacency, and LAN Adj-SID is advertised per neighbor. on multi-access link so this is list.
 
-        Returns: Ospfv2LsaAdjacencySid
+        Returns: Ospfv2LsaAdjacencySidIter
         """
-        return self._get_property("adjacency_sid", Ospfv2LsaAdjacencySid)
+        return self._get_property(
+            "adjacency_sids", Ospfv2LsaAdjacencySidIter, self._parent, self._choice
+        )
 
     @property
     def link_attributes(self):
         # type: () -> Ospfv2LsaLinkTrafficEngineering
         """link_attributes getter
 
-        Traffic engineering attributes for link, decoded from the Link TLV sub-TLVs of the. Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of. the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).Traffic engineering attributes for link, decoded from the Link TLV sub-TLVs of the. Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of. the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).Traffic engineering attributes for link, decoded from the Link TLV sub-TLVs of the. Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of. the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).The link attributes advertised for this link, decoded from the application-specific. and legacy link attribute sub-TLVs of the Extended Link TLV (RFC 9492 Section 6).
+        Traffic engineering attributes for link, sourced from the Link TLV sub-TLVs of the. Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of. the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).. This is the attribute set of the link, not transcription of the sub-TLVs that. carried it: property here names the attribute, and the description of each names. the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.Traffic engineering attributes for link, sourced from the Link TLV sub-TLVs of the. Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of. the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).. This is the attribute set of the link, not transcription of the sub-TLVs that. carried it: property here names the attribute, and the description of each names. the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.Traffic engineering attributes for link, sourced from the Link TLV sub-TLVs of the. Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of. the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).. This is the attribute set of the link, not transcription of the sub-TLVs that. carried it: property here names the attribute, and the description of each names. the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.Traffic engineering attributes for link, sourced from the Link TLV sub-TLVs of the. Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of. the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).. This is the attribute set of the link, not transcription of the sub-TLVs that. carried it: property here names the attribute, and the description of each names. the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.Traffic engineering link attributes associated with this Extended Link. This. object represents the supported link-attribute set and does not expose the. underlying OSPF sub-TLV structure: it is semantic grouping of the attribute. values advertised for the link, not decode of one sub-TLV instance. The. values are sourced from the application-specific and legacy link attribute. sub-TLVs of the Extended Link TLV (RFC 9492 Section 6), and RFC 9492 allows an. attribute to be advertised more than once, per application, so which instance. value came from is not recoverable from this object.
 
         Returns: Ospfv2LsaLinkTrafficEngineering
         """
@@ -210395,15 +210525,24 @@ class Ospfv2LsaAdjacencySid(OpenApiObject):
                 "lan_adj_sid",
             ],
         },
-        "sids": {
-            "type": list,
-            "itemtype": int,
-            "itemformat": "uint32",
+        "sid": {
+            "type": int,
+            "format": "uint32",
         },
         "flags": {"type": "Ospfv2LsaAdjSidFlags"},
         "weight": {
             "type": int,
             "format": "uint32",
+            "maximum": 255,
+        },
+        "neighbor_id": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "mt_id": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 127,
         },
     }  # type: Dict[str, str]
 
@@ -210416,14 +210555,24 @@ class Ospfv2LsaAdjacencySid(OpenApiObject):
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, type=None, sids=None, weight=None):
+    def __init__(
+        self,
+        parent=None,
+        type=None,
+        sid=None,
+        weight=None,
+        neighbor_id=None,
+        mt_id=None,
+    ):
         super(Ospfv2LsaAdjacencySid, self).__init__()
         self._parent = parent
         self._set_property("type", type)
-        self._set_property("sids", sids)
+        self._set_property("sid", sid)
         self._set_property("weight", weight)
+        self._set_property("neighbor_id", neighbor_id)
+        self._set_property("mt_id", mt_id)
 
-    def set(self, type=None, sids=None, weight=None):
+    def set(self, type=None, sid=None, weight=None, neighbor_id=None, mt_id=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -210433,7 +210582,7 @@ class Ospfv2LsaAdjacencySid(OpenApiObject):
         # type: () -> Union[Literal["adj_sid"], Literal["lan_adj_sid"]]
         """type getter
 
-        Adjacency-SID type: Adjacency-SID (Extended Link sub-TLV Type 2) or LAN Adjacency-SID (Type 3).
+        The sub-TLV this object was decoded from: adj_sid for the Adj-SID sub-TLV,. Extended Link sub-TLV type (RFC 8665 Section 6.1), or lan_adj_sid for the LAN. Adj-SID sub-TLV, type (RFC 8665 Section 6.2). It is not property of the SID. itself, it names the wire encoding this object came from, and it is what tells. you whether to expect neighbor_id.
 
         Returns: Union[Literal["adj_sid"], Literal["lan_adj_sid"]]
         """
@@ -210443,39 +210592,39 @@ class Ospfv2LsaAdjacencySid(OpenApiObject):
     def type(self, value):
         """type setter
 
-        Adjacency-SID type: Adjacency-SID (Extended Link sub-TLV Type 2) or LAN Adjacency-SID (Type 3).
+        The sub-TLV this object was decoded from: adj_sid for the Adj-SID sub-TLV,. Extended Link sub-TLV type (RFC 8665 Section 6.1), or lan_adj_sid for the LAN. Adj-SID sub-TLV, type (RFC 8665 Section 6.2). It is not property of the SID. itself, it names the wire encoding this object came from, and it is what tells. you whether to expect neighbor_id.
 
         value: Union[Literal["adj_sid"], Literal["lan_adj_sid"]]
         """
         self._set_property("type", value)
 
     @property
-    def sids(self):
-        # type: () -> List[int]
-        """sids getter
+    def sid(self):
+        # type: () -> int
+        """sid getter
 
-        One or more SID/Label values or indices associated with the adjacency.
+        The SID/Label value or index associated with the adjacency. flags.v_flag tells which of the two it is.
 
-        Returns: List[int]
+        Returns: int
         """
-        return self._get_property("sids")
+        return self._get_property("sid")
 
-    @sids.setter
-    def sids(self, value):
-        """sids setter
+    @sid.setter
+    def sid(self, value):
+        """sid setter
 
-        One or more SID/Label values or indices associated with the adjacency.
+        The SID/Label value or index associated with the adjacency. flags.v_flag tells which of the two it is.
 
-        value: List[int]
+        value: int
         """
-        self._set_property("sids", value)
+        self._set_property("sid", value)
 
     @property
     def flags(self):
         # type: () -> Ospfv2LsaAdjSidFlags
         """flags getter
 
-        One-octet flags of the OSPFv2 Adjacency-SID sub-TLV (RFC 8665).One-octet flags of the OSPFv2 Adjacency-SID sub-TLV (RFC 8665).One-octet flags of the OSPFv2 Adjacency-SID sub-TLV (RFC 8665).Flags associated with the Adjacency-SID.
+        The one-octet Flags field of the sub-TLV this Adjacency-SID was decoded from. The. Adj-SID sub-TLV and the LAN Adj-SID sub-TLV define the same flags in the same bit. positions (RFC 8665 Sections 6.1, 6.2), so one object covers both.The one-octet Flags field of the sub-TLV this Adjacency-SID was decoded from. The. Adj-SID sub-TLV and the LAN Adj-SID sub-TLV define the same flags in the same bit. positions (RFC 8665 Sections 6.1, 6.2), so one object covers both.The one-octet Flags field of the sub-TLV this Adjacency-SID was decoded from. The. Adj-SID sub-TLV and the LAN Adj-SID sub-TLV define the same flags in the same bit. positions (RFC 8665 Sections 6.1, 6.2), so one object covers both.Flags associated with the Adjacency-SID.
 
         Returns: Ospfv2LsaAdjSidFlags
         """
@@ -210486,7 +210635,7 @@ class Ospfv2LsaAdjacencySid(OpenApiObject):
         # type: () -> int
         """weight getter
 
-        The weight of the Adjacency-SID for the purpose of load balancing.
+        The weight of the Adjacency-SID for the purpose of load balancing, decoded from the Weight field (RFC 8665 Sections 6.1, 6.2).
 
         Returns: int
         """
@@ -210496,11 +210645,53 @@ class Ospfv2LsaAdjacencySid(OpenApiObject):
     def weight(self, value):
         """weight setter
 
-        The weight of the Adjacency-SID for the purpose of load balancing.
+        The weight of the Adjacency-SID for the purpose of load balancing, decoded from the Weight field (RFC 8665 Sections 6.1, 6.2).
 
         value: int
         """
         self._set_property("weight", value)
+
+    @property
+    def neighbor_id(self):
+        # type: () -> str
+        """neighbor_id getter
+
+        The Router ID of the neighbor the LAN Adjacency-SID is advertised for, decoded. from the Neighbor ID field of the LAN Adj-SID sub-TLV (RFC 8665 Section 6.2).. Present only when type is lan_adj_sid, and the field that tells one LAN. Adjacency-SID from another on the same multi-access link. The Adj-SID sub-TLV,. sub-type 2, has no Neighbor ID field, so it is absent when type is adj_sid:. the adjacency is then identified by the link the parent Extended Link TLV. describes.
+
+        Returns: str
+        """
+        return self._get_property("neighbor_id")
+
+    @neighbor_id.setter
+    def neighbor_id(self, value):
+        """neighbor_id setter
+
+        The Router ID of the neighbor the LAN Adjacency-SID is advertised for, decoded. from the Neighbor ID field of the LAN Adj-SID sub-TLV (RFC 8665 Section 6.2).. Present only when type is lan_adj_sid, and the field that tells one LAN. Adjacency-SID from another on the same multi-access link. The Adj-SID sub-TLV,. sub-type 2, has no Neighbor ID field, so it is absent when type is adj_sid:. the adjacency is then identified by the link the parent Extended Link TLV. describes.
+
+        value: str
+        """
+        self._set_property("neighbor_id", value)
+
+    @property
+    def mt_id(self):
+        # type: () -> int
+        """mt_id getter
+
+        The Multi-Topology ID the Adjacency-SID applies to, decoded from the MT-ID. field of either sub-TLV (RFC 8665 Sections 6.1, 6.2, RFC 4915).. The MT-ID field is one octet wide on the wire, but RFC 4915 Section 3.7. defines only 0-127 as valid MT-ID values 128-255 are invalid and SHOULD be. ignored on receipt, so value in that range is never reported here. The. maximum matches the range statement on the equivalent mt-id leaf of the IETF. OSPF Segment Routing YANG model.
+
+        Returns: int
+        """
+        return self._get_property("mt_id")
+
+    @mt_id.setter
+    def mt_id(self, value):
+        """mt_id setter
+
+        The Multi-Topology ID the Adjacency-SID applies to, decoded from the MT-ID. field of either sub-TLV (RFC 8665 Sections 6.1, 6.2, RFC 4915).. The MT-ID field is one octet wide on the wire, but RFC 4915 Section 3.7. defines only 0-127 as valid MT-ID values 128-255 are invalid and SHOULD be. ignored on receipt, so value in that range is never reported here. The. maximum matches the range statement on the equivalent mt-id leaf of the IETF. OSPF Segment Routing YANG model.
+
+        value: int
+        """
+        self._set_property("mt_id", value)
 
 
 class Ospfv2LsaAdjSidFlags(OpenApiObject):
@@ -210648,69 +210839,124 @@ class Ospfv2LsaAdjSidFlags(OpenApiObject):
         self._set_property("l_flag", value)
 
 
-class Ospfv2OpaqueLsaExtendedLinkIter(OpenApiIter):
+class Ospfv2LsaAdjacencySidIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
     _GETITEM_RETURNS_CHOICE_OBJECT = False
 
     def __init__(self, parent=None, choice=None):
-        super(Ospfv2OpaqueLsaExtendedLinkIter, self).__init__()
+        super(Ospfv2LsaAdjacencySidIter, self).__init__()
         self._parent = parent
         self._choice = choice
 
     def __getitem__(self, key):
-        # type: (str) -> Union[Ospfv2OpaqueLsaExtendedLink]
+        # type: (str) -> Union[Ospfv2LsaAdjacencySid]
         return self._getitem(key)
 
     def __iter__(self):
-        # type: () -> Ospfv2OpaqueLsaExtendedLinkIter
+        # type: () -> Ospfv2LsaAdjacencySidIter
         return self._iter()
 
     def __next__(self):
-        # type: () -> Ospfv2OpaqueLsaExtendedLink
+        # type: () -> Ospfv2LsaAdjacencySid
         return self._next()
 
     def next(self):
-        # type: () -> Ospfv2OpaqueLsaExtendedLink
+        # type: () -> Ospfv2LsaAdjacencySid
         return self._next()
 
     def _instanceOf(self, item):
-        if not isinstance(item, Ospfv2OpaqueLsaExtendedLink):
-            raise Exception("Item is not an instance of Ospfv2OpaqueLsaExtendedLink")
+        if not isinstance(item, Ospfv2LsaAdjacencySid):
+            raise Exception("Item is not an instance of Ospfv2LsaAdjacencySid")
 
-    def extendedlink(self, link_type=None, link_id=None, link_data=None):
-        # type: (Union[Literal["point_to_point"], Literal["stub"], Literal["transit"], Literal["virtual"]],str,str) -> Ospfv2OpaqueLsaExtendedLinkIter
-        """Factory method that creates an instance of the Ospfv2OpaqueLsaExtendedLink class
+    def adjacencysid(
+        self, type=None, sid=None, weight=None, neighbor_id=None, mt_id=None
+    ):
+        # type: (Union[Literal["adj_sid"], Literal["lan_adj_sid"]],int,int,str,int) -> Ospfv2LsaAdjacencySidIter
+        """Factory method that creates an instance of the Ospfv2LsaAdjacencySid class
 
-        A decoded OSPFv2 Extended Link TLV of an Extended Link Opaque LSA, TLV type 1. (RFC 7684 Section 3.1).. The TLV repeats the Link Type, Link ID and Link Data of the Router-LSA link it extends,. so correlate it to that link by matching link_id, and link_data when the same link_id. is advertised more than once, against router_lsas[].links[] of the Router-LSA whose. header.advertising_router_id equals that of this Opaque LSA.
+        A learned OSPFv2 Adjacency-SID and its attributes.. One object of this type represents exactly one sub-TLV instance on the wire, and. that sub-TLV is either an Adj-SID sub-TLV, sub-type (RFC 8665 Section 6.1), or a. LAN Adj-SID sub-TLV, sub-type (RFC 8665 Section 6.2). The two are deliberately. modelled by one object because they carry the same information about the same kind. of thing a SID for an adjacency over the link the parent Extended Link TLV. describes and differ only in that the LAN form names the neighbor the SID is for.. type says which of the two sub-TLVs this object was decoded from, and is the field. to read before interpreting the rest: neighbor_id is present only for. type lan_adj_sid, because only the LAN Adj-SID sub-TLV carries Neighbor ID. field. Every other field of this object is decoded from field that both sub-TLVs. carry.. This object is never an aggregate of several sub-TLVs: link that advertises more. than one Adj-SID, or one LAN Adj-SID per neighbor, is reported as that many entries. of Ospfv2.OpaqueLsa.ExtendedLink/adjacency_sids, each with its own type. Both. sub-TLVs may appear multiple times in one Extended Link TLV (RFC 8665. Sections 6.1, 6.2), and the two forms may be mixed in the same list.
 
-        Returns: Ospfv2OpaqueLsaExtendedLinkIter
+        Returns: Ospfv2LsaAdjacencySidIter
         """
-        item = Ospfv2OpaqueLsaExtendedLink(
+        item = Ospfv2LsaAdjacencySid(
             parent=self._parent,
-            link_type=link_type,
-            link_id=link_id,
-            link_data=link_data,
+            type=type,
+            sid=sid,
+            weight=weight,
+            neighbor_id=neighbor_id,
+            mt_id=mt_id,
         )
         self._add(item)
         return self
 
-    def add(self, link_type=None, link_id=None, link_data=None):
-        # type: (Union[Literal["point_to_point"], Literal["stub"], Literal["transit"], Literal["virtual"]],str,str) -> Ospfv2OpaqueLsaExtendedLink
-        """Add method that creates and returns an instance of the Ospfv2OpaqueLsaExtendedLink class
+    def add(self, type=None, sid=None, weight=None, neighbor_id=None, mt_id=None):
+        # type: (Union[Literal["adj_sid"], Literal["lan_adj_sid"]],int,int,str,int) -> Ospfv2LsaAdjacencySid
+        """Add method that creates and returns an instance of the Ospfv2LsaAdjacencySid class
 
-        A decoded OSPFv2 Extended Link TLV of an Extended Link Opaque LSA, TLV type 1. (RFC 7684 Section 3.1).. The TLV repeats the Link Type, Link ID and Link Data of the Router-LSA link it extends,. so correlate it to that link by matching link_id, and link_data when the same link_id. is advertised more than once, against router_lsas[].links[] of the Router-LSA whose. header.advertising_router_id equals that of this Opaque LSA.
+        A learned OSPFv2 Adjacency-SID and its attributes.. One object of this type represents exactly one sub-TLV instance on the wire, and. that sub-TLV is either an Adj-SID sub-TLV, sub-type (RFC 8665 Section 6.1), or a. LAN Adj-SID sub-TLV, sub-type (RFC 8665 Section 6.2). The two are deliberately. modelled by one object because they carry the same information about the same kind. of thing a SID for an adjacency over the link the parent Extended Link TLV. describes and differ only in that the LAN form names the neighbor the SID is for.. type says which of the two sub-TLVs this object was decoded from, and is the field. to read before interpreting the rest: neighbor_id is present only for. type lan_adj_sid, because only the LAN Adj-SID sub-TLV carries Neighbor ID. field. Every other field of this object is decoded from field that both sub-TLVs. carry.. This object is never an aggregate of several sub-TLVs: link that advertises more. than one Adj-SID, or one LAN Adj-SID per neighbor, is reported as that many entries. of Ospfv2.OpaqueLsa.ExtendedLink/adjacency_sids, each with its own type. Both. sub-TLVs may appear multiple times in one Extended Link TLV (RFC 8665. Sections 6.1, 6.2), and the two forms may be mixed in the same list.
 
-        Returns: Ospfv2OpaqueLsaExtendedLink
+        Returns: Ospfv2LsaAdjacencySid
         """
-        item = Ospfv2OpaqueLsaExtendedLink(
+        item = Ospfv2LsaAdjacencySid(
             parent=self._parent,
-            link_type=link_type,
-            link_id=link_id,
-            link_data=link_data,
+            type=type,
+            sid=sid,
+            weight=weight,
+            neighbor_id=neighbor_id,
+            mt_id=mt_id,
         )
         self._add(item)
         return item
+
+
+class Ospfv2OpaqueLsaUnknownOpaqueType(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "opaque_type": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, opaque_type=None):
+        super(Ospfv2OpaqueLsaUnknownOpaqueType, self).__init__()
+        self._parent = parent
+        self._set_property("opaque_type", opaque_type)
+
+    def set(self, opaque_type=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def opaque_type(self):
+        # type: () -> int
+        """opaque_type getter
+
+        The Opaque Type carried in the most significant octet of the LSA's Link State. ID, as the numeric value on the wire (RFC 5250 Section 3). The authoritative. list of assigned Opaque Types is the IANA registry:. https://www.iana.org/assignments/ospf-opaque-types/ospf-opaque-types.xhtml
+
+        Returns: int
+        """
+        return self._get_property("opaque_type")
+
+    @opaque_type.setter
+    def opaque_type(self, value):
+        """opaque_type setter
+
+        The Opaque Type carried in the most significant octet of the LSA's Link State. ID, as the numeric value on the wire (RFC 5250 Section 3). The authoritative. list of assigned Opaque Types is the IANA registry:. https://www.iana.org/assignments/ospf-opaque-types/ospf-opaque-types.xhtml
+
+        value: int
+        """
+        self._set_property("opaque_type", value)
 
 
 class Ospfv2OpaqueLsaTlv(OpenApiObject):
@@ -210718,82 +210964,24 @@ class Ospfv2OpaqueLsaTlv(OpenApiObject):
 
     _TYPES = {
         "type": {
-            "type": str,
-            "enum": [
-                "te_router_address",
-                "te_link",
-                "te_router_ipv6_address",
-                "te_link_local",
-                "te_node_attribute",
-                "te_optical_node_property",
-                "ri_te_mesh_group_ipv4",
-                "ri_te_mesh_group_ipv6",
-                "ri_te_node_capability_descriptor",
-                "ri_pced",
-                "ri_dynamic_hostname",
-                "ri_sr_algorithm",
-                "ri_sid_label_range",
-                "ri_node_admin_tag",
-                "ri_sbfd_discriminator",
-                "ri_tunnel_encapsulations",
-                "ri_sr_local_block",
-                "ri_srms_preference",
-                "ri_flexible_algorithm_definition",
-                "ri_area_leader",
-                "ri_dynamic_flooding",
-                "extended_prefix_tlv",
-                "extended_prefix_range_tlv",
-                "extended_link_tlv",
-                "ttz_id",
-                "ttz_router",
-                "ttz_options",
-                "dynamic_flooding_area_router_ids",
-                "dynamic_flooding_path",
-                "extended_inter_area_asbr_tlv",
-            ],
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
         },
         "length": {
             "type": int,
             "format": "uint32",
+            "maximum": 65535,
         },
-        "value": {"type": str},
-        "unknown_sub_tlvs": {"type": "Ospfv2OpaqueLsaSubTlvIter"},
+        "value": {
+            "type": str,
+            "format": "hex",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
 
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    TE_ROUTER_ADDRESS = "te_router_address"  # type: str
-    TE_LINK = "te_link"  # type: str
-    TE_ROUTER_IPV6_ADDRESS = "te_router_ipv6_address"  # type: str
-    TE_LINK_LOCAL = "te_link_local"  # type: str
-    TE_NODE_ATTRIBUTE = "te_node_attribute"  # type: str
-    TE_OPTICAL_NODE_PROPERTY = "te_optical_node_property"  # type: str
-    RI_TE_MESH_GROUP_IPV4 = "ri_te_mesh_group_ipv4"  # type: str
-    RI_TE_MESH_GROUP_IPV6 = "ri_te_mesh_group_ipv6"  # type: str
-    RI_TE_NODE_CAPABILITY_DESCRIPTOR = "ri_te_node_capability_descriptor"  # type: str
-    RI_PCED = "ri_pced"  # type: str
-    RI_DYNAMIC_HOSTNAME = "ri_dynamic_hostname"  # type: str
-    RI_SR_ALGORITHM = "ri_sr_algorithm"  # type: str
-    RI_SID_LABEL_RANGE = "ri_sid_label_range"  # type: str
-    RI_NODE_ADMIN_TAG = "ri_node_admin_tag"  # type: str
-    RI_SBFD_DISCRIMINATOR = "ri_sbfd_discriminator"  # type: str
-    RI_TUNNEL_ENCAPSULATIONS = "ri_tunnel_encapsulations"  # type: str
-    RI_SR_LOCAL_BLOCK = "ri_sr_local_block"  # type: str
-    RI_SRMS_PREFERENCE = "ri_srms_preference"  # type: str
-    RI_FLEXIBLE_ALGORITHM_DEFINITION = "ri_flexible_algorithm_definition"  # type: str
-    RI_AREA_LEADER = "ri_area_leader"  # type: str
-    RI_DYNAMIC_FLOODING = "ri_dynamic_flooding"  # type: str
-    EXTENDED_PREFIX_TLV = "extended_prefix_tlv"  # type: str
-    EXTENDED_PREFIX_RANGE_TLV = "extended_prefix_range_tlv"  # type: str
-    EXTENDED_LINK_TLV = "extended_link_tlv"  # type: str
-    TTZ_ID = "ttz_id"  # type: str
-    TTZ_ROUTER = "ttz_router"  # type: str
-    TTZ_OPTIONS = "ttz_options"  # type: str
-    DYNAMIC_FLOODING_AREA_ROUTER_IDS = "dynamic_flooding_area_router_ids"  # type: str
-    DYNAMIC_FLOODING_PATH = "dynamic_flooding_path"  # type: str
-    EXTENDED_INTER_AREA_ASBR_TLV = "extended_inter_area_asbr_tlv"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -210811,12 +210999,12 @@ class Ospfv2OpaqueLsaTlv(OpenApiObject):
 
     @property
     def type(self):
-        # type: () -> Union[Literal["dynamic_flooding_area_router_ids"], Literal["dynamic_flooding_path"], Literal["extended_inter_area_asbr_tlv"], Literal["extended_link_tlv"], Literal["extended_prefix_range_tlv"], Literal["extended_prefix_tlv"], Literal["ri_area_leader"], Literal["ri_dynamic_flooding"], Literal["ri_dynamic_hostname"], Literal["ri_flexible_algorithm_definition"], Literal["ri_node_admin_tag"], Literal["ri_pced"], Literal["ri_sbfd_discriminator"], Literal["ri_sid_label_range"], Literal["ri_sr_algorithm"], Literal["ri_sr_local_block"], Literal["ri_srms_preference"], Literal["ri_te_mesh_group_ipv4"], Literal["ri_te_mesh_group_ipv6"], Literal["ri_te_node_capability_descriptor"], Literal["ri_tunnel_encapsulations"], Literal["te_link"], Literal["te_link_local"], Literal["te_node_attribute"], Literal["te_optical_node_property"], Literal["te_router_address"], Literal["te_router_ipv6_address"], Literal["ttz_id"], Literal["ttz_options"], Literal["ttz_router"]]
+        # type: () -> int
         """type getter
 
-        The TLV Type field. Its meaning is scoped by the parent LSA's. tlv_information (IANA OSPFv2 TLV registries).
+        The TLV Type field, as the numeric value carried on the wire. Its meaning is. scoped by the parent LSA's tlv_information.choice; the authoritative list of. assigned TLV types is the IANA OSPFv2 parameters registry:. https://www.iana.org/assignments/ospfv2-parameters/ospfv2-parameters.xhtml
 
-        Returns: Union[Literal["dynamic_flooding_area_router_ids"], Literal["dynamic_flooding_path"], Literal["extended_inter_area_asbr_tlv"], Literal["extended_link_tlv"], Literal["extended_prefix_range_tlv"], Literal["extended_prefix_tlv"], Literal["ri_area_leader"], Literal["ri_dynamic_flooding"], Literal["ri_dynamic_hostname"], Literal["ri_flexible_algorithm_definition"], Literal["ri_node_admin_tag"], Literal["ri_pced"], Literal["ri_sbfd_discriminator"], Literal["ri_sid_label_range"], Literal["ri_sr_algorithm"], Literal["ri_sr_local_block"], Literal["ri_srms_preference"], Literal["ri_te_mesh_group_ipv4"], Literal["ri_te_mesh_group_ipv6"], Literal["ri_te_node_capability_descriptor"], Literal["ri_tunnel_encapsulations"], Literal["te_link"], Literal["te_link_local"], Literal["te_node_attribute"], Literal["te_optical_node_property"], Literal["te_router_address"], Literal["te_router_ipv6_address"], Literal["ttz_id"], Literal["ttz_options"], Literal["ttz_router"]]
+        Returns: int
         """
         return self._get_property("type")
 
@@ -210824,9 +211012,9 @@ class Ospfv2OpaqueLsaTlv(OpenApiObject):
     def type(self, value):
         """type setter
 
-        The TLV Type field. Its meaning is scoped by the parent LSA's. tlv_information (IANA OSPFv2 TLV registries).
+        The TLV Type field, as the numeric value carried on the wire. Its meaning is. scoped by the parent LSA's tlv_information.choice; the authoritative list of. assigned TLV types is the IANA OSPFv2 parameters registry:. https://www.iana.org/assignments/ospfv2-parameters/ospfv2-parameters.xhtml
 
-        value: Union[Literal["dynamic_flooding_area_router_ids"], Literal["dynamic_flooding_path"], Literal["extended_inter_area_asbr_tlv"], Literal["extended_link_tlv"], Literal["extended_prefix_range_tlv"], Literal["extended_prefix_tlv"], Literal["ri_area_leader"], Literal["ri_dynamic_flooding"], Literal["ri_dynamic_hostname"], Literal["ri_flexible_algorithm_definition"], Literal["ri_node_admin_tag"], Literal["ri_pced"], Literal["ri_sbfd_discriminator"], Literal["ri_sid_label_range"], Literal["ri_sr_algorithm"], Literal["ri_sr_local_block"], Literal["ri_srms_preference"], Literal["ri_te_mesh_group_ipv4"], Literal["ri_te_mesh_group_ipv6"], Literal["ri_te_node_capability_descriptor"], Literal["ri_tunnel_encapsulations"], Literal["te_link"], Literal["te_link_local"], Literal["te_node_attribute"], Literal["te_optical_node_property"], Literal["te_router_address"], Literal["te_router_ipv6_address"], Literal["ttz_id"], Literal["ttz_options"], Literal["ttz_router"]]
+        value: int
         """
         self._set_property("type", value)
 
@@ -210856,7 +211044,7 @@ class Ospfv2OpaqueLsaTlv(OpenApiObject):
         # type: () -> str
         """value getter
 
-        The TLV Value field, returned as lowercase hexadecimal string.
+        The raw byte contents of the TLV Value field, as hex characters. Two hex characters per octet, so the string is twice length characters long.
 
         Returns: str
         """
@@ -210866,540 +211054,11 @@ class Ospfv2OpaqueLsaTlv(OpenApiObject):
     def value(self, value):
         """value setter
 
-        The TLV Value field, returned as lowercase hexadecimal string.
+        The raw byte contents of the TLV Value field, as hex characters. Two hex characters per octet, so the string is twice length characters long.
 
         value: str
         """
         self._set_property("value", value)
-
-    @property
-    def unknown_sub_tlvs(self):
-        # type: () -> Ospfv2OpaqueLsaSubTlvIter
-        """unknown_sub_tlvs getter
-
-        Sub-TLVs nested within this TLV's value that are not decoded into structured field elsewhere in the model, returned raw in the generic type/length/value format (e.g. RFC 8665 Extended Prefix/Link Opaque LSA sub-TLVs).
-
-        Returns: Ospfv2OpaqueLsaSubTlvIter
-        """
-        return self._get_property(
-            "unknown_sub_tlvs", Ospfv2OpaqueLsaSubTlvIter, self._parent, self._choice
-        )
-
-
-class Ospfv2OpaqueLsaSubTlv(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "type": {
-            "type": str,
-            "enum": [
-                "te_link_id",
-                "te_local_remote_te_router_id",
-                "te_link_local_remote_identifiers",
-                "te_link_protection_type",
-                "te_interface_switching_capability_descriptor",
-                "te_bandwidth_constraints",
-                "te_unidirectional_link_delay",
-                "te_min_max_unidirectional_link_delay",
-                "te_unidirectional_delay_variation",
-                "te_unidirectional_link_loss",
-                "te_unidirectional_residual_bandwidth",
-                "te_unidirectional_available_bandwidth",
-                "te_unidirectional_utilized_bandwidth",
-                "te_network_to_router_metric",
-                "te_generic_metric",
-                "extended_prefix_sid_label",
-                "extended_prefix_sid",
-                "extended_prefix_flexible_algorithm_prefix_metric",
-                "extended_prefix_source_ospf_router_id",
-                "extended_prefix_source_router_address",
-                "extended_prefix_ip_algorithm_prefix_reachability",
-                "extended_prefix_ip_forwarding_address",
-                "extended_prefix_bier",
-                "extended_prefix_bier_mpls_encapsulation",
-                "extended_prefix_extended_flags",
-                "extended_prefix_bier_php_request",
-                "extended_prefix_administrative_tag",
-                "extended_link_sid_label",
-                "extended_link_adj_sid",
-                "extended_link_lan_adj_sid_label",
-                "extended_link_network_to_router_metric",
-                "extended_link_rtm_capability",
-                "extended_link_graceful_link_shutdown",
-                "extended_link_remote_ipv4_address",
-                "extended_link_local_remote_interface_id",
-                "extended_link_asla",
-                "extended_link_unidirectional_link_delay",
-                "extended_link_min_max_unidirectional_link_delay",
-                "extended_link_unidirectional_delay_variation",
-                "extended_link_unidirectional_link_loss",
-                "extended_link_unidirectional_residual_bandwidth",
-                "extended_link_unidirectional_available_bandwidth",
-                "extended_link_unidirectional_utilized_bandwidth",
-                "extended_link_attributes_bits",
-                "extended_link_te_metric",
-                "extended_link_maximum_link_bandwidth",
-                "extended_link_l2_bundle_member_attributes",
-                "extended_link_generic_metric",
-                "fad_exclude_admin_group",
-                "fad_include_any_admin_group",
-                "fad_include_all_admin_group",
-                "fad_flags",
-                "fad_exclude_srlg",
-                "fad_exclude_minimum_bandwidth",
-                "fad_exclude_maximum_delay",
-                "fad_reference_bandwidth",
-                "fad_bandwidth_threshold",
-                "fad_exclude_reverse_admin_group",
-                "fad_include_any_reverse_admin_group",
-                "fad_include_all_reverse_admin_group",
-                "eia_asbr_flexible_algorithm_asbr_metric",
-                "eia_asbr_ip_flexible_algorithm_asbr_metric",
-            ],
-        },
-        "length": {
-            "type": int,
-            "format": "uint32",
-        },
-        "value": {"type": str},
-        "asla": {"type": "Ospfv2OpaqueLsaAslaIter"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    TE_LINK_ID = "te_link_id"  # type: str
-    TE_LOCAL_REMOTE_TE_ROUTER_ID = "te_local_remote_te_router_id"  # type: str
-    TE_LINK_LOCAL_REMOTE_IDENTIFIERS = "te_link_local_remote_identifiers"  # type: str
-    TE_LINK_PROTECTION_TYPE = "te_link_protection_type"  # type: str
-    TE_INTERFACE_SWITCHING_CAPABILITY_DESCRIPTOR = (
-        "te_interface_switching_capability_descriptor"
-    )  # type: str
-    TE_BANDWIDTH_CONSTRAINTS = "te_bandwidth_constraints"  # type: str
-    TE_UNIDIRECTIONAL_LINK_DELAY = "te_unidirectional_link_delay"  # type: str
-    TE_MIN_MAX_UNIDIRECTIONAL_LINK_DELAY = (
-        "te_min_max_unidirectional_link_delay"
-    )  # type: str
-    TE_UNIDIRECTIONAL_DELAY_VARIATION = "te_unidirectional_delay_variation"  # type: str
-    TE_UNIDIRECTIONAL_LINK_LOSS = "te_unidirectional_link_loss"  # type: str
-    TE_UNIDIRECTIONAL_RESIDUAL_BANDWIDTH = (
-        "te_unidirectional_residual_bandwidth"
-    )  # type: str
-    TE_UNIDIRECTIONAL_AVAILABLE_BANDWIDTH = (
-        "te_unidirectional_available_bandwidth"
-    )  # type: str
-    TE_UNIDIRECTIONAL_UTILIZED_BANDWIDTH = (
-        "te_unidirectional_utilized_bandwidth"
-    )  # type: str
-    TE_NETWORK_TO_ROUTER_METRIC = "te_network_to_router_metric"  # type: str
-    TE_GENERIC_METRIC = "te_generic_metric"  # type: str
-    EXTENDED_PREFIX_SID_LABEL = "extended_prefix_sid_label"  # type: str
-    EXTENDED_PREFIX_SID = "extended_prefix_sid"  # type: str
-    EXTENDED_PREFIX_FLEXIBLE_ALGORITHM_PREFIX_METRIC = (
-        "extended_prefix_flexible_algorithm_prefix_metric"
-    )  # type: str
-    EXTENDED_PREFIX_SOURCE_OSPF_ROUTER_ID = (
-        "extended_prefix_source_ospf_router_id"
-    )  # type: str
-    EXTENDED_PREFIX_SOURCE_ROUTER_ADDRESS = (
-        "extended_prefix_source_router_address"
-    )  # type: str
-    EXTENDED_PREFIX_IP_ALGORITHM_PREFIX_REACHABILITY = (
-        "extended_prefix_ip_algorithm_prefix_reachability"
-    )  # type: str
-    EXTENDED_PREFIX_IP_FORWARDING_ADDRESS = (
-        "extended_prefix_ip_forwarding_address"
-    )  # type: str
-    EXTENDED_PREFIX_BIER = "extended_prefix_bier"  # type: str
-    EXTENDED_PREFIX_BIER_MPLS_ENCAPSULATION = (
-        "extended_prefix_bier_mpls_encapsulation"
-    )  # type: str
-    EXTENDED_PREFIX_EXTENDED_FLAGS = "extended_prefix_extended_flags"  # type: str
-    EXTENDED_PREFIX_BIER_PHP_REQUEST = "extended_prefix_bier_php_request"  # type: str
-    EXTENDED_PREFIX_ADMINISTRATIVE_TAG = (
-        "extended_prefix_administrative_tag"
-    )  # type: str
-    EXTENDED_LINK_SID_LABEL = "extended_link_sid_label"  # type: str
-    EXTENDED_LINK_ADJ_SID = "extended_link_adj_sid"  # type: str
-    EXTENDED_LINK_LAN_ADJ_SID_LABEL = "extended_link_lan_adj_sid_label"  # type: str
-    EXTENDED_LINK_NETWORK_TO_ROUTER_METRIC = (
-        "extended_link_network_to_router_metric"
-    )  # type: str
-    EXTENDED_LINK_RTM_CAPABILITY = "extended_link_rtm_capability"  # type: str
-    EXTENDED_LINK_GRACEFUL_LINK_SHUTDOWN = (
-        "extended_link_graceful_link_shutdown"
-    )  # type: str
-    EXTENDED_LINK_REMOTE_IPV4_ADDRESS = "extended_link_remote_ipv4_address"  # type: str
-    EXTENDED_LINK_LOCAL_REMOTE_INTERFACE_ID = (
-        "extended_link_local_remote_interface_id"
-    )  # type: str
-    EXTENDED_LINK_ASLA = "extended_link_asla"  # type: str
-    EXTENDED_LINK_UNIDIRECTIONAL_LINK_DELAY = (
-        "extended_link_unidirectional_link_delay"
-    )  # type: str
-    EXTENDED_LINK_MIN_MAX_UNIDIRECTIONAL_LINK_DELAY = (
-        "extended_link_min_max_unidirectional_link_delay"
-    )  # type: str
-    EXTENDED_LINK_UNIDIRECTIONAL_DELAY_VARIATION = (
-        "extended_link_unidirectional_delay_variation"
-    )  # type: str
-    EXTENDED_LINK_UNIDIRECTIONAL_LINK_LOSS = (
-        "extended_link_unidirectional_link_loss"
-    )  # type: str
-    EXTENDED_LINK_UNIDIRECTIONAL_RESIDUAL_BANDWIDTH = (
-        "extended_link_unidirectional_residual_bandwidth"
-    )  # type: str
-    EXTENDED_LINK_UNIDIRECTIONAL_AVAILABLE_BANDWIDTH = (
-        "extended_link_unidirectional_available_bandwidth"
-    )  # type: str
-    EXTENDED_LINK_UNIDIRECTIONAL_UTILIZED_BANDWIDTH = (
-        "extended_link_unidirectional_utilized_bandwidth"
-    )  # type: str
-    EXTENDED_LINK_ATTRIBUTES_BITS = "extended_link_attributes_bits"  # type: str
-    EXTENDED_LINK_TE_METRIC = "extended_link_te_metric"  # type: str
-    EXTENDED_LINK_MAXIMUM_LINK_BANDWIDTH = (
-        "extended_link_maximum_link_bandwidth"
-    )  # type: str
-    EXTENDED_LINK_L2_BUNDLE_MEMBER_ATTRIBUTES = (
-        "extended_link_l2_bundle_member_attributes"
-    )  # type: str
-    EXTENDED_LINK_GENERIC_METRIC = "extended_link_generic_metric"  # type: str
-    FAD_EXCLUDE_ADMIN_GROUP = "fad_exclude_admin_group"  # type: str
-    FAD_INCLUDE_ANY_ADMIN_GROUP = "fad_include_any_admin_group"  # type: str
-    FAD_INCLUDE_ALL_ADMIN_GROUP = "fad_include_all_admin_group"  # type: str
-    FAD_FLAGS = "fad_flags"  # type: str
-    FAD_EXCLUDE_SRLG = "fad_exclude_srlg"  # type: str
-    FAD_EXCLUDE_MINIMUM_BANDWIDTH = "fad_exclude_minimum_bandwidth"  # type: str
-    FAD_EXCLUDE_MAXIMUM_DELAY = "fad_exclude_maximum_delay"  # type: str
-    FAD_REFERENCE_BANDWIDTH = "fad_reference_bandwidth"  # type: str
-    FAD_BANDWIDTH_THRESHOLD = "fad_bandwidth_threshold"  # type: str
-    FAD_EXCLUDE_REVERSE_ADMIN_GROUP = "fad_exclude_reverse_admin_group"  # type: str
-    FAD_INCLUDE_ANY_REVERSE_ADMIN_GROUP = (
-        "fad_include_any_reverse_admin_group"
-    )  # type: str
-    FAD_INCLUDE_ALL_REVERSE_ADMIN_GROUP = (
-        "fad_include_all_reverse_admin_group"
-    )  # type: str
-    EIA_ASBR_FLEXIBLE_ALGORITHM_ASBR_METRIC = (
-        "eia_asbr_flexible_algorithm_asbr_metric"
-    )  # type: str
-    EIA_ASBR_IP_FLEXIBLE_ALGORITHM_ASBR_METRIC = (
-        "eia_asbr_ip_flexible_algorithm_asbr_metric"
-    )  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, type=None, length=None, value=None):
-        super(Ospfv2OpaqueLsaSubTlv, self).__init__()
-        self._parent = parent
-        self._set_property("type", type)
-        self._set_property("length", length)
-        self._set_property("value", value)
-
-    def set(self, type=None, length=None, value=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def type(self):
-        # type: () -> Union[Literal["eia_asbr_flexible_algorithm_asbr_metric"], Literal["eia_asbr_ip_flexible_algorithm_asbr_metric"], Literal["extended_link_adj_sid"], Literal["extended_link_asla"], Literal["extended_link_attributes_bits"], Literal["extended_link_generic_metric"], Literal["extended_link_graceful_link_shutdown"], Literal["extended_link_l2_bundle_member_attributes"], Literal["extended_link_lan_adj_sid_label"], Literal["extended_link_local_remote_interface_id"], Literal["extended_link_maximum_link_bandwidth"], Literal["extended_link_min_max_unidirectional_link_delay"], Literal["extended_link_network_to_router_metric"], Literal["extended_link_remote_ipv4_address"], Literal["extended_link_rtm_capability"], Literal["extended_link_sid_label"], Literal["extended_link_te_metric"], Literal["extended_link_unidirectional_available_bandwidth"], Literal["extended_link_unidirectional_delay_variation"], Literal["extended_link_unidirectional_link_delay"], Literal["extended_link_unidirectional_link_loss"], Literal["extended_link_unidirectional_residual_bandwidth"], Literal["extended_link_unidirectional_utilized_bandwidth"], Literal["extended_prefix_administrative_tag"], Literal["extended_prefix_bier"], Literal["extended_prefix_bier_mpls_encapsulation"], Literal["extended_prefix_bier_php_request"], Literal["extended_prefix_extended_flags"], Literal["extended_prefix_flexible_algorithm_prefix_metric"], Literal["extended_prefix_ip_algorithm_prefix_reachability"], Literal["extended_prefix_ip_forwarding_address"], Literal["extended_prefix_sid"], Literal["extended_prefix_sid_label"], Literal["extended_prefix_source_ospf_router_id"], Literal["extended_prefix_source_router_address"], Literal["fad_bandwidth_threshold"], Literal["fad_exclude_admin_group"], Literal["fad_exclude_maximum_delay"], Literal["fad_exclude_minimum_bandwidth"], Literal["fad_exclude_reverse_admin_group"], Literal["fad_exclude_srlg"], Literal["fad_flags"], Literal["fad_include_all_admin_group"], Literal["fad_include_all_reverse_admin_group"], Literal["fad_include_any_admin_group"], Literal["fad_include_any_reverse_admin_group"], Literal["fad_reference_bandwidth"], Literal["te_bandwidth_constraints"], Literal["te_generic_metric"], Literal["te_interface_switching_capability_descriptor"], Literal["te_link_id"], Literal["te_link_local_remote_identifiers"], Literal["te_link_protection_type"], Literal["te_local_remote_te_router_id"], Literal["te_min_max_unidirectional_link_delay"], Literal["te_network_to_router_metric"], Literal["te_unidirectional_available_bandwidth"], Literal["te_unidirectional_delay_variation"], Literal["te_unidirectional_link_delay"], Literal["te_unidirectional_link_loss"], Literal["te_unidirectional_residual_bandwidth"], Literal["te_unidirectional_utilized_bandwidth"]]
-        """type getter
-
-        The sub-TLV Type field. Its meaning is scoped by the parent TLV (IANA. OSPFv2 sub-TLV registries).
-
-        Returns: Union[Literal["eia_asbr_flexible_algorithm_asbr_metric"], Literal["eia_asbr_ip_flexible_algorithm_asbr_metric"], Literal["extended_link_adj_sid"], Literal["extended_link_asla"], Literal["extended_link_attributes_bits"], Literal["extended_link_generic_metric"], Literal["extended_link_graceful_link_shutdown"], Literal["extended_link_l2_bundle_member_attributes"], Literal["extended_link_lan_adj_sid_label"], Literal["extended_link_local_remote_interface_id"], Literal["extended_link_maximum_link_bandwidth"], Literal["extended_link_min_max_unidirectional_link_delay"], Literal["extended_link_network_to_router_metric"], Literal["extended_link_remote_ipv4_address"], Literal["extended_link_rtm_capability"], Literal["extended_link_sid_label"], Literal["extended_link_te_metric"], Literal["extended_link_unidirectional_available_bandwidth"], Literal["extended_link_unidirectional_delay_variation"], Literal["extended_link_unidirectional_link_delay"], Literal["extended_link_unidirectional_link_loss"], Literal["extended_link_unidirectional_residual_bandwidth"], Literal["extended_link_unidirectional_utilized_bandwidth"], Literal["extended_prefix_administrative_tag"], Literal["extended_prefix_bier"], Literal["extended_prefix_bier_mpls_encapsulation"], Literal["extended_prefix_bier_php_request"], Literal["extended_prefix_extended_flags"], Literal["extended_prefix_flexible_algorithm_prefix_metric"], Literal["extended_prefix_ip_algorithm_prefix_reachability"], Literal["extended_prefix_ip_forwarding_address"], Literal["extended_prefix_sid"], Literal["extended_prefix_sid_label"], Literal["extended_prefix_source_ospf_router_id"], Literal["extended_prefix_source_router_address"], Literal["fad_bandwidth_threshold"], Literal["fad_exclude_admin_group"], Literal["fad_exclude_maximum_delay"], Literal["fad_exclude_minimum_bandwidth"], Literal["fad_exclude_reverse_admin_group"], Literal["fad_exclude_srlg"], Literal["fad_flags"], Literal["fad_include_all_admin_group"], Literal["fad_include_all_reverse_admin_group"], Literal["fad_include_any_admin_group"], Literal["fad_include_any_reverse_admin_group"], Literal["fad_reference_bandwidth"], Literal["te_bandwidth_constraints"], Literal["te_generic_metric"], Literal["te_interface_switching_capability_descriptor"], Literal["te_link_id"], Literal["te_link_local_remote_identifiers"], Literal["te_link_protection_type"], Literal["te_local_remote_te_router_id"], Literal["te_min_max_unidirectional_link_delay"], Literal["te_network_to_router_metric"], Literal["te_unidirectional_available_bandwidth"], Literal["te_unidirectional_delay_variation"], Literal["te_unidirectional_link_delay"], Literal["te_unidirectional_link_loss"], Literal["te_unidirectional_residual_bandwidth"], Literal["te_unidirectional_utilized_bandwidth"]]
-        """
-        return self._get_property("type")
-
-    @type.setter
-    def type(self, value):
-        """type setter
-
-        The sub-TLV Type field. Its meaning is scoped by the parent TLV (IANA. OSPFv2 sub-TLV registries).
-
-        value: Union[Literal["eia_asbr_flexible_algorithm_asbr_metric"], Literal["eia_asbr_ip_flexible_algorithm_asbr_metric"], Literal["extended_link_adj_sid"], Literal["extended_link_asla"], Literal["extended_link_attributes_bits"], Literal["extended_link_generic_metric"], Literal["extended_link_graceful_link_shutdown"], Literal["extended_link_l2_bundle_member_attributes"], Literal["extended_link_lan_adj_sid_label"], Literal["extended_link_local_remote_interface_id"], Literal["extended_link_maximum_link_bandwidth"], Literal["extended_link_min_max_unidirectional_link_delay"], Literal["extended_link_network_to_router_metric"], Literal["extended_link_remote_ipv4_address"], Literal["extended_link_rtm_capability"], Literal["extended_link_sid_label"], Literal["extended_link_te_metric"], Literal["extended_link_unidirectional_available_bandwidth"], Literal["extended_link_unidirectional_delay_variation"], Literal["extended_link_unidirectional_link_delay"], Literal["extended_link_unidirectional_link_loss"], Literal["extended_link_unidirectional_residual_bandwidth"], Literal["extended_link_unidirectional_utilized_bandwidth"], Literal["extended_prefix_administrative_tag"], Literal["extended_prefix_bier"], Literal["extended_prefix_bier_mpls_encapsulation"], Literal["extended_prefix_bier_php_request"], Literal["extended_prefix_extended_flags"], Literal["extended_prefix_flexible_algorithm_prefix_metric"], Literal["extended_prefix_ip_algorithm_prefix_reachability"], Literal["extended_prefix_ip_forwarding_address"], Literal["extended_prefix_sid"], Literal["extended_prefix_sid_label"], Literal["extended_prefix_source_ospf_router_id"], Literal["extended_prefix_source_router_address"], Literal["fad_bandwidth_threshold"], Literal["fad_exclude_admin_group"], Literal["fad_exclude_maximum_delay"], Literal["fad_exclude_minimum_bandwidth"], Literal["fad_exclude_reverse_admin_group"], Literal["fad_exclude_srlg"], Literal["fad_flags"], Literal["fad_include_all_admin_group"], Literal["fad_include_all_reverse_admin_group"], Literal["fad_include_any_admin_group"], Literal["fad_include_any_reverse_admin_group"], Literal["fad_reference_bandwidth"], Literal["te_bandwidth_constraints"], Literal["te_generic_metric"], Literal["te_interface_switching_capability_descriptor"], Literal["te_link_id"], Literal["te_link_local_remote_identifiers"], Literal["te_link_protection_type"], Literal["te_local_remote_te_router_id"], Literal["te_min_max_unidirectional_link_delay"], Literal["te_network_to_router_metric"], Literal["te_unidirectional_available_bandwidth"], Literal["te_unidirectional_delay_variation"], Literal["te_unidirectional_link_delay"], Literal["te_unidirectional_link_loss"], Literal["te_unidirectional_residual_bandwidth"], Literal["te_unidirectional_utilized_bandwidth"]]
-        """
-        self._set_property("type", value)
-
-    @property
-    def length(self):
-        # type: () -> int
-        """length getter
-
-        The sub-TLV Length field, in octets, of the value field.
-
-        Returns: int
-        """
-        return self._get_property("length")
-
-    @length.setter
-    def length(self, value):
-        """length setter
-
-        The sub-TLV Length field, in octets, of the value field.
-
-        value: int
-        """
-        self._set_property("length", value)
-
-    @property
-    def value(self):
-        # type: () -> str
-        """value getter
-
-        The sub-TLV Value field, returned as lowercase hexadecimal string.
-
-        Returns: str
-        """
-        return self._get_property("value")
-
-    @value.setter
-    def value(self, value):
-        """value setter
-
-        The sub-TLV Value field, returned as lowercase hexadecimal string.
-
-        value: str
-        """
-        self._set_property("value", value)
-
-    @property
-    def asla(self):
-        # type: () -> Ospfv2OpaqueLsaAslaIter
-        """asla getter
-
-        Application-Specific Link Attributes nested within this sub-TLV, present when. this is an ASLA sub-TLV (RFC 9492).
-
-        Returns: Ospfv2OpaqueLsaAslaIter
-        """
-        return self._get_property(
-            "asla", Ospfv2OpaqueLsaAslaIter, self._parent, self._choice
-        )
-
-
-class Ospfv2OpaqueLsaAsla(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "type": {
-            "type": str,
-            "enum": [
-                "rsvp_te",
-                "segment_routing_policy",
-                "loop_free_alternate",
-                "flexible_algorithm",
-                "shared_risk_link_group",
-                "unidirectional_link_delay",
-                "min_max_unidirectional_link_delay",
-                "unidirectional_delay_variation",
-                "unidirectional_link_loss",
-                "unidirectional_residual_bandwidth",
-                "unidirectional_available_bandwidth",
-                "unidirectional_utilized_bandwidth",
-                "administrative_group",
-                "extended_administrative_group",
-                "te_metric",
-                "maximum_link_bandwidth",
-                "generic_metric",
-            ],
-        },
-        "value": {"type": str},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    RSVP_TE = "rsvp_te"  # type: str
-    SEGMENT_ROUTING_POLICY = "segment_routing_policy"  # type: str
-    LOOP_FREE_ALTERNATE = "loop_free_alternate"  # type: str
-    FLEXIBLE_ALGORITHM = "flexible_algorithm"  # type: str
-    SHARED_RISK_LINK_GROUP = "shared_risk_link_group"  # type: str
-    UNIDIRECTIONAL_LINK_DELAY = "unidirectional_link_delay"  # type: str
-    MIN_MAX_UNIDIRECTIONAL_LINK_DELAY = "min_max_unidirectional_link_delay"  # type: str
-    UNIDIRECTIONAL_DELAY_VARIATION = "unidirectional_delay_variation"  # type: str
-    UNIDIRECTIONAL_LINK_LOSS = "unidirectional_link_loss"  # type: str
-    UNIDIRECTIONAL_RESIDUAL_BANDWIDTH = "unidirectional_residual_bandwidth"  # type: str
-    UNIDIRECTIONAL_AVAILABLE_BANDWIDTH = (
-        "unidirectional_available_bandwidth"
-    )  # type: str
-    UNIDIRECTIONAL_UTILIZED_BANDWIDTH = "unidirectional_utilized_bandwidth"  # type: str
-    ADMINISTRATIVE_GROUP = "administrative_group"  # type: str
-    EXTENDED_ADMINISTRATIVE_GROUP = "extended_administrative_group"  # type: str
-    TE_METRIC = "te_metric"  # type: str
-    MAXIMUM_LINK_BANDWIDTH = "maximum_link_bandwidth"  # type: str
-    GENERIC_METRIC = "generic_metric"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, type=None, value=None):
-        super(Ospfv2OpaqueLsaAsla, self).__init__()
-        self._parent = parent
-        self._set_property("type", type)
-        self._set_property("value", value)
-
-    def set(self, type=None, value=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def type(self):
-        # type: () -> Union[Literal["administrative_group"], Literal["extended_administrative_group"], Literal["flexible_algorithm"], Literal["generic_metric"], Literal["loop_free_alternate"], Literal["maximum_link_bandwidth"], Literal["min_max_unidirectional_link_delay"], Literal["rsvp_te"], Literal["segment_routing_policy"], Literal["shared_risk_link_group"], Literal["te_metric"], Literal["unidirectional_available_bandwidth"], Literal["unidirectional_delay_variation"], Literal["unidirectional_link_delay"], Literal["unidirectional_link_loss"], Literal["unidirectional_residual_bandwidth"], Literal["unidirectional_utilized_bandwidth"]]
-        """type getter
-
-        The Application-Specific Link Attribute Type field: either Link Attribute. Application Identifier bit (RFC 9479), or the type of nested link-attribute. sub-TLV reusing the OSPFv2 Extended Link TLV Sub-TLV type space (RFC 9492).
-
-        Returns: Union[Literal["administrative_group"], Literal["extended_administrative_group"], Literal["flexible_algorithm"], Literal["generic_metric"], Literal["loop_free_alternate"], Literal["maximum_link_bandwidth"], Literal["min_max_unidirectional_link_delay"], Literal["rsvp_te"], Literal["segment_routing_policy"], Literal["shared_risk_link_group"], Literal["te_metric"], Literal["unidirectional_available_bandwidth"], Literal["unidirectional_delay_variation"], Literal["unidirectional_link_delay"], Literal["unidirectional_link_loss"], Literal["unidirectional_residual_bandwidth"], Literal["unidirectional_utilized_bandwidth"]]
-        """
-        return self._get_property("type")
-
-    @type.setter
-    def type(self, value):
-        """type setter
-
-        The Application-Specific Link Attribute Type field: either Link Attribute. Application Identifier bit (RFC 9479), or the type of nested link-attribute. sub-TLV reusing the OSPFv2 Extended Link TLV Sub-TLV type space (RFC 9492).
-
-        value: Union[Literal["administrative_group"], Literal["extended_administrative_group"], Literal["flexible_algorithm"], Literal["generic_metric"], Literal["loop_free_alternate"], Literal["maximum_link_bandwidth"], Literal["min_max_unidirectional_link_delay"], Literal["rsvp_te"], Literal["segment_routing_policy"], Literal["shared_risk_link_group"], Literal["te_metric"], Literal["unidirectional_available_bandwidth"], Literal["unidirectional_delay_variation"], Literal["unidirectional_link_delay"], Literal["unidirectional_link_loss"], Literal["unidirectional_residual_bandwidth"], Literal["unidirectional_utilized_bandwidth"]]
-        """
-        self._set_property("type", value)
-
-    @property
-    def value(self):
-        # type: () -> str
-        """value getter
-
-        The Application-Specific Link Attribute Value field, returned as lowercase hexadecimal string.
-
-        Returns: str
-        """
-        return self._get_property("value")
-
-    @value.setter
-    def value(self, value):
-        """value setter
-
-        The Application-Specific Link Attribute Value field, returned as lowercase hexadecimal string.
-
-        value: str
-        """
-        self._set_property("value", value)
-
-
-class Ospfv2OpaqueLsaAslaIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(Ospfv2OpaqueLsaAslaIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[Ospfv2OpaqueLsaAsla]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> Ospfv2OpaqueLsaAslaIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> Ospfv2OpaqueLsaAsla
-        return self._next()
-
-    def next(self):
-        # type: () -> Ospfv2OpaqueLsaAsla
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, Ospfv2OpaqueLsaAsla):
-            raise Exception("Item is not an instance of Ospfv2OpaqueLsaAsla")
-
-    def asla(self, type=None, value=None):
-        # type: (Union[Literal["administrative_group"], Literal["extended_administrative_group"], Literal["flexible_algorithm"], Literal["generic_metric"], Literal["loop_free_alternate"], Literal["maximum_link_bandwidth"], Literal["min_max_unidirectional_link_delay"], Literal["rsvp_te"], Literal["segment_routing_policy"], Literal["shared_risk_link_group"], Literal["te_metric"], Literal["unidirectional_available_bandwidth"], Literal["unidirectional_delay_variation"], Literal["unidirectional_link_delay"], Literal["unidirectional_link_loss"], Literal["unidirectional_residual_bandwidth"], Literal["unidirectional_utilized_bandwidth"]],str) -> Ospfv2OpaqueLsaAslaIter
-        """Factory method that creates an instance of the Ospfv2OpaqueLsaAsla class
-
-        An Application-Specific Link Attribute carried within an ASLA sub-TLV (RFC 9492).
-
-        Returns: Ospfv2OpaqueLsaAslaIter
-        """
-        item = Ospfv2OpaqueLsaAsla(parent=self._parent, type=type, value=value)
-        self._add(item)
-        return self
-
-    def add(self, type=None, value=None):
-        # type: (Union[Literal["administrative_group"], Literal["extended_administrative_group"], Literal["flexible_algorithm"], Literal["generic_metric"], Literal["loop_free_alternate"], Literal["maximum_link_bandwidth"], Literal["min_max_unidirectional_link_delay"], Literal["rsvp_te"], Literal["segment_routing_policy"], Literal["shared_risk_link_group"], Literal["te_metric"], Literal["unidirectional_available_bandwidth"], Literal["unidirectional_delay_variation"], Literal["unidirectional_link_delay"], Literal["unidirectional_link_loss"], Literal["unidirectional_residual_bandwidth"], Literal["unidirectional_utilized_bandwidth"]],str) -> Ospfv2OpaqueLsaAsla
-        """Add method that creates and returns an instance of the Ospfv2OpaqueLsaAsla class
-
-        An Application-Specific Link Attribute carried within an ASLA sub-TLV (RFC 9492).
-
-        Returns: Ospfv2OpaqueLsaAsla
-        """
-        item = Ospfv2OpaqueLsaAsla(parent=self._parent, type=type, value=value)
-        self._add(item)
-        return item
-
-
-class Ospfv2OpaqueLsaSubTlvIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(Ospfv2OpaqueLsaSubTlvIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[Ospfv2OpaqueLsaSubTlv]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> Ospfv2OpaqueLsaSubTlvIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> Ospfv2OpaqueLsaSubTlv
-        return self._next()
-
-    def next(self):
-        # type: () -> Ospfv2OpaqueLsaSubTlv
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, Ospfv2OpaqueLsaSubTlv):
-            raise Exception("Item is not an instance of Ospfv2OpaqueLsaSubTlv")
-
-    def subtlv(self, type=None, length=None, value=None):
-        # type: (Union[Literal["eia_asbr_flexible_algorithm_asbr_metric"], Literal["eia_asbr_ip_flexible_algorithm_asbr_metric"], Literal["extended_link_adj_sid"], Literal["extended_link_asla"], Literal["extended_link_attributes_bits"], Literal["extended_link_generic_metric"], Literal["extended_link_graceful_link_shutdown"], Literal["extended_link_l2_bundle_member_attributes"], Literal["extended_link_lan_adj_sid_label"], Literal["extended_link_local_remote_interface_id"], Literal["extended_link_maximum_link_bandwidth"], Literal["extended_link_min_max_unidirectional_link_delay"], Literal["extended_link_network_to_router_metric"], Literal["extended_link_remote_ipv4_address"], Literal["extended_link_rtm_capability"], Literal["extended_link_sid_label"], Literal["extended_link_te_metric"], Literal["extended_link_unidirectional_available_bandwidth"], Literal["extended_link_unidirectional_delay_variation"], Literal["extended_link_unidirectional_link_delay"], Literal["extended_link_unidirectional_link_loss"], Literal["extended_link_unidirectional_residual_bandwidth"], Literal["extended_link_unidirectional_utilized_bandwidth"], Literal["extended_prefix_administrative_tag"], Literal["extended_prefix_bier"], Literal["extended_prefix_bier_mpls_encapsulation"], Literal["extended_prefix_bier_php_request"], Literal["extended_prefix_extended_flags"], Literal["extended_prefix_flexible_algorithm_prefix_metric"], Literal["extended_prefix_ip_algorithm_prefix_reachability"], Literal["extended_prefix_ip_forwarding_address"], Literal["extended_prefix_sid"], Literal["extended_prefix_sid_label"], Literal["extended_prefix_source_ospf_router_id"], Literal["extended_prefix_source_router_address"], Literal["fad_bandwidth_threshold"], Literal["fad_exclude_admin_group"], Literal["fad_exclude_maximum_delay"], Literal["fad_exclude_minimum_bandwidth"], Literal["fad_exclude_reverse_admin_group"], Literal["fad_exclude_srlg"], Literal["fad_flags"], Literal["fad_include_all_admin_group"], Literal["fad_include_all_reverse_admin_group"], Literal["fad_include_any_admin_group"], Literal["fad_include_any_reverse_admin_group"], Literal["fad_reference_bandwidth"], Literal["te_bandwidth_constraints"], Literal["te_generic_metric"], Literal["te_interface_switching_capability_descriptor"], Literal["te_link_id"], Literal["te_link_local_remote_identifiers"], Literal["te_link_protection_type"], Literal["te_local_remote_te_router_id"], Literal["te_min_max_unidirectional_link_delay"], Literal["te_network_to_router_metric"], Literal["te_unidirectional_available_bandwidth"], Literal["te_unidirectional_delay_variation"], Literal["te_unidirectional_link_delay"], Literal["te_unidirectional_link_loss"], Literal["te_unidirectional_residual_bandwidth"], Literal["te_unidirectional_utilized_bandwidth"]],int,str) -> Ospfv2OpaqueLsaSubTlvIter
-        """Factory method that creates an instance of the Ospfv2OpaqueLsaSubTlv class
-
-        A sub-TLV nested within top-level Opaque LSA TLV that is not decoded into structured field elsewhere in the model (RFC 8665).
-
-        Returns: Ospfv2OpaqueLsaSubTlvIter
-        """
-        item = Ospfv2OpaqueLsaSubTlv(
-            parent=self._parent, type=type, length=length, value=value
-        )
-        self._add(item)
-        return self
-
-    def add(self, type=None, length=None, value=None):
-        # type: (Union[Literal["eia_asbr_flexible_algorithm_asbr_metric"], Literal["eia_asbr_ip_flexible_algorithm_asbr_metric"], Literal["extended_link_adj_sid"], Literal["extended_link_asla"], Literal["extended_link_attributes_bits"], Literal["extended_link_generic_metric"], Literal["extended_link_graceful_link_shutdown"], Literal["extended_link_l2_bundle_member_attributes"], Literal["extended_link_lan_adj_sid_label"], Literal["extended_link_local_remote_interface_id"], Literal["extended_link_maximum_link_bandwidth"], Literal["extended_link_min_max_unidirectional_link_delay"], Literal["extended_link_network_to_router_metric"], Literal["extended_link_remote_ipv4_address"], Literal["extended_link_rtm_capability"], Literal["extended_link_sid_label"], Literal["extended_link_te_metric"], Literal["extended_link_unidirectional_available_bandwidth"], Literal["extended_link_unidirectional_delay_variation"], Literal["extended_link_unidirectional_link_delay"], Literal["extended_link_unidirectional_link_loss"], Literal["extended_link_unidirectional_residual_bandwidth"], Literal["extended_link_unidirectional_utilized_bandwidth"], Literal["extended_prefix_administrative_tag"], Literal["extended_prefix_bier"], Literal["extended_prefix_bier_mpls_encapsulation"], Literal["extended_prefix_bier_php_request"], Literal["extended_prefix_extended_flags"], Literal["extended_prefix_flexible_algorithm_prefix_metric"], Literal["extended_prefix_ip_algorithm_prefix_reachability"], Literal["extended_prefix_ip_forwarding_address"], Literal["extended_prefix_sid"], Literal["extended_prefix_sid_label"], Literal["extended_prefix_source_ospf_router_id"], Literal["extended_prefix_source_router_address"], Literal["fad_bandwidth_threshold"], Literal["fad_exclude_admin_group"], Literal["fad_exclude_maximum_delay"], Literal["fad_exclude_minimum_bandwidth"], Literal["fad_exclude_reverse_admin_group"], Literal["fad_exclude_srlg"], Literal["fad_flags"], Literal["fad_include_all_admin_group"], Literal["fad_include_all_reverse_admin_group"], Literal["fad_include_any_admin_group"], Literal["fad_include_any_reverse_admin_group"], Literal["fad_reference_bandwidth"], Literal["te_bandwidth_constraints"], Literal["te_generic_metric"], Literal["te_interface_switching_capability_descriptor"], Literal["te_link_id"], Literal["te_link_local_remote_identifiers"], Literal["te_link_protection_type"], Literal["te_local_remote_te_router_id"], Literal["te_min_max_unidirectional_link_delay"], Literal["te_network_to_router_metric"], Literal["te_unidirectional_available_bandwidth"], Literal["te_unidirectional_delay_variation"], Literal["te_unidirectional_link_delay"], Literal["te_unidirectional_link_loss"], Literal["te_unidirectional_residual_bandwidth"], Literal["te_unidirectional_utilized_bandwidth"]],int,str) -> Ospfv2OpaqueLsaSubTlv
-        """Add method that creates and returns an instance of the Ospfv2OpaqueLsaSubTlv class
-
-        A sub-TLV nested within top-level Opaque LSA TLV that is not decoded into structured field elsewhere in the model (RFC 8665).
-
-        Returns: Ospfv2OpaqueLsaSubTlv
-        """
-        item = Ospfv2OpaqueLsaSubTlv(
-            parent=self._parent, type=type, length=length, value=value
-        )
-        self._add(item)
-        return item
 
 
 class Ospfv2OpaqueLsaTlvIter(OpenApiIter):
@@ -211433,10 +211092,10 @@ class Ospfv2OpaqueLsaTlvIter(OpenApiIter):
             raise Exception("Item is not an instance of Ospfv2OpaqueLsaTlv")
 
     def tlv(self, type=None, length=None, value=None):
-        # type: (Union[Literal["dynamic_flooding_area_router_ids"], Literal["dynamic_flooding_path"], Literal["extended_inter_area_asbr_tlv"], Literal["extended_link_tlv"], Literal["extended_prefix_range_tlv"], Literal["extended_prefix_tlv"], Literal["ri_area_leader"], Literal["ri_dynamic_flooding"], Literal["ri_dynamic_hostname"], Literal["ri_flexible_algorithm_definition"], Literal["ri_node_admin_tag"], Literal["ri_pced"], Literal["ri_sbfd_discriminator"], Literal["ri_sid_label_range"], Literal["ri_sr_algorithm"], Literal["ri_sr_local_block"], Literal["ri_srms_preference"], Literal["ri_te_mesh_group_ipv4"], Literal["ri_te_mesh_group_ipv6"], Literal["ri_te_node_capability_descriptor"], Literal["ri_tunnel_encapsulations"], Literal["te_link"], Literal["te_link_local"], Literal["te_node_attribute"], Literal["te_optical_node_property"], Literal["te_router_address"], Literal["te_router_ipv6_address"], Literal["ttz_id"], Literal["ttz_options"], Literal["ttz_router"]],int,str) -> Ospfv2OpaqueLsaTlvIter
+        # type: (int,int,str) -> Ospfv2OpaqueLsaTlvIter
         """Factory method that creates an instance of the Ospfv2OpaqueLsaTlv class
 
-        A top-level TLV carried in the body of an OSPFv2 Opaque LSA that is not decoded into structured field elsewhere in the model (RFC 7770 Section 2).
+        A top-level TLV carried in the body of an OSPFv2 Opaque LSA that is not decoded. into structured field elsewhere in the model, reported in the generic wire format. every OSPFv2 Opaque LSA TLV shares: 2-octet Type, 2-octet Length and the Value. octets (RFC 7770 Section 2.3).. type is the numeric wire value, so TLV type this model has never heard of is. still fully representable and its content is never lost. The Value is reported as. one opaque blob, including for TLV whose Value is itself sub-TLV sequence:. nothing in the TLV header says the Value is sub-TLV sequence, and TLV reported. here is by definition one this model does not decode.
 
         Returns: Ospfv2OpaqueLsaTlvIter
         """
@@ -211447,10 +211106,10 @@ class Ospfv2OpaqueLsaTlvIter(OpenApiIter):
         return self
 
     def add(self, type=None, length=None, value=None):
-        # type: (Union[Literal["dynamic_flooding_area_router_ids"], Literal["dynamic_flooding_path"], Literal["extended_inter_area_asbr_tlv"], Literal["extended_link_tlv"], Literal["extended_prefix_range_tlv"], Literal["extended_prefix_tlv"], Literal["ri_area_leader"], Literal["ri_dynamic_flooding"], Literal["ri_dynamic_hostname"], Literal["ri_flexible_algorithm_definition"], Literal["ri_node_admin_tag"], Literal["ri_pced"], Literal["ri_sbfd_discriminator"], Literal["ri_sid_label_range"], Literal["ri_sr_algorithm"], Literal["ri_sr_local_block"], Literal["ri_srms_preference"], Literal["ri_te_mesh_group_ipv4"], Literal["ri_te_mesh_group_ipv6"], Literal["ri_te_node_capability_descriptor"], Literal["ri_tunnel_encapsulations"], Literal["te_link"], Literal["te_link_local"], Literal["te_node_attribute"], Literal["te_optical_node_property"], Literal["te_router_address"], Literal["te_router_ipv6_address"], Literal["ttz_id"], Literal["ttz_options"], Literal["ttz_router"]],int,str) -> Ospfv2OpaqueLsaTlv
+        # type: (int,int,str) -> Ospfv2OpaqueLsaTlv
         """Add method that creates and returns an instance of the Ospfv2OpaqueLsaTlv class
 
-        A top-level TLV carried in the body of an OSPFv2 Opaque LSA that is not decoded into structured field elsewhere in the model (RFC 7770 Section 2).
+        A top-level TLV carried in the body of an OSPFv2 Opaque LSA that is not decoded. into structured field elsewhere in the model, reported in the generic wire format. every OSPFv2 Opaque LSA TLV shares: 2-octet Type, 2-octet Length and the Value. octets (RFC 7770 Section 2.3).. type is the numeric wire value, so TLV type this model has never heard of is. still fully representable and its content is never lost. The Value is reported as. one opaque blob, including for TLV whose Value is itself sub-TLV sequence:. nothing in the TLV header says the Value is sub-TLV sequence, and TLV reported. here is by definition one this model does not decode.
 
         Returns: Ospfv2OpaqueLsaTlv
         """
@@ -211491,31 +211150,27 @@ class Ospfv2OpaqueLsaIter(OpenApiIter):
         if not isinstance(item, Ospfv2OpaqueLsa):
             raise Exception("Item is not an instance of Ospfv2OpaqueLsa")
 
-    def opaquelsa(self, type=None, tlv_information=None, id=None):
-        # type: (Union[Literal["area"], Literal["domain"], Literal["local"]],Union[Literal["dynamic_flooding"], Literal["extended_inter_area_asbr"], Literal["extended_link"], Literal["extended_prefix"], Literal["grace"], Literal["inter_as_te_v2"], Literal["l1vpn"], Literal["router_information"], Literal["sycamore_optical_topology"], Literal["traffic_engineering"], Literal["ttz"]],int) -> Ospfv2OpaqueLsaIter
+    def opaquelsa(self, type=None, id=None):
+        # type: (Union[Literal["area"], Literal["domain"], Literal["local"]],int) -> Ospfv2OpaqueLsaIter
         """Factory method that creates an instance of the Ospfv2OpaqueLsa class
 
-        Contents of OSPFv2 Opaque LSA Type 9/10/11 (RFC 5250).. The Link State ID of an Opaque LSA is not plain IPv4 address; it is split into. an Opaque Type (most significant octet) and an Opaque ID (remaining three octets),. decoded here as tlv_information and id (RFC 5250 Section 3). header.lsa_id carries. the raw, undecoded Link State ID value.. The Segment Routing and Traffic Engineering information carried by an Opaque LSA is. reported on this object, in the LSA it was actually advertised in, rather than on the. Router-LSA, Summary-LSA, AS-External-LSA or NSSA-LSA that describes the router, link. or prefix it applies to. Exactly one of router_information, traffic_engineering,. extended_prefixes or extended_links is populated, selected by tlv_information; every. other top-level TLV of the LSA is reported raw in unknown_tlvs. Each of those objects. documents how to correlate it back to the LSA that advertises the router, link or. prefix it describes.
+        Contents of OSPFv2 Opaque LSA Type 9/10/11 (RFC 5250).. The Link State ID of an Opaque LSA is not plain IPv4 address; it is split into. an Opaque Type (most significant octet) and an Opaque ID (remaining three octets),. decoded here as tlv_information.choice and id (RFC 5250 Section 3). header.lsa_id. carries the raw, undecoded Link State ID value.. The Segment Routing and Traffic Engineering information carried by an Opaque LSA is. reported on this object, in the LSA it was actually advertised in, rather than on the. Router-LSA, Summary-LSA, AS-External-LSA or NSSA-LSA that describes the router, link. or prefix it applies to. The decoded contents are reported under tlv_information,. whose choice names the Opaque Type and selects the contents of that Opaque Type. directly; every top-level TLV of the LSA that the model does not decode is reported. raw in unknown_tlvs. Each decoded object documents how to correlate it back to the. LSA that advertises the router, link or prefix it describes.
 
         Returns: Ospfv2OpaqueLsaIter
         """
-        item = Ospfv2OpaqueLsa(
-            parent=self._parent, type=type, tlv_information=tlv_information, id=id
-        )
+        item = Ospfv2OpaqueLsa(parent=self._parent, type=type, id=id)
         self._add(item)
         return self
 
-    def add(self, type=None, tlv_information=None, id=None):
-        # type: (Union[Literal["area"], Literal["domain"], Literal["local"]],Union[Literal["dynamic_flooding"], Literal["extended_inter_area_asbr"], Literal["extended_link"], Literal["extended_prefix"], Literal["grace"], Literal["inter_as_te_v2"], Literal["l1vpn"], Literal["router_information"], Literal["sycamore_optical_topology"], Literal["traffic_engineering"], Literal["ttz"]],int) -> Ospfv2OpaqueLsa
+    def add(self, type=None, id=None):
+        # type: (Union[Literal["area"], Literal["domain"], Literal["local"]],int) -> Ospfv2OpaqueLsa
         """Add method that creates and returns an instance of the Ospfv2OpaqueLsa class
 
-        Contents of OSPFv2 Opaque LSA Type 9/10/11 (RFC 5250).. The Link State ID of an Opaque LSA is not plain IPv4 address; it is split into. an Opaque Type (most significant octet) and an Opaque ID (remaining three octets),. decoded here as tlv_information and id (RFC 5250 Section 3). header.lsa_id carries. the raw, undecoded Link State ID value.. The Segment Routing and Traffic Engineering information carried by an Opaque LSA is. reported on this object, in the LSA it was actually advertised in, rather than on the. Router-LSA, Summary-LSA, AS-External-LSA or NSSA-LSA that describes the router, link. or prefix it applies to. Exactly one of router_information, traffic_engineering,. extended_prefixes or extended_links is populated, selected by tlv_information; every. other top-level TLV of the LSA is reported raw in unknown_tlvs. Each of those objects. documents how to correlate it back to the LSA that advertises the router, link or. prefix it describes.
+        Contents of OSPFv2 Opaque LSA Type 9/10/11 (RFC 5250).. The Link State ID of an Opaque LSA is not plain IPv4 address; it is split into. an Opaque Type (most significant octet) and an Opaque ID (remaining three octets),. decoded here as tlv_information.choice and id (RFC 5250 Section 3). header.lsa_id. carries the raw, undecoded Link State ID value.. The Segment Routing and Traffic Engineering information carried by an Opaque LSA is. reported on this object, in the LSA it was actually advertised in, rather than on the. Router-LSA, Summary-LSA, AS-External-LSA or NSSA-LSA that describes the router, link. or prefix it applies to. The decoded contents are reported under tlv_information,. whose choice names the Opaque Type and selects the contents of that Opaque Type. directly; every top-level TLV of the LSA that the model does not decode is reported. raw in unknown_tlvs. Each decoded object documents how to correlate it back to the. LSA that advertises the router, link or prefix it describes.
 
         Returns: Ospfv2OpaqueLsa
         """
-        item = Ospfv2OpaqueLsa(
-            parent=self._parent, type=type, tlv_information=tlv_information, id=id
-        )
+        item = Ospfv2OpaqueLsa(parent=self._parent, type=type, id=id)
         self._add(item)
         return item
 

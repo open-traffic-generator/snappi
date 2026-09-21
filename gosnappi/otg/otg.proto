@@ -22422,18 +22422,18 @@ message Ospfv2NssaLsa {
 // Contents of OSPFv2 Opaque LSA - Type 9/10/11 (RFC 5250).
 // The Link State ID of an Opaque LSA is not a plain IPv4 address; it is split into
 // an Opaque Type (most significant octet) and an Opaque ID (remaining three octets),
-// decoded here as tlv_information and id (RFC 5250 Section 3). header.lsa_id carries
-// the raw, undecoded Link State ID value.
+// decoded here as tlv_information.choice and id (RFC 5250 Section 3). header.lsa_id
+// carries the raw, undecoded Link State ID value.
 // The Segment Routing and Traffic Engineering information carried by an Opaque LSA
 // is
 // reported on this object, in the LSA it was actually advertised in, rather than on
 // the
 // Router-LSA, Summary-LSA, AS-External-LSA or NSSA-LSA that describes the router, link
-// or prefix it applies to. Exactly one of router_information, traffic_engineering,
-// extended_prefixes or extended_links is populated, selected by tlv_information; every
-// other top-level TLV of the LSA is reported raw in unknown_tlvs. Each of those objects
-// documents how to correlate it back to the LSA that advertises the router, link or
-// prefix it describes.
+// or prefix it applies to. The decoded contents are reported under tlv_information,
+// whose choice names the Opaque Type and selects the contents of that Opaque Type
+// directly; every top-level TLV of the LSA that the model does not decode is reported
+// raw in unknown_tlvs. Each decoded object documents how to correlate it back to the
+// LSA that advertises the router, link or prefix it describes.
 message Ospfv2OpaqueLsa {
 
   // Contents of the LSA header.
@@ -22453,64 +22453,111 @@ message Ospfv2OpaqueLsa {
   // throughout the Autonomous System, excluding stub areas).
   optional Type.Enum type = 2;
 
-  message TlvInformation {
-    enum Enum {
-      unspecified = 0;
-      traffic_engineering = 1;
-      sycamore_optical_topology = 2;
-      grace = 3;
-      router_information = 4;
-      l1vpn = 5;
-      inter_as_te_v2 = 6;
-      extended_prefix = 7;
-      extended_link = 8;
-      ttz = 9;
-      dynamic_flooding = 10;
-      extended_inter_area_asbr = 11;
-    }
-  }
-  // The Opaque Type, decoded from the most significant octet of the LSA's Link
-  // State ID (RFC 5250 Section 3). Identifies the type of information carried in
-  // the tlvs (IANA Opaque LSA Option Types registry).
-  optional TlvInformation.Enum tlv_information = 3;
+  // The type of information carried in the body of the Opaque LSA, decoded from the
+  // Opaque Type in the most significant octet of the LSA's Link State ID
+  // (RFC 5250 Section 3), together with the decoded contents of that Opaque Type.
+  Ospfv2OpaqueLsaTlvInformation tlv_information = 3;
 
   // The Opaque ID, decoded from the least significant three octets of the LSA's Link
   // State ID (RFC 5250 Section 3). Used to further distinguish LSAs of the same Opaque
   // Type originated by the same router.
   optional uint32 id = 4;
 
-  // The decoded contents of a Router Information (RI) Opaque LSA, present when
-  // tlv_information is router_information (RFC 7770 Section 2).
-  // An RI Opaque LSA is originated per router, so its contents describe the router
-  // identified by header.advertising_router_id. Correlate it to the Router-LSA of that
-  // router by matching router_lsas[].header.advertising_router_id.
-  Ospfv2OpaqueLsaRouterInformation router_information = 5;
-
-  // The decoded contents of a Traffic Engineering Opaque LSA, present when
-  // tlv_information is traffic_engineering (RFC 3630 Section 2.4).
-  Ospfv2OpaqueLsaTrafficEngineering traffic_engineering = 6;
-
-  // The decoded OSPFv2 Extended Prefix TLVs of an Extended Prefix Opaque LSA, present
-  // when tlv_information is extended_prefix. One Extended Prefix Opaque LSA can carry
-  // more than one Extended Prefix TLV, each describing a different prefix
-  // (RFC 7684 Section 2.1).
-  repeated Ospfv2OpaqueLsaExtendedPrefix extended_prefixes = 7;
-
-  // The decoded OSPFv2 Extended Link TLVs of an Extended Link Opaque LSA, present when
-  // tlv_information is extended_link (RFC 7684 Section 3.1).
-  repeated Ospfv2OpaqueLsaExtendedLink extended_links = 8;
-
-  // TLVs carried in the body of the Opaque LSA that are not decoded into
-  // router_information, traffic_engineering, extended_prefixes or extended_links,
-  // returned raw in the generic type/length/value TLV format used by all OSPFv2 Opaque
-  // LSAs (RFC 7770 Section 2, RFC 8665, RFC 9492).
-  repeated Ospfv2OpaqueLsaTlv unknown_tlvs = 9;
+  // Top-level TLVs carried in the body of the Opaque LSA that are not decoded into
+  // tlv_information, returned raw in the generic type/length/value TLV format used by
+  // all OSPFv2 Opaque LSAs (RFC 7770 Section 2, RFC 8665, RFC 9492).
+  repeated Ospfv2OpaqueLsaTlv unknown_tlvs = 5;
 }
 
-// The decoded Router Information (RI) Opaque LSA contents, Opaque Type 4
-// (RFC 7770 Section 2). The RI Opaque LSA is originated once per router, so everything
-// reported here describes the router named by the parent LSA's
-// header.advertising_router_id.
+// The decoded body of an OSPFv2 Opaque LSA, selected by Opaque Type
+// (RFC 5250 Section 3).
+// choice names the Opaque Type of the LSA, so reading choice is enough to know what
+// to read next. There are two cases:
+// 1. The Opaque Type is decoded by this model: choice is also the name of the field
+// carrying the decoded payload (traffic_engineering, router_information,
+// extended_prefixes, extended_link).
+// 2. The Opaque Type is not decoded by this model: choice is unknown, the numeric
+// Opaque Type is reported in unknown.opaque_type, and the TLVs of the LSA are
+// reported raw in the parent LSA's unknown_tlvs. This is the single escape hatch for
+// every Opaque Type this model does not decode, whichever the reason - assigned by
+// IANA but not decoded here (grace-LSA Opaque Type 3, L1VPN Opaque Type 5,
+// Inter-AS-TE-v2 Opaque Type 6 and the rest), not assigned by IANA, reserved for
+// private use, or assigned by IANA after this version of the model.
+// The choice values are not a copy of the IANA registry and are not kept in step with
+// it; the registry is the authoritative list of assigned Opaque Types:
+// https://www.iana.org/assignments/ospf-opaque-types/ospf-opaque-types.xhtml
+// unknown_tlvs is not limited to case 2: a TLV of a decoded Opaque Type that this
+// model does not itself decode is reported there too, which is why it stays on the
+// parent LSA rather than inside this object.
+message Ospfv2OpaqueLsaTlvInformation {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      traffic_engineering = 1;
+      router_information = 2;
+      extended_prefixes = 3;
+      extended_link = 4;
+      unknown = 5;
+    }
+  }
+  // The Opaque Type carried in the most significant octet of the LSA's Link State ID
+  // (RFC 5250 Section 3), when this model decodes that Opaque Type; unknown otherwise.
+  optional Choice.Enum choice = 1;
+
+  // The decoded contents of a Traffic Engineering Opaque LSA
+  // (RFC 3630 Section 2.4).
+  Ospfv2OpaqueLsaTrafficEngineering traffic_engineering = 2;
+
+  // The decoded contents of this Router Information (RI) Opaque LSA instance
+  // (RFC 7770 Section 2). Multiple Router Information LSA instances may be
+  // originated by the same router, with each instance represented by a separate
+  // Opaque LSA, distinguished by the Opaque ID reported in the parent LSA's id.
+  // The contents describe the router identified by the parent LSA's
+  // header.advertising_router_id. Correlate them to the Router-LSA of that router
+  // by matching router_lsas[].header.advertising_router_id, and expect to merge
+  // the contents of every RI LSA instance that router originated in this scope.
+  Ospfv2OpaqueLsaRouterInformation router_information = 3;
+
+  // The decoded OSPFv2 Extended Prefix TLVs of an Extended Prefix Opaque LSA.
+  // One Extended Prefix Opaque LSA can carry more than one Extended Prefix TLV, each
+  // describing a different prefix (RFC 7684 Section 2.1).
+  repeated Ospfv2OpaqueLsaExtendedPrefix extended_prefixes = 4;
+
+  // The decoded OSPFv2 Extended Link TLV of an Extended Link Opaque LSA. Only one
+  // Extended Link TLV is advertised in each Extended Link Opaque LSA
+  // (RFC 7684 Section 3.1), so this is a single object rather than a list.
+  Ospfv2OpaqueLsaExtendedLink extended_link = 5;
+
+  // The Opaque Type when this model does not decode it (RFC 5250 Section 3). The
+  // body of such an LSA is not decoded, so its TLVs are reported raw in the parent
+  // LSA's unknown_tlvs.
+  Ospfv2OpaqueLsaUnknownOpaqueType unknown = 6;
+}
+
+// The Opaque Type of an OSPFv2 Opaque LSA that this model does not decode
+// (RFC 5250 Section 3).
+// Reported as the numeric wire value, so an Opaque Type this model does not decode
+// is still fully identifiable, whichever the reason - assigned by IANA but not
+// decoded here, not assigned by IANA, reserved for private use, or assigned by IANA
+// after this version of the model.
+message Ospfv2OpaqueLsaUnknownOpaqueType {
+
+  // The Opaque Type carried in the most significant octet of the LSA's Link State
+  // ID, as the numeric value on the wire (RFC 5250 Section 3). The authoritative
+  // list of assigned Opaque Types is the IANA registry:
+  // https://www.iana.org/assignments/ospf-opaque-types/ospf-opaque-types.xhtml
+  optional uint32 opaque_type = 1;
+}
+
+// The decoded contents of one Router Information (RI) Opaque LSA instance, Opaque
+// Type 4 (RFC 7770 Section 2).
+// Everything reported here describes the router named by the parent LSA's
+// header.advertising_router_id, but not necessarily all of it: a router may originate
+// more than one RI LSA instance, for example when its capabilities do not fit in one
+// LSA, and each instance is a separate Opaque LSA carrying its own Opaque ID
+// (RFC 7770 Section 2.1). This object therefore reports what one instance carried,
+// not the complete Router Information of the router.
 message Ospfv2OpaqueLsaRouterInformation {
 
   // The Segment Routing capability of the advertising router, decoded from the
@@ -22529,9 +22576,11 @@ message Ospfv2OpaqueLsaRouterInformation {
 }
 
 // The decoded Traffic Engineering Opaque LSA contents, Opaque Type 1
-// (RFC 3630 Section 2.4). A TE LSA carries a single top-level TLV: either the Router
-// Address TLV, reported as router_address, or the Link TLV, reported as link_id plus
-// link_attributes.
+// (RFC 3630 Section 2.4). A TE LSA contains one top-level TLV (RFC 3630 Section 2.4):
+// either the Router Address TLV, reported as router_address, or the Link TLV,
+// reported as link_id plus link_attributes. Only one Link TLV is carried in each LSA
+// and each of its sub-TLVs occurs at most once (RFC 3630 Section 2.4.2), so both are
+// single-valued here.
 message Ospfv2OpaqueLsaTrafficEngineering {
 
   // The stable IPv4 address of the advertising router, decoded from the Router Address
@@ -22573,9 +22622,11 @@ message Ospfv2OpaqueLsaExtendedPrefix {
   // (RFC 7684 Section 2.1).
   optional uint32 prefix_length = 2;
 
-  // The Prefix-SID advertised for this prefix, decoded from the Prefix-SID sub-TLV,
-  // sub-type 2 (RFC 8665 Section 5).
-  Ospfv2LsaPrefixSid prefix_sid = 3;
+  // The Prefix-SIDs advertised for this prefix, decoded from the Prefix-SID
+  // sub-TLV, sub-type 2 (RFC 8665 Section 5). The Prefix-SID sub-TLV may appear
+  // more than once in the parent TLV, one per Segment Routing algorithm, so this
+  // is a list; each entry names its algorithm.
+  repeated Ospfv2LsaPrefixSid prefix_sids = 3;
 }
 
 // A decoded OSPFv2 Extended Link TLV of an Extended Link Opaque LSA, TLV type 1
@@ -22609,189 +22660,50 @@ message Ospfv2OpaqueLsaExtendedLink {
   // parallel point-to-point links to the same neighbor.
   optional string link_data = 3;
 
-  // The Adjacency-SID advertised for this link, decoded from the Adj-SID sub-TLV,
-  // sub-type 2, or the LAN Adj-SID sub-TLV, sub-type 3 (RFC 8665 Sections 6.1, 6.2).
-  Ospfv2LsaAdjacencySid adjacency_sid = 4;
+  // The Adjacency-SIDs advertised for this link, decoded from the Adj-SID sub-TLV,
+  // sub-type 2, and the LAN Adj-SID sub-TLV, sub-type 3 (RFC 8665 Sections 6.1,
+  // 6.2). One entry per sub-TLV instance, in the order the sub-TLVs appear in the
+  // Extended Link TLV, with entry.type naming which of the two sub-TLVs each entry
+  // was decoded from; the two forms may be mixed in this list. Both sub-TLVs may
+  // appear multiple times in one Extended Link TLV - a router may allocate more
+  // than one Adj-SID to an adjacency, and a LAN Adj-SID is advertised per neighbor
+  // on a multi-access link - so this is a list.
+  repeated Ospfv2LsaAdjacencySid adjacency_sids = 4;
 
-  // The link attributes advertised for this link, decoded from the application-specific
-  // and legacy link attribute sub-TLVs of the Extended Link TLV (RFC 9492 Section 6).
+  // Traffic engineering link attributes associated with this Extended Link. This
+  // object represents the supported link-attribute set and does not expose the
+  // underlying OSPF sub-TLV structure: it is a semantic grouping of the attribute
+  // values advertised for the link, not a decode of one sub-TLV instance. The
+  // values are sourced from the application-specific and legacy link attribute
+  // sub-TLVs of the Extended Link TLV (RFC 9492 Section 6), and RFC 9492 allows an
+  // attribute to be advertised more than once, per application, so which instance
+  // a value came from is not recoverable from this object.
   Ospfv2LsaLinkTrafficEngineering link_attributes = 5;
 }
 
-// A top-level TLV carried in the body of an OSPFv2 Opaque LSA that is not decoded into
-// a structured field elsewhere in the model (RFC 7770 Section 2).
+// A top-level TLV carried in the body of an OSPFv2 Opaque LSA that is not decoded
+// into a structured field elsewhere in the model, reported in the generic wire format
+// every OSPFv2 Opaque LSA TLV shares: a 2-octet Type, a 2-octet Length and the Value
+// octets (RFC 7770 Section 2.3).
+// type is the numeric wire value, so a TLV type this model has never heard of is
+// still fully representable and its content is never lost. The Value is reported as
+// one opaque blob, including for a TLV whose Value is itself a sub-TLV sequence:
+// nothing in the TLV header says the Value is a sub-TLV sequence, and a TLV reported
+// here is by definition one this model does not decode.
 message Ospfv2OpaqueLsaTlv {
 
-  message Type {
-    enum Enum {
-      unspecified = 0;
-      te_router_address = 1;
-      te_link = 2;
-      te_router_ipv6_address = 3;
-      te_link_local = 4;
-      te_node_attribute = 5;
-      te_optical_node_property = 6;
-      ri_te_mesh_group_ipv4 = 7;
-      ri_te_mesh_group_ipv6 = 8;
-      ri_te_node_capability_descriptor = 9;
-      ri_pced = 10;
-      ri_dynamic_hostname = 11;
-      ri_sr_algorithm = 12;
-      ri_sid_label_range = 13;
-      ri_node_admin_tag = 14;
-      ri_sbfd_discriminator = 15;
-      ri_tunnel_encapsulations = 16;
-      ri_sr_local_block = 17;
-      ri_srms_preference = 18;
-      ri_flexible_algorithm_definition = 19;
-      ri_area_leader = 20;
-      ri_dynamic_flooding = 21;
-      extended_prefix_tlv = 22;
-      extended_prefix_range_tlv = 23;
-      extended_link_tlv = 24;
-      ttz_id = 25;
-      ttz_router = 26;
-      ttz_options = 27;
-      dynamic_flooding_area_router_ids = 28;
-      dynamic_flooding_path = 29;
-      extended_inter_area_asbr_tlv = 30;
-    }
-  }
-  // The TLV Type field. Its meaning is scoped by the parent LSA's
-  // tlv_information (IANA OSPFv2 TLV registries).
-  optional Type.Enum type = 1;
+  // The TLV Type field, as the numeric value carried on the wire. Its meaning is
+  // scoped by the parent LSA's tlv_information.choice; the authoritative list of
+  // assigned TLV types is the IANA OSPFv2 parameters registry:
+  // https://www.iana.org/assignments/ospfv2-parameters/ospfv2-parameters.xhtml
+  optional uint32 type = 1;
 
   // The TLV Length field, in octets, of the value field.
   optional uint32 length = 2;
 
-  // The TLV Value field, returned as a lowercase hexadecimal string.
+  // The raw byte contents of the TLV Value field, as hex characters. Two hex characters
+  // per octet, so the string is twice length characters long.
   optional string value = 3;
-
-  // Sub-TLVs nested within this TLV's value that are not decoded into a structured field
-  // elsewhere in the model, returned raw in the generic type/length/value format (e.g.
-  // RFC 8665 Extended Prefix/Link Opaque LSA sub-TLVs).
-  repeated Ospfv2OpaqueLsaSubTlv unknown_sub_tlvs = 4;
-}
-
-// A sub-TLV nested within a top-level Opaque LSA TLV that is not decoded into a structured
-// field elsewhere in the model (RFC 8665).
-message Ospfv2OpaqueLsaSubTlv {
-
-  message Type {
-    enum Enum {
-      unspecified = 0;
-      te_link_id = 1;
-      te_local_remote_te_router_id = 2;
-      te_link_local_remote_identifiers = 3;
-      te_link_protection_type = 4;
-      te_interface_switching_capability_descriptor = 5;
-      te_bandwidth_constraints = 6;
-      te_unidirectional_link_delay = 7;
-      te_min_max_unidirectional_link_delay = 8;
-      te_unidirectional_delay_variation = 9;
-      te_unidirectional_link_loss = 10;
-      te_unidirectional_residual_bandwidth = 11;
-      te_unidirectional_available_bandwidth = 12;
-      te_unidirectional_utilized_bandwidth = 13;
-      te_network_to_router_metric = 14;
-      te_generic_metric = 15;
-      extended_prefix_sid_label = 16;
-      extended_prefix_sid = 17;
-      extended_prefix_flexible_algorithm_prefix_metric = 18;
-      extended_prefix_source_ospf_router_id = 19;
-      extended_prefix_source_router_address = 20;
-      extended_prefix_ip_algorithm_prefix_reachability = 21;
-      extended_prefix_ip_forwarding_address = 22;
-      extended_prefix_bier = 23;
-      extended_prefix_bier_mpls_encapsulation = 24;
-      extended_prefix_extended_flags = 25;
-      extended_prefix_bier_php_request = 26;
-      extended_prefix_administrative_tag = 27;
-      extended_link_sid_label = 28;
-      extended_link_adj_sid = 29;
-      extended_link_lan_adj_sid_label = 30;
-      extended_link_network_to_router_metric = 31;
-      extended_link_rtm_capability = 32;
-      extended_link_graceful_link_shutdown = 33;
-      extended_link_remote_ipv4_address = 34;
-      extended_link_local_remote_interface_id = 35;
-      extended_link_asla = 36;
-      extended_link_unidirectional_link_delay = 37;
-      extended_link_min_max_unidirectional_link_delay = 38;
-      extended_link_unidirectional_delay_variation = 39;
-      extended_link_unidirectional_link_loss = 40;
-      extended_link_unidirectional_residual_bandwidth = 41;
-      extended_link_unidirectional_available_bandwidth = 42;
-      extended_link_unidirectional_utilized_bandwidth = 43;
-      extended_link_attributes_bits = 44;
-      extended_link_te_metric = 45;
-      extended_link_maximum_link_bandwidth = 46;
-      extended_link_l2_bundle_member_attributes = 47;
-      extended_link_generic_metric = 48;
-      fad_exclude_admin_group = 49;
-      fad_include_any_admin_group = 50;
-      fad_include_all_admin_group = 51;
-      fad_flags = 52;
-      fad_exclude_srlg = 53;
-      fad_exclude_minimum_bandwidth = 54;
-      fad_exclude_maximum_delay = 55;
-      fad_reference_bandwidth = 56;
-      fad_bandwidth_threshold = 57;
-      fad_exclude_reverse_admin_group = 58;
-      fad_include_any_reverse_admin_group = 59;
-      fad_include_all_reverse_admin_group = 60;
-      eia_asbr_flexible_algorithm_asbr_metric = 61;
-      eia_asbr_ip_flexible_algorithm_asbr_metric = 62;
-    }
-  }
-  // The sub-TLV Type field. Its meaning is scoped by the parent TLV (IANA
-  // OSPFv2 sub-TLV registries).
-  optional Type.Enum type = 1;
-
-  // The sub-TLV Length field, in octets, of the value field.
-  optional uint32 length = 2;
-
-  // The sub-TLV Value field, returned as a lowercase hexadecimal string.
-  optional string value = 3;
-
-  // Application-Specific Link Attributes nested within this sub-TLV, present when
-  // this is an ASLA sub-TLV (RFC 9492).
-  repeated Ospfv2OpaqueLsaAsla asla = 4;
-}
-
-// An Application-Specific Link Attribute carried within an ASLA sub-TLV (RFC 9492).
-message Ospfv2OpaqueLsaAsla {
-
-  message Type {
-    enum Enum {
-      unspecified = 0;
-      rsvp_te = 1;
-      segment_routing_policy = 2;
-      loop_free_alternate = 3;
-      flexible_algorithm = 4;
-      shared_risk_link_group = 5;
-      unidirectional_link_delay = 6;
-      min_max_unidirectional_link_delay = 7;
-      unidirectional_delay_variation = 8;
-      unidirectional_link_loss = 9;
-      unidirectional_residual_bandwidth = 10;
-      unidirectional_available_bandwidth = 11;
-      unidirectional_utilized_bandwidth = 12;
-      administrative_group = 13;
-      extended_administrative_group = 14;
-      te_metric = 15;
-      maximum_link_bandwidth = 16;
-      generic_metric = 17;
-    }
-  }
-  // The Application-Specific Link Attribute Type field: either a Link Attribute
-  // Application Identifier bit (RFC 9479), or the type of a nested link-attribute
-  // sub-TLV reusing the OSPFv2 Extended Link TLV Sub-TLV type space (RFC 9492).
-  optional Type.Enum type = 1;
-
-  // The Application-Specific Link Attribute Value field, returned as a lowercase hexadecimal
-  // string.
-  optional string value = 2;
 }
 
 // Attributes in LSA Header.
@@ -22890,20 +22802,33 @@ message Ospfv2LsaSrlb {
   optional uint32 range = 2;
 }
 
-// The learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV
-// of
-// the Extended Prefix Opaque LSA (RFC 8665).
+// The learned OSPFv2 Prefix-SID and its attributes, decoded from one Prefix-SID sub-TLV
+// of the Extended Prefix Opaque LSA (RFC 8665 Section 5). One object per Prefix-SID
+// sub-TLV instance.
 message Ospfv2LsaPrefixSid {
 
-  // One or more SID/Label values or indices associated with the IGP Prefix segment attached
-  // to the prefix.
-  repeated uint32 sids = 1;
+  // The SID/Label value or index associated with the IGP Prefix segment attached to the
+  // prefix. flags.v_flag tells which of the two it is.
+  optional uint32 sid = 1;
 
   // Flags associated with the Prefix-SID.
   Ospfv2LsaPrefixSidFlags flags = 2;
 
-  // The Segment Routing algorithm the Prefix-SID is associated with.
+  // The Segment Routing algorithm the Prefix-SID is associated with, decoded from the
+  // Algorithm field (RFC 8665 Section 5).
   optional uint32 algorithm = 3;
+
+  // The Multi-Topology ID the Prefix-SID applies to, decoded from the MT-ID field
+  // (RFC 8665 Section 5, RFC 4915). Together with prefix and algorithm it
+  // identifies the Prefix-SID: RFC 8665 Section 5 requires all Prefix-SIDs
+  // advertised for the same prefix, topology and algorithm to be ignored, so the
+  // entries of prefix_sids are distinguished by this field and algorithm.
+  // The MT-ID field is one octet wide on the wire, but RFC 4915 Section 3.7
+  // defines only 0-127 as valid MT-ID values - 128-255 are invalid and SHOULD be
+  // ignored on receipt, so a value in that range is never reported here. The
+  // maximum matches the range statement on the equivalent mt-id leaf of the IETF
+  // OSPF Segment Routing YANG model.
+  optional uint32 mt_id = 4;
 }
 
 // One-octet flags of the OSPFv2 Prefix-SID sub-TLV (RFC 8665).
@@ -22928,9 +22853,24 @@ message Ospfv2LsaPrefixSidFlags {
   optional bool l_flag = 5;
 }
 
-// The learned OSPFv2 Adjacency-SID and its attributes, decoded from the Adj-SID / LAN
-// Adj-SID
-// sub-TLV of the Extended Link Opaque LSA (RFC 8665).
+// A learned OSPFv2 Adjacency-SID and its attributes.
+// One object of this type represents exactly one sub-TLV instance on the wire, and
+// that sub-TLV is either an Adj-SID sub-TLV, sub-type 2 (RFC 8665 Section 6.1), or
+// a
+// LAN Adj-SID sub-TLV, sub-type 3 (RFC 8665 Section 6.2). The two are deliberately
+// modelled by one object because they carry the same information about the same kind
+// of thing - a SID for an adjacency over the link the parent Extended Link TLV
+// describes - and differ only in that the LAN form names the neighbor the SID is for.
+// type says which of the two sub-TLVs this object was decoded from, and is the field
+// to read before interpreting the rest: neighbor_id is present only for
+// type = lan_adj_sid, because only the LAN Adj-SID sub-TLV carries a Neighbor ID
+// field. Every other field of this object is decoded from a field that both sub-TLVs
+// carry.
+// This object is never an aggregate of several sub-TLVs: a link that advertises more
+// than one Adj-SID, or one LAN Adj-SID per neighbor, is reported as that many entries
+// of Ospfv2.OpaqueLsa.ExtendedLink/adjacency_sids, each with its own type. Both
+// sub-TLVs may appear multiple times in one Extended Link TLV (RFC 8665
+// Sections 6.1, 6.2), and the two forms may be mixed in the same list.
 message Ospfv2LsaAdjacencySid {
 
   message Type {
@@ -22940,21 +22880,46 @@ message Ospfv2LsaAdjacencySid {
       lan_adj_sid = 2;
     }
   }
-  // Adjacency-SID type: Adjacency-SID (Extended Link sub-TLV Type 2) or LAN Adjacency-SID
-  // (Type 3).
+  // The sub-TLV this object was decoded from: adj_sid for the Adj-SID sub-TLV,
+  // Extended Link sub-TLV type 2 (RFC 8665 Section 6.1), or lan_adj_sid for the LAN
+  // Adj-SID sub-TLV, type 3 (RFC 8665 Section 6.2). It is not a property of the SID
+  // itself, it names the wire encoding this object came from, and it is what tells
+  // you whether to expect neighbor_id.
   optional Type.Enum type = 1;
 
-  // One or more SID/Label values or indices associated with the adjacency.
-  repeated uint32 sids = 2;
+  // The SID/Label value or index associated with the adjacency. flags.v_flag tells which
+  // of the two it is.
+  optional uint32 sid = 2;
 
   // Flags associated with the Adjacency-SID.
   Ospfv2LsaAdjSidFlags flags = 3;
 
-  // The weight of the Adjacency-SID for the purpose of load balancing.
+  // The weight of the Adjacency-SID for the purpose of load balancing, decoded from the
+  // Weight field (RFC 8665 Sections 6.1, 6.2).
   optional uint32 weight = 4;
+
+  // The Router ID of the neighbor the LAN Adjacency-SID is advertised for, decoded
+  // from the Neighbor ID field of the LAN Adj-SID sub-TLV (RFC 8665 Section 6.2).
+  // Present only when type is lan_adj_sid, and the field that tells one LAN
+  // Adjacency-SID from another on the same multi-access link. The Adj-SID sub-TLV,
+  // sub-type 2, has no Neighbor ID field, so it is absent when type is adj_sid:
+  // the adjacency is then identified by the link the parent Extended Link TLV
+  // describes.
+  optional string neighbor_id = 5;
+
+  // The Multi-Topology ID the Adjacency-SID applies to, decoded from the MT-ID
+  // field of either sub-TLV (RFC 8665 Sections 6.1, 6.2, RFC 4915).
+  // The MT-ID field is one octet wide on the wire, but RFC 4915 Section 3.7
+  // defines only 0-127 as valid MT-ID values - 128-255 are invalid and SHOULD be
+  // ignored on receipt, so a value in that range is never reported here. The
+  // maximum matches the range statement on the equivalent mt-id leaf of the IETF
+  // OSPF Segment Routing YANG model.
+  optional uint32 mt_id = 6;
 }
 
-// One-octet flags of the OSPFv2 Adjacency-SID sub-TLV (RFC 8665).
+// The one-octet Flags field of the sub-TLV this Adjacency-SID was decoded from. The
+// Adj-SID sub-TLV and the LAN Adj-SID sub-TLV define the same flags in the same bit
+// positions (RFC 8665 Sections 6.1, 6.2), so one object covers both.
 message Ospfv2LsaAdjSidFlags {
 
   // B-Flag (Backup): the Adjacency-SID is eligible for protection.
@@ -23024,11 +22989,14 @@ message Ospfv2LsaMsd {
   optional uint32 msd_value = 2;
 }
 
-// Traffic engineering attributes for a link, decoded from the Link TLV sub-TLVs of
+// Traffic engineering attributes for a link, sourced from the Link TLV sub-TLVs of
 // the
 // Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs
 // of
 // the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).
+// This is the attribute set of the link, not a transcription of the sub-TLVs that
+// carried it: a property here names the attribute, and the description of each names
+// the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.
 message Ospfv2LsaLinkTrafficEngineering {
 
   message LinkType {

@@ -250,8 +250,9 @@ func (obj *ospfv2LsaPrefixSid) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Ospfv2LsaPrefixSid is the learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of
-// the Extended Prefix Opaque LSA (RFC 8665).
+// Ospfv2LsaPrefixSid is the learned OSPFv2 Prefix-SID and its attributes, decoded from one Prefix-SID sub-TLV
+// of the Extended Prefix Opaque LSA (RFC 8665 Section 5). One object per Prefix-SID
+// sub-TLV instance.
 type Ospfv2LsaPrefixSid interface {
 	Validation
 	// msg marshals Ospfv2LsaPrefixSid to protobuf object *otg.Ospfv2LsaPrefixSid
@@ -273,10 +274,12 @@ type Ospfv2LsaPrefixSid interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// Sids returns []uint32, set in Ospfv2LsaPrefixSid.
-	Sids() []uint32
-	// SetSids assigns []uint32 provided by user to Ospfv2LsaPrefixSid
-	SetSids(value []uint32) Ospfv2LsaPrefixSid
+	// Sid returns uint32, set in Ospfv2LsaPrefixSid.
+	Sid() uint32
+	// SetSid assigns uint32 provided by user to Ospfv2LsaPrefixSid
+	SetSid(value uint32) Ospfv2LsaPrefixSid
+	// HasSid checks if Sid has been set in Ospfv2LsaPrefixSid
+	HasSid() bool
 	// Flags returns Ospfv2LsaPrefixSidFlags, set in Ospfv2LsaPrefixSid.
 	// Ospfv2LsaPrefixSidFlags is one-octet flags of the OSPFv2 Prefix-SID sub-TLV (RFC 8665).
 	Flags() Ospfv2LsaPrefixSidFlags
@@ -291,27 +294,34 @@ type Ospfv2LsaPrefixSid interface {
 	SetAlgorithm(value uint32) Ospfv2LsaPrefixSid
 	// HasAlgorithm checks if Algorithm has been set in Ospfv2LsaPrefixSid
 	HasAlgorithm() bool
+	// MtId returns uint32, set in Ospfv2LsaPrefixSid.
+	MtId() uint32
+	// SetMtId assigns uint32 provided by user to Ospfv2LsaPrefixSid
+	SetMtId(value uint32) Ospfv2LsaPrefixSid
+	// HasMtId checks if MtId has been set in Ospfv2LsaPrefixSid
+	HasMtId() bool
 	setNil()
 }
 
-// One or more SID/Label values or indices associated with the IGP Prefix segment attached to the prefix.
-// Sids returns a []uint32
-func (obj *ospfv2LsaPrefixSid) Sids() []uint32 {
-	if obj.obj.Sids == nil {
-		obj.obj.Sids = make([]uint32, 0)
-	}
-	return obj.obj.Sids
+// The SID/Label value or index associated with the IGP Prefix segment attached to the prefix. flags.v_flag tells which of the two it is.
+// Sid returns a uint32
+func (obj *ospfv2LsaPrefixSid) Sid() uint32 {
+
+	return *obj.obj.Sid
+
 }
 
-// One or more SID/Label values or indices associated with the IGP Prefix segment attached to the prefix.
-// SetSids sets the []uint32 value in the Ospfv2LsaPrefixSid object
-func (obj *ospfv2LsaPrefixSid) SetSids(value []uint32) Ospfv2LsaPrefixSid {
+// The SID/Label value or index associated with the IGP Prefix segment attached to the prefix. flags.v_flag tells which of the two it is.
+// Sid returns a uint32
+func (obj *ospfv2LsaPrefixSid) HasSid() bool {
+	return obj.obj.Sid != nil
+}
 
-	if obj.obj.Sids == nil {
-		obj.obj.Sids = make([]uint32, 0)
-	}
-	obj.obj.Sids = value
+// The SID/Label value or index associated with the IGP Prefix segment attached to the prefix. flags.v_flag tells which of the two it is.
+// SetSid sets the uint32 value in the Ospfv2LsaPrefixSid object
+func (obj *ospfv2LsaPrefixSid) SetSid(value uint32) Ospfv2LsaPrefixSid {
 
+	obj.obj.Sid = &value
 	return obj
 }
 
@@ -343,7 +353,7 @@ func (obj *ospfv2LsaPrefixSid) SetFlags(value Ospfv2LsaPrefixSidFlags) Ospfv2Lsa
 	return obj
 }
 
-// The Segment Routing algorithm the Prefix-SID is associated with.
+// The Segment Routing algorithm the Prefix-SID is associated with, decoded from the Algorithm field (RFC 8665 Section 5).
 // Algorithm returns a uint32
 func (obj *ospfv2LsaPrefixSid) Algorithm() uint32 {
 
@@ -351,17 +361,66 @@ func (obj *ospfv2LsaPrefixSid) Algorithm() uint32 {
 
 }
 
-// The Segment Routing algorithm the Prefix-SID is associated with.
+// The Segment Routing algorithm the Prefix-SID is associated with, decoded from the Algorithm field (RFC 8665 Section 5).
 // Algorithm returns a uint32
 func (obj *ospfv2LsaPrefixSid) HasAlgorithm() bool {
 	return obj.obj.Algorithm != nil
 }
 
-// The Segment Routing algorithm the Prefix-SID is associated with.
+// The Segment Routing algorithm the Prefix-SID is associated with, decoded from the Algorithm field (RFC 8665 Section 5).
 // SetAlgorithm sets the uint32 value in the Ospfv2LsaPrefixSid object
 func (obj *ospfv2LsaPrefixSid) SetAlgorithm(value uint32) Ospfv2LsaPrefixSid {
 
 	obj.obj.Algorithm = &value
+	return obj
+}
+
+// The Multi-Topology ID the Prefix-SID applies to, decoded from the MT-ID field
+// (RFC 8665 Section 5, RFC 4915). Together with prefix and algorithm it
+// identifies the Prefix-SID: RFC 8665 Section 5 requires all Prefix-SIDs
+// advertised for the same prefix, topology and algorithm to be ignored, so the
+// entries of prefix_sids are distinguished by this field and algorithm.
+// The MT-ID field is one octet wide on the wire, but RFC 4915 Section 3.7
+// defines only 0-127 as valid MT-ID values - 128-255 are invalid and SHOULD be
+// ignored on receipt, so a value in that range is never reported here. The
+// maximum matches the range statement on the equivalent mt-id leaf of the IETF
+// OSPF Segment Routing YANG model.
+// MtId returns a uint32
+func (obj *ospfv2LsaPrefixSid) MtId() uint32 {
+
+	return *obj.obj.MtId
+
+}
+
+// The Multi-Topology ID the Prefix-SID applies to, decoded from the MT-ID field
+// (RFC 8665 Section 5, RFC 4915). Together with prefix and algorithm it
+// identifies the Prefix-SID: RFC 8665 Section 5 requires all Prefix-SIDs
+// advertised for the same prefix, topology and algorithm to be ignored, so the
+// entries of prefix_sids are distinguished by this field and algorithm.
+// The MT-ID field is one octet wide on the wire, but RFC 4915 Section 3.7
+// defines only 0-127 as valid MT-ID values - 128-255 are invalid and SHOULD be
+// ignored on receipt, so a value in that range is never reported here. The
+// maximum matches the range statement on the equivalent mt-id leaf of the IETF
+// OSPF Segment Routing YANG model.
+// MtId returns a uint32
+func (obj *ospfv2LsaPrefixSid) HasMtId() bool {
+	return obj.obj.MtId != nil
+}
+
+// The Multi-Topology ID the Prefix-SID applies to, decoded from the MT-ID field
+// (RFC 8665 Section 5, RFC 4915). Together with prefix and algorithm it
+// identifies the Prefix-SID: RFC 8665 Section 5 requires all Prefix-SIDs
+// advertised for the same prefix, topology and algorithm to be ignored, so the
+// entries of prefix_sids are distinguished by this field and algorithm.
+// The MT-ID field is one octet wide on the wire, but RFC 4915 Section 3.7
+// defines only 0-127 as valid MT-ID values - 128-255 are invalid and SHOULD be
+// ignored on receipt, so a value in that range is never reported here. The
+// maximum matches the range statement on the equivalent mt-id leaf of the IETF
+// OSPF Segment Routing YANG model.
+// SetMtId sets the uint32 value in the Ospfv2LsaPrefixSid object
+func (obj *ospfv2LsaPrefixSid) SetMtId(value uint32) Ospfv2LsaPrefixSid {
+
+	obj.obj.MtId = &value
 	return obj
 }
 
@@ -381,6 +440,16 @@ func (obj *ospfv2LsaPrefixSid) validateObj(vObj *validation, set_default bool) {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
 				fmt.Sprintf("0 <= Ospfv2LsaPrefixSid.Algorithm <= 255 but Got %d", *obj.obj.Algorithm))
+		}
+
+	}
+
+	if obj.obj.MtId != nil {
+
+		if *obj.obj.MtId > 127 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("0 <= Ospfv2LsaPrefixSid.MtId <= 127 but Got %d", *obj.obj.MtId))
 		}
 
 	}

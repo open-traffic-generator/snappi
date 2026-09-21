@@ -16,7 +16,7 @@ type ospfv2OpaqueLsaExtendedLink struct {
 	obj                  *otg.Ospfv2OpaqueLsaExtendedLink
 	marshaller           marshalOspfv2OpaqueLsaExtendedLink
 	unMarshaller         unMarshalOspfv2OpaqueLsaExtendedLink
-	adjacencySidHolder   Ospfv2LsaAdjacencySid
+	adjacencySidsHolder  Ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter
 	linkAttributesHolder Ospfv2LsaLinkTrafficEngineering
 }
 
@@ -245,7 +245,7 @@ func (obj *ospfv2OpaqueLsaExtendedLink) Clone() (Ospfv2OpaqueLsaExtendedLink, er
 }
 
 func (obj *ospfv2OpaqueLsaExtendedLink) setNil() {
-	obj.adjacencySidHolder = nil
+	obj.adjacencySidsHolder = nil
 	obj.linkAttributesHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
@@ -297,25 +297,23 @@ type Ospfv2OpaqueLsaExtendedLink interface {
 	SetLinkData(value string) Ospfv2OpaqueLsaExtendedLink
 	// HasLinkData checks if LinkData has been set in Ospfv2OpaqueLsaExtendedLink
 	HasLinkData() bool
-	// AdjacencySid returns Ospfv2LsaAdjacencySid, set in Ospfv2OpaqueLsaExtendedLink.
-	// Ospfv2LsaAdjacencySid is the learned OSPFv2 Adjacency-SID and its attributes, decoded from the Adj-SID / LAN Adj-SID
-	// sub-TLV of the Extended Link Opaque LSA (RFC 8665).
-	AdjacencySid() Ospfv2LsaAdjacencySid
-	// SetAdjacencySid assigns Ospfv2LsaAdjacencySid provided by user to Ospfv2OpaqueLsaExtendedLink.
-	// Ospfv2LsaAdjacencySid is the learned OSPFv2 Adjacency-SID and its attributes, decoded from the Adj-SID / LAN Adj-SID
-	// sub-TLV of the Extended Link Opaque LSA (RFC 8665).
-	SetAdjacencySid(value Ospfv2LsaAdjacencySid) Ospfv2OpaqueLsaExtendedLink
-	// HasAdjacencySid checks if AdjacencySid has been set in Ospfv2OpaqueLsaExtendedLink
-	HasAdjacencySid() bool
+	// AdjacencySids returns Ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIterIter, set in Ospfv2OpaqueLsaExtendedLink
+	AdjacencySids() Ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter
 	// LinkAttributes returns Ospfv2LsaLinkTrafficEngineering, set in Ospfv2OpaqueLsaExtendedLink.
-	// Ospfv2LsaLinkTrafficEngineering is traffic engineering attributes for a link, decoded from the Link TLV sub-TLVs of the
+	// Ospfv2LsaLinkTrafficEngineering is traffic engineering attributes for a link, sourced from the Link TLV sub-TLVs of the
 	// Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of
 	// the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).
+	// This is the attribute set of the link, not a transcription of the sub-TLVs that
+	// carried it: a property here names the attribute, and the description of each names
+	// the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.
 	LinkAttributes() Ospfv2LsaLinkTrafficEngineering
 	// SetLinkAttributes assigns Ospfv2LsaLinkTrafficEngineering provided by user to Ospfv2OpaqueLsaExtendedLink.
-	// Ospfv2LsaLinkTrafficEngineering is traffic engineering attributes for a link, decoded from the Link TLV sub-TLVs of the
+	// Ospfv2LsaLinkTrafficEngineering is traffic engineering attributes for a link, sourced from the Link TLV sub-TLVs of the
 	// Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of
 	// the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).
+	// This is the attribute set of the link, not a transcription of the sub-TLVs that
+	// carried it: a property here names the attribute, and the description of each names
+	// the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.
 	SetLinkAttributes(value Ospfv2LsaLinkTrafficEngineering) Ospfv2OpaqueLsaExtendedLink
 	// HasLinkAttributes checks if LinkAttributes has been set in Ospfv2OpaqueLsaExtendedLink
 	HasLinkAttributes() bool
@@ -415,39 +413,108 @@ func (obj *ospfv2OpaqueLsaExtendedLink) SetLinkData(value string) Ospfv2OpaqueLs
 	return obj
 }
 
-// The Adjacency-SID advertised for this link, decoded from the Adj-SID sub-TLV,
-// sub-type 2, or the LAN Adj-SID sub-TLV, sub-type 3 (RFC 8665 Sections 6.1, 6.2).
-// AdjacencySid returns a Ospfv2LsaAdjacencySid
-func (obj *ospfv2OpaqueLsaExtendedLink) AdjacencySid() Ospfv2LsaAdjacencySid {
-	if obj.obj.AdjacencySid == nil {
-		obj.obj.AdjacencySid = NewOspfv2LsaAdjacencySid().msg()
+// The Adjacency-SIDs advertised for this link, decoded from the Adj-SID sub-TLV,
+// sub-type 2, and the LAN Adj-SID sub-TLV, sub-type 3 (RFC 8665 Sections 6.1,
+// 6.2). One entry per sub-TLV instance, in the order the sub-TLVs appear in the
+// Extended Link TLV, with entry.type naming which of the two sub-TLVs each entry
+// was decoded from; the two forms may be mixed in this list. Both sub-TLVs may
+// appear multiple times in one Extended Link TLV - a router may allocate more
+// than one Adj-SID to an adjacency, and a LAN Adj-SID is advertised per neighbor
+// on a multi-access link - so this is a list.
+// AdjacencySids returns a []Ospfv2LsaAdjacencySid
+func (obj *ospfv2OpaqueLsaExtendedLink) AdjacencySids() Ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter {
+	if len(obj.obj.AdjacencySids) == 0 {
+		obj.obj.AdjacencySids = []*otg.Ospfv2LsaAdjacencySid{}
 	}
-	if obj.adjacencySidHolder == nil {
-		obj.adjacencySidHolder = &ospfv2LsaAdjacencySid{obj: obj.obj.AdjacencySid}
+	if obj.adjacencySidsHolder == nil {
+		obj.adjacencySidsHolder = newOspfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter(&obj.obj.AdjacencySids).setMsg(obj)
 	}
-	return obj.adjacencySidHolder
+	return obj.adjacencySidsHolder
 }
 
-// The Adjacency-SID advertised for this link, decoded from the Adj-SID sub-TLV,
-// sub-type 2, or the LAN Adj-SID sub-TLV, sub-type 3 (RFC 8665 Sections 6.1, 6.2).
-// AdjacencySid returns a Ospfv2LsaAdjacencySid
-func (obj *ospfv2OpaqueLsaExtendedLink) HasAdjacencySid() bool {
-	return obj.obj.AdjacencySid != nil
+type ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter struct {
+	obj                        *ospfv2OpaqueLsaExtendedLink
+	ospfv2LsaAdjacencySidSlice []Ospfv2LsaAdjacencySid
+	fieldPtr                   *[]*otg.Ospfv2LsaAdjacencySid
 }
 
-// The Adjacency-SID advertised for this link, decoded from the Adj-SID sub-TLV,
-// sub-type 2, or the LAN Adj-SID sub-TLV, sub-type 3 (RFC 8665 Sections 6.1, 6.2).
-// SetAdjacencySid sets the Ospfv2LsaAdjacencySid value in the Ospfv2OpaqueLsaExtendedLink object
-func (obj *ospfv2OpaqueLsaExtendedLink) SetAdjacencySid(value Ospfv2LsaAdjacencySid) Ospfv2OpaqueLsaExtendedLink {
+func newOspfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter(ptr *[]*otg.Ospfv2LsaAdjacencySid) Ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter {
+	return &ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter{fieldPtr: ptr}
+}
 
-	obj.adjacencySidHolder = nil
-	obj.obj.AdjacencySid = value.msg()
+type Ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter interface {
+	setMsg(*ospfv2OpaqueLsaExtendedLink) Ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter
+	Items() []Ospfv2LsaAdjacencySid
+	Add() Ospfv2LsaAdjacencySid
+	Append(items ...Ospfv2LsaAdjacencySid) Ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter
+	Set(index int, newObj Ospfv2LsaAdjacencySid) Ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter
+	Clear() Ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter
+	clearHolderSlice() Ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter
+	appendHolderSlice(item Ospfv2LsaAdjacencySid) Ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter
+}
 
+func (obj *ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter) setMsg(msg *ospfv2OpaqueLsaExtendedLink) Ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&ospfv2LsaAdjacencySid{obj: val})
+	}
+	obj.obj = msg
 	return obj
 }
 
-// The link attributes advertised for this link, decoded from the application-specific
-// and legacy link attribute sub-TLVs of the Extended Link TLV (RFC 9492 Section 6).
+func (obj *ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter) Items() []Ospfv2LsaAdjacencySid {
+	return obj.ospfv2LsaAdjacencySidSlice
+}
+
+func (obj *ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter) Add() Ospfv2LsaAdjacencySid {
+	newObj := &otg.Ospfv2LsaAdjacencySid{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &ospfv2LsaAdjacencySid{obj: newObj}
+	newLibObj.setDefault()
+	obj.ospfv2LsaAdjacencySidSlice = append(obj.ospfv2LsaAdjacencySidSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter) Append(items ...Ospfv2LsaAdjacencySid) Ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.ospfv2LsaAdjacencySidSlice = append(obj.ospfv2LsaAdjacencySidSlice, item)
+	}
+	return obj
+}
+
+func (obj *ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter) Set(index int, newObj Ospfv2LsaAdjacencySid) Ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.ospfv2LsaAdjacencySidSlice[index] = newObj
+	return obj
+}
+func (obj *ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter) Clear() Ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.Ospfv2LsaAdjacencySid{}
+		obj.ospfv2LsaAdjacencySidSlice = []Ospfv2LsaAdjacencySid{}
+	}
+	return obj
+}
+func (obj *ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter) clearHolderSlice() Ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter {
+	if len(obj.ospfv2LsaAdjacencySidSlice) > 0 {
+		obj.ospfv2LsaAdjacencySidSlice = []Ospfv2LsaAdjacencySid{}
+	}
+	return obj
+}
+func (obj *ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter) appendHolderSlice(item Ospfv2LsaAdjacencySid) Ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter {
+	obj.ospfv2LsaAdjacencySidSlice = append(obj.ospfv2LsaAdjacencySidSlice, item)
+	return obj
+}
+
+// Traffic engineering link attributes associated with this Extended Link. This
+// object represents the supported link-attribute set and does not expose the
+// underlying OSPF sub-TLV structure: it is a semantic grouping of the attribute
+// values advertised for the link, not a decode of one sub-TLV instance. The
+// values are sourced from the application-specific and legacy link attribute
+// sub-TLVs of the Extended Link TLV (RFC 9492 Section 6), and RFC 9492 allows an
+// attribute to be advertised more than once, per application, so which instance
+// a value came from is not recoverable from this object.
 // LinkAttributes returns a Ospfv2LsaLinkTrafficEngineering
 func (obj *ospfv2OpaqueLsaExtendedLink) LinkAttributes() Ospfv2LsaLinkTrafficEngineering {
 	if obj.obj.LinkAttributes == nil {
@@ -459,15 +526,27 @@ func (obj *ospfv2OpaqueLsaExtendedLink) LinkAttributes() Ospfv2LsaLinkTrafficEng
 	return obj.linkAttributesHolder
 }
 
-// The link attributes advertised for this link, decoded from the application-specific
-// and legacy link attribute sub-TLVs of the Extended Link TLV (RFC 9492 Section 6).
+// Traffic engineering link attributes associated with this Extended Link. This
+// object represents the supported link-attribute set and does not expose the
+// underlying OSPF sub-TLV structure: it is a semantic grouping of the attribute
+// values advertised for the link, not a decode of one sub-TLV instance. The
+// values are sourced from the application-specific and legacy link attribute
+// sub-TLVs of the Extended Link TLV (RFC 9492 Section 6), and RFC 9492 allows an
+// attribute to be advertised more than once, per application, so which instance
+// a value came from is not recoverable from this object.
 // LinkAttributes returns a Ospfv2LsaLinkTrafficEngineering
 func (obj *ospfv2OpaqueLsaExtendedLink) HasLinkAttributes() bool {
 	return obj.obj.LinkAttributes != nil
 }
 
-// The link attributes advertised for this link, decoded from the application-specific
-// and legacy link attribute sub-TLVs of the Extended Link TLV (RFC 9492 Section 6).
+// Traffic engineering link attributes associated with this Extended Link. This
+// object represents the supported link-attribute set and does not expose the
+// underlying OSPF sub-TLV structure: it is a semantic grouping of the attribute
+// values advertised for the link, not a decode of one sub-TLV instance. The
+// values are sourced from the application-specific and legacy link attribute
+// sub-TLVs of the Extended Link TLV (RFC 9492 Section 6), and RFC 9492 allows an
+// attribute to be advertised more than once, per application, so which instance
+// a value came from is not recoverable from this object.
 // SetLinkAttributes sets the Ospfv2LsaLinkTrafficEngineering value in the Ospfv2OpaqueLsaExtendedLink object
 func (obj *ospfv2OpaqueLsaExtendedLink) SetLinkAttributes(value Ospfv2LsaLinkTrafficEngineering) Ospfv2OpaqueLsaExtendedLink {
 
@@ -500,9 +579,18 @@ func (obj *ospfv2OpaqueLsaExtendedLink) validateObj(vObj *validation, set_defaul
 
 	}
 
-	if obj.obj.AdjacencySid != nil {
+	if len(obj.obj.AdjacencySids) != 0 {
 
-		obj.AdjacencySid().validateObj(vObj, set_default)
+		if set_default {
+			obj.AdjacencySids().clearHolderSlice()
+			for _, item := range obj.obj.AdjacencySids {
+				obj.AdjacencySids().appendHolderSlice(&ospfv2LsaAdjacencySid{obj: item})
+			}
+		}
+		for _, item := range obj.AdjacencySids().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
 	}
 
 	if obj.obj.LinkAttributes != nil {
