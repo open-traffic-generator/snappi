@@ -270,10 +270,10 @@ type LagPortMacsecSecureEntityDataPlaneRxValidateFrames interface {
 	setChoice(value LagPortMacsecSecureEntityDataPlaneRxValidateFramesChoiceEnum) LagPortMacsecSecureEntityDataPlaneRxValidateFrames
 	// HasChoice checks if Choice has been set in LagPortMacsecSecureEntityDataPlaneRxValidateFrames
 	HasChoice() bool
-	// getter for Check to set choice.
-	Check()
 	// getter for Strict to set choice.
 	Strict()
+	// getter for Check to set choice.
+	Check()
 }
 
 type LagPortMacsecSecureEntityDataPlaneRxValidateFramesChoiceEnum string
@@ -291,14 +291,14 @@ func (obj *lagPortMacsecSecureEntityDataPlaneRxValidateFrames) Choice() LagPortM
 	return LagPortMacsecSecureEntityDataPlaneRxValidateFramesChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for Check to set choice
-func (obj *lagPortMacsecSecureEntityDataPlaneRxValidateFrames) Check() {
-	obj.setChoice(LagPortMacsecSecureEntityDataPlaneRxValidateFramesChoice.CHECK)
-}
-
 // getter for Strict to set choice
 func (obj *lagPortMacsecSecureEntityDataPlaneRxValidateFrames) Strict() {
 	obj.setChoice(LagPortMacsecSecureEntityDataPlaneRxValidateFramesChoice.STRICT)
+}
+
+// getter for Check to set choice
+func (obj *lagPortMacsecSecureEntityDataPlaneRxValidateFrames) Check() {
+	obj.setChoice(LagPortMacsecSecureEntityDataPlaneRxValidateFramesChoice.CHECK)
 }
 
 // Controls validation of received frames. check - enable validation, do not discard invalid frames and increment in_pkts_invalid stats. strict - enable validation and discard invalid frames and increment in_pkts_not_valid stats.

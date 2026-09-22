@@ -329,6 +329,9 @@ from .snappi import BgpRawBytes
 from .snappi import BgpOneUpdateReplay
 from .snappi import BgpOneUpdateReplayIter
 from .snappi import BgpL3vpnVrf
+from .snappi import BgpL3vpnV6RouteRange
+from .snappi import BgpL3vpnV6ServiceBinding
+from .snappi import BgpL3vpnV6RouteRangeIter
 from .snappi import BgpL3vpnVrfIter
 from .snappi import BgpV4PeerIter
 from .snappi import BgpV4InterfaceIter
@@ -1745,6 +1748,8 @@ from .snappi import BgpPrefixIpv6MplsUnicastState
 from .snappi import BgpPrefixIpv6MplsUnicastStateIter
 from .snappi import BgpPrefixIpv4MplsVpnUnicastState
 from .snappi import BgpPrefixIpv4MplsVpnUnicastStateIter
+from .snappi import BgpPrefixIpv6MplsVpnUnicastState
+from .snappi import BgpPrefixIpv6MplsVpnUnicastStateIter
 from .snappi import BgpPrefixesStateIter
 from .snappi import IsisLspsState
 from .snappi import IsisLspState

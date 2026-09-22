@@ -21,6 +21,7 @@ type bgpPrefixesState struct {
 	ipv4MplsUnicastPrefixesHolder    BgpPrefixesStateBgpPrefixIpv4MplsUnicastStateIter
 	ipv6MplsUnicastPrefixesHolder    BgpPrefixesStateBgpPrefixIpv6MplsUnicastStateIter
 	ipv4MplsVpnUnicastPrefixesHolder BgpPrefixesStateBgpPrefixIpv4MplsVpnUnicastStateIter
+	ipv6MplsVpnUnicastPrefixesHolder BgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter
 }
 
 func NewBgpPrefixesState() BgpPrefixesState {
@@ -253,6 +254,7 @@ func (obj *bgpPrefixesState) setNil() {
 	obj.ipv4MplsUnicastPrefixesHolder = nil
 	obj.ipv6MplsUnicastPrefixesHolder = nil
 	obj.ipv4MplsVpnUnicastPrefixesHolder = nil
+	obj.ipv6MplsVpnUnicastPrefixesHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -296,6 +298,8 @@ type BgpPrefixesState interface {
 	Ipv6MplsUnicastPrefixes() BgpPrefixesStateBgpPrefixIpv6MplsUnicastStateIter
 	// Ipv4MplsVpnUnicastPrefixes returns BgpPrefixesStateBgpPrefixIpv4MplsVpnUnicastStateIterIter, set in BgpPrefixesState
 	Ipv4MplsVpnUnicastPrefixes() BgpPrefixesStateBgpPrefixIpv4MplsVpnUnicastStateIter
+	// Ipv6MplsVpnUnicastPrefixes returns BgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIterIter, set in BgpPrefixesState
+	Ipv6MplsVpnUnicastPrefixes() BgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter
 	setNil()
 }
 
@@ -756,6 +760,93 @@ func (obj *bgpPrefixesStateBgpPrefixIpv4MplsVpnUnicastStateIter) appendHolderSli
 	return obj
 }
 
+// BGP/MPLS L3VPN (RFC 4659) VPN-IPv6 (6VPE) learned prefixes.
+// Ipv6MplsVpnUnicastPrefixes returns a []BgpPrefixIpv6MplsVpnUnicastState
+func (obj *bgpPrefixesState) Ipv6MplsVpnUnicastPrefixes() BgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter {
+	if len(obj.obj.Ipv6MplsVpnUnicastPrefixes) == 0 {
+		obj.obj.Ipv6MplsVpnUnicastPrefixes = []*otg.BgpPrefixIpv6MplsVpnUnicastState{}
+	}
+	if obj.ipv6MplsVpnUnicastPrefixesHolder == nil {
+		obj.ipv6MplsVpnUnicastPrefixesHolder = newBgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter(&obj.obj.Ipv6MplsVpnUnicastPrefixes).setMsg(obj)
+	}
+	return obj.ipv6MplsVpnUnicastPrefixesHolder
+}
+
+type bgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter struct {
+	obj                                   *bgpPrefixesState
+	bgpPrefixIpv6MplsVpnUnicastStateSlice []BgpPrefixIpv6MplsVpnUnicastState
+	fieldPtr                              *[]*otg.BgpPrefixIpv6MplsVpnUnicastState
+}
+
+func newBgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter(ptr *[]*otg.BgpPrefixIpv6MplsVpnUnicastState) BgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter {
+	return &bgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter{fieldPtr: ptr}
+}
+
+type BgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter interface {
+	setMsg(*bgpPrefixesState) BgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter
+	Items() []BgpPrefixIpv6MplsVpnUnicastState
+	Add() BgpPrefixIpv6MplsVpnUnicastState
+	Append(items ...BgpPrefixIpv6MplsVpnUnicastState) BgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter
+	Set(index int, newObj BgpPrefixIpv6MplsVpnUnicastState) BgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter
+	Clear() BgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter
+	clearHolderSlice() BgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter
+	appendHolderSlice(item BgpPrefixIpv6MplsVpnUnicastState) BgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter
+}
+
+func (obj *bgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter) setMsg(msg *bgpPrefixesState) BgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&bgpPrefixIpv6MplsVpnUnicastState{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter) Items() []BgpPrefixIpv6MplsVpnUnicastState {
+	return obj.bgpPrefixIpv6MplsVpnUnicastStateSlice
+}
+
+func (obj *bgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter) Add() BgpPrefixIpv6MplsVpnUnicastState {
+	newObj := &otg.BgpPrefixIpv6MplsVpnUnicastState{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &bgpPrefixIpv6MplsVpnUnicastState{obj: newObj}
+	newLibObj.setDefault()
+	obj.bgpPrefixIpv6MplsVpnUnicastStateSlice = append(obj.bgpPrefixIpv6MplsVpnUnicastStateSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *bgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter) Append(items ...BgpPrefixIpv6MplsVpnUnicastState) BgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.bgpPrefixIpv6MplsVpnUnicastStateSlice = append(obj.bgpPrefixIpv6MplsVpnUnicastStateSlice, item)
+	}
+	return obj
+}
+
+func (obj *bgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter) Set(index int, newObj BgpPrefixIpv6MplsVpnUnicastState) BgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.bgpPrefixIpv6MplsVpnUnicastStateSlice[index] = newObj
+	return obj
+}
+func (obj *bgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter) Clear() BgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.BgpPrefixIpv6MplsVpnUnicastState{}
+		obj.bgpPrefixIpv6MplsVpnUnicastStateSlice = []BgpPrefixIpv6MplsVpnUnicastState{}
+	}
+	return obj
+}
+func (obj *bgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter) clearHolderSlice() BgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter {
+	if len(obj.bgpPrefixIpv6MplsVpnUnicastStateSlice) > 0 {
+		obj.bgpPrefixIpv6MplsVpnUnicastStateSlice = []BgpPrefixIpv6MplsVpnUnicastState{}
+	}
+	return obj
+}
+func (obj *bgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter) appendHolderSlice(item BgpPrefixIpv6MplsVpnUnicastState) BgpPrefixesStateBgpPrefixIpv6MplsVpnUnicastStateIter {
+	obj.bgpPrefixIpv6MplsVpnUnicastStateSlice = append(obj.bgpPrefixIpv6MplsVpnUnicastStateSlice, item)
+	return obj
+}
+
 func (obj *bgpPrefixesState) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -826,6 +917,20 @@ func (obj *bgpPrefixesState) validateObj(vObj *validation, set_default bool) {
 			}
 		}
 		for _, item := range obj.Ipv4MplsVpnUnicastPrefixes().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
+	if len(obj.obj.Ipv6MplsVpnUnicastPrefixes) != 0 {
+
+		if set_default {
+			obj.Ipv6MplsVpnUnicastPrefixes().clearHolderSlice()
+			for _, item := range obj.obj.Ipv6MplsVpnUnicastPrefixes {
+				obj.Ipv6MplsVpnUnicastPrefixes().appendHolderSlice(&bgpPrefixIpv6MplsVpnUnicastState{obj: item})
+			}
+		}
+		for _, item := range obj.Ipv6MplsVpnUnicastPrefixes().Items() {
 			item.validateObj(vObj, set_default)
 		}
 

@@ -817,6 +817,19 @@ func (obj *bgpPrefixIpv4MplsVpnUnicastState) validateObj(vObj *validation, set_d
 
 	}
 
+	if obj.obj.Labels != nil {
+
+		for _, item := range obj.obj.Labels {
+			if item > 255 {
+				vObj.validationErrors = append(
+					vObj.validationErrors,
+					fmt.Sprintf("min(uint32) <= BgpPrefixIpv4MplsVpnUnicastState.Labels <= 255 but Got %d", item))
+			}
+
+		}
+
+	}
+
 	if len(obj.obj.Communities) != 0 {
 
 		if set_default {

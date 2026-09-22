@@ -8096,7 +8096,116 @@ message BgpL3vpnVrf {
 
   // Emulated IPv6 customer route ranges belonging to this VRF (6VPE, RFC 4659). Each
   // is advertised as VPN-IPv6 NLRI using this VRF's route_distinguisher and route_target_export.
-  repeated BgpV6RouteRange v6_routes = 6;
+  // Each route range's dataplane binding is selected via its own service_binding, currently
+  // a VPN MPLS label (RFC 4364 Section 3); the choice structure keeps room for an additional
+  // binding (for example an SRv6 Service SID, RFC 9252) to be added later without a breaking
+  // change.
+  repeated BgpL3vpnV6RouteRange v6_routes = 6;
+}
+
+// Emulated VPN-IPv6 customer route range belonging to a Bgp.L3vpn.Vrf (RFC 4659, 6VPE).
+// Same shape as the plain Bgp.V6RouteRange, except the dataplane binding is selected
+// via service_binding, a choice that currently offers only a VPN MPLS label (RFC 4364
+// Section 3) but keeps the route range independent of the shared Bgp.V6RouteRange/
+// Bgp.MplsLabelBindings schemas so that an additional dataplane binding (for example
+// an SRv6 Service SID, RFC 9252) can be added later as a new choice value without a
+// breaking change.
+message BgpL3vpnV6RouteRange {
+
+  // A list of group of IPv6 route addresses.
+  repeated V6RouteAddress addresses = 1;
+
+  message NextHopMode {
+    enum Enum {
+      unspecified = 0;
+      local_ip = 1;
+      manual = 2;
+    }
+  }
+  // Specify the NextHop in MP REACH NLRI. The mode for setting the IP address  of the
+  // NextHop in the MP REACH NLRI can be one of the following:
+  // Local IP: Automatically fills the Nexthop with the Local IP of the BGP
+  // peer.
+  // If BGP peer is of type IPv6, Nexthop Encoding capability should be enabled.
+  // Manual: Override the Nexthop with any arbitrary IPv4/IPv6 address.
+  // default = NextHopMode.Enum.local_ip
+  optional NextHopMode.Enum next_hop_mode = 2;
+
+  message NextHopAddressType {
+    enum Enum {
+      unspecified = 0;
+      ipv4 = 1;
+      ipv6 = 2;
+    }
+  }
+  // If the Nexthop Mode is Manual, it sets the type of the NextHop IP address.
+  // default = NextHopAddressType.Enum.ipv6
+  optional NextHopAddressType.Enum next_hop_address_type = 3;
+
+  // The IPv4 address of the next hop if the Nexthop Mode is manual and the Nexthop type
+  // is IPv4. If BGP peer is of type IPv6, Nexthop Encoding capability should be enabled.
+  // default = 0.0.0.0
+  optional string next_hop_ipv4_address = 4;
+
+  // The IPv6 address of the next hop if the Nexthop Mode is manual and the Nexthop type
+  // is IPv6.
+  // default = ::0
+  optional string next_hop_ipv6_address = 5;
+
+  // Description missing in models
+  BgpRouteAdvanced advanced = 6;
+
+  // Optional community settings.
+  repeated BgpCommunity communities = 7;
+
+  // Description missing in models
+  BgpAsPath as_path = 8;
+
+  // Description missing in models
+  BgpAddPath add_path = 9;
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 10;
+
+  // Optional Extended Community settings. The Extended Communities Attribute is a transitive
+  // optional BGP attribute, with the Type Code 16. Community and Extended Communities
+  // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
+  // preference, or redistribution. An extended community is an eight byte value. It
+  // is divided into two main parts. The first two bytes of the community encode a type
+  // and sub-type fields and the last six bytes carry a unique set of data in a format
+  // defined by the type and sub-type field. Extended communities provide a larger range
+  // for grouping or categorizing communities.
+  repeated BgpExtendedCommunity extended_communities = 11;
+
+  // Selects and configures this route range's VPN dataplane binding. Only the VPN MPLS
+  // label is currently supported; the choice structure exists so that an additional dataplane
+  // binding can be added later without breaking this field.
+  BgpL3vpnV6ServiceBinding service_binding = 12;
+}
+
+// Selects how a VPN-IPv6 route range's dataplane binding is advertised. Currently the
+// only defined choice is the traditional VPN MPLS label (RFC 4364 Section 3); the choice
+// discriminator is kept independent of the shared Bgp.MplsLabelBindings schema so a
+// future dataplane binding (for example an SRv6 Service SID, RFC 9252) can be added
+// as a new sibling choice value without restructuring this schema or affecting existing
+// mpls_labels configs.
+message BgpL3vpnV6ServiceBinding {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      mpls_labels = 1;
+    }
+  }
+  // The VPN dataplane encoding advertised for this route range's routes.
+  // default = Choice.Enum.mpls_labels
+  optional Choice.Enum choice = 1;
+
+  // Optional configuration for a BGP speaker to bind an address prefix to one or more
+  // MPLS labels (RFC 3107/8277, RFC 4364 Section 3).
+  BgpMplsLabelBindings mpls_labels = 2;
 }
 
 // Configuration for BGPv6 peer settings and routes.
@@ -15637,9 +15746,15 @@ message FlowsUpdate {
       unspecified = 0;
       rate = 1;
       size = 2;
+      packet = 3;
     }
   }
-  // Flow properties to be updated without affecting the transmit state.
+  // Flow properties to be updated without affecting the transmit state. rate and size
+  // are OTF on every implementation. packet (a header field value, e.g. an Mpls label)
+  // is implementation-specific: it is OTF only for header fields the implementation is
+  // able to update without disrupting the running transmit. For a field that does not
+  // support this, the implementation should fall back to the same warn-and-reapply behavior
+  // that Protocols.Update uses for a session that cannot be updated purely on-the-fly.
   repeated PropertyNames.Enum property_names = 1;
 
   // The list of configured flows for which the given property will be updated.
@@ -20256,6 +20371,7 @@ message BgpPrefixStateRequest {
       ipv4_mpls_unicast = 3;
       ipv6_mpls_unicast = 4;
       ipv4_mpls_vpn_unicast = 5;
+      ipv6_mpls_vpn_unicast = 6;
     }
   }
   // Specify which prefixes to return. If the list is empty or missing then all prefixes
@@ -20345,6 +20461,9 @@ message BgpPrefixesState {
 
   // BGP/MPLS L3VPN (RFC 4364) VPN-IPv4 learned prefixes.
   repeated BgpPrefixIpv4MplsVpnUnicastState ipv4_mpls_vpn_unicast_prefixes = 6;
+
+  // BGP/MPLS L3VPN (RFC 4659) VPN-IPv6 (6VPE) learned prefixes.
+  repeated BgpPrefixIpv6MplsVpnUnicastState ipv6_mpls_vpn_unicast_prefixes = 7;
 }
 
 // IPv4 unicast prefix.
@@ -20809,6 +20928,60 @@ message BgpPrefixIpv4MplsUnicastState {
   optional uint32 multi_exit_discriminator = 12;
 }
 
+// IPv6 MPLS unicast prefix.
+message BgpPrefixIpv6MplsUnicastState {
+
+  // An IPv6 unicast address
+  optional string ipv6_address = 1;
+
+  // Description missing in models
+  optional uint32 prefix_length = 2;
+
+  message Origin {
+    enum Enum {
+      unspecified = 0;
+      igp = 1;
+      egp = 2;
+      incomplete = 3;
+    }
+  }
+  // The origin of the prefix.
+  optional Origin.Enum origin = 3;
+
+  // The path id.
+  optional uint32 path_id = 4;
+
+  // The IPv4 address of the egress interface.
+  optional string ipv4_next_hop = 5;
+
+  // The IPv6 address of the egress interface.
+  optional string ipv6_next_hop = 6;
+
+  // One or more MPLS Label 24 bit values bound to this address prefix.
+  repeated uint32 labels = 7;
+
+  // Optional community attributes.
+  repeated ResultBgpCommunity communities = 8;
+
+  // Optional received Extended Community attributes. Each received Extended Community
+  // attribute is available for retrieval in two forms. Support of the 'raw' format in
+  // which all 8 bytes (16 hex characters) is always present and available for use. In
+  // addition, if supported by the implementation, the Extended Community attribute may
+  // also be retrieved in the  'structured' format which is an optional field.
+  repeated ResultExtendedCommunity extended_communities = 9;
+
+  // Description missing in models
+  ResultBgpAsPath as_path = 10;
+
+  // The local preference is a well-known attribute and the value is used for route selection.
+  // The route with the highest local preference value is preferred.
+  optional uint32 local_preference = 11;
+
+  // The multi exit discriminator (MED) is an optional non-transitive attribute and the
+  // value is used for route selection. The route with the lowest MED value is preferred.
+  optional uint32 multi_exit_discriminator = 12;
+}
+
 // BGP/MPLS L3VPN (RFC 4364) VPN-IPv4 learned prefix, received under the VPN-IPv4 AFI/SAFI
 // (AFI 1, SAFI 128).
 message BgpPrefixIpv4MplsVpnUnicastState {
@@ -20870,14 +21043,19 @@ message BgpPrefixIpv4MplsVpnUnicastState {
   optional uint32 multi_exit_discriminator = 13;
 }
 
-// IPv6 MPLS unicast prefix.
-message BgpPrefixIpv6MplsUnicastState {
+// BGP/MPLS L3VPN (RFC 4659) VPN-IPv6 (6VPE) learned prefix, received under the VPN-IPv6
+// AFI/SAFI (AFI 2, SAFI 128).
+message BgpPrefixIpv6MplsVpnUnicastState {
 
-  // An IPv6 unicast address
-  optional string ipv6_address = 1;
+  // The Route Distinguisher (RFC 4364 Section 4.1) received as part of the VPN-IPv6 NLRI,
+  // formatted as a colon separated value, for example 60005:100 or 1.1.1.1:100.
+  optional string route_distinguisher = 1;
+
+  // An IPv6 unicast address.
+  optional string ipv6_address = 2;
 
   // Description missing in models
-  optional uint32 prefix_length = 2;
+  optional uint32 prefix_length = 3;
 
   message Origin {
     enum Enum {
@@ -20888,40 +21066,42 @@ message BgpPrefixIpv6MplsUnicastState {
     }
   }
   // The origin of the prefix.
-  optional Origin.Enum origin = 3;
+  optional Origin.Enum origin = 4;
 
   // The path id.
-  optional uint32 path_id = 4;
+  optional uint32 path_id = 5;
 
   // The IPv4 address of the egress interface.
-  optional string ipv4_next_hop = 5;
+  optional string ipv4_next_hop = 6;
 
   // The IPv6 address of the egress interface.
-  optional string ipv6_next_hop = 6;
+  optional string ipv6_next_hop = 7;
 
-  // One or more MPLS Label 24 bit values bound to this address prefix.
-  repeated uint32 labels = 7;
+  // One or more MPLS VPN Label 24 bit values bound to this VPN-IPv6 prefix (RFC 4364
+  // Section 3, RFC 4659).
+  repeated uint32 labels = 8;
 
   // Optional community attributes.
-  repeated ResultBgpCommunity communities = 8;
+  repeated ResultBgpCommunity communities = 9;
 
-  // Optional received Extended Community attributes. Each received Extended Community
-  // attribute is available for retrieval in two forms. Support of the 'raw' format in
-  // which all 8 bytes (16 hex characters) is always present and available for use. In
-  // addition, if supported by the implementation, the Extended Community attribute may
-  // also be retrieved in the  'structured' format which is an optional field.
-  repeated ResultExtendedCommunity extended_communities = 9;
+  // Optional received Extended Community attributes, including the Route Target(s) (RFC
+  // 4360) attached to this VPN-IPv6 route. Each received Extended Community attribute
+  // is available for retrieval in two forms. Support of the 'raw' format in which all
+  // 8 bytes (16 hex characters) is always present and available for use. In addition,
+  // if supported by the implementation, the Extended Community attribute may also be
+  // retrieved in the 'structured' format which is an optional field.
+  repeated ResultExtendedCommunity extended_communities = 10;
 
   // Description missing in models
-  ResultBgpAsPath as_path = 10;
+  ResultBgpAsPath as_path = 11;
 
   // The local preference is a well-known attribute and the value is used for route selection.
   // The route with the highest local preference value is preferred.
-  optional uint32 local_preference = 11;
+  optional uint32 local_preference = 12;
 
   // The multi exit discriminator (MED) is an optional non-transitive attribute and the
   // value is used for route selection. The route with the lowest MED value is preferred.
-  optional uint32 multi_exit_discriminator = 12;
+  optional uint32 multi_exit_discriminator = 13;
 }
 
 // BGP communities provide additional capability for tagging routes and  for modifying

@@ -329,12 +329,14 @@ var BgpPrefixStateRequestPrefixFilters = struct {
 	IPV4_MPLS_UNICAST     BgpPrefixStateRequestPrefixFiltersEnum
 	IPV6_MPLS_UNICAST     BgpPrefixStateRequestPrefixFiltersEnum
 	IPV4_MPLS_VPN_UNICAST BgpPrefixStateRequestPrefixFiltersEnum
+	IPV6_MPLS_VPN_UNICAST BgpPrefixStateRequestPrefixFiltersEnum
 }{
 	IPV4_UNICAST:          BgpPrefixStateRequestPrefixFiltersEnum("ipv4_unicast"),
 	IPV6_UNICAST:          BgpPrefixStateRequestPrefixFiltersEnum("ipv6_unicast"),
 	IPV4_MPLS_UNICAST:     BgpPrefixStateRequestPrefixFiltersEnum("ipv4_mpls_unicast"),
 	IPV6_MPLS_UNICAST:     BgpPrefixStateRequestPrefixFiltersEnum("ipv6_mpls_unicast"),
 	IPV4_MPLS_VPN_UNICAST: BgpPrefixStateRequestPrefixFiltersEnum("ipv4_mpls_vpn_unicast"),
+	IPV6_MPLS_VPN_UNICAST: BgpPrefixStateRequestPrefixFiltersEnum("ipv6_mpls_vpn_unicast"),
 }
 
 func (obj *bgpPrefixStateRequest) PrefixFilters() []BgpPrefixStateRequestPrefixFiltersEnum {

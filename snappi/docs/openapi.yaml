@@ -7798,6 +7798,7 @@ components:
           - labels
         labels:
           type: array
+          maxItems: 255
           items:
             $ref: '#/components/schemas/RouteMplsLabelValue'
           x-field-uid: 2
@@ -10830,11 +10831,133 @@ components:
           x-field-uid: 5
         v6_routes:
           description: |-
-            Emulated IPv6 customer route ranges belonging to this VRF (6VPE, RFC 4659). Each is advertised as VPN-IPv6 NLRI using this VRF's route_distinguisher and route_target_export.
+            Emulated IPv6 customer route ranges belonging to this VRF (6VPE, RFC 4659). Each is advertised as VPN-IPv6 NLRI using this VRF's route_distinguisher and route_target_export. Each route range's dataplane binding is selected via its own service_binding, currently a VPN MPLS label (RFC 4364 Section 3); the choice structure keeps room for an additional binding (for example an SRv6 Service SID, RFC 9252) to be added later without a breaking change.
           type: array
           items:
-            $ref: '#/components/schemas/Bgp.V6RouteRange'
+            $ref: '#/components/schemas/Bgp.L3vpn.V6RouteRange'
           x-field-uid: 6
+    Bgp.L3vpn.V6RouteRange:
+      description: |-
+        Emulated VPN-IPv6 customer route range belonging to a Bgp.L3vpn.Vrf (RFC 4659, 6VPE). Same shape as the plain Bgp.V6RouteRange, except the dataplane binding is selected via service_binding, a choice that currently offers only a VPN MPLS label (RFC 4364 Section 3) but keeps the route range independent of the shared Bgp.V6RouteRange/ Bgp.MplsLabelBindings schemas so that an additional dataplane binding (for example an SRv6 Service SID, RFC 9252) can be added later as a new choice value without a breaking change.
+      type: object
+      required:
+      - name
+      properties:
+        addresses:
+          x-field-uid: 1
+          description: |-
+            A list of group of IPv6 route addresses.
+          type: array
+          items:
+            $ref: '#/components/schemas/V6RouteAddress'
+        next_hop_mode:
+          x-field-uid: 2
+          description: "Specify the NextHop in MP REACH NLRI. The mode for setting\
+            \ the IP address  of the NextHop in the MP REACH NLRI can be one of the\
+            \ following:\n  Local IP: Automatically fills the Nexthop with the Local\
+            \ IP of the BGP\npeer.\n  If BGP peer is of type IPv6, Nexthop Encoding\
+            \ capability should be enabled.\n  Manual: Override the Nexthop with any\
+            \ arbitrary IPv4/IPv6 address.   "
+          type: string
+          default: local_ip
+          x-enum:
+            local_ip:
+              x-field-uid: 1
+            manual:
+              x-field-uid: 2
+          enum:
+          - local_ip
+          - manual
+        next_hop_address_type:
+          x-field-uid: 3
+          description: |-
+            If the Nexthop Mode is Manual, it sets the type of the NextHop IP address.
+          type: string
+          default: ipv6
+          x-enum:
+            ipv4:
+              x-field-uid: 1
+            ipv6:
+              x-field-uid: 2
+          enum:
+          - ipv4
+          - ipv6
+        next_hop_ipv4_address:
+          x-field-uid: 4
+          description: |-
+            The IPv4 address of the next hop if the Nexthop Mode is manual and the Nexthop type is IPv4. If BGP peer is of type IPv6, Nexthop Encoding capability should be enabled.
+          type: string
+          format: ipv4
+          default: 0.0.0.0
+        next_hop_ipv6_address:
+          x-field-uid: 5
+          description: "The IPv6 address of the next hop if the Nexthop Mode is manual\
+            \ and the Nexthop type is IPv6. "
+          type: string
+          format: ipv6
+          default: ::0
+        advanced:
+          x-field-uid: 6
+          $ref: '#/components/schemas/Bgp.RouteAdvanced'
+        communities:
+          x-field-uid: 7
+          description: |-
+            Optional community settings.
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.Community'
+        as_path:
+          x-field-uid: 8
+          $ref: '#/components/schemas/Bgp.AsPath'
+        add_path:
+          x-field-uid: 9
+          $ref: '#/components/schemas/Bgp.AddPath'
+        name:
+          x-field-uid: 10
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          x-unique: global
+        extended_communities:
+          x-field-uid: 11
+          description: "Optional Extended Community settings. The Extended Communities\
+            \ Attribute is a transitive optional BGP attribute, with the Type Code\
+            \ 16. Community and Extended Communities  attributes are utilized to trigger\
+            \ routing decisions, such as acceptance, rejection,  preference, or redistribution.\
+            \ An extended community is an eight byte value. It is divided into two\
+            \ main parts. The first two bytes of the community encode a type and sub-type\
+            \ fields and the last six bytes carry a unique set of data in a format\
+            \ defined by the type and sub-type field. Extended communities provide\
+            \ a larger range for grouping or categorizing communities.            "
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.ExtendedCommunity'
+        service_binding:
+          description: |-
+            Selects and configures this route range's VPN dataplane binding. Only the VPN MPLS label is currently supported; the choice structure exists so that an additional dataplane binding can be added later without breaking this field.
+          $ref: '#/components/schemas/Bgp.L3vpn.V6ServiceBinding'
+          x-field-uid: 12
+    Bgp.L3vpn.V6ServiceBinding:
+      description: |-
+        Selects how a VPN-IPv6 route range's dataplane binding is advertised. Currently the only defined choice is the traditional VPN MPLS label (RFC 4364 Section 3); the choice discriminator is kept independent of the shared Bgp.MplsLabelBindings schema so a future dataplane binding (for example an SRv6 Service SID, RFC 9252) can be added as a new sibling choice value without restructuring this schema or affecting existing mpls_labels configs.
+      type: object
+      properties:
+        choice:
+          description: |-
+            The VPN dataplane encoding advertised for this route range's routes.
+          type: string
+          default: mpls_labels
+          x-enum:
+            mpls_labels:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - mpls_labels
+        mpls_labels:
+          description: |-
+            Optional configuration for a BGP speaker to bind an address prefix to one or more MPLS labels (RFC 3107/8277, RFC 4364 Section 3).
+          $ref: '#/components/schemas/Bgp.MplsLabelBindings'
+          x-field-uid: 2
     Bgp.V6Peer:
       description: |-
         Configuration for BGPv6 peer settings and routes.
@@ -20280,7 +20403,7 @@ components:
       properties:
         property_names:
           description: |-
-            Flow properties to be updated without affecting the transmit state.
+            Flow properties to be updated without affecting the transmit state. rate and size are OTF on every implementation. packet (a header field value, e.g. an Mpls label) is implementation-specific: it is OTF only for header fields the implementation is able to update without disrupting the running transmit. For a field that does not support this, the implementation should fall back to the same warn-and-reapply behavior that Protocols.Update uses for a session that cannot be updated purely on-the-fly.
           type: array
           items:
             type: string
@@ -20289,9 +20412,12 @@ components:
                 x-field-uid: 1
               size:
                 x-field-uid: 2
+              packet:
+                x-field-uid: 3
             enum:
             - rate
             - size
+            - packet
           x-field-uid: 1
         flows:
           description: |-
@@ -27544,12 +27670,15 @@ components:
                 x-field-uid: 4
               ipv4_mpls_vpn_unicast:
                 x-field-uid: 5
+              ipv6_mpls_vpn_unicast:
+                x-field-uid: 6
             enum:
             - ipv4_unicast
             - ipv6_unicast
             - ipv4_mpls_unicast
             - ipv6_mpls_unicast
             - ipv4_mpls_vpn_unicast
+            - ipv6_mpls_vpn_unicast
           x-field-uid: 2
         ipv4_unicast_filters:
           description: |-
@@ -27682,6 +27811,13 @@ components:
           items:
             $ref: '#/components/schemas/BgpPrefixIpv4MplsVpnUnicast.State'
           x-field-uid: 6
+        ipv6_mpls_vpn_unicast_prefixes:
+          description: |-
+            BGP/MPLS L3VPN (RFC 4659) VPN-IPv6 (6VPE) learned prefixes.
+          type: array
+          items:
+            $ref: '#/components/schemas/BgpPrefixIpv6MplsVpnUnicast.State'
+          x-field-uid: 7
     BgpPrefixIpv4Unicast.State:
       description: |-
         IPv4 unicast prefix.
@@ -28290,97 +28426,6 @@ components:
             The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
           type: integer
           format: uint32
-    BgpPrefixIpv4MplsVpnUnicast.State:
-      description: |-
-        BGP/MPLS L3VPN (RFC 4364) VPN-IPv4 learned prefix, received under the VPN-IPv4 AFI/SAFI (AFI 1, SAFI 128).
-      type: object
-      properties:
-        route_distinguisher:
-          description: |-
-            The Route Distinguisher (RFC 4364 Section 4.1) received as part of the VPN-IPv4 NLRI, formatted as a colon separated value, for example "60005:100" or "1.1.1.1:100".
-          type: string
-          x-field-uid: 1
-        ipv4_address:
-          description: |-
-            An IPv4 unicast address.
-          type: string
-          x-field-uid: 2
-        prefix_length:
-          type: integer
-          format: uint32
-          maximum: 32
-          x-field-uid: 3
-        origin:
-          x-field-uid: 4
-          description: |-
-            The origin of the prefix.
-          type: string
-          x-enum:
-            igp:
-              x-field-uid: 1
-            egp:
-              x-field-uid: 2
-            incomplete:
-              x-field-uid: 3
-          enum:
-          - igp
-          - egp
-          - incomplete
-        path_id:
-          x-field-uid: 5
-          description: |-
-            The path id.
-          type: integer
-          format: uint32
-        ipv4_next_hop:
-          x-field-uid: 6
-          description: |-
-            The IPv4 address of the egress interface.
-          type: string
-          format: ipv4
-        ipv6_next_hop:
-          x-field-uid: 7
-          description: |-
-            The IPv6 address of the egress interface.
-          type: string
-          format: ipv6
-        labels:
-          description: |-
-            One or more MPLS VPN Label 24 bit values bound to this VPN-IPv4 prefix (RFC 4364 Section 3).
-          type: array
-          items:
-            type: integer
-            format: uint32
-          x-field-uid: 8
-        communities:
-          x-field-uid: 9
-          description: |-
-            Optional community attributes.
-          type: array
-          items:
-            $ref: '#/components/schemas/Result.BgpCommunity'
-        extended_communities:
-          description: |-
-            Optional received Extended Community attributes, including the Route Target(s) (RFC 4360) attached to this VPN-IPv4 route. Each received Extended Community attribute is available for retrieval in two forms. Support of the 'raw' format in which all 8 bytes (16 hex characters) is always present and available for use. In addition, if supported by the implementation, the Extended Community attribute may also be retrieved in the 'structured' format which is an optional field.
-          type: array
-          items:
-            $ref: '#/components/schemas/Result.ExtendedCommunity'
-          x-field-uid: 10
-        as_path:
-          x-field-uid: 11
-          $ref: '#/components/schemas/Result.BgpAsPath'
-        local_preference:
-          x-field-uid: 12
-          description: |-
-            The local preference is a well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
-          type: integer
-          format: uint32
-        multi_exit_discriminator:
-          x-field-uid: 13
-          description: |-
-            The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
-          type: integer
-          format: uint32
     BgpPrefixIpv6MplsUnicast.State:
       description: |-
         IPv6 MPLS unicast prefix.
@@ -28463,6 +28508,190 @@ components:
           format: uint32
         multi_exit_discriminator:
           x-field-uid: 12
+          description: |-
+            The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+          type: integer
+          format: uint32
+    BgpPrefixIpv4MplsVpnUnicast.State:
+      description: |-
+        BGP/MPLS L3VPN (RFC 4364) VPN-IPv4 learned prefix, received under the VPN-IPv4 AFI/SAFI (AFI 1, SAFI 128).
+      type: object
+      properties:
+        route_distinguisher:
+          description: |-
+            The Route Distinguisher (RFC 4364 Section 4.1) received as part of the VPN-IPv4 NLRI, formatted as a colon separated value, for example "60005:100" or "1.1.1.1:100".
+          type: string
+          x-field-uid: 1
+        ipv4_address:
+          description: |-
+            An IPv4 unicast address.
+          type: string
+          x-field-uid: 2
+        prefix_length:
+          type: integer
+          format: uint32
+          maximum: 32
+          x-field-uid: 3
+        origin:
+          x-field-uid: 4
+          description: |-
+            The origin of the prefix.
+          type: string
+          x-enum:
+            igp:
+              x-field-uid: 1
+            egp:
+              x-field-uid: 2
+            incomplete:
+              x-field-uid: 3
+          enum:
+          - igp
+          - egp
+          - incomplete
+        path_id:
+          x-field-uid: 5
+          description: |-
+            The path id.
+          type: integer
+          format: uint32
+        ipv4_next_hop:
+          x-field-uid: 6
+          description: |-
+            The IPv4 address of the egress interface.
+          type: string
+          format: ipv4
+        ipv6_next_hop:
+          x-field-uid: 7
+          description: |-
+            The IPv6 address of the egress interface.
+          type: string
+          format: ipv6
+        labels:
+          description: |-
+            One or more MPLS VPN Label 24 bit values bound to this VPN-IPv4 prefix (RFC 4364 Section 3).
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 8
+        communities:
+          x-field-uid: 9
+          description: |-
+            Optional community attributes.
+          type: array
+          items:
+            $ref: '#/components/schemas/Result.BgpCommunity'
+        extended_communities:
+          description: |-
+            Optional received Extended Community attributes, including the Route Target(s) (RFC 4360) attached to this VPN-IPv4 route. Each received Extended Community attribute is available for retrieval in two forms. Support of the 'raw' format in which all 8 bytes (16 hex characters) is always present and available for use. In addition, if supported by the implementation, the Extended Community attribute may also be retrieved in the 'structured' format which is an optional field.
+          type: array
+          items:
+            $ref: '#/components/schemas/Result.ExtendedCommunity'
+          x-field-uid: 10
+        as_path:
+          x-field-uid: 11
+          $ref: '#/components/schemas/Result.BgpAsPath'
+        local_preference:
+          x-field-uid: 12
+          description: |-
+            The local preference is a well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+          type: integer
+          format: uint32
+        multi_exit_discriminator:
+          x-field-uid: 13
+          description: |-
+            The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+          type: integer
+          format: uint32
+    BgpPrefixIpv6MplsVpnUnicast.State:
+      description: |-
+        BGP/MPLS L3VPN (RFC 4659) VPN-IPv6 (6VPE) learned prefix, received under the VPN-IPv6 AFI/SAFI (AFI 2, SAFI 128).
+      type: object
+      properties:
+        route_distinguisher:
+          description: |-
+            The Route Distinguisher (RFC 4364 Section 4.1) received as part of the VPN-IPv6 NLRI, formatted as a colon separated value, for example "60005:100" or "1.1.1.1:100".
+          type: string
+          x-field-uid: 1
+        ipv6_address:
+          description: |-
+            An IPv6 unicast address.
+          type: string
+          x-field-uid: 2
+        prefix_length:
+          type: integer
+          format: uint32
+          maximum: 128
+          x-field-uid: 3
+        origin:
+          x-field-uid: 4
+          description: |-
+            The origin of the prefix.
+          type: string
+          x-enum:
+            igp:
+              x-field-uid: 1
+            egp:
+              x-field-uid: 2
+            incomplete:
+              x-field-uid: 3
+          enum:
+          - igp
+          - egp
+          - incomplete
+        path_id:
+          x-field-uid: 5
+          description: |-
+            The path id.
+          type: integer
+          format: uint32
+        ipv4_next_hop:
+          x-field-uid: 6
+          description: |-
+            The IPv4 address of the egress interface.
+          type: string
+          format: ipv4
+        ipv6_next_hop:
+          x-field-uid: 7
+          description: |-
+            The IPv6 address of the egress interface.
+          type: string
+          format: ipv6
+        labels:
+          description: |-
+            One or more MPLS VPN Label 24 bit values bound to this VPN-IPv6 prefix (RFC 4364 Section 3, RFC 4659).
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 8
+        communities:
+          x-field-uid: 9
+          description: |-
+            Optional community attributes.
+          type: array
+          items:
+            $ref: '#/components/schemas/Result.BgpCommunity'
+        extended_communities:
+          description: |-
+            Optional received Extended Community attributes, including the Route Target(s) (RFC 4360) attached to this VPN-IPv6 route. Each received Extended Community attribute is available for retrieval in two forms. Support of the 'raw' format in which all 8 bytes (16 hex characters) is always present and available for use. In addition, if supported by the implementation, the Extended Community attribute may also be retrieved in the 'structured' format which is an optional field.
+          type: array
+          items:
+            $ref: '#/components/schemas/Result.ExtendedCommunity'
+          x-field-uid: 10
+        as_path:
+          x-field-uid: 11
+          $ref: '#/components/schemas/Result.BgpAsPath'
+        local_preference:
+          x-field-uid: 12
+          description: |-
+            The local preference is a well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+          type: integer
+          format: uint32
+        multi_exit_discriminator:
+          x-field-uid: 13
           description: |-
             The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
           type: integer

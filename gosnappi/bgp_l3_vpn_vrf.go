@@ -20,7 +20,7 @@ type bgpL3VpnVrf struct {
 	routeTargetExportHolder  BgpL3VpnVrfBgpRouteTargetIter
 	routeTargetImportHolder  BgpL3VpnVrfBgpRouteTargetIter
 	v4RoutesHolder           BgpL3VpnVrfBgpV4RouteRangeIter
-	v6RoutesHolder           BgpL3VpnVrfBgpV6RouteRangeIter
+	v6RoutesHolder           BgpL3VpnVrfBgpL3VpnV6RouteRangeIter
 }
 
 func NewBgpL3VpnVrf() BgpL3VpnVrf {
@@ -304,8 +304,8 @@ type BgpL3VpnVrf interface {
 	RouteTargetImport() BgpL3VpnVrfBgpRouteTargetIter
 	// V4Routes returns BgpL3VpnVrfBgpV4RouteRangeIterIter, set in BgpL3VpnVrf
 	V4Routes() BgpL3VpnVrfBgpV4RouteRangeIter
-	// V6Routes returns BgpL3VpnVrfBgpV6RouteRangeIterIter, set in BgpL3VpnVrf
-	V6Routes() BgpL3VpnVrfBgpV6RouteRangeIter
+	// V6Routes returns BgpL3VpnVrfBgpL3VpnV6RouteRangeIterIter, set in BgpL3VpnVrf
+	V6Routes() BgpL3VpnVrfBgpL3VpnV6RouteRangeIter
 	setNil()
 }
 
@@ -533,90 +533,90 @@ func (obj *bgpL3VpnVrfBgpV4RouteRangeIter) appendHolderSlice(item BgpV4RouteRang
 	return obj
 }
 
-// Emulated IPv6 customer route ranges belonging to this VRF (6VPE, RFC 4659). Each is advertised as VPN-IPv6 NLRI using this VRF's route_distinguisher and route_target_export.
-// V6Routes returns a []BgpV6RouteRange
-func (obj *bgpL3VpnVrf) V6Routes() BgpL3VpnVrfBgpV6RouteRangeIter {
+// Emulated IPv6 customer route ranges belonging to this VRF (6VPE, RFC 4659). Each is advertised as VPN-IPv6 NLRI using this VRF's route_distinguisher and route_target_export. Each route range's dataplane binding is selected via its own service_binding, currently a VPN MPLS label (RFC 4364 Section 3); the choice structure keeps room for an additional binding (for example an SRv6 Service SID, RFC 9252) to be added later without a breaking change.
+// V6Routes returns a []BgpL3VpnV6RouteRange
+func (obj *bgpL3VpnVrf) V6Routes() BgpL3VpnVrfBgpL3VpnV6RouteRangeIter {
 	if len(obj.obj.V6Routes) == 0 {
-		obj.obj.V6Routes = []*otg.BgpV6RouteRange{}
+		obj.obj.V6Routes = []*otg.BgpL3VpnV6RouteRange{}
 	}
 	if obj.v6RoutesHolder == nil {
-		obj.v6RoutesHolder = newBgpL3VpnVrfBgpV6RouteRangeIter(&obj.obj.V6Routes).setMsg(obj)
+		obj.v6RoutesHolder = newBgpL3VpnVrfBgpL3VpnV6RouteRangeIter(&obj.obj.V6Routes).setMsg(obj)
 	}
 	return obj.v6RoutesHolder
 }
 
-type bgpL3VpnVrfBgpV6RouteRangeIter struct {
-	obj                  *bgpL3VpnVrf
-	bgpV6RouteRangeSlice []BgpV6RouteRange
-	fieldPtr             *[]*otg.BgpV6RouteRange
+type bgpL3VpnVrfBgpL3VpnV6RouteRangeIter struct {
+	obj                       *bgpL3VpnVrf
+	bgpL3VpnV6RouteRangeSlice []BgpL3VpnV6RouteRange
+	fieldPtr                  *[]*otg.BgpL3VpnV6RouteRange
 }
 
-func newBgpL3VpnVrfBgpV6RouteRangeIter(ptr *[]*otg.BgpV6RouteRange) BgpL3VpnVrfBgpV6RouteRangeIter {
-	return &bgpL3VpnVrfBgpV6RouteRangeIter{fieldPtr: ptr}
+func newBgpL3VpnVrfBgpL3VpnV6RouteRangeIter(ptr *[]*otg.BgpL3VpnV6RouteRange) BgpL3VpnVrfBgpL3VpnV6RouteRangeIter {
+	return &bgpL3VpnVrfBgpL3VpnV6RouteRangeIter{fieldPtr: ptr}
 }
 
-type BgpL3VpnVrfBgpV6RouteRangeIter interface {
-	setMsg(*bgpL3VpnVrf) BgpL3VpnVrfBgpV6RouteRangeIter
-	Items() []BgpV6RouteRange
-	Add() BgpV6RouteRange
-	Append(items ...BgpV6RouteRange) BgpL3VpnVrfBgpV6RouteRangeIter
-	Set(index int, newObj BgpV6RouteRange) BgpL3VpnVrfBgpV6RouteRangeIter
-	Clear() BgpL3VpnVrfBgpV6RouteRangeIter
-	clearHolderSlice() BgpL3VpnVrfBgpV6RouteRangeIter
-	appendHolderSlice(item BgpV6RouteRange) BgpL3VpnVrfBgpV6RouteRangeIter
+type BgpL3VpnVrfBgpL3VpnV6RouteRangeIter interface {
+	setMsg(*bgpL3VpnVrf) BgpL3VpnVrfBgpL3VpnV6RouteRangeIter
+	Items() []BgpL3VpnV6RouteRange
+	Add() BgpL3VpnV6RouteRange
+	Append(items ...BgpL3VpnV6RouteRange) BgpL3VpnVrfBgpL3VpnV6RouteRangeIter
+	Set(index int, newObj BgpL3VpnV6RouteRange) BgpL3VpnVrfBgpL3VpnV6RouteRangeIter
+	Clear() BgpL3VpnVrfBgpL3VpnV6RouteRangeIter
+	clearHolderSlice() BgpL3VpnVrfBgpL3VpnV6RouteRangeIter
+	appendHolderSlice(item BgpL3VpnV6RouteRange) BgpL3VpnVrfBgpL3VpnV6RouteRangeIter
 }
 
-func (obj *bgpL3VpnVrfBgpV6RouteRangeIter) setMsg(msg *bgpL3VpnVrf) BgpL3VpnVrfBgpV6RouteRangeIter {
+func (obj *bgpL3VpnVrfBgpL3VpnV6RouteRangeIter) setMsg(msg *bgpL3VpnVrf) BgpL3VpnVrfBgpL3VpnV6RouteRangeIter {
 	obj.clearHolderSlice()
 	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&bgpV6RouteRange{obj: val})
+		obj.appendHolderSlice(&bgpL3VpnV6RouteRange{obj: val})
 	}
 	obj.obj = msg
 	return obj
 }
 
-func (obj *bgpL3VpnVrfBgpV6RouteRangeIter) Items() []BgpV6RouteRange {
-	return obj.bgpV6RouteRangeSlice
+func (obj *bgpL3VpnVrfBgpL3VpnV6RouteRangeIter) Items() []BgpL3VpnV6RouteRange {
+	return obj.bgpL3VpnV6RouteRangeSlice
 }
 
-func (obj *bgpL3VpnVrfBgpV6RouteRangeIter) Add() BgpV6RouteRange {
-	newObj := &otg.BgpV6RouteRange{}
+func (obj *bgpL3VpnVrfBgpL3VpnV6RouteRangeIter) Add() BgpL3VpnV6RouteRange {
+	newObj := &otg.BgpL3VpnV6RouteRange{}
 	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &bgpV6RouteRange{obj: newObj}
+	newLibObj := &bgpL3VpnV6RouteRange{obj: newObj}
 	newLibObj.setDefault()
-	obj.bgpV6RouteRangeSlice = append(obj.bgpV6RouteRangeSlice, newLibObj)
+	obj.bgpL3VpnV6RouteRangeSlice = append(obj.bgpL3VpnV6RouteRangeSlice, newLibObj)
 	return newLibObj
 }
 
-func (obj *bgpL3VpnVrfBgpV6RouteRangeIter) Append(items ...BgpV6RouteRange) BgpL3VpnVrfBgpV6RouteRangeIter {
+func (obj *bgpL3VpnVrfBgpL3VpnV6RouteRangeIter) Append(items ...BgpL3VpnV6RouteRange) BgpL3VpnVrfBgpL3VpnV6RouteRangeIter {
 	for _, item := range items {
 		newObj := item.msg()
 		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.bgpV6RouteRangeSlice = append(obj.bgpV6RouteRangeSlice, item)
+		obj.bgpL3VpnV6RouteRangeSlice = append(obj.bgpL3VpnV6RouteRangeSlice, item)
 	}
 	return obj
 }
 
-func (obj *bgpL3VpnVrfBgpV6RouteRangeIter) Set(index int, newObj BgpV6RouteRange) BgpL3VpnVrfBgpV6RouteRangeIter {
+func (obj *bgpL3VpnVrfBgpL3VpnV6RouteRangeIter) Set(index int, newObj BgpL3VpnV6RouteRange) BgpL3VpnVrfBgpL3VpnV6RouteRangeIter {
 	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.bgpV6RouteRangeSlice[index] = newObj
+	obj.bgpL3VpnV6RouteRangeSlice[index] = newObj
 	return obj
 }
-func (obj *bgpL3VpnVrfBgpV6RouteRangeIter) Clear() BgpL3VpnVrfBgpV6RouteRangeIter {
+func (obj *bgpL3VpnVrfBgpL3VpnV6RouteRangeIter) Clear() BgpL3VpnVrfBgpL3VpnV6RouteRangeIter {
 	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.BgpV6RouteRange{}
-		obj.bgpV6RouteRangeSlice = []BgpV6RouteRange{}
+		*obj.fieldPtr = []*otg.BgpL3VpnV6RouteRange{}
+		obj.bgpL3VpnV6RouteRangeSlice = []BgpL3VpnV6RouteRange{}
 	}
 	return obj
 }
-func (obj *bgpL3VpnVrfBgpV6RouteRangeIter) clearHolderSlice() BgpL3VpnVrfBgpV6RouteRangeIter {
-	if len(obj.bgpV6RouteRangeSlice) > 0 {
-		obj.bgpV6RouteRangeSlice = []BgpV6RouteRange{}
+func (obj *bgpL3VpnVrfBgpL3VpnV6RouteRangeIter) clearHolderSlice() BgpL3VpnVrfBgpL3VpnV6RouteRangeIter {
+	if len(obj.bgpL3VpnV6RouteRangeSlice) > 0 {
+		obj.bgpL3VpnV6RouteRangeSlice = []BgpL3VpnV6RouteRange{}
 	}
 	return obj
 }
-func (obj *bgpL3VpnVrfBgpV6RouteRangeIter) appendHolderSlice(item BgpV6RouteRange) BgpL3VpnVrfBgpV6RouteRangeIter {
-	obj.bgpV6RouteRangeSlice = append(obj.bgpV6RouteRangeSlice, item)
+func (obj *bgpL3VpnVrfBgpL3VpnV6RouteRangeIter) appendHolderSlice(item BgpL3VpnV6RouteRange) BgpL3VpnVrfBgpL3VpnV6RouteRangeIter {
+	obj.bgpL3VpnV6RouteRangeSlice = append(obj.bgpL3VpnV6RouteRangeSlice, item)
 	return obj
 }
 
@@ -687,7 +687,7 @@ func (obj *bgpL3VpnVrf) validateObj(vObj *validation, set_default bool) {
 		if set_default {
 			obj.V6Routes().clearHolderSlice()
 			for _, item := range obj.obj.V6Routes {
-				obj.V6Routes().appendHolderSlice(&bgpV6RouteRange{obj: item})
+				obj.V6Routes().appendHolderSlice(&bgpL3VpnV6RouteRange{obj: item})
 			}
 		}
 		for _, item := range obj.V6Routes().Items() {
