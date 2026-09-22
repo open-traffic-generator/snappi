@@ -305,9 +305,6 @@ func (obj *configDeleteResources) setChoice(value ConfigDeleteResourcesChoiceEnu
 // x-constraint:
 // - /components/schemas/Flow/properties/name
 //
-// x-constraint:
-// - /components/schemas/Flow/properties/name
-//
 // Flows returns a []string
 func (obj *configDeleteResources) Flows() []string {
 	if obj.obj.Flows == nil {
@@ -319,9 +316,6 @@ func (obj *configDeleteResources) Flows() []string {
 }
 
 // List of flows that will be deleted from existing configuration on the traffic generator.
-//
-// x-constraint:
-// - /components/schemas/Flow/properties/name
 //
 // x-constraint:
 // - /components/schemas/Flow/properties/name

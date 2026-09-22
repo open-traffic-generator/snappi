@@ -279,9 +279,6 @@ type Dhcpv6ClientMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Device.Dhcpv6client/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Dhcpv6client/properties/name
-//
 // ClientNames returns a []string
 func (obj *dhcpv6ClientMetricsRequest) ClientNames() []string {
 	if obj.obj.ClientNames == nil {
@@ -291,9 +288,6 @@ func (obj *dhcpv6ClientMetricsRequest) ClientNames() []string {
 }
 
 // The names of DHCPv6 clients to return results for. An empty list will return results for all DHCPv6 client.
-//
-// x-constraint:
-// - /components/schemas/Device.Dhcpv6client/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Dhcpv6client/properties/name

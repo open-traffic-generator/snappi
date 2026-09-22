@@ -13,17 +13,18 @@ import (
 // ***** Flow *****
 type flow struct {
 	validation
-	obj                *otg.Flow
-	marshaller         marshalFlow
-	unMarshaller       unMarshalFlow
-	txRxHolder         FlowTxRx
-	packetHolder       FlowFlowHeaderIter
-	egressPacketHolder FlowFlowHeaderIter
-	sizeHolder         FlowSize
-	rateHolder         FlowRate
-	durationHolder     FlowDuration
-	metricsHolder      FlowMetrics
-	payloadHolder      FlowPayload
+	obj                 *otg.Flow
+	marshaller          marshalFlow
+	unMarshaller        unMarshalFlow
+	txRxHolder          FlowTxRx
+	packetHolder        FlowFlowHeaderIter
+	egressPacketHolder  FlowFlowHeaderIter
+	sizeHolder          FlowSize
+	rateHolder          FlowRate
+	durationHolder      FlowDuration
+	metricsHolder       FlowMetrics
+	payloadHolder       FlowPayload
+	ultraEthernetHolder FlowUltraEthernet
 }
 
 func NewFlow() Flow {
@@ -259,6 +260,7 @@ func (obj *flow) setNil() {
 	obj.durationHolder = nil
 	obj.metricsHolder = nil
 	obj.payloadHolder = nil
+	obj.ultraEthernetHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -344,6 +346,18 @@ type Flow interface {
 	SetPayload(value FlowPayload) Flow
 	// HasPayload checks if Payload has been set in Flow
 	HasPayload() bool
+	// UltraEthernet returns FlowUltraEthernet, set in Flow.
+	// FlowUltraEthernet is per flow Ultra Ethernet (UEC) settings.
+	//
+	// Reference: UE-Specification-1.0.3 Section 5.1.
+	UltraEthernet() FlowUltraEthernet
+	// SetUltraEthernet assigns FlowUltraEthernet provided by user to Flow.
+	// FlowUltraEthernet is per flow Ultra Ethernet (UEC) settings.
+	//
+	// Reference: UE-Specification-1.0.3 Section 5.1.
+	SetUltraEthernet(value FlowUltraEthernet) Flow
+	// HasUltraEthernet checks if UltraEthernet has been set in Flow
+	HasUltraEthernet() bool
 	setNil()
 }
 
@@ -469,8 +483,6 @@ func (obj *flowFlowHeaderIter) appendHolderSlice(item FlowHeader) FlowFlowHeader
 	return obj
 }
 
-// Under Review: The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.
-//
 // Under Review: The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.
 //
 // The list of protocol headers defining the shape of all
@@ -645,6 +657,37 @@ func (obj *flow) SetPayload(value FlowPayload) Flow {
 	return obj
 }
 
+// Per flow Ultra Ethernet (UEC) settings, such as Link Layer Retry (LLR)
+// eligibility.
+// UltraEthernet returns a FlowUltraEthernet
+func (obj *flow) UltraEthernet() FlowUltraEthernet {
+	if obj.obj.UltraEthernet == nil {
+		obj.obj.UltraEthernet = NewFlowUltraEthernet().msg()
+	}
+	if obj.ultraEthernetHolder == nil {
+		obj.ultraEthernetHolder = &flowUltraEthernet{obj: obj.obj.UltraEthernet}
+	}
+	return obj.ultraEthernetHolder
+}
+
+// Per flow Ultra Ethernet (UEC) settings, such as Link Layer Retry (LLR)
+// eligibility.
+// UltraEthernet returns a FlowUltraEthernet
+func (obj *flow) HasUltraEthernet() bool {
+	return obj.obj.UltraEthernet != nil
+}
+
+// Per flow Ultra Ethernet (UEC) settings, such as Link Layer Retry (LLR)
+// eligibility.
+// SetUltraEthernet sets the FlowUltraEthernet value in the Flow object
+func (obj *flow) SetUltraEthernet(value FlowUltraEthernet) Flow {
+
+	obj.ultraEthernetHolder = nil
+	obj.obj.UltraEthernet = value.msg()
+
+	return obj
+}
+
 func (obj *flow) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -716,6 +759,11 @@ func (obj *flow) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Payload != nil {
 
 		obj.Payload().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.UltraEthernet != nil {
+
+		obj.UltraEthernet().validateObj(vObj, set_default)
 	}
 
 }

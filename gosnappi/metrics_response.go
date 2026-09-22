@@ -39,6 +39,7 @@ type metricsResponse struct {
 	rocev2FlowPerQpMetricsHolder    MetricsResponseRocev2FlowMetricPerQPIter
 	egressOnlyTrackingMetricsHolder MetricsResponseEgressOnlyTrackingMetricIter
 	bmpServerMetricsHolder          MetricsResponseBmpServerMetricIter
+	ultraEthernetMetricsHolder      MetricsResponseUltraEthernetMetricIter
 }
 
 func NewMetricsResponse() MetricsResponse {
@@ -289,6 +290,7 @@ func (obj *metricsResponse) setNil() {
 	obj.rocev2FlowPerQpMetricsHolder = nil
 	obj.egressOnlyTrackingMetricsHolder = nil
 	obj.bmpServerMetricsHolder = nil
+	obj.ultraEthernetMetricsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -322,14 +324,14 @@ type MetricsResponse interface {
 	setChoice(value MetricsResponseChoiceEnum) MetricsResponse
 	// HasChoice checks if Choice has been set in MetricsResponse
 	HasChoice() bool
-	// getter for Dhcpv6Client to set choice.
-	Dhcpv6Client()
-	// getter for Dhcpv4Client to set choice.
-	Dhcpv4Client()
 	// getter for Dhcpv4Server to set choice.
 	Dhcpv4Server()
+	// getter for Dhcpv6Client to set choice.
+	Dhcpv6Client()
 	// getter for Dhcpv6Server to set choice.
 	Dhcpv6Server()
+	// getter for Dhcpv4Client to set choice.
+	Dhcpv4Client()
 	// PortMetrics returns MetricsResponsePortMetricIterIter, set in MetricsResponse
 	PortMetrics() MetricsResponsePortMetricIter
 	// FlowMetrics returns MetricsResponseFlowMetricIterIter, set in MetricsResponse
@@ -376,6 +378,8 @@ type MetricsResponse interface {
 	EgressOnlyTrackingMetrics() MetricsResponseEgressOnlyTrackingMetricIter
 	// BmpServerMetrics returns MetricsResponseBmpServerMetricIterIter, set in MetricsResponse
 	BmpServerMetrics() MetricsResponseBmpServerMetricIter
+	// UltraEthernetMetrics returns MetricsResponseUltraEthernetMetricIterIter, set in MetricsResponse
+	UltraEthernetMetrics() MetricsResponseUltraEthernetMetricIter
 	setNil()
 }
 
@@ -406,6 +410,7 @@ var MetricsResponseChoice = struct {
 	ROCEV2_FLOW_PER_QP_METRICS   MetricsResponseChoiceEnum
 	EGRESS_ONLY_TRACKING_METRICS MetricsResponseChoiceEnum
 	BMP_SERVER_METRICS           MetricsResponseChoiceEnum
+	ULTRA_ETHERNET_METRICS       MetricsResponseChoiceEnum
 }{
 	FLOW_METRICS:                 MetricsResponseChoiceEnum("flow_metrics"),
 	PORT_METRICS:                 MetricsResponseChoiceEnum("port_metrics"),
@@ -430,20 +435,11 @@ var MetricsResponseChoice = struct {
 	ROCEV2_FLOW_PER_QP_METRICS:   MetricsResponseChoiceEnum("rocev2_flow_per_qp_metrics"),
 	EGRESS_ONLY_TRACKING_METRICS: MetricsResponseChoiceEnum("egress_only_tracking_metrics"),
 	BMP_SERVER_METRICS:           MetricsResponseChoiceEnum("bmp_server_metrics"),
+	ULTRA_ETHERNET_METRICS:       MetricsResponseChoiceEnum("ultra_ethernet_metrics"),
 }
 
 func (obj *metricsResponse) Choice() MetricsResponseChoiceEnum {
 	return MetricsResponseChoiceEnum(obj.obj.Choice.Enum().String())
-}
-
-// getter for Dhcpv6Client to set choice
-func (obj *metricsResponse) Dhcpv6Client() {
-	obj.setChoice(MetricsResponseChoice.DHCPV6_CLIENT)
-}
-
-// getter for Dhcpv4Client to set choice
-func (obj *metricsResponse) Dhcpv4Client() {
-	obj.setChoice(MetricsResponseChoice.DHCPV4_CLIENT)
 }
 
 // getter for Dhcpv4Server to set choice
@@ -451,9 +447,19 @@ func (obj *metricsResponse) Dhcpv4Server() {
 	obj.setChoice(MetricsResponseChoice.DHCPV4_SERVER)
 }
 
+// getter for Dhcpv6Client to set choice
+func (obj *metricsResponse) Dhcpv6Client() {
+	obj.setChoice(MetricsResponseChoice.DHCPV6_CLIENT)
+}
+
 // getter for Dhcpv6Server to set choice
 func (obj *metricsResponse) Dhcpv6Server() {
 	obj.setChoice(MetricsResponseChoice.DHCPV6_SERVER)
+}
+
+// getter for Dhcpv4Client to set choice
+func (obj *metricsResponse) Dhcpv4Client() {
+	obj.setChoice(MetricsResponseChoice.DHCPV4_CLIENT)
 }
 
 // description is TBD
@@ -471,6 +477,8 @@ func (obj *metricsResponse) setChoice(value MetricsResponseChoiceEnum) MetricsRe
 	}
 	enumValue := otg.MetricsResponse_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.UltraEthernetMetrics = nil
+	obj.ultraEthernetMetricsHolder = nil
 	obj.obj.BmpServerMetrics = nil
 	obj.bmpServerMetricsHolder = nil
 	obj.obj.EgressOnlyTrackingMetrics = nil
@@ -584,6 +592,10 @@ func (obj *metricsResponse) setChoice(value MetricsResponseChoiceEnum) MetricsRe
 
 	if value == MetricsResponseChoice.BMP_SERVER_METRICS {
 		obj.obj.BmpServerMetrics = []*otg.BmpServerMetric{}
+	}
+
+	if value == MetricsResponseChoice.ULTRA_ETHERNET_METRICS {
+		obj.obj.UltraEthernetMetrics = []*otg.UltraEthernetMetric{}
 	}
 
 	return obj
@@ -2590,6 +2602,93 @@ func (obj *metricsResponseBmpServerMetricIter) appendHolderSlice(item BmpServerM
 	return obj
 }
 
+// description is TBD
+// UltraEthernetMetrics returns a []UltraEthernetMetric
+func (obj *metricsResponse) UltraEthernetMetrics() MetricsResponseUltraEthernetMetricIter {
+	if len(obj.obj.UltraEthernetMetrics) == 0 {
+		obj.setChoice(MetricsResponseChoice.ULTRA_ETHERNET_METRICS)
+	}
+	if obj.ultraEthernetMetricsHolder == nil {
+		obj.ultraEthernetMetricsHolder = newMetricsResponseUltraEthernetMetricIter(&obj.obj.UltraEthernetMetrics).setMsg(obj)
+	}
+	return obj.ultraEthernetMetricsHolder
+}
+
+type metricsResponseUltraEthernetMetricIter struct {
+	obj                      *metricsResponse
+	ultraEthernetMetricSlice []UltraEthernetMetric
+	fieldPtr                 *[]*otg.UltraEthernetMetric
+}
+
+func newMetricsResponseUltraEthernetMetricIter(ptr *[]*otg.UltraEthernetMetric) MetricsResponseUltraEthernetMetricIter {
+	return &metricsResponseUltraEthernetMetricIter{fieldPtr: ptr}
+}
+
+type MetricsResponseUltraEthernetMetricIter interface {
+	setMsg(*metricsResponse) MetricsResponseUltraEthernetMetricIter
+	Items() []UltraEthernetMetric
+	Add() UltraEthernetMetric
+	Append(items ...UltraEthernetMetric) MetricsResponseUltraEthernetMetricIter
+	Set(index int, newObj UltraEthernetMetric) MetricsResponseUltraEthernetMetricIter
+	Clear() MetricsResponseUltraEthernetMetricIter
+	clearHolderSlice() MetricsResponseUltraEthernetMetricIter
+	appendHolderSlice(item UltraEthernetMetric) MetricsResponseUltraEthernetMetricIter
+}
+
+func (obj *metricsResponseUltraEthernetMetricIter) setMsg(msg *metricsResponse) MetricsResponseUltraEthernetMetricIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&ultraEthernetMetric{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *metricsResponseUltraEthernetMetricIter) Items() []UltraEthernetMetric {
+	return obj.ultraEthernetMetricSlice
+}
+
+func (obj *metricsResponseUltraEthernetMetricIter) Add() UltraEthernetMetric {
+	newObj := &otg.UltraEthernetMetric{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &ultraEthernetMetric{obj: newObj}
+	newLibObj.setDefault()
+	obj.ultraEthernetMetricSlice = append(obj.ultraEthernetMetricSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *metricsResponseUltraEthernetMetricIter) Append(items ...UltraEthernetMetric) MetricsResponseUltraEthernetMetricIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.ultraEthernetMetricSlice = append(obj.ultraEthernetMetricSlice, item)
+	}
+	return obj
+}
+
+func (obj *metricsResponseUltraEthernetMetricIter) Set(index int, newObj UltraEthernetMetric) MetricsResponseUltraEthernetMetricIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.ultraEthernetMetricSlice[index] = newObj
+	return obj
+}
+func (obj *metricsResponseUltraEthernetMetricIter) Clear() MetricsResponseUltraEthernetMetricIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.UltraEthernetMetric{}
+		obj.ultraEthernetMetricSlice = []UltraEthernetMetric{}
+	}
+	return obj
+}
+func (obj *metricsResponseUltraEthernetMetricIter) clearHolderSlice() MetricsResponseUltraEthernetMetricIter {
+	if len(obj.ultraEthernetMetricSlice) > 0 {
+		obj.ultraEthernetMetricSlice = []UltraEthernetMetric{}
+	}
+	return obj
+}
+func (obj *metricsResponseUltraEthernetMetricIter) appendHolderSlice(item UltraEthernetMetric) MetricsResponseUltraEthernetMetricIter {
+	obj.ultraEthernetMetricSlice = append(obj.ultraEthernetMetricSlice, item)
+	return obj
+}
+
 func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -2917,6 +3016,20 @@ func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 
 	}
 
+	if len(obj.obj.UltraEthernetMetrics) != 0 {
+
+		if set_default {
+			obj.UltraEthernetMetrics().clearHolderSlice()
+			for _, item := range obj.obj.UltraEthernetMetrics {
+				obj.UltraEthernetMetrics().appendHolderSlice(&ultraEthernetMetric{obj: item})
+			}
+		}
+		for _, item := range obj.UltraEthernetMetrics().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
 }
 
 func (obj *metricsResponse) setDefault() {
@@ -3016,6 +3129,11 @@ func (obj *metricsResponse) setDefault() {
 	if len(obj.obj.BmpServerMetrics) > 0 {
 		choices_set += 1
 		choice = MetricsResponseChoice.BMP_SERVER_METRICS
+	}
+
+	if len(obj.obj.UltraEthernetMetrics) > 0 {
+		choices_set += 1
+		choice = MetricsResponseChoice.ULTRA_ETHERNET_METRICS
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

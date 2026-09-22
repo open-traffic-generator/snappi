@@ -279,9 +279,6 @@ type Bgpv4MetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Bgp.V4peer/properties/name
 //
-// x-constraint:
-// - /components/schemas/Bgp.V4peer/properties/name
-//
 // PeerNames returns a []string
 func (obj *bgpv4MetricsRequest) PeerNames() []string {
 	if obj.obj.PeerNames == nil {
@@ -291,9 +288,6 @@ func (obj *bgpv4MetricsRequest) PeerNames() []string {
 }
 
 // The names of BGPv4 peers to return results for. An empty list will return results for all BGPv4 peers.
-//
-// x-constraint:
-// - /components/schemas/Bgp.V4peer/properties/name
 //
 // x-constraint:
 // - /components/schemas/Bgp.V4peer/properties/name

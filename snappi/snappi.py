@@ -1289,6 +1289,7 @@ class Config(OpenApiObject):
         "lldp": {"type": "LldpIter"},
         "stateful_flows": {"type": "StatefulFlow"},
         "egress_only_tracking": {"type": "EgressOnlyTrackingIter"},
+        "ultra_ethernet": {"type": "UltraEthernetIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -1422,6 +1423,19 @@ class Config(OpenApiObject):
         """
         return self._get_property(
             "egress_only_tracking", EgressOnlyTrackingIter, self._parent, self._choice
+        )
+
+    @property
+    def ultra_ethernet(self):
+        # type: () -> UltraEthernetIter
+        """ultra_ethernet getter
+
+        The Ultra Ethernet (UE) link layer settings that will be configured on the. traffic generator. Since these settings usually vary across variety of. test ports, these most likely won't be portable.
+
+        Returns: UltraEthernetIter
+        """
+        return self._get_property(
+            "ultra_ethernet", UltraEthernetIter, self._parent, self._choice
         )
 
 
@@ -1681,7 +1695,7 @@ class LagPort(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        The name of port object that will be part of the LAG. . x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port object that will be part of the LAG. . x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -1691,7 +1705,7 @@ class LagPort(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        The name of port object that will be part of the LAG. . x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port object that will be part of the LAG. . x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -6507,7 +6521,7 @@ class Layer1(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        A list of unique names of port objects that will share the. choice settings. . x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        A list of unique names of port objects that will share the. choice settings. . x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -6517,7 +6531,7 @@ class Layer1(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        A list of unique names of port objects that will share the. choice settings. . x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        A list of unique names of port objects that will share the. choice settings. . x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -6614,7 +6628,7 @@ class Layer1(OpenApiObject):
         # type: () -> bool
         """ieee_media_defaults getter
 
-        Under Review: This field is currently under review for pending exploration on use cases. Under Review: This field is currently under review for pending exploration on use cases. Set to true to override the auto_negotiate, link_training. and rs_fec settings for gigabit ethernet interfaces.
+        Under Review: This field is currently under review for pending exploration on use cases. Set to true to override the auto_negotiate, link_training. and rs_fec settings for gigabit ethernet interfaces.
 
         Returns: bool
         """
@@ -6624,7 +6638,7 @@ class Layer1(OpenApiObject):
     def ieee_media_defaults(self, value):
         """ieee_media_defaults setter
 
-        Under Review: This field is currently under review for pending exploration on use cases. Under Review: This field is currently under review for pending exploration on use cases. Set to true to override the auto_negotiate, link_training. and rs_fec settings for gigabit ethernet interfaces.
+        Under Review: This field is currently under review for pending exploration on use cases. Set to true to override the auto_negotiate, link_training. and rs_fec settings for gigabit ethernet interfaces.
 
         value: bool
         """
@@ -6635,7 +6649,7 @@ class Layer1(OpenApiObject):
         # type: () -> bool
         """auto_negotiate getter
 
-        Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Enable/disable auto negotiation.
+        Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Enable/disable auto negotiation.
 
         Returns: bool
         """
@@ -6645,7 +6659,7 @@ class Layer1(OpenApiObject):
     def auto_negotiate(self, value):
         """auto_negotiate setter
 
-        Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Enable/disable auto negotiation.
+        Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Enable/disable auto negotiation.
 
         value: bool
         """
@@ -7498,7 +7512,7 @@ class Capture(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -7508,7 +7522,7 @@ class Capture(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -9121,7 +9135,7 @@ class EthernetConnection(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        Name of the port that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        Name of the port that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -9131,7 +9145,7 @@ class EthernetConnection(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        Name of the port that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        Name of the port that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -9142,7 +9156,7 @@ class EthernetConnection(OpenApiObject):
         # type: () -> str
         """lag_name getter
 
-        Name of the LAG that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        Name of the LAG that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Lag/properties/name.
 
         Returns: str
         """
@@ -9152,7 +9166,7 @@ class EthernetConnection(OpenApiObject):
     def lag_name(self, value):
         """lag_name setter
 
-        Name of the LAG that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        Name of the LAG that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Lag/properties/name.
 
         value: str
         """
@@ -9163,7 +9177,7 @@ class EthernetConnection(OpenApiObject):
         # type: () -> str
         """vxlan_name getter
 
-        Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.. x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name. . x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name.
+        Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.. x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name.
 
         Returns: str
         """
@@ -9173,7 +9187,7 @@ class EthernetConnection(OpenApiObject):
     def vxlan_name(self, value):
         """vxlan_name setter
 
-        Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.. x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name. . x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name.
+        Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.. x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name.
 
         value: str
         """
@@ -9221,7 +9235,7 @@ class EthernetSimulatedLink(OpenApiObject):
         # type: () -> str
         """remote_simulated_link getter
 
-        Name of the remote end of the simulated interface which also must be simulated_link on device which might be acting either as an unconnected device in simulated topology ( all ethernet links of type simulated_link or an emulated device connected to the Device Under Test (has at atleast one ethernet interface with connection to the port or. lag connected to the DUT). x-constraint:. #/components/schemas/Device.Ethernet/properties/name. . x-constraint:. #/components/schemas/Device.Ethernet/properties/name.
+        Name of the remote end of the simulated interface which also must be simulated_link on device which might be acting either as an unconnected device in simulated topology ( all ethernet links of type simulated_link or an emulated device connected to the Device Under Test (has at atleast one ethernet interface with connection to the port or. lag connected to the DUT). x-constraint:. #/components/schemas/Device.Ethernet/properties/name.
 
         Returns: str
         """
@@ -9231,7 +9245,7 @@ class EthernetSimulatedLink(OpenApiObject):
     def remote_simulated_link(self, value):
         """remote_simulated_link setter
 
-        Name of the remote end of the simulated interface which also must be simulated_link on device which might be acting either as an unconnected device in simulated topology ( all ethernet links of type simulated_link or an emulated device connected to the Device Under Test (has at atleast one ethernet interface with connection to the port or. lag connected to the DUT). x-constraint:. #/components/schemas/Device.Ethernet/properties/name. . x-constraint:. #/components/schemas/Device.Ethernet/properties/name.
+        Name of the remote end of the simulated interface which also must be simulated_link on device which might be acting either as an unconnected device in simulated topology ( all ethernet links of type simulated_link or an emulated device connected to the Device Under Test (has at atleast one ethernet interface with connection to the port or. lag connected to the DUT). x-constraint:. #/components/schemas/Device.Ethernet/properties/name.
 
         value: str
         """
@@ -12560,7 +12574,7 @@ class DeviceIpv4Loopback(OpenApiObject):
         # type: () -> str
         """eth_name getter
 
-        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: str
         """
@@ -12570,7 +12584,7 @@ class DeviceIpv4Loopback(OpenApiObject):
     def eth_name(self, value):
         """eth_name setter
 
-        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: str
         """
@@ -12719,7 +12733,7 @@ class DeviceIpv6Loopback(OpenApiObject):
         # type: () -> str
         """eth_name getter
 
-        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: str
         """
@@ -12729,7 +12743,7 @@ class DeviceIpv6Loopback(OpenApiObject):
     def eth_name(self, value):
         """eth_name setter
 
-        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: str
         """
@@ -13206,7 +13220,7 @@ class IsisInterface(OpenApiObject):
         # type: () -> str
         """eth_name getter
 
-        The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. The underlying Ethernet Interface can an emulated or simulated interface. simulated ethernet interface can be assumed to be connected by primary (internal to simulated topology) or secondary link (connected to device behind different simulated topology).. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. The underlying Ethernet Interface can an emulated or simulated interface. simulated ethernet interface can be assumed to be connected by primary (internal to simulated topology) or secondary link (connected to device behind different simulated topology).. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: str
         """
@@ -13216,7 +13230,7 @@ class IsisInterface(OpenApiObject):
     def eth_name(self, value):
         """eth_name setter
 
-        The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. The underlying Ethernet Interface can an emulated or simulated interface. simulated ethernet interface can be assumed to be connected by primary (internal to simulated topology) or secondary link (connected to device behind different simulated topology).. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. The underlying Ethernet Interface can an emulated or simulated interface. simulated ethernet interface can be assumed to be connected by primary (internal to simulated topology) or secondary link (connected to device behind different simulated topology).. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: str
         """
@@ -15264,7 +15278,7 @@ class IsisSRv6AdjSid(OpenApiObject):
         # type: () -> str
         """custom_locator_reference getter
 
-        Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".. x-constraint:. /components/schemas/IsisSRv6.Locator/properties/locator_name. . x-constraint:. /components/schemas/IsisSRv6.Locator/properties/locator_name.
+        Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".. x-constraint:. /components/schemas/IsisSRv6.Locator/properties/locator_name.
 
         Returns: str
         """
@@ -15274,7 +15288,7 @@ class IsisSRv6AdjSid(OpenApiObject):
     def custom_locator_reference(self, value):
         """custom_locator_reference setter
 
-        Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".. x-constraint:. /components/schemas/IsisSRv6.Locator/properties/locator_name. . x-constraint:. /components/schemas/IsisSRv6.Locator/properties/locator_name.
+        Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".. x-constraint:. /components/schemas/IsisSRv6.Locator/properties/locator_name.
 
         value: str
         """
@@ -19857,7 +19871,7 @@ class BgpV4Interface(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The unique name of the IPv4, Loopback IPv4 interface or DHCPv4 client used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. /components/schemas/Device.Dhcpv4client/properties/name.
+        The unique name of the IPv4, Loopback IPv4 interface or DHCPv4 client used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. /components/schemas/Device.Dhcpv4client/properties/name.
 
         Returns: str
         """
@@ -19867,7 +19881,7 @@ class BgpV4Interface(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The unique name of the IPv4, Loopback IPv4 interface or DHCPv4 client used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. /components/schemas/Device.Dhcpv4client/properties/name.
+        The unique name of the IPv4, Loopback IPv4 interface or DHCPv4 client used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. /components/schemas/Device.Dhcpv4client/properties/name.
 
         value: str
         """
@@ -24041,7 +24055,7 @@ class BgpV4RouteRange(OpenApiObject):
         # type: () -> BgpExtCommunityIter
         """ext_communities getter
 
-        Deprecated: This property is deprecated in favor of property extended_communities. Deprecated: This property is deprecated in favor of property extended_communities. Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first Bytes of the community encode type and sub-type fields and the last Bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two byte local administrator id. When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for administrator_ipv4_address is four byte IPv4 address followed by two byte local administrator id. When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from IANA's "ETHER TYPES" registry e.g IPv4 (protocol type 0x0800), IPv6 (protocol type 0x86dd), and MPLS (protocol type 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format. When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates occur for the same MAC address. Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
+        Deprecated: This property is deprecated in favor of property extended_communities. Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first Bytes of the community encode type and sub-type fields and the last Bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two byte local administrator id. When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for administrator_ipv4_address is four byte IPv4 address followed by two byte local administrator id. When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from IANA's "ETHER TYPES" registry e.g IPv4 (protocol type 0x0800), IPv6 (protocol type 0x86dd), and MPLS (protocol type 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format. When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates occur for the same MAC address. Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
 
         Returns: BgpExtCommunityIter
         """
@@ -26541,7 +26555,7 @@ class BgpV6RouteRange(OpenApiObject):
         # type: () -> BgpExtCommunityIter
         """ext_communities getter
 
-        Deprecated: This property is deprecated in favor of property extended_communities. Deprecated: This property is deprecated in favor of property extended_communities. Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first Bytes of the community encode type and sub-type fields and the last Bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two byte local administrator id. When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for administrator_ipv4_address is four byte IPv4 address followed by two byte local administrator id. When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from IANA's "ETHER TYPES" registry e.g IPv4 (protocol type 0x0800), IPv6 (protocol type 0x86dd), and MPLS (protocol type 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format. When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates occur for the same MAC address. Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
+        Deprecated: This property is deprecated in favor of property extended_communities. Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first Bytes of the community encode type and sub-type fields and the last Bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two byte local administrator id. When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for administrator_ipv4_address is four byte IPv4 address followed by two byte local administrator id. When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from IANA's "ETHER TYPES" registry e.g IPv4 (protocol type 0x0800), IPv6 (protocol type 0x86dd), and MPLS (protocol type 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format. When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates occur for the same MAC address. Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
 
         Returns: BgpExtCommunityIter
         """
@@ -37938,7 +37952,7 @@ class BgpV6Interface(OpenApiObject):
         # type: () -> str
         """ipv6_name getter
 
-        The unique name of IPv6 Loopback IPv6 interface or DHCPv4 client used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. /components/schemas/Device.Dhcpv6client/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. /components/schemas/Device.Dhcpv6client/properties/name.
+        The unique name of IPv6 Loopback IPv6 interface or DHCPv4 client used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. /components/schemas/Device.Dhcpv6client/properties/name.
 
         Returns: str
         """
@@ -37948,7 +37962,7 @@ class BgpV6Interface(OpenApiObject):
     def ipv6_name(self, value):
         """ipv6_name setter
 
-        The unique name of IPv6 Loopback IPv6 interface or DHCPv4 client used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. /components/schemas/Device.Dhcpv6client/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. /components/schemas/Device.Dhcpv6client/properties/name.
+        The unique name of IPv6 Loopback IPv6 interface or DHCPv4 client used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. /components/schemas/Device.Dhcpv6client/properties/name.
 
         value: str
         """
@@ -39567,7 +39581,7 @@ class VxlanV4Tunnel(OpenApiObject):
         # type: () -> str
         """source_interface getter
 
-        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         Returns: str
         """
@@ -39577,7 +39591,7 @@ class VxlanV4Tunnel(OpenApiObject):
     def source_interface(self, value):
         """source_interface setter
 
-        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         value: str
         """
@@ -40177,7 +40191,7 @@ class VxlanV6Tunnel(OpenApiObject):
         # type: () -> str
         """source_interface getter
 
-        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
+        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         Returns: str
         """
@@ -40187,7 +40201,7 @@ class VxlanV6Tunnel(OpenApiObject):
     def source_interface(self, value):
         """source_interface setter
 
-        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
+        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         value: str
         """
@@ -40793,7 +40807,7 @@ class RsvpIpv4Interface(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The globally unique name of the IPv4 interface connected to the DUT. This name must match the "name" field of the "ipv4_addresses" on top which this RSVP interface is configured. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The globally unique name of the IPv4 interface connected to the DUT. This name must match the "name" field of the "ipv4_addresses" on top which this RSVP interface is configured. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         Returns: str
         """
@@ -40803,7 +40817,7 @@ class RsvpIpv4Interface(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The globally unique name of the IPv4 interface connected to the DUT. This name must match the "name" field of the "ipv4_addresses" on top which this RSVP interface is configured. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The globally unique name of the IPv4 interface connected to the DUT. This name must match the "name" field of the "ipv4_addresses" on top which this RSVP interface is configured. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         value: str
         """
@@ -41161,7 +41175,7 @@ class RsvpLspIpv4Interface(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks" on which this LSP interface is configured.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks" on which this LSP interface is configured.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         Returns: str
         """
@@ -41171,7 +41185,7 @@ class RsvpLspIpv4Interface(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks" on which this LSP interface is configured.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks" on which this LSP interface is configured.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         value: str
         """
@@ -43221,7 +43235,7 @@ class DhcpServerV4(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The unique name of the IPv4 on which DHCPv4 server will run.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The unique name of the IPv4 on which DHCPv4 server will run.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         Returns: str
         """
@@ -43231,7 +43245,7 @@ class DhcpServerV4(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The unique name of the IPv4 on which DHCPv4 server will run.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The unique name of the IPv4 on which DHCPv4 server will run.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         value: str
         """
@@ -43827,7 +43841,7 @@ class DhcpServerV6(OpenApiObject):
         # type: () -> str
         """ipv6_name getter
 
-        The unique name of the IPv6 on which DHCPv6 server will run.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        The unique name of the IPv6 on which DHCPv6 server will run.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         Returns: str
         """
@@ -43837,7 +43851,7 @@ class DhcpServerV6(OpenApiObject):
     def ipv6_name(self, value):
         """ipv6_name setter
 
-        The unique name of the IPv6 on which DHCPv6 server will run.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        The unique name of the IPv6 on which DHCPv6 server will run.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         value: str
         """
@@ -46005,7 +46019,7 @@ class Ospfv2Interface(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The globally unique name of the IPv4 interface connected to the DUT. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The globally unique name of the IPv4 interface connected to the DUT. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         Returns: str
         """
@@ -46015,7 +46029,7 @@ class Ospfv2Interface(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The globally unique name of the IPv4 interface connected to the DUT. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The globally unique name of the IPv4 interface connected to the DUT. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         value: str
         """
@@ -47709,7 +47723,7 @@ class DeviceMacsecEthernetInterface(OpenApiObject):
         # type: () -> str
         """eth_name getter
 
-        The unique name of the Ethernet interface on which MACsec is enabled.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface on which MACsec is enabled.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: str
         """
@@ -47719,7 +47733,7 @@ class DeviceMacsecEthernetInterface(OpenApiObject):
     def eth_name(self, value):
         """eth_name setter
 
-        The unique name of the Ethernet interface on which MACsec is enabled.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface on which MACsec is enabled.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: str
         """
@@ -49470,7 +49484,7 @@ class Ospfv3Interface(OpenApiObject):
         # type: () -> str
         """ipv6_name getter
 
-        The globally unique name of the IPv6 interface connected to the DUT. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        The globally unique name of the IPv6 interface connected to the DUT. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         Returns: str
         """
@@ -49480,7 +49494,7 @@ class Ospfv3Interface(OpenApiObject):
     def ipv6_name(self, value):
         """ipv6_name setter
 
-        The globally unique name of the IPv6 interface connected to the DUT. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        The globally unique name of the IPv6 interface connected to the DUT. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         value: str
         """
@@ -50725,7 +50739,7 @@ class Rocev2V4Interface(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The unique name of the IPv4 interface, used as the source IP for this list of RoCEv2 peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The unique name of the IPv4 interface, used as the source IP for this list of RoCEv2 peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         Returns: str
         """
@@ -50735,7 +50749,7 @@ class Rocev2V4Interface(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The unique name of the IPv4 interface, used as the source IP for this list of RoCEv2 peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The unique name of the IPv4 interface, used as the source IP for this list of RoCEv2 peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         value: str
         """
@@ -51460,7 +51474,7 @@ class Rocev2V6Interface(OpenApiObject):
         # type: () -> str
         """ipv6_name getter
 
-        The unique name of IPv6 used as the source IP for this list of RoCEv2 peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        The unique name of IPv6 used as the source IP for this list of RoCEv2 peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         Returns: str
         """
@@ -51470,7 +51484,7 @@ class Rocev2V6Interface(OpenApiObject):
     def ipv6_name(self, value):
         """ipv6_name setter
 
-        The unique name of IPv6 used as the source IP for this list of RoCEv2 peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        The unique name of IPv6 used as the source IP for this list of RoCEv2 peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         value: str
         """
@@ -51796,7 +51810,7 @@ class DeviceBmpV4Interface(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The unique name of the IPv4 interface used as the source IP for the BMP Server.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The unique name of the IPv4 interface used as the source IP for the BMP Server.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         Returns: str
         """
@@ -51806,7 +51820,7 @@ class DeviceBmpV4Interface(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The unique name of the IPv4 interface used as the source IP for the BMP Server.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The unique name of the IPv4 interface used as the source IP for the BMP Server.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         value: str
         """
@@ -52885,7 +52899,7 @@ class DeviceBmpV6Interface(OpenApiObject):
         # type: () -> str
         """ipv6_name getter
 
-        The unique name of the IPv6 interface used as the source IP for BMP Server.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        The unique name of the IPv6 interface used as the source IP for BMP Server.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         Returns: str
         """
@@ -52895,7 +52909,7 @@ class DeviceBmpV6Interface(OpenApiObject):
     def ipv6_name(self, value):
         """ipv6_name setter
 
-        The unique name of the IPv6 interface used as the source IP for BMP Server.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        The unique name of the IPv6 interface used as the source IP for BMP Server.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         value: str
         """
@@ -53194,6 +53208,7 @@ class Flow(OpenApiObject):
         "metrics": {"type": "FlowMetrics"},
         "name": {"type": str},
         "payload": {"type": "FlowPayload"},
+        "ultra_ethernet": {"type": "FlowUltraEthernet"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("tx_rx", "name")  # type: tuple(str)
@@ -53241,7 +53256,7 @@ class Flow(OpenApiObject):
         # type: () -> FlowHeaderIter
         """egress_packet getter
 
-        Under Review: The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.. Under Review: The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.. The list of protocol headers defining the shape of all intended packets in corresponding flow as it is received. by traffic-generator port.. For all protocol headers, only the `metric_tags` property is configurable.
+        Under Review: The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.. The list of protocol headers defining the shape of all intended packets in corresponding flow as it is received. by traffic-generator port.. For all protocol headers, only the `metric_tags` property is configurable.
 
         Returns: FlowHeaderIter
         """
@@ -53326,6 +53341,17 @@ class Flow(OpenApiObject):
         Returns: FlowPayload
         """
         return self._get_property("payload", FlowPayload)
+
+    @property
+    def ultra_ethernet(self):
+        # type: () -> FlowUltraEthernet
+        """ultra_ethernet getter
+
+        Per flow Ultra Ethernet (UEC) settings.. Reference: UE-Specification-1.0.3 Section 5.1.Per flow Ultra Ethernet (UEC) settings.. Reference: UE-Specification-1.0.3 Section 5.1.Per flow Ultra Ethernet (UEC) settings.. Reference: UE-Specification-1.0.3 Section 5.1.Per flow Ultra Ethernet (UEC) settings, such as Link Layer Retry (LLR). eligibility.
+
+        Returns: FlowUltraEthernet
+        """
+        return self._get_property("ultra_ethernet", FlowUltraEthernet)
 
 
 class FlowTxRx(OpenApiObject):
@@ -53447,7 +53473,7 @@ class FlowPort(OpenApiObject):
         # type: () -> str
         """tx_name getter
 
-        The unique name of port that is the transmit port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        The unique name of port that is the transmit port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         Returns: str
         """
@@ -53457,7 +53483,7 @@ class FlowPort(OpenApiObject):
     def tx_name(self, value):
         """tx_name setter
 
-        The unique name of port that is the transmit port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        The unique name of port that is the transmit port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         value: str
         """
@@ -53470,7 +53496,7 @@ class FlowPort(OpenApiObject):
         # type: () -> str
         """rx_name getter
 
-        Deprecated: This property is deprecated in favor of property rx_names. Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         Returns: str
         """
@@ -53480,7 +53506,7 @@ class FlowPort(OpenApiObject):
     def rx_name(self, value):
         """rx_name setter
 
-        Deprecated: This property is deprecated in favor of property rx_names. Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         value: str
         """
@@ -53491,7 +53517,7 @@ class FlowPort(OpenApiObject):
         # type: () -> List[str]
         """rx_names getter
 
-        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         Returns: List[str]
         """
@@ -53501,7 +53527,7 @@ class FlowPort(OpenApiObject):
     def rx_names(self, value):
         """rx_names setter
 
-        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         value: List[str]
         """
@@ -53588,7 +53614,7 @@ class FlowRouter(OpenApiObject):
         # type: () -> List[str]
         """tx_names getter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. /components/schemas/Device.Dhcpv6client/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. /components/schemas/Device.Dhcpv6client/properties/name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. /components/schemas/Device.Dhcpv6client/properties/name.
 
         Returns: List[str]
         """
@@ -53598,7 +53624,7 @@ class FlowRouter(OpenApiObject):
     def tx_names(self, value):
         """tx_names setter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. /components/schemas/Device.Dhcpv6client/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. /components/schemas/Device.Dhcpv6client/properties/name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. /components/schemas/Device.Dhcpv6client/properties/name.
 
         value: List[str]
         """
@@ -53611,7 +53637,7 @@ class FlowRouter(OpenApiObject):
         # type: () -> List[str]
         """rx_names getter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv6client/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv6client/properties/name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv6client/properties/name.
 
         Returns: List[str]
         """
@@ -53621,7 +53647,7 @@ class FlowRouter(OpenApiObject):
     def rx_names(self, value):
         """rx_names setter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv6client/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv6client/properties/name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv6client/properties/name.
 
         value: List[str]
         """
@@ -161031,6 +161057,53 @@ class FlowPayloadFixed(OpenApiObject):
         self._set_property("repeat", value)
 
 
+class FlowUltraEthernet(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "llr_eligible": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "llr_eligible": False,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, llr_eligible=False):
+        super(FlowUltraEthernet, self).__init__()
+        self._parent = parent
+        self._set_property("llr_eligible", llr_eligible)
+
+    def set(self, llr_eligible=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def llr_eligible(self):
+        # type: () -> bool
+        """llr_eligible getter
+
+        Marks this flow's frames as Link Layer Retry (LLR) eligible, independent of. the port level LLR enable. When true, the frames of this flow participate in. LLR (sequence numbering and replay on loss); when false, they are transmitted. as LLR-ineligible. Applies only on ports where LLR is enabled.
+
+        Returns: bool
+        """
+        return self._get_property("llr_eligible")
+
+    @llr_eligible.setter
+    def llr_eligible(self, value):
+        """llr_eligible setter
+
+        Marks this flow's frames as Link Layer Retry (LLR) eligible, independent of. the port level LLR enable. When true, the frames of this flow participate in. LLR (sequence numbering and replay on loss); when false, they are transmitted. as LLR-ineligible. Applies only on ports where LLR is enabled.
+
+        value: bool
+        """
+        self._set_property("llr_eligible", value)
+
+
 class FlowIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
@@ -161534,7 +161607,7 @@ class PerPortOptions(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        The name of port for which this settings will be applied to.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port for which this settings will be applied to.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -161544,7 +161617,7 @@ class PerPortOptions(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        The name of port for which this settings will be applied to.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port for which this settings will be applied to.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -163727,7 +163800,7 @@ class LldpConnection(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        Name of the test port on which LLDP is configured on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        Name of the test port on which LLDP is configured on.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -163737,7 +163810,7 @@ class LldpConnection(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        Name of the test port on which LLDP is configured on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        Name of the test port on which LLDP is configured on.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -164732,7 +164805,7 @@ class Rocev2TxPorts(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        The name of port for which this settings will be applied to.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port for which this settings will be applied to.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -164742,7 +164815,7 @@ class Rocev2TxPorts(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        The name of port for which this settings will be applied to.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port for which this settings will be applied to.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -164967,7 +165040,7 @@ class Rocev2Flow(OpenApiObject):
         # type: () -> str
         """tx_endpoint getter
 
-        The unique name of an emulated device that will be transmitting the flows.. x-constraint:. /components/schemas/Rocev2.QPs/properties/qp_name. . x-constraint:. /components/schemas/Rocev2.QPs/properties/qp_name.
+        The unique name of an emulated device that will be transmitting the flows.. x-constraint:. /components/schemas/Rocev2.QPs/properties/qp_name.
 
         Returns: str
         """
@@ -164977,7 +165050,7 @@ class Rocev2Flow(OpenApiObject):
     def tx_endpoint(self, value):
         """tx_endpoint setter
 
-        The unique name of an emulated device that will be transmitting the flows.. x-constraint:. /components/schemas/Rocev2.QPs/properties/qp_name. . x-constraint:. /components/schemas/Rocev2.QPs/properties/qp_name.
+        The unique name of an emulated device that will be transmitting the flows.. x-constraint:. /components/schemas/Rocev2.QPs/properties/qp_name.
 
         value: str
         """
@@ -164990,7 +165063,7 @@ class Rocev2Flow(OpenApiObject):
         # type: () -> str
         """rx_endpoint getter
 
-        The unique name of remote QP or port which be receiving the packets for the flow.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Rocev2.QPs/properties/qp_name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Rocev2.QPs/properties/qp_name.
+        The unique name of remote QP or port which be receiving the packets for the flow.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Rocev2.QPs/properties/qp_name.
 
         Returns: str
         """
@@ -165000,7 +165073,7 @@ class Rocev2Flow(OpenApiObject):
     def rx_endpoint(self, value):
         """rx_endpoint setter
 
-        The unique name of remote QP or port which be receiving the packets for the flow.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Rocev2.QPs/properties/qp_name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Rocev2.QPs/properties/qp_name.
+        The unique name of remote QP or port which be receiving the packets for the flow.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Rocev2.QPs/properties/qp_name.
 
         value: str
         """
@@ -165454,7 +165527,7 @@ class EgressOnlyTracking(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        Name of the received port this egress tracking rule/specification has to be applied.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        Name of the received port this egress tracking rule/specification has to be applied.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -165464,7 +165537,7 @@ class EgressOnlyTracking(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        Name of the received port this egress tracking rule/specification has to be applied.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        Name of the received port this egress tracking rule/specification has to be applied.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -165991,6 +166064,2311 @@ class EgressOnlyTrackingIter(OpenApiIter):
         return item
 
 
+class UltraEthernet(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "port_names": {
+            "type": list,
+            "itemtype": str,
+        },
+        "phy": {"type": "UltraEthernetPhy"},
+        "llr": {"type": "UltraEthernetLlr"},
+        "cbfc": {"type": "UltraEthernetCbfc"},
+        "name": {"type": str},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("port_names", "name")  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, port_names=None, name=None):
+        super(UltraEthernet, self).__init__()
+        self._parent = parent
+        self._set_property("port_names", port_names)
+        self._set_property("name", name)
+
+    def set(self, port_names=None, name=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def port_names(self):
+        # type: () -> List[str]
+        """port_names getter
+
+        A list of unique names of port objects that will share the Ultra Ethernet. link layer settings.. x-constraint:. /components/schemas/Port/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("port_names")
+
+    @port_names.setter
+    def port_names(self, value):
+        """port_names setter
+
+        A list of unique names of port objects that will share the Ultra Ethernet. link layer settings.. x-constraint:. /components/schemas/Port/properties/name.
+
+        value: List[str]
+        """
+        if value is None:
+            raise TypeError("Cannot set required property port_names as None")
+        self._set_property("port_names", value)
+
+    @property
+    def phy(self):
+        # type: () -> UltraEthernetPhy
+        """phy getter
+
+        Ultra Ethernet PHY layer settings that control the insertion and validation. of Control Ordered Sets (CtlOS). CtlOS carry the LLR (LLR_ACK, LLR_NACK,. LLR_INIT, LLR_INIT_ECHO) and CBFC (CF_Update) messages in the 64B/66B block. stream.. Reference: UE-Specification-1.0.3 Section 6.2 (Control Ordered Sets); CtlOS. spacing rules Section 5.1.3.1.1.Ultra Ethernet PHY layer settings that control the insertion and validation. of Control Ordered Sets (CtlOS). CtlOS carry the LLR (LLR_ACK, LLR_NACK,. LLR_INIT, LLR_INIT_ECHO) and CBFC (CF_Update) messages in the 64B/66B block. stream.. Reference: UE-Specification-1.0.3 Section 6.2 (Control Ordered Sets); CtlOS. spacing rules Section 5.1.3.1.1.Ultra Ethernet PHY layer settings that control the insertion and validation. of Control Ordered Sets (CtlOS). CtlOS carry the LLR (LLR_ACK, LLR_NACK,. LLR_INIT, LLR_INIT_ECHO) and CBFC (CF_Update) messages in the 64B/66B block. stream.. Reference: UE-Specification-1.0.3 Section 6.2 (Control Ordered Sets); CtlOS. spacing rules Section 5.1.3.1.1.Ultra Ethernet PHY Control Ordered Set (CtlOS) timing settings.
+
+        Returns: UltraEthernetPhy
+        """
+        return self._get_property("phy", UltraEthernetPhy)
+
+    @property
+    def llr(self):
+        # type: () -> UltraEthernetLlr
+        """llr getter
+
+        Ultra Ethernet Link Layer Retry (LLR) settings. LLR provides lossless link. operation by assigning sequence number to LLR-eligible frames, holding them. in replay buffer, and retransmitting them when the link partner reports a. loss via LLR_NACK or when replay timer expires.. Reference: UE-Specification-1.0.3 Section 5.1; configuration registers. Table 5-9, counters Table 5-13.Ultra Ethernet Link Layer Retry (LLR) settings. LLR provides lossless link. operation by assigning sequence number to LLR-eligible frames, holding them. in replay buffer, and retransmitting them when the link partner reports a. loss via LLR_NACK or when replay timer expires.. Reference: UE-Specification-1.0.3 Section 5.1; configuration registers. Table 5-9, counters Table 5-13.Ultra Ethernet Link Layer Retry (LLR) settings. LLR provides lossless link. operation by assigning sequence number to LLR-eligible frames, holding them. in replay buffer, and retransmitting them when the link partner reports a. loss via LLR_NACK or when replay timer expires.. Reference: UE-Specification-1.0.3 Section 5.1; configuration registers. Table 5-9, counters Table 5-13.Ultra Ethernet Link Layer Retry (LLR) settings.
+
+        Returns: UltraEthernetLlr
+        """
+        return self._get_property("llr", UltraEthernetLlr)
+
+    @property
+    def cbfc(self):
+        # type: () -> UltraEthernetCbfc
+        """cbfc getter
+
+        Ultra Ethernet Credit-based Flow Control (CBFC) settings. CBFC is per. virtual channel (VC) credit based flow control mechanism and is an alternative. to priority based flow control (PFC). The sender and receiver directions of a. link are configured independently.. Reference: UE-Specification-1.0.3 Section 5.2.Ultra Ethernet Credit-based Flow Control (CBFC) settings. CBFC is per. virtual channel (VC) credit based flow control mechanism and is an alternative. to priority based flow control (PFC). The sender and receiver directions of a. link are configured independently.. Reference: UE-Specification-1.0.3 Section 5.2.Ultra Ethernet Credit-based Flow Control (CBFC) settings. CBFC is per. virtual channel (VC) credit based flow control mechanism and is an alternative. to priority based flow control (PFC). The sender and receiver directions of a. link are configured independently.. Reference: UE-Specification-1.0.3 Section 5.2.Ultra Ethernet Credit-based Flow Control (CBFC) settings.
+
+        Returns: UltraEthernetCbfc
+        """
+        return self._get_property("cbfc", UltraEthernetCbfc)
+
+    @property
+    def name(self):
+        # type: () -> str
+        """name getter
+
+        Globally unique name of an object. It also serves as the primary key for arrays of objects.
+
+        Returns: str
+        """
+        return self._get_property("name")
+
+    @name.setter
+    def name(self, value):
+        """name setter
+
+        Globally unique name of an object. It also serves as the primary key for arrays of objects.
+
+        value: str
+        """
+        if value is None:
+            raise TypeError("Cannot set required property name as None")
+        self._set_property("name", value)
+
+
+class UltraEthernetPhy(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "tx_control_ordered_set": {"type": "UltraEthernetPhyTxControlOrderedSet"},
+        "rx_control_ordered_set": {"type": "UltraEthernetPhyRxControlOrderedSet"},
+        "o_code": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 15,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "o_code": 6,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, o_code=6):
+        super(UltraEthernetPhy, self).__init__()
+        self._parent = parent
+        self._set_property("o_code", o_code)
+
+    def set(self, o_code=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def tx_control_ordered_set(self):
+        # type: () -> UltraEthernetPhyTxControlOrderedSet
+        """tx_control_ordered_set getter
+
+        Transmit side Control Ordered Set (CtlOS) spacing and timing configuration.Transmit side Control Ordered Set (CtlOS) spacing and timing configuration.Transmit side Control Ordered Set (CtlOS) spacing and timing configuration.Transmit side Control Ordered Set spacing and timing settings.
+
+        Returns: UltraEthernetPhyTxControlOrderedSet
+        """
+        return self._get_property(
+            "tx_control_ordered_set", UltraEthernetPhyTxControlOrderedSet
+        )
+
+    @property
+    def rx_control_ordered_set(self):
+        # type: () -> UltraEthernetPhyRxControlOrderedSet
+        """rx_control_ordered_set getter
+
+        Receive side Control Ordered Set (CtlOS) spacing validation configuration.. Each validation, when enabled, checks that the received CtlOS spacing honors. the configured minimum spacing.Receive side Control Ordered Set (CtlOS) spacing validation configuration.. Each validation, when enabled, checks that the received CtlOS spacing honors. the configured minimum spacing.Receive side Control Ordered Set (CtlOS) spacing validation configuration.. Each validation, when enabled, checks that the received CtlOS spacing honors. the configured minimum spacing.Receive side Control Ordered Set spacing validation settings.
+
+        Returns: UltraEthernetPhyRxControlOrderedSet
+        """
+        return self._get_property(
+            "rx_control_ordered_set", UltraEthernetPhyRxControlOrderedSet
+        )
+
+    @property
+    def o_code(self):
+        # type: () -> int
+        """o_code getter
+
+        The 4-bit O-code used in the CtlOS 64B/66B block format. The UE. specification uses the value 0x6 (6).
+
+        Returns: int
+        """
+        return self._get_property("o_code")
+
+    @o_code.setter
+    def o_code(self, value):
+        """o_code setter
+
+        The 4-bit O-code used in the CtlOS 64B/66B block format. The UE. specification uses the value 0x6 (6).
+
+        value: int
+        """
+        self._set_property("o_code", value)
+
+
+class UltraEthernetPhyTxControlOrderedSet(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "min_spacing": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 320,
+            "maximum": 32760,
+        },
+        "min_spacing_at_frame_start": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 64,
+            "maximum": 1008,
+        },
+        "min_spacing_within_frame": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1024,
+            "maximum": 8184,
+        },
+        "llr_target_spacing": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 320,
+            "maximum": 32760,
+        },
+        "cbfc_cf_min_timer": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 768,
+            "maximum": 131072,
+        },
+        "cbfc_cf_max_timer": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 16384,
+            "maximum": 1048576,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "min_spacing": 400,
+        "min_spacing_at_frame_start": 256,
+        "min_spacing_within_frame": 2048,
+        "llr_target_spacing": 2048,
+        "cbfc_cf_min_timer": 800,
+        "cbfc_cf_max_timer": 65536,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        min_spacing=400,
+        min_spacing_at_frame_start=256,
+        min_spacing_within_frame=2048,
+        llr_target_spacing=2048,
+        cbfc_cf_min_timer=800,
+        cbfc_cf_max_timer=65536,
+    ):
+        super(UltraEthernetPhyTxControlOrderedSet, self).__init__()
+        self._parent = parent
+        self._set_property("min_spacing", min_spacing)
+        self._set_property("min_spacing_at_frame_start", min_spacing_at_frame_start)
+        self._set_property("min_spacing_within_frame", min_spacing_within_frame)
+        self._set_property("llr_target_spacing", llr_target_spacing)
+        self._set_property("cbfc_cf_min_timer", cbfc_cf_min_timer)
+        self._set_property("cbfc_cf_max_timer", cbfc_cf_max_timer)
+
+    def set(
+        self,
+        min_spacing=None,
+        min_spacing_at_frame_start=None,
+        min_spacing_within_frame=None,
+        llr_target_spacing=None,
+        cbfc_cf_min_timer=None,
+        cbfc_cf_max_timer=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def min_spacing(self):
+        # type: () -> int
+        """min_spacing getter
+
+        The minimum spacing, in bytes, between successive transmitted CtlOS.
+
+        Returns: int
+        """
+        return self._get_property("min_spacing")
+
+    @min_spacing.setter
+    def min_spacing(self, value):
+        """min_spacing setter
+
+        The minimum spacing, in bytes, between successive transmitted CtlOS.
+
+        value: int
+        """
+        self._set_property("min_spacing", value)
+
+    @property
+    def min_spacing_at_frame_start(self):
+        # type: () -> int
+        """min_spacing_at_frame_start getter
+
+        The minimum number of bytes from the start of frame before CtlOS. may be inserted. Used to mitigate the impact on per-frame switch latency.
+
+        Returns: int
+        """
+        return self._get_property("min_spacing_at_frame_start")
+
+    @min_spacing_at_frame_start.setter
+    def min_spacing_at_frame_start(self, value):
+        """min_spacing_at_frame_start setter
+
+        The minimum number of bytes from the start of frame before CtlOS. may be inserted. Used to mitigate the impact on per-frame switch latency.
+
+        value: int
+        """
+        self._set_property("min_spacing_at_frame_start", value)
+
+    @property
+    def min_spacing_within_frame(self):
+        # type: () -> int
+        """min_spacing_within_frame getter
+
+        The minimum spacing, in bytes, between two CtlOS inserted within the same. frame so that underrun can be managed on cut-through switches.
+
+        Returns: int
+        """
+        return self._get_property("min_spacing_within_frame")
+
+    @min_spacing_within_frame.setter
+    def min_spacing_within_frame(self, value):
+        """min_spacing_within_frame setter
+
+        The minimum spacing, in bytes, between two CtlOS inserted within the same. frame so that underrun can be managed on cut-through switches.
+
+        value: int
+        """
+        self._set_property("min_spacing_within_frame", value)
+
+    @property
+    def llr_target_spacing(self):
+        # type: () -> int
+        """llr_target_spacing getter
+
+        The target spacing, in bytes, between successive transmitted. LLR_ACK LLR_NACK CtlOS.
+
+        Returns: int
+        """
+        return self._get_property("llr_target_spacing")
+
+    @llr_target_spacing.setter
+    def llr_target_spacing(self, value):
+        """llr_target_spacing setter
+
+        The target spacing, in bytes, between successive transmitted. LLR_ACK LLR_NACK CtlOS.
+
+        value: int
+        """
+        self._set_property("llr_target_spacing", value)
+
+    @property
+    def cbfc_cf_min_timer(self):
+        # type: () -> int
+        """cbfc_cf_min_timer getter
+
+        The minimum spacing, in bytes, between successive transmitted CBFC. CF_Update messages. Guarantees minimum spacing so that minimal bandwidth. overhead is used for these messages.
+
+        Returns: int
+        """
+        return self._get_property("cbfc_cf_min_timer")
+
+    @cbfc_cf_min_timer.setter
+    def cbfc_cf_min_timer(self, value):
+        """cbfc_cf_min_timer setter
+
+        The minimum spacing, in bytes, between successive transmitted CBFC. CF_Update messages. Guarantees minimum spacing so that minimal bandwidth. overhead is used for these messages.
+
+        value: int
+        """
+        self._set_property("cbfc_cf_min_timer", value)
+
+    @property
+    def cbfc_cf_max_timer(self):
+        # type: () -> int
+        """cbfc_cf_max_timer getter
+
+        The maximum spacing, in bytes, between successive transmitted CBFC. CF_Update messages. Used to periodically refresh credit freed values in. case previous CF_Update message was lost.
+
+        Returns: int
+        """
+        return self._get_property("cbfc_cf_max_timer")
+
+    @cbfc_cf_max_timer.setter
+    def cbfc_cf_max_timer(self, value):
+        """cbfc_cf_max_timer setter
+
+        The maximum spacing, in bytes, between successive transmitted CBFC. CF_Update messages. Used to periodically refresh credit freed values in. case previous CF_Update message was lost.
+
+        value: int
+        """
+        self._set_property("cbfc_cf_max_timer", value)
+
+
+class UltraEthernetPhyRxControlOrderedSet(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "validate_min_spacing": {"type": bool},
+        "min_spacing": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 131064,
+        },
+        "validate_llr_init_min_spacing": {"type": bool},
+        "llr_init_min_spacing": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 131064,
+        },
+        "validate_llr_ack_nack_min_spacing": {"type": bool},
+        "llr_ack_nack_min_spacing": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 131064,
+        },
+        "validate_cf_min_spacing": {"type": bool},
+        "cf_min_spacing": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 131064,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "validate_min_spacing": False,
+        "min_spacing": 400,
+        "validate_llr_init_min_spacing": False,
+        "llr_init_min_spacing": 1600,
+        "validate_llr_ack_nack_min_spacing": False,
+        "llr_ack_nack_min_spacing": 400,
+        "validate_cf_min_spacing": False,
+        "cf_min_spacing": 400,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        validate_min_spacing=False,
+        min_spacing=400,
+        validate_llr_init_min_spacing=False,
+        llr_init_min_spacing=1600,
+        validate_llr_ack_nack_min_spacing=False,
+        llr_ack_nack_min_spacing=400,
+        validate_cf_min_spacing=False,
+        cf_min_spacing=400,
+    ):
+        super(UltraEthernetPhyRxControlOrderedSet, self).__init__()
+        self._parent = parent
+        self._set_property("validate_min_spacing", validate_min_spacing)
+        self._set_property("min_spacing", min_spacing)
+        self._set_property(
+            "validate_llr_init_min_spacing", validate_llr_init_min_spacing
+        )
+        self._set_property("llr_init_min_spacing", llr_init_min_spacing)
+        self._set_property(
+            "validate_llr_ack_nack_min_spacing", validate_llr_ack_nack_min_spacing
+        )
+        self._set_property("llr_ack_nack_min_spacing", llr_ack_nack_min_spacing)
+        self._set_property("validate_cf_min_spacing", validate_cf_min_spacing)
+        self._set_property("cf_min_spacing", cf_min_spacing)
+
+    def set(
+        self,
+        validate_min_spacing=None,
+        min_spacing=None,
+        validate_llr_init_min_spacing=None,
+        llr_init_min_spacing=None,
+        validate_llr_ack_nack_min_spacing=None,
+        llr_ack_nack_min_spacing=None,
+        validate_cf_min_spacing=None,
+        cf_min_spacing=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def validate_min_spacing(self):
+        # type: () -> bool
+        """validate_min_spacing getter
+
+        Enable validation of the minimum spacing between received CtlOS.
+
+        Returns: bool
+        """
+        return self._get_property("validate_min_spacing")
+
+    @validate_min_spacing.setter
+    def validate_min_spacing(self, value):
+        """validate_min_spacing setter
+
+        Enable validation of the minimum spacing between received CtlOS.
+
+        value: bool
+        """
+        self._set_property("validate_min_spacing", value)
+
+    @property
+    def min_spacing(self):
+        # type: () -> int
+        """min_spacing getter
+
+        The minimum spacing, in bytes, expected between received CtlOS.
+
+        Returns: int
+        """
+        return self._get_property("min_spacing")
+
+    @min_spacing.setter
+    def min_spacing(self, value):
+        """min_spacing setter
+
+        The minimum spacing, in bytes, expected between received CtlOS.
+
+        value: int
+        """
+        self._set_property("min_spacing", value)
+
+    @property
+    def validate_llr_init_min_spacing(self):
+        # type: () -> bool
+        """validate_llr_init_min_spacing getter
+
+        Enable validation of the minimum spacing between received LLR_INIT CtlOS.
+
+        Returns: bool
+        """
+        return self._get_property("validate_llr_init_min_spacing")
+
+    @validate_llr_init_min_spacing.setter
+    def validate_llr_init_min_spacing(self, value):
+        """validate_llr_init_min_spacing setter
+
+        Enable validation of the minimum spacing between received LLR_INIT CtlOS.
+
+        value: bool
+        """
+        self._set_property("validate_llr_init_min_spacing", value)
+
+    @property
+    def llr_init_min_spacing(self):
+        # type: () -> int
+        """llr_init_min_spacing getter
+
+        The minimum spacing, in bytes, expected between received LLR_INIT CtlOS.
+
+        Returns: int
+        """
+        return self._get_property("llr_init_min_spacing")
+
+    @llr_init_min_spacing.setter
+    def llr_init_min_spacing(self, value):
+        """llr_init_min_spacing setter
+
+        The minimum spacing, in bytes, expected between received LLR_INIT CtlOS.
+
+        value: int
+        """
+        self._set_property("llr_init_min_spacing", value)
+
+    @property
+    def validate_llr_ack_nack_min_spacing(self):
+        # type: () -> bool
+        """validate_llr_ack_nack_min_spacing getter
+
+        Enable validation of the minimum spacing between received. LLR_ACK LLR_NACK CtlOS.
+
+        Returns: bool
+        """
+        return self._get_property("validate_llr_ack_nack_min_spacing")
+
+    @validate_llr_ack_nack_min_spacing.setter
+    def validate_llr_ack_nack_min_spacing(self, value):
+        """validate_llr_ack_nack_min_spacing setter
+
+        Enable validation of the minimum spacing between received. LLR_ACK LLR_NACK CtlOS.
+
+        value: bool
+        """
+        self._set_property("validate_llr_ack_nack_min_spacing", value)
+
+    @property
+    def llr_ack_nack_min_spacing(self):
+        # type: () -> int
+        """llr_ack_nack_min_spacing getter
+
+        The minimum spacing, in bytes, expected between received. LLR_ACK LLR_NACK CtlOS.
+
+        Returns: int
+        """
+        return self._get_property("llr_ack_nack_min_spacing")
+
+    @llr_ack_nack_min_spacing.setter
+    def llr_ack_nack_min_spacing(self, value):
+        """llr_ack_nack_min_spacing setter
+
+        The minimum spacing, in bytes, expected between received. LLR_ACK LLR_NACK CtlOS.
+
+        value: int
+        """
+        self._set_property("llr_ack_nack_min_spacing", value)
+
+    @property
+    def validate_cf_min_spacing(self):
+        # type: () -> bool
+        """validate_cf_min_spacing getter
+
+        Enable validation of the minimum spacing between received CBFC. CF_Update CtlOS.
+
+        Returns: bool
+        """
+        return self._get_property("validate_cf_min_spacing")
+
+    @validate_cf_min_spacing.setter
+    def validate_cf_min_spacing(self, value):
+        """validate_cf_min_spacing setter
+
+        Enable validation of the minimum spacing between received CBFC. CF_Update CtlOS.
+
+        value: bool
+        """
+        self._set_property("validate_cf_min_spacing", value)
+
+    @property
+    def cf_min_spacing(self):
+        # type: () -> int
+        """cf_min_spacing getter
+
+        The minimum spacing, in bytes, expected between received CBFC CF_Update. CtlOS.
+
+        Returns: int
+        """
+        return self._get_property("cf_min_spacing")
+
+    @cf_min_spacing.setter
+    def cf_min_spacing(self, value):
+        """cf_min_spacing setter
+
+        The minimum spacing, in bytes, expected between received CBFC CF_Update. CtlOS.
+
+        value: int
+        """
+        self._set_property("cf_min_spacing", value)
+
+
+class UltraEthernetLlr(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "local_enable": {"type": bool},
+        "remote_enable": {"type": bool},
+        "outstanding_seq_max": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 524288,
+        },
+        "outstanding_data_max": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 2147483647,
+        },
+        "replay_timer_max": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "replay_count_max": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "pcs_lost_status_timer_max": {
+            "type": int,
+            "format": "uint64",
+            "maximum": 4290000000,
+        },
+        "data_age_timer_max": {
+            "type": int,
+            "format": "uint64",
+            "maximum": 4290000000,
+        },
+        "init_behavior": {
+            "type": str,
+            "enum": [
+                "discard",
+                "block",
+                "best_effort",
+            ],
+        },
+        "flush_behavior": {
+            "type": str,
+            "enum": [
+                "discard",
+                "block",
+                "best_effort",
+            ],
+        },
+        "re_init_on_discard": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "local_enable": False,
+        "remote_enable": False,
+        "outstanding_seq_max": 2047,
+        "outstanding_data_max": 64000000,
+        "replay_timer_max": 65535,
+        "replay_count_max": 255,
+        "pcs_lost_status_timer_max": 4200000000,
+        "data_age_timer_max": 4200000000,
+        "init_behavior": "best_effort",
+        "flush_behavior": "best_effort",
+        "re_init_on_discard": False,
+    }  # type: Dict[str, Union(type)]
+
+    DISCARD = "discard"  # type: str
+    BLOCK = "block"  # type: str
+    BEST_EFFORT = "best_effort"  # type: str
+
+    DISCARD = "discard"  # type: str
+    BLOCK = "block"  # type: str
+    BEST_EFFORT = "best_effort"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        local_enable=False,
+        remote_enable=False,
+        outstanding_seq_max=2047,
+        outstanding_data_max=64000000,
+        replay_timer_max=65535,
+        replay_count_max=255,
+        pcs_lost_status_timer_max=4200000000,
+        data_age_timer_max=4200000000,
+        init_behavior="best_effort",
+        flush_behavior="best_effort",
+        re_init_on_discard=False,
+    ):
+        super(UltraEthernetLlr, self).__init__()
+        self._parent = parent
+        self._set_property("local_enable", local_enable)
+        self._set_property("remote_enable", remote_enable)
+        self._set_property("outstanding_seq_max", outstanding_seq_max)
+        self._set_property("outstanding_data_max", outstanding_data_max)
+        self._set_property("replay_timer_max", replay_timer_max)
+        self._set_property("replay_count_max", replay_count_max)
+        self._set_property("pcs_lost_status_timer_max", pcs_lost_status_timer_max)
+        self._set_property("data_age_timer_max", data_age_timer_max)
+        self._set_property("init_behavior", init_behavior)
+        self._set_property("flush_behavior", flush_behavior)
+        self._set_property("re_init_on_discard", re_init_on_discard)
+
+    def set(
+        self,
+        local_enable=None,
+        remote_enable=None,
+        outstanding_seq_max=None,
+        outstanding_data_max=None,
+        replay_timer_max=None,
+        replay_count_max=None,
+        pcs_lost_status_timer_max=None,
+        data_age_timer_max=None,
+        init_behavior=None,
+        flush_behavior=None,
+        re_init_on_discard=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def local_enable(self):
+        # type: () -> bool
+        """local_enable getter
+
+        Enables LLR reception on the port. When enabled, the port is allowed to. receive LLR_INIT and operate as an LLR receiver (llr_mode_local).
+
+        Returns: bool
+        """
+        return self._get_property("local_enable")
+
+    @local_enable.setter
+    def local_enable(self, value):
+        """local_enable setter
+
+        Enables LLR reception on the port. When enabled, the port is allowed to. receive LLR_INIT and operate as an LLR receiver (llr_mode_local).
+
+        value: bool
+        """
+        self._set_property("local_enable", value)
+
+    @property
+    def remote_enable(self):
+        # type: () -> bool
+        """remote_enable getter
+
+        Enables LLR transmission on the port. When enabled, the port may send. LLR_INIT and operate as an LLR transmitter (llr_mode_remote).
+
+        Returns: bool
+        """
+        return self._get_property("remote_enable")
+
+    @remote_enable.setter
+    def remote_enable(self, value):
+        """remote_enable setter
+
+        Enables LLR transmission on the port. When enabled, the port may send. LLR_INIT and operate as an LLR transmitter (llr_mode_remote).
+
+        value: bool
+        """
+        self._set_property("remote_enable", value)
+
+    @property
+    def outstanding_seq_max(self):
+        # type: () -> int
+        """outstanding_seq_max getter
+
+        The maximum number of unacknowledged (in flight) LLR frames permitted.. The specification permits an absolute maximum of 524288, however an. implementation may support lower maximum depending on the link speed. and minimum frame size.
+
+        Returns: int
+        """
+        return self._get_property("outstanding_seq_max")
+
+    @outstanding_seq_max.setter
+    def outstanding_seq_max(self, value):
+        """outstanding_seq_max setter
+
+        The maximum number of unacknowledged (in flight) LLR frames permitted.. The specification permits an absolute maximum of 524288, however an. implementation may support lower maximum depending on the link speed. and minimum frame size.
+
+        value: int
+        """
+        self._set_property("outstanding_seq_max", value)
+
+    @property
+    def outstanding_data_max(self):
+        # type: () -> int
+        """outstanding_data_max getter
+
+        The maximum number of unacknowledged (in flight) bytes permitted. This. should be set to the link's bandwidth-delay product to ensure correct. operation of the pause and PFC mechanisms.
+
+        Returns: int
+        """
+        return self._get_property("outstanding_data_max")
+
+    @outstanding_data_max.setter
+    def outstanding_data_max(self, value):
+        """outstanding_data_max setter
+
+        The maximum number of unacknowledged (in flight) bytes permitted. This. should be set to the link's bandwidth-delay product to ensure correct. operation of the pause and PFC mechanisms.
+
+        value: int
+        """
+        self._set_property("outstanding_data_max", value)
+
+    @property
+    def replay_timer_max(self):
+        # type: () -> int
+        """replay_timer_max getter
+
+        The time, in nanoseconds, before missing acknowledgement triggers a. replay of the unacknowledged frames held in the replay buffer.
+
+        Returns: int
+        """
+        return self._get_property("replay_timer_max")
+
+    @replay_timer_max.setter
+    def replay_timer_max(self, value):
+        """replay_timer_max setter
+
+        The time, in nanoseconds, before missing acknowledgement triggers a. replay of the unacknowledged frames held in the replay buffer.
+
+        value: int
+        """
+        self._set_property("replay_timer_max", value)
+
+    @property
+    def replay_count_max(self):
+        # type: () -> int
+        """replay_count_max getter
+
+        The maximum number of replay attempts before the LLR gives up and enters. the FLUSH state. value of 255 indicates there is no maximum (unlimited. retries).
+
+        Returns: int
+        """
+        return self._get_property("replay_count_max")
+
+    @replay_count_max.setter
+    def replay_count_max(self, value):
+        """replay_count_max setter
+
+        The maximum number of replay attempts before the LLR gives up and enters. the FLUSH state. value of 255 indicates there is no maximum (unlimited. retries).
+
+        value: int
+        """
+        self._set_property("replay_count_max", value)
+
+    @property
+    def pcs_lost_status_timer_max(self):
+        # type: () -> int
+        """pcs_lost_status_timer_max getter
+
+        The time, in nanoseconds, that the PCS link may remain down before the LLR. transmit state machine is forced to transition to the FLUSH state. value. of causes immediate expiration.
+
+        Returns: int
+        """
+        return self._get_property("pcs_lost_status_timer_max")
+
+    @pcs_lost_status_timer_max.setter
+    def pcs_lost_status_timer_max(self, value):
+        """pcs_lost_status_timer_max setter
+
+        The time, in nanoseconds, that the PCS link may remain down before the LLR. transmit state machine is forced to transition to the FLUSH state. value. of causes immediate expiration.
+
+        value: int
+        """
+        self._set_property("pcs_lost_status_timer_max", value)
+
+    @property
+    def data_age_timer_max(self):
+        # type: () -> int
+        """data_age_timer_max getter
+
+        The maximum time, in nanoseconds, that data may sit unacknowledged in the. replay buffer before it is discarded as too old.
+
+        Returns: int
+        """
+        return self._get_property("data_age_timer_max")
+
+    @data_age_timer_max.setter
+    def data_age_timer_max(self, value):
+        """data_age_timer_max setter
+
+        The maximum time, in nanoseconds, that data may sit unacknowledged in the. replay buffer before it is discarded as too old.
+
+        value: int
+        """
+        self._set_property("data_age_timer_max", value)
+
+    @property
+    def init_behavior(self):
+        # type: () -> Union[Literal["best_effort"], Literal["block"], Literal["discard"]]
+        """init_behavior getter
+
+        Controls how the transmit LLR handles outgoing LLR-desired frames while in. the INIT state.. - discard: frames are discarded without being transmitted.. block: frames are not accepted from the MAC client, blocking transmission.. best_effort: frames are transmitted as LLR-ineligible (no replay protection).
+
+        Returns: Union[Literal["best_effort"], Literal["block"], Literal["discard"]]
+        """
+        return self._get_property("init_behavior")
+
+    @init_behavior.setter
+    def init_behavior(self, value):
+        """init_behavior setter
+
+        Controls how the transmit LLR handles outgoing LLR-desired frames while in. the INIT state.. - discard: frames are discarded without being transmitted.. block: frames are not accepted from the MAC client, blocking transmission.. best_effort: frames are transmitted as LLR-ineligible (no replay protection).
+
+        value: Union[Literal["best_effort"], Literal["block"], Literal["discard"]]
+        """
+        self._set_property("init_behavior", value)
+
+    @property
+    def flush_behavior(self):
+        # type: () -> Union[Literal["best_effort"], Literal["block"], Literal["discard"]]
+        """flush_behavior getter
+
+        Controls how the transmit LLR handles outgoing LLR-desired frames while in. the FLUSH state.. - discard: frames are discarded without being transmitted.. block: frames are not accepted from the MAC client, blocking transmission.. best_effort: frames are transmitted as LLR-ineligible (no replay protection).
+
+        Returns: Union[Literal["best_effort"], Literal["block"], Literal["discard"]]
+        """
+        return self._get_property("flush_behavior")
+
+    @flush_behavior.setter
+    def flush_behavior(self, value):
+        """flush_behavior setter
+
+        Controls how the transmit LLR handles outgoing LLR-desired frames while in. the FLUSH state.. - discard: frames are discarded without being transmitted.. block: frames are not accepted from the MAC client, blocking transmission.. best_effort: frames are transmitted as LLR-ineligible (no replay protection).
+
+        value: Union[Literal["best_effort"], Literal["block"], Literal["discard"]]
+        """
+        self._set_property("flush_behavior", value)
+
+    @property
+    def re_init_on_discard(self):
+        # type: () -> bool
+        """re_init_on_discard getter
+
+        When true, the LLR automatically re-initializes after replay failure.. When false, it waits for management intervention.
+
+        Returns: bool
+        """
+        return self._get_property("re_init_on_discard")
+
+    @re_init_on_discard.setter
+    def re_init_on_discard(self, value):
+        """re_init_on_discard setter
+
+        When true, the LLR automatically re-initializes after replay failure.. When false, it waits for management intervention.
+
+        value: bool
+        """
+        self._set_property("re_init_on_discard", value)
+
+
+class UltraEthernetCbfc(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "sender": {"type": "UltraEthernetCbfcSender"},
+        "receiver": {"type": "UltraEthernetCbfcReceiver"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(UltraEthernetCbfc, self).__init__()
+        self._parent = parent
+
+    @property
+    def sender(self):
+        # type: () -> UltraEthernetCbfcSender
+        """sender getter
+
+        CBFC sender direction configuration.CBFC sender direction configuration.CBFC sender direction configuration.CBFC sender direction settings. The sender transmits packets on lossless. VCs only when enough credits are available at the receiver, and periodically. transmits CC_Update messages.
+
+        Returns: UltraEthernetCbfcSender
+        """
+        return self._get_property("sender", UltraEthernetCbfcSender)
+
+    @property
+    def receiver(self):
+        # type: () -> UltraEthernetCbfcReceiver
+        """receiver getter
+
+        CBFC receiver direction configuration.CBFC receiver direction configuration.CBFC receiver direction configuration.CBFC receiver direction settings. The receiver returns credits to the. sender using CF_Update messages as buffer space is freed.
+
+        Returns: UltraEthernetCbfcReceiver
+        """
+        return self._get_property("receiver", UltraEthernetCbfcReceiver)
+
+
+class UltraEthernetCbfcSender(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "enable": {"type": bool},
+        "port_credit": {"type": "UltraEthernetCbfcPortCredit"},
+        "cc_message": {"type": "UltraEthernetCbfcSenderCcMessage"},
+        "virtual_channels": {"type": "UltraEthernetCbfcVcIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "enable": False,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, enable=False):
+        super(UltraEthernetCbfcSender, self).__init__()
+        self._parent = parent
+        self._set_property("enable", enable)
+
+    def set(self, enable=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def enable(self):
+        # type: () -> bool
+        """enable getter
+
+        Enable the CBFC sender on the port.
+
+        Returns: bool
+        """
+        return self._get_property("enable")
+
+    @enable.setter
+    def enable(self, value):
+        """enable setter
+
+        Enable the CBFC sender on the port.
+
+        value: bool
+        """
+        self._set_property("enable", value)
+
+    @property
+    def port_credit(self):
+        # type: () -> UltraEthernetCbfcPortCredit
+        """port_credit getter
+
+        CBFC port level credit configuration. Credits are the unit used to track. available buffer space at the receiver.. Reference: UE-Specification-1.0.3 Table 5-14.CBFC port level credit configuration. Credits are the unit used to track. available buffer space at the receiver.. Reference: UE-Specification-1.0.3 Table 5-14.CBFC port level credit configuration. Credits are the unit used to track. available buffer space at the receiver.. Reference: UE-Specification-1.0.3 Table 5-14.Port level credit configuration (credit mode, total credits, cell size and. per-packet overhead).
+
+        Returns: UltraEthernetCbfcPortCredit
+        """
+        return self._get_property("port_credit", UltraEthernetCbfcPortCredit)
+
+    @property
+    def cc_message(self):
+        # type: () -> UltraEthernetCbfcSenderCcMessage
+        """cc_message getter
+
+        CBFC CC_Update (credit consumed) message configuration. CC_Update messages are. periodically generated by the sender to recover credits that may have leaked. due to packet drops from link errors.CBFC CC_Update (credit consumed) message configuration. CC_Update messages are. periodically generated by the sender to recover credits that may have leaked. due to packet drops from link errors.CBFC CC_Update (credit consumed) message configuration. CC_Update messages are. periodically generated by the sender to recover credits that may have leaked. due to packet drops from link errors.CC_Update (credit consumed) message configuration.
+
+        Returns: UltraEthernetCbfcSenderCcMessage
+        """
+        return self._get_property("cc_message", UltraEthernetCbfcSenderCcMessage)
+
+    @property
+    def virtual_channels(self):
+        # type: () -> UltraEthernetCbfcVcIter
+        """virtual_channels getter
+
+        The list of virtual channels (VCs). maximum of 32 VCs are supported per. port, of which maximum of may be configured as lossless.
+
+        Returns: UltraEthernetCbfcVcIter
+        """
+        return self._get_property(
+            "virtual_channels", UltraEthernetCbfcVcIter, self._parent, self._choice
+        )
+
+
+class UltraEthernetCbfcPortCredit(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "per_port",
+                "per_vc",
+            ],
+        },
+        "per_port": {"type": "UltraEthernetCbfcPortCreditPerPort"},
+        "per_vc": {"type": "UltraEthernetCbfcPortCreditPerVc"},
+        "cell_size": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 32,
+            "maximum": 2048,
+        },
+        "packet_overhead": {
+            "type": int,
+            "format": "int32",
+            "minimum": -16,
+            "maximum": 127,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "per_port",
+        "cell_size": 64,
+        "packet_overhead": -4,
+    }  # type: Dict[str, Union(type)]
+
+    PER_PORT = "per_port"  # type: str
+    PER_VC = "per_vc"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, cell_size=64, packet_overhead=-4):
+        super(UltraEthernetCbfcPortCredit, self).__init__()
+        self._parent = parent
+        self._set_property("cell_size", cell_size)
+        self._set_property("packet_overhead", packet_overhead)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, cell_size=None, packet_overhead=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def per_port(self):
+        # type: () -> UltraEthernetCbfcPortCreditPerPort
+        """Factory property that returns an instance of the UltraEthernetCbfcPortCreditPerPort class
+
+        Port based credit limit configuration. single total credit limit is set and. the sender distributes those credits among the lossless VCs.
+
+        Returns: UltraEthernetCbfcPortCreditPerPort
+        """
+        return self._get_property(
+            "per_port", UltraEthernetCbfcPortCreditPerPort, self, "per_port"
+        )
+
+    @property
+    def per_vc(self):
+        # type: () -> UltraEthernetCbfcPortCreditPerVc
+        """Factory property that returns an instance of the UltraEthernetCbfcPortCreditPerVc class
+
+        Per virtual channel credit limit configuration. The credit limit for each. lossless VC is set individually using the credit_limit field of the VC.
+
+        Returns: UltraEthernetCbfcPortCreditPerVc
+        """
+        return self._get_property(
+            "per_vc", UltraEthernetCbfcPortCreditPerVc, self, "per_vc"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["per_port"], Literal["per_vc"]]
+        """choice getter
+
+        The method used to set credit limits.. - per_port: the receiver sets single total credit limit and the sender. distributes those credits among the lossless VCs.. per_vc: the receiver sets an individual credit limit for each lossless VC.
+
+        Returns: Union[Literal["per_port"], Literal["per_vc"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The method used to set credit limits.. - per_port: the receiver sets single total credit limit and the sender. distributes those credits among the lossless VCs.. per_vc: the receiver sets an individual credit limit for each lossless VC.
+
+        value: Union[Literal["per_port"], Literal["per_vc"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def cell_size(self):
+        # type: () -> int
+        """cell_size getter
+
+        The number of bytes represented by each credit. This is function of the. receiver's buffer allocation unit ("cell size") and is implementation. dependent; given implementation may support only certain discrete cell. sizes.
+
+        Returns: int
+        """
+        return self._get_property("cell_size")
+
+    @cell_size.setter
+    def cell_size(self, value):
+        """cell_size setter
+
+        The number of bytes represented by each credit. This is function of the. receiver's buffer allocation unit ("cell size") and is implementation. dependent; given implementation may support only certain discrete cell. sizes.
+
+        value: int
+        """
+        self._set_property("cell_size", value)
+
+    @property
+    def packet_overhead(self):
+        # type: () -> int
+        """packet_overhead getter
+
+        The number of bytes of per-packet overhead in the receiver's input buffer.. May be negative if part of each packet is not stored in the receiver's. input buffer (for example if the CRC is stripped before storing).
+
+        Returns: int
+        """
+        return self._get_property("packet_overhead")
+
+    @packet_overhead.setter
+    def packet_overhead(self, value):
+        """packet_overhead setter
+
+        The number of bytes of per-packet overhead in the receiver's input buffer.. May be negative if part of each packet is not stored in the receiver's. input buffer (for example if the CRC is stripped before storing).
+
+        value: int
+        """
+        self._set_property("packet_overhead", value)
+
+
+class UltraEthernetCbfcPortCreditPerPort(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "total_credits": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 524287,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "total_credits": 524287,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, total_credits=524287):
+        super(UltraEthernetCbfcPortCreditPerPort, self).__init__()
+        self._parent = parent
+        self._set_property("total_credits", total_credits)
+
+    def set(self, total_credits=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def total_credits(self):
+        # type: () -> int
+        """total_credits getter
+
+        The total number of credits available at the receiver, based on the. receiver's buffer size.
+
+        Returns: int
+        """
+        return self._get_property("total_credits")
+
+    @total_credits.setter
+    def total_credits(self, value):
+        """total_credits setter
+
+        The total number of credits available at the receiver, based on the. receiver's buffer size.
+
+        value: int
+        """
+        self._set_property("total_credits", value)
+
+
+class UltraEthernetCbfcPortCreditPerVc(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {}  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(UltraEthernetCbfcPortCreditPerVc, self).__init__()
+        self._parent = parent
+
+
+class UltraEthernetCbfcSenderCcMessage(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "enable_type1_message": {"type": bool},
+        "enable_type2_message": {"type": bool},
+        "timer": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 25000,
+        },
+        "company_id": {
+            "type": str,
+            "pattern": r"^[0-9a-fA-F]{6}$",
+        },
+        "source_address": {
+            "type": str,
+            "format": "mac",
+        },
+        "destination_address": {
+            "type": str,
+            "format": "mac",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "enable_type1_message": False,
+        "enable_type2_message": False,
+        "timer": 10,
+        "company_id": "FA7ACB",
+        "source_address": "00:00:00:00:00:01",
+        "destination_address": "01:80:C2:00:00:01",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        enable_type1_message=False,
+        enable_type2_message=False,
+        timer=10,
+        company_id="FA7ACB",
+        source_address="00:00:00:00:00:01",
+        destination_address="01:80:C2:00:00:01",
+    ):
+        super(UltraEthernetCbfcSenderCcMessage, self).__init__()
+        self._parent = parent
+        self._set_property("enable_type1_message", enable_type1_message)
+        self._set_property("enable_type2_message", enable_type2_message)
+        self._set_property("timer", timer)
+        self._set_property("company_id", company_id)
+        self._set_property("source_address", source_address)
+        self._set_property("destination_address", destination_address)
+
+    def set(
+        self,
+        enable_type1_message=None,
+        enable_type2_message=None,
+        timer=None,
+        company_id=None,
+        source_address=None,
+        destination_address=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def enable_type1_message(self):
+        # type: () -> bool
+        """enable_type1_message getter
+
+        Enable generation of the type CC_Update message which carries the credits. consumed counters for VC through VC 15.
+
+        Returns: bool
+        """
+        return self._get_property("enable_type1_message")
+
+    @enable_type1_message.setter
+    def enable_type1_message(self, value):
+        """enable_type1_message setter
+
+        Enable generation of the type CC_Update message which carries the credits. consumed counters for VC through VC 15.
+
+        value: bool
+        """
+        self._set_property("enable_type1_message", value)
+
+    @property
+    def enable_type2_message(self):
+        # type: () -> bool
+        """enable_type2_message getter
+
+        Enable generation of the type CC_Update message which carries the credits. consumed counters for VC 16 through VC 31.
+
+        Returns: bool
+        """
+        return self._get_property("enable_type2_message")
+
+    @enable_type2_message.setter
+    def enable_type2_message(self, value):
+        """enable_type2_message setter
+
+        Enable generation of the type CC_Update message which carries the credits. consumed counters for VC 16 through VC 31.
+
+        value: bool
+        """
+        self._set_property("enable_type2_message", value)
+
+    @property
+    def timer(self):
+        # type: () -> int
+        """timer getter
+
+        The time interval, in microseconds, between generation of successive. CC_Update messages.
+
+        Returns: int
+        """
+        return self._get_property("timer")
+
+    @timer.setter
+    def timer(self, value):
+        """timer setter
+
+        The time interval, in microseconds, between generation of successive. CC_Update messages.
+
+        value: int
+        """
+        self._set_property("timer", value)
+
+    @property
+    def company_id(self):
+        # type: () -> str
+        """company_id getter
+
+        The 24-bit UEC Company ID (CID) placed in the CC_Update message, as a. character hexadecimal string. The UEC CID is FA7ACB.
+
+        Returns: str
+        """
+        return self._get_property("company_id")
+
+    @company_id.setter
+    def company_id(self, value):
+        """company_id setter
+
+        The 24-bit UEC Company ID (CID) placed in the CC_Update message, as a. character hexadecimal string. The UEC CID is FA7ACB.
+
+        value: str
+        """
+        self._set_property("company_id", value)
+
+    @property
+    def source_address(self):
+        # type: () -> str
+        """source_address getter
+
+        The MAC source address of the CC_Update message.
+
+        Returns: str
+        """
+        return self._get_property("source_address")
+
+    @source_address.setter
+    def source_address(self, value):
+        """source_address setter
+
+        The MAC source address of the CC_Update message.
+
+        value: str
+        """
+        self._set_property("source_address", value)
+
+    @property
+    def destination_address(self):
+        # type: () -> str
+        """destination_address getter
+
+        The MAC destination address of the CC_Update message. The specification. uses the reserved address 01:80:C2:00:00:01 or the individual address of. the destination station.
+
+        Returns: str
+        """
+        return self._get_property("destination_address")
+
+    @destination_address.setter
+    def destination_address(self, value):
+        """destination_address setter
+
+        The MAC destination address of the CC_Update message. The specification. uses the reserved address 01:80:C2:00:00:01 or the individual address of. the destination station.
+
+        value: str
+        """
+        self._set_property("destination_address", value)
+
+
+class UltraEthernetCbfcVc(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "best_effort",
+                "lossless",
+            ],
+        },
+        "best_effort": {"type": "UltraEthernetCbfcVcBestEffort"},
+        "lossless": {"type": "UltraEthernetCbfcVcLossless"},
+        "mapping": {"type": "UltraEthernetCbfcVcMapping"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "best_effort",
+    }  # type: Dict[str, Union(type)]
+
+    BEST_EFFORT = "best_effort"  # type: str
+    LOSSLESS = "lossless"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(UltraEthernetCbfcVc, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def best_effort(self):
+        # type: () -> UltraEthernetCbfcVcBestEffort
+        """Factory property that returns an instance of the UltraEthernetCbfcVcBestEffort class
+
+        Best effort virtual channel settings. best effort VC does not use CBFC. credits.
+
+        Returns: UltraEthernetCbfcVcBestEffort
+        """
+        return self._get_property(
+            "best_effort", UltraEthernetCbfcVcBestEffort, self, "best_effort"
+        )
+
+    @property
+    def lossless(self):
+        # type: () -> UltraEthernetCbfcVcLossless
+        """Factory property that returns an instance of the UltraEthernetCbfcVcLossless class
+
+        Lossless virtual channel settings.
+
+        Returns: UltraEthernetCbfcVcLossless
+        """
+        return self._get_property(
+            "lossless", UltraEthernetCbfcVcLossless, self, "lossless"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["best_effort"], Literal["lossless"]]
+        """choice getter
+
+        The disposition of the virtual channel.. - best_effort: the VC does not use credits (best effort delivery).. lossless: the VC uses CBFC credits for lossless delivery.
+
+        Returns: Union[Literal["best_effort"], Literal["lossless"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The disposition of the virtual channel.. - best_effort: the VC does not use credits (best effort delivery).. lossless: the VC uses CBFC credits for lossless delivery.
+
+        value: Union[Literal["best_effort"], Literal["lossless"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def mapping(self):
+        # type: () -> UltraEthernetCbfcVcMapping
+        """mapping getter
+
+        The packet header field used to classify packets into virtual channel, and. the associated values. At minimum, mapping from the mac.vlan.pcp_dei and. ip.dscp header fields is supported.The packet header field used to classify packets into virtual channel, and. the associated values. At minimum, mapping from the mac.vlan.pcp_dei and. ip.dscp header fields is supported.The packet header field used to classify packets into virtual channel, and. the associated values. At minimum, mapping from the mac.vlan.pcp_dei and. ip.dscp header fields is supported.The packet header field values that classify packets into this virtual. channel.
+
+        Returns: UltraEthernetCbfcVcMapping
+        """
+        return self._get_property("mapping", UltraEthernetCbfcVcMapping)
+
+
+class UltraEthernetCbfcVcBestEffort(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {}  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(UltraEthernetCbfcVcBestEffort, self).__init__()
+        self._parent = parent
+
+
+class UltraEthernetCbfcVcLossless(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "credit_limit": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 524287,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "credit_limit": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, credit_limit=1):
+        super(UltraEthernetCbfcVcLossless, self).__init__()
+        self._parent = parent
+        self._set_property("credit_limit", credit_limit)
+
+    def set(self, credit_limit=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def credit_limit(self):
+        # type: () -> int
+        """credit_limit getter
+
+        The maximum number of credits allowed for this lossless VC. Applies only. when the port credit mode is per_vc.
+
+        Returns: int
+        """
+        return self._get_property("credit_limit")
+
+    @credit_limit.setter
+    def credit_limit(self, value):
+        """credit_limit setter
+
+        The maximum number of credits allowed for this lossless VC. Applies only. when the port credit mode is per_vc.
+
+        value: int
+        """
+        self._set_property("credit_limit", value)
+
+
+class UltraEthernetCbfcVcMapping(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "vlan_pcp_dei",
+                "dscp",
+            ],
+        },
+        "vlan_pcp_dei": {"type": "UltraEthernetCbfcVcMappingVlanPcpDei"},
+        "dscp": {"type": "UltraEthernetCbfcVcMappingDscp"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "vlan_pcp_dei",
+    }  # type: Dict[str, Union(type)]
+
+    VLAN_PCP_DEI = "vlan_pcp_dei"  # type: str
+    DSCP = "dscp"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(UltraEthernetCbfcVcMapping, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def vlan_pcp_dei(self):
+        # type: () -> UltraEthernetCbfcVcMappingVlanPcpDei
+        """Factory property that returns an instance of the UltraEthernetCbfcVcMappingVlanPcpDei class
+
+        VLAN PCP/DEI values that classify packets into this virtual channel.
+
+        Returns: UltraEthernetCbfcVcMappingVlanPcpDei
+        """
+        return self._get_property(
+            "vlan_pcp_dei", UltraEthernetCbfcVcMappingVlanPcpDei, self, "vlan_pcp_dei"
+        )
+
+    @property
+    def dscp(self):
+        # type: () -> UltraEthernetCbfcVcMappingDscp
+        """Factory property that returns an instance of the UltraEthernetCbfcVcMappingDscp class
+
+        IPv4/IPv6 DSCP values that classify packets into this virtual channel.
+
+        Returns: UltraEthernetCbfcVcMappingDscp
+        """
+        return self._get_property("dscp", UltraEthernetCbfcVcMappingDscp, self, "dscp")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["dscp"], Literal["vlan_pcp_dei"]]
+        """choice getter
+
+        The packet header field used to classify packets into this VC.. - vlan_pcp_dei: classify by the mac.vlan.pcp_dei value(s).. dscp: classify by the ip.dscp value(s).
+
+        Returns: Union[Literal["dscp"], Literal["vlan_pcp_dei"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The packet header field used to classify packets into this VC.. - vlan_pcp_dei: classify by the mac.vlan.pcp_dei value(s).. dscp: classify by the ip.dscp value(s).
+
+        value: Union[Literal["dscp"], Literal["vlan_pcp_dei"]]
+        """
+        self._set_property("choice", value)
+
+
+class UltraEthernetCbfcVcMappingVlanPcpDei(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "pcp_dei0": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 7,
+        },
+        "pcp_dei1": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 7,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, pcp_dei0=None, pcp_dei1=None):
+        super(UltraEthernetCbfcVcMappingVlanPcpDei, self).__init__()
+        self._parent = parent
+        self._set_property("pcp_dei0", pcp_dei0)
+        self._set_property("pcp_dei1", pcp_dei1)
+
+    def set(self, pcp_dei0=None, pcp_dei1=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def pcp_dei0(self):
+        # type: () -> List[int]
+        """pcp_dei0 getter
+
+        The VLAN PCP values, with DEI 0, mapped to this VC. Valid values are to 7.
+
+        Returns: List[int]
+        """
+        return self._get_property("pcp_dei0")
+
+    @pcp_dei0.setter
+    def pcp_dei0(self, value):
+        """pcp_dei0 setter
+
+        The VLAN PCP values, with DEI 0, mapped to this VC. Valid values are to 7.
+
+        value: List[int]
+        """
+        self._set_property("pcp_dei0", value)
+
+    @property
+    def pcp_dei1(self):
+        # type: () -> List[int]
+        """pcp_dei1 getter
+
+        The VLAN PCP values, with DEI 1, mapped to this VC. Valid values are to 7.
+
+        Returns: List[int]
+        """
+        return self._get_property("pcp_dei1")
+
+    @pcp_dei1.setter
+    def pcp_dei1(self, value):
+        """pcp_dei1 setter
+
+        The VLAN PCP values, with DEI 1, mapped to this VC. Valid values are to 7.
+
+        value: List[int]
+        """
+        self._set_property("pcp_dei1", value)
+
+
+class UltraEthernetCbfcVcMappingDscp(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 63,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, values=None):
+        super(UltraEthernetCbfcVcMappingDscp, self).__init__()
+        self._parent = parent
+        self._set_property("values", values)
+
+    def set(self, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        The DSCP values mapped to this VC. Valid values are to 63.
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        The DSCP values mapped to this VC. Valid values are to 63.
+
+        value: List[int]
+        """
+        self._set_property("values", value)
+
+
+class UltraEthernetCbfcVcIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(UltraEthernetCbfcVcIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[UltraEthernetCbfcVc, UltraEthernetCbfcVcBestEffort, UltraEthernetCbfcVcLossless]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> UltraEthernetCbfcVcIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> UltraEthernetCbfcVc
+        return self._next()
+
+    def next(self):
+        # type: () -> UltraEthernetCbfcVc
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, UltraEthernetCbfcVc):
+            raise Exception("Item is not an instance of UltraEthernetCbfcVc")
+
+    def vc(self):
+        # type: () -> UltraEthernetCbfcVcIter
+        """Factory method that creates an instance of the UltraEthernetCbfcVc class
+
+        A CBFC virtual channel (VC). The position of the VC in the virtual_channels. list is its VC number (zero based). maximum of VCs may be configured as. lossless.. Reference: UE-Specification-1.0.3 Section 5.2.
+
+        Returns: UltraEthernetCbfcVcIter
+        """
+        item = UltraEthernetCbfcVc(parent=self._parent, choice=self._choice)
+        self._add(item)
+        return self
+
+    def add(self):
+        # type: () -> UltraEthernetCbfcVc
+        """Add method that creates and returns an instance of the UltraEthernetCbfcVc class
+
+        A CBFC virtual channel (VC). The position of the VC in the virtual_channels. list is its VC number (zero based). maximum of VCs may be configured as. lossless.. Reference: UE-Specification-1.0.3 Section 5.2.
+
+        Returns: UltraEthernetCbfcVc
+        """
+        item = UltraEthernetCbfcVc(parent=self._parent, choice=self._choice)
+        self._add(item)
+        return item
+
+
+class UltraEthernetCbfcReceiver(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "enable": {"type": bool},
+        "port_credit": {"type": "UltraEthernetCbfcPortCredit"},
+        "cc_message": {"type": "UltraEthernetCbfcReceiverCcMessage"},
+        "virtual_channels": {"type": "UltraEthernetCbfcVcIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "enable": False,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, enable=False):
+        super(UltraEthernetCbfcReceiver, self).__init__()
+        self._parent = parent
+        self._set_property("enable", enable)
+
+    def set(self, enable=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def enable(self):
+        # type: () -> bool
+        """enable getter
+
+        Enable the CBFC receiver on the port.
+
+        Returns: bool
+        """
+        return self._get_property("enable")
+
+    @enable.setter
+    def enable(self, value):
+        """enable setter
+
+        Enable the CBFC receiver on the port.
+
+        value: bool
+        """
+        self._set_property("enable", value)
+
+    @property
+    def port_credit(self):
+        # type: () -> UltraEthernetCbfcPortCredit
+        """port_credit getter
+
+        CBFC port level credit configuration. Credits are the unit used to track. available buffer space at the receiver.. Reference: UE-Specification-1.0.3 Table 5-14.CBFC port level credit configuration. Credits are the unit used to track. available buffer space at the receiver.. Reference: UE-Specification-1.0.3 Table 5-14.CBFC port level credit configuration. Credits are the unit used to track. available buffer space at the receiver.. Reference: UE-Specification-1.0.3 Table 5-14.Port level credit configuration (credit mode, total credits, cell size and. per-packet overhead).
+
+        Returns: UltraEthernetCbfcPortCredit
+        """
+        return self._get_property("port_credit", UltraEthernetCbfcPortCredit)
+
+    @property
+    def cc_message(self):
+        # type: () -> UltraEthernetCbfcReceiverCcMessage
+        """cc_message getter
+
+        CBFC CC_Update (credit consumed) message reception configuration.CBFC CC_Update (credit consumed) message reception configuration.CBFC CC_Update (credit consumed) message reception configuration.CC_Update (credit consumed) message reception configuration.
+
+        Returns: UltraEthernetCbfcReceiverCcMessage
+        """
+        return self._get_property("cc_message", UltraEthernetCbfcReceiverCcMessage)
+
+    @property
+    def virtual_channels(self):
+        # type: () -> UltraEthernetCbfcVcIter
+        """virtual_channels getter
+
+        The list of virtual channels (VCs). maximum of 32 VCs are supported per. port, of which maximum of may be configured as lossless.
+
+        Returns: UltraEthernetCbfcVcIter
+        """
+        return self._get_property(
+            "virtual_channels", UltraEthernetCbfcVcIter, self._parent, self._choice
+        )
+
+
+class UltraEthernetCbfcReceiverCcMessage(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "expected_company_id": {
+            "type": str,
+            "pattern": r"^[0-9a-fA-F]{6}$",
+        },
+        "validate_cc_min_spacing": {"type": bool},
+        "cc_min_spacing": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 25000,
+        },
+        "validate_cc_max_spacing": {"type": bool},
+        "cc_max_spacing": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 25000,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "expected_company_id": "FA7ACB",
+        "validate_cc_min_spacing": False,
+        "cc_min_spacing": 1,
+        "validate_cc_max_spacing": False,
+        "cc_max_spacing": 25000,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        expected_company_id="FA7ACB",
+        validate_cc_min_spacing=False,
+        cc_min_spacing=1,
+        validate_cc_max_spacing=False,
+        cc_max_spacing=25000,
+    ):
+        super(UltraEthernetCbfcReceiverCcMessage, self).__init__()
+        self._parent = parent
+        self._set_property("expected_company_id", expected_company_id)
+        self._set_property("validate_cc_min_spacing", validate_cc_min_spacing)
+        self._set_property("cc_min_spacing", cc_min_spacing)
+        self._set_property("validate_cc_max_spacing", validate_cc_max_spacing)
+        self._set_property("cc_max_spacing", cc_max_spacing)
+
+    def set(
+        self,
+        expected_company_id=None,
+        validate_cc_min_spacing=None,
+        cc_min_spacing=None,
+        validate_cc_max_spacing=None,
+        cc_max_spacing=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def expected_company_id(self):
+        # type: () -> str
+        """expected_company_id getter
+
+        The 24-bit UEC Company ID (CID) expected in received CC_Update messages, as. 6 character hexadecimal string. The UEC CID is FA7ACB.
+
+        Returns: str
+        """
+        return self._get_property("expected_company_id")
+
+    @expected_company_id.setter
+    def expected_company_id(self, value):
+        """expected_company_id setter
+
+        The 24-bit UEC Company ID (CID) expected in received CC_Update messages, as. 6 character hexadecimal string. The UEC CID is FA7ACB.
+
+        value: str
+        """
+        self._set_property("expected_company_id", value)
+
+    @property
+    def validate_cc_min_spacing(self):
+        # type: () -> bool
+        """validate_cc_min_spacing getter
+
+        Enable validation of the minimum spacing between received CC_Update. messages.
+
+        Returns: bool
+        """
+        return self._get_property("validate_cc_min_spacing")
+
+    @validate_cc_min_spacing.setter
+    def validate_cc_min_spacing(self, value):
+        """validate_cc_min_spacing setter
+
+        Enable validation of the minimum spacing between received CC_Update. messages.
+
+        value: bool
+        """
+        self._set_property("validate_cc_min_spacing", value)
+
+    @property
+    def cc_min_spacing(self):
+        # type: () -> int
+        """cc_min_spacing getter
+
+        The minimum spacing, in microseconds, expected between received CC_Update. messages.
+
+        Returns: int
+        """
+        return self._get_property("cc_min_spacing")
+
+    @cc_min_spacing.setter
+    def cc_min_spacing(self, value):
+        """cc_min_spacing setter
+
+        The minimum spacing, in microseconds, expected between received CC_Update. messages.
+
+        value: int
+        """
+        self._set_property("cc_min_spacing", value)
+
+    @property
+    def validate_cc_max_spacing(self):
+        # type: () -> bool
+        """validate_cc_max_spacing getter
+
+        Enable validation of the maximum spacing between received CC_Update. messages.
+
+        Returns: bool
+        """
+        return self._get_property("validate_cc_max_spacing")
+
+    @validate_cc_max_spacing.setter
+    def validate_cc_max_spacing(self, value):
+        """validate_cc_max_spacing setter
+
+        Enable validation of the maximum spacing between received CC_Update. messages.
+
+        value: bool
+        """
+        self._set_property("validate_cc_max_spacing", value)
+
+    @property
+    def cc_max_spacing(self):
+        # type: () -> int
+        """cc_max_spacing getter
+
+        The maximum spacing, in microseconds, expected between received CC_Update. messages.
+
+        Returns: int
+        """
+        return self._get_property("cc_max_spacing")
+
+    @cc_max_spacing.setter
+    def cc_max_spacing(self, value):
+        """cc_max_spacing setter
+
+        The maximum spacing, in microseconds, expected between received CC_Update. messages.
+
+        value: int
+        """
+        self._set_property("cc_max_spacing", value)
+
+
+class UltraEthernetIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(UltraEthernetIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[UltraEthernet]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> UltraEthernetIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> UltraEthernet
+        return self._next()
+
+    def next(self):
+        # type: () -> UltraEthernet
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, UltraEthernet):
+            raise Exception("Item is not an instance of UltraEthernet")
+
+    def ultraethernet(self, port_names=None, name=None):
+        # type: (List[str],str) -> UltraEthernetIter
+        """Factory method that creates an instance of the UltraEthernet class
+
+        A container for Ultra Ethernet (UE) link layer settings applied to one or. more test ports.. The Ultra Ethernet Consortium (UEC) link layer defines optional-to-implement. features that enhance performance and reliability of the Ethernet link:. - Link Layer Retry (LLR): frame based link level retransmission of lost frames.. Credit-based Flow Control (CBFC): per virtual channel (VC) credit based. alternative to priority based flow control (PFC).. PHY Control Ordered Set (CtlOS) timing: transmit/receive spacing controls. for the ordered sets that carry LLR and CBFC messages.. These settings usually vary across variety of test ports and most likely. won't be portable.
+
+        Returns: UltraEthernetIter
+        """
+        item = UltraEthernet(parent=self._parent, port_names=port_names, name=name)
+        self._add(item)
+        return self
+
+    def add(self, port_names=None, name=None):
+        # type: (List[str],str) -> UltraEthernet
+        """Add method that creates and returns an instance of the UltraEthernet class
+
+        A container for Ultra Ethernet (UE) link layer settings applied to one or. more test ports.. The Ultra Ethernet Consortium (UEC) link layer defines optional-to-implement. features that enhance performance and reliability of the Ethernet link:. - Link Layer Retry (LLR): frame based link level retransmission of lost frames.. Credit-based Flow Control (CBFC): per virtual channel (VC) credit based. alternative to priority based flow control (PFC).. PHY Control Ordered Set (CtlOS) timing: transmit/receive spacing controls. for the ordered sets that carry LLR and CBFC messages.. These settings usually vary across variety of test ports and most likely. won't be portable.
+
+        Returns: UltraEthernet
+        """
+        item = UltraEthernet(parent=self._parent, port_names=port_names, name=name)
+        self._add(item)
+        return item
+
+
 class Warning(OpenApiObject):
     __slots__ = "_parent"
 
@@ -166393,7 +168771,7 @@ class UpdateProtocolConfigIsisInterfaceUpdateGroup(OpenApiObject):
         # type: () -> List[str]
         """names getter
 
-        The names of the IS-IS interfaces to which all attribute updates in this group will be applied.. x-constraint:. /components/schemas/Isis.Interface/properties/name. . x-constraint:. /components/schemas/Isis.Interface/properties/name.
+        The names of the IS-IS interfaces to which all attribute updates in this group will be applied.. x-constraint:. /components/schemas/Isis.Interface/properties/name.
 
         Returns: List[str]
         """
@@ -166403,7 +168781,7 @@ class UpdateProtocolConfigIsisInterfaceUpdateGroup(OpenApiObject):
     def names(self, value):
         """names setter
 
-        The names of the IS-IS interfaces to which all attribute updates in this group will be applied.. x-constraint:. /components/schemas/Isis.Interface/properties/name. . x-constraint:. /components/schemas/Isis.Interface/properties/name.
+        The names of the IS-IS interfaces to which all attribute updates in this group will be applied.. x-constraint:. /components/schemas/Isis.Interface/properties/name.
 
         value: List[str]
         """
@@ -166905,7 +169283,7 @@ class ConfigDeleteResources(OpenApiObject):
         # type: () -> List[str]
         """flows getter
 
-        List of flows that will be deleted from existing configuration on the traffic generator.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
+        List of flows that will be deleted from existing configuration on the traffic generator.. x-constraint:. /components/schemas/Flow/properties/name.
 
         Returns: List[str]
         """
@@ -166915,7 +169293,7 @@ class ConfigDeleteResources(OpenApiObject):
     def flows(self, value):
         """flows setter
 
-        List of flows that will be deleted from existing configuration on the traffic generator.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
+        List of flows that will be deleted from existing configuration on the traffic generator.. x-constraint:. /components/schemas/Flow/properties/name.
 
         value: List[str]
         """
@@ -166991,11 +169369,13 @@ class ControlState(OpenApiObject):
                 "port",
                 "protocol",
                 "traffic",
+                "ultra_ethernet",
             ],
         },
         "port": {"type": "StatePort"},
         "protocol": {"type": "StateProtocol"},
         "traffic": {"type": "StateTraffic"},
+        "ultra_ethernet": {"type": "StateUltraEthernet"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("choice",)  # type: tuple(str)
@@ -167005,6 +169385,7 @@ class ControlState(OpenApiObject):
     PORT = "port"  # type: str
     PROTOCOL = "protocol"  # type: str
     TRAFFIC = "traffic"  # type: str
+    ULTRA_ETHERNET = "ultra_ethernet"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -167054,13 +169435,26 @@ class ControlState(OpenApiObject):
         return self._get_property("traffic", StateTraffic, self, "traffic")
 
     @property
+    def ultra_ethernet(self):
+        # type: () -> StateUltraEthernet
+        """Factory property that returns an instance of the StateUltraEthernet class
+
+        States associated with Ultra Ethernet link layer features on configured resources.
+
+        Returns: StateUltraEthernet
+        """
+        return self._get_property(
+            "ultra_ethernet", StateUltraEthernet, self, "ultra_ethernet"
+        )
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["port"], Literal["protocol"], Literal["traffic"]]
+        # type: () -> Union[Literal["port"], Literal["protocol"], Literal["traffic"], Literal["ultra_ethernet"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["port"], Literal["protocol"], Literal["traffic"]]
+        Returns: Union[Literal["port"], Literal["protocol"], Literal["traffic"], Literal["ultra_ethernet"]]
         """
         return self._get_property("choice")
 
@@ -167070,7 +169464,7 @@ class ControlState(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["port"], Literal["protocol"], Literal["traffic"]]
+        value: Union[Literal["port"], Literal["protocol"], Literal["traffic"], Literal["ultra_ethernet"]]
         """
         if value is None:
             raise TypeError("Cannot set required property choice as None")
@@ -167201,7 +169595,7 @@ class StatePortLink(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -167211,7 +169605,7 @@ class StatePortLink(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -167283,7 +169677,7 @@ class StatePortCapture(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        The names of ports to which the capture state will be applied to. If the list of port_names is empty or null the state will be applied to all configured ports.. If the list is not empty any port that is not included in the list of port_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of ports to which the capture state will be applied to. If the list of port_names is empty or null the state will be applied to all configured ports.. If the list is not empty any port that is not included in the list of port_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -167293,7 +169687,7 @@ class StatePortCapture(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        The names of ports to which the capture state will be applied to. If the list of port_names is empty or null the state will be applied to all configured ports.. If the list is not empty any port that is not included in the list of port_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of ports to which the capture state will be applied to. If the list of port_names is empty or null the state will be applied to all configured ports.. If the list is not empty any port that is not included in the list of port_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -167585,7 +169979,7 @@ class StateProtocolRoute(OpenApiObject):
         # type: () -> List[str]
         """names getter
 
-        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. . x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name.
+        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name.
 
         Returns: List[str]
         """
@@ -167595,7 +169989,7 @@ class StateProtocolRoute(OpenApiObject):
     def names(self, value):
         """names setter
 
-        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. . x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name.
+        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name.
 
         value: List[str]
         """
@@ -167751,7 +170145,7 @@ class StateProtocolLacpAdmin(OpenApiObject):
         # type: () -> List[str]
         """lag_member_names getter
 
-        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -167761,7 +170155,7 @@ class StateProtocolLacpAdmin(OpenApiObject):
     def lag_member_names(self, value):
         """lag_member_names setter
 
-        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -167833,7 +170227,7 @@ class StateProtocolLacpMemberPorts(OpenApiObject):
         # type: () -> List[str]
         """lag_member_names getter
 
-        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -167843,7 +170237,7 @@ class StateProtocolLacpMemberPorts(OpenApiObject):
     def lag_member_names(self, value):
         """lag_member_names setter
 
-        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -167983,7 +170377,7 @@ class StateProtocolBgpPeers(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         Returns: List[str]
         """
@@ -167993,7 +170387,7 @@ class StateProtocolBgpPeers(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         value: List[str]
         """
@@ -168149,7 +170543,7 @@ class StateProtocolIsisRouters(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         Returns: List[str]
         """
@@ -168159,7 +170553,7 @@ class StateProtocolIsisRouters(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         value: List[str]
         """
@@ -168231,7 +170625,7 @@ class StateProtocolIsisSimLinks(OpenApiObject):
         # type: () -> List[str]
         """names getter
 
-        The names of ISIS Simulated Links to control. If no names are specified then all ISIS Simulated Links in the configuration will be affected... x-constraint:. /components/schemas/Isis.Interface/properties/name. . x-constraint:. /components/schemas/Isis.Interface/properties/name.
+        The names of ISIS Simulated Links to control. If no names are specified then all ISIS Simulated Links in the configuration will be affected... x-constraint:. /components/schemas/Isis.Interface/properties/name.
 
         Returns: List[str]
         """
@@ -168241,7 +170635,7 @@ class StateProtocolIsisSimLinks(OpenApiObject):
     def names(self, value):
         """names setter
 
-        The names of ISIS Simulated Links to control. If no names are specified then all ISIS Simulated Links in the configuration will be affected... x-constraint:. /components/schemas/Isis.Interface/properties/name. . x-constraint:. /components/schemas/Isis.Interface/properties/name.
+        The names of ISIS Simulated Links to control. If no names are specified then all ISIS Simulated Links in the configuration will be affected... x-constraint:. /components/schemas/Isis.Interface/properties/name.
 
         value: List[str]
         """
@@ -168381,7 +170775,7 @@ class StateProtocolOspfv2Routers(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of OSPFv2 routers for which the state has to be applied. An empty or null list will control all OSPFv2 routers.. x-constraint:. /components/schemas/Device.Ospfv2/properties/name. . x-constraint:. /components/schemas/Device.Ospfv2/properties/name.
+        The names of OSPFv2 routers for which the state has to be applied. An empty or null list will control all OSPFv2 routers.. x-constraint:. /components/schemas/Device.Ospfv2/properties/name.
 
         Returns: List[str]
         """
@@ -168391,7 +170785,7 @@ class StateProtocolOspfv2Routers(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of OSPFv2 routers for which the state has to be applied. An empty or null list will control all OSPFv2 routers.. x-constraint:. /components/schemas/Device.Ospfv2/properties/name. . x-constraint:. /components/schemas/Device.Ospfv2/properties/name.
+        The names of OSPFv2 routers for which the state has to be applied. An empty or null list will control all OSPFv2 routers.. x-constraint:. /components/schemas/Device.Ospfv2/properties/name.
 
         value: List[str]
         """
@@ -168533,7 +170927,7 @@ class StateProtocolOspfv3Routers(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of OSPFv3 routers for which the state has to be applied. An empty or null list will control all OSPFv3 routers.. x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name. . x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name.
+        The names of OSPFv3 routers for which the state has to be applied. An empty or null list will control all OSPFv3 routers.. x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name.
 
         Returns: List[str]
         """
@@ -168543,7 +170937,7 @@ class StateProtocolOspfv3Routers(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of OSPFv3 routers for which the state has to be applied. An empty or null list will control all OSPFv3 routers.. x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name. . x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name.
+        The names of OSPFv3 routers for which the state has to be applied. An empty or null list will control all OSPFv3 routers.. x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name.
 
         value: List[str]
         """
@@ -168683,7 +171077,7 @@ class StateProtocolRocev2Peers(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of RoCEv2 peers for which the state has to be applied. An empty or null list will control all RoCEv2 peers.. x-constraint:. /components/schemas/Rocev2.V4Peer/properties/name. /components/schemas/Rocev2.V6Peer/properties/name. . x-constraint:. /components/schemas/Rocev2.V4Peer/properties/name. /components/schemas/Rocev2.V6Peer/properties/name.
+        The names of RoCEv2 peers for which the state has to be applied. An empty or null list will control all RoCEv2 peers.. x-constraint:. /components/schemas/Rocev2.V4Peer/properties/name. /components/schemas/Rocev2.V6Peer/properties/name.
 
         Returns: List[str]
         """
@@ -168693,7 +171087,7 @@ class StateProtocolRocev2Peers(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of RoCEv2 peers for which the state has to be applied. An empty or null list will control all RoCEv2 peers.. x-constraint:. /components/schemas/Rocev2.V4Peer/properties/name. /components/schemas/Rocev2.V6Peer/properties/name. . x-constraint:. /components/schemas/Rocev2.V4Peer/properties/name. /components/schemas/Rocev2.V6Peer/properties/name.
+        The names of RoCEv2 peers for which the state has to be applied. An empty or null list will control all RoCEv2 peers.. x-constraint:. /components/schemas/Rocev2.V4Peer/properties/name. /components/schemas/Rocev2.V6Peer/properties/name.
 
         value: List[str]
         """
@@ -168839,7 +171233,7 @@ class StateTrafficFlowTransmit(OpenApiObject):
         # type: () -> List[str]
         """flow_names getter
 
-        The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.. If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
+        The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.. If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Flow/properties/name.
 
         Returns: List[str]
         """
@@ -168849,7 +171243,7 @@ class StateTrafficFlowTransmit(OpenApiObject):
     def flow_names(self, value):
         """flow_names setter
 
-        The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.. If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
+        The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.. If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Flow/properties/name.
 
         value: List[str]
         """
@@ -168873,6 +171267,268 @@ class StateTrafficFlowTransmit(OpenApiObject):
         The transmit state.. If the value of the state property is 'start' then all flows defined by the 'flow_names' property will be started and the metric counters MUST be cleared prior to starting the flow(s).. If the value of the state property is 'stop' then all flows defined by the 'flow_names' property will be stopped and the metric counters MUST NOT be cleared.. If the value of the state property is 'pause' then all flows defined by the 'flow_names' property will be paused and the metric counters MUST NOT be cleared.. If the value of the state property is 'resume' then any paused flows defined by the 'flow_names' property will start transmit at the point at which they were paused. Any flow that is stopped will start transmit at the beginning of the flow. The flow(s) MUST NOT have their metric counters cleared.
 
         value: Union[Literal["pause"], Literal["resume"], Literal["start"], Literal["stop"]]
+        """
+        if value is None:
+            raise TypeError("Cannot set required property state as None")
+        self._set_property("state", value)
+
+
+class StateUltraEthernet(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "llr",
+                "cbfc",
+            ],
+        },
+        "llr": {"type": "StateUltraEthernetLlr"},
+        "cbfc": {"type": "StateUltraEthernetCbfc"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("choice",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    LLR = "llr"  # type: str
+    CBFC = "cbfc"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(StateUltraEthernet, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def llr(self):
+        # type: () -> StateUltraEthernetLlr
+        """Factory property that returns an instance of the StateUltraEthernetLlr class
+
+        Sets the Link Layer Retry (LLR) mode state of configured Ultra Ethernet instances.
+
+        Returns: StateUltraEthernetLlr
+        """
+        return self._get_property("llr", StateUltraEthernetLlr, self, "llr")
+
+    @property
+    def cbfc(self):
+        # type: () -> StateUltraEthernetCbfc
+        """Factory property that returns an instance of the StateUltraEthernetCbfc class
+
+        Sets the Credit-based Flow Control (CBFC) state of configured Ultra Ethernet instances.
+
+        Returns: StateUltraEthernetCbfc
+        """
+        return self._get_property("cbfc", StateUltraEthernetCbfc, self, "cbfc")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["cbfc"], Literal["llr"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["cbfc"], Literal["llr"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["cbfc"], Literal["llr"]]
+        """
+        if value is None:
+            raise TypeError("Cannot set required property choice as None")
+        self._set_property("choice", value)
+
+
+class StateUltraEthernetLlr(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "ultra_ethernet_names": {
+            "type": list,
+            "itemtype": str,
+        },
+        "state": {
+            "type": str,
+            "enum": [
+                "disable_all",
+                "enable_all",
+                "local_disable",
+                "local_enable",
+                "remote_disable",
+                "remote_enable",
+            ],
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("state",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    DISABLE_ALL = "disable_all"  # type: str
+    ENABLE_ALL = "enable_all"  # type: str
+    LOCAL_DISABLE = "local_disable"  # type: str
+    LOCAL_ENABLE = "local_enable"  # type: str
+    REMOTE_DISABLE = "remote_disable"  # type: str
+    REMOTE_ENABLE = "remote_enable"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, ultra_ethernet_names=None, state=None):
+        super(StateUltraEthernetLlr, self).__init__()
+        self._parent = parent
+        self._set_property("ultra_ethernet_names", ultra_ethernet_names)
+        self._set_property("state", state)
+
+    def set(self, ultra_ethernet_names=None, state=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def ultra_ethernet_names(self):
+        # type: () -> List[str]
+        """ultra_ethernet_names getter
+
+        The names of target Ultra Ethernet instances. An empty or null list will target all Ultra Ethernet instances.. x-constraint:. /components/schemas/UltraEthernet/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("ultra_ethernet_names")
+
+    @ultra_ethernet_names.setter
+    def ultra_ethernet_names(self, value):
+        """ultra_ethernet_names setter
+
+        The names of target Ultra Ethernet instances. An empty or null list will target all Ultra Ethernet instances.. x-constraint:. /components/schemas/UltraEthernet/properties/name.
+
+        value: List[str]
+        """
+        self._set_property("ultra_ethernet_names", value)
+
+    @property
+    def state(self):
+        # type: () -> Union[Literal["disable_all"], Literal["enable_all"], Literal["local_disable"], Literal["local_enable"], Literal["remote_disable"], Literal["remote_enable"]]
+        """state getter
+
+        The LLR mode state to apply.. local_enable local_disable: enable or disable LLR reception. (llr_mode_local).. remote_enable remote_disable: enable or disable LLR transmission. (llr_mode_remote).. enable_all disable_all: enable or disable both directions.
+
+        Returns: Union[Literal["disable_all"], Literal["enable_all"], Literal["local_disable"], Literal["local_enable"], Literal["remote_disable"], Literal["remote_enable"]]
+        """
+        return self._get_property("state")
+
+    @state.setter
+    def state(self, value):
+        """state setter
+
+        The LLR mode state to apply.. local_enable local_disable: enable or disable LLR reception. (llr_mode_local).. remote_enable remote_disable: enable or disable LLR transmission. (llr_mode_remote).. enable_all disable_all: enable or disable both directions.
+
+        value: Union[Literal["disable_all"], Literal["enable_all"], Literal["local_disable"], Literal["local_enable"], Literal["remote_disable"], Literal["remote_enable"]]
+        """
+        if value is None:
+            raise TypeError("Cannot set required property state as None")
+        self._set_property("state", value)
+
+
+class StateUltraEthernetCbfc(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "ultra_ethernet_names": {
+            "type": list,
+            "itemtype": str,
+        },
+        "state": {
+            "type": str,
+            "enum": [
+                "disable_all",
+                "enable_all",
+                "receiver_disable",
+                "receiver_enable",
+                "sender_disable",
+                "sender_enable",
+            ],
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("state",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    DISABLE_ALL = "disable_all"  # type: str
+    ENABLE_ALL = "enable_all"  # type: str
+    RECEIVER_DISABLE = "receiver_disable"  # type: str
+    RECEIVER_ENABLE = "receiver_enable"  # type: str
+    SENDER_DISABLE = "sender_disable"  # type: str
+    SENDER_ENABLE = "sender_enable"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, ultra_ethernet_names=None, state=None):
+        super(StateUltraEthernetCbfc, self).__init__()
+        self._parent = parent
+        self._set_property("ultra_ethernet_names", ultra_ethernet_names)
+        self._set_property("state", state)
+
+    def set(self, ultra_ethernet_names=None, state=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def ultra_ethernet_names(self):
+        # type: () -> List[str]
+        """ultra_ethernet_names getter
+
+        The names of target Ultra Ethernet instances. An empty or null list will target all Ultra Ethernet instances.. x-constraint:. /components/schemas/UltraEthernet/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("ultra_ethernet_names")
+
+    @ultra_ethernet_names.setter
+    def ultra_ethernet_names(self, value):
+        """ultra_ethernet_names setter
+
+        The names of target Ultra Ethernet instances. An empty or null list will target all Ultra Ethernet instances.. x-constraint:. /components/schemas/UltraEthernet/properties/name.
+
+        value: List[str]
+        """
+        self._set_property("ultra_ethernet_names", value)
+
+    @property
+    def state(self):
+        # type: () -> Union[Literal["disable_all"], Literal["enable_all"], Literal["receiver_disable"], Literal["receiver_enable"], Literal["sender_disable"], Literal["sender_enable"]]
+        """state getter
+
+        The CBFC state to apply.. sender_enable sender_disable: enable or disable the CBFC sender. receiver_enable receiver_disable: enable or disable the CBFC receiver. enable_all disable_all: enable or disable both sender and receiver.
+
+        Returns: Union[Literal["disable_all"], Literal["enable_all"], Literal["receiver_disable"], Literal["receiver_enable"], Literal["sender_disable"], Literal["sender_enable"]]
+        """
+        return self._get_property("state")
+
+    @state.setter
+    def state(self, value):
+        """state setter
+
+        The CBFC state to apply.. sender_enable sender_disable: enable or disable the CBFC sender. receiver_enable receiver_disable: enable or disable the CBFC receiver. enable_all disable_all: enable or disable both sender and receiver.
+
+        value: Union[Literal["disable_all"], Literal["enable_all"], Literal["receiver_disable"], Literal["receiver_enable"], Literal["sender_disable"], Literal["sender_enable"]]
         """
         if value is None:
             raise TypeError("Cannot set required property state as None")
@@ -169203,7 +171859,7 @@ class ActionProtocolIpv4PingRequest(OpenApiObject):
         # type: () -> str
         """src_name getter
 
-        Name of source IPv4 interface to be used.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        Name of source IPv4 interface to be used.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         Returns: str
         """
@@ -169213,7 +171869,7 @@ class ActionProtocolIpv4PingRequest(OpenApiObject):
     def src_name(self, value):
         """src_name setter
 
-        Name of source IPv4 interface to be used.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        Name of source IPv4 interface to be used.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         value: str
         """
@@ -169432,7 +172088,7 @@ class ActionProtocolIpv6PingRequest(OpenApiObject):
         # type: () -> str
         """src_name getter
 
-        Name of source IPv6 interface to be used.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
+        Name of source IPv6 interface to be used.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         Returns: str
         """
@@ -169442,7 +172098,7 @@ class ActionProtocolIpv6PingRequest(OpenApiObject):
     def src_name(self, value):
         """src_name setter
 
-        Name of source IPv6 interface to be used.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
+        Name of source IPv6 interface to be used.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         value: str
         """
@@ -169791,7 +172447,7 @@ class ActionProtocolBgpNotification(OpenApiObject):
         # type: () -> List[str]
         """names getter
 
-        The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         Returns: List[str]
         """
@@ -169801,7 +172457,7 @@ class ActionProtocolBgpNotification(OpenApiObject):
     def names(self, value):
         """names setter
 
-        The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         value: List[str]
         """
@@ -170302,7 +172958,7 @@ class ActionProtocolBgpInitiateGracefulRestart(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of device BGP peers objects to control.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of device BGP peers objects to control.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         Returns: List[str]
         """
@@ -170312,7 +172968,7 @@ class ActionProtocolBgpInitiateGracefulRestart(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of device BGP peers objects to control.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of device BGP peers objects to control.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         value: List[str]
         """
@@ -170695,7 +173351,7 @@ class ActionProtocolIsisInitiateRestart(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of device objects to control.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of device objects to control.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         Returns: List[str]
         """
@@ -170705,7 +173361,7 @@ class ActionProtocolIsisInitiateRestart(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of device objects to control.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of device objects to control.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         value: List[str]
         """
@@ -170946,7 +173602,7 @@ class ActionProtocolIsisOverloadBit(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of IS-IS routers on which to apply the overload bit state. If no names are specified then the action is applied to all configured IS-IS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of IS-IS routers on which to apply the overload bit state. If no names are specified then the action is applied to all configured IS-IS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         Returns: List[str]
         """
@@ -170956,7 +173612,7 @@ class ActionProtocolIsisOverloadBit(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of IS-IS routers on which to apply the overload bit state. If no names are specified then the action is applied to all configured IS-IS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of IS-IS routers on which to apply the overload bit state. If no names are specified then the action is applied to all configured IS-IS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         value: List[str]
         """
@@ -171083,7 +173739,7 @@ class ActionPortReboot(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -171093,7 +173749,7 @@ class ActionPortReboot(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -171456,7 +174112,7 @@ class ActionResponseProtocolIpv4PingResponse(OpenApiObject):
         # type: () -> str
         """src_name getter
 
-        Name of source IPv4 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        Name of source IPv4 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         Returns: str
         """
@@ -171466,7 +174122,7 @@ class ActionResponseProtocolIpv4PingResponse(OpenApiObject):
     def src_name(self, value):
         """src_name setter
 
-        Name of source IPv4 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        Name of source IPv4 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         value: str
         """
@@ -171728,7 +174384,7 @@ class ActionResponseProtocolIpv6PingResponse(OpenApiObject):
         # type: () -> str
         """src_name getter
 
-        Name of source IPv6 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
+        Name of source IPv6 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         Returns: str
         """
@@ -171738,7 +174394,7 @@ class ActionResponseProtocolIpv6PingResponse(OpenApiObject):
     def src_name(self, value):
         """src_name setter
 
-        Name of source IPv6 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
+        Name of source IPv6 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         value: str
         """
@@ -171884,6 +174540,7 @@ class MetricsRequest(OpenApiObject):
                 "rocev2_flow",
                 "egress_only_tracking",
                 "bmp_server",
+                "ultra_ethernet",
             ],
         },
         "port": {"type": "PortMetricsRequest"},
@@ -171909,6 +174566,7 @@ class MetricsRequest(OpenApiObject):
         "rocev2_flow": {"type": "Rocev2FlowMetricsRequest"},
         "egress_only_tracking": {"type": "EgressOnlyTrackingMetricsRequest"},
         "bmp_server": {"type": "BmpServerMetricsRequest"},
+        "ultra_ethernet": {"type": "UltraEthernetMetricsRequest"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -171940,6 +174598,7 @@ class MetricsRequest(OpenApiObject):
     ROCEV2_FLOW = "rocev2_flow"  # type: str
     EGRESS_ONLY_TRACKING = "egress_only_tracking"  # type: str
     BMP_SERVER = "bmp_server"  # type: str
+    ULTRA_ETHERNET = "ultra_ethernet"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -172232,13 +174891,26 @@ class MetricsRequest(OpenApiObject):
         )
 
     @property
+    def ultra_ethernet(self):
+        # type: () -> UltraEthernetMetricsRequest
+        """Factory property that returns an instance of the UltraEthernetMetricsRequest class
+
+        The request to retrieve Ultra Ethernet (UE) per port metrics/statistics covering the Link Layer Retry (LLR), Credit-based Flow Control (CBFC) and PHY Control Ordered Set (CtlOS) features.
+
+        Returns: UltraEthernetMetricsRequest
+        """
+        return self._get_property(
+            "ultra_ethernet", UltraEthernetMetricsRequest, self, "ultra_ethernet"
+        )
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["bgpv4"], Literal["bgpv6"], Literal["bmp_server"], Literal["convergence"], Literal["dhcpv4_client"], Literal["dhcpv4_server"], Literal["dhcpv6_client"], Literal["dhcpv6_server"], Literal["egress_only_tracking"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["macsec"], Literal["mka"], Literal["ospfv2"], Literal["ospfv3"], Literal["port"], Literal["rocev2_flow"], Literal["rocev2_ipv4"], Literal["rocev2_ipv6"], Literal["rsvp"]]
+        # type: () -> Union[Literal["bgpv4"], Literal["bgpv6"], Literal["bmp_server"], Literal["convergence"], Literal["dhcpv4_client"], Literal["dhcpv4_server"], Literal["dhcpv6_client"], Literal["dhcpv6_server"], Literal["egress_only_tracking"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["macsec"], Literal["mka"], Literal["ospfv2"], Literal["ospfv3"], Literal["port"], Literal["rocev2_flow"], Literal["rocev2_ipv4"], Literal["rocev2_ipv6"], Literal["rsvp"], Literal["ultra_ethernet"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["bgpv4"], Literal["bgpv6"], Literal["bmp_server"], Literal["convergence"], Literal["dhcpv4_client"], Literal["dhcpv4_server"], Literal["dhcpv6_client"], Literal["dhcpv6_server"], Literal["egress_only_tracking"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["macsec"], Literal["mka"], Literal["ospfv2"], Literal["ospfv3"], Literal["port"], Literal["rocev2_flow"], Literal["rocev2_ipv4"], Literal["rocev2_ipv6"], Literal["rsvp"]]
+        Returns: Union[Literal["bgpv4"], Literal["bgpv6"], Literal["bmp_server"], Literal["convergence"], Literal["dhcpv4_client"], Literal["dhcpv4_server"], Literal["dhcpv6_client"], Literal["dhcpv6_server"], Literal["egress_only_tracking"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["macsec"], Literal["mka"], Literal["ospfv2"], Literal["ospfv3"], Literal["port"], Literal["rocev2_flow"], Literal["rocev2_ipv4"], Literal["rocev2_ipv6"], Literal["rsvp"], Literal["ultra_ethernet"]]
         """
         return self._get_property("choice")
 
@@ -172248,7 +174920,7 @@ class MetricsRequest(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["bgpv4"], Literal["bgpv6"], Literal["bmp_server"], Literal["convergence"], Literal["dhcpv4_client"], Literal["dhcpv4_server"], Literal["dhcpv6_client"], Literal["dhcpv6_server"], Literal["egress_only_tracking"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["macsec"], Literal["mka"], Literal["ospfv2"], Literal["ospfv3"], Literal["port"], Literal["rocev2_flow"], Literal["rocev2_ipv4"], Literal["rocev2_ipv6"], Literal["rsvp"]]
+        value: Union[Literal["bgpv4"], Literal["bgpv6"], Literal["bmp_server"], Literal["convergence"], Literal["dhcpv4_client"], Literal["dhcpv4_server"], Literal["dhcpv6_client"], Literal["dhcpv6_server"], Literal["egress_only_tracking"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["macsec"], Literal["mka"], Literal["ospfv2"], Literal["ospfv3"], Literal["port"], Literal["rocev2_flow"], Literal["rocev2_ipv4"], Literal["rocev2_ipv6"], Literal["rsvp"], Literal["ultra_ethernet"]]
         """
         self._set_property("choice", value)
 
@@ -172320,7 +174992,7 @@ class PortMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        The names of objects to return results for. An empty list will return all port row results.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of objects to return results for. An empty list will return all port row results.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -172330,7 +175002,7 @@ class PortMetricsRequest(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        The names of objects to return results for. An empty list will return all port row results.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of objects to return results for. An empty list will return all port row results.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -172432,7 +175104,7 @@ class FlowMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """flow_names getter
 
-        Flow metrics will be retrieved for these flow names.. If no flow names are specified then all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
+        Flow metrics will be retrieved for these flow names.. If no flow names are specified then all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name.
 
         Returns: List[str]
         """
@@ -172442,7 +175114,7 @@ class FlowMetricsRequest(OpenApiObject):
     def flow_names(self, value):
         """flow_names setter
 
-        Flow metrics will be retrieved for these flow names.. If no flow names are specified then all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
+        Flow metrics will be retrieved for these flow names.. If no flow names are specified then all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name.
 
         value: List[str]
         """
@@ -172826,7 +175498,7 @@ class Bgpv4MetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of BGPv4 peers to return results for. An empty list will return results for all BGPv4 peers.. x-constraint:. /components/schemas/Bgp.V4peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4peer/properties/name.
+        The names of BGPv4 peers to return results for. An empty list will return results for all BGPv4 peers.. x-constraint:. /components/schemas/Bgp.V4peer/properties/name.
 
         Returns: List[str]
         """
@@ -172836,7 +175508,7 @@ class Bgpv4MetricsRequest(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of BGPv4 peers to return results for. An empty list will return results for all BGPv4 peers.. x-constraint:. /components/schemas/Bgp.V4peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4peer/properties/name.
+        The names of BGPv4 peers to return results for. An empty list will return results for all BGPv4 peers.. x-constraint:. /components/schemas/Bgp.V4peer/properties/name.
 
         value: List[str]
         """
@@ -172935,7 +175607,7 @@ class Bgpv6MetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of BGPv6 peers to return results for. An empty list will return results for all BGPv6 peers.. x-constraint:. /components/schemas/Bgp.V6peer/properties/name. . x-constraint:. /components/schemas/Bgp.V6peer/properties/name.
+        The names of BGPv6 peers to return results for. An empty list will return results for all BGPv6 peers.. x-constraint:. /components/schemas/Bgp.V6peer/properties/name.
 
         Returns: List[str]
         """
@@ -172945,7 +175617,7 @@ class Bgpv6MetricsRequest(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of BGPv6 peers to return results for. An empty list will return results for all BGPv6 peers.. x-constraint:. /components/schemas/Bgp.V6peer/properties/name. . x-constraint:. /components/schemas/Bgp.V6peer/properties/name.
+        The names of BGPv6 peers to return results for. An empty list will return results for all BGPv6 peers.. x-constraint:. /components/schemas/Bgp.V6peer/properties/name.
 
         value: List[str]
         """
@@ -173072,7 +175744,7 @@ class IsisMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         Returns: List[str]
         """
@@ -173082,7 +175754,7 @@ class IsisMetricsRequest(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         value: List[str]
         """
@@ -173169,7 +175841,7 @@ class LagMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """lag_names getter
 
-        The names of LAGs to return results for. An empty list will return results for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        The names of LAGs to return results for. An empty list will return results for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name.
 
         Returns: List[str]
         """
@@ -173179,7 +175851,7 @@ class LagMetricsRequest(OpenApiObject):
     def lag_names(self, value):
         """lag_names setter
 
-        The names of LAGs to return results for. An empty list will return results for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        The names of LAGs to return results for. An empty list will return results for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name.
 
         value: List[str]
         """
@@ -173283,7 +175955,7 @@ class LacpMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """lag_names getter
 
-        The names of LAG (ports group) for which LACP metrics to be returned. An empty list will return metrics for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        The names of LAG (ports group) for which LACP metrics to be returned. An empty list will return metrics for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name.
 
         Returns: List[str]
         """
@@ -173293,7 +175965,7 @@ class LacpMetricsRequest(OpenApiObject):
     def lag_names(self, value):
         """lag_names setter
 
-        The names of LAG (ports group) for which LACP metrics to be returned. An empty list will return metrics for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        The names of LAG (ports group) for which LACP metrics to be returned. An empty list will return metrics for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name.
 
         value: List[str]
         """
@@ -173304,7 +175976,7 @@ class LacpMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """lag_member_port_names getter
 
-        The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -173314,7 +175986,7 @@ class LacpMetricsRequest(OpenApiObject):
     def lag_member_port_names(self, value):
         """lag_member_port_names setter
 
-        The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -173393,7 +176065,7 @@ class LldpMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """lldp_names getter
 
-        The names of LLDP instances to return results for. An empty list will return results for all LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name. . x-constraint:. /components/schemas/Lldp/properties/name.
+        The names of LLDP instances to return results for. An empty list will return results for all LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name.
 
         Returns: List[str]
         """
@@ -173403,7 +176075,7 @@ class LldpMetricsRequest(OpenApiObject):
     def lldp_names(self, value):
         """lldp_names setter
 
-        The names of LLDP instances to return results for. An empty list will return results for all LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name. . x-constraint:. /components/schemas/Lldp/properties/name.
+        The names of LLDP instances to return results for. An empty list will return results for all LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name.
 
         value: List[str]
         """
@@ -173530,7 +176202,7 @@ class RsvpMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name. . x-constraint:. /components/schemas/Device.Rsvp/properties/name.
+        The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name.
 
         Returns: List[str]
         """
@@ -173540,7 +176212,7 @@ class RsvpMetricsRequest(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name. . x-constraint:. /components/schemas/Device.Rsvp/properties/name.
+        The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name.
 
         value: List[str]
         """
@@ -173621,7 +176293,7 @@ class Dhcpv4ClientMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """client_names getter
 
-        The names of DHCPv4 clients to return results for. An empty list will return results for all DHCPv4 client.. x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name.
+        The names of DHCPv4 clients to return results for. An empty list will return results for all DHCPv4 client.. x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name.
 
         Returns: List[str]
         """
@@ -173631,7 +176303,7 @@ class Dhcpv4ClientMetricsRequest(OpenApiObject):
     def client_names(self, value):
         """client_names setter
 
-        The names of DHCPv4 clients to return results for. An empty list will return results for all DHCPv4 client.. x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name.
+        The names of DHCPv4 clients to return results for. An empty list will return results for all DHCPv4 client.. x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name.
 
         value: List[str]
         """
@@ -173712,7 +176384,7 @@ class Dhcpv4ServerMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """server_names getter
 
-        The names of DHCPv4 Servers to return results for. An empty list will return results for all DHCPv4 Server.. x-constraint:. /components/schemas/Device.Dhcpv4Server/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv4Server/properties/name.
+        The names of DHCPv4 Servers to return results for. An empty list will return results for all DHCPv4 Server.. x-constraint:. /components/schemas/Device.Dhcpv4Server/properties/name.
 
         Returns: List[str]
         """
@@ -173722,7 +176394,7 @@ class Dhcpv4ServerMetricsRequest(OpenApiObject):
     def server_names(self, value):
         """server_names setter
 
-        The names of DHCPv4 Servers to return results for. An empty list will return results for all DHCPv4 Server.. x-constraint:. /components/schemas/Device.Dhcpv4Server/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv4Server/properties/name.
+        The names of DHCPv4 Servers to return results for. An empty list will return results for all DHCPv4 Server.. x-constraint:. /components/schemas/Device.Dhcpv4Server/properties/name.
 
         value: List[str]
         """
@@ -173815,7 +176487,7 @@ class Dhcpv6ClientMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """client_names getter
 
-        The names of DHCPv6 clients to return results for. An empty list will return results for all DHCPv6 client.. x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name.
+        The names of DHCPv6 clients to return results for. An empty list will return results for all DHCPv6 client.. x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name.
 
         Returns: List[str]
         """
@@ -173825,7 +176497,7 @@ class Dhcpv6ClientMetricsRequest(OpenApiObject):
     def client_names(self, value):
         """client_names setter
 
-        The names of DHCPv6 clients to return results for. An empty list will return results for all DHCPv6 client.. x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name.
+        The names of DHCPv6 clients to return results for. An empty list will return results for all DHCPv6 client.. x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name.
 
         value: List[str]
         """
@@ -173922,7 +176594,7 @@ class Dhcpv6ServerMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """server_names getter
 
-        The names of DHCPv6 Servers to return results for. An empty list will return results for all DHCPv6 Server.. x-constraint:. /components/schemas/Device.Dhcpv6Server/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv6Server/properties/name.
+        The names of DHCPv6 Servers to return results for. An empty list will return results for all DHCPv6 Server.. x-constraint:. /components/schemas/Device.Dhcpv6Server/properties/name.
 
         Returns: List[str]
         """
@@ -173932,7 +176604,7 @@ class Dhcpv6ServerMetricsRequest(OpenApiObject):
     def server_names(self, value):
         """server_names setter
 
-        The names of DHCPv6 Servers to return results for. An empty list will return results for all DHCPv6 Server.. x-constraint:. /components/schemas/Device.Dhcpv6Server/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv6Server/properties/name.
+        The names of DHCPv6 Servers to return results for. An empty list will return results for all DHCPv6 Server.. x-constraint:. /components/schemas/Device.Dhcpv6Server/properties/name.
 
         value: List[str]
         """
@@ -174065,7 +176737,7 @@ class Ospfv2MetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of OSPFv2 routers to return results for. An empty list will return results for all OSPFv2 router.. x-constraint:. /components/schemas/Device.Ospfv2/properties/name. . x-constraint:. /components/schemas/Device.Ospfv2/properties/name.
+        The names of OSPFv2 routers to return results for. An empty list will return results for all OSPFv2 router.. x-constraint:. /components/schemas/Device.Ospfv2/properties/name.
 
         Returns: List[str]
         """
@@ -174075,7 +176747,7 @@ class Ospfv2MetricsRequest(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of OSPFv2 routers to return results for. An empty list will return results for all OSPFv2 router.. x-constraint:. /components/schemas/Device.Ospfv2/properties/name. . x-constraint:. /components/schemas/Device.Ospfv2/properties/name.
+        The names of OSPFv2 routers to return results for. An empty list will return results for all OSPFv2 router.. x-constraint:. /components/schemas/Device.Ospfv2/properties/name.
 
         value: List[str]
         """
@@ -174134,7 +176806,7 @@ class ConvergenceRequest(OpenApiObject):
         # type: () -> List[str]
         """flow_names getter
 
-        Convergence metrics will be retrieved for these flow names.. If no flow names are specified then convergence metrics for all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
+        Convergence metrics will be retrieved for these flow names.. If no flow names are specified then convergence metrics for all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name.
 
         Returns: List[str]
         """
@@ -174144,7 +176816,7 @@ class ConvergenceRequest(OpenApiObject):
     def flow_names(self, value):
         """flow_names setter
 
-        Convergence metrics will be retrieved for these flow names.. If no flow names are specified then convergence metrics for all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
+        Convergence metrics will be retrieved for these flow names.. If no flow names are specified then convergence metrics for all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name.
 
         value: List[str]
         """
@@ -174228,7 +176900,7 @@ class MacsecMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """secure_entity_names getter
 
-        The names of secure entities(secYs) to return results for. An empty list will return results for all secYs.. x-constraint:. /components/schemas/SecureEntity/properties/name. . x-constraint:. /components/schemas/SecureEntity/properties/name.
+        The names of secure entities(secYs) to return results for. An empty list will return results for all secYs.. x-constraint:. /components/schemas/SecureEntity/properties/name.
 
         Returns: List[str]
         """
@@ -174238,7 +176910,7 @@ class MacsecMetricsRequest(OpenApiObject):
     def secure_entity_names(self, value):
         """secure_entity_names setter
 
-        The names of secure entities(secYs) to return results for. An empty list will return results for all secYs.. x-constraint:. /components/schemas/SecureEntity/properties/name. . x-constraint:. /components/schemas/SecureEntity/properties/name.
+        The names of secure entities(secYs) to return results for. An empty list will return results for all secYs.. x-constraint:. /components/schemas/SecureEntity/properties/name.
 
         value: List[str]
         """
@@ -174325,7 +176997,7 @@ class MkaMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of peers to return results for. An empty list will return results for all peers.. x-constraint:. /components/schemas/Mka/properties/name. . x-constraint:. /components/schemas/Mka/properties/name.
+        The names of peers to return results for. An empty list will return results for all peers.. x-constraint:. /components/schemas/Mka/properties/name.
 
         Returns: List[str]
         """
@@ -174335,7 +177007,7 @@ class MkaMetricsRequest(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of peers to return results for. An empty list will return results for all peers.. x-constraint:. /components/schemas/Mka/properties/name. . x-constraint:. /components/schemas/Mka/properties/name.
+        The names of peers to return results for. An empty list will return results for all peers.. x-constraint:. /components/schemas/Mka/properties/name.
 
         value: List[str]
         """
@@ -174464,7 +177136,7 @@ class Ospfv3MetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of OSPFv3 routers to return results for. An empty list will return results for all OSPFv3 routers.. x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name. . x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name.
+        The names of OSPFv3 routers to return results for. An empty list will return results for all OSPFv3 routers.. x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name.
 
         Returns: List[str]
         """
@@ -174474,7 +177146,7 @@ class Ospfv3MetricsRequest(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of OSPFv3 routers to return results for. An empty list will return results for all OSPFv3 routers.. x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name. . x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name.
+        The names of OSPFv3 routers to return results for. An empty list will return results for all OSPFv3 routers.. x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name.
 
         value: List[str]
         """
@@ -174641,7 +177313,7 @@ class Rocev2IPv4ColumnNames(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of RoCEv2 over IPv4 peers to return results for. An empty list will return results for all RoCEv2 peers.. x-constraint:. /components/schemas/Rocev2.V4peer/properties/name. . x-constraint:. /components/schemas/Rocev2.V4peer/properties/name.
+        The names of RoCEv2 over IPv4 peers to return results for. An empty list will return results for all RoCEv2 peers.. x-constraint:. /components/schemas/Rocev2.V4peer/properties/name.
 
         Returns: List[str]
         """
@@ -174651,7 +177323,7 @@ class Rocev2IPv4ColumnNames(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of RoCEv2 over IPv4 peers to return results for. An empty list will return results for all RoCEv2 peers.. x-constraint:. /components/schemas/Rocev2.V4peer/properties/name. . x-constraint:. /components/schemas/Rocev2.V4peer/properties/name.
+        The names of RoCEv2 over IPv4 peers to return results for. An empty list will return results for all RoCEv2 peers.. x-constraint:. /components/schemas/Rocev2.V4peer/properties/name.
 
         value: List[str]
         """
@@ -174818,7 +177490,7 @@ class Rocev2IPv6ColumnNames(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of RoCEv2 over IPv6 peers to return results for. An empty list will return results for all RoCEv2 peers.. x-constraint:. /components/schemas/Rocev2.V6peer/properties/name. . x-constraint:. /components/schemas/Rocev2.V6peer/properties/name.
+        The names of RoCEv2 over IPv6 peers to return results for. An empty list will return results for all RoCEv2 peers.. x-constraint:. /components/schemas/Rocev2.V6peer/properties/name.
 
         Returns: List[str]
         """
@@ -174828,7 +177500,7 @@ class Rocev2IPv6ColumnNames(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of RoCEv2 over IPv6 peers to return results for. An empty list will return results for all RoCEv2 peers.. x-constraint:. /components/schemas/Rocev2.V6peer/properties/name. . x-constraint:. /components/schemas/Rocev2.V6peer/properties/name.
+        The names of RoCEv2 over IPv6 peers to return results for. An empty list will return results for all RoCEv2 peers.. x-constraint:. /components/schemas/Rocev2.V6peer/properties/name.
 
         value: List[str]
         """
@@ -175071,7 +177743,7 @@ class EgressOnlyTrackingMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        Egress only tracking metrics will be retrieved for these port names.. If no port-names are provided, egress_only_tracking metrics will be returned for all ports. which have one or more egress_only_tracking enabled.. x-constraint:. /components/schemas/EgressOnlyTracking/properties/port_name. . x-constraint:. /components/schemas/EgressOnlyTracking/properties/port_name.
+        Egress only tracking metrics will be retrieved for these port names.. If no port-names are provided, egress_only_tracking metrics will be returned for all ports. which have one or more egress_only_tracking enabled.. x-constraint:. /components/schemas/EgressOnlyTracking/properties/port_name.
 
         Returns: List[str]
         """
@@ -175081,7 +177753,7 @@ class EgressOnlyTrackingMetricsRequest(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        Egress only tracking metrics will be retrieved for these port names.. If no port-names are provided, egress_only_tracking metrics will be returned for all ports. which have one or more egress_only_tracking enabled.. x-constraint:. /components/schemas/EgressOnlyTracking/properties/port_name. . x-constraint:. /components/schemas/EgressOnlyTracking/properties/port_name.
+        Egress only tracking metrics will be retrieved for these port names.. If no port-names are provided, egress_only_tracking metrics will be returned for all ports. which have one or more egress_only_tracking enabled.. x-constraint:. /components/schemas/EgressOnlyTracking/properties/port_name.
 
         value: List[str]
         """
@@ -175270,7 +177942,7 @@ class BmpServerMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """server_names getter
 
-        The names of BMP Servers to return results for. An empty list will return results for all BMP Servers.. x-constraint:. /components/schemas/Device.Bmp.ServerV4/properties/name. /components/schemas/Device.Bmp.ServerV6/properties/name. . x-constraint:. /components/schemas/Device.Bmp.ServerV4/properties/name. /components/schemas/Device.Bmp.ServerV6/properties/name.
+        The names of BMP Servers to return results for. An empty list will return results for all BMP Servers.. x-constraint:. /components/schemas/Device.Bmp.ServerV4/properties/name. /components/schemas/Device.Bmp.ServerV6/properties/name.
 
         Returns: List[str]
         """
@@ -175280,7 +177952,7 @@ class BmpServerMetricsRequest(OpenApiObject):
     def server_names(self, value):
         """server_names setter
 
-        The names of BMP Servers to return results for. An empty list will return results for all BMP Servers.. x-constraint:. /components/schemas/Device.Bmp.ServerV4/properties/name. /components/schemas/Device.Bmp.ServerV6/properties/name. . x-constraint:. /components/schemas/Device.Bmp.ServerV4/properties/name. /components/schemas/Device.Bmp.ServerV6/properties/name.
+        The names of BMP Servers to return results for. An empty list will return results for all BMP Servers.. x-constraint:. /components/schemas/Device.Bmp.ServerV4/properties/name. /components/schemas/Device.Bmp.ServerV6/properties/name.
 
         value: List[str]
         """
@@ -175304,6 +177976,179 @@ class BmpServerMetricsRequest(OpenApiObject):
         The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the BMP Server cannot be excluded.
 
         value: List[Union[Literal["flap_count"], Literal["initiation_messages_received"], Literal["peer_down_messages_received"], Literal["peer_up_messages_received"], Literal["post_policy_ipv4_unicast_routes_received"], Literal["post_policy_ipv6_unicast_routes_received"], Literal["pre_policy_ipv4_unicast_routes_received"], Literal["pre_policy_ipv6_unicast_routes_received"], Literal["route_mirroring_messages_received"], Literal["route_monitoring_messages_received"], Literal["session_state"], Literal["statistics_messages_received"], Literal["termination_messages_received"]]]
+        """
+        self._set_property("column_names", value)
+
+
+class UltraEthernetMetricsRequest(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "ultra_ethernet_names": {
+            "type": list,
+            "itemtype": str,
+        },
+        "column_names": {
+            "type": list,
+            "enum": [
+                "llr_ack_nack_ctl_os_spacing_error",
+                "llr_ack_nack_ctl_os_spacing_min",
+                "llr_ack_nack_transmit_state",
+                "llr_init_ctl_os_spacing_error",
+                "llr_init_ctl_os_spacing_min",
+                "llr_init_echo_init_seq_mismatch",
+                "llr_mode_local",
+                "llr_mode_remote",
+                "llr_transmit_state",
+                "mean_time_between_phy_errors",
+                "replayed_byte",
+                "replayed_packet",
+                "round_trip_time_ns",
+                "round_trip_time_valid",
+                "rx_ack_ctl_os",
+                "rx_ack_ctl_os_dropped",
+                "rx_ack_nack_seq_error",
+                "rx_bad",
+                "rx_duplicate_seq",
+                "rx_expected_seq_bad",
+                "rx_expected_seq_good",
+                "rx_expected_seq_poisoned",
+                "rx_init_ctl_os",
+                "rx_init_ctl_os_dropped",
+                "rx_init_echo_ctl_os",
+                "rx_init_echo_ctl_os_dropped",
+                "rx_missing_seq",
+                "rx_nack_ctl_os",
+                "rx_nack_ctl_os_dropped",
+                "rx_next_seq",
+                "rx_ok",
+                "rx_poisoned",
+                "rx_replay",
+                "tx_ack_ctl_os",
+                "tx_discard",
+                "tx_init_ctl_os",
+                "tx_init_echo_ctl_os",
+                "tx_nack_ctl_os",
+                "tx_ok",
+                "tx_outstanding_seq",
+                "tx_poisoned",
+                "tx_replay_event",
+                "tx_seq",
+                "ue_ctl_os_spacing_error",
+                "ue_ctl_os_spacing_min",
+                "ue_rx_ctl_os_frame_header_error",
+                "ue_rx_ctl_os_intra_frame_spacing_error",
+            ],
+            "itemtype": str,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    LLR_ACK_NACK_CTL_OS_SPACING_ERROR = "llr_ack_nack_ctl_os_spacing_error"  # type: str
+    LLR_ACK_NACK_CTL_OS_SPACING_MIN = "llr_ack_nack_ctl_os_spacing_min"  # type: str
+    LLR_ACK_NACK_TRANSMIT_STATE = "llr_ack_nack_transmit_state"  # type: str
+    LLR_INIT_CTL_OS_SPACING_ERROR = "llr_init_ctl_os_spacing_error"  # type: str
+    LLR_INIT_CTL_OS_SPACING_MIN = "llr_init_ctl_os_spacing_min"  # type: str
+    LLR_INIT_ECHO_INIT_SEQ_MISMATCH = "llr_init_echo_init_seq_mismatch"  # type: str
+    LLR_MODE_LOCAL = "llr_mode_local"  # type: str
+    LLR_MODE_REMOTE = "llr_mode_remote"  # type: str
+    LLR_TRANSMIT_STATE = "llr_transmit_state"  # type: str
+    MEAN_TIME_BETWEEN_PHY_ERRORS = "mean_time_between_phy_errors"  # type: str
+    REPLAYED_BYTE = "replayed_byte"  # type: str
+    REPLAYED_PACKET = "replayed_packet"  # type: str
+    ROUND_TRIP_TIME_NS = "round_trip_time_ns"  # type: str
+    ROUND_TRIP_TIME_VALID = "round_trip_time_valid"  # type: str
+    RX_ACK_CTL_OS = "rx_ack_ctl_os"  # type: str
+    RX_ACK_CTL_OS_DROPPED = "rx_ack_ctl_os_dropped"  # type: str
+    RX_ACK_NACK_SEQ_ERROR = "rx_ack_nack_seq_error"  # type: str
+    RX_BAD = "rx_bad"  # type: str
+    RX_DUPLICATE_SEQ = "rx_duplicate_seq"  # type: str
+    RX_EXPECTED_SEQ_BAD = "rx_expected_seq_bad"  # type: str
+    RX_EXPECTED_SEQ_GOOD = "rx_expected_seq_good"  # type: str
+    RX_EXPECTED_SEQ_POISONED = "rx_expected_seq_poisoned"  # type: str
+    RX_INIT_CTL_OS = "rx_init_ctl_os"  # type: str
+    RX_INIT_CTL_OS_DROPPED = "rx_init_ctl_os_dropped"  # type: str
+    RX_INIT_ECHO_CTL_OS = "rx_init_echo_ctl_os"  # type: str
+    RX_INIT_ECHO_CTL_OS_DROPPED = "rx_init_echo_ctl_os_dropped"  # type: str
+    RX_MISSING_SEQ = "rx_missing_seq"  # type: str
+    RX_NACK_CTL_OS = "rx_nack_ctl_os"  # type: str
+    RX_NACK_CTL_OS_DROPPED = "rx_nack_ctl_os_dropped"  # type: str
+    RX_NEXT_SEQ = "rx_next_seq"  # type: str
+    RX_OK = "rx_ok"  # type: str
+    RX_POISONED = "rx_poisoned"  # type: str
+    RX_REPLAY = "rx_replay"  # type: str
+    TX_ACK_CTL_OS = "tx_ack_ctl_os"  # type: str
+    TX_DISCARD = "tx_discard"  # type: str
+    TX_INIT_CTL_OS = "tx_init_ctl_os"  # type: str
+    TX_INIT_ECHO_CTL_OS = "tx_init_echo_ctl_os"  # type: str
+    TX_NACK_CTL_OS = "tx_nack_ctl_os"  # type: str
+    TX_OK = "tx_ok"  # type: str
+    TX_OUTSTANDING_SEQ = "tx_outstanding_seq"  # type: str
+    TX_POISONED = "tx_poisoned"  # type: str
+    TX_REPLAY_EVENT = "tx_replay_event"  # type: str
+    TX_SEQ = "tx_seq"  # type: str
+    UE_CTL_OS_SPACING_ERROR = "ue_ctl_os_spacing_error"  # type: str
+    UE_CTL_OS_SPACING_MIN = "ue_ctl_os_spacing_min"  # type: str
+    UE_RX_CTL_OS_FRAME_HEADER_ERROR = "ue_rx_ctl_os_frame_header_error"  # type: str
+    UE_RX_CTL_OS_INTRA_FRAME_SPACING_ERROR = (
+        "ue_rx_ctl_os_intra_frame_spacing_error"
+    )  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, ultra_ethernet_names=None, column_names=None):
+        super(UltraEthernetMetricsRequest, self).__init__()
+        self._parent = parent
+        self._set_property("ultra_ethernet_names", ultra_ethernet_names)
+        self._set_property("column_names", column_names)
+
+    def set(self, ultra_ethernet_names=None, column_names=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def ultra_ethernet_names(self):
+        # type: () -> List[str]
+        """ultra_ethernet_names getter
+
+        The names of Ultra Ethernet configurations to return results for. An empty list will return results for all Ultra Ethernet configurations.. x-constraint:. /components/schemas/UltraEthernet/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("ultra_ethernet_names")
+
+    @ultra_ethernet_names.setter
+    def ultra_ethernet_names(self, value):
+        """ultra_ethernet_names setter
+
+        The names of Ultra Ethernet configurations to return results for. An empty list will return results for all Ultra Ethernet configurations.. x-constraint:. /components/schemas/UltraEthernet/properties/name.
+
+        value: List[str]
+        """
+        self._set_property("ultra_ethernet_names", value)
+
+    @property
+    def column_names(self):
+        # type: () -> List[Union[Literal["llr_ack_nack_ctl_os_spacing_error"], Literal["llr_ack_nack_ctl_os_spacing_min"], Literal["llr_ack_nack_transmit_state"], Literal["llr_init_ctl_os_spacing_error"], Literal["llr_init_ctl_os_spacing_min"], Literal["llr_init_echo_init_seq_mismatch"], Literal["llr_mode_local"], Literal["llr_mode_remote"], Literal["llr_transmit_state"], Literal["mean_time_between_phy_errors"], Literal["replayed_byte"], Literal["replayed_packet"], Literal["round_trip_time_ns"], Literal["round_trip_time_valid"], Literal["rx_ack_ctl_os"], Literal["rx_ack_ctl_os_dropped"], Literal["rx_ack_nack_seq_error"], Literal["rx_bad"], Literal["rx_duplicate_seq"], Literal["rx_expected_seq_bad"], Literal["rx_expected_seq_good"], Literal["rx_expected_seq_poisoned"], Literal["rx_init_ctl_os"], Literal["rx_init_ctl_os_dropped"], Literal["rx_init_echo_ctl_os"], Literal["rx_init_echo_ctl_os_dropped"], Literal["rx_missing_seq"], Literal["rx_nack_ctl_os"], Literal["rx_nack_ctl_os_dropped"], Literal["rx_next_seq"], Literal["rx_ok"], Literal["rx_poisoned"], Literal["rx_replay"], Literal["tx_ack_ctl_os"], Literal["tx_discard"], Literal["tx_init_ctl_os"], Literal["tx_init_echo_ctl_os"], Literal["tx_nack_ctl_os"], Literal["tx_ok"], Literal["tx_outstanding_seq"], Literal["tx_poisoned"], Literal["tx_replay_event"], Literal["tx_seq"], Literal["ue_ctl_os_spacing_error"], Literal["ue_ctl_os_spacing_min"], Literal["ue_rx_ctl_os_frame_header_error"], Literal["ue_rx_ctl_os_intra_frame_spacing_error"]]]
+        """column_names getter
+
+        The requested list of column names for the result set. If the list is empty then metrics for all columns will be returned. The name of the Ultra Ethernet configuration can not be excluded. The cbfc_sender_virtual_channels and cbfc_receiver_virtual_channels per-VC array metrics are always returned and cannot be individually selected or excluded via column_names.
+
+        Returns: List[Union[Literal["llr_ack_nack_ctl_os_spacing_error"], Literal["llr_ack_nack_ctl_os_spacing_min"], Literal["llr_ack_nack_transmit_state"], Literal["llr_init_ctl_os_spacing_error"], Literal["llr_init_ctl_os_spacing_min"], Literal["llr_init_echo_init_seq_mismatch"], Literal["llr_mode_local"], Literal["llr_mode_remote"], Literal["llr_transmit_state"], Literal["mean_time_between_phy_errors"], Literal["replayed_byte"], Literal["replayed_packet"], Literal["round_trip_time_ns"], Literal["round_trip_time_valid"], Literal["rx_ack_ctl_os"], Literal["rx_ack_ctl_os_dropped"], Literal["rx_ack_nack_seq_error"], Literal["rx_bad"], Literal["rx_duplicate_seq"], Literal["rx_expected_seq_bad"], Literal["rx_expected_seq_good"], Literal["rx_expected_seq_poisoned"], Literal["rx_init_ctl_os"], Literal["rx_init_ctl_os_dropped"], Literal["rx_init_echo_ctl_os"], Literal["rx_init_echo_ctl_os_dropped"], Literal["rx_missing_seq"], Literal["rx_nack_ctl_os"], Literal["rx_nack_ctl_os_dropped"], Literal["rx_next_seq"], Literal["rx_ok"], Literal["rx_poisoned"], Literal["rx_replay"], Literal["tx_ack_ctl_os"], Literal["tx_discard"], Literal["tx_init_ctl_os"], Literal["tx_init_echo_ctl_os"], Literal["tx_nack_ctl_os"], Literal["tx_ok"], Literal["tx_outstanding_seq"], Literal["tx_poisoned"], Literal["tx_replay_event"], Literal["tx_seq"], Literal["ue_ctl_os_spacing_error"], Literal["ue_ctl_os_spacing_min"], Literal["ue_rx_ctl_os_frame_header_error"], Literal["ue_rx_ctl_os_intra_frame_spacing_error"]]]
+        """
+        return self._get_property("column_names")
+
+    @column_names.setter
+    def column_names(self, value):
+        """column_names setter
+
+        The requested list of column names for the result set. If the list is empty then metrics for all columns will be returned. The name of the Ultra Ethernet configuration can not be excluded. The cbfc_sender_virtual_channels and cbfc_receiver_virtual_channels per-VC array metrics are always returned and cannot be individually selected or excluded via column_names.
+
+        value: List[Union[Literal["llr_ack_nack_ctl_os_spacing_error"], Literal["llr_ack_nack_ctl_os_spacing_min"], Literal["llr_ack_nack_transmit_state"], Literal["llr_init_ctl_os_spacing_error"], Literal["llr_init_ctl_os_spacing_min"], Literal["llr_init_echo_init_seq_mismatch"], Literal["llr_mode_local"], Literal["llr_mode_remote"], Literal["llr_transmit_state"], Literal["mean_time_between_phy_errors"], Literal["replayed_byte"], Literal["replayed_packet"], Literal["round_trip_time_ns"], Literal["round_trip_time_valid"], Literal["rx_ack_ctl_os"], Literal["rx_ack_ctl_os_dropped"], Literal["rx_ack_nack_seq_error"], Literal["rx_bad"], Literal["rx_duplicate_seq"], Literal["rx_expected_seq_bad"], Literal["rx_expected_seq_good"], Literal["rx_expected_seq_poisoned"], Literal["rx_init_ctl_os"], Literal["rx_init_ctl_os_dropped"], Literal["rx_init_echo_ctl_os"], Literal["rx_init_echo_ctl_os_dropped"], Literal["rx_missing_seq"], Literal["rx_nack_ctl_os"], Literal["rx_nack_ctl_os_dropped"], Literal["rx_next_seq"], Literal["rx_ok"], Literal["rx_poisoned"], Literal["rx_replay"], Literal["tx_ack_ctl_os"], Literal["tx_discard"], Literal["tx_init_ctl_os"], Literal["tx_init_echo_ctl_os"], Literal["tx_nack_ctl_os"], Literal["tx_ok"], Literal["tx_outstanding_seq"], Literal["tx_poisoned"], Literal["tx_replay_event"], Literal["tx_seq"], Literal["ue_ctl_os_spacing_error"], Literal["ue_ctl_os_spacing_min"], Literal["ue_rx_ctl_os_frame_header_error"], Literal["ue_rx_ctl_os_intra_frame_spacing_error"]]]
         """
         self._set_property("column_names", value)
 
@@ -175338,6 +178183,7 @@ class MetricsResponse(OpenApiObject):
                 "rocev2_flow_per_qp_metrics",
                 "egress_only_tracking_metrics",
                 "bmp_server_metrics",
+                "ultra_ethernet_metrics",
             ],
         },
         "port_metrics": {"type": "PortMetricIter"},
@@ -175363,6 +178209,7 @@ class MetricsResponse(OpenApiObject):
         "rocev2_flow_per_qp_metrics": {"type": "Rocev2FlowMetricPerQPIter"},
         "egress_only_tracking_metrics": {"type": "EgressOnlyTrackingMetricIter"},
         "bmp_server_metrics": {"type": "BmpServerMetricIter"},
+        "ultra_ethernet_metrics": {"type": "UltraEthernetMetricIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -175394,6 +178241,7 @@ class MetricsResponse(OpenApiObject):
     ROCEV2_FLOW_PER_QP_METRICS = "rocev2_flow_per_qp_metrics"  # type: str
     EGRESS_ONLY_TRACKING_METRICS = "egress_only_tracking_metrics"  # type: str
     BMP_SERVER_METRICS = "bmp_server_metrics"  # type: str
+    ULTRA_ETHERNET_METRICS = "ultra_ethernet_metrics"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -175411,12 +178259,12 @@ class MetricsResponse(OpenApiObject):
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["bgpv4_metrics"], Literal["bgpv6_metrics"], Literal["bmp_server_metrics"], Literal["convergence_metrics"], Literal["dhcpv4_client"], Literal["dhcpv4_server"], Literal["dhcpv6_client"], Literal["dhcpv6_server"], Literal["egress_only_tracking_metrics"], Literal["flow_metrics"], Literal["isis_metrics"], Literal["lacp_metrics"], Literal["lag_metrics"], Literal["lldp_metrics"], Literal["macsec_metrics"], Literal["mka_metrics"], Literal["ospfv2_metrics"], Literal["ospfv3_metrics"], Literal["port_metrics"], Literal["rocev2_flow_per_qp_metrics"], Literal["rocev2_ipv4_per_peer_metrics"], Literal["rocev2_ipv6_per_peer_metrics"], Literal["rsvp_metrics"]]
+        # type: () -> Union[Literal["bgpv4_metrics"], Literal["bgpv6_metrics"], Literal["bmp_server_metrics"], Literal["convergence_metrics"], Literal["dhcpv4_client"], Literal["dhcpv4_server"], Literal["dhcpv6_client"], Literal["dhcpv6_server"], Literal["egress_only_tracking_metrics"], Literal["flow_metrics"], Literal["isis_metrics"], Literal["lacp_metrics"], Literal["lag_metrics"], Literal["lldp_metrics"], Literal["macsec_metrics"], Literal["mka_metrics"], Literal["ospfv2_metrics"], Literal["ospfv3_metrics"], Literal["port_metrics"], Literal["rocev2_flow_per_qp_metrics"], Literal["rocev2_ipv4_per_peer_metrics"], Literal["rocev2_ipv6_per_peer_metrics"], Literal["rsvp_metrics"], Literal["ultra_ethernet_metrics"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["bgpv4_metrics"], Literal["bgpv6_metrics"], Literal["bmp_server_metrics"], Literal["convergence_metrics"], Literal["dhcpv4_client"], Literal["dhcpv4_server"], Literal["dhcpv6_client"], Literal["dhcpv6_server"], Literal["egress_only_tracking_metrics"], Literal["flow_metrics"], Literal["isis_metrics"], Literal["lacp_metrics"], Literal["lag_metrics"], Literal["lldp_metrics"], Literal["macsec_metrics"], Literal["mka_metrics"], Literal["ospfv2_metrics"], Literal["ospfv3_metrics"], Literal["port_metrics"], Literal["rocev2_flow_per_qp_metrics"], Literal["rocev2_ipv4_per_peer_metrics"], Literal["rocev2_ipv6_per_peer_metrics"], Literal["rsvp_metrics"]]
+        Returns: Union[Literal["bgpv4_metrics"], Literal["bgpv6_metrics"], Literal["bmp_server_metrics"], Literal["convergence_metrics"], Literal["dhcpv4_client"], Literal["dhcpv4_server"], Literal["dhcpv6_client"], Literal["dhcpv6_server"], Literal["egress_only_tracking_metrics"], Literal["flow_metrics"], Literal["isis_metrics"], Literal["lacp_metrics"], Literal["lag_metrics"], Literal["lldp_metrics"], Literal["macsec_metrics"], Literal["mka_metrics"], Literal["ospfv2_metrics"], Literal["ospfv3_metrics"], Literal["port_metrics"], Literal["rocev2_flow_per_qp_metrics"], Literal["rocev2_ipv4_per_peer_metrics"], Literal["rocev2_ipv6_per_peer_metrics"], Literal["rsvp_metrics"], Literal["ultra_ethernet_metrics"]]
         """
         return self._get_property("choice")
 
@@ -175426,7 +178274,7 @@ class MetricsResponse(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["bgpv4_metrics"], Literal["bgpv6_metrics"], Literal["bmp_server_metrics"], Literal["convergence_metrics"], Literal["dhcpv4_client"], Literal["dhcpv4_server"], Literal["dhcpv6_client"], Literal["dhcpv6_server"], Literal["egress_only_tracking_metrics"], Literal["flow_metrics"], Literal["isis_metrics"], Literal["lacp_metrics"], Literal["lag_metrics"], Literal["lldp_metrics"], Literal["macsec_metrics"], Literal["mka_metrics"], Literal["ospfv2_metrics"], Literal["ospfv3_metrics"], Literal["port_metrics"], Literal["rocev2_flow_per_qp_metrics"], Literal["rocev2_ipv4_per_peer_metrics"], Literal["rocev2_ipv6_per_peer_metrics"], Literal["rsvp_metrics"]]
+        value: Union[Literal["bgpv4_metrics"], Literal["bgpv6_metrics"], Literal["bmp_server_metrics"], Literal["convergence_metrics"], Literal["dhcpv4_client"], Literal["dhcpv4_server"], Literal["dhcpv6_client"], Literal["dhcpv6_server"], Literal["egress_only_tracking_metrics"], Literal["flow_metrics"], Literal["isis_metrics"], Literal["lacp_metrics"], Literal["lag_metrics"], Literal["lldp_metrics"], Literal["macsec_metrics"], Literal["mka_metrics"], Literal["ospfv2_metrics"], Literal["ospfv3_metrics"], Literal["port_metrics"], Literal["rocev2_flow_per_qp_metrics"], Literal["rocev2_ipv4_per_peer_metrics"], Literal["rocev2_ipv6_per_peer_metrics"], Literal["rsvp_metrics"], Literal["ultra_ethernet_metrics"]]
         """
         self._set_property("choice", value)
 
@@ -175741,6 +178589,22 @@ class MetricsResponse(OpenApiObject):
             "bmp_server_metrics", BmpServerMetricIter, self._parent, self._choice
         )
 
+    @property
+    def ultra_ethernet_metrics(self):
+        # type: () -> UltraEthernetMetricIter
+        """ultra_ethernet_metrics getter
+
+        TBD
+
+        Returns: UltraEthernetMetricIter
+        """
+        return self._get_property(
+            "ultra_ethernet_metrics",
+            UltraEthernetMetricIter,
+            self._parent,
+            self._choice,
+        )
+
 
 class PortMetric(OpenApiObject):
     __slots__ = "_parent"
@@ -175879,7 +178743,7 @@ class PortMetric(OpenApiObject):
         # type: () -> str
         """name getter
 
-        The name of configured port. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of configured port. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -175889,7 +178753,7 @@ class PortMetric(OpenApiObject):
     def name(self, value):
         """name setter
 
-        The name of configured port. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of configured port. x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -180748,7 +183612,7 @@ class LagMetric(OpenApiObject):
         # type: () -> str
         """name getter
 
-        The name of configured LAG. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        The name of configured LAG. x-constraint:. /components/schemas/Lag/properties/name.
 
         Returns: str
         """
@@ -180758,7 +183622,7 @@ class LagMetric(OpenApiObject):
     def name(self, value):
         """name setter
 
-        The name of configured LAG. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        The name of configured LAG. x-constraint:. /components/schemas/Lag/properties/name.
 
         value: str
         """
@@ -186320,7 +189184,7 @@ class ConvergenceEvent(OpenApiObject):
         # type: () -> str
         """source getter
 
-        The source of the event. The source MUST be the value of one of the x-constraint paths,. which means the source MUST be unique name in the configuration. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Flow/properties/name. /components/schemas/Device.Bgpv4Route/properties/name. /components/schemas/Device.Bgpv6Route/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Flow/properties/name. /components/schemas/Device.Bgpv4Route/properties/name. /components/schemas/Device.Bgpv6Route/properties/name.
+        The source of the event. The source MUST be the value of one of the x-constraint paths,. which means the source MUST be unique name in the configuration. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Flow/properties/name. /components/schemas/Device.Bgpv4Route/properties/name. /components/schemas/Device.Bgpv6Route/properties/name.
 
         Returns: str
         """
@@ -186330,7 +189194,7 @@ class ConvergenceEvent(OpenApiObject):
     def source(self, value):
         """source setter
 
-        The source of the event. The source MUST be the value of one of the x-constraint paths,. which means the source MUST be unique name in the configuration. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Flow/properties/name. /components/schemas/Device.Bgpv4Route/properties/name. /components/schemas/Device.Bgpv6Route/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Flow/properties/name. /components/schemas/Device.Bgpv4Route/properties/name. /components/schemas/Device.Bgpv6Route/properties/name.
+        The source of the event. The source MUST be the value of one of the x-constraint paths,. which means the source MUST be unique name in the configuration. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Flow/properties/name. /components/schemas/Device.Bgpv4Route/properties/name. /components/schemas/Device.Bgpv6Route/properties/name.
 
         value: str
         """
@@ -192642,6 +195506,2018 @@ class BmpServerMetricIter(OpenApiIter):
         return item
 
 
+class UltraEthernetMetric(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "name": {"type": str},
+        "llr_mode_local": {
+            "type": str,
+            "enum": [
+                "off",
+                "on",
+            ],
+        },
+        "llr_mode_remote": {
+            "type": str,
+            "enum": [
+                "off",
+                "on",
+            ],
+        },
+        "llr_transmit_state": {
+            "type": str,
+            "enum": [
+                "off",
+                "init",
+                "advance",
+                "replay",
+                "flush",
+            ],
+        },
+        "llr_ack_nack_transmit_state": {
+            "type": str,
+            "enum": [
+                "off",
+                "send_acks",
+                "send_nack",
+                "nack_sent",
+            ],
+        },
+        "round_trip_time_ns": {
+            "type": int,
+            "format": "uint64",
+        },
+        "round_trip_time_valid": {"type": bool},
+        "mean_time_between_phy_errors": {
+            "type": float,
+            "format": "double",
+        },
+        "tx_init_ctl_os": {
+            "type": int,
+            "format": "uint64",
+        },
+        "tx_init_echo_ctl_os": {
+            "type": int,
+            "format": "uint64",
+        },
+        "tx_ack_ctl_os": {
+            "type": int,
+            "format": "uint64",
+        },
+        "tx_nack_ctl_os": {
+            "type": int,
+            "format": "uint64",
+        },
+        "tx_discard": {
+            "type": int,
+            "format": "uint64",
+        },
+        "tx_ok": {
+            "type": int,
+            "format": "uint64",
+        },
+        "tx_poisoned": {
+            "type": int,
+            "format": "uint64",
+        },
+        "tx_replay_event": {
+            "type": int,
+            "format": "uint64",
+        },
+        "replayed_packet": {
+            "type": int,
+            "format": "uint64",
+        },
+        "replayed_byte": {
+            "type": int,
+            "format": "uint64",
+        },
+        "tx_seq": {
+            "type": int,
+            "format": "uint64",
+        },
+        "tx_outstanding_seq": {
+            "type": int,
+            "format": "uint64",
+        },
+        "rx_init_ctl_os": {
+            "type": int,
+            "format": "uint64",
+        },
+        "rx_init_echo_ctl_os": {
+            "type": int,
+            "format": "uint64",
+        },
+        "rx_ack_ctl_os": {
+            "type": int,
+            "format": "uint64",
+        },
+        "rx_nack_ctl_os": {
+            "type": int,
+            "format": "uint64",
+        },
+        "rx_ack_nack_seq_error": {
+            "type": int,
+            "format": "uint64",
+        },
+        "rx_ok": {
+            "type": int,
+            "format": "uint64",
+        },
+        "rx_poisoned": {
+            "type": int,
+            "format": "uint64",
+        },
+        "rx_bad": {
+            "type": int,
+            "format": "uint64",
+        },
+        "rx_expected_seq_good": {
+            "type": int,
+            "format": "uint64",
+        },
+        "rx_expected_seq_poisoned": {
+            "type": int,
+            "format": "uint64",
+        },
+        "rx_expected_seq_bad": {
+            "type": int,
+            "format": "uint64",
+        },
+        "rx_missing_seq": {
+            "type": int,
+            "format": "uint64",
+        },
+        "rx_duplicate_seq": {
+            "type": int,
+            "format": "uint64",
+        },
+        "rx_replay": {
+            "type": int,
+            "format": "uint64",
+        },
+        "rx_next_seq": {
+            "type": int,
+            "format": "uint64",
+        },
+        "llr_init_ctl_os_spacing_min": {
+            "type": int,
+            "format": "uint64",
+        },
+        "llr_init_ctl_os_spacing_error": {
+            "type": int,
+            "format": "uint64",
+        },
+        "llr_ack_nack_ctl_os_spacing_min": {
+            "type": int,
+            "format": "uint64",
+        },
+        "llr_ack_nack_ctl_os_spacing_error": {
+            "type": int,
+            "format": "uint64",
+        },
+        "llr_init_echo_init_seq_mismatch": {
+            "type": int,
+            "format": "uint64",
+        },
+        "rx_ack_ctl_os_dropped": {
+            "type": int,
+            "format": "uint64",
+        },
+        "rx_nack_ctl_os_dropped": {
+            "type": int,
+            "format": "uint64",
+        },
+        "rx_init_ctl_os_dropped": {
+            "type": int,
+            "format": "uint64",
+        },
+        "rx_init_echo_ctl_os_dropped": {
+            "type": int,
+            "format": "uint64",
+        },
+        "ue_rx_ctl_os_frame_header_error": {
+            "type": int,
+            "format": "uint64",
+        },
+        "ue_rx_ctl_os_intra_frame_spacing_error": {
+            "type": int,
+            "format": "uint64",
+        },
+        "ue_ctl_os_spacing_min": {
+            "type": int,
+            "format": "uint64",
+        },
+        "ue_ctl_os_spacing_error": {
+            "type": int,
+            "format": "uint64",
+        },
+        "cbfc_sender_virtual_channels": {"type": "UltraEthernetCbfcVcMetricIter"},
+        "cbfc_receiver_virtual_channels": {"type": "UltraEthernetCbfcVcMetricIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    OFF = "off"  # type: str
+    ON = "on"  # type: str
+
+    OFF = "off"  # type: str
+    ON = "on"  # type: str
+
+    OFF = "off"  # type: str
+    INIT = "init"  # type: str
+    ADVANCE = "advance"  # type: str
+    REPLAY = "replay"  # type: str
+    FLUSH = "flush"  # type: str
+
+    OFF = "off"  # type: str
+    SEND_ACKS = "send_acks"  # type: str
+    SEND_NACK = "send_nack"  # type: str
+    NACK_SENT = "nack_sent"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        name=None,
+        llr_mode_local=None,
+        llr_mode_remote=None,
+        llr_transmit_state=None,
+        llr_ack_nack_transmit_state=None,
+        round_trip_time_ns=None,
+        round_trip_time_valid=None,
+        mean_time_between_phy_errors=None,
+        tx_init_ctl_os=None,
+        tx_init_echo_ctl_os=None,
+        tx_ack_ctl_os=None,
+        tx_nack_ctl_os=None,
+        tx_discard=None,
+        tx_ok=None,
+        tx_poisoned=None,
+        tx_replay_event=None,
+        replayed_packet=None,
+        replayed_byte=None,
+        tx_seq=None,
+        tx_outstanding_seq=None,
+        rx_init_ctl_os=None,
+        rx_init_echo_ctl_os=None,
+        rx_ack_ctl_os=None,
+        rx_nack_ctl_os=None,
+        rx_ack_nack_seq_error=None,
+        rx_ok=None,
+        rx_poisoned=None,
+        rx_bad=None,
+        rx_expected_seq_good=None,
+        rx_expected_seq_poisoned=None,
+        rx_expected_seq_bad=None,
+        rx_missing_seq=None,
+        rx_duplicate_seq=None,
+        rx_replay=None,
+        rx_next_seq=None,
+        llr_init_ctl_os_spacing_min=None,
+        llr_init_ctl_os_spacing_error=None,
+        llr_ack_nack_ctl_os_spacing_min=None,
+        llr_ack_nack_ctl_os_spacing_error=None,
+        llr_init_echo_init_seq_mismatch=None,
+        rx_ack_ctl_os_dropped=None,
+        rx_nack_ctl_os_dropped=None,
+        rx_init_ctl_os_dropped=None,
+        rx_init_echo_ctl_os_dropped=None,
+        ue_rx_ctl_os_frame_header_error=None,
+        ue_rx_ctl_os_intra_frame_spacing_error=None,
+        ue_ctl_os_spacing_min=None,
+        ue_ctl_os_spacing_error=None,
+    ):
+        super(UltraEthernetMetric, self).__init__()
+        self._parent = parent
+        self._set_property("name", name)
+        self._set_property("llr_mode_local", llr_mode_local)
+        self._set_property("llr_mode_remote", llr_mode_remote)
+        self._set_property("llr_transmit_state", llr_transmit_state)
+        self._set_property("llr_ack_nack_transmit_state", llr_ack_nack_transmit_state)
+        self._set_property("round_trip_time_ns", round_trip_time_ns)
+        self._set_property("round_trip_time_valid", round_trip_time_valid)
+        self._set_property("mean_time_between_phy_errors", mean_time_between_phy_errors)
+        self._set_property("tx_init_ctl_os", tx_init_ctl_os)
+        self._set_property("tx_init_echo_ctl_os", tx_init_echo_ctl_os)
+        self._set_property("tx_ack_ctl_os", tx_ack_ctl_os)
+        self._set_property("tx_nack_ctl_os", tx_nack_ctl_os)
+        self._set_property("tx_discard", tx_discard)
+        self._set_property("tx_ok", tx_ok)
+        self._set_property("tx_poisoned", tx_poisoned)
+        self._set_property("tx_replay_event", tx_replay_event)
+        self._set_property("replayed_packet", replayed_packet)
+        self._set_property("replayed_byte", replayed_byte)
+        self._set_property("tx_seq", tx_seq)
+        self._set_property("tx_outstanding_seq", tx_outstanding_seq)
+        self._set_property("rx_init_ctl_os", rx_init_ctl_os)
+        self._set_property("rx_init_echo_ctl_os", rx_init_echo_ctl_os)
+        self._set_property("rx_ack_ctl_os", rx_ack_ctl_os)
+        self._set_property("rx_nack_ctl_os", rx_nack_ctl_os)
+        self._set_property("rx_ack_nack_seq_error", rx_ack_nack_seq_error)
+        self._set_property("rx_ok", rx_ok)
+        self._set_property("rx_poisoned", rx_poisoned)
+        self._set_property("rx_bad", rx_bad)
+        self._set_property("rx_expected_seq_good", rx_expected_seq_good)
+        self._set_property("rx_expected_seq_poisoned", rx_expected_seq_poisoned)
+        self._set_property("rx_expected_seq_bad", rx_expected_seq_bad)
+        self._set_property("rx_missing_seq", rx_missing_seq)
+        self._set_property("rx_duplicate_seq", rx_duplicate_seq)
+        self._set_property("rx_replay", rx_replay)
+        self._set_property("rx_next_seq", rx_next_seq)
+        self._set_property("llr_init_ctl_os_spacing_min", llr_init_ctl_os_spacing_min)
+        self._set_property(
+            "llr_init_ctl_os_spacing_error", llr_init_ctl_os_spacing_error
+        )
+        self._set_property(
+            "llr_ack_nack_ctl_os_spacing_min", llr_ack_nack_ctl_os_spacing_min
+        )
+        self._set_property(
+            "llr_ack_nack_ctl_os_spacing_error", llr_ack_nack_ctl_os_spacing_error
+        )
+        self._set_property(
+            "llr_init_echo_init_seq_mismatch", llr_init_echo_init_seq_mismatch
+        )
+        self._set_property("rx_ack_ctl_os_dropped", rx_ack_ctl_os_dropped)
+        self._set_property("rx_nack_ctl_os_dropped", rx_nack_ctl_os_dropped)
+        self._set_property("rx_init_ctl_os_dropped", rx_init_ctl_os_dropped)
+        self._set_property("rx_init_echo_ctl_os_dropped", rx_init_echo_ctl_os_dropped)
+        self._set_property(
+            "ue_rx_ctl_os_frame_header_error", ue_rx_ctl_os_frame_header_error
+        )
+        self._set_property(
+            "ue_rx_ctl_os_intra_frame_spacing_error",
+            ue_rx_ctl_os_intra_frame_spacing_error,
+        )
+        self._set_property("ue_ctl_os_spacing_min", ue_ctl_os_spacing_min)
+        self._set_property("ue_ctl_os_spacing_error", ue_ctl_os_spacing_error)
+
+    def set(
+        self,
+        name=None,
+        llr_mode_local=None,
+        llr_mode_remote=None,
+        llr_transmit_state=None,
+        llr_ack_nack_transmit_state=None,
+        round_trip_time_ns=None,
+        round_trip_time_valid=None,
+        mean_time_between_phy_errors=None,
+        tx_init_ctl_os=None,
+        tx_init_echo_ctl_os=None,
+        tx_ack_ctl_os=None,
+        tx_nack_ctl_os=None,
+        tx_discard=None,
+        tx_ok=None,
+        tx_poisoned=None,
+        tx_replay_event=None,
+        replayed_packet=None,
+        replayed_byte=None,
+        tx_seq=None,
+        tx_outstanding_seq=None,
+        rx_init_ctl_os=None,
+        rx_init_echo_ctl_os=None,
+        rx_ack_ctl_os=None,
+        rx_nack_ctl_os=None,
+        rx_ack_nack_seq_error=None,
+        rx_ok=None,
+        rx_poisoned=None,
+        rx_bad=None,
+        rx_expected_seq_good=None,
+        rx_expected_seq_poisoned=None,
+        rx_expected_seq_bad=None,
+        rx_missing_seq=None,
+        rx_duplicate_seq=None,
+        rx_replay=None,
+        rx_next_seq=None,
+        llr_init_ctl_os_spacing_min=None,
+        llr_init_ctl_os_spacing_error=None,
+        llr_ack_nack_ctl_os_spacing_min=None,
+        llr_ack_nack_ctl_os_spacing_error=None,
+        llr_init_echo_init_seq_mismatch=None,
+        rx_ack_ctl_os_dropped=None,
+        rx_nack_ctl_os_dropped=None,
+        rx_init_ctl_os_dropped=None,
+        rx_init_echo_ctl_os_dropped=None,
+        ue_rx_ctl_os_frame_header_error=None,
+        ue_rx_ctl_os_intra_frame_spacing_error=None,
+        ue_ctl_os_spacing_min=None,
+        ue_ctl_os_spacing_error=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def name(self):
+        # type: () -> str
+        """name getter
+
+        The name of the configured Ultra Ethernet instance.
+
+        Returns: str
+        """
+        return self._get_property("name")
+
+    @name.setter
+    def name(self, value):
+        """name setter
+
+        The name of the configured Ultra Ethernet instance.
+
+        value: str
+        """
+        self._set_property("name", value)
+
+    @property
+    def llr_mode_local(self):
+        # type: () -> Union[Literal["off"], Literal["on"]]
+        """llr_mode_local getter
+
+        The current LLR local mode (receive) reported by the device.
+
+        Returns: Union[Literal["off"], Literal["on"]]
+        """
+        return self._get_property("llr_mode_local")
+
+    @llr_mode_local.setter
+    def llr_mode_local(self, value):
+        """llr_mode_local setter
+
+        The current LLR local mode (receive) reported by the device.
+
+        value: Union[Literal["off"], Literal["on"]]
+        """
+        self._set_property("llr_mode_local", value)
+
+    @property
+    def llr_mode_remote(self):
+        # type: () -> Union[Literal["off"], Literal["on"]]
+        """llr_mode_remote getter
+
+        The current LLR remote mode (transmit) reported by the device.
+
+        Returns: Union[Literal["off"], Literal["on"]]
+        """
+        return self._get_property("llr_mode_remote")
+
+    @llr_mode_remote.setter
+    def llr_mode_remote(self, value):
+        """llr_mode_remote setter
+
+        The current LLR remote mode (transmit) reported by the device.
+
+        value: Union[Literal["off"], Literal["on"]]
+        """
+        self._set_property("llr_mode_remote", value)
+
+    @property
+    def llr_transmit_state(self):
+        # type: () -> Union[Literal["advance"], Literal["flush"], Literal["init"], Literal["off"], Literal["replay"]]
+        """llr_transmit_state getter
+
+        The current LLR remote transmit state machine value.
+
+        Returns: Union[Literal["advance"], Literal["flush"], Literal["init"], Literal["off"], Literal["replay"]]
+        """
+        return self._get_property("llr_transmit_state")
+
+    @llr_transmit_state.setter
+    def llr_transmit_state(self, value):
+        """llr_transmit_state setter
+
+        The current LLR remote transmit state machine value.
+
+        value: Union[Literal["advance"], Literal["flush"], Literal["init"], Literal["off"], Literal["replay"]]
+        """
+        self._set_property("llr_transmit_state", value)
+
+    @property
+    def llr_ack_nack_transmit_state(self):
+        # type: () -> Union[Literal["nack_sent"], Literal["off"], Literal["send_acks"], Literal["send_nack"]]
+        """llr_ack_nack_transmit_state getter
+
+        The current LLR ACK/NACK transmit state machine value.
+
+        Returns: Union[Literal["nack_sent"], Literal["off"], Literal["send_acks"], Literal["send_nack"]]
+        """
+        return self._get_property("llr_ack_nack_transmit_state")
+
+    @llr_ack_nack_transmit_state.setter
+    def llr_ack_nack_transmit_state(self, value):
+        """llr_ack_nack_transmit_state setter
+
+        The current LLR ACK/NACK transmit state machine value.
+
+        value: Union[Literal["nack_sent"], Literal["off"], Literal["send_acks"], Literal["send_nack"]]
+        """
+        self._set_property("llr_ack_nack_transmit_state", value)
+
+    @property
+    def round_trip_time_ns(self):
+        # type: () -> int
+        """round_trip_time_ns getter
+
+        The measured round trip time, in nanoseconds, of the LLR_INIT control ordered set handshake.
+
+        Returns: int
+        """
+        return self._get_property("round_trip_time_ns")
+
+    @round_trip_time_ns.setter
+    def round_trip_time_ns(self, value):
+        """round_trip_time_ns setter
+
+        The measured round trip time, in nanoseconds, of the LLR_INIT control ordered set handshake.
+
+        value: int
+        """
+        self._set_property("round_trip_time_ns", value)
+
+    @property
+    def round_trip_time_valid(self):
+        # type: () -> bool
+        """round_trip_time_valid getter
+
+        Indicates whether the round_trip_time_ns measurement is currently valid.
+
+        Returns: bool
+        """
+        return self._get_property("round_trip_time_valid")
+
+    @round_trip_time_valid.setter
+    def round_trip_time_valid(self, value):
+        """round_trip_time_valid setter
+
+        Indicates whether the round_trip_time_ns measurement is currently valid.
+
+        value: bool
+        """
+        self._set_property("round_trip_time_valid", value)
+
+    @property
+    def mean_time_between_phy_errors(self):
+        # type: () -> float
+        """mean_time_between_phy_errors getter
+
+        The mean time, in seconds, between PHY errors.
+
+        Returns: float
+        """
+        return self._get_property("mean_time_between_phy_errors")
+
+    @mean_time_between_phy_errors.setter
+    def mean_time_between_phy_errors(self, value):
+        """mean_time_between_phy_errors setter
+
+        The mean time, in seconds, between PHY errors.
+
+        value: float
+        """
+        self._set_property("mean_time_between_phy_errors", value)
+
+    @property
+    def tx_init_ctl_os(self):
+        # type: () -> int
+        """tx_init_ctl_os getter
+
+        Number of LLR_INIT control ordered sets transmitted.
+
+        Returns: int
+        """
+        return self._get_property("tx_init_ctl_os")
+
+    @tx_init_ctl_os.setter
+    def tx_init_ctl_os(self, value):
+        """tx_init_ctl_os setter
+
+        Number of LLR_INIT control ordered sets transmitted.
+
+        value: int
+        """
+        self._set_property("tx_init_ctl_os", value)
+
+    @property
+    def tx_init_echo_ctl_os(self):
+        # type: () -> int
+        """tx_init_echo_ctl_os getter
+
+        Number of LLR_INIT_ECHO control ordered sets transmitted.
+
+        Returns: int
+        """
+        return self._get_property("tx_init_echo_ctl_os")
+
+    @tx_init_echo_ctl_os.setter
+    def tx_init_echo_ctl_os(self, value):
+        """tx_init_echo_ctl_os setter
+
+        Number of LLR_INIT_ECHO control ordered sets transmitted.
+
+        value: int
+        """
+        self._set_property("tx_init_echo_ctl_os", value)
+
+    @property
+    def tx_ack_ctl_os(self):
+        # type: () -> int
+        """tx_ack_ctl_os getter
+
+        Number of LLR_ACK control ordered sets transmitted.
+
+        Returns: int
+        """
+        return self._get_property("tx_ack_ctl_os")
+
+    @tx_ack_ctl_os.setter
+    def tx_ack_ctl_os(self, value):
+        """tx_ack_ctl_os setter
+
+        Number of LLR_ACK control ordered sets transmitted.
+
+        value: int
+        """
+        self._set_property("tx_ack_ctl_os", value)
+
+    @property
+    def tx_nack_ctl_os(self):
+        # type: () -> int
+        """tx_nack_ctl_os getter
+
+        Number of LLR_NACK control ordered sets transmitted.
+
+        Returns: int
+        """
+        return self._get_property("tx_nack_ctl_os")
+
+    @tx_nack_ctl_os.setter
+    def tx_nack_ctl_os(self, value):
+        """tx_nack_ctl_os setter
+
+        Number of LLR_NACK control ordered sets transmitted.
+
+        value: int
+        """
+        self._set_property("tx_nack_ctl_os", value)
+
+    @property
+    def tx_discard(self):
+        # type: () -> int
+        """tx_discard getter
+
+        Number of LLR-eligible frames discarded by the LLR transmitter while in the INIT or FLUSH state with discard behavior.
+
+        Returns: int
+        """
+        return self._get_property("tx_discard")
+
+    @tx_discard.setter
+    def tx_discard(self, value):
+        """tx_discard setter
+
+        Number of LLR-eligible frames discarded by the LLR transmitter while in the INIT or FLUSH state with discard behavior.
+
+        value: int
+        """
+        self._set_property("tx_discard", value)
+
+    @property
+    def tx_ok(self):
+        # type: () -> int
+        """tx_ok getter
+
+        Number of LLR-eligible frames transmitted with good FCS.
+
+        Returns: int
+        """
+        return self._get_property("tx_ok")
+
+    @tx_ok.setter
+    def tx_ok(self, value):
+        """tx_ok setter
+
+        Number of LLR-eligible frames transmitted with good FCS.
+
+        value: int
+        """
+        self._set_property("tx_ok", value)
+
+    @property
+    def tx_poisoned(self):
+        # type: () -> int
+        """tx_poisoned getter
+
+        Number of LLR-eligible frames transmitted with poisoned FCS.
+
+        Returns: int
+        """
+        return self._get_property("tx_poisoned")
+
+    @tx_poisoned.setter
+    def tx_poisoned(self, value):
+        """tx_poisoned setter
+
+        Number of LLR-eligible frames transmitted with poisoned FCS.
+
+        value: int
+        """
+        self._set_property("tx_poisoned", value)
+
+    @property
+    def tx_replay_event(self):
+        # type: () -> int
+        """tx_replay_event getter
+
+        Number of times the transmitter completed replay operation (exited the REPLAY state).
+
+        Returns: int
+        """
+        return self._get_property("tx_replay_event")
+
+    @tx_replay_event.setter
+    def tx_replay_event(self, value):
+        """tx_replay_event setter
+
+        Number of times the transmitter completed replay operation (exited the REPLAY state).
+
+        value: int
+        """
+        self._set_property("tx_replay_event", value)
+
+    @property
+    def replayed_packet(self):
+        # type: () -> int
+        """replayed_packet getter
+
+        Number of LLR-eligible frames replayed.
+
+        Returns: int
+        """
+        return self._get_property("replayed_packet")
+
+    @replayed_packet.setter
+    def replayed_packet(self, value):
+        """replayed_packet setter
+
+        Number of LLR-eligible frames replayed.
+
+        value: int
+        """
+        self._set_property("replayed_packet", value)
+
+    @property
+    def replayed_byte(self):
+        # type: () -> int
+        """replayed_byte getter
+
+        Number of bytes replayed.
+
+        Returns: int
+        """
+        return self._get_property("replayed_byte")
+
+    @replayed_byte.setter
+    def replayed_byte(self, value):
+        """replayed_byte setter
+
+        Number of bytes replayed.
+
+        value: int
+        """
+        self._set_property("replayed_byte", value)
+
+    @property
+    def tx_seq(self):
+        # type: () -> int
+        """tx_seq getter
+
+        The current LLR transmit sequence number.
+
+        Returns: int
+        """
+        return self._get_property("tx_seq")
+
+    @tx_seq.setter
+    def tx_seq(self, value):
+        """tx_seq setter
+
+        The current LLR transmit sequence number.
+
+        value: int
+        """
+        self._set_property("tx_seq", value)
+
+    @property
+    def tx_outstanding_seq(self):
+        # type: () -> int
+        """tx_outstanding_seq getter
+
+        The current number of unacknowledged transmitted frames.
+
+        Returns: int
+        """
+        return self._get_property("tx_outstanding_seq")
+
+    @tx_outstanding_seq.setter
+    def tx_outstanding_seq(self, value):
+        """tx_outstanding_seq setter
+
+        The current number of unacknowledged transmitted frames.
+
+        value: int
+        """
+        self._set_property("tx_outstanding_seq", value)
+
+    @property
+    def rx_init_ctl_os(self):
+        # type: () -> int
+        """rx_init_ctl_os getter
+
+        Number of LLR_INIT control ordered sets received.
+
+        Returns: int
+        """
+        return self._get_property("rx_init_ctl_os")
+
+    @rx_init_ctl_os.setter
+    def rx_init_ctl_os(self, value):
+        """rx_init_ctl_os setter
+
+        Number of LLR_INIT control ordered sets received.
+
+        value: int
+        """
+        self._set_property("rx_init_ctl_os", value)
+
+    @property
+    def rx_init_echo_ctl_os(self):
+        # type: () -> int
+        """rx_init_echo_ctl_os getter
+
+        Number of LLR_INIT_ECHO control ordered sets received.
+
+        Returns: int
+        """
+        return self._get_property("rx_init_echo_ctl_os")
+
+    @rx_init_echo_ctl_os.setter
+    def rx_init_echo_ctl_os(self, value):
+        """rx_init_echo_ctl_os setter
+
+        Number of LLR_INIT_ECHO control ordered sets received.
+
+        value: int
+        """
+        self._set_property("rx_init_echo_ctl_os", value)
+
+    @property
+    def rx_ack_ctl_os(self):
+        # type: () -> int
+        """rx_ack_ctl_os getter
+
+        Number of LLR_ACK control ordered sets received.
+
+        Returns: int
+        """
+        return self._get_property("rx_ack_ctl_os")
+
+    @rx_ack_ctl_os.setter
+    def rx_ack_ctl_os(self, value):
+        """rx_ack_ctl_os setter
+
+        Number of LLR_ACK control ordered sets received.
+
+        value: int
+        """
+        self._set_property("rx_ack_ctl_os", value)
+
+    @property
+    def rx_nack_ctl_os(self):
+        # type: () -> int
+        """rx_nack_ctl_os getter
+
+        Number of LLR_NACK control ordered sets received.
+
+        Returns: int
+        """
+        return self._get_property("rx_nack_ctl_os")
+
+    @rx_nack_ctl_os.setter
+    def rx_nack_ctl_os(self, value):
+        """rx_nack_ctl_os setter
+
+        Number of LLR_NACK control ordered sets received.
+
+        value: int
+        """
+        self._set_property("rx_nack_ctl_os", value)
+
+    @property
+    def rx_ack_nack_seq_error(self):
+        # type: () -> int
+        """rx_ack_nack_seq_error getter
+
+        Number of LLR_ACK/LLR_NACK control ordered sets received with sequence number error.
+
+        Returns: int
+        """
+        return self._get_property("rx_ack_nack_seq_error")
+
+    @rx_ack_nack_seq_error.setter
+    def rx_ack_nack_seq_error(self, value):
+        """rx_ack_nack_seq_error setter
+
+        Number of LLR_ACK/LLR_NACK control ordered sets received with sequence number error.
+
+        value: int
+        """
+        self._set_property("rx_ack_nack_seq_error", value)
+
+    @property
+    def rx_ok(self):
+        # type: () -> int
+        """rx_ok getter
+
+        Number of LLR-eligible frames received with good FCS.
+
+        Returns: int
+        """
+        return self._get_property("rx_ok")
+
+    @rx_ok.setter
+    def rx_ok(self, value):
+        """rx_ok setter
+
+        Number of LLR-eligible frames received with good FCS.
+
+        value: int
+        """
+        self._set_property("rx_ok", value)
+
+    @property
+    def rx_poisoned(self):
+        # type: () -> int
+        """rx_poisoned getter
+
+        Number of LLR-eligible frames received with poisoned FCS.
+
+        Returns: int
+        """
+        return self._get_property("rx_poisoned")
+
+    @rx_poisoned.setter
+    def rx_poisoned(self, value):
+        """rx_poisoned setter
+
+        Number of LLR-eligible frames received with poisoned FCS.
+
+        value: int
+        """
+        self._set_property("rx_poisoned", value)
+
+    @property
+    def rx_bad(self):
+        # type: () -> int
+        """rx_bad getter
+
+        Number of LLR-eligible frames received with bad FCS.
+
+        Returns: int
+        """
+        return self._get_property("rx_bad")
+
+    @rx_bad.setter
+    def rx_bad(self, value):
+        """rx_bad setter
+
+        Number of LLR-eligible frames received with bad FCS.
+
+        value: int
+        """
+        self._set_property("rx_bad", value)
+
+    @property
+    def rx_expected_seq_good(self):
+        # type: () -> int
+        """rx_expected_seq_good getter
+
+        Number of LLR-eligible frames received with good FCS that had the expected sequence number.
+
+        Returns: int
+        """
+        return self._get_property("rx_expected_seq_good")
+
+    @rx_expected_seq_good.setter
+    def rx_expected_seq_good(self, value):
+        """rx_expected_seq_good setter
+
+        Number of LLR-eligible frames received with good FCS that had the expected sequence number.
+
+        value: int
+        """
+        self._set_property("rx_expected_seq_good", value)
+
+    @property
+    def rx_expected_seq_poisoned(self):
+        # type: () -> int
+        """rx_expected_seq_poisoned getter
+
+        Number of LLR-eligible frames received with poisoned FCS that had the expected sequence number.
+
+        Returns: int
+        """
+        return self._get_property("rx_expected_seq_poisoned")
+
+    @rx_expected_seq_poisoned.setter
+    def rx_expected_seq_poisoned(self, value):
+        """rx_expected_seq_poisoned setter
+
+        Number of LLR-eligible frames received with poisoned FCS that had the expected sequence number.
+
+        value: int
+        """
+        self._set_property("rx_expected_seq_poisoned", value)
+
+    @property
+    def rx_expected_seq_bad(self):
+        # type: () -> int
+        """rx_expected_seq_bad getter
+
+        Number of LLR-eligible frames received with bad FCS that had the expected sequence number.
+
+        Returns: int
+        """
+        return self._get_property("rx_expected_seq_bad")
+
+    @rx_expected_seq_bad.setter
+    def rx_expected_seq_bad(self, value):
+        """rx_expected_seq_bad setter
+
+        Number of LLR-eligible frames received with bad FCS that had the expected sequence number.
+
+        value: int
+        """
+        self._set_property("rx_expected_seq_bad", value)
+
+    @property
+    def rx_missing_seq(self):
+        # type: () -> int
+        """rx_missing_seq getter
+
+        Number of LLR-eligible frames received that indicated missing frame in the sequence.
+
+        Returns: int
+        """
+        return self._get_property("rx_missing_seq")
+
+    @rx_missing_seq.setter
+    def rx_missing_seq(self, value):
+        """rx_missing_seq setter
+
+        Number of LLR-eligible frames received that indicated missing frame in the sequence.
+
+        value: int
+        """
+        self._set_property("rx_missing_seq", value)
+
+    @property
+    def rx_duplicate_seq(self):
+        # type: () -> int
+        """rx_duplicate_seq getter
+
+        Number of LLR-eligible frames received that had duplicate sequence number.
+
+        Returns: int
+        """
+        return self._get_property("rx_duplicate_seq")
+
+    @rx_duplicate_seq.setter
+    def rx_duplicate_seq(self, value):
+        """rx_duplicate_seq setter
+
+        Number of LLR-eligible frames received that had duplicate sequence number.
+
+        value: int
+        """
+        self._set_property("rx_duplicate_seq", value)
+
+    @property
+    def rx_replay(self):
+        # type: () -> int
+        """rx_replay getter
+
+        Number of times the receiver has detected the start of replay.
+
+        Returns: int
+        """
+        return self._get_property("rx_replay")
+
+    @rx_replay.setter
+    def rx_replay(self, value):
+        """rx_replay setter
+
+        Number of times the receiver has detected the start of replay.
+
+        value: int
+        """
+        self._set_property("rx_replay", value)
+
+    @property
+    def rx_next_seq(self):
+        # type: () -> int
+        """rx_next_seq getter
+
+        The current expected LLR receive sequence number.
+
+        Returns: int
+        """
+        return self._get_property("rx_next_seq")
+
+    @rx_next_seq.setter
+    def rx_next_seq(self, value):
+        """rx_next_seq setter
+
+        The current expected LLR receive sequence number.
+
+        value: int
+        """
+        self._set_property("rx_next_seq", value)
+
+    @property
+    def llr_init_ctl_os_spacing_min(self):
+        # type: () -> int
+        """llr_init_ctl_os_spacing_min getter
+
+        The minimum observed spacing between received LLR_INIT control ordered sets.
+
+        Returns: int
+        """
+        return self._get_property("llr_init_ctl_os_spacing_min")
+
+    @llr_init_ctl_os_spacing_min.setter
+    def llr_init_ctl_os_spacing_min(self, value):
+        """llr_init_ctl_os_spacing_min setter
+
+        The minimum observed spacing between received LLR_INIT control ordered sets.
+
+        value: int
+        """
+        self._set_property("llr_init_ctl_os_spacing_min", value)
+
+    @property
+    def llr_init_ctl_os_spacing_error(self):
+        # type: () -> int
+        """llr_init_ctl_os_spacing_error getter
+
+        Number of received LLR_INIT control ordered set minimum spacing violations.
+
+        Returns: int
+        """
+        return self._get_property("llr_init_ctl_os_spacing_error")
+
+    @llr_init_ctl_os_spacing_error.setter
+    def llr_init_ctl_os_spacing_error(self, value):
+        """llr_init_ctl_os_spacing_error setter
+
+        Number of received LLR_INIT control ordered set minimum spacing violations.
+
+        value: int
+        """
+        self._set_property("llr_init_ctl_os_spacing_error", value)
+
+    @property
+    def llr_ack_nack_ctl_os_spacing_min(self):
+        # type: () -> int
+        """llr_ack_nack_ctl_os_spacing_min getter
+
+        The minimum observed spacing between received LLR_ACK/LLR_NACK control ordered sets.
+
+        Returns: int
+        """
+        return self._get_property("llr_ack_nack_ctl_os_spacing_min")
+
+    @llr_ack_nack_ctl_os_spacing_min.setter
+    def llr_ack_nack_ctl_os_spacing_min(self, value):
+        """llr_ack_nack_ctl_os_spacing_min setter
+
+        The minimum observed spacing between received LLR_ACK/LLR_NACK control ordered sets.
+
+        value: int
+        """
+        self._set_property("llr_ack_nack_ctl_os_spacing_min", value)
+
+    @property
+    def llr_ack_nack_ctl_os_spacing_error(self):
+        # type: () -> int
+        """llr_ack_nack_ctl_os_spacing_error getter
+
+        Number of received LLR_ACK/LLR_NACK control ordered set minimum spacing violations.
+
+        Returns: int
+        """
+        return self._get_property("llr_ack_nack_ctl_os_spacing_error")
+
+    @llr_ack_nack_ctl_os_spacing_error.setter
+    def llr_ack_nack_ctl_os_spacing_error(self, value):
+        """llr_ack_nack_ctl_os_spacing_error setter
+
+        Number of received LLR_ACK/LLR_NACK control ordered set minimum spacing violations.
+
+        value: int
+        """
+        self._set_property("llr_ack_nack_ctl_os_spacing_error", value)
+
+    @property
+    def llr_init_echo_init_seq_mismatch(self):
+        # type: () -> int
+        """llr_init_echo_init_seq_mismatch getter
+
+        Number of received LLR_INIT_ECHO control ordered sets whose init sequence did not match the transmit sequence.
+
+        Returns: int
+        """
+        return self._get_property("llr_init_echo_init_seq_mismatch")
+
+    @llr_init_echo_init_seq_mismatch.setter
+    def llr_init_echo_init_seq_mismatch(self, value):
+        """llr_init_echo_init_seq_mismatch setter
+
+        Number of received LLR_INIT_ECHO control ordered sets whose init sequence did not match the transmit sequence.
+
+        value: int
+        """
+        self._set_property("llr_init_echo_init_seq_mismatch", value)
+
+    @property
+    def rx_ack_ctl_os_dropped(self):
+        # type: () -> int
+        """rx_ack_ctl_os_dropped getter
+
+        Number of received LLR_ACK control ordered sets dropped.
+
+        Returns: int
+        """
+        return self._get_property("rx_ack_ctl_os_dropped")
+
+    @rx_ack_ctl_os_dropped.setter
+    def rx_ack_ctl_os_dropped(self, value):
+        """rx_ack_ctl_os_dropped setter
+
+        Number of received LLR_ACK control ordered sets dropped.
+
+        value: int
+        """
+        self._set_property("rx_ack_ctl_os_dropped", value)
+
+    @property
+    def rx_nack_ctl_os_dropped(self):
+        # type: () -> int
+        """rx_nack_ctl_os_dropped getter
+
+        Number of received LLR_NACK control ordered sets dropped.
+
+        Returns: int
+        """
+        return self._get_property("rx_nack_ctl_os_dropped")
+
+    @rx_nack_ctl_os_dropped.setter
+    def rx_nack_ctl_os_dropped(self, value):
+        """rx_nack_ctl_os_dropped setter
+
+        Number of received LLR_NACK control ordered sets dropped.
+
+        value: int
+        """
+        self._set_property("rx_nack_ctl_os_dropped", value)
+
+    @property
+    def rx_init_ctl_os_dropped(self):
+        # type: () -> int
+        """rx_init_ctl_os_dropped getter
+
+        Number of received LLR_INIT control ordered sets dropped.
+
+        Returns: int
+        """
+        return self._get_property("rx_init_ctl_os_dropped")
+
+    @rx_init_ctl_os_dropped.setter
+    def rx_init_ctl_os_dropped(self, value):
+        """rx_init_ctl_os_dropped setter
+
+        Number of received LLR_INIT control ordered sets dropped.
+
+        value: int
+        """
+        self._set_property("rx_init_ctl_os_dropped", value)
+
+    @property
+    def rx_init_echo_ctl_os_dropped(self):
+        # type: () -> int
+        """rx_init_echo_ctl_os_dropped getter
+
+        Number of received LLR_INIT_ECHO control ordered sets dropped.
+
+        Returns: int
+        """
+        return self._get_property("rx_init_echo_ctl_os_dropped")
+
+    @rx_init_echo_ctl_os_dropped.setter
+    def rx_init_echo_ctl_os_dropped(self, value):
+        """rx_init_echo_ctl_os_dropped setter
+
+        Number of received LLR_INIT_ECHO control ordered sets dropped.
+
+        value: int
+        """
+        self._set_property("rx_init_echo_ctl_os_dropped", value)
+
+    @property
+    def ue_rx_ctl_os_frame_header_error(self):
+        # type: () -> int
+        """ue_rx_ctl_os_frame_header_error getter
+
+        Number of received UE control ordered sets with frame header error.
+
+        Returns: int
+        """
+        return self._get_property("ue_rx_ctl_os_frame_header_error")
+
+    @ue_rx_ctl_os_frame_header_error.setter
+    def ue_rx_ctl_os_frame_header_error(self, value):
+        """ue_rx_ctl_os_frame_header_error setter
+
+        Number of received UE control ordered sets with frame header error.
+
+        value: int
+        """
+        self._set_property("ue_rx_ctl_os_frame_header_error", value)
+
+    @property
+    def ue_rx_ctl_os_intra_frame_spacing_error(self):
+        # type: () -> int
+        """ue_rx_ctl_os_intra_frame_spacing_error getter
+
+        Number of received UE control ordered set intra-frame spacing violations.
+
+        Returns: int
+        """
+        return self._get_property("ue_rx_ctl_os_intra_frame_spacing_error")
+
+    @ue_rx_ctl_os_intra_frame_spacing_error.setter
+    def ue_rx_ctl_os_intra_frame_spacing_error(self, value):
+        """ue_rx_ctl_os_intra_frame_spacing_error setter
+
+        Number of received UE control ordered set intra-frame spacing violations.
+
+        value: int
+        """
+        self._set_property("ue_rx_ctl_os_intra_frame_spacing_error", value)
+
+    @property
+    def ue_ctl_os_spacing_min(self):
+        # type: () -> int
+        """ue_ctl_os_spacing_min getter
+
+        The minimum observed spacing between received UE control ordered sets.
+
+        Returns: int
+        """
+        return self._get_property("ue_ctl_os_spacing_min")
+
+    @ue_ctl_os_spacing_min.setter
+    def ue_ctl_os_spacing_min(self, value):
+        """ue_ctl_os_spacing_min setter
+
+        The minimum observed spacing between received UE control ordered sets.
+
+        value: int
+        """
+        self._set_property("ue_ctl_os_spacing_min", value)
+
+    @property
+    def ue_ctl_os_spacing_error(self):
+        # type: () -> int
+        """ue_ctl_os_spacing_error getter
+
+        Number of received UE control ordered set minimum spacing violations.
+
+        Returns: int
+        """
+        return self._get_property("ue_ctl_os_spacing_error")
+
+    @ue_ctl_os_spacing_error.setter
+    def ue_ctl_os_spacing_error(self, value):
+        """ue_ctl_os_spacing_error setter
+
+        Number of received UE control ordered set minimum spacing violations.
+
+        value: int
+        """
+        self._set_property("ue_ctl_os_spacing_error", value)
+
+    @property
+    def cbfc_sender_virtual_channels(self):
+        # type: () -> UltraEthernetCbfcVcMetricIter
+        """cbfc_sender_virtual_channels getter
+
+        The CBFC sender per virtual channel credit state.
+
+        Returns: UltraEthernetCbfcVcMetricIter
+        """
+        return self._get_property(
+            "cbfc_sender_virtual_channels",
+            UltraEthernetCbfcVcMetricIter,
+            self._parent,
+            self._choice,
+        )
+
+    @property
+    def cbfc_receiver_virtual_channels(self):
+        # type: () -> UltraEthernetCbfcVcMetricIter
+        """cbfc_receiver_virtual_channels getter
+
+        The CBFC receiver per virtual channel credit state.
+
+        Returns: UltraEthernetCbfcVcMetricIter
+        """
+        return self._get_property(
+            "cbfc_receiver_virtual_channels",
+            UltraEthernetCbfcVcMetricIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class UltraEthernetCbfcVcMetric(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "vc_id": {
+            "type": int,
+            "format": "uint32",
+        },
+        "vc_state": {
+            "type": str,
+            "enum": [
+                "best_effort",
+                "lossless",
+            ],
+        },
+        "credits_consumed": {
+            "type": int,
+            "format": "uint64",
+        },
+        "credits_freed": {
+            "type": int,
+            "format": "uint64",
+        },
+        "credit_limit_exceeded_error": {"type": bool},
+        "excess_credit_freed_error": {"type": bool},
+        "lost_credit_error": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    BEST_EFFORT = "best_effort"  # type: str
+    LOSSLESS = "lossless"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        vc_id=None,
+        vc_state=None,
+        credits_consumed=None,
+        credits_freed=None,
+        credit_limit_exceeded_error=None,
+        excess_credit_freed_error=None,
+        lost_credit_error=None,
+    ):
+        super(UltraEthernetCbfcVcMetric, self).__init__()
+        self._parent = parent
+        self._set_property("vc_id", vc_id)
+        self._set_property("vc_state", vc_state)
+        self._set_property("credits_consumed", credits_consumed)
+        self._set_property("credits_freed", credits_freed)
+        self._set_property("credit_limit_exceeded_error", credit_limit_exceeded_error)
+        self._set_property("excess_credit_freed_error", excess_credit_freed_error)
+        self._set_property("lost_credit_error", lost_credit_error)
+
+    def set(
+        self,
+        vc_id=None,
+        vc_state=None,
+        credits_consumed=None,
+        credits_freed=None,
+        credit_limit_exceeded_error=None,
+        excess_credit_freed_error=None,
+        lost_credit_error=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def vc_id(self):
+        # type: () -> int
+        """vc_id getter
+
+        The zero based VC number.
+
+        Returns: int
+        """
+        return self._get_property("vc_id")
+
+    @vc_id.setter
+    def vc_id(self, value):
+        """vc_id setter
+
+        The zero based VC number.
+
+        value: int
+        """
+        self._set_property("vc_id", value)
+
+    @property
+    def vc_state(self):
+        # type: () -> Union[Literal["best_effort"], Literal["lossless"]]
+        """vc_state getter
+
+        The current operational state of the VC.
+
+        Returns: Union[Literal["best_effort"], Literal["lossless"]]
+        """
+        return self._get_property("vc_state")
+
+    @vc_state.setter
+    def vc_state(self, value):
+        """vc_state setter
+
+        The current operational state of the VC.
+
+        value: Union[Literal["best_effort"], Literal["lossless"]]
+        """
+        self._set_property("vc_state", value)
+
+    @property
+    def credits_consumed(self):
+        # type: () -> int
+        """credits_consumed getter
+
+        The credits consumed counter for this VC (S_VC_CC for the sender or R_VC_CC for the receiver). 20-bit cyclic counter (modulo 2^20) per UE-Specification-1.0.3 Section 5.2.
+
+        Returns: int
+        """
+        return self._get_property("credits_consumed")
+
+    @credits_consumed.setter
+    def credits_consumed(self, value):
+        """credits_consumed setter
+
+        The credits consumed counter for this VC (S_VC_CC for the sender or R_VC_CC for the receiver). 20-bit cyclic counter (modulo 2^20) per UE-Specification-1.0.3 Section 5.2.
+
+        value: int
+        """
+        self._set_property("credits_consumed", value)
+
+    @property
+    def credits_freed(self):
+        # type: () -> int
+        """credits_freed getter
+
+        The credits freed counter for this VC (S_VC_CF for the sender or R_VC_CF for the receiver). 15-bit cyclic counter (modulo 2^15) per UE-Specification-1.0.3 Section 5.2.
+
+        Returns: int
+        """
+        return self._get_property("credits_freed")
+
+    @credits_freed.setter
+    def credits_freed(self, value):
+        """credits_freed setter
+
+        The credits freed counter for this VC (S_VC_CF for the sender or R_VC_CF for the receiver). 15-bit cyclic counter (modulo 2^15) per UE-Specification-1.0.3 Section 5.2.
+
+        value: int
+        """
+        self._set_property("credits_freed", value)
+
+    @property
+    def credit_limit_exceeded_error(self):
+        # type: () -> bool
+        """credit_limit_exceeded_error getter
+
+        Indicates whether credit limit exceeded condition was detected on this VC when the sender credit mode is per VC.
+
+        Returns: bool
+        """
+        return self._get_property("credit_limit_exceeded_error")
+
+    @credit_limit_exceeded_error.setter
+    def credit_limit_exceeded_error(self, value):
+        """credit_limit_exceeded_error setter
+
+        Indicates whether credit limit exceeded condition was detected on this VC when the sender credit mode is per VC.
+
+        value: bool
+        """
+        self._set_property("credit_limit_exceeded_error", value)
+
+    @property
+    def excess_credit_freed_error(self):
+        # type: () -> bool
+        """excess_credit_freed_error getter
+
+        Indicates whether an excess credit freed condition was detected on this VC when the sender credit mode is per VC.
+
+        Returns: bool
+        """
+        return self._get_property("excess_credit_freed_error")
+
+    @excess_credit_freed_error.setter
+    def excess_credit_freed_error(self, value):
+        """excess_credit_freed_error setter
+
+        Indicates whether an excess credit freed condition was detected on this VC when the sender credit mode is per VC.
+
+        value: bool
+        """
+        self._set_property("excess_credit_freed_error", value)
+
+    @property
+    def lost_credit_error(self):
+        # type: () -> bool
+        """lost_credit_error getter
+
+        Indicates whether lost credit condition was detected on this VC when the credit mode is per VC.
+
+        Returns: bool
+        """
+        return self._get_property("lost_credit_error")
+
+    @lost_credit_error.setter
+    def lost_credit_error(self, value):
+        """lost_credit_error setter
+
+        Indicates whether lost credit condition was detected on this VC when the credit mode is per VC.
+
+        value: bool
+        """
+        self._set_property("lost_credit_error", value)
+
+
+class UltraEthernetCbfcVcMetricIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(UltraEthernetCbfcVcMetricIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[UltraEthernetCbfcVcMetric]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> UltraEthernetCbfcVcMetricIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> UltraEthernetCbfcVcMetric
+        return self._next()
+
+    def next(self):
+        # type: () -> UltraEthernetCbfcVcMetric
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, UltraEthernetCbfcVcMetric):
+            raise Exception("Item is not an instance of UltraEthernetCbfcVcMetric")
+
+    def metric(
+        self,
+        vc_id=None,
+        vc_state=None,
+        credits_consumed=None,
+        credits_freed=None,
+        credit_limit_exceeded_error=None,
+        excess_credit_freed_error=None,
+        lost_credit_error=None,
+    ):
+        # type: (int,Union[Literal["best_effort"], Literal["lossless"]],int,int,bool,bool,bool) -> UltraEthernetCbfcVcMetricIter
+        """Factory method that creates an instance of the UltraEthernetCbfcVcMetric class
+
+        CBFC per virtual channel (VC) credit state. Credit counters per UE-Specification-1.0.3 Tables 5-15/5-16; credit reconciliation Section 5.2.9.
+
+        Returns: UltraEthernetCbfcVcMetricIter
+        """
+        item = UltraEthernetCbfcVcMetric(
+            parent=self._parent,
+            vc_id=vc_id,
+            vc_state=vc_state,
+            credits_consumed=credits_consumed,
+            credits_freed=credits_freed,
+            credit_limit_exceeded_error=credit_limit_exceeded_error,
+            excess_credit_freed_error=excess_credit_freed_error,
+            lost_credit_error=lost_credit_error,
+        )
+        self._add(item)
+        return self
+
+    def add(
+        self,
+        vc_id=None,
+        vc_state=None,
+        credits_consumed=None,
+        credits_freed=None,
+        credit_limit_exceeded_error=None,
+        excess_credit_freed_error=None,
+        lost_credit_error=None,
+    ):
+        # type: (int,Union[Literal["best_effort"], Literal["lossless"]],int,int,bool,bool,bool) -> UltraEthernetCbfcVcMetric
+        """Add method that creates and returns an instance of the UltraEthernetCbfcVcMetric class
+
+        CBFC per virtual channel (VC) credit state. Credit counters per UE-Specification-1.0.3 Tables 5-15/5-16; credit reconciliation Section 5.2.9.
+
+        Returns: UltraEthernetCbfcVcMetric
+        """
+        item = UltraEthernetCbfcVcMetric(
+            parent=self._parent,
+            vc_id=vc_id,
+            vc_state=vc_state,
+            credits_consumed=credits_consumed,
+            credits_freed=credits_freed,
+            credit_limit_exceeded_error=credit_limit_exceeded_error,
+            excess_credit_freed_error=excess_credit_freed_error,
+            lost_credit_error=lost_credit_error,
+        )
+        self._add(item)
+        return item
+
+
+class UltraEthernetMetricIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(UltraEthernetMetricIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[UltraEthernetMetric]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> UltraEthernetMetricIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> UltraEthernetMetric
+        return self._next()
+
+    def next(self):
+        # type: () -> UltraEthernetMetric
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, UltraEthernetMetric):
+            raise Exception("Item is not an instance of UltraEthernetMetric")
+
+    def metric(
+        self,
+        name=None,
+        llr_mode_local=None,
+        llr_mode_remote=None,
+        llr_transmit_state=None,
+        llr_ack_nack_transmit_state=None,
+        round_trip_time_ns=None,
+        round_trip_time_valid=None,
+        mean_time_between_phy_errors=None,
+        tx_init_ctl_os=None,
+        tx_init_echo_ctl_os=None,
+        tx_ack_ctl_os=None,
+        tx_nack_ctl_os=None,
+        tx_discard=None,
+        tx_ok=None,
+        tx_poisoned=None,
+        tx_replay_event=None,
+        replayed_packet=None,
+        replayed_byte=None,
+        tx_seq=None,
+        tx_outstanding_seq=None,
+        rx_init_ctl_os=None,
+        rx_init_echo_ctl_os=None,
+        rx_ack_ctl_os=None,
+        rx_nack_ctl_os=None,
+        rx_ack_nack_seq_error=None,
+        rx_ok=None,
+        rx_poisoned=None,
+        rx_bad=None,
+        rx_expected_seq_good=None,
+        rx_expected_seq_poisoned=None,
+        rx_expected_seq_bad=None,
+        rx_missing_seq=None,
+        rx_duplicate_seq=None,
+        rx_replay=None,
+        rx_next_seq=None,
+        llr_init_ctl_os_spacing_min=None,
+        llr_init_ctl_os_spacing_error=None,
+        llr_ack_nack_ctl_os_spacing_min=None,
+        llr_ack_nack_ctl_os_spacing_error=None,
+        llr_init_echo_init_seq_mismatch=None,
+        rx_ack_ctl_os_dropped=None,
+        rx_nack_ctl_os_dropped=None,
+        rx_init_ctl_os_dropped=None,
+        rx_init_echo_ctl_os_dropped=None,
+        ue_rx_ctl_os_frame_header_error=None,
+        ue_rx_ctl_os_intra_frame_spacing_error=None,
+        ue_ctl_os_spacing_min=None,
+        ue_ctl_os_spacing_error=None,
+    ):
+        # type: (str,Union[Literal["off"], Literal["on"]],Union[Literal["off"], Literal["on"]],Union[Literal["advance"], Literal["flush"], Literal["init"], Literal["off"], Literal["replay"]],Union[Literal["nack_sent"], Literal["off"], Literal["send_acks"], Literal["send_nack"]],int,bool,float,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int) -> UltraEthernetMetricIter
+        """Factory method that creates an instance of the UltraEthernetMetric class
+
+        Ultra Ethernet per port statistics information covering LLR, PHY/CtlOS and the CBFC per virtual channel state. LLR/PHY counters per UE-Specification-1.0.3 Table 5-13.
+
+        Returns: UltraEthernetMetricIter
+        """
+        item = UltraEthernetMetric(
+            parent=self._parent,
+            name=name,
+            llr_mode_local=llr_mode_local,
+            llr_mode_remote=llr_mode_remote,
+            llr_transmit_state=llr_transmit_state,
+            llr_ack_nack_transmit_state=llr_ack_nack_transmit_state,
+            round_trip_time_ns=round_trip_time_ns,
+            round_trip_time_valid=round_trip_time_valid,
+            mean_time_between_phy_errors=mean_time_between_phy_errors,
+            tx_init_ctl_os=tx_init_ctl_os,
+            tx_init_echo_ctl_os=tx_init_echo_ctl_os,
+            tx_ack_ctl_os=tx_ack_ctl_os,
+            tx_nack_ctl_os=tx_nack_ctl_os,
+            tx_discard=tx_discard,
+            tx_ok=tx_ok,
+            tx_poisoned=tx_poisoned,
+            tx_replay_event=tx_replay_event,
+            replayed_packet=replayed_packet,
+            replayed_byte=replayed_byte,
+            tx_seq=tx_seq,
+            tx_outstanding_seq=tx_outstanding_seq,
+            rx_init_ctl_os=rx_init_ctl_os,
+            rx_init_echo_ctl_os=rx_init_echo_ctl_os,
+            rx_ack_ctl_os=rx_ack_ctl_os,
+            rx_nack_ctl_os=rx_nack_ctl_os,
+            rx_ack_nack_seq_error=rx_ack_nack_seq_error,
+            rx_ok=rx_ok,
+            rx_poisoned=rx_poisoned,
+            rx_bad=rx_bad,
+            rx_expected_seq_good=rx_expected_seq_good,
+            rx_expected_seq_poisoned=rx_expected_seq_poisoned,
+            rx_expected_seq_bad=rx_expected_seq_bad,
+            rx_missing_seq=rx_missing_seq,
+            rx_duplicate_seq=rx_duplicate_seq,
+            rx_replay=rx_replay,
+            rx_next_seq=rx_next_seq,
+            llr_init_ctl_os_spacing_min=llr_init_ctl_os_spacing_min,
+            llr_init_ctl_os_spacing_error=llr_init_ctl_os_spacing_error,
+            llr_ack_nack_ctl_os_spacing_min=llr_ack_nack_ctl_os_spacing_min,
+            llr_ack_nack_ctl_os_spacing_error=llr_ack_nack_ctl_os_spacing_error,
+            llr_init_echo_init_seq_mismatch=llr_init_echo_init_seq_mismatch,
+            rx_ack_ctl_os_dropped=rx_ack_ctl_os_dropped,
+            rx_nack_ctl_os_dropped=rx_nack_ctl_os_dropped,
+            rx_init_ctl_os_dropped=rx_init_ctl_os_dropped,
+            rx_init_echo_ctl_os_dropped=rx_init_echo_ctl_os_dropped,
+            ue_rx_ctl_os_frame_header_error=ue_rx_ctl_os_frame_header_error,
+            ue_rx_ctl_os_intra_frame_spacing_error=ue_rx_ctl_os_intra_frame_spacing_error,
+            ue_ctl_os_spacing_min=ue_ctl_os_spacing_min,
+            ue_ctl_os_spacing_error=ue_ctl_os_spacing_error,
+        )
+        self._add(item)
+        return self
+
+    def add(
+        self,
+        name=None,
+        llr_mode_local=None,
+        llr_mode_remote=None,
+        llr_transmit_state=None,
+        llr_ack_nack_transmit_state=None,
+        round_trip_time_ns=None,
+        round_trip_time_valid=None,
+        mean_time_between_phy_errors=None,
+        tx_init_ctl_os=None,
+        tx_init_echo_ctl_os=None,
+        tx_ack_ctl_os=None,
+        tx_nack_ctl_os=None,
+        tx_discard=None,
+        tx_ok=None,
+        tx_poisoned=None,
+        tx_replay_event=None,
+        replayed_packet=None,
+        replayed_byte=None,
+        tx_seq=None,
+        tx_outstanding_seq=None,
+        rx_init_ctl_os=None,
+        rx_init_echo_ctl_os=None,
+        rx_ack_ctl_os=None,
+        rx_nack_ctl_os=None,
+        rx_ack_nack_seq_error=None,
+        rx_ok=None,
+        rx_poisoned=None,
+        rx_bad=None,
+        rx_expected_seq_good=None,
+        rx_expected_seq_poisoned=None,
+        rx_expected_seq_bad=None,
+        rx_missing_seq=None,
+        rx_duplicate_seq=None,
+        rx_replay=None,
+        rx_next_seq=None,
+        llr_init_ctl_os_spacing_min=None,
+        llr_init_ctl_os_spacing_error=None,
+        llr_ack_nack_ctl_os_spacing_min=None,
+        llr_ack_nack_ctl_os_spacing_error=None,
+        llr_init_echo_init_seq_mismatch=None,
+        rx_ack_ctl_os_dropped=None,
+        rx_nack_ctl_os_dropped=None,
+        rx_init_ctl_os_dropped=None,
+        rx_init_echo_ctl_os_dropped=None,
+        ue_rx_ctl_os_frame_header_error=None,
+        ue_rx_ctl_os_intra_frame_spacing_error=None,
+        ue_ctl_os_spacing_min=None,
+        ue_ctl_os_spacing_error=None,
+    ):
+        # type: (str,Union[Literal["off"], Literal["on"]],Union[Literal["off"], Literal["on"]],Union[Literal["advance"], Literal["flush"], Literal["init"], Literal["off"], Literal["replay"]],Union[Literal["nack_sent"], Literal["off"], Literal["send_acks"], Literal["send_nack"]],int,bool,float,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int) -> UltraEthernetMetric
+        """Add method that creates and returns an instance of the UltraEthernetMetric class
+
+        Ultra Ethernet per port statistics information covering LLR, PHY/CtlOS and the CBFC per virtual channel state. LLR/PHY counters per UE-Specification-1.0.3 Table 5-13.
+
+        Returns: UltraEthernetMetric
+        """
+        item = UltraEthernetMetric(
+            parent=self._parent,
+            name=name,
+            llr_mode_local=llr_mode_local,
+            llr_mode_remote=llr_mode_remote,
+            llr_transmit_state=llr_transmit_state,
+            llr_ack_nack_transmit_state=llr_ack_nack_transmit_state,
+            round_trip_time_ns=round_trip_time_ns,
+            round_trip_time_valid=round_trip_time_valid,
+            mean_time_between_phy_errors=mean_time_between_phy_errors,
+            tx_init_ctl_os=tx_init_ctl_os,
+            tx_init_echo_ctl_os=tx_init_echo_ctl_os,
+            tx_ack_ctl_os=tx_ack_ctl_os,
+            tx_nack_ctl_os=tx_nack_ctl_os,
+            tx_discard=tx_discard,
+            tx_ok=tx_ok,
+            tx_poisoned=tx_poisoned,
+            tx_replay_event=tx_replay_event,
+            replayed_packet=replayed_packet,
+            replayed_byte=replayed_byte,
+            tx_seq=tx_seq,
+            tx_outstanding_seq=tx_outstanding_seq,
+            rx_init_ctl_os=rx_init_ctl_os,
+            rx_init_echo_ctl_os=rx_init_echo_ctl_os,
+            rx_ack_ctl_os=rx_ack_ctl_os,
+            rx_nack_ctl_os=rx_nack_ctl_os,
+            rx_ack_nack_seq_error=rx_ack_nack_seq_error,
+            rx_ok=rx_ok,
+            rx_poisoned=rx_poisoned,
+            rx_bad=rx_bad,
+            rx_expected_seq_good=rx_expected_seq_good,
+            rx_expected_seq_poisoned=rx_expected_seq_poisoned,
+            rx_expected_seq_bad=rx_expected_seq_bad,
+            rx_missing_seq=rx_missing_seq,
+            rx_duplicate_seq=rx_duplicate_seq,
+            rx_replay=rx_replay,
+            rx_next_seq=rx_next_seq,
+            llr_init_ctl_os_spacing_min=llr_init_ctl_os_spacing_min,
+            llr_init_ctl_os_spacing_error=llr_init_ctl_os_spacing_error,
+            llr_ack_nack_ctl_os_spacing_min=llr_ack_nack_ctl_os_spacing_min,
+            llr_ack_nack_ctl_os_spacing_error=llr_ack_nack_ctl_os_spacing_error,
+            llr_init_echo_init_seq_mismatch=llr_init_echo_init_seq_mismatch,
+            rx_ack_ctl_os_dropped=rx_ack_ctl_os_dropped,
+            rx_nack_ctl_os_dropped=rx_nack_ctl_os_dropped,
+            rx_init_ctl_os_dropped=rx_init_ctl_os_dropped,
+            rx_init_echo_ctl_os_dropped=rx_init_echo_ctl_os_dropped,
+            ue_rx_ctl_os_frame_header_error=ue_rx_ctl_os_frame_header_error,
+            ue_rx_ctl_os_intra_frame_spacing_error=ue_rx_ctl_os_intra_frame_spacing_error,
+            ue_ctl_os_spacing_min=ue_ctl_os_spacing_min,
+            ue_ctl_os_spacing_error=ue_ctl_os_spacing_error,
+        )
+        self._add(item)
+        return item
+
+
 class StatesRequest(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -192947,7 +197823,7 @@ class Neighborsv4StatesRequest(OpenApiObject):
         # type: () -> List[str]
         """ethernet_names getter
 
-        The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (ARP cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (ARP cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: List[str]
         """
@@ -192957,7 +197833,7 @@ class Neighborsv4StatesRequest(OpenApiObject):
     def ethernet_names(self, value):
         """ethernet_names setter
 
-        The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (ARP cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (ARP cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: List[str]
         """
@@ -192995,7 +197871,7 @@ class Neighborsv6StatesRequest(OpenApiObject):
         # type: () -> List[str]
         """ethernet_names getter
 
-        The names of Ethernet interfaces for which Neighbor state (NDISC cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (NDISC cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The names of Ethernet interfaces for which Neighbor state (NDISC cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (NDISC cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: List[str]
         """
@@ -193005,7 +197881,7 @@ class Neighborsv6StatesRequest(OpenApiObject):
     def ethernet_names(self, value):
         """ethernet_names setter
 
-        The names of Ethernet interfaces for which Neighbor state (NDISC cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (NDISC cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The names of Ethernet interfaces for which Neighbor state (NDISC cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (NDISC cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: List[str]
         """
@@ -193061,7 +197937,7 @@ class BgpPrefixStateRequest(OpenApiObject):
         # type: () -> List[str]
         """bgp_peer_names getter
 
-        The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         Returns: List[str]
         """
@@ -193071,7 +197947,7 @@ class BgpPrefixStateRequest(OpenApiObject):
     def bgp_peer_names(self, value):
         """bgp_peer_names setter
 
-        The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         value: List[str]
         """
@@ -193572,7 +198448,7 @@ class IsisLspsStateRequest(OpenApiObject):
         # type: () -> List[str]
         """isis_router_names getter
 
-        The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         Returns: List[str]
         """
@@ -193582,7 +198458,7 @@ class IsisLspsStateRequest(OpenApiObject):
     def isis_router_names(self, value):
         """isis_router_names setter
 
-        The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         value: List[str]
         """
@@ -193625,7 +198501,7 @@ class LldpNeighborsStateRequest(OpenApiObject):
         # type: () -> List[str]
         """lldp_names getter
 
-        The names of LLDP instances for which neighbor information will be retrieved. If no names are specified then the results will contain neighbor information for all configured LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name. . x-constraint:. /components/schemas/Lldp/properties/name.
+        The names of LLDP instances for which neighbor information will be retrieved. If no names are specified then the results will contain neighbor information for all configured LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name.
 
         Returns: List[str]
         """
@@ -193635,7 +198511,7 @@ class LldpNeighborsStateRequest(OpenApiObject):
     def lldp_names(self, value):
         """lldp_names setter
 
-        The names of LLDP instances for which neighbor information will be retrieved. If no names are specified then the results will contain neighbor information for all configured LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name. . x-constraint:. /components/schemas/Lldp/properties/name.
+        The names of LLDP instances for which neighbor information will be retrieved. If no names are specified then the results will contain neighbor information for all configured LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name.
 
         value: List[str]
         """
@@ -193694,7 +198570,7 @@ class RsvpLspsStateRequest(OpenApiObject):
         # type: () -> List[str]
         """rsvp_router_names getter
 
-        The names of RSVP-TE routers for which learned information is requested. An empty list will return results for all RSVP=TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name. . x-constraint:. /components/schemas/Device.Rsvp/properties/name.
+        The names of RSVP-TE routers for which learned information is requested. An empty list will return results for all RSVP=TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name.
 
         Returns: List[str]
         """
@@ -193704,7 +198580,7 @@ class RsvpLspsStateRequest(OpenApiObject):
     def rsvp_router_names(self, value):
         """rsvp_router_names setter
 
-        The names of RSVP-TE routers for which learned information is requested. An empty list will return results for all RSVP=TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name. . x-constraint:. /components/schemas/Device.Rsvp/properties/name.
+        The names of RSVP-TE routers for which learned information is requested. An empty list will return results for all RSVP=TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name.
 
         value: List[str]
         """
@@ -193742,7 +198618,7 @@ class Dhcpv4InterfaceStateRequest(OpenApiObject):
         # type: () -> List[str]
         """dhcp_client_names getter
 
-        The names of DHCPv4 client to return results for. An empty list will return results for all DHCPv4 Client address information.. x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name.
+        The names of DHCPv4 client to return results for. An empty list will return results for all DHCPv4 Client address information.. x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name.
 
         Returns: List[str]
         """
@@ -193752,7 +198628,7 @@ class Dhcpv4InterfaceStateRequest(OpenApiObject):
     def dhcp_client_names(self, value):
         """dhcp_client_names setter
 
-        The names of DHCPv4 client to return results for. An empty list will return results for all DHCPv4 Client address information.. x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name.
+        The names of DHCPv4 client to return results for. An empty list will return results for all DHCPv4 Client address information.. x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name.
 
         value: List[str]
         """
@@ -193790,7 +198666,7 @@ class Dhcpv4LeaseStateRequest(OpenApiObject):
         # type: () -> List[str]
         """dhcp_server_names getter
 
-        The names of DHCPv4 server to return results for. An empty list will return results for all DHCPv4 servers.. x-constraint:. /components/schemas/Device.Dhcpv4server/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv4server/properties/name.
+        The names of DHCPv4 server to return results for. An empty list will return results for all DHCPv4 servers.. x-constraint:. /components/schemas/Device.Dhcpv4server/properties/name.
 
         Returns: List[str]
         """
@@ -193800,7 +198676,7 @@ class Dhcpv4LeaseStateRequest(OpenApiObject):
     def dhcp_server_names(self, value):
         """dhcp_server_names setter
 
-        The names of DHCPv4 server to return results for. An empty list will return results for all DHCPv4 servers.. x-constraint:. /components/schemas/Device.Dhcpv4server/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv4server/properties/name.
+        The names of DHCPv4 server to return results for. An empty list will return results for all DHCPv4 servers.. x-constraint:. /components/schemas/Device.Dhcpv4server/properties/name.
 
         value: List[str]
         """
@@ -193838,7 +198714,7 @@ class Dhcpv6InterfaceStateRequest(OpenApiObject):
         # type: () -> List[str]
         """dhcp_client_names getter
 
-        The names of DHCPv6 client to return results for. An empty list will return results for all DHCPv6 Client address information.. x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name.
+        The names of DHCPv6 client to return results for. An empty list will return results for all DHCPv6 Client address information.. x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name.
 
         Returns: List[str]
         """
@@ -193848,7 +198724,7 @@ class Dhcpv6InterfaceStateRequest(OpenApiObject):
     def dhcp_client_names(self, value):
         """dhcp_client_names setter
 
-        The names of DHCPv6 client to return results for. An empty list will return results for all DHCPv6 Client address information.. x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name.
+        The names of DHCPv6 client to return results for. An empty list will return results for all DHCPv6 Client address information.. x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name.
 
         value: List[str]
         """
@@ -193886,7 +198762,7 @@ class Dhcpv6LeaseStateRequest(OpenApiObject):
         # type: () -> List[str]
         """dhcp_server_names getter
 
-        The names of DHCPv6 server to return results for. An empty list will return results for all DHCPv6 servers.. x-constraint:. /components/schemas/Device.Dhcpv6server/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv6server/properties/name.
+        The names of DHCPv6 server to return results for. An empty list will return results for all DHCPv6 servers.. x-constraint:. /components/schemas/Device.Dhcpv6server/properties/name.
 
         Returns: List[str]
         """
@@ -193896,7 +198772,7 @@ class Dhcpv6LeaseStateRequest(OpenApiObject):
     def dhcp_server_names(self, value):
         """dhcp_server_names setter
 
-        The names of DHCPv6 server to return results for. An empty list will return results for all DHCPv6 servers.. x-constraint:. /components/schemas/Device.Dhcpv6server/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv6server/properties/name.
+        The names of DHCPv6 server to return results for. An empty list will return results for all DHCPv6 servers.. x-constraint:. /components/schemas/Device.Dhcpv6server/properties/name.
 
         value: List[str]
         """
@@ -193934,7 +198810,7 @@ class Ospfv2LsasStateRequest(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of OSPFv2 routers for which learned information is requested. An empty list will return results for all OSPFv2 routers.. x-constraint:. /components/schemas/Device.Ospfv2Router/properties/name. . x-constraint:. /components/schemas/Device.Ospfv2Router/properties/name.
+        The names of OSPFv2 routers for which learned information is requested. An empty list will return results for all OSPFv2 routers.. x-constraint:. /components/schemas/Device.Ospfv2Router/properties/name.
 
         Returns: List[str]
         """
@@ -193944,7 +198820,7 @@ class Ospfv2LsasStateRequest(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of OSPFv2 routers for which learned information is requested. An empty list will return results for all OSPFv2 routers.. x-constraint:. /components/schemas/Device.Ospfv2Router/properties/name. . x-constraint:. /components/schemas/Device.Ospfv2Router/properties/name.
+        The names of OSPFv2 routers for which learned information is requested. An empty list will return results for all OSPFv2 routers.. x-constraint:. /components/schemas/Device.Ospfv2Router/properties/name.
 
         value: List[str]
         """
@@ -193982,7 +198858,7 @@ class Ospfv3LsasStateRequest(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of OSPFv3 routers for which learned information is requested. An empty list will return results for all OSPFv3 routers.. x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name. . x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name.
+        The names of OSPFv3 routers for which learned information is requested. An empty list will return results for all OSPFv3 routers.. x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name.
 
         Returns: List[str]
         """
@@ -193992,7 +198868,7 @@ class Ospfv3LsasStateRequest(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of OSPFv3 routers for which learned information is requested. An empty list will return results for all OSPFv3 routers.. x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name. . x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name.
+        The names of OSPFv3 routers for which learned information is requested. An empty list will return results for all OSPFv3 routers.. x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name.
 
         value: List[str]
         """
@@ -194030,7 +198906,7 @@ class IsisIIHsStateRequest(OpenApiObject):
         # type: () -> List[str]
         """isis_router_names getter
 
-        The names of ISIS routers for which learned information is requested. An empty list will return results of IIH States for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS routers for which learned information is requested. An empty list will return results of IIH States for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         Returns: List[str]
         """
@@ -194040,7 +198916,7 @@ class IsisIIHsStateRequest(OpenApiObject):
     def isis_router_names(self, value):
         """isis_router_names setter
 
-        The names of ISIS routers for which learned information is requested. An empty list will return results of IIH States for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS routers for which learned information is requested. An empty list will return results of IIH States for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         value: List[str]
         """
@@ -194078,7 +198954,7 @@ class BmpServersStateRequest(OpenApiObject):
         # type: () -> List[str]
         """bmp_server_names getter
 
-        The names of the BMP Servers to return results for. An empty list will return results for all BMP Servers.. x-constraint:. /components/schemas/Device.Bmp.ServerV4/properties/name. /components/schemas/Device.Bmp.ServerV6/properties/name. . x-constraint:. /components/schemas/Device.Bmp.ServerV4/properties/name. /components/schemas/Device.Bmp.ServerV6/properties/name.
+        The names of the BMP Servers to return results for. An empty list will return results for all BMP Servers.. x-constraint:. /components/schemas/Device.Bmp.ServerV4/properties/name. /components/schemas/Device.Bmp.ServerV6/properties/name.
 
         Returns: List[str]
         """
@@ -194088,7 +198964,7 @@ class BmpServersStateRequest(OpenApiObject):
     def bmp_server_names(self, value):
         """bmp_server_names setter
 
-        The names of the BMP Servers to return results for. An empty list will return results for all BMP Servers.. x-constraint:. /components/schemas/Device.Bmp.ServerV4/properties/name. /components/schemas/Device.Bmp.ServerV6/properties/name. . x-constraint:. /components/schemas/Device.Bmp.ServerV4/properties/name. /components/schemas/Device.Bmp.ServerV6/properties/name.
+        The names of the BMP Servers to return results for. An empty list will return results for all BMP Servers.. x-constraint:. /components/schemas/Device.Bmp.ServerV4/properties/name. /components/schemas/Device.Bmp.ServerV6/properties/name.
 
         value: List[str]
         """
@@ -212409,7 +217285,7 @@ class CaptureRequest(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        The name of port capture is started on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port capture is started on.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -212419,7 +217295,7 @@ class CaptureRequest(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        The name of port capture is started on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port capture is started on.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """

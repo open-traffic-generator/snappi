@@ -275,9 +275,6 @@ type Neighborsv4StatesRequest interface {
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
-//
 // EthernetNames returns a []string
 func (obj *neighborsv4StatesRequest) EthernetNames() []string {
 	if obj.obj.EthernetNames == nil {
@@ -287,9 +284,6 @@ func (obj *neighborsv4StatesRequest) EthernetNames() []string {
 }
 
 // The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (ARP cache entries) for all available Ethernet interfaces.
-//
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name

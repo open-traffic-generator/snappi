@@ -310,9 +310,6 @@ type LagPort interface {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // PortName returns a string
 func (obj *lagPort) PortName() string {
 
@@ -321,9 +318,6 @@ func (obj *lagPort) PortName() string {
 }
 
 // The name of a port object that will be part of the LAG.
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name

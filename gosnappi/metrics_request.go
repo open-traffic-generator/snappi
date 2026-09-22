@@ -39,6 +39,7 @@ type metricsRequest struct {
 	rocev2FlowHolder         Rocev2FlowMetricsRequest
 	egressOnlyTrackingHolder EgressOnlyTrackingMetricsRequest
 	bmpServerHolder          BmpServerMetricsRequest
+	ultraEthernetHolder      UltraEthernetMetricsRequest
 }
 
 func NewMetricsRequest() MetricsRequest {
@@ -289,6 +290,7 @@ func (obj *metricsRequest) setNil() {
 	obj.rocev2FlowHolder = nil
 	obj.egressOnlyTrackingHolder = nil
 	obj.bmpServerHolder = nil
+	obj.ultraEthernetHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -508,6 +510,14 @@ type MetricsRequest interface {
 	SetBmpServer(value BmpServerMetricsRequest) MetricsRequest
 	// HasBmpServer checks if BmpServer has been set in MetricsRequest
 	HasBmpServer() bool
+	// UltraEthernet returns UltraEthernetMetricsRequest, set in MetricsRequest.
+	// UltraEthernetMetricsRequest is the request to retrieve Ultra Ethernet (UE) per port metrics/statistics covering the Link Layer Retry (LLR), Credit-based Flow Control (CBFC) and PHY Control Ordered Set (CtlOS) features.
+	UltraEthernet() UltraEthernetMetricsRequest
+	// SetUltraEthernet assigns UltraEthernetMetricsRequest provided by user to MetricsRequest.
+	// UltraEthernetMetricsRequest is the request to retrieve Ultra Ethernet (UE) per port metrics/statistics covering the Link Layer Retry (LLR), Credit-based Flow Control (CBFC) and PHY Control Ordered Set (CtlOS) features.
+	SetUltraEthernet(value UltraEthernetMetricsRequest) MetricsRequest
+	// HasUltraEthernet checks if UltraEthernet has been set in MetricsRequest
+	HasUltraEthernet() bool
 	setNil()
 }
 
@@ -538,6 +548,7 @@ var MetricsRequestChoice = struct {
 	ROCEV2_FLOW          MetricsRequestChoiceEnum
 	EGRESS_ONLY_TRACKING MetricsRequestChoiceEnum
 	BMP_SERVER           MetricsRequestChoiceEnum
+	ULTRA_ETHERNET       MetricsRequestChoiceEnum
 }{
 	PORT:                 MetricsRequestChoiceEnum("port"),
 	FLOW:                 MetricsRequestChoiceEnum("flow"),
@@ -562,6 +573,7 @@ var MetricsRequestChoice = struct {
 	ROCEV2_FLOW:          MetricsRequestChoiceEnum("rocev2_flow"),
 	EGRESS_ONLY_TRACKING: MetricsRequestChoiceEnum("egress_only_tracking"),
 	BMP_SERVER:           MetricsRequestChoiceEnum("bmp_server"),
+	ULTRA_ETHERNET:       MetricsRequestChoiceEnum("ultra_ethernet"),
 }
 
 func (obj *metricsRequest) Choice() MetricsRequestChoiceEnum {
@@ -583,6 +595,8 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 	}
 	enumValue := otg.MetricsRequest_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.UltraEthernet = nil
+	obj.ultraEthernetHolder = nil
 	obj.obj.BmpServer = nil
 	obj.bmpServerHolder = nil
 	obj.obj.EgressOnlyTracking = nil
@@ -720,6 +734,10 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 
 	if value == MetricsRequestChoice.BMP_SERVER {
 		obj.obj.BmpServer = NewBmpServerMetricsRequest().msg()
+	}
+
+	if value == MetricsRequestChoice.ULTRA_ETHERNET {
+		obj.obj.UltraEthernet = NewUltraEthernetMetricsRequest().msg()
 	}
 
 	return obj
@@ -1369,6 +1387,34 @@ func (obj *metricsRequest) SetBmpServer(value BmpServerMetricsRequest) MetricsRe
 	return obj
 }
 
+// description is TBD
+// UltraEthernet returns a UltraEthernetMetricsRequest
+func (obj *metricsRequest) UltraEthernet() UltraEthernetMetricsRequest {
+	if obj.obj.UltraEthernet == nil {
+		obj.setChoice(MetricsRequestChoice.ULTRA_ETHERNET)
+	}
+	if obj.ultraEthernetHolder == nil {
+		obj.ultraEthernetHolder = &ultraEthernetMetricsRequest{obj: obj.obj.UltraEthernet}
+	}
+	return obj.ultraEthernetHolder
+}
+
+// description is TBD
+// UltraEthernet returns a UltraEthernetMetricsRequest
+func (obj *metricsRequest) HasUltraEthernet() bool {
+	return obj.obj.UltraEthernet != nil
+}
+
+// description is TBD
+// SetUltraEthernet sets the UltraEthernetMetricsRequest value in the MetricsRequest object
+func (obj *metricsRequest) SetUltraEthernet(value UltraEthernetMetricsRequest) MetricsRequest {
+	obj.setChoice(MetricsRequestChoice.ULTRA_ETHERNET)
+	obj.ultraEthernetHolder = nil
+	obj.obj.UltraEthernet = value.msg()
+
+	return obj
+}
+
 func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1487,6 +1533,11 @@ func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.BmpServer != nil {
 
 		obj.BmpServer().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.UltraEthernet != nil {
+
+		obj.UltraEthernet().validateObj(vObj, set_default)
 	}
 
 }
@@ -1608,6 +1659,11 @@ func (obj *metricsRequest) setDefault() {
 	if obj.obj.BmpServer != nil {
 		choices_set += 1
 		choice = MetricsRequestChoice.BMP_SERVER
+	}
+
+	if obj.obj.UltraEthernet != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.ULTRA_ETHERNET
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

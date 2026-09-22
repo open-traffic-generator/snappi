@@ -279,9 +279,6 @@ type MkaMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Mka/properties/name
 //
-// x-constraint:
-// - /components/schemas/Mka/properties/name
-//
 // PeerNames returns a []string
 func (obj *mkaMetricsRequest) PeerNames() []string {
 	if obj.obj.PeerNames == nil {
@@ -291,9 +288,6 @@ func (obj *mkaMetricsRequest) PeerNames() []string {
 }
 
 // The names of peers to return results for. An empty list will return results for all peers.
-//
-// x-constraint:
-// - /components/schemas/Mka/properties/name
 //
 // x-constraint:
 // - /components/schemas/Mka/properties/name

@@ -13,12 +13,13 @@ import (
 // ***** ControlState *****
 type controlState struct {
 	validation
-	obj            *otg.ControlState
-	marshaller     marshalControlState
-	unMarshaller   unMarshalControlState
-	portHolder     StatePort
-	protocolHolder StateProtocol
-	trafficHolder  StateTraffic
+	obj                 *otg.ControlState
+	marshaller          marshalControlState
+	unMarshaller        unMarshalControlState
+	portHolder          StatePort
+	protocolHolder      StateProtocol
+	trafficHolder       StateTraffic
+	ultraEthernetHolder StateUltraEthernet
 }
 
 func NewControlState() ControlState {
@@ -249,6 +250,7 @@ func (obj *controlState) setNil() {
 	obj.portHolder = nil
 	obj.protocolHolder = nil
 	obj.trafficHolder = nil
+	obj.ultraEthernetHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -304,6 +306,14 @@ type ControlState interface {
 	SetTraffic(value StateTraffic) ControlState
 	// HasTraffic checks if Traffic has been set in ControlState
 	HasTraffic() bool
+	// UltraEthernet returns StateUltraEthernet, set in ControlState.
+	// StateUltraEthernet is states associated with Ultra Ethernet link layer features on configured resources.
+	UltraEthernet() StateUltraEthernet
+	// SetUltraEthernet assigns StateUltraEthernet provided by user to ControlState.
+	// StateUltraEthernet is states associated with Ultra Ethernet link layer features on configured resources.
+	SetUltraEthernet(value StateUltraEthernet) ControlState
+	// HasUltraEthernet checks if UltraEthernet has been set in ControlState
+	HasUltraEthernet() bool
 	setNil()
 }
 
@@ -311,13 +321,15 @@ type ControlStateChoiceEnum string
 
 // Enum of Choice on ControlState
 var ControlStateChoice = struct {
-	PORT     ControlStateChoiceEnum
-	PROTOCOL ControlStateChoiceEnum
-	TRAFFIC  ControlStateChoiceEnum
+	PORT           ControlStateChoiceEnum
+	PROTOCOL       ControlStateChoiceEnum
+	TRAFFIC        ControlStateChoiceEnum
+	ULTRA_ETHERNET ControlStateChoiceEnum
 }{
-	PORT:     ControlStateChoiceEnum("port"),
-	PROTOCOL: ControlStateChoiceEnum("protocol"),
-	TRAFFIC:  ControlStateChoiceEnum("traffic"),
+	PORT:           ControlStateChoiceEnum("port"),
+	PROTOCOL:       ControlStateChoiceEnum("protocol"),
+	TRAFFIC:        ControlStateChoiceEnum("traffic"),
+	ULTRA_ETHERNET: ControlStateChoiceEnum("ultra_ethernet"),
 }
 
 func (obj *controlState) Choice() ControlStateChoiceEnum {
@@ -333,6 +345,8 @@ func (obj *controlState) setChoice(value ControlStateChoiceEnum) ControlState {
 	}
 	enumValue := otg.ControlState_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.UltraEthernet = nil
+	obj.ultraEthernetHolder = nil
 	obj.obj.Traffic = nil
 	obj.trafficHolder = nil
 	obj.obj.Protocol = nil
@@ -350,6 +364,10 @@ func (obj *controlState) setChoice(value ControlStateChoiceEnum) ControlState {
 
 	if value == ControlStateChoice.TRAFFIC {
 		obj.obj.Traffic = NewStateTraffic().msg()
+	}
+
+	if value == ControlStateChoice.ULTRA_ETHERNET {
+		obj.obj.UltraEthernet = NewStateUltraEthernet().msg()
 	}
 
 	return obj
@@ -439,6 +457,34 @@ func (obj *controlState) SetTraffic(value StateTraffic) ControlState {
 	return obj
 }
 
+// description is TBD
+// UltraEthernet returns a StateUltraEthernet
+func (obj *controlState) UltraEthernet() StateUltraEthernet {
+	if obj.obj.UltraEthernet == nil {
+		obj.setChoice(ControlStateChoice.ULTRA_ETHERNET)
+	}
+	if obj.ultraEthernetHolder == nil {
+		obj.ultraEthernetHolder = &stateUltraEthernet{obj: obj.obj.UltraEthernet}
+	}
+	return obj.ultraEthernetHolder
+}
+
+// description is TBD
+// UltraEthernet returns a StateUltraEthernet
+func (obj *controlState) HasUltraEthernet() bool {
+	return obj.obj.UltraEthernet != nil
+}
+
+// description is TBD
+// SetUltraEthernet sets the StateUltraEthernet value in the ControlState object
+func (obj *controlState) SetUltraEthernet(value StateUltraEthernet) ControlState {
+	obj.setChoice(ControlStateChoice.ULTRA_ETHERNET)
+	obj.ultraEthernetHolder = nil
+	obj.obj.UltraEthernet = value.msg()
+
+	return obj
+}
+
 func (obj *controlState) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -464,6 +510,11 @@ func (obj *controlState) validateObj(vObj *validation, set_default bool) {
 		obj.Traffic().validateObj(vObj, set_default)
 	}
 
+	if obj.obj.UltraEthernet != nil {
+
+		obj.UltraEthernet().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *controlState) setDefault() {
@@ -483,6 +534,11 @@ func (obj *controlState) setDefault() {
 	if obj.obj.Traffic != nil {
 		choices_set += 1
 		choice = ControlStateChoice.TRAFFIC
+	}
+
+	if obj.obj.UltraEthernet != nil {
+		choices_set += 1
+		choice = ControlStateChoice.ULTRA_ETHERNET
 	}
 	if choices_set == 1 && choice != "" {
 		if obj.obj.Choice != nil {

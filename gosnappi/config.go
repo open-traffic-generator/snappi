@@ -27,6 +27,7 @@ type config struct {
 	lldpHolder               ConfigLldpIter
 	statefulFlowsHolder      StatefulFlow
 	egressOnlyTrackingHolder ConfigEgressOnlyTrackingIter
+	ultraEthernetHolder      ConfigUltraEthernetIter
 }
 
 func NewConfig() Config {
@@ -265,6 +266,7 @@ func (obj *config) setNil() {
 	obj.lldpHolder = nil
 	obj.statefulFlowsHolder = nil
 	obj.egressOnlyTrackingHolder = nil
+	obj.ultraEthernetHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -336,6 +338,8 @@ type Config interface {
 	HasStatefulFlows() bool
 	// EgressOnlyTracking returns ConfigEgressOnlyTrackingIterIter, set in Config
 	EgressOnlyTracking() ConfigEgressOnlyTrackingIter
+	// UltraEthernet returns ConfigUltraEthernetIterIter, set in Config
+	UltraEthernet() ConfigUltraEthernetIter
 	setNil()
 }
 
@@ -1126,6 +1130,95 @@ func (obj *configEgressOnlyTrackingIter) appendHolderSlice(item EgressOnlyTracki
 	return obj
 }
 
+// The Ultra Ethernet (UE) link layer settings that will be configured on the
+// traffic generator. Since these settings usually vary across a variety of
+// test ports, these most likely won't be portable.
+// UltraEthernet returns a []UltraEthernet
+func (obj *config) UltraEthernet() ConfigUltraEthernetIter {
+	if len(obj.obj.UltraEthernet) == 0 {
+		obj.obj.UltraEthernet = []*otg.UltraEthernet{}
+	}
+	if obj.ultraEthernetHolder == nil {
+		obj.ultraEthernetHolder = newConfigUltraEthernetIter(&obj.obj.UltraEthernet).setMsg(obj)
+	}
+	return obj.ultraEthernetHolder
+}
+
+type configUltraEthernetIter struct {
+	obj                *config
+	ultraEthernetSlice []UltraEthernet
+	fieldPtr           *[]*otg.UltraEthernet
+}
+
+func newConfigUltraEthernetIter(ptr *[]*otg.UltraEthernet) ConfigUltraEthernetIter {
+	return &configUltraEthernetIter{fieldPtr: ptr}
+}
+
+type ConfigUltraEthernetIter interface {
+	setMsg(*config) ConfigUltraEthernetIter
+	Items() []UltraEthernet
+	Add() UltraEthernet
+	Append(items ...UltraEthernet) ConfigUltraEthernetIter
+	Set(index int, newObj UltraEthernet) ConfigUltraEthernetIter
+	Clear() ConfigUltraEthernetIter
+	clearHolderSlice() ConfigUltraEthernetIter
+	appendHolderSlice(item UltraEthernet) ConfigUltraEthernetIter
+}
+
+func (obj *configUltraEthernetIter) setMsg(msg *config) ConfigUltraEthernetIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&ultraEthernet{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *configUltraEthernetIter) Items() []UltraEthernet {
+	return obj.ultraEthernetSlice
+}
+
+func (obj *configUltraEthernetIter) Add() UltraEthernet {
+	newObj := &otg.UltraEthernet{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &ultraEthernet{obj: newObj}
+	newLibObj.setDefault()
+	obj.ultraEthernetSlice = append(obj.ultraEthernetSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *configUltraEthernetIter) Append(items ...UltraEthernet) ConfigUltraEthernetIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.ultraEthernetSlice = append(obj.ultraEthernetSlice, item)
+	}
+	return obj
+}
+
+func (obj *configUltraEthernetIter) Set(index int, newObj UltraEthernet) ConfigUltraEthernetIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.ultraEthernetSlice[index] = newObj
+	return obj
+}
+func (obj *configUltraEthernetIter) Clear() ConfigUltraEthernetIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.UltraEthernet{}
+		obj.ultraEthernetSlice = []UltraEthernet{}
+	}
+	return obj
+}
+func (obj *configUltraEthernetIter) clearHolderSlice() ConfigUltraEthernetIter {
+	if len(obj.ultraEthernetSlice) > 0 {
+		obj.ultraEthernetSlice = []UltraEthernet{}
+	}
+	return obj
+}
+func (obj *configUltraEthernetIter) appendHolderSlice(item UltraEthernet) ConfigUltraEthernetIter {
+	obj.ultraEthernetSlice = append(obj.ultraEthernetSlice, item)
+	return obj
+}
+
 func (obj *config) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1253,6 +1346,20 @@ func (obj *config) validateObj(vObj *validation, set_default bool) {
 			}
 		}
 		for _, item := range obj.EgressOnlyTracking().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
+	if len(obj.obj.UltraEthernet) != 0 {
+
+		if set_default {
+			obj.UltraEthernet().clearHolderSlice()
+			for _, item := range obj.obj.UltraEthernet {
+				obj.UltraEthernet().appendHolderSlice(&ultraEthernet{obj: item})
+			}
+		}
+		for _, item := range obj.UltraEthernet().Items() {
 			item.validateObj(vObj, set_default)
 		}
 

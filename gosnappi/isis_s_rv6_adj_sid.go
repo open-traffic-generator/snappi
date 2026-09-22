@@ -378,9 +378,6 @@ func (obj *isisSRv6AdjSid) SetLocator(value IsisSRv6AdjSidLocatorEnum) IsisSRv6A
 // x-constraint:
 // - /components/schemas/IsisSRv6.Locator/properties/locator_name
 //
-// x-constraint:
-// - /components/schemas/IsisSRv6.Locator/properties/locator_name
-//
 // CustomLocatorReference returns a string
 func (obj *isisSRv6AdjSid) CustomLocatorReference() string {
 
@@ -393,18 +390,12 @@ func (obj *isisSRv6AdjSid) CustomLocatorReference() string {
 // x-constraint:
 // - /components/schemas/IsisSRv6.Locator/properties/locator_name
 //
-// x-constraint:
-// - /components/schemas/IsisSRv6.Locator/properties/locator_name
-//
 // CustomLocatorReference returns a string
 func (obj *isisSRv6AdjSid) HasCustomLocatorReference() bool {
 	return obj.obj.CustomLocatorReference != nil
 }
 
 // Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of a locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".
-//
-// x-constraint:
-// - /components/schemas/IsisSRv6.Locator/properties/locator_name
 //
 // x-constraint:
 // - /components/schemas/IsisSRv6.Locator/properties/locator_name

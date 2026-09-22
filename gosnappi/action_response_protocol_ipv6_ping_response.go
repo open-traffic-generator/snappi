@@ -284,10 +284,6 @@ type ActionResponseProtocolIpv6PingResponse interface {
 // - /components/schemas/Device.Ipv6/properties/name
 // - /components/schemas/Device.Ipv6Loopback/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Device.Ipv6Loopback/properties/name
-//
 // SrcName returns a string
 func (obj *actionResponseProtocolIpv6PingResponse) SrcName() string {
 
@@ -296,10 +292,6 @@ func (obj *actionResponseProtocolIpv6PingResponse) SrcName() string {
 }
 
 // Name of source IPv6 interface used for ping.
-//
-// x-constraint:
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Device.Ipv6Loopback/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv6/properties/name
