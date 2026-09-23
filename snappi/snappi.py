@@ -166860,7 +166860,6 @@ class FlowsUpdate(OpenApiObject):
         "property_names": {
             "type": list,
             "enum": [
-                "packet",
                 "rate",
                 "size",
             ],
@@ -166873,7 +166872,6 @@ class FlowsUpdate(OpenApiObject):
 
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
-    PACKET = "packet"  # type: str
     RATE = "rate"  # type: str
     SIZE = "size"  # type: str
 
@@ -166891,12 +166889,12 @@ class FlowsUpdate(OpenApiObject):
 
     @property
     def property_names(self):
-        # type: () -> List[Union[Literal["packet"], Literal["rate"], Literal["size"]]]
+        # type: () -> List[Union[Literal["rate"], Literal["size"]]]
         """property_names getter
 
-        Flow properties to be updated without affecting the transmit state. rate and size are OTF on every implementation. packet (a header field value, e.g. an Mpls label) is implementation-specific: it is OTF only for header fields the implementation is able to update without disrupting the running transmit. For field that does not support this, the implementation should fall back to the same warn-and-reapply behavior that Protocols.Update uses for session that cannot be updated purely on-the-fly.
+        Flow properties to be updated without affecting the transmit state.
 
-        Returns: List[Union[Literal["packet"], Literal["rate"], Literal["size"]]]
+        Returns: List[Union[Literal["rate"], Literal["size"]]]
         """
         return self._get_property("property_names")
 
@@ -166904,9 +166902,9 @@ class FlowsUpdate(OpenApiObject):
     def property_names(self, value):
         """property_names setter
 
-        Flow properties to be updated without affecting the transmit state. rate and size are OTF on every implementation. packet (a header field value, e.g. an Mpls label) is implementation-specific: it is OTF only for header fields the implementation is able to update without disrupting the running transmit. For field that does not support this, the implementation should fall back to the same warn-and-reapply behavior that Protocols.Update uses for session that cannot be updated purely on-the-fly.
+        Flow properties to be updated without affecting the transmit state.
 
-        value: List[Union[Literal["packet"], Literal["rate"], Literal["size"]]]
+        value: List[Union[Literal["rate"], Literal["size"]]]
         """
         if value is None:
             raise TypeError("Cannot set required property property_names as None")

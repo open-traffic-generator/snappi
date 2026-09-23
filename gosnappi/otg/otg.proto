@@ -15746,15 +15746,9 @@ message FlowsUpdate {
       unspecified = 0;
       rate = 1;
       size = 2;
-      packet = 3;
     }
   }
-  // Flow properties to be updated without affecting the transmit state. rate and size
-  // are OTF on every implementation. packet (a header field value, e.g. an Mpls label)
-  // is implementation-specific: it is OTF only for header fields the implementation is
-  // able to update without disrupting the running transmit. For a field that does not
-  // support this, the implementation should fall back to the same warn-and-reapply behavior
-  // that Protocols.Update uses for a session that cannot be updated purely on-the-fly.
+  // Flow properties to be updated without affecting the transmit state.
   repeated PropertyNames.Enum property_names = 1;
 
   // The list of configured flows for which the given property will be updated.

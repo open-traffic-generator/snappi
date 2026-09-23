@@ -285,13 +285,11 @@ type FlowsUpdatePropertyNamesEnum string
 
 // Enum of PropertyNames on FlowsUpdate
 var FlowsUpdatePropertyNames = struct {
-	RATE   FlowsUpdatePropertyNamesEnum
-	SIZE   FlowsUpdatePropertyNamesEnum
-	PACKET FlowsUpdatePropertyNamesEnum
+	RATE FlowsUpdatePropertyNamesEnum
+	SIZE FlowsUpdatePropertyNamesEnum
 }{
-	RATE:   FlowsUpdatePropertyNamesEnum("rate"),
-	SIZE:   FlowsUpdatePropertyNamesEnum("size"),
-	PACKET: FlowsUpdatePropertyNamesEnum("packet"),
+	RATE: FlowsUpdatePropertyNamesEnum("rate"),
+	SIZE: FlowsUpdatePropertyNamesEnum("size"),
 }
 
 func (obj *flowsUpdate) PropertyNames() []FlowsUpdatePropertyNamesEnum {
@@ -302,7 +300,7 @@ func (obj *flowsUpdate) PropertyNames() []FlowsUpdatePropertyNamesEnum {
 	return items
 }
 
-// Flow properties to be updated without affecting the transmit state. rate and size are OTF on every implementation. packet (a header field value, e.g. an Mpls label) is implementation-specific: it is OTF only for header fields the implementation is able to update without disrupting the running transmit. For a field that does not support this, the implementation should fall back to the same warn-and-reapply behavior that Protocols.Update uses for a session that cannot be updated purely on-the-fly.
+// Flow properties to be updated without affecting the transmit state.
 // SetPropertyNames sets the []string value in the FlowsUpdate object
 func (obj *flowsUpdate) SetPropertyNames(value []FlowsUpdatePropertyNamesEnum) FlowsUpdate {
 

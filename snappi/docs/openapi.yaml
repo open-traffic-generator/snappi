@@ -20403,7 +20403,7 @@ components:
       properties:
         property_names:
           description: |-
-            Flow properties to be updated without affecting the transmit state. rate and size are OTF on every implementation. packet (a header field value, e.g. an Mpls label) is implementation-specific: it is OTF only for header fields the implementation is able to update without disrupting the running transmit. For a field that does not support this, the implementation should fall back to the same warn-and-reapply behavior that Protocols.Update uses for a session that cannot be updated purely on-the-fly.
+            Flow properties to be updated without affecting the transmit state.
           type: array
           items:
             type: string
@@ -20412,12 +20412,9 @@ components:
                 x-field-uid: 1
               size:
                 x-field-uid: 2
-              packet:
-                x-field-uid: 3
             enum:
             - rate
             - size
-            - packet
           x-field-uid: 1
         flows:
           description: |-
