@@ -37786,14 +37786,13 @@ class BgpL3vpnVrf(OpenApiObject):
 
     _TYPES = {
         "name": {"type": str},
-        "route_distinguisher": {"type": "BgpRouteDistinguisher"},
         "route_target_export": {"type": "BgpRouteTargetIter"},
         "route_target_import": {"type": "BgpRouteTargetIter"},
-        "v4_routes": {"type": "BgpV4RouteRangeIter"},
+        "v4_routes": {"type": "BgpL3vpnV4RouteRangeIter"},
         "v6_routes": {"type": "BgpL3vpnV6RouteRangeIter"},
     }  # type: Dict[str, str]
 
-    _REQUIRED = ("name", "route_distinguisher")  # type: tuple(str)
+    _REQUIRED = ("name",)  # type: tuple(str)
 
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
@@ -37833,17 +37832,6 @@ class BgpL3vpnVrf(OpenApiObject):
         self._set_property("name", value)
 
     @property
-    def route_distinguisher(self):
-        # type: () -> BgpRouteDistinguisher
-        """route_distinguisher getter
-
-        BGP Route Distinguisher.BGP Route Distinguisher.BGP Route Distinguisher.The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv4 prefix advertised from this VRF's v4_routes, forming the VPN-IPv4 NLRI. All routes in this VRF share the same RD.
-
-        Returns: BgpRouteDistinguisher
-        """
-        return self._get_property("route_distinguisher", BgpRouteDistinguisher)
-
-    @property
     def route_target_export(self):
         # type: () -> BgpRouteTargetIter
         """route_target_export getter
@@ -37871,15 +37859,15 @@ class BgpL3vpnVrf(OpenApiObject):
 
     @property
     def v4_routes(self):
-        # type: () -> BgpV4RouteRangeIter
+        # type: () -> BgpL3vpnV4RouteRangeIter
         """v4_routes getter
 
-        Emulated IPv4 customer route ranges belonging to this VRF. Each is advertised as VPN-IPv4 NLRI using this VRF's route_distinguisher and route_target_export.
+        Emulated IPv4 customer route ranges belonging to this VRF. Each is advertised as VPN-IPv4 NLRI using its own route_distinguisher and this VRF's route_target_export.
 
-        Returns: BgpV4RouteRangeIter
+        Returns: BgpL3vpnV4RouteRangeIter
         """
         return self._get_property(
-            "v4_routes", BgpV4RouteRangeIter, self._parent, self._choice
+            "v4_routes", BgpL3vpnV4RouteRangeIter, self._parent, self._choice
         )
 
     @property
@@ -37887,13 +37875,381 @@ class BgpL3vpnVrf(OpenApiObject):
         # type: () -> BgpL3vpnV6RouteRangeIter
         """v6_routes getter
 
-        Emulated IPv6 customer route ranges belonging to this VRF (6VPE, RFC 4659). Each is advertised as VPN-IPv6 NLRI using this VRF's route_distinguisher and route_target_export. Each route range's dataplane binding is selected via its own service_binding, currently VPN MPLS label (RFC 4364 Section 3); the choice structure keeps room for an additional binding (for example an SRv6 Service SID, RFC 9252) to be added later without breaking change.
+        Emulated IPv6 customer route ranges belonging to this VRF (6VPE, RFC 4659). Each is advertised as VPN-IPv6 NLRI using its own route_distinguisher and this VRF's route_target_export. Each route range's dataplane binding is selected via its own service_binding, currently VPN MPLS label (RFC 4364 Section 3); the choice structure keeps room for an additional binding (for example an SRv6 Service SID, RFC 9252) to be added later without breaking change.
 
         Returns: BgpL3vpnV6RouteRangeIter
         """
         return self._get_property(
             "v6_routes", BgpL3vpnV6RouteRangeIter, self._parent, self._choice
         )
+
+
+class BgpL3vpnV4RouteRange(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "addresses": {"type": "V4RouteAddressIter"},
+        "next_hop_mode": {
+            "type": str,
+            "enum": [
+                "local_ip",
+                "manual",
+            ],
+        },
+        "next_hop_address_type": {
+            "type": str,
+            "enum": [
+                "ipv4",
+                "ipv6",
+            ],
+        },
+        "next_hop_ipv4_address": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "next_hop_ipv6_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "advanced": {"type": "BgpRouteAdvanced"},
+        "communities": {"type": "BgpCommunityIter"},
+        "as_path": {"type": "BgpAsPath"},
+        "add_path": {"type": "BgpAddPath"},
+        "name": {"type": str},
+        "extended_communities": {"type": "BgpExtendedCommunityIter"},
+        "mpls_labels": {"type": "BgpMplsLabelBindings"},
+        "route_distinguisher": {"type": "BgpRouteDistinguisher"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("name", "route_distinguisher")  # type: tuple(str)
+
+    _DEFAULTS = {
+        "next_hop_mode": "local_ip",
+        "next_hop_address_type": "ipv4",
+        "next_hop_ipv4_address": "0.0.0.0",
+        "next_hop_ipv6_address": "::0",
+    }  # type: Dict[str, Union(type)]
+
+    LOCAL_IP = "local_ip"  # type: str
+    MANUAL = "manual"  # type: str
+
+    IPV4 = "ipv4"  # type: str
+    IPV6 = "ipv6"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        next_hop_mode="local_ip",
+        next_hop_address_type="ipv4",
+        next_hop_ipv4_address="0.0.0.0",
+        next_hop_ipv6_address="::0",
+        name=None,
+    ):
+        super(BgpL3vpnV4RouteRange, self).__init__()
+        self._parent = parent
+        self._set_property("next_hop_mode", next_hop_mode)
+        self._set_property("next_hop_address_type", next_hop_address_type)
+        self._set_property("next_hop_ipv4_address", next_hop_ipv4_address)
+        self._set_property("next_hop_ipv6_address", next_hop_ipv6_address)
+        self._set_property("name", name)
+
+    def set(
+        self,
+        next_hop_mode=None,
+        next_hop_address_type=None,
+        next_hop_ipv4_address=None,
+        next_hop_ipv6_address=None,
+        name=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def addresses(self):
+        # type: () -> V4RouteAddressIter
+        """addresses getter
+
+        A list of group of IPv4 route addresses.
+
+        Returns: V4RouteAddressIter
+        """
+        return self._get_property(
+            "addresses", V4RouteAddressIter, self._parent, self._choice
+        )
+
+    @property
+    def next_hop_mode(self):
+        # type: () -> Union[Literal["local_ip"], Literal["manual"]]
+        """next_hop_mode getter
+
+        Specify the NextHop in MP REACH NLRI. The mode for setting the IP address of the NextHop in the MP REACH NLRI can be one of the following:. Local IP: Automatically fills the Nexthop with the Local IP of the BGP. peer.. If BGP peer is of type IPv6, Nexthop Encoding capability should be enabled.. Manual: Override the Nexthop with any arbitrary IPv4/IPv6 address.
+
+        Returns: Union[Literal["local_ip"], Literal["manual"]]
+        """
+        return self._get_property("next_hop_mode")
+
+    @next_hop_mode.setter
+    def next_hop_mode(self, value):
+        """next_hop_mode setter
+
+        Specify the NextHop in MP REACH NLRI. The mode for setting the IP address of the NextHop in the MP REACH NLRI can be one of the following:. Local IP: Automatically fills the Nexthop with the Local IP of the BGP. peer.. If BGP peer is of type IPv6, Nexthop Encoding capability should be enabled.. Manual: Override the Nexthop with any arbitrary IPv4/IPv6 address.
+
+        value: Union[Literal["local_ip"], Literal["manual"]]
+        """
+        self._set_property("next_hop_mode", value)
+
+    @property
+    def next_hop_address_type(self):
+        # type: () -> Union[Literal["ipv4"], Literal["ipv6"]]
+        """next_hop_address_type getter
+
+        If the Nexthop Mode is Manual, it sets the type of the NextHop IP address.
+
+        Returns: Union[Literal["ipv4"], Literal["ipv6"]]
+        """
+        return self._get_property("next_hop_address_type")
+
+    @next_hop_address_type.setter
+    def next_hop_address_type(self, value):
+        """next_hop_address_type setter
+
+        If the Nexthop Mode is Manual, it sets the type of the NextHop IP address.
+
+        value: Union[Literal["ipv4"], Literal["ipv6"]]
+        """
+        self._set_property("next_hop_address_type", value)
+
+    @property
+    def next_hop_ipv4_address(self):
+        # type: () -> str
+        """next_hop_ipv4_address getter
+
+        The IPv4 address of the next hop if the Nexthop Mode is manual and the Nexthop type is IPv4. If BGP peer is of type IPv6, Nexthop Encoding capability should be enabled.
+
+        Returns: str
+        """
+        return self._get_property("next_hop_ipv4_address")
+
+    @next_hop_ipv4_address.setter
+    def next_hop_ipv4_address(self, value):
+        """next_hop_ipv4_address setter
+
+        The IPv4 address of the next hop if the Nexthop Mode is manual and the Nexthop type is IPv4. If BGP peer is of type IPv6, Nexthop Encoding capability should be enabled.
+
+        value: str
+        """
+        self._set_property("next_hop_ipv4_address", value)
+
+    @property
+    def next_hop_ipv6_address(self):
+        # type: () -> str
+        """next_hop_ipv6_address getter
+
+        The IPv6 address of the next hop if the Nexthop Mode is manual and the Nexthop type is IPv6.
+
+        Returns: str
+        """
+        return self._get_property("next_hop_ipv6_address")
+
+    @next_hop_ipv6_address.setter
+    def next_hop_ipv6_address(self, value):
+        """next_hop_ipv6_address setter
+
+        The IPv6 address of the next hop if the Nexthop Mode is manual and the Nexthop type is IPv6.
+
+        value: str
+        """
+        self._set_property("next_hop_ipv6_address", value)
+
+    @property
+    def advanced(self):
+        # type: () -> BgpRouteAdvanced
+        """advanced getter
+
+        Configuration for advanced BGP route range settings.Configuration for advanced BGP route range settings.Configuration for advanced BGP route range settings.
+
+        Returns: BgpRouteAdvanced
+        """
+        return self._get_property("advanced", BgpRouteAdvanced)
+
+    @property
+    def communities(self):
+        # type: () -> BgpCommunityIter
+        """communities getter
+
+        Optional community settings.
+
+        Returns: BgpCommunityIter
+        """
+        return self._get_property(
+            "communities", BgpCommunityIter, self._parent, self._choice
+        )
+
+    @property
+    def as_path(self):
+        # type: () -> BgpAsPath
+        """as_path getter
+
+        This attribute identifies the autonomous systems through which routing information carried in this UPDATE message has passed. This contains the configuration of how to include the Local AS in the AS path attribute of the MP REACH NLRI. It also contains optional configuration of additional AS Path Segments that can be included in the AS Path attribute. The AS Path consists of Set or Sequence of Autonomous Systems (AS) numbers that routing information passes through to reach the destination.This attribute identifies the autonomous systems through which routing information carried in this UPDATE message has passed. This contains the configuration of how to include the Local AS in the AS path attribute of the MP REACH NLRI. It also contains optional configuration of additional AS Path Segments that can be included in the AS Path attribute. The AS Path consists of Set or Sequence of Autonomous Systems (AS) numbers that routing information passes through to reach the destination.This attribute identifies the autonomous systems through which routing information carried in this UPDATE message has passed. This contains the configuration of how to include the Local AS in the AS path attribute of the MP REACH NLRI. It also contains optional configuration of additional AS Path Segments that can be included in the AS Path attribute. The AS Path consists of Set or Sequence of Autonomous Systems (AS) numbers that routing information passes through to reach the destination.
+
+        Returns: BgpAsPath
+        """
+        return self._get_property("as_path", BgpAsPath)
+
+    @property
+    def add_path(self):
+        # type: () -> BgpAddPath
+        """add_path getter
+
+        The BGP Additional Paths feature is BGP extension that allows the advertisement of multiple paths for the same prefix without the new paths implicitly replacing any previous paths.The BGP Additional Paths feature is BGP extension that allows the advertisement of multiple paths for the same prefix without the new paths implicitly replacing any previous paths.The BGP Additional Paths feature is BGP extension that allows the advertisement of multiple paths for the same prefix without the new paths implicitly replacing any previous paths.
+
+        Returns: BgpAddPath
+        """
+        return self._get_property("add_path", BgpAddPath)
+
+    @property
+    def name(self):
+        # type: () -> str
+        """name getter
+
+        Globally unique name of an object. It also serves as the primary key for arrays of objects.
+
+        Returns: str
+        """
+        return self._get_property("name")
+
+    @name.setter
+    def name(self, value):
+        """name setter
+
+        Globally unique name of an object. It also serves as the primary key for arrays of objects.
+
+        value: str
+        """
+        if value is None:
+            raise TypeError("Cannot set required property name as None")
+        self._set_property("name", value)
+
+    @property
+    def extended_communities(self):
+        # type: () -> BgpExtendedCommunityIter
+        """extended_communities getter
+
+        Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an eight byte value. It is divided into two main parts. The first two bytes of the community encode type and sub-type fields and the last six bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities.
+
+        Returns: BgpExtendedCommunityIter
+        """
+        return self._get_property(
+            "extended_communities", BgpExtendedCommunityIter, self._parent, self._choice
+        )
+
+    @property
+    def mpls_labels(self):
+        # type: () -> BgpMplsLabelBindings
+        """mpls_labels getter
+
+        BGP may be used to advertise that particular node (N) has bound particular MPLS label, or particular sequence of MPLS labels, to particular address prefix.. This is done by sending Multiprotocol BGP UPDATE message with with an MP_REACH_NLRI attribute. The Network Address of Next Hop field of that attribute contains an IP address of node N.. References: https://datatracker.ietf.org/doc/html/rfc3107 & https://datatracker.ietf.org/doc/html/rfc8277.BGP may be used to advertise that particular node (N) has bound particular MPLS label, or particular sequence of MPLS labels, to particular address prefix.. This is done by sending Multiprotocol BGP UPDATE message with with an MP_REACH_NLRI attribute. The Network Address of Next Hop field of that attribute contains an IP address of node N.. References: https://datatracker.ietf.org/doc/html/rfc3107 & https://datatracker.ietf.org/doc/html/rfc8277.BGP may be used to advertise that particular node (N) has bound particular MPLS label, or particular sequence of MPLS labels, to particular address prefix.. This is done by sending Multiprotocol BGP UPDATE message with with an MP_REACH_NLRI attribute. The Network Address of Next Hop field of that attribute contains an IP address of node N.. References: https://datatracker.ietf.org/doc/html/rfc3107 & https://datatracker.ietf.org/doc/html/rfc8277.Optional configuration for BGP speaker to Bind an Address Prefix to One or More MPLS Labels.
+
+        Returns: BgpMplsLabelBindings
+        """
+        return self._get_property("mpls_labels", BgpMplsLabelBindings)
+
+    @property
+    def route_distinguisher(self):
+        # type: () -> BgpRouteDistinguisher
+        """route_distinguisher getter
+
+        BGP Route Distinguisher.BGP Route Distinguisher.BGP Route Distinguisher.The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv4 prefix in this route range, forming the VPN-IPv4 NLRI (AFI 1, SAFI 128). Carried per route range to mirror the IxNetwork RESTpy BgpL3VpnRouteProperty Distinguisher* attributes and RFC 4364's per-NLRI RD semantics; route ranges in the same VRF may use different RDs.
+
+        Returns: BgpRouteDistinguisher
+        """
+        return self._get_property("route_distinguisher", BgpRouteDistinguisher)
+
+
+class BgpL3vpnV4RouteRangeIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpL3vpnV4RouteRangeIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpL3vpnV4RouteRange]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpL3vpnV4RouteRangeIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpL3vpnV4RouteRange
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpL3vpnV4RouteRange
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpL3vpnV4RouteRange):
+            raise Exception("Item is not an instance of BgpL3vpnV4RouteRange")
+
+    def v4routerange(
+        self,
+        next_hop_mode="local_ip",
+        next_hop_address_type="ipv4",
+        next_hop_ipv4_address="0.0.0.0",
+        next_hop_ipv6_address="::0",
+        name=None,
+    ):
+        # type: (Union[Literal["local_ip"], Literal["manual"]],Union[Literal["ipv4"], Literal["ipv6"]],str,str,str) -> BgpL3vpnV4RouteRangeIter
+        """Factory method that creates an instance of the BgpL3vpnV4RouteRange class
+
+        Emulated VPN-IPv4 customer route range belonging to Bgp.L3vpn.Vrf (RFC 4364). Same shape as the plain Bgp.V4RouteRange, plus per route range route_distinguisher. The Route Distinguisher (RFC 4364 Section 4.1) is carried here, on the route range, rather than once on the parent VRF matching the IxNetwork RESTpy BgpL3VpnRouteProperty object, whose Distinguisher* attributes are per route range, and RFC 4364's per-NLRI RD semantics. This lets different route ranges in the same VRF advertise different RDs (RFC 4364 Section 4.1 4.3.5, e.g. multihomed CE whose prefix must stay distinct per PE). The VPN dataplane label is the existing mpls_labels field (RFC 4364 Section 3). The route range is kept independent of the shared Bgp.V4RouteRange so the VPN-only route_distinguisher does not leak into plain (non-VPN) BGP route ranges.
+
+        Returns: BgpL3vpnV4RouteRangeIter
+        """
+        item = BgpL3vpnV4RouteRange(
+            parent=self._parent,
+            next_hop_mode=next_hop_mode,
+            next_hop_address_type=next_hop_address_type,
+            next_hop_ipv4_address=next_hop_ipv4_address,
+            next_hop_ipv6_address=next_hop_ipv6_address,
+            name=name,
+        )
+        self._add(item)
+        return self
+
+    def add(
+        self,
+        next_hop_mode="local_ip",
+        next_hop_address_type="ipv4",
+        next_hop_ipv4_address="0.0.0.0",
+        next_hop_ipv6_address="::0",
+        name=None,
+    ):
+        # type: (Union[Literal["local_ip"], Literal["manual"]],Union[Literal["ipv4"], Literal["ipv6"]],str,str,str) -> BgpL3vpnV4RouteRange
+        """Add method that creates and returns an instance of the BgpL3vpnV4RouteRange class
+
+        Emulated VPN-IPv4 customer route range belonging to Bgp.L3vpn.Vrf (RFC 4364). Same shape as the plain Bgp.V4RouteRange, plus per route range route_distinguisher. The Route Distinguisher (RFC 4364 Section 4.1) is carried here, on the route range, rather than once on the parent VRF matching the IxNetwork RESTpy BgpL3VpnRouteProperty object, whose Distinguisher* attributes are per route range, and RFC 4364's per-NLRI RD semantics. This lets different route ranges in the same VRF advertise different RDs (RFC 4364 Section 4.1 4.3.5, e.g. multihomed CE whose prefix must stay distinct per PE). The VPN dataplane label is the existing mpls_labels field (RFC 4364 Section 3). The route range is kept independent of the shared Bgp.V4RouteRange so the VPN-only route_distinguisher does not leak into plain (non-VPN) BGP route ranges.
+
+        Returns: BgpL3vpnV4RouteRange
+        """
+        item = BgpL3vpnV4RouteRange(
+            parent=self._parent,
+            next_hop_mode=next_hop_mode,
+            next_hop_address_type=next_hop_address_type,
+            next_hop_ipv4_address=next_hop_ipv4_address,
+            next_hop_ipv6_address=next_hop_ipv6_address,
+            name=name,
+        )
+        self._add(item)
+        return item
 
 
 class BgpL3vpnV6RouteRange(OpenApiObject):
@@ -37930,9 +38286,10 @@ class BgpL3vpnV6RouteRange(OpenApiObject):
         "name": {"type": str},
         "extended_communities": {"type": "BgpExtendedCommunityIter"},
         "service_binding": {"type": "BgpL3vpnV6ServiceBinding"},
+        "route_distinguisher": {"type": "BgpRouteDistinguisher"},
     }  # type: Dict[str, str]
 
-    _REQUIRED = ("name",)  # type: tuple(str)
+    _REQUIRED = ("name", "route_distinguisher")  # type: tuple(str)
 
     _DEFAULTS = {
         "next_hop_mode": "local_ip",
@@ -38168,6 +38525,17 @@ class BgpL3vpnV6RouteRange(OpenApiObject):
         """
         return self._get_property("service_binding", BgpL3vpnV6ServiceBinding)
 
+    @property
+    def route_distinguisher(self):
+        # type: () -> BgpRouteDistinguisher
+        """route_distinguisher getter
+
+        BGP Route Distinguisher.BGP Route Distinguisher.BGP Route Distinguisher.The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv6 prefix in this route range, forming the VPN-IPv6 NLRI (AFI 2, SAFI 128, RFC 4659). Carried per route range to mirror the IxNetwork RESTpy BgpV6L3VpnRouteProperty Distinguisher* attributes and RFC 4364's per-NLRI RD semantics; route ranges in the same VRF may use different RDs.
+
+        Returns: BgpRouteDistinguisher
+        """
+        return self._get_property("route_distinguisher", BgpRouteDistinguisher)
+
 
 class BgpL3vpnV6ServiceBinding(OpenApiObject):
     __slots__ = ("_parent", "_choice")
@@ -38280,7 +38648,7 @@ class BgpL3vpnV6RouteRangeIter(OpenApiIter):
         # type: (Union[Literal["local_ip"], Literal["manual"]],Union[Literal["ipv4"], Literal["ipv6"]],str,str,str) -> BgpL3vpnV6RouteRangeIter
         """Factory method that creates an instance of the BgpL3vpnV6RouteRange class
 
-        Emulated VPN-IPv6 customer route range belonging to Bgp.L3vpn.Vrf (RFC 4659, 6VPE). Same shape as the plain Bgp.V6RouteRange, except the dataplane binding is selected via service_binding, choice that currently offers only VPN MPLS label (RFC 4364 Section 3) but keeps the route range independent of the shared Bgp.V6RouteRange/ Bgp.MplsLabelBindings schemas so that an additional dataplane binding (for example an SRv6 Service SID, RFC 9252) can be added later as new choice value without breaking change.
+        Emulated VPN-IPv6 customer route range belonging to Bgp.L3vpn.Vrf (RFC 4659, 6VPE). Same shape as the plain Bgp.V6RouteRange, except the dataplane binding is selected via service_binding, choice that currently offers only VPN MPLS label (RFC 4364 Section 3) but keeps the route range independent of the shared Bgp.V6RouteRange/ Bgp.MplsLabelBindings schemas so that an additional dataplane binding (for example an SRv6 Service SID, RFC 9252) can be added later as new choice value without breaking change. The Route Distinguisher (RFC 4364 Section 4.1) is carried per route range via route_distinguisher matching the IxNetwork RESTpy BgpV6L3VpnRouteProperty Distinguisher* attributes and RFC 4364's per-NLRI RD semantics rather than once on the parent VRF, so different route ranges in the same VRF may advertise different RDs.
 
         Returns: BgpL3vpnV6RouteRangeIter
         """
@@ -38306,7 +38674,7 @@ class BgpL3vpnV6RouteRangeIter(OpenApiIter):
         # type: (Union[Literal["local_ip"], Literal["manual"]],Union[Literal["ipv4"], Literal["ipv6"]],str,str,str) -> BgpL3vpnV6RouteRange
         """Add method that creates and returns an instance of the BgpL3vpnV6RouteRange class
 
-        Emulated VPN-IPv6 customer route range belonging to Bgp.L3vpn.Vrf (RFC 4659, 6VPE). Same shape as the plain Bgp.V6RouteRange, except the dataplane binding is selected via service_binding, choice that currently offers only VPN MPLS label (RFC 4364 Section 3) but keeps the route range independent of the shared Bgp.V6RouteRange/ Bgp.MplsLabelBindings schemas so that an additional dataplane binding (for example an SRv6 Service SID, RFC 9252) can be added later as new choice value without breaking change.
+        Emulated VPN-IPv6 customer route range belonging to Bgp.L3vpn.Vrf (RFC 4659, 6VPE). Same shape as the plain Bgp.V6RouteRange, except the dataplane binding is selected via service_binding, choice that currently offers only VPN MPLS label (RFC 4364 Section 3) but keeps the route range independent of the shared Bgp.V6RouteRange/ Bgp.MplsLabelBindings schemas so that an additional dataplane binding (for example an SRv6 Service SID, RFC 9252) can be added later as new choice value without breaking change. The Route Distinguisher (RFC 4364 Section 4.1) is carried per route range via route_distinguisher matching the IxNetwork RESTpy BgpV6L3VpnRouteProperty Distinguisher* attributes and RFC 4364's per-NLRI RD semantics rather than once on the parent VRF, so different route ranges in the same VRF may advertise different RDs.
 
         Returns: BgpL3vpnV6RouteRange
         """
@@ -38356,7 +38724,7 @@ class BgpL3vpnVrfIter(OpenApiIter):
         # type: (str) -> BgpL3vpnVrfIter
         """Factory method that creates an instance of the BgpL3vpnVrf class
 
-        A BGP/MPLS Layer VPN VRF (RFC 4364). Binds Route Distinguisher and. Route Target import/export policy to set of customer (PE-CE learned. or locally originated) IPv4/IPv6 route ranges, so that they are. advertised as VPN-IPv4 NLRI (AFI 1, SAFI 128) or VPN-IPv6 NLRI. (AFI 2, SAFI 128, RFC 4659) instead of plain unicast NLRI.. The BGP capability device.bgp.capability.ipv4_mpls_vpn must be enabled. on the peer for VPN-IPv4 NLRI to be negotiated and advertised, and. device.bgp.capability.ipv6_mpls_vpn for VPN-IPv6 NLRI.
+        A BGP/MPLS Layer VPN VRF (RFC 4364). Groups Route Target. import/export policy with set of customer (PE-CE learned or locally. originated) IPv4/IPv6 route ranges. Each route range carries its own. Route Distinguisher (RFC 4364 Section 4.1), so its prefixes are. advertised as VPN-IPv4 NLRI (AFI 1, SAFI 128) or VPN-IPv6 NLRI (AFI 2,. SAFI 128, RFC 4659) instead of plain unicast NLRI. The RD is carried. per route range not once per VRF to mirror the IxNetwork RESTpy. BgpL3VpnRouteProperty BgpV6L3VpnRouteProperty objects (whose. Distinguisher* attributes are per route range) and RFC 4364's per-NLRI. RD semantics, so route ranges in the same VRF may advertise different. RDs (RFC 4364 Section 4.1 4.3.5, e.g. multihomed CE).. The BGP capability device.bgp.capability.ipv4_mpls_vpn must be enabled. on the peer for VPN-IPv4 NLRI to be negotiated and advertised, and. device.bgp.capability.ipv6_mpls_vpn for VPN-IPv6 NLRI.
 
         Returns: BgpL3vpnVrfIter
         """
@@ -38368,7 +38736,7 @@ class BgpL3vpnVrfIter(OpenApiIter):
         # type: (str) -> BgpL3vpnVrf
         """Add method that creates and returns an instance of the BgpL3vpnVrf class
 
-        A BGP/MPLS Layer VPN VRF (RFC 4364). Binds Route Distinguisher and. Route Target import/export policy to set of customer (PE-CE learned. or locally originated) IPv4/IPv6 route ranges, so that they are. advertised as VPN-IPv4 NLRI (AFI 1, SAFI 128) or VPN-IPv6 NLRI. (AFI 2, SAFI 128, RFC 4659) instead of plain unicast NLRI.. The BGP capability device.bgp.capability.ipv4_mpls_vpn must be enabled. on the peer for VPN-IPv4 NLRI to be negotiated and advertised, and. device.bgp.capability.ipv6_mpls_vpn for VPN-IPv6 NLRI.
+        A BGP/MPLS Layer VPN VRF (RFC 4364). Groups Route Target. import/export policy with set of customer (PE-CE learned or locally. originated) IPv4/IPv6 route ranges. Each route range carries its own. Route Distinguisher (RFC 4364 Section 4.1), so its prefixes are. advertised as VPN-IPv4 NLRI (AFI 1, SAFI 128) or VPN-IPv6 NLRI (AFI 2,. SAFI 128, RFC 4659) instead of plain unicast NLRI. The RD is carried. per route range not once per VRF to mirror the IxNetwork RESTpy. BgpL3VpnRouteProperty BgpV6L3VpnRouteProperty objects (whose. Distinguisher* attributes are per route range) and RFC 4364's per-NLRI. RD semantics, so route ranges in the same VRF may advertise different. RDs (RFC 4364 Section 4.1 4.3.5, e.g. multihomed CE).. The BGP capability device.bgp.capability.ipv4_mpls_vpn must be enabled. on the peer for VPN-IPv4 NLRI to be negotiated and advertised, and. device.bgp.capability.ipv6_mpls_vpn for VPN-IPv6 NLRI.
 
         Returns: BgpL3vpnVrf
         """

@@ -8058,11 +8058,17 @@ message BgpNLRIPrefixSegmentRoutingDistinguisher {
   optional uint32 value = 1;
 }
 
-// A BGP/MPLS Layer 3 VPN VRF (RFC 4364). Binds a Route Distinguisher and
-// Route Target import/export policy to a set of customer (PE-CE learned
-// or locally originated) IPv4/IPv6 route ranges, so that they are
-// advertised as VPN-IPv4 NLRI (AFI 1, SAFI 128) or VPN-IPv6 NLRI
-// (AFI 2, SAFI 128, RFC 4659) instead of plain unicast NLRI.
+// A BGP/MPLS Layer 3 VPN VRF (RFC 4364). Groups a Route Target
+// import/export policy with a set of customer (PE-CE learned or locally
+// originated) IPv4/IPv6 route ranges. Each route range carries its own
+// Route Distinguisher (RFC 4364 Section 4.1), so its prefixes are
+// advertised as VPN-IPv4 NLRI (AFI 1, SAFI 128) or VPN-IPv6 NLRI (AFI 2,
+// SAFI 128, RFC 4659) instead of plain unicast NLRI. The RD is carried
+// per route range - not once per VRF - to mirror the IxNetwork RESTpy
+// BgpL3VpnRouteProperty / BgpV6L3VpnRouteProperty objects (whose
+// Distinguisher* attributes are per route range) and RFC 4364's per-NLRI
+// RD semantics, so route ranges in the same VRF may advertise different
+// RDs (RFC 4364 Section 4.1 / 4.3.5, e.g. a multihomed CE).
 // 
 // The BGP capability device.bgp.capability.ipv4_mpls_vpn must be enabled
 // on the peer for VPN-IPv4 NLRI to be negotiated and advertised, and
@@ -8074,33 +8080,119 @@ message BgpL3vpnVrf {
   // required = true
   optional string name = 1;
 
-  // The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv4 prefix advertised
-  // from this VRF's v4_routes, forming the VPN-IPv4 NLRI. All routes in this VRF share
-  // the same RD.
-  // required = true
-  BgpRouteDistinguisher route_distinguisher = 2;
-
   // List of Route Targets (RFC 4364 Section 4.3.1) attached as BGP Extended Communities
   // to every route advertised from this VRF. A remote VRF imports the route only if one
   // of its route_target_import values matches one of these.
-  repeated BgpRouteTarget route_target_export = 3;
+  repeated BgpRouteTarget route_target_export = 2;
 
   // List of Route Targets (RFC 4364 Section 4.3.1) used to filter which received VPN-IPv4
   // routes are imported into this VRF. A received route is imported if any of its Route
   // Target Extended Communities matches one of these.
-  repeated BgpRouteTarget route_target_import = 4;
+  repeated BgpRouteTarget route_target_import = 3;
 
   // Emulated IPv4 customer route ranges belonging to this VRF. Each is advertised as
-  // VPN-IPv4 NLRI using this VRF's route_distinguisher and route_target_export.
-  repeated BgpV4RouteRange v4_routes = 5;
+  // VPN-IPv4 NLRI using its own route_distinguisher and this VRF's route_target_export.
+  repeated BgpL3vpnV4RouteRange v4_routes = 4;
 
   // Emulated IPv6 customer route ranges belonging to this VRF (6VPE, RFC 4659). Each
-  // is advertised as VPN-IPv6 NLRI using this VRF's route_distinguisher and route_target_export.
+  // is advertised as VPN-IPv6 NLRI using its own route_distinguisher and this VRF's route_target_export.
   // Each route range's dataplane binding is selected via its own service_binding, currently
   // a VPN MPLS label (RFC 4364 Section 3); the choice structure keeps room for an additional
   // binding (for example an SRv6 Service SID, RFC 9252) to be added later without a breaking
   // change.
-  repeated BgpL3vpnV6RouteRange v6_routes = 6;
+  repeated BgpL3vpnV6RouteRange v6_routes = 5;
+}
+
+// Emulated VPN-IPv4 customer route range belonging to a Bgp.L3vpn.Vrf (RFC 4364). Same
+// shape as the plain Bgp.V4RouteRange, plus a per route range route_distinguisher.
+// The Route Distinguisher (RFC 4364 Section 4.1) is carried here, on the route range,
+// rather than once on the parent VRF - matching the IxNetwork RESTpy BgpL3VpnRouteProperty
+// object, whose Distinguisher* attributes are per route range, and RFC 4364's per-NLRI
+// RD semantics. This lets different route ranges in the same VRF advertise different
+// RDs (RFC 4364 Section 4.1 / 4.3.5, e.g. a multihomed CE whose prefix must stay distinct
+// per PE). The VPN dataplane label is the existing mpls_labels field (RFC 4364 Section
+// 3). The route range is kept independent of the shared Bgp.V4RouteRange so the VPN-only
+// route_distinguisher does not leak into plain (non-VPN) BGP route ranges.
+message BgpL3vpnV4RouteRange {
+
+  // A list of group of IPv4 route addresses.
+  repeated V4RouteAddress addresses = 1;
+
+  message NextHopMode {
+    enum Enum {
+      unspecified = 0;
+      local_ip = 1;
+      manual = 2;
+    }
+  }
+  // Specify the NextHop in MP REACH NLRI. The mode for setting the IP address  of the
+  // NextHop in the MP REACH NLRI can be one of the following:
+  // Local IP: Automatically fills the Nexthop with the Local IP of the BGP
+  // peer.
+  // If BGP peer is of type IPv6, Nexthop Encoding capability should be enabled.
+  // Manual: Override the Nexthop with any arbitrary IPv4/IPv6 address.
+  // default = NextHopMode.Enum.local_ip
+  optional NextHopMode.Enum next_hop_mode = 2;
+
+  message NextHopAddressType {
+    enum Enum {
+      unspecified = 0;
+      ipv4 = 1;
+      ipv6 = 2;
+    }
+  }
+  // If the Nexthop Mode is Manual, it sets the type of the NextHop IP address.
+  // default = NextHopAddressType.Enum.ipv4
+  optional NextHopAddressType.Enum next_hop_address_type = 3;
+
+  // The IPv4 address of the next hop if the Nexthop Mode is manual and the Nexthop type
+  // is IPv4. If BGP peer is of type IPv6, Nexthop Encoding capability should be enabled.
+  // default = 0.0.0.0
+  optional string next_hop_ipv4_address = 4;
+
+  // The IPv6 address of the next hop if the Nexthop Mode is manual and the Nexthop type
+  // is IPv6.
+  // default = ::0
+  optional string next_hop_ipv6_address = 5;
+
+  // Description missing in models
+  BgpRouteAdvanced advanced = 6;
+
+  // Optional community settings.
+  repeated BgpCommunity communities = 7;
+
+  // Description missing in models
+  BgpAsPath as_path = 8;
+
+  // Description missing in models
+  BgpAddPath add_path = 9;
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 10;
+
+  // Optional Extended Community settings. The Extended Communities Attribute is a transitive
+  // optional BGP attribute, with the Type Code 16. Community and Extended Communities
+  // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
+  // preference, or redistribution. An extended community is an eight byte value. It
+  // is divided into two main parts. The first two bytes of the community encode a type
+  // and sub-type fields and the last six bytes carry a unique set of data in a format
+  // defined by the type and sub-type field. Extended communities provide a larger range
+  // for grouping or categorizing communities.
+  repeated BgpExtendedCommunity extended_communities = 11;
+
+  // Optional configuration for a BGP speaker to Bind an Address Prefix to One or More
+  // MPLS Labels.
+  BgpMplsLabelBindings mpls_labels = 12;
+
+  // The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv4 prefix in
+  // this route range, forming the VPN-IPv4 NLRI (AFI 1, SAFI 128). Carried per route
+  // range to mirror the IxNetwork RESTpy BgpL3VpnRouteProperty Distinguisher* attributes
+  // and RFC 4364's per-NLRI RD semantics; route ranges in the same VRF may use different
+  // RDs.
+  // required = true
+  BgpRouteDistinguisher route_distinguisher = 13;
 }
 
 // Emulated VPN-IPv6 customer route range belonging to a Bgp.L3vpn.Vrf (RFC 4659, 6VPE).
@@ -8109,7 +8201,11 @@ message BgpL3vpnVrf {
 // Section 3) but keeps the route range independent of the shared Bgp.V6RouteRange/
 // Bgp.MplsLabelBindings schemas so that an additional dataplane binding (for example
 // an SRv6 Service SID, RFC 9252) can be added later as a new choice value without a
-// breaking change.
+// breaking change. The Route Distinguisher (RFC 4364 Section 4.1) is carried per route
+// range via route_distinguisher - matching the IxNetwork RESTpy BgpV6L3VpnRouteProperty
+// Distinguisher* attributes and RFC 4364's per-NLRI RD semantics - rather than once
+// on the parent VRF, so different route ranges in the same VRF may advertise different
+// RDs.
 message BgpL3vpnV6RouteRange {
 
   // A list of group of IPv6 route addresses.
@@ -8183,6 +8279,14 @@ message BgpL3vpnV6RouteRange {
   // label is currently supported; the choice structure exists so that an additional dataplane
   // binding can be added later without breaking this field.
   BgpL3vpnV6ServiceBinding service_binding = 12;
+
+  // The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv6 prefix in
+  // this route range, forming the VPN-IPv6 NLRI (AFI 2, SAFI 128, RFC 4659). Carried
+  // per route range to mirror the IxNetwork RESTpy BgpV6L3VpnRouteProperty Distinguisher*
+  // attributes and RFC 4364's per-NLRI RD semantics; route ranges in the same VRF may
+  // use different RDs.
+  // required = true
+  BgpRouteDistinguisher route_distinguisher = 13;
 }
 
 // Selects how a VPN-IPv6 route range's dataplane binding is advertised. Currently the

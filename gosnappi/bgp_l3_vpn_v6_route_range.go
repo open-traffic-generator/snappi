@@ -23,6 +23,7 @@ type bgpL3VpnV6RouteRange struct {
 	addPathHolder             BgpAddPath
 	extendedCommunitiesHolder BgpL3VpnV6RouteRangeBgpExtendedCommunityIter
 	serviceBindingHolder      BgpL3VpnV6ServiceBinding
+	routeDistinguisherHolder  BgpRouteDistinguisher
 }
 
 func NewBgpL3VpnV6RouteRange() BgpL3VpnV6RouteRange {
@@ -257,12 +258,13 @@ func (obj *bgpL3VpnV6RouteRange) setNil() {
 	obj.addPathHolder = nil
 	obj.extendedCommunitiesHolder = nil
 	obj.serviceBindingHolder = nil
+	obj.routeDistinguisherHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// BgpL3VpnV6RouteRange is emulated VPN-IPv6 customer route range belonging to a Bgp.L3vpn.Vrf (RFC 4659, 6VPE). Same shape as the plain Bgp.V6RouteRange, except the dataplane binding is selected via service_binding, a choice that currently offers only a VPN MPLS label (RFC 4364 Section 3) but keeps the route range independent of the shared Bgp.V6RouteRange/ Bgp.MplsLabelBindings schemas so that an additional dataplane binding (for example an SRv6 Service SID, RFC 9252) can be added later as a new choice value without a breaking change.
+// BgpL3VpnV6RouteRange is emulated VPN-IPv6 customer route range belonging to a Bgp.L3vpn.Vrf (RFC 4659, 6VPE). Same shape as the plain Bgp.V6RouteRange, except the dataplane binding is selected via service_binding, a choice that currently offers only a VPN MPLS label (RFC 4364 Section 3) but keeps the route range independent of the shared Bgp.V6RouteRange/ Bgp.MplsLabelBindings schemas so that an additional dataplane binding (for example an SRv6 Service SID, RFC 9252) can be added later as a new choice value without a breaking change. The Route Distinguisher (RFC 4364 Section 4.1) is carried per route range via route_distinguisher - matching the IxNetwork RESTpy BgpV6L3VpnRouteProperty Distinguisher* attributes and RFC 4364's per-NLRI RD semantics - rather than once on the parent VRF, so different route ranges in the same VRF may advertise different RDs.
 type BgpL3VpnV6RouteRange interface {
 	Validation
 	// msg marshals BgpL3VpnV6RouteRange to protobuf object *otg.BgpL3VpnV6RouteRange
@@ -348,6 +350,12 @@ type BgpL3VpnV6RouteRange interface {
 	SetServiceBinding(value BgpL3VpnV6ServiceBinding) BgpL3VpnV6RouteRange
 	// HasServiceBinding checks if ServiceBinding has been set in BgpL3VpnV6RouteRange
 	HasServiceBinding() bool
+	// RouteDistinguisher returns BgpRouteDistinguisher, set in BgpL3VpnV6RouteRange.
+	// BgpRouteDistinguisher is bGP Route Distinguisher.
+	RouteDistinguisher() BgpRouteDistinguisher
+	// SetRouteDistinguisher assigns BgpRouteDistinguisher provided by user to BgpL3VpnV6RouteRange.
+	// BgpRouteDistinguisher is bGP Route Distinguisher.
+	SetRouteDistinguisher(value BgpRouteDistinguisher) BgpL3VpnV6RouteRange
 	setNil()
 }
 
@@ -856,6 +864,28 @@ func (obj *bgpL3VpnV6RouteRange) SetServiceBinding(value BgpL3VpnV6ServiceBindin
 	return obj
 }
 
+// The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv6 prefix in this route range, forming the VPN-IPv6 NLRI (AFI 2, SAFI 128, RFC 4659). Carried per route range to mirror the IxNetwork RESTpy BgpV6L3VpnRouteProperty Distinguisher* attributes and RFC 4364's per-NLRI RD semantics; route ranges in the same VRF may use different RDs.
+// RouteDistinguisher returns a BgpRouteDistinguisher
+func (obj *bgpL3VpnV6RouteRange) RouteDistinguisher() BgpRouteDistinguisher {
+	if obj.obj.RouteDistinguisher == nil {
+		obj.obj.RouteDistinguisher = NewBgpRouteDistinguisher().msg()
+	}
+	if obj.routeDistinguisherHolder == nil {
+		obj.routeDistinguisherHolder = &bgpRouteDistinguisher{obj: obj.obj.RouteDistinguisher}
+	}
+	return obj.routeDistinguisherHolder
+}
+
+// The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv6 prefix in this route range, forming the VPN-IPv6 NLRI (AFI 2, SAFI 128, RFC 4659). Carried per route range to mirror the IxNetwork RESTpy BgpV6L3VpnRouteProperty Distinguisher* attributes and RFC 4364's per-NLRI RD semantics; route ranges in the same VRF may use different RDs.
+// SetRouteDistinguisher sets the BgpRouteDistinguisher value in the BgpL3VpnV6RouteRange object
+func (obj *bgpL3VpnV6RouteRange) SetRouteDistinguisher(value BgpRouteDistinguisher) BgpL3VpnV6RouteRange {
+
+	obj.routeDistinguisherHolder = nil
+	obj.obj.RouteDistinguisher = value.msg()
+
+	return obj
+}
+
 func (obj *bgpL3VpnV6RouteRange) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -944,6 +974,16 @@ func (obj *bgpL3VpnV6RouteRange) validateObj(vObj *validation, set_default bool)
 	if obj.obj.ServiceBinding != nil {
 
 		obj.ServiceBinding().validateObj(vObj, set_default)
+	}
+
+	// RouteDistinguisher is required
+	if obj.obj.RouteDistinguisher == nil {
+		vObj.validationErrors = append(vObj.validationErrors, "RouteDistinguisher is required field on interface BgpL3VpnV6RouteRange")
+	}
+
+	if obj.obj.RouteDistinguisher != nil {
+
+		obj.RouteDistinguisher().validateObj(vObj, set_default)
 	}
 
 }

@@ -329,6 +329,8 @@ from .snappi import BgpRawBytes
 from .snappi import BgpOneUpdateReplay
 from .snappi import BgpOneUpdateReplayIter
 from .snappi import BgpL3vpnVrf
+from .snappi import BgpL3vpnV4RouteRange
+from .snappi import BgpL3vpnV4RouteRangeIter
 from .snappi import BgpL3vpnV6RouteRange
 from .snappi import BgpL3vpnV6ServiceBinding
 from .snappi import BgpL3vpnV6RouteRangeIter
