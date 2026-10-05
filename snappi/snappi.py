@@ -23675,6 +23675,8 @@ class BgpLearnedInformationFilter(OpenApiObject):
         "unicast_ipv6_prefix": {"type": bool},
         "ipv4_mpls_unicast_prefix": {"type": bool},
         "ipv6_mpls_unicast_prefix": {"type": bool},
+        "ipv4_vpn_unicast_prefix": {"type": bool},
+        "ipv6_vpn_unicast_prefix": {"type": bool},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -23684,6 +23686,8 @@ class BgpLearnedInformationFilter(OpenApiObject):
         "unicast_ipv6_prefix": False,
         "ipv4_mpls_unicast_prefix": False,
         "ipv6_mpls_unicast_prefix": False,
+        "ipv4_vpn_unicast_prefix": False,
+        "ipv6_vpn_unicast_prefix": False,
     }  # type: Dict[str, Union(type)]
 
     _STATUS = {}  # type: Dict[str, Union(type)]
@@ -23695,6 +23699,8 @@ class BgpLearnedInformationFilter(OpenApiObject):
         unicast_ipv6_prefix=False,
         ipv4_mpls_unicast_prefix=False,
         ipv6_mpls_unicast_prefix=False,
+        ipv4_vpn_unicast_prefix=False,
+        ipv6_vpn_unicast_prefix=False,
     ):
         super(BgpLearnedInformationFilter, self).__init__()
         self._parent = parent
@@ -23702,6 +23708,8 @@ class BgpLearnedInformationFilter(OpenApiObject):
         self._set_property("unicast_ipv6_prefix", unicast_ipv6_prefix)
         self._set_property("ipv4_mpls_unicast_prefix", ipv4_mpls_unicast_prefix)
         self._set_property("ipv6_mpls_unicast_prefix", ipv6_mpls_unicast_prefix)
+        self._set_property("ipv4_vpn_unicast_prefix", ipv4_vpn_unicast_prefix)
+        self._set_property("ipv6_vpn_unicast_prefix", ipv6_vpn_unicast_prefix)
 
     def set(
         self,
@@ -23709,6 +23717,8 @@ class BgpLearnedInformationFilter(OpenApiObject):
         unicast_ipv6_prefix=None,
         ipv4_mpls_unicast_prefix=None,
         ipv6_mpls_unicast_prefix=None,
+        ipv4_vpn_unicast_prefix=None,
+        ipv6_vpn_unicast_prefix=None,
     ):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
@@ -23719,7 +23729,7 @@ class BgpLearnedInformationFilter(OpenApiObject):
         # type: () -> bool
         """unicast_ipv4_prefix getter
 
-        If enabled, will store the information related to Unicast IPv4 Prefixes recieved from the peer.
+        If enabled, will store the information related to Unicast IPv4 Prefixes received from the peer.
 
         Returns: bool
         """
@@ -23729,7 +23739,7 @@ class BgpLearnedInformationFilter(OpenApiObject):
     def unicast_ipv4_prefix(self, value):
         """unicast_ipv4_prefix setter
 
-        If enabled, will store the information related to Unicast IPv4 Prefixes recieved from the peer.
+        If enabled, will store the information related to Unicast IPv4 Prefixes received from the peer.
 
         value: bool
         """
@@ -23740,7 +23750,7 @@ class BgpLearnedInformationFilter(OpenApiObject):
         # type: () -> bool
         """unicast_ipv6_prefix getter
 
-        If enabled, will store the information related to Unicast IPv6 Prefixes recieved from the peer.
+        If enabled, will store the information related to Unicast IPv6 Prefixes received from the peer.
 
         Returns: bool
         """
@@ -23750,7 +23760,7 @@ class BgpLearnedInformationFilter(OpenApiObject):
     def unicast_ipv6_prefix(self, value):
         """unicast_ipv6_prefix setter
 
-        If enabled, will store the information related to Unicast IPv6 Prefixes recieved from the peer.
+        If enabled, will store the information related to Unicast IPv6 Prefixes received from the peer.
 
         value: bool
         """
@@ -23761,7 +23771,7 @@ class BgpLearnedInformationFilter(OpenApiObject):
         # type: () -> bool
         """ipv4_mpls_unicast_prefix getter
 
-        If enabled, will store the information related to MPLS Unicast IPv4 Prefixes recieved from the peer.
+        If enabled, will store the information related to MPLS Unicast IPv4 Prefixes received from the peer.
 
         Returns: bool
         """
@@ -23771,7 +23781,7 @@ class BgpLearnedInformationFilter(OpenApiObject):
     def ipv4_mpls_unicast_prefix(self, value):
         """ipv4_mpls_unicast_prefix setter
 
-        If enabled, will store the information related to MPLS Unicast IPv4 Prefixes recieved from the peer.
+        If enabled, will store the information related to MPLS Unicast IPv4 Prefixes received from the peer.
 
         value: bool
         """
@@ -23782,7 +23792,7 @@ class BgpLearnedInformationFilter(OpenApiObject):
         # type: () -> bool
         """ipv6_mpls_unicast_prefix getter
 
-        If enabled, will store the information related to MPLS Unicast IPv6 Prefixes recieved from the peer.
+        If enabled, will store the information related to MPLS Unicast IPv6 Prefixes received from the peer.
 
         Returns: bool
         """
@@ -23792,11 +23802,53 @@ class BgpLearnedInformationFilter(OpenApiObject):
     def ipv6_mpls_unicast_prefix(self, value):
         """ipv6_mpls_unicast_prefix setter
 
-        If enabled, will store the information related to MPLS Unicast IPv6 Prefixes recieved from the peer.
+        If enabled, will store the information related to MPLS Unicast IPv6 Prefixes received from the peer.
 
         value: bool
         """
         self._set_property("ipv6_mpls_unicast_prefix", value)
+
+    @property
+    def ipv4_vpn_unicast_prefix(self):
+        # type: () -> bool
+        """ipv4_vpn_unicast_prefix getter
+
+        If enabled, will store the information related to IPv4 VPN Unicast Prefixes received from the peer.
+
+        Returns: bool
+        """
+        return self._get_property("ipv4_vpn_unicast_prefix")
+
+    @ipv4_vpn_unicast_prefix.setter
+    def ipv4_vpn_unicast_prefix(self, value):
+        """ipv4_vpn_unicast_prefix setter
+
+        If enabled, will store the information related to IPv4 VPN Unicast Prefixes received from the peer.
+
+        value: bool
+        """
+        self._set_property("ipv4_vpn_unicast_prefix", value)
+
+    @property
+    def ipv6_vpn_unicast_prefix(self):
+        # type: () -> bool
+        """ipv6_vpn_unicast_prefix getter
+
+        If enabled, will store the information related to IPv6 VPN Unicast Prefixes received from the peer.
+
+        Returns: bool
+        """
+        return self._get_property("ipv6_vpn_unicast_prefix")
+
+    @ipv6_vpn_unicast_prefix.setter
+    def ipv6_vpn_unicast_prefix(self, value):
+        """ipv6_vpn_unicast_prefix setter
+
+        If enabled, will store the information related to IPv6 VPN Unicast Prefixes received from the peer.
+
+        value: bool
+        """
+        self._set_property("ipv6_vpn_unicast_prefix", value)
 
 
 class BgpV4RouteRange(OpenApiObject):

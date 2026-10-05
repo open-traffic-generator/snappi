@@ -7190,28 +7190,40 @@ components:
       properties:
         unicast_ipv4_prefix:
           description: |-
-            If enabled, will store the information related to Unicast IPv4 Prefixes recieved from the peer.
+            If enabled, will store the information related to Unicast IPv4 Prefixes received from the peer.
           type: boolean
           default: false
           x-field-uid: 1
         unicast_ipv6_prefix:
           description: |-
-            If enabled, will store the information related to Unicast IPv6 Prefixes recieved from the peer.
+            If enabled, will store the information related to Unicast IPv6 Prefixes received from the peer.
           type: boolean
           default: false
           x-field-uid: 2
         ipv4_mpls_unicast_prefix:
           description: |-
-            If enabled, will store the information related to MPLS Unicast IPv4 Prefixes recieved from the peer.
+            If enabled, will store the information related to MPLS Unicast IPv4 Prefixes received from the peer.
           type: boolean
           default: false
           x-field-uid: 3
         ipv6_mpls_unicast_prefix:
           description: |-
-            If enabled, will store the information related to MPLS Unicast IPv6 Prefixes recieved from the peer.
+            If enabled, will store the information related to MPLS Unicast IPv6 Prefixes received from the peer.
           type: boolean
           default: false
           x-field-uid: 4
+        ipv4_vpn_unicast_prefix:
+          description: |-
+            If enabled, will store the information related to IPv4 VPN Unicast Prefixes received from the peer.
+          type: boolean
+          default: false
+          x-field-uid: 5
+        ipv6_vpn_unicast_prefix:
+          description: |-
+            If enabled, will store the information related to IPv6 VPN Unicast Prefixes received from the peer.
+          type: boolean
+          default: false
+          x-field-uid: 6
     Bgp.V4RouteRange:
       description: |-
         Emulated BGPv4 route range.

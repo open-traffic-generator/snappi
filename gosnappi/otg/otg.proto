@@ -5210,25 +5210,35 @@ message BgpCapabilityIpv6MplsMulti {
 // peer.
 message BgpLearnedInformationFilter {
 
-  // If enabled, will store the information related to Unicast IPv4 Prefixes recieved
+  // If enabled, will store the information related to Unicast IPv4 Prefixes received
   // from the peer.
   // default = False
   optional bool unicast_ipv4_prefix = 1;
 
-  // If enabled, will store the information related to Unicast IPv6 Prefixes recieved
+  // If enabled, will store the information related to Unicast IPv6 Prefixes received
   // from the peer.
   // default = False
   optional bool unicast_ipv6_prefix = 2;
 
-  // If enabled, will store the information related to MPLS Unicast IPv4 Prefixes recieved
+  // If enabled, will store the information related to MPLS Unicast IPv4 Prefixes received
   // from the peer.
   // default = False
   optional bool ipv4_mpls_unicast_prefix = 3;
 
-  // If enabled, will store the information related to MPLS Unicast IPv6 Prefixes recieved
+  // If enabled, will store the information related to MPLS Unicast IPv6 Prefixes received
   // from the peer.
   // default = False
   optional bool ipv6_mpls_unicast_prefix = 4;
+
+  // If enabled, will store the information related to IPv4 VPN Unicast Prefixes received
+  // from the peer.
+  // default = False
+  optional bool ipv4_vpn_unicast_prefix = 5;
+
+  // If enabled, will store the information related to IPv6 VPN Unicast Prefixes received
+  // from the peer.
+  // default = False
+  optional bool ipv6_vpn_unicast_prefix = 6;
 }
 
 // Emulated BGPv4 route range.
