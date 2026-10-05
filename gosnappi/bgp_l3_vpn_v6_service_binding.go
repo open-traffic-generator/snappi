@@ -284,8 +284,6 @@ type BgpL3VpnV6ServiceBinding interface {
 	// SetMplsLabels assigns RouteMplsLabelValue provided by user to BgpL3VpnV6ServiceBinding.
 	// RouteMplsLabelValue is a container of MPLS Prefix Label Value/Index in the address range.
 	SetMplsLabels(value RouteMplsLabelValue) BgpL3VpnV6ServiceBinding
-	// HasMplsLabels checks if MplsLabels has been set in BgpL3VpnV6ServiceBinding
-	HasMplsLabels() bool
 	setNil()
 }
 
@@ -340,12 +338,6 @@ func (obj *bgpL3VpnV6ServiceBinding) MplsLabels() RouteMplsLabelValue {
 }
 
 // The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv6 prefix in this route range. RFC 4364 assigns exactly one label per route - Section 4.3.2 only discusses whether that value is shared across routes in a VRF or attachment circuit, not stacking multiple labels per route. Matches the IxNetwork RESTpy BgpV6L3VpnRouteProperty LabelStart/LabelEnd/LabelStep attributes, which likewise expose a single auto-incrementing label per route range rather than the label stack (RFC 3107/8277) modeled by Bgp.MplsLabelBindings for plain BGP-LU route ranges.
-// MplsLabels returns a RouteMplsLabelValue
-func (obj *bgpL3VpnV6ServiceBinding) HasMplsLabels() bool {
-	return obj.obj.MplsLabels != nil
-}
-
-// The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv6 prefix in this route range. RFC 4364 assigns exactly one label per route - Section 4.3.2 only discusses whether that value is shared across routes in a VRF or attachment circuit, not stacking multiple labels per route. Matches the IxNetwork RESTpy BgpV6L3VpnRouteProperty LabelStart/LabelEnd/LabelStep attributes, which likewise expose a single auto-incrementing label per route range rather than the label stack (RFC 3107/8277) modeled by Bgp.MplsLabelBindings for plain BGP-LU route ranges.
 // SetMplsLabels sets the RouteMplsLabelValue value in the BgpL3VpnV6ServiceBinding object
 func (obj *bgpL3VpnV6ServiceBinding) SetMplsLabels(value RouteMplsLabelValue) BgpL3VpnV6ServiceBinding {
 	obj.setChoice(BgpL3VpnV6ServiceBindingChoice.MPLS_LABELS)
@@ -358,6 +350,11 @@ func (obj *bgpL3VpnV6ServiceBinding) SetMplsLabels(value RouteMplsLabelValue) Bg
 func (obj *bgpL3VpnV6ServiceBinding) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
+	}
+
+	// MplsLabels is required
+	if obj.obj.MplsLabels == nil {
+		vObj.validationErrors = append(vObj.validationErrors, "MplsLabels is required field on interface BgpL3VpnV6ServiceBinding")
 	}
 
 	if obj.obj.MplsLabels != nil {

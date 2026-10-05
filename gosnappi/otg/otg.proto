@@ -8199,6 +8199,7 @@ message BgpL3vpnV4RouteRange {
   // LabelStart/LabelEnd/LabelStep attributes, which likewise expose a single auto-incrementing
   // label per route range. This intentionally does not reuse the Bgp.MplsLabelBindings
   // schema, which models a label stack (RFC 3107/8277) for plain BGP-LU route ranges.
+  // required = true
   RouteMplsLabelValue mpls_labels = 12;
 
   // The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv4 prefix in
@@ -8293,6 +8294,7 @@ message BgpL3vpnV6RouteRange {
   // Selects and configures this route range's VPN dataplane binding. Only the VPN MPLS
   // label is currently supported; the choice structure exists so that an additional dataplane
   // binding can be added later without breaking this field.
+  // required = true
   BgpL3vpnV6ServiceBinding service_binding = 12;
 
   // The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv6 prefix in
@@ -8329,6 +8331,7 @@ message BgpL3vpnV6ServiceBinding {
   // LabelStart/LabelEnd/LabelStep attributes, which likewise expose a single auto-incrementing
   // label per route range rather than the label stack (RFC 3107/8277) modeled by Bgp.MplsLabelBindings
   // for plain BGP-LU route ranges.
+  // required = true
   RouteMplsLabelValue mpls_labels = 2;
 }
 

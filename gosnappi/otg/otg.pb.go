@@ -61018,6 +61018,7 @@ type BgpL3VpnV4RouteRange struct {
 	// LabelStart/LabelEnd/LabelStep attributes, which likewise expose a single auto-incrementing
 	// label per route range. This intentionally does not reuse the Bgp.MplsLabelBindings
 	// schema, which models a label stack (RFC 3107/8277) for plain BGP-LU route ranges.
+	// required = true
 	MplsLabels *RouteMplsLabelValue `protobuf:"bytes,12,opt,name=mpls_labels,json=mplsLabels,proto3" json:"mpls_labels,omitempty"`
 	// The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv4 prefix in
 	// this route range, forming the VPN-IPv4 NLRI (AFI 1, SAFI 128). Carried per route
@@ -61212,6 +61213,7 @@ type BgpL3VpnV6RouteRange struct {
 	// Selects and configures this route range's VPN dataplane binding. Only the VPN MPLS
 	// label is currently supported; the choice structure exists so that an additional dataplane
 	// binding can be added later without breaking this field.
+	// required = true
 	ServiceBinding *BgpL3VpnV6ServiceBinding `protobuf:"bytes,12,opt,name=service_binding,json=serviceBinding,proto3" json:"service_binding,omitempty"`
 	// The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv6 prefix in
 	// this route range, forming the VPN-IPv6 NLRI (AFI 2, SAFI 128, RFC 4659). Carried
@@ -61366,6 +61368,7 @@ type BgpL3VpnV6ServiceBinding struct {
 	// LabelStart/LabelEnd/LabelStep attributes, which likewise expose a single auto-incrementing
 	// label per route range rather than the label stack (RFC 3107/8277) modeled by Bgp.MplsLabelBindings
 	// for plain BGP-LU route ranges.
+	// required = true
 	MplsLabels *RouteMplsLabelValue `protobuf:"bytes,2,opt,name=mpls_labels,json=mplsLabels,proto3" json:"mpls_labels,omitempty"`
 }
 

@@ -10855,6 +10855,7 @@ components:
       required:
       - name
       - route_distinguisher
+      - mpls_labels
       properties:
         addresses:
           x-field-uid: 1
@@ -10962,6 +10963,7 @@ components:
       required:
       - name
       - route_distinguisher
+      - service_binding
       properties:
         addresses:
           x-field-uid: 1
@@ -11066,6 +11068,8 @@ components:
       description: |-
         Selects how a VPN-IPv6 route range's dataplane binding is advertised. Currently the only defined choice is the traditional VPN MPLS label (RFC 4364 Section 3); the choice discriminator is kept independent of the shared Bgp.MplsLabelBindings schema so a future dataplane binding (for example an SRv6 Service SID, RFC 9252) can be added as a new sibling choice value without restructuring this schema or affecting existing mpls_labels configs.
       type: object
+      required:
+      - mpls_labels
       properties:
         choice:
           description: |-

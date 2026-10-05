@@ -37973,7 +37973,7 @@ class BgpL3vpnV4RouteRange(OpenApiObject):
         "route_distinguisher": {"type": "BgpRouteDistinguisher"},
     }  # type: Dict[str, str]
 
-    _REQUIRED = ("name", "route_distinguisher")  # type: tuple(str)
+    _REQUIRED = ("name", "route_distinguisher", "mpls_labels")  # type: tuple(str)
 
     _DEFAULTS = {
         "next_hop_mode": "local_ip",
@@ -38341,7 +38341,7 @@ class BgpL3vpnV6RouteRange(OpenApiObject):
         "route_distinguisher": {"type": "BgpRouteDistinguisher"},
     }  # type: Dict[str, str]
 
-    _REQUIRED = ("name", "route_distinguisher")  # type: tuple(str)
+    _REQUIRED = ("name", "route_distinguisher", "service_binding")  # type: tuple(str)
 
     _DEFAULTS = {
         "next_hop_mode": "local_ip",
@@ -38602,7 +38602,7 @@ class BgpL3vpnV6ServiceBinding(OpenApiObject):
         "mpls_labels": {"type": "RouteMplsLabelValue"},
     }  # type: Dict[str, str]
 
-    _REQUIRED = ()  # type: tuple(str)
+    _REQUIRED = ("mpls_labels",)  # type: tuple(str)
 
     _DEFAULTS = {
         "choice": "mpls_labels",

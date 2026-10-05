@@ -350,8 +350,6 @@ type BgpL3VpnV4RouteRange interface {
 	// SetMplsLabels assigns RouteMplsLabelValue provided by user to BgpL3VpnV4RouteRange.
 	// RouteMplsLabelValue is a container of MPLS Prefix Label Value/Index in the address range.
 	SetMplsLabels(value RouteMplsLabelValue) BgpL3VpnV4RouteRange
-	// HasMplsLabels checks if MplsLabels has been set in BgpL3VpnV4RouteRange
-	HasMplsLabels() bool
 	// RouteDistinguisher returns BgpRouteDistinguisher, set in BgpL3VpnV4RouteRange.
 	// BgpRouteDistinguisher is bGP Route Distinguisher.
 	RouteDistinguisher() BgpRouteDistinguisher
@@ -851,12 +849,6 @@ func (obj *bgpL3VpnV4RouteRange) MplsLabels() RouteMplsLabelValue {
 }
 
 // The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv4 prefix in this route range. RFC 4364 assigns exactly one label per route - Section 4.3.2 only discusses whether that value is shared across routes in a VRF or attachment circuit, not stacking multiple labels per route. Matches the IxNetwork RESTpy BgpL3VpnRouteProperty LabelStart/LabelEnd/LabelStep attributes, which likewise expose a single auto-incrementing label per route range. This intentionally does not reuse the Bgp.MplsLabelBindings schema, which models a label stack (RFC 3107/8277) for plain BGP-LU route ranges.
-// MplsLabels returns a RouteMplsLabelValue
-func (obj *bgpL3VpnV4RouteRange) HasMplsLabels() bool {
-	return obj.obj.MplsLabels != nil
-}
-
-// The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv4 prefix in this route range. RFC 4364 assigns exactly one label per route - Section 4.3.2 only discusses whether that value is shared across routes in a VRF or attachment circuit, not stacking multiple labels per route. Matches the IxNetwork RESTpy BgpL3VpnRouteProperty LabelStart/LabelEnd/LabelStep attributes, which likewise expose a single auto-incrementing label per route range. This intentionally does not reuse the Bgp.MplsLabelBindings schema, which models a label stack (RFC 3107/8277) for plain BGP-LU route ranges.
 // SetMplsLabels sets the RouteMplsLabelValue value in the BgpL3VpnV4RouteRange object
 func (obj *bgpL3VpnV4RouteRange) SetMplsLabels(value RouteMplsLabelValue) BgpL3VpnV4RouteRange {
 
@@ -971,6 +963,11 @@ func (obj *bgpL3VpnV4RouteRange) validateObj(vObj *validation, set_default bool)
 			item.validateObj(vObj, set_default)
 		}
 
+	}
+
+	// MplsLabels is required
+	if obj.obj.MplsLabels == nil {
+		vObj.validationErrors = append(vObj.validationErrors, "MplsLabels is required field on interface BgpL3VpnV4RouteRange")
 	}
 
 	if obj.obj.MplsLabels != nil {

@@ -348,8 +348,6 @@ type BgpL3VpnV6RouteRange interface {
 	ServiceBinding() BgpL3VpnV6ServiceBinding
 	// SetServiceBinding assigns BgpL3VpnV6ServiceBinding provided by user to BgpL3VpnV6RouteRange.
 	SetServiceBinding(value BgpL3VpnV6ServiceBinding) BgpL3VpnV6RouteRange
-	// HasServiceBinding checks if ServiceBinding has been set in BgpL3VpnV6RouteRange
-	HasServiceBinding() bool
 	// RouteDistinguisher returns BgpRouteDistinguisher, set in BgpL3VpnV6RouteRange.
 	// BgpRouteDistinguisher is bGP Route Distinguisher.
 	RouteDistinguisher() BgpRouteDistinguisher
@@ -849,12 +847,6 @@ func (obj *bgpL3VpnV6RouteRange) ServiceBinding() BgpL3VpnV6ServiceBinding {
 }
 
 // Selects and configures this route range's VPN dataplane binding. Only the VPN MPLS label is currently supported; the choice structure exists so that an additional dataplane binding can be added later without breaking this field.
-// ServiceBinding returns a BgpL3VpnV6ServiceBinding
-func (obj *bgpL3VpnV6RouteRange) HasServiceBinding() bool {
-	return obj.obj.ServiceBinding != nil
-}
-
-// Selects and configures this route range's VPN dataplane binding. Only the VPN MPLS label is currently supported; the choice structure exists so that an additional dataplane binding can be added later without breaking this field.
 // SetServiceBinding sets the BgpL3VpnV6ServiceBinding value in the BgpL3VpnV6RouteRange object
 func (obj *bgpL3VpnV6RouteRange) SetServiceBinding(value BgpL3VpnV6ServiceBinding) BgpL3VpnV6RouteRange {
 
@@ -969,6 +961,11 @@ func (obj *bgpL3VpnV6RouteRange) validateObj(vObj *validation, set_default bool)
 			item.validateObj(vObj, set_default)
 		}
 
+	}
+
+	// ServiceBinding is required
+	if obj.obj.ServiceBinding == nil {
+		vObj.validationErrors = append(vObj.validationErrors, "ServiceBinding is required field on interface BgpL3VpnV6RouteRange")
 	}
 
 	if obj.obj.ServiceBinding != nil {
