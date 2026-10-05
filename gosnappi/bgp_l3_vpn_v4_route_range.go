@@ -22,7 +22,7 @@ type bgpL3VpnV4RouteRange struct {
 	asPathHolder              BgpAsPath
 	addPathHolder             BgpAddPath
 	extendedCommunitiesHolder BgpL3VpnV4RouteRangeBgpExtendedCommunityIter
-	mplsLabelsHolder          BgpMplsLabelBindings
+	mplsLabelsHolder          RouteMplsLabelValue
 	routeDistinguisherHolder  BgpRouteDistinguisher
 }
 
@@ -344,22 +344,12 @@ type BgpL3VpnV4RouteRange interface {
 	SetName(value string) BgpL3VpnV4RouteRange
 	// ExtendedCommunities returns BgpL3VpnV4RouteRangeBgpExtendedCommunityIterIter, set in BgpL3VpnV4RouteRange
 	ExtendedCommunities() BgpL3VpnV4RouteRangeBgpExtendedCommunityIter
-	// MplsLabels returns BgpMplsLabelBindings, set in BgpL3VpnV4RouteRange.
-	// BgpMplsLabelBindings is bGP may be used to advertise that a particular node (N) has bound a particular MPLS label, or a particular sequence of MPLS labels,
-	// to a particular address prefix.
-	// This is done by sending a Multiprotocol BGP UPDATE message with with an MP_REACH_NLRI attribute.
-	// The Network Address of Next Hop field of that attribute contains an IP address of node N.
-	// References: https://datatracker.ietf.org/doc/html/rfc3107
-	// & https://datatracker.ietf.org/doc/html/rfc8277.
-	MplsLabels() BgpMplsLabelBindings
-	// SetMplsLabels assigns BgpMplsLabelBindings provided by user to BgpL3VpnV4RouteRange.
-	// BgpMplsLabelBindings is bGP may be used to advertise that a particular node (N) has bound a particular MPLS label, or a particular sequence of MPLS labels,
-	// to a particular address prefix.
-	// This is done by sending a Multiprotocol BGP UPDATE message with with an MP_REACH_NLRI attribute.
-	// The Network Address of Next Hop field of that attribute contains an IP address of node N.
-	// References: https://datatracker.ietf.org/doc/html/rfc3107
-	// & https://datatracker.ietf.org/doc/html/rfc8277.
-	SetMplsLabels(value BgpMplsLabelBindings) BgpL3VpnV4RouteRange
+	// MplsLabels returns RouteMplsLabelValue, set in BgpL3VpnV4RouteRange.
+	// RouteMplsLabelValue is a container of MPLS Prefix Label Value/Index in the address range.
+	MplsLabels() RouteMplsLabelValue
+	// SetMplsLabels assigns RouteMplsLabelValue provided by user to BgpL3VpnV4RouteRange.
+	// RouteMplsLabelValue is a container of MPLS Prefix Label Value/Index in the address range.
+	SetMplsLabels(value RouteMplsLabelValue) BgpL3VpnV4RouteRange
 	// HasMplsLabels checks if MplsLabels has been set in BgpL3VpnV4RouteRange
 	HasMplsLabels() bool
 	// RouteDistinguisher returns BgpRouteDistinguisher, set in BgpL3VpnV4RouteRange.
@@ -848,27 +838,27 @@ func (obj *bgpL3VpnV4RouteRangeBgpExtendedCommunityIter) appendHolderSlice(item 
 	return obj
 }
 
-// Optional configuration for a BGP speaker to Bind an Address Prefix to One or More MPLS Labels.
-// MplsLabels returns a BgpMplsLabelBindings
-func (obj *bgpL3VpnV4RouteRange) MplsLabels() BgpMplsLabelBindings {
+// The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv4 prefix in this route range. RFC 4364 assigns exactly one label per route - Section 4.3.2 only discusses whether that value is shared across routes in a VRF or attachment circuit, not stacking multiple labels per route. Matches the IxNetwork RESTpy BgpL3VpnRouteProperty LabelStart/LabelEnd/LabelStep attributes, which likewise expose a single auto-incrementing label per route range. This intentionally does not reuse the Bgp.MplsLabelBindings schema, which models a label stack (RFC 3107/8277) for plain BGP-LU route ranges.
+// MplsLabels returns a RouteMplsLabelValue
+func (obj *bgpL3VpnV4RouteRange) MplsLabels() RouteMplsLabelValue {
 	if obj.obj.MplsLabels == nil {
-		obj.obj.MplsLabels = NewBgpMplsLabelBindings().msg()
+		obj.obj.MplsLabels = NewRouteMplsLabelValue().msg()
 	}
 	if obj.mplsLabelsHolder == nil {
-		obj.mplsLabelsHolder = &bgpMplsLabelBindings{obj: obj.obj.MplsLabels}
+		obj.mplsLabelsHolder = &routeMplsLabelValue{obj: obj.obj.MplsLabels}
 	}
 	return obj.mplsLabelsHolder
 }
 
-// Optional configuration for a BGP speaker to Bind an Address Prefix to One or More MPLS Labels.
-// MplsLabels returns a BgpMplsLabelBindings
+// The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv4 prefix in this route range. RFC 4364 assigns exactly one label per route - Section 4.3.2 only discusses whether that value is shared across routes in a VRF or attachment circuit, not stacking multiple labels per route. Matches the IxNetwork RESTpy BgpL3VpnRouteProperty LabelStart/LabelEnd/LabelStep attributes, which likewise expose a single auto-incrementing label per route range. This intentionally does not reuse the Bgp.MplsLabelBindings schema, which models a label stack (RFC 3107/8277) for plain BGP-LU route ranges.
+// MplsLabels returns a RouteMplsLabelValue
 func (obj *bgpL3VpnV4RouteRange) HasMplsLabels() bool {
 	return obj.obj.MplsLabels != nil
 }
 
-// Optional configuration for a BGP speaker to Bind an Address Prefix to One or More MPLS Labels.
-// SetMplsLabels sets the BgpMplsLabelBindings value in the BgpL3VpnV4RouteRange object
-func (obj *bgpL3VpnV4RouteRange) SetMplsLabels(value BgpMplsLabelBindings) BgpL3VpnV4RouteRange {
+// The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv4 prefix in this route range. RFC 4364 assigns exactly one label per route - Section 4.3.2 only discusses whether that value is shared across routes in a VRF or attachment circuit, not stacking multiple labels per route. Matches the IxNetwork RESTpy BgpL3VpnRouteProperty LabelStart/LabelEnd/LabelStep attributes, which likewise expose a single auto-incrementing label per route range. This intentionally does not reuse the Bgp.MplsLabelBindings schema, which models a label stack (RFC 3107/8277) for plain BGP-LU route ranges.
+// SetMplsLabels sets the RouteMplsLabelValue value in the BgpL3VpnV4RouteRange object
+func (obj *bgpL3VpnV4RouteRange) SetMplsLabels(value RouteMplsLabelValue) BgpL3VpnV4RouteRange {
 
 	obj.mplsLabelsHolder = nil
 	obj.obj.MplsLabels = value.msg()

@@ -37969,7 +37969,7 @@ class BgpL3vpnV4RouteRange(OpenApiObject):
         "add_path": {"type": "BgpAddPath"},
         "name": {"type": str},
         "extended_communities": {"type": "BgpExtendedCommunityIter"},
-        "mpls_labels": {"type": "BgpMplsLabelBindings"},
+        "mpls_labels": {"type": "RouteMplsLabelValue"},
         "route_distinguisher": {"type": "BgpRouteDistinguisher"},
     }  # type: Dict[str, str]
 
@@ -38200,14 +38200,14 @@ class BgpL3vpnV4RouteRange(OpenApiObject):
 
     @property
     def mpls_labels(self):
-        # type: () -> BgpMplsLabelBindings
+        # type: () -> RouteMplsLabelValue
         """mpls_labels getter
 
-        BGP may be used to advertise that particular node (N) has bound particular MPLS label, or particular sequence of MPLS labels, to particular address prefix.. This is done by sending Multiprotocol BGP UPDATE message with with an MP_REACH_NLRI attribute. The Network Address of Next Hop field of that attribute contains an IP address of node N.. References: https://datatracker.ietf.org/doc/html/rfc3107 & https://datatracker.ietf.org/doc/html/rfc8277.BGP may be used to advertise that particular node (N) has bound particular MPLS label, or particular sequence of MPLS labels, to particular address prefix.. This is done by sending Multiprotocol BGP UPDATE message with with an MP_REACH_NLRI attribute. The Network Address of Next Hop field of that attribute contains an IP address of node N.. References: https://datatracker.ietf.org/doc/html/rfc3107 & https://datatracker.ietf.org/doc/html/rfc8277.BGP may be used to advertise that particular node (N) has bound particular MPLS label, or particular sequence of MPLS labels, to particular address prefix.. This is done by sending Multiprotocol BGP UPDATE message with with an MP_REACH_NLRI attribute. The Network Address of Next Hop field of that attribute contains an IP address of node N.. References: https://datatracker.ietf.org/doc/html/rfc3107 & https://datatracker.ietf.org/doc/html/rfc8277.Optional configuration for BGP speaker to Bind an Address Prefix to One or More MPLS Labels.
+        A container of MPLS Prefix Label Value/Index in the address range.A container of MPLS Prefix Label Value/Index in the address range.A container of MPLS Prefix Label Value/Index in the address range.The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv4 prefix in this route range. RFC 4364 assigns exactly one label per route Section 4.3.2 only discusses whether that value is shared across routes in VRF or attachment circuit, not stacking multiple labels per route. Matches the IxNetwork RESTpy BgpL3VpnRouteProperty LabelStart/LabelEnd/LabelStep attributes, which likewise expose single auto-incrementing label per route range. This intentionally does not reuse the Bgp.MplsLabelBindings schema, which models label stack (RFC 3107/8277) for plain BGP-LU route ranges.
 
-        Returns: BgpMplsLabelBindings
+        Returns: RouteMplsLabelValue
         """
-        return self._get_property("mpls_labels", BgpMplsLabelBindings)
+        return self._get_property("mpls_labels", RouteMplsLabelValue)
 
     @property
     def route_distinguisher(self):
@@ -38599,7 +38599,7 @@ class BgpL3vpnV6ServiceBinding(OpenApiObject):
                 "mpls_labels",
             ],
         },
-        "mpls_labels": {"type": "BgpMplsLabelBindings"},
+        "mpls_labels": {"type": "RouteMplsLabelValue"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -38626,15 +38626,15 @@ class BgpL3vpnV6ServiceBinding(OpenApiObject):
 
     @property
     def mpls_labels(self):
-        # type: () -> BgpMplsLabelBindings
-        """Factory property that returns an instance of the BgpMplsLabelBindings class
+        # type: () -> RouteMplsLabelValue
+        """Factory property that returns an instance of the RouteMplsLabelValue class
 
-        BGP may be used to advertise that particular node (N) has bound particular MPLS label, or particular sequence of MPLS labels, to particular address prefix.. This is done by sending Multiprotocol BGP UPDATE message with with an MP_REACH_NLRI attribute. The Network Address of Next Hop field of that attribute contains an IP address of node N.. References: https://datatracker.ietf.org/doc/html/rfc3107 & https://datatracker.ietf.org/doc/html/rfc8277.
+        A container of MPLS Prefix Label Value/Index in the address range.
 
-        Returns: BgpMplsLabelBindings
+        Returns: RouteMplsLabelValue
         """
         return self._get_property(
-            "mpls_labels", BgpMplsLabelBindings, self, "mpls_labels"
+            "mpls_labels", RouteMplsLabelValue, self, "mpls_labels"
         )
 
     @property

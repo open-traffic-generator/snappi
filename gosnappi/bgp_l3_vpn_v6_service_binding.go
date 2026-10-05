@@ -16,7 +16,7 @@ type bgpL3VpnV6ServiceBinding struct {
 	obj              *otg.BgpL3VpnV6ServiceBinding
 	marshaller       marshalBgpL3VpnV6ServiceBinding
 	unMarshaller     unMarshalBgpL3VpnV6ServiceBinding
-	mplsLabelsHolder BgpMplsLabelBindings
+	mplsLabelsHolder RouteMplsLabelValue
 }
 
 func NewBgpL3VpnV6ServiceBinding() BgpL3VpnV6ServiceBinding {
@@ -278,22 +278,12 @@ type BgpL3VpnV6ServiceBinding interface {
 	setChoice(value BgpL3VpnV6ServiceBindingChoiceEnum) BgpL3VpnV6ServiceBinding
 	// HasChoice checks if Choice has been set in BgpL3VpnV6ServiceBinding
 	HasChoice() bool
-	// MplsLabels returns BgpMplsLabelBindings, set in BgpL3VpnV6ServiceBinding.
-	// BgpMplsLabelBindings is bGP may be used to advertise that a particular node (N) has bound a particular MPLS label, or a particular sequence of MPLS labels,
-	// to a particular address prefix.
-	// This is done by sending a Multiprotocol BGP UPDATE message with with an MP_REACH_NLRI attribute.
-	// The Network Address of Next Hop field of that attribute contains an IP address of node N.
-	// References: https://datatracker.ietf.org/doc/html/rfc3107
-	// & https://datatracker.ietf.org/doc/html/rfc8277.
-	MplsLabels() BgpMplsLabelBindings
-	// SetMplsLabels assigns BgpMplsLabelBindings provided by user to BgpL3VpnV6ServiceBinding.
-	// BgpMplsLabelBindings is bGP may be used to advertise that a particular node (N) has bound a particular MPLS label, or a particular sequence of MPLS labels,
-	// to a particular address prefix.
-	// This is done by sending a Multiprotocol BGP UPDATE message with with an MP_REACH_NLRI attribute.
-	// The Network Address of Next Hop field of that attribute contains an IP address of node N.
-	// References: https://datatracker.ietf.org/doc/html/rfc3107
-	// & https://datatracker.ietf.org/doc/html/rfc8277.
-	SetMplsLabels(value BgpMplsLabelBindings) BgpL3VpnV6ServiceBinding
+	// MplsLabels returns RouteMplsLabelValue, set in BgpL3VpnV6ServiceBinding.
+	// RouteMplsLabelValue is a container of MPLS Prefix Label Value/Index in the address range.
+	MplsLabels() RouteMplsLabelValue
+	// SetMplsLabels assigns RouteMplsLabelValue provided by user to BgpL3VpnV6ServiceBinding.
+	// RouteMplsLabelValue is a container of MPLS Prefix Label Value/Index in the address range.
+	SetMplsLabels(value RouteMplsLabelValue) BgpL3VpnV6ServiceBinding
 	// HasMplsLabels checks if MplsLabels has been set in BgpL3VpnV6ServiceBinding
 	HasMplsLabels() bool
 	setNil()
@@ -331,33 +321,33 @@ func (obj *bgpL3VpnV6ServiceBinding) setChoice(value BgpL3VpnV6ServiceBindingCho
 	obj.mplsLabelsHolder = nil
 
 	if value == BgpL3VpnV6ServiceBindingChoice.MPLS_LABELS {
-		obj.obj.MplsLabels = NewBgpMplsLabelBindings().msg()
+		obj.obj.MplsLabels = NewRouteMplsLabelValue().msg()
 	}
 
 	return obj
 }
 
-// Optional configuration for a BGP speaker to bind an address prefix to one or more MPLS labels (RFC 3107/8277, RFC 4364 Section 3).
-// MplsLabels returns a BgpMplsLabelBindings
-func (obj *bgpL3VpnV6ServiceBinding) MplsLabels() BgpMplsLabelBindings {
+// The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv6 prefix in this route range. RFC 4364 assigns exactly one label per route - Section 4.3.2 only discusses whether that value is shared across routes in a VRF or attachment circuit, not stacking multiple labels per route. Matches the IxNetwork RESTpy BgpV6L3VpnRouteProperty LabelStart/LabelEnd/LabelStep attributes, which likewise expose a single auto-incrementing label per route range rather than the label stack (RFC 3107/8277) modeled by Bgp.MplsLabelBindings for plain BGP-LU route ranges.
+// MplsLabels returns a RouteMplsLabelValue
+func (obj *bgpL3VpnV6ServiceBinding) MplsLabels() RouteMplsLabelValue {
 	if obj.obj.MplsLabels == nil {
 		obj.setChoice(BgpL3VpnV6ServiceBindingChoice.MPLS_LABELS)
 	}
 	if obj.mplsLabelsHolder == nil {
-		obj.mplsLabelsHolder = &bgpMplsLabelBindings{obj: obj.obj.MplsLabels}
+		obj.mplsLabelsHolder = &routeMplsLabelValue{obj: obj.obj.MplsLabels}
 	}
 	return obj.mplsLabelsHolder
 }
 
-// Optional configuration for a BGP speaker to bind an address prefix to one or more MPLS labels (RFC 3107/8277, RFC 4364 Section 3).
-// MplsLabels returns a BgpMplsLabelBindings
+// The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv6 prefix in this route range. RFC 4364 assigns exactly one label per route - Section 4.3.2 only discusses whether that value is shared across routes in a VRF or attachment circuit, not stacking multiple labels per route. Matches the IxNetwork RESTpy BgpV6L3VpnRouteProperty LabelStart/LabelEnd/LabelStep attributes, which likewise expose a single auto-incrementing label per route range rather than the label stack (RFC 3107/8277) modeled by Bgp.MplsLabelBindings for plain BGP-LU route ranges.
+// MplsLabels returns a RouteMplsLabelValue
 func (obj *bgpL3VpnV6ServiceBinding) HasMplsLabels() bool {
 	return obj.obj.MplsLabels != nil
 }
 
-// Optional configuration for a BGP speaker to bind an address prefix to one or more MPLS labels (RFC 3107/8277, RFC 4364 Section 3).
-// SetMplsLabels sets the BgpMplsLabelBindings value in the BgpL3VpnV6ServiceBinding object
-func (obj *bgpL3VpnV6ServiceBinding) SetMplsLabels(value BgpMplsLabelBindings) BgpL3VpnV6ServiceBinding {
+// The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv6 prefix in this route range. RFC 4364 assigns exactly one label per route - Section 4.3.2 only discusses whether that value is shared across routes in a VRF or attachment circuit, not stacking multiple labels per route. Matches the IxNetwork RESTpy BgpV6L3VpnRouteProperty LabelStart/LabelEnd/LabelStep attributes, which likewise expose a single auto-incrementing label per route range rather than the label stack (RFC 3107/8277) modeled by Bgp.MplsLabelBindings for plain BGP-LU route ranges.
+// SetMplsLabels sets the RouteMplsLabelValue value in the BgpL3VpnV6ServiceBinding object
+func (obj *bgpL3VpnV6ServiceBinding) SetMplsLabels(value RouteMplsLabelValue) BgpL3VpnV6ServiceBinding {
 	obj.setChoice(BgpL3VpnV6ServiceBindingChoice.MPLS_LABELS)
 	obj.mplsLabelsHolder = nil
 	obj.obj.MplsLabels = value.msg()
