@@ -36,7 +36,7 @@ USE_OPENAPIART_DIR = None
 USE_MODELS_DIR = None
 
 # supported values - branch name or None
-USE_OPENAPIART_BRANCH = None
+USE_OPENAPIART_BRANCH = "update_go_version"
 USE_MODELS_BRANCH = "ospf_sr"
 
 OPENAPIART_REPO = "https://github.com/open-traffic-generator/openapiart.git"
