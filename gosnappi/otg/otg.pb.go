@@ -70363,7 +70363,7 @@ type FlowRouter struct {
 	// (u1,v1),(u2,v2),(u1,v1),... for (ethernet.src,ethernet.dst) fields.
 	// default = Mode.Enum.mesh
 	Mode *FlowRouter_Mode_Enum `protobuf:"varint,1,opt,name=mode,proto3,enum=otg.FlowRouter_Mode_Enum,oneof" json:"mode,omitempty"`
-	// TBD
+	// Description missing in models
 	//
 	// x-constraint:
 	// - /components/schemas/Device.Ethernet/properties/name
@@ -70380,7 +70380,7 @@ type FlowRouter struct {
 	// - /components/schemas/Device.Dhcpv4client/properties/name
 	// - /components/schemas/Device.Dhcpv6client/properties/name
 	TxNames []string `protobuf:"bytes,2,rep,name=tx_names,json=txNames,proto3" json:"tx_names,omitempty"`
-	// TBD
+	// Description missing in models
 	//
 	// x-constraint:
 	// - /components/schemas/Device.Ethernet/properties/name
