@@ -275,9 +275,6 @@ type RsvpLspsStateRequest interface {
 // x-constraint:
 // - /components/schemas/Device.Rsvp/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Rsvp/properties/name
-//
 // RsvpRouterNames returns a []string
 func (obj *rsvpLspsStateRequest) RsvpRouterNames() []string {
 	if obj.obj.RsvpRouterNames == nil {
@@ -287,9 +284,6 @@ func (obj *rsvpLspsStateRequest) RsvpRouterNames() []string {
 }
 
 // The names of RSVP-TE routers for which learned information is requested. An empty list will return results for all RSVP=TE routers.
-//
-// x-constraint:
-// - /components/schemas/Device.Rsvp/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Rsvp/properties/name

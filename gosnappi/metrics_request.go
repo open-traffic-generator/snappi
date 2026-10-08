@@ -39,6 +39,7 @@ type metricsRequest struct {
 	rocev2FlowHolder         Rocev2FlowMetricsRequest
 	egressOnlyTrackingHolder EgressOnlyTrackingMetricsRequest
 	bmpServerHolder          BmpServerMetricsRequest
+	ldpHolder                LdpMetricsRequest
 }
 
 func NewMetricsRequest() MetricsRequest {
@@ -289,6 +290,7 @@ func (obj *metricsRequest) setNil() {
 	obj.rocev2FlowHolder = nil
 	obj.egressOnlyTrackingHolder = nil
 	obj.bmpServerHolder = nil
+	obj.ldpHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -508,6 +510,14 @@ type MetricsRequest interface {
 	SetBmpServer(value BmpServerMetricsRequest) MetricsRequest
 	// HasBmpServer checks if BmpServer has been set in MetricsRequest
 	HasBmpServer() bool
+	// Ldp returns LdpMetricsRequest, set in MetricsRequest.
+	// LdpMetricsRequest is the request to retrieve LDP per router metrics/statistics.
+	Ldp() LdpMetricsRequest
+	// SetLdp assigns LdpMetricsRequest provided by user to MetricsRequest.
+	// LdpMetricsRequest is the request to retrieve LDP per router metrics/statistics.
+	SetLdp(value LdpMetricsRequest) MetricsRequest
+	// HasLdp checks if Ldp has been set in MetricsRequest
+	HasLdp() bool
 	setNil()
 }
 
@@ -538,6 +548,7 @@ var MetricsRequestChoice = struct {
 	ROCEV2_FLOW          MetricsRequestChoiceEnum
 	EGRESS_ONLY_TRACKING MetricsRequestChoiceEnum
 	BMP_SERVER           MetricsRequestChoiceEnum
+	LDP                  MetricsRequestChoiceEnum
 }{
 	PORT:                 MetricsRequestChoiceEnum("port"),
 	FLOW:                 MetricsRequestChoiceEnum("flow"),
@@ -562,6 +573,7 @@ var MetricsRequestChoice = struct {
 	ROCEV2_FLOW:          MetricsRequestChoiceEnum("rocev2_flow"),
 	EGRESS_ONLY_TRACKING: MetricsRequestChoiceEnum("egress_only_tracking"),
 	BMP_SERVER:           MetricsRequestChoiceEnum("bmp_server"),
+	LDP:                  MetricsRequestChoiceEnum("ldp"),
 }
 
 func (obj *metricsRequest) Choice() MetricsRequestChoiceEnum {
@@ -583,6 +595,8 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 	}
 	enumValue := otg.MetricsRequest_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Ldp = nil
+	obj.ldpHolder = nil
 	obj.obj.BmpServer = nil
 	obj.bmpServerHolder = nil
 	obj.obj.EgressOnlyTracking = nil
@@ -720,6 +734,10 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 
 	if value == MetricsRequestChoice.BMP_SERVER {
 		obj.obj.BmpServer = NewBmpServerMetricsRequest().msg()
+	}
+
+	if value == MetricsRequestChoice.LDP {
+		obj.obj.Ldp = NewLdpMetricsRequest().msg()
 	}
 
 	return obj
@@ -1369,6 +1387,34 @@ func (obj *metricsRequest) SetBmpServer(value BmpServerMetricsRequest) MetricsRe
 	return obj
 }
 
+// description is TBD
+// Ldp returns a LdpMetricsRequest
+func (obj *metricsRequest) Ldp() LdpMetricsRequest {
+	if obj.obj.Ldp == nil {
+		obj.setChoice(MetricsRequestChoice.LDP)
+	}
+	if obj.ldpHolder == nil {
+		obj.ldpHolder = &ldpMetricsRequest{obj: obj.obj.Ldp}
+	}
+	return obj.ldpHolder
+}
+
+// description is TBD
+// Ldp returns a LdpMetricsRequest
+func (obj *metricsRequest) HasLdp() bool {
+	return obj.obj.Ldp != nil
+}
+
+// description is TBD
+// SetLdp sets the LdpMetricsRequest value in the MetricsRequest object
+func (obj *metricsRequest) SetLdp(value LdpMetricsRequest) MetricsRequest {
+	obj.setChoice(MetricsRequestChoice.LDP)
+	obj.ldpHolder = nil
+	obj.obj.Ldp = value.msg()
+
+	return obj
+}
+
 func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1487,6 +1533,11 @@ func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.BmpServer != nil {
 
 		obj.BmpServer().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Ldp != nil {
+
+		obj.Ldp().validateObj(vObj, set_default)
 	}
 
 }
@@ -1608,6 +1659,11 @@ func (obj *metricsRequest) setDefault() {
 	if obj.obj.BmpServer != nil {
 		choices_set += 1
 		choice = MetricsRequestChoice.BMP_SERVER
+	}
+
+	if obj.obj.Ldp != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.LDP
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

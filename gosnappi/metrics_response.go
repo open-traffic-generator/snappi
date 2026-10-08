@@ -39,6 +39,7 @@ type metricsResponse struct {
 	rocev2FlowPerQpMetricsHolder    MetricsResponseRocev2FlowMetricPerQPIter
 	egressOnlyTrackingMetricsHolder MetricsResponseEgressOnlyTrackingMetricIter
 	bmpServerMetricsHolder          MetricsResponseBmpServerMetricIter
+	ldpMetricsHolder                MetricsResponseLdpMetricIter
 }
 
 func NewMetricsResponse() MetricsResponse {
@@ -289,6 +290,7 @@ func (obj *metricsResponse) setNil() {
 	obj.rocev2FlowPerQpMetricsHolder = nil
 	obj.egressOnlyTrackingMetricsHolder = nil
 	obj.bmpServerMetricsHolder = nil
+	obj.ldpMetricsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -322,14 +324,14 @@ type MetricsResponse interface {
 	setChoice(value MetricsResponseChoiceEnum) MetricsResponse
 	// HasChoice checks if Choice has been set in MetricsResponse
 	HasChoice() bool
-	// getter for Dhcpv4Server to set choice.
-	Dhcpv4Server()
 	// getter for Dhcpv6Client to set choice.
 	Dhcpv6Client()
-	// getter for Dhcpv6Server to set choice.
-	Dhcpv6Server()
 	// getter for Dhcpv4Client to set choice.
 	Dhcpv4Client()
+	// getter for Dhcpv6Server to set choice.
+	Dhcpv6Server()
+	// getter for Dhcpv4Server to set choice.
+	Dhcpv4Server()
 	// PortMetrics returns MetricsResponsePortMetricIterIter, set in MetricsResponse
 	PortMetrics() MetricsResponsePortMetricIter
 	// FlowMetrics returns MetricsResponseFlowMetricIterIter, set in MetricsResponse
@@ -376,6 +378,8 @@ type MetricsResponse interface {
 	EgressOnlyTrackingMetrics() MetricsResponseEgressOnlyTrackingMetricIter
 	// BmpServerMetrics returns MetricsResponseBmpServerMetricIterIter, set in MetricsResponse
 	BmpServerMetrics() MetricsResponseBmpServerMetricIter
+	// LdpMetrics returns MetricsResponseLdpMetricIterIter, set in MetricsResponse
+	LdpMetrics() MetricsResponseLdpMetricIter
 	setNil()
 }
 
@@ -406,6 +410,7 @@ var MetricsResponseChoice = struct {
 	ROCEV2_FLOW_PER_QP_METRICS   MetricsResponseChoiceEnum
 	EGRESS_ONLY_TRACKING_METRICS MetricsResponseChoiceEnum
 	BMP_SERVER_METRICS           MetricsResponseChoiceEnum
+	LDP_METRICS                  MetricsResponseChoiceEnum
 }{
 	FLOW_METRICS:                 MetricsResponseChoiceEnum("flow_metrics"),
 	PORT_METRICS:                 MetricsResponseChoiceEnum("port_metrics"),
@@ -430,15 +435,11 @@ var MetricsResponseChoice = struct {
 	ROCEV2_FLOW_PER_QP_METRICS:   MetricsResponseChoiceEnum("rocev2_flow_per_qp_metrics"),
 	EGRESS_ONLY_TRACKING_METRICS: MetricsResponseChoiceEnum("egress_only_tracking_metrics"),
 	BMP_SERVER_METRICS:           MetricsResponseChoiceEnum("bmp_server_metrics"),
+	LDP_METRICS:                  MetricsResponseChoiceEnum("ldp_metrics"),
 }
 
 func (obj *metricsResponse) Choice() MetricsResponseChoiceEnum {
 	return MetricsResponseChoiceEnum(obj.obj.Choice.Enum().String())
-}
-
-// getter for Dhcpv4Server to set choice
-func (obj *metricsResponse) Dhcpv4Server() {
-	obj.setChoice(MetricsResponseChoice.DHCPV4_SERVER)
 }
 
 // getter for Dhcpv6Client to set choice
@@ -446,14 +447,19 @@ func (obj *metricsResponse) Dhcpv6Client() {
 	obj.setChoice(MetricsResponseChoice.DHCPV6_CLIENT)
 }
 
+// getter for Dhcpv4Client to set choice
+func (obj *metricsResponse) Dhcpv4Client() {
+	obj.setChoice(MetricsResponseChoice.DHCPV4_CLIENT)
+}
+
 // getter for Dhcpv6Server to set choice
 func (obj *metricsResponse) Dhcpv6Server() {
 	obj.setChoice(MetricsResponseChoice.DHCPV6_SERVER)
 }
 
-// getter for Dhcpv4Client to set choice
-func (obj *metricsResponse) Dhcpv4Client() {
-	obj.setChoice(MetricsResponseChoice.DHCPV4_CLIENT)
+// getter for Dhcpv4Server to set choice
+func (obj *metricsResponse) Dhcpv4Server() {
+	obj.setChoice(MetricsResponseChoice.DHCPV4_SERVER)
 }
 
 // description is TBD
@@ -471,6 +477,8 @@ func (obj *metricsResponse) setChoice(value MetricsResponseChoiceEnum) MetricsRe
 	}
 	enumValue := otg.MetricsResponse_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.LdpMetrics = nil
+	obj.ldpMetricsHolder = nil
 	obj.obj.BmpServerMetrics = nil
 	obj.bmpServerMetricsHolder = nil
 	obj.obj.EgressOnlyTrackingMetrics = nil
@@ -584,6 +592,10 @@ func (obj *metricsResponse) setChoice(value MetricsResponseChoiceEnum) MetricsRe
 
 	if value == MetricsResponseChoice.BMP_SERVER_METRICS {
 		obj.obj.BmpServerMetrics = []*otg.BmpServerMetric{}
+	}
+
+	if value == MetricsResponseChoice.LDP_METRICS {
+		obj.obj.LdpMetrics = []*otg.LdpMetric{}
 	}
 
 	return obj
@@ -2590,6 +2602,93 @@ func (obj *metricsResponseBmpServerMetricIter) appendHolderSlice(item BmpServerM
 	return obj
 }
 
+// description is TBD
+// LdpMetrics returns a []LdpMetric
+func (obj *metricsResponse) LdpMetrics() MetricsResponseLdpMetricIter {
+	if len(obj.obj.LdpMetrics) == 0 {
+		obj.setChoice(MetricsResponseChoice.LDP_METRICS)
+	}
+	if obj.ldpMetricsHolder == nil {
+		obj.ldpMetricsHolder = newMetricsResponseLdpMetricIter(&obj.obj.LdpMetrics).setMsg(obj)
+	}
+	return obj.ldpMetricsHolder
+}
+
+type metricsResponseLdpMetricIter struct {
+	obj            *metricsResponse
+	ldpMetricSlice []LdpMetric
+	fieldPtr       *[]*otg.LdpMetric
+}
+
+func newMetricsResponseLdpMetricIter(ptr *[]*otg.LdpMetric) MetricsResponseLdpMetricIter {
+	return &metricsResponseLdpMetricIter{fieldPtr: ptr}
+}
+
+type MetricsResponseLdpMetricIter interface {
+	setMsg(*metricsResponse) MetricsResponseLdpMetricIter
+	Items() []LdpMetric
+	Add() LdpMetric
+	Append(items ...LdpMetric) MetricsResponseLdpMetricIter
+	Set(index int, newObj LdpMetric) MetricsResponseLdpMetricIter
+	Clear() MetricsResponseLdpMetricIter
+	clearHolderSlice() MetricsResponseLdpMetricIter
+	appendHolderSlice(item LdpMetric) MetricsResponseLdpMetricIter
+}
+
+func (obj *metricsResponseLdpMetricIter) setMsg(msg *metricsResponse) MetricsResponseLdpMetricIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&ldpMetric{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *metricsResponseLdpMetricIter) Items() []LdpMetric {
+	return obj.ldpMetricSlice
+}
+
+func (obj *metricsResponseLdpMetricIter) Add() LdpMetric {
+	newObj := &otg.LdpMetric{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &ldpMetric{obj: newObj}
+	newLibObj.setDefault()
+	obj.ldpMetricSlice = append(obj.ldpMetricSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *metricsResponseLdpMetricIter) Append(items ...LdpMetric) MetricsResponseLdpMetricIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.ldpMetricSlice = append(obj.ldpMetricSlice, item)
+	}
+	return obj
+}
+
+func (obj *metricsResponseLdpMetricIter) Set(index int, newObj LdpMetric) MetricsResponseLdpMetricIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.ldpMetricSlice[index] = newObj
+	return obj
+}
+func (obj *metricsResponseLdpMetricIter) Clear() MetricsResponseLdpMetricIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.LdpMetric{}
+		obj.ldpMetricSlice = []LdpMetric{}
+	}
+	return obj
+}
+func (obj *metricsResponseLdpMetricIter) clearHolderSlice() MetricsResponseLdpMetricIter {
+	if len(obj.ldpMetricSlice) > 0 {
+		obj.ldpMetricSlice = []LdpMetric{}
+	}
+	return obj
+}
+func (obj *metricsResponseLdpMetricIter) appendHolderSlice(item LdpMetric) MetricsResponseLdpMetricIter {
+	obj.ldpMetricSlice = append(obj.ldpMetricSlice, item)
+	return obj
+}
+
 func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -2917,6 +3016,20 @@ func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 
 	}
 
+	if len(obj.obj.LdpMetrics) != 0 {
+
+		if set_default {
+			obj.LdpMetrics().clearHolderSlice()
+			for _, item := range obj.obj.LdpMetrics {
+				obj.LdpMetrics().appendHolderSlice(&ldpMetric{obj: item})
+			}
+		}
+		for _, item := range obj.LdpMetrics().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
 }
 
 func (obj *metricsResponse) setDefault() {
@@ -3016,6 +3129,11 @@ func (obj *metricsResponse) setDefault() {
 	if len(obj.obj.BmpServerMetrics) > 0 {
 		choices_set += 1
 		choice = MetricsResponseChoice.BMP_SERVER_METRICS
+	}
+
+	if len(obj.obj.LdpMetrics) > 0 {
+		choices_set += 1
+		choice = MetricsResponseChoice.LDP_METRICS
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

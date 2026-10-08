@@ -279,9 +279,6 @@ type Ospfv3MetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Ospfv3.RouterInstance/properties/name
 //
-// x-constraint:
-// - /components/schemas/Ospfv3.RouterInstance/properties/name
-//
 // RouterNames returns a []string
 func (obj *ospfv3MetricsRequest) RouterNames() []string {
 	if obj.obj.RouterNames == nil {
@@ -291,9 +288,6 @@ func (obj *ospfv3MetricsRequest) RouterNames() []string {
 }
 
 // The names of OSPFv3 routers to return results for. An empty list will return results for all OSPFv3 routers.
-//
-// x-constraint:
-// - /components/schemas/Ospfv3.RouterInstance/properties/name
 //
 // x-constraint:
 // - /components/schemas/Ospfv3.RouterInstance/properties/name

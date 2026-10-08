@@ -368,9 +368,6 @@ func (obj *ospfv2Interface) SetName(value string) Ospfv2Interface {
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ipv4/properties/name
-//
 // Ipv4Name returns a string
 func (obj *ospfv2Interface) Ipv4Name() string {
 
@@ -379,9 +376,6 @@ func (obj *ospfv2Interface) Ipv4Name() string {
 }
 
 // The globally unique name of the IPv4 interface connected to the DUT.
-//
-// x-constraint:
-// - /components/schemas/Device.Ipv4/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name

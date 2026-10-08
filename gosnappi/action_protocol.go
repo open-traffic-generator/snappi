@@ -20,6 +20,7 @@ type actionProtocol struct {
 	ipv6Holder   ActionProtocolIpv6
 	bgpHolder    ActionProtocolBgp
 	isisHolder   ActionProtocolIsis
+	ldpHolder    ActionProtocolLdp
 }
 
 func NewActionProtocol() ActionProtocol {
@@ -251,6 +252,7 @@ func (obj *actionProtocol) setNil() {
 	obj.ipv6Holder = nil
 	obj.bgpHolder = nil
 	obj.isisHolder = nil
+	obj.ldpHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -314,6 +316,14 @@ type ActionProtocol interface {
 	SetIsis(value ActionProtocolIsis) ActionProtocol
 	// HasIsis checks if Isis has been set in ActionProtocol
 	HasIsis() bool
+	// Ldp returns ActionProtocolLdp, set in ActionProtocol.
+	// ActionProtocolLdp is actions associated with LDP on configured resources.
+	Ldp() ActionProtocolLdp
+	// SetLdp assigns ActionProtocolLdp provided by user to ActionProtocol.
+	// ActionProtocolLdp is actions associated with LDP on configured resources.
+	SetLdp(value ActionProtocolLdp) ActionProtocol
+	// HasLdp checks if Ldp has been set in ActionProtocol
+	HasLdp() bool
 	setNil()
 }
 
@@ -325,11 +335,13 @@ var ActionProtocolChoice = struct {
 	IPV6 ActionProtocolChoiceEnum
 	BGP  ActionProtocolChoiceEnum
 	ISIS ActionProtocolChoiceEnum
+	LDP  ActionProtocolChoiceEnum
 }{
 	IPV4: ActionProtocolChoiceEnum("ipv4"),
 	IPV6: ActionProtocolChoiceEnum("ipv6"),
 	BGP:  ActionProtocolChoiceEnum("bgp"),
 	ISIS: ActionProtocolChoiceEnum("isis"),
+	LDP:  ActionProtocolChoiceEnum("ldp"),
 }
 
 func (obj *actionProtocol) Choice() ActionProtocolChoiceEnum {
@@ -345,6 +357,8 @@ func (obj *actionProtocol) setChoice(value ActionProtocolChoiceEnum) ActionProto
 	}
 	enumValue := otg.ActionProtocol_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Ldp = nil
+	obj.ldpHolder = nil
 	obj.obj.Isis = nil
 	obj.isisHolder = nil
 	obj.obj.Bgp = nil
@@ -368,6 +382,10 @@ func (obj *actionProtocol) setChoice(value ActionProtocolChoiceEnum) ActionProto
 
 	if value == ActionProtocolChoice.ISIS {
 		obj.obj.Isis = NewActionProtocolIsis().msg()
+	}
+
+	if value == ActionProtocolChoice.LDP {
+		obj.obj.Ldp = NewActionProtocolLdp().msg()
 	}
 
 	return obj
@@ -485,6 +503,34 @@ func (obj *actionProtocol) SetIsis(value ActionProtocolIsis) ActionProtocol {
 	return obj
 }
 
+// description is TBD
+// Ldp returns a ActionProtocolLdp
+func (obj *actionProtocol) Ldp() ActionProtocolLdp {
+	if obj.obj.Ldp == nil {
+		obj.setChoice(ActionProtocolChoice.LDP)
+	}
+	if obj.ldpHolder == nil {
+		obj.ldpHolder = &actionProtocolLdp{obj: obj.obj.Ldp}
+	}
+	return obj.ldpHolder
+}
+
+// description is TBD
+// Ldp returns a ActionProtocolLdp
+func (obj *actionProtocol) HasLdp() bool {
+	return obj.obj.Ldp != nil
+}
+
+// description is TBD
+// SetLdp sets the ActionProtocolLdp value in the ActionProtocol object
+func (obj *actionProtocol) SetLdp(value ActionProtocolLdp) ActionProtocol {
+	obj.setChoice(ActionProtocolChoice.LDP)
+	obj.ldpHolder = nil
+	obj.obj.Ldp = value.msg()
+
+	return obj
+}
+
 func (obj *actionProtocol) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -515,6 +561,11 @@ func (obj *actionProtocol) validateObj(vObj *validation, set_default bool) {
 		obj.Isis().validateObj(vObj, set_default)
 	}
 
+	if obj.obj.Ldp != nil {
+
+		obj.Ldp().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *actionProtocol) setDefault() {
@@ -539,6 +590,11 @@ func (obj *actionProtocol) setDefault() {
 	if obj.obj.Isis != nil {
 		choices_set += 1
 		choice = ActionProtocolChoice.ISIS
+	}
+
+	if obj.obj.Ldp != nil {
+		choices_set += 1
+		choice = ActionProtocolChoice.LDP
 	}
 	if choices_set == 1 && choice != "" {
 		if obj.obj.Choice != nil {

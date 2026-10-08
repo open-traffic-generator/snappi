@@ -487,8 +487,7 @@ components:
       properties:
         port_name:
           description: "The name of a port object that will be part of the LAG. \n\
-            \nx-constraint:\n- /components/schemas/Port/properties/name\n\n\nx-constraint:\n\
-            - /components/schemas/Port/properties/name\n"
+            \nx-constraint:\n- /components/schemas/Port/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -757,10 +756,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -771,10 +766,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: string
           x-constraint:
           - /components/schemas/Lag/properties/name
@@ -782,11 +773,6 @@ components:
         vxlan_name:
           description: |
             Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.
-
-            x-constraint:
-            - #/components/schemas/Vxlan.V4Tunnel/properties/name
-            - #/components/schemas/Vxlan.V6Tunnel/properties/name
-
 
             x-constraint:
             - #/components/schemas/Vxlan.V4Tunnel/properties/name
@@ -811,8 +797,7 @@ components:
             \ an unconnected device in a simulated topology \n( all ethernet links\
             \ of type simulated_link ) or an emulated device connected to the Device\
             \ Under Test (has at atleast one ethernet interface with connection to\
-            \ the port or\n lag connected to the DUT)\n\nx-constraint:\n- #/components/schemas/Device.Ethernet/properties/name\n\
-            \n\nx-constraint:\n- #/components/schemas/Device.Ethernet/properties/name\n"
+            \ the port or\n lag connected to the DUT)\n\nx-constraint:\n- #/components/schemas/Device.Ethernet/properties/name\n"
           x-constraint:
           - '#/components/schemas/Device.Ethernet/properties/name'
           x-field-uid: 1
@@ -953,10 +938,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ethernet/properties/name
@@ -1056,8 +1037,7 @@ components:
       properties:
         eth_name:
           description: "The unique name of the Ethernet interface behind which this\
-            \ Loopback \n interface will be created.\n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n\
-            \n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n"
+            \ Loopback \n interface will be created.\n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Device.Ethernet/properties/name
@@ -2038,10 +2018,6 @@ components:
         eth_name:
           description: |
             The unique name of the Ethernet interface on which MACsec is enabled.
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
@@ -3365,8 +3341,7 @@ components:
       properties:
         port_names:
           description: "A list of unique names of port objects that will share the\n\
-            choice settings. \n\nx-constraint:\n- /components/schemas/Port/properties/name\n\
-            \n\nx-constraint:\n- /components/schemas/Port/properties/name\n"
+            choice settings. \n\nx-constraint:\n- /components/schemas/Port/properties/name\n"
           type: array
           items:
             type: string
@@ -3460,8 +3435,6 @@ components:
           description: |-
             Under Review: This field is currently under review for pending exploration on use cases
 
-            Under Review: This field is currently under review for pending exploration on use cases
-
             Set to true to override the auto_negotiate, link_training
             and rs_fec settings for gigabit ethernet interfaces.
           type: boolean
@@ -3472,8 +3445,6 @@ components:
               on use cases
         auto_negotiate:
           description: |-
-            Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
-
             Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
 
             Enable/disable auto negotiation.
@@ -3684,10 +3655,6 @@ components:
         port_names:
           description: |
             The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -4014,6 +3981,11 @@ components:
             Configuration for BMP.
           $ref: '#/components/schemas/Device.Bmp'
           x-field-uid: 14
+        ldp:
+          description: |-
+            The properties of an LDP router and its children, such as LDP interfaces, targeted peers and FEC ranges. In this model, LDP over IPv4 is supported as per RFC 5036.
+          $ref: '#/components/schemas/Device.LdpRouter'
+          x-field-uid: 15
       required:
       - name
     Protocol.Options:
@@ -4131,10 +4103,6 @@ components:
         eth_name:
           description: |
             The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. The underlying Ethernet Interface can an emulated or simulated interface. A simulated ethernet interface can be assumed to be connected by  a primary (internal to a simulated topology)  or a secondary link (connected to a device behind a different simulated topology).
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
@@ -4936,10 +4904,6 @@ components:
         custom_locator_reference:
           description: |
             Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of a locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".
-
-            x-constraint:
-            - /components/schemas/IsisSRv6.Locator/properties/locator_name
-
 
             x-constraint:
             - /components/schemas/IsisSRv6.Locator/properties/locator_name
@@ -6335,12 +6299,6 @@ components:
             - /components/schemas/Device.Ipv4/properties/name
             - /components/schemas/Device.Ipv4Loopback/properties/name
             - /components/schemas/Device.Dhcpv4client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
-            - /components/schemas/Device.Dhcpv4client/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -7340,8 +7298,6 @@ components:
           description: |-
             Deprecated: This property is deprecated in favor of property extended_communities
 
-            Deprecated: This property is deprecated in favor of property extended_communities
-
             Optional Extended Community settings. The Extended Communities Attribute is a transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities  attributes are utilized to trigger routing decisions, such as acceptance, rejection,  preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first 2 Bytes of the community encode a type and sub-type fields and the last 6 Bytes carry a unique set of data in a format defined by the type and sub-type field. Extended communities provide a larger  range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for  administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two  byte local administrator id.  When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for  administrator_ipv4_address is a four byte IPv4 address followed by a two byte local administrator id.  When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes  contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from  IANA's "ETHER TYPES" registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format.  When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the  last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates  occur for the same MAC address.  Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
           type: array
           items:
@@ -7929,8 +7885,6 @@ components:
             information: This property is deprecated in favor of property extended_communities
           x-field-uid: 11
           description: |-
-            Deprecated: This property is deprecated in favor of property extended_communities
-
             Deprecated: This property is deprecated in favor of property extended_communities
 
             Optional Extended Community settings. The Extended Communities Attribute is a transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities  attributes are utilized to trigger routing decisions, such as acceptance, rejection,  preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first 2 Bytes of the community encode a type and sub-type fields and the last 6 Bytes carry a unique set of data in a format defined by the type and sub-type field. Extended communities provide a larger  range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for  administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two  byte local administrator id.  When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for  administrator_ipv4_address is a four byte IPv4 address followed by a two byte local administrator id.  When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes  contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from  IANA's "ETHER TYPES" registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format.  When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the  last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates  occur for the same MAC address.  Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
@@ -10961,12 +10915,6 @@ components:
             - /components/schemas/Device.Ipv6/properties/name
             - /components/schemas/Device.Ipv6Loopback/properties/name
             - /components/schemas/Device.Dhcpv6client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Device.Ipv6Loopback/properties/name
-            - /components/schemas/Device.Dhcpv6client/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
@@ -11285,11 +11233,6 @@ components:
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
             - /components/schemas/Device.Ipv4Loopback/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -11325,11 +11268,6 @@ components:
         source_interface:
           description: |
             Determines the source interface.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Device.Ipv6Loopback/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -11537,7 +11475,6 @@ components:
           description: "The globally unique name of the IPv4 interface connected to\
             \ the DUT. This name must match the \"name\" field of the \"ipv4_addresses\"\
             \ on top which this RSVP interface is configured.          \n\nx-constraint:\n\
-            - /components/schemas/Device.Ipv4/properties/name\n\n\nx-constraint:\n\
             - /components/schemas/Device.Ipv4/properties/name\n"
           type: string
           x-constraint:
@@ -11626,11 +11563,6 @@ components:
         ipv4_name:
           description: |
             The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for  the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks"  on which this LSP interface is configured.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
@@ -12205,10 +12137,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -12326,10 +12254,6 @@ components:
         ipv6_name:
           description: |
             The unique name of the IPv6 on which DHCPv6 server will run.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -12761,8 +12685,7 @@ components:
           x-unique: global
         ipv4_name:
           description: "The globally unique name of the IPv4 interface connected to\
-            \ the DUT.            \n\nx-constraint:\n- /components/schemas/Device.Ipv4/properties/name\n\
-            \n\nx-constraint:\n- /components/schemas/Device.Ipv4/properties/name\n"
+            \ the DUT.            \n\nx-constraint:\n- /components/schemas/Device.Ipv4/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -13427,8 +13350,7 @@ components:
           x-unique: global
         ipv6_name:
           description: "The globally unique name of the IPv6 interface connected to\
-            \ the DUT.            \n\nx-constraint:\n- /components/schemas/Device.Ipv6/properties/name\n\
-            \n\nx-constraint:\n- /components/schemas/Device.Ipv6/properties/name\n"
+            \ the DUT.            \n\nx-constraint:\n- /components/schemas/Device.Ipv6/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
@@ -13766,10 +13688,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -13941,10 +13859,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
@@ -14026,10 +13940,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -14052,10 +13962,6 @@ components:
         ipv6_name:
           description: |
             The unique name of the IPv6 interface used as the source IP for BMP Server.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -14377,6 +14283,310 @@ components:
           default: 48
           maximum: 128
           x-field-uid: 2
+    Device.LdpRouter:
+      description: |-
+        Configuration for an emulated LDP Label Switching Router (LSR) as per RFC 5036. In this model, LDP over IPv4 is supported, with Basic (link) discovery on IPv4 interfaces (RFC 5036 Section 2.4.1) and Extended (targeted) discovery to configured peers (RFC 5036 Section 2.4.2). The LDP Identifier carried in every LDP PDU is lsr_id:label_space_id (RFC 5036 Section 2.2.2). At least one entry in ipv4_interfaces or ipv4_targeted_peers is needed to form an LDP session. All sessions of this router use the session parameters configured here (label space, label advertisement mode, keepalive and graceful restart).
+      type: object
+      required:
+      - name
+      - lsr_id
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          x-unique: global
+        lsr_id:
+          description: |-
+            The 4-octet LSR ID, the first part of the 6-octet LDP Identifier (RFC 5036 Section 2.2.2). It must be globally unique in the network and is normally the address of an IPv4 loopback of this device. An implementation that uses one router ID per emulated device requires lsr_id to be equal to any other router ID configured on the same device, such as Device.BgpRouter.router_id or a custom OSPFv2 / OSPFv3 router ID, and rejects a mismatch.
+          type: string
+          format: ipv4
+          x-field-uid: 2
+        label_space_id:
+          description: |-
+            The 2-octet label space identifier, the second part of the LDP Identifier (RFC 5036 Section 2.2.2). The value 0 identifies the platform-wide label space (RFC 5036 Section 2.2.1), which is the normal value for IPv4 LDP over Ethernet.
+          type: integer
+          format: uint32
+          maximum: 65535
+          default: 0
+          x-field-uid: 3
+        label_advertisement_mode:
+          description: |-
+            The label advertisement discipline proposed by this LSR in the A bit of the Common Session Parameters TLV of the Initialization message (RFC 5036 Sections 2.6.3 and 3.5.3). It applies to every session of this router. downstream_unsolicited - labels for the FECs in ipv4_fec_ranges are advertised to every peer without a request (A bit = 0). downstream_on_demand - a label for a FEC is advertised to a peer only after that peer sends a Label Request for it (A bit = 1).
+          type: string
+          default: downstream_unsolicited
+          x-enum:
+            downstream_unsolicited:
+              x-field-uid: 1
+            downstream_on_demand:
+              x-field-uid: 2
+          x-field-uid: 4
+          enum:
+          - downstream_unsolicited
+          - downstream_on_demand
+        keepalive_hold_time:
+          description: |-
+            The KeepAlive Time in seconds advertised in the Common Session Parameters TLV of the Initialization message (RFC 5036 Section 3.5.3). A session is closed when no LDP PDU is received from the peer within the negotiated KeepAlive Time, which is the smaller of the two advertised values. The value must be non-zero.
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 65535
+          default: 180
+          x-field-uid: 5
+        keepalive_interval:
+          description: |-
+            The interval in seconds at which KeepAlive messages are sent when no other LDP PDU has been sent (RFC 5036 Sections 2.5.6 and 3.5.4). It should be smaller than keepalive_hold_time. One third of keepalive_hold_time is common.
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 65535
+          default: 60
+          x-field-uid: 6
+        graceful_restart:
+          description: |-
+            When present, LDP graceful restart (RFC 3478) is enabled and the Fault Tolerant Session TLV is included in the Initialization message. Omit to disable graceful restart.
+          $ref: '#/components/schemas/Ldp.GracefulRestart'
+          x-field-uid: 7
+        ipv4_interfaces:
+          description: |-
+            IPv4 interfaces on which LDP Basic Discovery runs (RFC 5036 Section 2.4.1). A session is formed with each LSR discovered on the link.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ldp.Ipv4Interface'
+          x-field-uid: 8
+        ipv4_targeted_peers:
+          description: |-
+            IPv4 peers to which LDP Extended Discovery runs (RFC 5036 Section 2.4.2). A session is formed with each configured peer.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ldp.Ipv4TargetedPeer'
+          x-field-uid: 9
+        ipv4_fec_ranges:
+          description: |-
+            IPv4 Prefix FECs (RFC 5036 Section 3.4.1) that this LSR advertises to all its peers in Label Mapping messages.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ldp.Ipv4FecRange'
+          x-field-uid: 10
+    Ldp.GracefulRestart:
+      description: |-
+        LDP graceful restart parameters (RFC 3478). When this object is present, the emulated LSR includes the Fault Tolerant (FT) Session TLV (type 0x0503) with the L flag set in its Initialization message (RFC 3478 Section 2). Both timers are configured in seconds; they are carried in milliseconds on the wire, and the implementation converts them.
+      type: object
+      properties:
+        reconnect_time:
+          description: |-
+            The FT Reconnect Timeout in seconds advertised in the FT Session TLV (RFC 3478 Section 2): the time the peer should wait for this LSR to re-establish the session after a restart. A value of 0 indicates that this LSR does not preserve its forwarding state across a restart.
+          type: integer
+          format: uint32
+          maximum: 3600
+          default: 120
+          x-field-uid: 1
+        recovery_time:
+          description: |-
+            The Recovery Time in seconds advertised in the FT Session TLV after a restart (RFC 3478 Section 2): the time for which this LSR retains the MPLS forwarding state it preserved across the restart. A value of 0 indicates that the forwarding state was not preserved.
+          type: integer
+          format: uint32
+          maximum: 3600
+          default: 120
+          x-field-uid: 2
+    Ldp.Ipv4Interface:
+      description: |-
+        LDP Basic Discovery on an IPv4 interface (RFC 5036 Section 2.4.1). The emulated LSR sends LDP Link Hellos (UDP port 646, destination 224.0.0.2) on the referenced IPv4 interface and forms a session with each LSR discovered on the link.
+      type: object
+      required:
+      - name
+      - ipv4_name
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          x-unique: global
+        ipv4_name:
+          description: |
+            The globally unique name of the IPv4 interface on which Link Hellos are sent. It must match the "name" field of an entry in "ipv4_addresses". A loopback cannot be used, because Link Hellos are sent on a link.
+
+            x-constraint:
+            - /components/schemas/Device.Ipv4/properties/name
+          type: string
+          x-constraint:
+          - /components/schemas/Device.Ipv4/properties/name
+          x-field-uid: 2
+        hello_interval:
+          description: |-
+            The interval in seconds between Link Hello messages. RFC 5036 Section 3.5.2.1 asks that Hellos are sent well within the hold time; hello_interval should be at most one third of hello_hold_time.
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 65535
+          default: 5
+          x-field-uid: 3
+        hello_hold_time:
+          description: |-
+            The Hold Time in seconds advertised in the Common Hello Parameters TLV of Link Hellos (RFC 5036 Section 3.5.2). The hello adjacency is removed when no Hello is received within the negotiated hold time, which is the smaller of the two advertised values. The value 65535 means infinite.
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 65535
+          default: 15
+          x-field-uid: 4
+        authentication:
+          description: |-
+            When present, the TCP MD5 Signature Option is used on the session TCP connection of every session discovered on this interface (RFC 5036 Section 2.9). Omit to disable authentication. A session is a single TCP connection, so all adjacencies that lead to the same peer LSR must use the same key.
+          $ref: '#/components/schemas/Ldp.Authentication'
+          x-field-uid: 5
+    Ldp.Authentication:
+      description: |-
+        LDP session authentication. When this object is present, the TCP MD5 Signature Option (RFC 2385) is used on the LDP session TCP connection (RFC 5036 Section 2.9). Omit the object to disable authentication.
+      type: object
+      properties:
+        choice:
+          description: |-
+            The authentication mechanism.
+          type: string
+          default: md5
+          x-enum:
+            md5:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - md5
+        md5:
+          description: |-
+            The shared key used to compute the TCP MD5 signature (RFC 2385). A key must be set when choice is md5.
+          type: string
+          minLength: 1
+          maxLength: 80
+          x-field-uid: 2
+    Ldp.Ipv4TargetedPeer:
+      description: |-
+        LDP Extended Discovery to one IPv4 peer (RFC 5036 Section 2.4.2). The emulated LSR sends unicast Targeted Hellos (UDP port 646) from the address of ipv4_name to remote_address and forms a session with that LSR. remote_address must be reachable from the DUT, for example through an IGP or a static route.
+      type: object
+      required:
+      - name
+      - ipv4_name
+      - remote_address
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          x-unique: global
+        ipv4_name:
+          description: |
+            The globally unique name of the local IPv4 interface or IPv4 loopback from which Targeted Hellos are sent. It must match the "name" field of an entry in "ipv4_addresses" or "ipv4_loopbacks".
+
+            x-constraint:
+            - /components/schemas/Device.Ipv4/properties/name
+            - /components/schemas/Device.Ipv4Loopback/properties/name
+          type: string
+          x-constraint:
+          - /components/schemas/Device.Ipv4/properties/name
+          - /components/schemas/Device.Ipv4Loopback/properties/name
+          x-field-uid: 2
+        remote_address:
+          description: |-
+            The IPv4 address of the targeted peer, to which Targeted Hellos are sent (RFC 5036 Section 2.4.2).
+          type: string
+          format: ipv4
+          x-field-uid: 3
+        hello_interval:
+          description: |-
+            The interval in seconds between Targeted Hello messages. It should be at most one third of hello_hold_time (RFC 5036 Section 3.5.2.1).
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 65535
+          default: 15
+          x-field-uid: 4
+        hello_hold_time:
+          description: |-
+            The Hold Time in seconds advertised in the Common Hello Parameters TLV of Targeted Hellos (RFC 5036 Section 3.5.2). The value 65535 means infinite.
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 65535
+          default: 45
+          x-field-uid: 5
+        authentication:
+          description: |-
+            When present, the TCP MD5 Signature Option is used on the session TCP connection to this peer (RFC 5036 Section 2.9). Omit to disable authentication. If the peer is also reached through an Ldp.Ipv4Interface, both must use the same key.
+          $ref: '#/components/schemas/Ldp.Authentication'
+          x-field-uid: 6
+    Ldp.Ipv4FecRange:
+      description: |-
+        A range of IPv4 Prefix FEC elements (FEC element type 0x02, RFC 5036 Section 3.4.1) that the emulated LSR advertises to all its peers in Label Mapping messages (RFC 5036 Section 3.5.7), each bound to a Generic Label (RFC 5036 Section 3.4.2.1). A DUT normally installs a label for a FEC only when it has a matching route (RFC 5036 Section 2.6.1), so the same prefixes are usually also advertised through an IGP, for example an Isis.V4RouteRange on the same device.
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          x-unique: global
+        addresses:
+          description: |-
+            A list of groups of IPv4 prefixes. Each generated prefix is one Prefix FEC element.
+          type: array
+          items:
+            $ref: '#/components/schemas/V4RouteAddress'
+          x-field-uid: 2
+        label:
+          description: |-
+            The labels bound to the prefixes of this range.
+          $ref: '#/components/schemas/Ldp.FecLabel'
+          x-field-uid: 3
+    Ldp.FecLabel:
+      description: |-
+        The Generic Label (RFC 5036 Section 3.4.2.1) bound to each Prefix FEC of a Ldp.Ipv4FecRange. increment - the n-th prefix generated by addresses (counting across all entries, in order, from 0) gets label start + n. fixed - every prefix of the range gets the same label. Use 3 (Implicit NULL) or 0 (IPv4 Explicit NULL) to emulate an egress LSR (RFC 3032 Section 2.1).
+      type: object
+      properties:
+        choice:
+          description: |-
+            How labels are assigned to the prefixes of the range.
+          type: string
+          default: increment
+          x-enum:
+            increment:
+              x-field-uid: 1
+            fixed:
+              x-field-uid: 2
+          x-field-uid: 1
+          enum:
+          - increment
+          - fixed
+        increment:
+          description: |-
+            Labels that increase by 1 from one prefix to the next.
+          $ref: '#/components/schemas/Ldp.FecLabel.Increment'
+          x-field-uid: 2
+        fixed:
+          description: |-
+            The label bound to every prefix of the range. Meaningful values are 3 (Implicit NULL), 0 (IPv4 Explicit NULL) and 16 to 1048575. Values 1, 2 and 4 to 15 are reserved (RFC 3032 Section 2.1).
+          type: integer
+          format: uint32
+          maximum: 1048575
+          default: 3
+          x-field-uid: 3
+    Ldp.FecLabel.Increment:
+      description: |-
+        Labels that increase by 1 from one prefix to the next.
+      type: object
+      properties:
+        start:
+          description: |-
+            The label bound to the first prefix of the range. Labels 0 to 15 are reserved (RFC 3032 Section 2.1). start plus the number of prefixes in the range minus 1 must not exceed 1048575; the implementation rejects a configuration that does.
+          type: integer
+          format: uint32
+          minimum: 16
+          maximum: 1048575
+          default: 16
+          x-field-uid: 1
     Flow:
       description: |-
         A high level data plane traffic flow.
@@ -14408,10 +14618,7 @@ components:
           description: "Under Review: The packet header schema for egress tracking\
             \ currently exposes unwanted fields. The query structure for tagged metrics\
             \ inside flows metrics requires documenting expected response format.\n\
-            \nUnder Review: The packet header schema for egress tracking currently\
-            \ exposes unwanted fields. The query structure for tagged metrics inside\
-            \ flows metrics requires documenting expected response format.\n\nThe\
-            \ list of protocol headers defining the shape of all \nintended packets\
+            \nThe list of protocol headers defining the shape of all \nintended packets\
             \ in corresponding flow as it is received\nby traffic-generator port.\n\
             \nFor all protocol headers, only the `metric_tags` property is configurable."
           type: array
@@ -14507,11 +14714,6 @@ components:
             x-constraint:
             - /components/schemas/Port/properties/name
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -14521,14 +14723,7 @@ components:
           description: |
             Deprecated: This property is deprecated in favor of property rx_names
 
-            Deprecated: This property is deprecated in favor of property rx_names
-
             The unique name of a port that is the intended receive port.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -14544,11 +14739,6 @@ components:
         rx_names:
           description: |
             Unique name of ports or lags that are intended receive endpoints.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -14633,6 +14823,7 @@ components:
           - /components/schemas/Isis.V6RouteRange/properties/name
           - /components/schemas/Ospfv2.V4RouteRange/properties/name
           - /components/schemas/Ospfv3.V6RouteRange/properties/name
+          - /components/schemas/Ldp.Ipv4FecRange/properties/name
           - /components/schemas/Device.Dhcpv4client/properties/name
           - /components/schemas/Device.Dhcpv6client/properties/name
           example:
@@ -14659,22 +14850,7 @@ components:
             - /components/schemas/Isis.V6RouteRange/properties/name
             - /components/schemas/Ospfv2.V4RouteRange/properties/name
             - /components/schemas/Ospfv3.V6RouteRange/properties/name
-            - /components/schemas/Device.Dhcpv4client/properties/name
-            - /components/schemas/Device.Dhcpv6client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Bgp.CMacIpRange/properties/name
-            - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-            - /components/schemas/Isis.V4RouteRange/properties/name
-            - /components/schemas/Isis.V6RouteRange/properties/name
-            - /components/schemas/Ospfv2.V4RouteRange/properties/name
-            - /components/schemas/Ospfv3.V6RouteRange/properties/name
+            - /components/schemas/Ldp.Ipv4FecRange/properties/name
             - /components/schemas/Device.Dhcpv4client/properties/name
             - /components/schemas/Device.Dhcpv6client/properties/name
         rx_names:
@@ -14696,6 +14872,7 @@ components:
           - /components/schemas/Device.Dhcpv4client/properties/name
           - /components/schemas/Ospfv2.V4RouteRange/properties/name
           - /components/schemas/Ospfv3.V6RouteRange/properties/name
+          - /components/schemas/Ldp.Ipv4FecRange/properties/name
           - /components/schemas/Device.Dhcpv6client/properties/name
           example:
           - Eth 1
@@ -14722,22 +14899,7 @@ components:
             - /components/schemas/Device.Dhcpv4client/properties/name
             - /components/schemas/Ospfv2.V4RouteRange/properties/name
             - /components/schemas/Ospfv3.V6RouteRange/properties/name
-            - /components/schemas/Device.Dhcpv6client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Bgp.CMacIpRange/properties/name
-            - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-            - /components/schemas/Isis.V4RouteRange/properties/name
-            - /components/schemas/Isis.V6RouteRange/properties/name
-            - /components/schemas/Device.Dhcpv4client/properties/name
-            - /components/schemas/Ospfv2.V4RouteRange/properties/name
-            - /components/schemas/Ospfv3.V6RouteRange/properties/name
+            - /components/schemas/Ldp.Ipv4FecRange/properties/name
             - /components/schemas/Device.Dhcpv6client/properties/name
         bidirectional:
           description: "Allows traffic sub-flow(s) to be created on both forward and\
@@ -19075,8 +19237,7 @@ components:
           description: "Constrain the events being returned by specifying event sources.\
             \ \nIf the list is empty then all event sources will be returned. \n\n\
             x-constraint:\n- /components/schemas/Port/properties/name\n- /components/schemas/Bgp.V4RouteRange/name\n\
-            - /components/schemas/Bgp.V6RouteRange/name\n\n\nx-constraint:\n- /components/schemas/Port/properties/name\n\
-            - /components/schemas/Bgp.V4RouteRange/name\n- /components/schemas/Bgp.V6RouteRange/name\n"
+            - /components/schemas/Bgp.V6RouteRange/name\n"
           type: array
           items:
             type: string
@@ -19179,10 +19340,6 @@ components:
         port_name:
           description: |
             Name of the test port on which LLDP is configured on.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -19445,10 +19602,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -19506,10 +19659,6 @@ components:
 
             x-constraint:
             - /components/schemas/Rocev2.QPs/properties/qp_name
-
-
-            x-constraint:
-            - /components/schemas/Rocev2.QPs/properties/qp_name
           type: string
           x-constraint:
           - /components/schemas/Rocev2.QPs/properties/qp_name
@@ -19517,11 +19666,6 @@ components:
         rx_endpoint:
           description: |
             The unique name of remote QP or port which be receiving the packets for the flow.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Rocev2.QPs/properties/qp_name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -19627,10 +19771,6 @@ components:
         port_name:
           description: |
             Name of the received port this egress tracking rule/specification has to be applied.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -19758,10 +19898,6 @@ components:
         port_name:
           description: |
             The name of port for which this settings will be applied to.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -20465,10 +20601,6 @@ components:
 
             x-constraint:
             - /components/schemas/Isis.Interface/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Isis.Interface/properties/name
           type: array
           items:
             type: string
@@ -20576,10 +20708,6 @@ components:
 
             x-constraint:
             - /components/schemas/Flow/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
           type: array
           items:
             type: string
@@ -20682,6 +20810,8 @@ components:
               x-field-uid: 6
             ospfv3:
               x-field-uid: 7
+            ldp:
+              x-field-uid: 8
           x-field-uid: 1
           enum:
           - all
@@ -20691,6 +20821,7 @@ components:
           - isis
           - ospfv2
           - ospfv3
+          - ldp
         all:
           $ref: '#/components/schemas/State.Protocol.All'
           x-field-uid: 2
@@ -20715,6 +20846,9 @@ components:
         rocev2:
           $ref: '#/components/schemas/State.Protocol.Rocev2'
           x-field-uid: 9
+        ldp:
+          $ref: '#/components/schemas/State.Protocol.Ldp'
+          x-field-uid: 10
     State.Port.Link:
       description: |-
         Sets the link of configured ports.
@@ -20725,10 +20859,6 @@ components:
         port_names:
           description: |
             The names of target ports. An empty or null list will target all ports.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -20765,10 +20895,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -20799,10 +20925,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -20820,10 +20942,6 @@ components:
           description: |
             The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.
             If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
-
 
             x-constraint:
             - /components/schemas/Flow/properties/name
@@ -20895,15 +21013,7 @@ components:
             - /components/schemas/Isis.V6RouteRange/properties/name
             - /components/schemas/Ospfv2.V4RouteRange/properties/name
             - /components/schemas/Ospfv3.V6RouteRange/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Isis.V4RouteRange/properties/name
-            - /components/schemas/Isis.V6RouteRange/properties/name
-            - /components/schemas/Ospfv2.V4RouteRange/properties/name
-            - /components/schemas/Ospfv3.V6RouteRange/properties/name
+            - /components/schemas/Ldp.Ipv4FecRange/properties/name
           type: array
           items:
             type: string
@@ -20914,6 +21024,7 @@ components:
           - /components/schemas/Isis.V6RouteRange/properties/name
           - /components/schemas/Ospfv2.V4RouteRange/properties/name
           - /components/schemas/Ospfv3.V6RouteRange/properties/name
+          - /components/schemas/Ldp.Ipv4FecRange/properties/name
           x-field-uid: 1
         state:
           description: |-
@@ -20964,10 +21075,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -20996,10 +21103,6 @@ components:
         lag_member_names:
           description: |
             The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -21049,11 +21152,6 @@ components:
         peer_names:
           description: |
             The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Bgp.V4Peer/properties/name
@@ -21117,10 +21215,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
           type: array
           items:
             type: string
@@ -21172,10 +21266,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ospfv2/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ospfv2/properties/name
           type: array
           items:
             type: string
@@ -21224,10 +21314,6 @@ components:
         router_names:
           description: |
             The names of OSPFv3 routers for which the state has to be applied. An empty or null list will control all OSPFv3 routers.
-
-            x-constraint:
-            - /components/schemas/Ospfv3.RouterInstance/properties/name
-
 
             x-constraint:
             - /components/schemas/Ospfv3.RouterInstance/properties/name
@@ -21283,11 +21369,6 @@ components:
             x-constraint:
             - /components/schemas/Rocev2.V4Peer/properties/name
             - /components/schemas/Rocev2.V6Peer/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Rocev2.V4Peer/properties/name
-            - /components/schemas/Rocev2.V6Peer/properties/name
           type: array
           items:
             type: string
@@ -21321,10 +21402,6 @@ components:
 
             x-constraint:
             - /components/schemas/Isis.Interface/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Isis.Interface/properties/name
           type: array
           items:
             type: string
@@ -21355,6 +21432,60 @@ components:
             \ State\nLSP-ID of ST2: 770000000002-00-00: IS-Reachability Neighbors\
             \ : ['770000000001']\nLSP-ID of ST3: 770000000003-00-00: IS-Reachability\
             \ Neighbors : ['770000000001']"
+          type: string
+          x-field-uid: 2
+          x-enum:
+            up:
+              x-field-uid: 1
+            down:
+              x-field-uid: 2
+          enum:
+          - up
+          - down
+    State.Protocol.Ldp:
+      description: |-
+        Sets state of configured LDP routers.
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          description: |-
+            The LDP objects whose state is set.
+          type: string
+          x-enum:
+            routers:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - routers
+        routers:
+          description: |-
+            Sets the state of LDP routers.
+          $ref: '#/components/schemas/State.Protocol.Ldp.Routers'
+          x-field-uid: 2
+    State.Protocol.Ldp.Routers:
+      description: |-
+        Sets state of configured LDP routers.
+      type: object
+      required:
+      - state
+      properties:
+        router_names:
+          description: |
+            The names of LDP routers for which the state has to be applied. An empty or null list will control all LDP routers.
+
+            x-constraint:
+            - /components/schemas/Device.LdpRouter/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.LdpRouter/properties/name
+          x-field-uid: 1
+        state:
+          description: |-
+            The desired state of the LDP router. If the desired state is 'up', the router starts Hello discovery on its interfaces and towards its targeted peers, attempts to bring up its LDP session(s) and advertises its FEC range(s), if configured. If the desired state is 'down', the router stops sending Hellos and closes its LDP session(s) (RFC 5036 Section 2.5.6).
           type: string
           x-field-uid: 2
           x-enum:
@@ -21440,12 +21571,15 @@ components:
               x-field-uid: 3
             isis:
               x-field-uid: 4
+            ldp:
+              x-field-uid: 5
           x-field-uid: 1
           enum:
           - ipv4
           - ipv6
           - bgp
           - isis
+          - ldp
         ipv4:
           $ref: '#/components/schemas/Action.Protocol.Ipv4'
           x-field-uid: 2
@@ -21458,6 +21592,9 @@ components:
         isis:
           $ref: '#/components/schemas/Action.Protocol.Isis'
           x-field-uid: 5
+        ldp:
+          $ref: '#/components/schemas/Action.Protocol.Ldp'
+          x-field-uid: 6
     Action.Response.Protocol:
       description: |-
         Response for actions associated with protocols on configured resources.
@@ -21561,11 +21698,6 @@ components:
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
             - /components/schemas/Device.Ipv4Loopback/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -21601,11 +21733,6 @@ components:
         src_name:
           description: |
             Name of source IPv4 interface used for ping.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
@@ -21695,11 +21822,6 @@ components:
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
             - /components/schemas/Device.Ipv6Loopback/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Device.Ipv6Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
@@ -21735,11 +21857,6 @@ components:
         src_name:
           description: |
             Name of source IPv6 interface used for ping.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Device.Ipv6Loopback/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -21805,11 +21922,6 @@ components:
         names:
           description: |
             The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Bgp.V4Peer/properties/name
@@ -21889,11 +22001,6 @@ components:
         peer_names:
           description: |
             The names of device BGP peers objects to control.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Bgp.V4Peer/properties/name
@@ -22027,10 +22134,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
           type: array
           items:
             type: string
@@ -22121,10 +22224,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
           type: array
           items:
             type: string
@@ -22150,6 +22249,53 @@ components:
           enum:
           - set
           - unset
+    Action.Protocol.Ldp:
+      description: |-
+        Actions associated with LDP on configured resources.
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          description: |-
+            The LDP action to perform.
+          type: string
+          x-enum:
+            initiate_graceful_restart:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - initiate_graceful_restart
+        initiate_graceful_restart:
+          description: |-
+            Configuration for the initiation of an LDP graceful restart.
+          $ref: '#/components/schemas/Action.Protocol.Ldp.InitiateGracefulRestart'
+          x-field-uid: 2
+    Action.Protocol.Ldp.InitiateGracefulRestart:
+      description: |-
+        Initiates an LDP graceful restart (RFC 3478) on the selected LDP routers. Each selected router closes its LDP sessions without withdrawing its labels, and re-establishes them after restart_delay seconds. The Initialization messages sent after the restart carry the FT Session TLV with the configured reconnect_time and recovery_time (RFC 3478 Section 2). A selected router must have graceful_restart configured; otherwise the implementation returns an error. If no name is specified, all configured LDP routers are restarted.
+      type: object
+      properties:
+        router_names:
+          description: |
+            The names of LDP routers to restart.
+
+            x-constraint:
+            - /components/schemas/Device.LdpRouter/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.LdpRouter/properties/name
+          x-field-uid: 1
+        restart_delay:
+          description: |-
+            The time in seconds after which the selected LDP routers re-establish their sessions.
+          type: integer
+          format: uint32
+          maximum: 3600
+          default: 30
+          x-field-uid: 2
     Metrics.Request:
       description: |-
         Request to traffic generator for metrics of choice.
@@ -22206,6 +22352,8 @@ components:
               x-field-uid: 22
             bmp_server:
               x-field-uid: 23
+            ldp:
+              x-field-uid: 24
           enum:
           - port
           - flow
@@ -22230,6 +22378,7 @@ components:
           - rocev2_flow
           - egress_only_tracking
           - bmp_server
+          - ldp
         port:
           $ref: '#/components/schemas/Port.Metrics.Request'
           x-field-uid: 2
@@ -22299,6 +22448,9 @@ components:
         bmp_server:
           $ref: '#/components/schemas/BmpServer.Metrics.Request'
           x-field-uid: 24
+        ldp:
+          $ref: '#/components/schemas/Ldp.Metrics.Request'
+          x-field-uid: 25
     Metrics.Response:
       description: |-
         Response containing chosen traffic generator metrics.
@@ -22355,6 +22507,8 @@ components:
               x-field-uid: 22
             bmp_server_metrics:
               x-field-uid: 23
+            ldp_metrics:
+              x-field-uid: 24
           enum:
           - flow_metrics
           - port_metrics
@@ -22379,6 +22533,7 @@ components:
           - rocev2_flow_per_qp_metrics
           - egress_only_tracking_metrics
           - bmp_server_metrics
+          - ldp_metrics
         port_metrics:
           type: array
           items:
@@ -22494,6 +22649,11 @@ components:
           items:
             $ref: '#/components/schemas/BmpServer.Metric'
           x-field-uid: 24
+        ldp_metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ldp.Metric'
+          x-field-uid: 25
     Port.Metrics.Request:
       description: |-
         The port result request to the traffic generator
@@ -22502,10 +22662,6 @@ components:
         port_names:
           description: |
             The names of objects to return results for. An empty list will return all port row results.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -22572,10 +22728,6 @@ components:
         name:
           description: |
             The name of a configured port
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -22716,10 +22868,6 @@ components:
           description: |
             Flow metrics will be retrieved for these flow names.
             If no flow names are specified then all flows will be returned.
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
-
 
             x-constraint:
             - /components/schemas/Flow/properties/name
@@ -23259,10 +23407,6 @@ components:
 
             x-constraint:
             - /components/schemas/Bgp.V4peer/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Bgp.V4peer/properties/name
           type: array
           items:
             type: string
@@ -23469,10 +23613,6 @@ components:
 
             x-constraint:
             - /components/schemas/Bgp.V6peer/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Bgp.V6peer/properties/name
           type: array
           items:
             type: string
@@ -23676,10 +23816,6 @@ components:
         router_names:
           description: |
             The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
@@ -23989,10 +24125,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: array
           items:
             type: string
@@ -24044,10 +24176,6 @@ components:
         name:
           description: |
             The name of a configured LAG
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
-
 
             x-constraint:
             - /components/schemas/Lag/properties/name
@@ -24130,10 +24258,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: array
           items:
             type: string
@@ -24143,10 +24267,6 @@ components:
         lag_member_port_names:
           description: |
             The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -24344,10 +24464,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lldp/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lldp/properties/name
           type: array
           items:
             type: string
@@ -24435,10 +24551,6 @@ components:
         router_names:
           description: |
             The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.
-
-            x-constraint:
-            - /components/schemas/Device.Rsvp/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Rsvp/properties/name
@@ -24739,10 +24851,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Dhcpv4client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv4client/properties/name
           type: array
           items:
             type: string
@@ -24842,10 +24950,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Dhcpv4Server/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv4Server/properties/name
           type: array
           items:
             type: string
@@ -24942,10 +25046,6 @@ components:
         client_names:
           description: |
             The names of DHCPv6 clients to return results for. An empty list will return results for all DHCPv6 client.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv6client/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Dhcpv6client/properties/name
@@ -25099,10 +25199,6 @@ components:
         server_names:
           description: |
             The names of DHCPv6 Servers to return results for. An empty list will return results for all DHCPv6 Server.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv6Server/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Dhcpv6Server/properties/name
@@ -25274,10 +25370,6 @@ components:
         router_names:
           description: |
             The names of OSPFv2 routers to return results for. An empty list will return results for all OSPFv2 router.
-
-            x-constraint:
-            - /components/schemas/Device.Ospfv2/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ospfv2/properties/name
@@ -25617,10 +25709,6 @@ components:
 
             x-constraint:
             - /components/schemas/Flow/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
           type: array
           items:
             type: string
@@ -25696,9 +25784,7 @@ components:
             \ one of the x-constraint paths,\nwhich means the source MUST be a unique\
             \ name in the configuration. \n\nx-constraint:\n- /components/schemas/Port/properties/name\n\
             - /components/schemas/Flow/properties/name\n- /components/schemas/Device.Bgpv4Route/properties/name\n\
-            - /components/schemas/Device.Bgpv6Route/properties/name\n\n\nx-constraint:\n\
-            - /components/schemas/Port/properties/name\n- /components/schemas/Flow/properties/name\n\
-            - /components/schemas/Device.Bgpv4Route/properties/name\n- /components/schemas/Device.Bgpv6Route/properties/name\n"
+            - /components/schemas/Device.Bgpv6Route/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -25726,10 +25812,6 @@ components:
         secure_entity_names:
           description: |
             The names of secure entities(secYs) to return results for. An empty list will return results for all secYs.
-
-            x-constraint:
-            - /components/schemas/SecureEntity/properties/name
-
 
             x-constraint:
             - /components/schemas/SecureEntity/properties/name
@@ -25947,10 +26029,6 @@ components:
 
             x-constraint:
             - /components/schemas/Mka/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Mka/properties/name
           type: array
           items:
             type: string
@@ -26081,10 +26159,6 @@ components:
         router_names:
           description: |
             The names of OSPFv3 routers to return results for. An empty list will return results for all OSPFv3 routers.
-
-            x-constraint:
-            - /components/schemas/Ospfv3.RouterInstance/properties/name
-
 
             x-constraint:
             - /components/schemas/Ospfv3.RouterInstance/properties/name
@@ -26426,10 +26500,6 @@ components:
 
             x-constraint:
             - /components/schemas/Rocev2.V4peer/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Rocev2.V4peer/properties/name
           items:
             type: string
           x-constraint:
@@ -26619,10 +26689,6 @@ components:
         peer_names:
           description: |
             The names of RoCEv2 over IPv6 peers to return results for. An empty list will return results for all RoCEv2 peers.
-
-            x-constraint:
-            - /components/schemas/Rocev2.V6peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Rocev2.V6peer/properties/name
@@ -27123,10 +27189,6 @@ components:
 
             x-constraint:
             - /components/schemas/EgressOnlyTracking/properties/port_name
-
-
-            x-constraint:
-            - /components/schemas/EgressOnlyTracking/properties/port_name
           type: array
           items:
             type: string
@@ -27367,11 +27429,6 @@ components:
             x-constraint:
             - /components/schemas/Device.Bmp.ServerV4/properties/name
             - /components/schemas/Device.Bmp.ServerV6/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Bmp.ServerV4/properties/name
-            - /components/schemas/Device.Bmp.ServerV6/properties/name
           type: array
           items:
             type: string
@@ -27522,6 +27579,231 @@ components:
           type: integer
           format: uint64
           x-field-uid: 14
+    Ldp.Metrics.Request:
+      description: |-
+        The request to retrieve LDP per router metrics/statistics.
+      type: object
+      properties:
+        router_names:
+          description: |
+            The names of LDP routers to return results for. An empty list will return results for all LDP routers.
+
+            x-constraint:
+            - /components/schemas/Device.LdpRouter/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.LdpRouter/properties/name
+          x-field-uid: 1
+        column_names:
+          description: |-
+            The list of column names that the returned result set will contain. If the list is empty then all columns will be returned. The name of the LDP router cannot be excluded.
+          type: array
+          items:
+            type: string
+            x-enum:
+              sessions_up:
+                x-field-uid: 1
+              sessions_flap:
+                x-field-uid: 2
+              sessions_non_existent:
+                x-field-uid: 3
+              sessions_initialized:
+                x-field-uid: 4
+              sessions_open_received:
+                x-field-uid: 5
+              sessions_open_sent:
+                x-field-uid: 6
+              sessions_operational:
+                x-field-uid: 7
+              notifications_sent:
+                x-field-uid: 8
+              notifications_received:
+                x-field-uid: 9
+              label_mappings_sent:
+                x-field-uid: 10
+              label_mappings_received:
+                x-field-uid: 11
+              label_requests_sent:
+                x-field-uid: 12
+              label_requests_received:
+                x-field-uid: 13
+              label_withdraws_sent:
+                x-field-uid: 14
+              label_withdraws_received:
+                x-field-uid: 15
+              label_releases_sent:
+                x-field-uid: 16
+              label_releases_received:
+                x-field-uid: 17
+              label_abort_requests_sent:
+                x-field-uid: 18
+              label_abort_requests_received:
+                x-field-uid: 19
+              ingress_lsps_up:
+                x-field-uid: 20
+              egress_lsps_up:
+                x-field-uid: 21
+            enum:
+            - sessions_up
+            - sessions_flap
+            - sessions_non_existent
+            - sessions_initialized
+            - sessions_open_received
+            - sessions_open_sent
+            - sessions_operational
+            - notifications_sent
+            - notifications_received
+            - label_mappings_sent
+            - label_mappings_received
+            - label_requests_sent
+            - label_requests_received
+            - label_withdraws_sent
+            - label_withdraws_received
+            - label_releases_sent
+            - label_releases_received
+            - label_abort_requests_sent
+            - label_abort_requests_received
+            - ingress_lsps_up
+            - egress_lsps_up
+          x-field-uid: 2
+    Ldp.Metric:
+      description: |-
+        LDP per router statistics information. A counter that is not reported by the implementation is absent.
+      type: object
+      properties:
+        name:
+          description: |-
+            The name of a configured LDP router.
+          type: string
+          x-field-uid: 1
+        sessions_up:
+          description: |-
+            The number of LDP sessions of this router that are up, that is in the OPERATIONAL state (RFC 5036 Section 2.5.4). Sessions formed through Basic (link) discovery (RFC 5036 Section 2.4.1) and through Extended (targeted) discovery (RFC 5036 Section 2.4.2) are both counted.
+          type: integer
+          format: uint64
+          x-field-uid: 2
+        sessions_flap:
+          description: |-
+            The number of times an LDP session of this router left the OPERATIONAL state (RFC 5036 Section 2.5.4).
+          type: integer
+          format: uint64
+          x-field-uid: 3
+        sessions_non_existent:
+          description: |-
+            The number of LDP sessions of this router currently in the NON EXISTENT state of the session initialization state machine (RFC 5036 Section 2.5.4).
+          type: integer
+          format: uint64
+          x-field-uid: 4
+        sessions_initialized:
+          description: |-
+            The number of LDP sessions of this router currently in the INITIALIZED state of the session initialization state machine (RFC 5036 Section 2.5.4).
+          type: integer
+          format: uint64
+          x-field-uid: 5
+        sessions_open_received:
+          description: |-
+            The number of LDP sessions of this router currently in the OPENREC state of the session initialization state machine (RFC 5036 Section 2.5.4).
+          type: integer
+          format: uint64
+          x-field-uid: 6
+        sessions_open_sent:
+          description: |-
+            The number of LDP sessions of this router currently in the OPENSENT state of the session initialization state machine (RFC 5036 Section 2.5.4).
+          type: integer
+          format: uint64
+          x-field-uid: 7
+        sessions_operational:
+          description: |-
+            The number of LDP sessions of this router currently in the OPERATIONAL state of the session initialization state machine (RFC 5036 Section 2.5.4).
+          type: integer
+          format: uint64
+          x-field-uid: 8
+        notifications_sent:
+          description: |-
+            The number of Notification messages (type 0x0001, RFC 5036 Section 3.5.1) sent.
+          type: integer
+          format: uint64
+          x-field-uid: 9
+        notifications_received:
+          description: |-
+            The number of Notification messages (type 0x0001, RFC 5036 Section 3.5.1) received.
+          type: integer
+          format: uint64
+          x-field-uid: 10
+        label_mappings_sent:
+          description: |-
+            The number of Label Mapping messages (type 0x0400, RFC 5036 Section 3.5.7) sent.
+          type: integer
+          format: uint64
+          x-field-uid: 11
+        label_mappings_received:
+          description: |-
+            The number of Label Mapping messages (type 0x0400, RFC 5036 Section 3.5.7) received.
+          type: integer
+          format: uint64
+          x-field-uid: 12
+        label_requests_sent:
+          description: |-
+            The number of Label Request messages (type 0x0401, RFC 5036 Section 3.5.8) sent.
+          type: integer
+          format: uint64
+          x-field-uid: 13
+        label_requests_received:
+          description: |-
+            The number of Label Request messages (type 0x0401, RFC 5036 Section 3.5.8) received.
+          type: integer
+          format: uint64
+          x-field-uid: 14
+        label_withdraws_sent:
+          description: |-
+            The number of Label Withdraw messages (type 0x0402, RFC 5036 Section 3.5.10) sent.
+          type: integer
+          format: uint64
+          x-field-uid: 15
+        label_withdraws_received:
+          description: |-
+            The number of Label Withdraw messages (type 0x0402, RFC 5036 Section 3.5.10) received.
+          type: integer
+          format: uint64
+          x-field-uid: 16
+        label_releases_sent:
+          description: |-
+            The number of Label Release messages (type 0x0403, RFC 5036 Section 3.5.11) sent.
+          type: integer
+          format: uint64
+          x-field-uid: 17
+        label_releases_received:
+          description: |-
+            The number of Label Release messages (type 0x0403, RFC 5036 Section 3.5.11) received.
+          type: integer
+          format: uint64
+          x-field-uid: 18
+        label_abort_requests_sent:
+          description: |-
+            The number of Label Abort Request messages (type 0x0404, RFC 5036 Section 3.5.9) sent.
+          type: integer
+          format: uint64
+          x-field-uid: 19
+        label_abort_requests_received:
+          description: |-
+            The number of Label Abort Request messages (type 0x0404, RFC 5036 Section 3.5.9) received.
+          type: integer
+          format: uint64
+          x-field-uid: 20
+        ingress_lsps_up:
+          description: |-
+            The number of IPv4 Prefix FECs for which this LSR has received a label from a peer, that is LSPs for which this LSR is the ingress.
+          type: integer
+          format: uint64
+          x-field-uid: 21
+        egress_lsps_up:
+          description: |-
+            The number of IPv4 Prefix FECs advertised by this LSR for which a session to a peer is OPERATIONAL, that is LSPs for which this LSR is the egress.
+          type: integer
+          format: uint64
+          x-field-uid: 22
     States.Request:
       description: |-
         Request to traffic generator for states of choice
@@ -27560,6 +27842,8 @@ components:
               x-field-uid: 13
             bmp_servers:
               x-field-uid: 14
+            ldp_bindings:
+              x-field-uid: 15
           enum:
           - ipv4_neighbors
           - ipv6_neighbors
@@ -27575,6 +27859,7 @@ components:
           - ospfv3_lsas
           - isis_adjacencies
           - bmp_servers
+          - ldp_bindings
         ipv4_neighbors:
           $ref: '#/components/schemas/Neighborsv4.States.Request'
           x-field-uid: 2
@@ -27617,6 +27902,9 @@ components:
         bmp_servers:
           $ref: '#/components/schemas/BmpServers.State.Request'
           x-field-uid: 15
+        ldp_bindings:
+          $ref: '#/components/schemas/LdpBindings.State.Request'
+          x-field-uid: 16
     States.Response:
       description: |-
         Response containing chosen traffic generator states
@@ -27655,6 +27943,8 @@ components:
               x-field-uid: 13
             bmp_servers:
               x-field-uid: 14
+            ldp_bindings:
+              x-field-uid: 15
           enum:
           - ipv4_neighbors
           - ipv6_neighbors
@@ -27670,6 +27960,7 @@ components:
           - ospfv3_lsas
           - isis_adjacencies
           - bmp_servers
+          - ldp_bindings
         ipv4_neighbors:
           type: array
           items:
@@ -27740,6 +28031,11 @@ components:
           items:
             $ref: '#/components/schemas/BmpServer.State'
           x-field-uid: 15
+        ldp_bindings:
+          type: array
+          items:
+            $ref: '#/components/schemas/LdpBindings.State'
+          x-field-uid: 16
     Neighborsv4.States.Request:
       description: |-
         The request to retrieve IPv4 Neighbor state (ARP cache entries) of a network interface(s).
@@ -27748,10 +28044,6 @@ components:
         ethernet_names:
           description: |
             The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (ARP cache entries) for all available Ethernet interfaces.
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
@@ -27797,10 +28089,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
           type: array
           items:
             type: string
@@ -27840,11 +28128,6 @@ components:
         bgp_peer_names:
           description: |
             The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Bgp.V4Peer/properties/name
@@ -28793,10 +29076,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
           type: array
           items:
             type: string
@@ -29586,10 +29865,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lldp/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lldp/properties/name
           type: array
           items:
             type: string
@@ -29825,10 +30100,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Rsvp/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Rsvp/properties/name
           type: array
           items:
             type: string
@@ -30033,10 +30304,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Dhcpv4client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv4client/properties/name
           type: array
           items:
             type: string
@@ -30096,10 +30363,6 @@ components:
         dhcp_server_names:
           description: |
             The names of DHCPv4 server to return results for. An empty list will return results for all DHCPv4 servers.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv4server/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Dhcpv4server/properties/name
@@ -30181,10 +30444,6 @@ components:
         dhcp_client_names:
           description: |
             The names of DHCPv6 client to return results for. An empty list will return results for all DHCPv6 Client address information.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv6client/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Dhcpv6client/properties/name
@@ -30276,10 +30535,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Dhcpv6server/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv6server/properties/name
           type: array
           items:
             type: string
@@ -30358,10 +30613,6 @@ components:
         router_names:
           description: |
             The names of OSPFv2 routers for which learned information is requested. An empty list will return results for all OSPFv2 routers.
-
-            x-constraint:
-            - /components/schemas/Device.Ospfv2Router/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ospfv2Router/properties/name
@@ -30702,10 +30953,6 @@ components:
         router_names:
           description: |
             The names of OSPFv3 routers for which learned information is requested. An empty list will return results for all OSPFv3 routers.
-
-            x-constraint:
-            - /components/schemas/Ospfv3.RouterInstance/properties/name
-
 
             x-constraint:
             - /components/schemas/Ospfv3.RouterInstance/properties/name
@@ -31089,10 +31336,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
           type: array
           items:
             type: string
@@ -31451,11 +31694,6 @@ components:
         bmp_server_names:
           description: |
             The names of the BMP Servers  to return results for. An empty list will return results for all BMP Servers.
-
-            x-constraint:
-            - /components/schemas/Device.Bmp.ServerV4/properties/name
-            - /components/schemas/Device.Bmp.ServerV6/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Bmp.ServerV4/properties/name
@@ -31952,6 +32190,78 @@ components:
             The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
           type: integer
           format: uint32
+    LdpBindings.State.Request:
+      description: |-
+        The request to retrieve the FEC-label bindings received by LDP routers.
+      type: object
+      properties:
+        ldp_router_names:
+          description: |
+            The names of LDP routers for which received label bindings are requested. An empty list will return results for all LDP routers.
+
+            x-constraint:
+            - /components/schemas/Device.LdpRouter/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.LdpRouter/properties/name
+          x-field-uid: 1
+    LdpBindings.State:
+      description: |-
+        The FEC-label bindings received by one LDP router from its peers.
+      type: object
+      properties:
+        ldp_router_name:
+          description: |-
+            The name of the LDP router.
+          type: string
+          x-field-uid: 1
+        ipv4_bindings:
+          description: |-
+            The IPv4 Prefix FEC-label bindings received in Label Mapping messages (RFC 5036 Section 3.5.7).
+          type: array
+          items:
+            $ref: '#/components/schemas/LdpIpv4Binding.State'
+          x-field-uid: 2
+    LdpIpv4Binding.State:
+      description: |-
+        One IPv4 Prefix FEC element (RFC 5036 Section 3.4.1) and the label bound to it by a peer (RFC 5036 Section 3.4.2.1).
+      type: object
+      properties:
+        prefix:
+          description: |-
+            The IPv4 prefix of the FEC element.
+          type: string
+          format: ipv4
+          x-field-uid: 1
+        prefix_length:
+          description: |-
+            The prefix length of the FEC element.
+          type: integer
+          format: uint32
+          maximum: 32
+          x-field-uid: 2
+        label:
+          description: |-
+            The label bound to the FEC by the peer. 3 is Implicit NULL and 0 is IPv4 Explicit NULL (RFC 3032 Section 2.1).
+          type: integer
+          format: uint32
+          maximum: 1048575
+          x-field-uid: 3
+        peer_lsr_id:
+          description: |-
+            The LSR ID of the peer that advertised the binding (RFC 5036 Section 2.2.2).
+          type: string
+          format: ipv4
+          x-field-uid: 4
+        peer_label_space_id:
+          description: |-
+            The label space identifier of the peer that advertised the binding (RFC 5036 Section 2.2.2).
+          type: integer
+          format: uint32
+          maximum: 65535
+          x-field-uid: 5
     Capture.Request:
       description: |-
         The capture result request to the traffic generator.
@@ -31963,10 +32273,6 @@ components:
         port_name:
           description: |
             The name of a port a capture is started on.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name

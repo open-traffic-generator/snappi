@@ -498,6 +498,17 @@ from .snappi import DeviceBmpV6Interface
 from .snappi import DeviceBmpServerV6
 from .snappi import DeviceBmpServerV6Iter
 from .snappi import DeviceBmpV6InterfaceIter
+from .snappi import DeviceLdpRouter
+from .snappi import LdpGracefulRestart
+from .snappi import LdpIpv4Interface
+from .snappi import LdpAuthentication
+from .snappi import LdpIpv4InterfaceIter
+from .snappi import LdpIpv4TargetedPeer
+from .snappi import LdpIpv4TargetedPeerIter
+from .snappi import LdpIpv4FecRange
+from .snappi import LdpFecLabel
+from .snappi import LdpFecLabelIncrement
+from .snappi import LdpIpv4FecRangeIter
 from .snappi import DeviceIter
 from .snappi import Flow
 from .snappi import FlowTxRx
@@ -1549,6 +1560,8 @@ from .snappi import StateProtocolOspfv3
 from .snappi import StateProtocolOspfv3Routers
 from .snappi import StateProtocolRocev2
 from .snappi import StateProtocolRocev2Peers
+from .snappi import StateProtocolLdp
+from .snappi import StateProtocolLdpRouters
 from .snappi import StateTraffic
 from .snappi import StateTrafficFlowTransmit
 from .snappi import ControlAction
@@ -1577,6 +1590,8 @@ from .snappi import ActionProtocolIsisInitiateRestart
 from .snappi import ActionProtocolIsisUnplannedRestart
 from .snappi import ActionProtocolIsisPlannedRestart
 from .snappi import ActionProtocolIsisOverloadBit
+from .snappi import ActionProtocolLdp
+from .snappi import ActionProtocolLdpInitiateGracefulRestart
 from .snappi import ActionPort
 from .snappi import ActionPortReboot
 from .snappi import ControlActionResponse
@@ -1621,6 +1636,7 @@ from .snappi import Rocev2FlowColumnNames
 from .snappi import EgressOnlyTrackingMetricsRequest
 from .snappi import EgressOnlyTrackingTaggedMetricsFilter
 from .snappi import BmpServerMetricsRequest
+from .snappi import LdpMetricsRequest
 from .snappi import MetricsResponse
 from .snappi import PortMetric
 from .snappi import MetricDataIntegrity
@@ -1685,6 +1701,8 @@ from .snappi import EgressOnlyTrackingTaggedMetricIter
 from .snappi import EgressOnlyTrackingMetricIter
 from .snappi import BmpServerMetric
 from .snappi import BmpServerMetricIter
+from .snappi import LdpMetric
+from .snappi import LdpMetricIter
 from .snappi import StatesRequest
 from .snappi import Neighborsv4StatesRequest
 from .snappi import Neighborsv6StatesRequest
@@ -1704,6 +1722,7 @@ from .snappi import Ospfv2LsasStateRequest
 from .snappi import Ospfv3LsasStateRequest
 from .snappi import IsisIIHsStateRequest
 from .snappi import BmpServersStateRequest
+from .snappi import LdpBindingsStateRequest
 from .snappi import StatesResponse
 from .snappi import Neighborsv4State
 from .snappi import Neighborsv4StateIter
@@ -1888,6 +1907,10 @@ from .snappi import BmpPrefixIpv6UnicastStateIter
 from .snappi import BmpServerPeerPostPolicyInRib
 from .snappi import BmpServerPeerStateIter
 from .snappi import BmpServerStateIter
+from .snappi import LdpBindingsState
+from .snappi import LdpIpv4BindingState
+from .snappi import LdpIpv4BindingStateIter
+from .snappi import LdpBindingsStateIter
 from .snappi import CaptureRequest
 from .snappi import CaptureRequestPackets
 from .snappi import CaptureRequestCaptureSlice

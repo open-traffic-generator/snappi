@@ -30,6 +30,7 @@ type statesResponse struct {
 	ospfv3LsasHolder       StatesResponseOspfv3LsaStateIter
 	isisAdjacenciesHolder  StatesResponseIsisIIHsStateIter
 	bmpServersHolder       StatesResponseBmpServerStateIter
+	ldpBindingsHolder      StatesResponseLdpBindingsStateIter
 }
 
 func NewStatesResponse() StatesResponse {
@@ -271,6 +272,7 @@ func (obj *statesResponse) setNil() {
 	obj.ospfv3LsasHolder = nil
 	obj.isisAdjacenciesHolder = nil
 	obj.bmpServersHolder = nil
+	obj.ldpBindingsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -332,6 +334,8 @@ type StatesResponse interface {
 	IsisAdjacencies() StatesResponseIsisIIHsStateIter
 	// BmpServers returns StatesResponseBmpServerStateIterIter, set in StatesResponse
 	BmpServers() StatesResponseBmpServerStateIter
+	// LdpBindings returns StatesResponseLdpBindingsStateIterIter, set in StatesResponse
+	LdpBindings() StatesResponseLdpBindingsStateIter
 	setNil()
 }
 
@@ -353,6 +357,7 @@ var StatesResponseChoice = struct {
 	OSPFV3_LSAS       StatesResponseChoiceEnum
 	ISIS_ADJACENCIES  StatesResponseChoiceEnum
 	BMP_SERVERS       StatesResponseChoiceEnum
+	LDP_BINDINGS      StatesResponseChoiceEnum
 }{
 	IPV4_NEIGHBORS:    StatesResponseChoiceEnum("ipv4_neighbors"),
 	IPV6_NEIGHBORS:    StatesResponseChoiceEnum("ipv6_neighbors"),
@@ -368,6 +373,7 @@ var StatesResponseChoice = struct {
 	OSPFV3_LSAS:       StatesResponseChoiceEnum("ospfv3_lsas"),
 	ISIS_ADJACENCIES:  StatesResponseChoiceEnum("isis_adjacencies"),
 	BMP_SERVERS:       StatesResponseChoiceEnum("bmp_servers"),
+	LDP_BINDINGS:      StatesResponseChoiceEnum("ldp_bindings"),
 }
 
 func (obj *statesResponse) Choice() StatesResponseChoiceEnum {
@@ -389,6 +395,8 @@ func (obj *statesResponse) setChoice(value StatesResponseChoiceEnum) StatesRespo
 	}
 	enumValue := otg.StatesResponse_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.LdpBindings = nil
+	obj.ldpBindingsHolder = nil
 	obj.obj.BmpServers = nil
 	obj.bmpServersHolder = nil
 	obj.obj.IsisAdjacencies = nil
@@ -472,6 +480,10 @@ func (obj *statesResponse) setChoice(value StatesResponseChoiceEnum) StatesRespo
 
 	if value == StatesResponseChoice.BMP_SERVERS {
 		obj.obj.BmpServers = []*otg.BmpServerState{}
+	}
+
+	if value == StatesResponseChoice.LDP_BINDINGS {
+		obj.obj.LdpBindings = []*otg.LdpBindingsState{}
 	}
 
 	return obj
@@ -1695,6 +1707,93 @@ func (obj *statesResponseBmpServerStateIter) appendHolderSlice(item BmpServerSta
 	return obj
 }
 
+// description is TBD
+// LdpBindings returns a []LdpBindingsState
+func (obj *statesResponse) LdpBindings() StatesResponseLdpBindingsStateIter {
+	if len(obj.obj.LdpBindings) == 0 {
+		obj.setChoice(StatesResponseChoice.LDP_BINDINGS)
+	}
+	if obj.ldpBindingsHolder == nil {
+		obj.ldpBindingsHolder = newStatesResponseLdpBindingsStateIter(&obj.obj.LdpBindings).setMsg(obj)
+	}
+	return obj.ldpBindingsHolder
+}
+
+type statesResponseLdpBindingsStateIter struct {
+	obj                   *statesResponse
+	ldpBindingsStateSlice []LdpBindingsState
+	fieldPtr              *[]*otg.LdpBindingsState
+}
+
+func newStatesResponseLdpBindingsStateIter(ptr *[]*otg.LdpBindingsState) StatesResponseLdpBindingsStateIter {
+	return &statesResponseLdpBindingsStateIter{fieldPtr: ptr}
+}
+
+type StatesResponseLdpBindingsStateIter interface {
+	setMsg(*statesResponse) StatesResponseLdpBindingsStateIter
+	Items() []LdpBindingsState
+	Add() LdpBindingsState
+	Append(items ...LdpBindingsState) StatesResponseLdpBindingsStateIter
+	Set(index int, newObj LdpBindingsState) StatesResponseLdpBindingsStateIter
+	Clear() StatesResponseLdpBindingsStateIter
+	clearHolderSlice() StatesResponseLdpBindingsStateIter
+	appendHolderSlice(item LdpBindingsState) StatesResponseLdpBindingsStateIter
+}
+
+func (obj *statesResponseLdpBindingsStateIter) setMsg(msg *statesResponse) StatesResponseLdpBindingsStateIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&ldpBindingsState{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *statesResponseLdpBindingsStateIter) Items() []LdpBindingsState {
+	return obj.ldpBindingsStateSlice
+}
+
+func (obj *statesResponseLdpBindingsStateIter) Add() LdpBindingsState {
+	newObj := &otg.LdpBindingsState{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &ldpBindingsState{obj: newObj}
+	newLibObj.setDefault()
+	obj.ldpBindingsStateSlice = append(obj.ldpBindingsStateSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *statesResponseLdpBindingsStateIter) Append(items ...LdpBindingsState) StatesResponseLdpBindingsStateIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.ldpBindingsStateSlice = append(obj.ldpBindingsStateSlice, item)
+	}
+	return obj
+}
+
+func (obj *statesResponseLdpBindingsStateIter) Set(index int, newObj LdpBindingsState) StatesResponseLdpBindingsStateIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.ldpBindingsStateSlice[index] = newObj
+	return obj
+}
+func (obj *statesResponseLdpBindingsStateIter) Clear() StatesResponseLdpBindingsStateIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.LdpBindingsState{}
+		obj.ldpBindingsStateSlice = []LdpBindingsState{}
+	}
+	return obj
+}
+func (obj *statesResponseLdpBindingsStateIter) clearHolderSlice() StatesResponseLdpBindingsStateIter {
+	if len(obj.ldpBindingsStateSlice) > 0 {
+		obj.ldpBindingsStateSlice = []LdpBindingsState{}
+	}
+	return obj
+}
+func (obj *statesResponseLdpBindingsStateIter) appendHolderSlice(item LdpBindingsState) StatesResponseLdpBindingsStateIter {
+	obj.ldpBindingsStateSlice = append(obj.ldpBindingsStateSlice, item)
+	return obj
+}
+
 func (obj *statesResponse) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1896,6 +1995,20 @@ func (obj *statesResponse) validateObj(vObj *validation, set_default bool) {
 
 	}
 
+	if len(obj.obj.LdpBindings) != 0 {
+
+		if set_default {
+			obj.LdpBindings().clearHolderSlice()
+			for _, item := range obj.obj.LdpBindings {
+				obj.LdpBindings().appendHolderSlice(&ldpBindingsState{obj: item})
+			}
+		}
+		for _, item := range obj.LdpBindings().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
 }
 
 func (obj *statesResponse) setDefault() {
@@ -1970,6 +2083,11 @@ func (obj *statesResponse) setDefault() {
 	if len(obj.obj.BmpServers) > 0 {
 		choices_set += 1
 		choice = StatesResponseChoice.BMP_SERVERS
+	}
+
+	if len(obj.obj.LdpBindings) > 0 {
+		choices_set += 1
+		choice = StatesResponseChoice.LDP_BINDINGS
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

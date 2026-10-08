@@ -30,6 +30,7 @@ type statesRequest struct {
 	ospfv3LsasHolder       Ospfv3LsasStateRequest
 	isisAdjacenciesHolder  IsisIIHsStateRequest
 	bmpServersHolder       BmpServersStateRequest
+	ldpBindingsHolder      LdpBindingsStateRequest
 }
 
 func NewStatesRequest() StatesRequest {
@@ -271,6 +272,7 @@ func (obj *statesRequest) setNil() {
 	obj.ospfv3LsasHolder = nil
 	obj.isisAdjacenciesHolder = nil
 	obj.bmpServersHolder = nil
+	obj.ldpBindingsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -416,6 +418,14 @@ type StatesRequest interface {
 	SetBmpServers(value BmpServersStateRequest) StatesRequest
 	// HasBmpServers checks if BmpServers has been set in StatesRequest
 	HasBmpServers() bool
+	// LdpBindings returns LdpBindingsStateRequest, set in StatesRequest.
+	// LdpBindingsStateRequest is the request to retrieve the FEC-label bindings received by LDP routers.
+	LdpBindings() LdpBindingsStateRequest
+	// SetLdpBindings assigns LdpBindingsStateRequest provided by user to StatesRequest.
+	// LdpBindingsStateRequest is the request to retrieve the FEC-label bindings received by LDP routers.
+	SetLdpBindings(value LdpBindingsStateRequest) StatesRequest
+	// HasLdpBindings checks if LdpBindings has been set in StatesRequest
+	HasLdpBindings() bool
 	setNil()
 }
 
@@ -437,6 +447,7 @@ var StatesRequestChoice = struct {
 	OSPFV3_LSAS       StatesRequestChoiceEnum
 	ISIS_ADJACENCIES  StatesRequestChoiceEnum
 	BMP_SERVERS       StatesRequestChoiceEnum
+	LDP_BINDINGS      StatesRequestChoiceEnum
 }{
 	IPV4_NEIGHBORS:    StatesRequestChoiceEnum("ipv4_neighbors"),
 	IPV6_NEIGHBORS:    StatesRequestChoiceEnum("ipv6_neighbors"),
@@ -452,6 +463,7 @@ var StatesRequestChoice = struct {
 	OSPFV3_LSAS:       StatesRequestChoiceEnum("ospfv3_lsas"),
 	ISIS_ADJACENCIES:  StatesRequestChoiceEnum("isis_adjacencies"),
 	BMP_SERVERS:       StatesRequestChoiceEnum("bmp_servers"),
+	LDP_BINDINGS:      StatesRequestChoiceEnum("ldp_bindings"),
 }
 
 func (obj *statesRequest) Choice() StatesRequestChoiceEnum {
@@ -473,6 +485,8 @@ func (obj *statesRequest) setChoice(value StatesRequestChoiceEnum) StatesRequest
 	}
 	enumValue := otg.StatesRequest_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.LdpBindings = nil
+	obj.ldpBindingsHolder = nil
 	obj.obj.BmpServers = nil
 	obj.bmpServersHolder = nil
 	obj.obj.IsisAdjacencies = nil
@@ -556,6 +570,10 @@ func (obj *statesRequest) setChoice(value StatesRequestChoiceEnum) StatesRequest
 
 	if value == StatesRequestChoice.BMP_SERVERS {
 		obj.obj.BmpServers = NewBmpServersStateRequest().msg()
+	}
+
+	if value == StatesRequestChoice.LDP_BINDINGS {
+		obj.obj.LdpBindings = NewLdpBindingsStateRequest().msg()
 	}
 
 	return obj
@@ -953,6 +971,34 @@ func (obj *statesRequest) SetBmpServers(value BmpServersStateRequest) StatesRequ
 	return obj
 }
 
+// description is TBD
+// LdpBindings returns a LdpBindingsStateRequest
+func (obj *statesRequest) LdpBindings() LdpBindingsStateRequest {
+	if obj.obj.LdpBindings == nil {
+		obj.setChoice(StatesRequestChoice.LDP_BINDINGS)
+	}
+	if obj.ldpBindingsHolder == nil {
+		obj.ldpBindingsHolder = &ldpBindingsStateRequest{obj: obj.obj.LdpBindings}
+	}
+	return obj.ldpBindingsHolder
+}
+
+// description is TBD
+// LdpBindings returns a LdpBindingsStateRequest
+func (obj *statesRequest) HasLdpBindings() bool {
+	return obj.obj.LdpBindings != nil
+}
+
+// description is TBD
+// SetLdpBindings sets the LdpBindingsStateRequest value in the StatesRequest object
+func (obj *statesRequest) SetLdpBindings(value LdpBindingsStateRequest) StatesRequest {
+	obj.setChoice(StatesRequestChoice.LDP_BINDINGS)
+	obj.ldpBindingsHolder = nil
+	obj.obj.LdpBindings = value.msg()
+
+	return obj
+}
+
 func (obj *statesRequest) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1026,6 +1072,11 @@ func (obj *statesRequest) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.BmpServers != nil {
 
 		obj.BmpServers().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.LdpBindings != nil {
+
+		obj.LdpBindings().validateObj(vObj, set_default)
 	}
 
 }
@@ -1102,6 +1153,11 @@ func (obj *statesRequest) setDefault() {
 	if obj.obj.BmpServers != nil {
 		choices_set += 1
 		choice = StatesRequestChoice.BMP_SERVERS
+	}
+
+	if obj.obj.LdpBindings != nil {
+		choices_set += 1
+		choice = StatesRequestChoice.LDP_BINDINGS
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

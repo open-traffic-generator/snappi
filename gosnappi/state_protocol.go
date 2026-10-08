@@ -24,6 +24,7 @@ type stateProtocol struct {
 	ospfv2Holder StateProtocolOspfv2
 	ospfv3Holder StateProtocolOspfv3
 	rocev2Holder StateProtocolRocev2
+	ldpHolder    StateProtocolLdp
 }
 
 func NewStateProtocol() StateProtocol {
@@ -259,6 +260,7 @@ func (obj *stateProtocol) setNil() {
 	obj.ospfv2Holder = nil
 	obj.ospfv3Holder = nil
 	obj.rocev2Holder = nil
+	obj.ldpHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -356,6 +358,14 @@ type StateProtocol interface {
 	SetRocev2(value StateProtocolRocev2) StateProtocol
 	// HasRocev2 checks if Rocev2 has been set in StateProtocol
 	HasRocev2() bool
+	// Ldp returns StateProtocolLdp, set in StateProtocol.
+	// StateProtocolLdp is sets state of configured LDP routers.
+	Ldp() StateProtocolLdp
+	// SetLdp assigns StateProtocolLdp provided by user to StateProtocol.
+	// StateProtocolLdp is sets state of configured LDP routers.
+	SetLdp(value StateProtocolLdp) StateProtocol
+	// HasLdp checks if Ldp has been set in StateProtocol
+	HasLdp() bool
 	setNil()
 }
 
@@ -370,6 +380,7 @@ var StateProtocolChoice = struct {
 	ISIS   StateProtocolChoiceEnum
 	OSPFV2 StateProtocolChoiceEnum
 	OSPFV3 StateProtocolChoiceEnum
+	LDP    StateProtocolChoiceEnum
 }{
 	ALL:    StateProtocolChoiceEnum("all"),
 	ROUTE:  StateProtocolChoiceEnum("route"),
@@ -378,6 +389,7 @@ var StateProtocolChoice = struct {
 	ISIS:   StateProtocolChoiceEnum("isis"),
 	OSPFV2: StateProtocolChoiceEnum("ospfv2"),
 	OSPFV3: StateProtocolChoiceEnum("ospfv3"),
+	LDP:    StateProtocolChoiceEnum("ldp"),
 }
 
 func (obj *stateProtocol) Choice() StateProtocolChoiceEnum {
@@ -393,6 +405,8 @@ func (obj *stateProtocol) setChoice(value StateProtocolChoiceEnum) StateProtocol
 	}
 	enumValue := otg.StateProtocol_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Ldp = nil
+	obj.ldpHolder = nil
 	obj.obj.Ospfv3 = nil
 	obj.ospfv3Holder = nil
 	obj.obj.Ospfv2 = nil
@@ -434,6 +448,10 @@ func (obj *stateProtocol) setChoice(value StateProtocolChoiceEnum) StateProtocol
 
 	if value == StateProtocolChoice.OSPFV3 {
 		obj.obj.Ospfv3 = NewStateProtocolOspfv3().msg()
+	}
+
+	if value == StateProtocolChoice.LDP {
+		obj.obj.Ldp = NewStateProtocolLdp().msg()
 	}
 
 	return obj
@@ -663,6 +681,34 @@ func (obj *stateProtocol) SetRocev2(value StateProtocolRocev2) StateProtocol {
 	return obj
 }
 
+// description is TBD
+// Ldp returns a StateProtocolLdp
+func (obj *stateProtocol) Ldp() StateProtocolLdp {
+	if obj.obj.Ldp == nil {
+		obj.setChoice(StateProtocolChoice.LDP)
+	}
+	if obj.ldpHolder == nil {
+		obj.ldpHolder = &stateProtocolLdp{obj: obj.obj.Ldp}
+	}
+	return obj.ldpHolder
+}
+
+// description is TBD
+// Ldp returns a StateProtocolLdp
+func (obj *stateProtocol) HasLdp() bool {
+	return obj.obj.Ldp != nil
+}
+
+// description is TBD
+// SetLdp sets the StateProtocolLdp value in the StateProtocol object
+func (obj *stateProtocol) SetLdp(value StateProtocolLdp) StateProtocol {
+	obj.setChoice(StateProtocolChoice.LDP)
+	obj.ldpHolder = nil
+	obj.obj.Ldp = value.msg()
+
+	return obj
+}
+
 func (obj *stateProtocol) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -713,6 +759,11 @@ func (obj *stateProtocol) validateObj(vObj *validation, set_default bool) {
 		obj.Rocev2().validateObj(vObj, set_default)
 	}
 
+	if obj.obj.Ldp != nil {
+
+		obj.Ldp().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *stateProtocol) setDefault() {
@@ -752,6 +803,11 @@ func (obj *stateProtocol) setDefault() {
 	if obj.obj.Ospfv3 != nil {
 		choices_set += 1
 		choice = StateProtocolChoice.OSPFV3
+	}
+
+	if obj.obj.Ldp != nil {
+		choices_set += 1
+		choice = StateProtocolChoice.LDP
 	}
 	if choices_set == 1 && choice != "" {
 		if obj.obj.Choice != nil {

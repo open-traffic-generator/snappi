@@ -29,6 +29,7 @@ type device struct {
 	ospfv3Holder        DeviceOspfv3Router
 	rocev2Holder        DeviceRocev2Peer
 	bmpHolder           DeviceBmp
+	ldpHolder           DeviceLdpRouter
 }
 
 func NewDevice() Device {
@@ -269,6 +270,7 @@ func (obj *device) setNil() {
 	obj.ospfv3Holder = nil
 	obj.rocev2Holder = nil
 	obj.bmpHolder = nil
+	obj.ldpHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -386,6 +388,14 @@ type Device interface {
 	SetBmp(value DeviceBmp) Device
 	// HasBmp checks if Bmp has been set in Device
 	HasBmp() bool
+	// Ldp returns DeviceLdpRouter, set in Device.
+	// DeviceLdpRouter is configuration for an emulated LDP Label Switching Router (LSR) as per RFC 5036. In this model, LDP over IPv4 is supported, with Basic (link) discovery on IPv4 interfaces (RFC 5036 Section 2.4.1) and Extended (targeted) discovery to configured peers (RFC 5036 Section 2.4.2). The LDP Identifier carried in every LDP PDU is lsr_id:label_space_id (RFC 5036 Section 2.2.2). At least one entry in ipv4_interfaces or ipv4_targeted_peers is needed to form an LDP session. All sessions of this router use the session parameters configured here (label space, label advertisement mode, keepalive and graceful restart).
+	Ldp() DeviceLdpRouter
+	// SetLdp assigns DeviceLdpRouter provided by user to Device.
+	// DeviceLdpRouter is configuration for an emulated LDP Label Switching Router (LSR) as per RFC 5036. In this model, LDP over IPv4 is supported, with Basic (link) discovery on IPv4 interfaces (RFC 5036 Section 2.4.1) and Extended (targeted) discovery to configured peers (RFC 5036 Section 2.4.2). The LDP Identifier carried in every LDP PDU is lsr_id:label_space_id (RFC 5036 Section 2.2.2). At least one entry in ipv4_interfaces or ipv4_targeted_peers is needed to form an LDP session. All sessions of this router use the session parameters configured here (label space, label advertisement mode, keepalive and graceful restart).
+	SetLdp(value DeviceLdpRouter) Device
+	// HasLdp checks if Ldp has been set in Device
+	HasLdp() bool
 	setNil()
 }
 
@@ -946,6 +956,34 @@ func (obj *device) SetBmp(value DeviceBmp) Device {
 	return obj
 }
 
+// The properties of an LDP router and its children, such as LDP interfaces, targeted peers and FEC ranges. In this model, LDP over IPv4 is supported as per RFC 5036.
+// Ldp returns a DeviceLdpRouter
+func (obj *device) Ldp() DeviceLdpRouter {
+	if obj.obj.Ldp == nil {
+		obj.obj.Ldp = NewDeviceLdpRouter().msg()
+	}
+	if obj.ldpHolder == nil {
+		obj.ldpHolder = &deviceLdpRouter{obj: obj.obj.Ldp}
+	}
+	return obj.ldpHolder
+}
+
+// The properties of an LDP router and its children, such as LDP interfaces, targeted peers and FEC ranges. In this model, LDP over IPv4 is supported as per RFC 5036.
+// Ldp returns a DeviceLdpRouter
+func (obj *device) HasLdp() bool {
+	return obj.obj.Ldp != nil
+}
+
+// The properties of an LDP router and its children, such as LDP interfaces, targeted peers and FEC ranges. In this model, LDP over IPv4 is supported as per RFC 5036.
+// SetLdp sets the DeviceLdpRouter value in the Device object
+func (obj *device) SetLdp(value DeviceLdpRouter) Device {
+
+	obj.ldpHolder = nil
+	obj.obj.Ldp = value.msg()
+
+	return obj
+}
+
 func (obj *device) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1046,6 +1084,11 @@ func (obj *device) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Bmp != nil {
 
 		obj.Bmp().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Ldp != nil {
+
+		obj.Ldp().validateObj(vObj, set_default)
 	}
 
 }
