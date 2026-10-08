@@ -10,7 +10,7 @@ import hashlib
 
 
 BLACK_VERSION = "22.1.0"
-GO_VERSION = "1.22.1"
+GO_VERSION = "1.26.1"
 PROTOC_VERSION = "3.20.3"
 
 # this is where go and protoc shall be installed (and expected to be present)
