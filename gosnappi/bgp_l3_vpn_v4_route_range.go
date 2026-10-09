@@ -264,7 +264,7 @@ func (obj *bgpL3VpnV4RouteRange) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// BgpL3VpnV4RouteRange is emulated VPN-IPv4 customer route range belonging to a Bgp.L3vpn.Vrf (RFC 4364). Same shape as the plain Bgp.V4RouteRange, plus a per route range route_distinguisher. The Route Distinguisher (RFC 4364 Section 4.1) is carried here, on the route range, rather than once on the parent VRF - matching the IxNetwork RESTpy BgpL3VpnRouteProperty object, whose Distinguisher* attributes are per route range, and RFC 4364's per-NLRI RD semantics. This lets different route ranges in the same VRF advertise different RDs (RFC 4364 Section 4.1 / 4.3.5, e.g. a multihomed CE whose prefix must stay distinct per PE). The VPN dataplane label is the existing mpls_labels field (RFC 4364 Section 3). The route range is kept independent of the shared Bgp.V4RouteRange so the VPN-only route_distinguisher does not leak into plain (non-VPN) BGP route ranges.
+// BgpL3VpnV4RouteRange is emulated VPN-IPv4 customer route range belonging to a Bgp.L3vpn.Vrf (RFC 4364). Same shape as the plain Bgp.V4RouteRange, plus a per route range route_distinguisher. The Route Distinguisher (RFC 4364 Section 4.1) is carried here, on the route range, rather than once on the parent VRF - matching RFC 4364's per-NLRI RD semantics. This lets different route ranges in the same VRF advertise different RDs (RFC 4364 Section 4.1 / 4.3.5, e.g. a multihomed CE whose prefix must stay distinct per PE). The VPN dataplane label is the existing mpls_labels field (RFC 4364 Section 3). The route range is kept independent of the shared Bgp.V4RouteRange so the VPN-only route_distinguisher does not leak into plain (non-VPN) BGP route ranges.
 type BgpL3VpnV4RouteRange interface {
 	Validation
 	// msg marshals BgpL3VpnV4RouteRange to protobuf object *otg.BgpL3VpnV4RouteRange
@@ -836,7 +836,7 @@ func (obj *bgpL3VpnV4RouteRangeBgpExtendedCommunityIter) appendHolderSlice(item 
 	return obj
 }
 
-// The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv4 prefix in this route range. RFC 4364 assigns exactly one label per route - Section 4.3.2 only discusses whether that value is shared across routes in a VRF or attachment circuit, not stacking multiple labels per route. Matches the IxNetwork RESTpy BgpL3VpnRouteProperty LabelStart/LabelEnd/LabelStep attributes, which likewise expose a single auto-incrementing label per route range. This intentionally does not reuse the Bgp.MplsLabelBindings schema, which models a label stack (RFC 3107/8277) for plain BGP-LU route ranges.
+// The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv4 prefix in this route range. RFC 4364 assigns exactly one label per route - Section 4.3.2 only discusses whether that value is shared across routes in a VRF or attachment circuit, not stacking multiple labels per route.
 // MplsLabels returns a RouteMplsLabelValue
 func (obj *bgpL3VpnV4RouteRange) MplsLabels() RouteMplsLabelValue {
 	if obj.obj.MplsLabels == nil {
@@ -848,7 +848,7 @@ func (obj *bgpL3VpnV4RouteRange) MplsLabels() RouteMplsLabelValue {
 	return obj.mplsLabelsHolder
 }
 
-// The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv4 prefix in this route range. RFC 4364 assigns exactly one label per route - Section 4.3.2 only discusses whether that value is shared across routes in a VRF or attachment circuit, not stacking multiple labels per route. Matches the IxNetwork RESTpy BgpL3VpnRouteProperty LabelStart/LabelEnd/LabelStep attributes, which likewise expose a single auto-incrementing label per route range. This intentionally does not reuse the Bgp.MplsLabelBindings schema, which models a label stack (RFC 3107/8277) for plain BGP-LU route ranges.
+// The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv4 prefix in this route range. RFC 4364 assigns exactly one label per route - Section 4.3.2 only discusses whether that value is shared across routes in a VRF or attachment circuit, not stacking multiple labels per route.
 // SetMplsLabels sets the RouteMplsLabelValue value in the BgpL3VpnV4RouteRange object
 func (obj *bgpL3VpnV4RouteRange) SetMplsLabels(value RouteMplsLabelValue) BgpL3VpnV4RouteRange {
 
@@ -858,7 +858,7 @@ func (obj *bgpL3VpnV4RouteRange) SetMplsLabels(value RouteMplsLabelValue) BgpL3V
 	return obj
 }
 
-// The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv4 prefix in this route range, forming the VPN-IPv4 NLRI (AFI 1, SAFI 128). Carried per route range to mirror the IxNetwork RESTpy BgpL3VpnRouteProperty Distinguisher* attributes and RFC 4364's per-NLRI RD semantics; route ranges in the same VRF may use different RDs.
+// The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv4 prefix in this route range, forming the VPN-IPv4 NLRI (AFI 1, SAFI 128). Carried per route range to match RFC 4364's per-NLRI RD semantics; route ranges in the same VRF may use different RDs.
 // RouteDistinguisher returns a BgpRouteDistinguisher
 func (obj *bgpL3VpnV4RouteRange) RouteDistinguisher() BgpRouteDistinguisher {
 	if obj.obj.RouteDistinguisher == nil {
@@ -870,7 +870,7 @@ func (obj *bgpL3VpnV4RouteRange) RouteDistinguisher() BgpRouteDistinguisher {
 	return obj.routeDistinguisherHolder
 }
 
-// The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv4 prefix in this route range, forming the VPN-IPv4 NLRI (AFI 1, SAFI 128). Carried per route range to mirror the IxNetwork RESTpy BgpL3VpnRouteProperty Distinguisher* attributes and RFC 4364's per-NLRI RD semantics; route ranges in the same VRF may use different RDs.
+// The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv4 prefix in this route range, forming the VPN-IPv4 NLRI (AFI 1, SAFI 128). Carried per route range to match RFC 4364's per-NLRI RD semantics; route ranges in the same VRF may use different RDs.
 // SetRouteDistinguisher sets the BgpRouteDistinguisher value in the BgpL3VpnV4RouteRange object
 func (obj *bgpL3VpnV4RouteRange) SetRouteDistinguisher(value BgpRouteDistinguisher) BgpL3VpnV4RouteRange {
 

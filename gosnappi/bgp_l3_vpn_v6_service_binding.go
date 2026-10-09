@@ -325,7 +325,7 @@ func (obj *bgpL3VpnV6ServiceBinding) setChoice(value BgpL3VpnV6ServiceBindingCho
 	return obj
 }
 
-// The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv6 prefix in this route range. RFC 4364 assigns exactly one label per route - Section 4.3.2 only discusses whether that value is shared across routes in a VRF or attachment circuit, not stacking multiple labels per route. Matches the IxNetwork RESTpy BgpV6L3VpnRouteProperty LabelStart/LabelEnd/LabelStep attributes, which likewise expose a single auto-incrementing label per route range rather than the label stack (RFC 3107/8277) modeled by Bgp.MplsLabelBindings for plain BGP-LU route ranges.
+// The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv6 prefix in this route range. RFC 4364 assigns exactly one label per route - Section 4.3.2 only discusses whether that value is shared across routes in a VRF or attachment circuit.
 // MplsLabels returns a RouteMplsLabelValue
 func (obj *bgpL3VpnV6ServiceBinding) MplsLabels() RouteMplsLabelValue {
 	if obj.obj.MplsLabels == nil {
@@ -337,7 +337,7 @@ func (obj *bgpL3VpnV6ServiceBinding) MplsLabels() RouteMplsLabelValue {
 	return obj.mplsLabelsHolder
 }
 
-// The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv6 prefix in this route range. RFC 4364 assigns exactly one label per route - Section 4.3.2 only discusses whether that value is shared across routes in a VRF or attachment circuit, not stacking multiple labels per route. Matches the IxNetwork RESTpy BgpV6L3VpnRouteProperty LabelStart/LabelEnd/LabelStep attributes, which likewise expose a single auto-incrementing label per route range rather than the label stack (RFC 3107/8277) modeled by Bgp.MplsLabelBindings for plain BGP-LU route ranges.
+// The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv6 prefix in this route range. RFC 4364 assigns exactly one label per route - Section 4.3.2 only discusses whether that value is shared across routes in a VRF or attachment circuit.
 // SetMplsLabels sets the RouteMplsLabelValue value in the BgpL3VpnV6ServiceBinding object
 func (obj *bgpL3VpnV6ServiceBinding) SetMplsLabels(value RouteMplsLabelValue) BgpL3VpnV6ServiceBinding {
 	obj.setChoice(BgpL3VpnV6ServiceBindingChoice.MPLS_LABELS)

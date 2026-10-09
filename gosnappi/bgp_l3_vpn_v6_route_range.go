@@ -264,7 +264,7 @@ func (obj *bgpL3VpnV6RouteRange) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// BgpL3VpnV6RouteRange is emulated VPN-IPv6 customer route range belonging to a Bgp.L3vpn.Vrf (RFC 4659, 6VPE). Same shape as the plain Bgp.V6RouteRange, except the dataplane binding is selected via service_binding, a choice that currently offers only a VPN MPLS label (RFC 4364 Section 3) but keeps the route range independent of the shared Bgp.V6RouteRange/ Bgp.MplsLabelBindings schemas so that an additional dataplane binding (for example an SRv6 Service SID, RFC 9252) can be added later as a new choice value without a breaking change. The Route Distinguisher (RFC 4364 Section 4.1) is carried per route range via route_distinguisher - matching the IxNetwork RESTpy BgpV6L3VpnRouteProperty Distinguisher* attributes and RFC 4364's per-NLRI RD semantics - rather than once on the parent VRF, so different route ranges in the same VRF may advertise different RDs.
+// BgpL3VpnV6RouteRange is emulated VPN-IPv6 customer route range belonging to a Bgp.L3vpn.Vrf (RFC 4659, 6VPE). Same shape as the plain Bgp.V6RouteRange, except the dataplane binding is selected via service_binding, a choice that currently offers only a VPN MPLS label (RFC 4364 Section 3). The Route Distinguisher (RFC 4364 Section 4.1) is carried per route range via route_distinguisher - matching RFC 4364's per-NLRI RD semantics - rather than once on the parent VRF, so different route ranges in the same VRF may advertise different RDs.
 type BgpL3VpnV6RouteRange interface {
 	Validation
 	// msg marshals BgpL3VpnV6RouteRange to protobuf object *otg.BgpL3VpnV6RouteRange
@@ -856,7 +856,7 @@ func (obj *bgpL3VpnV6RouteRange) SetServiceBinding(value BgpL3VpnV6ServiceBindin
 	return obj
 }
 
-// The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv6 prefix in this route range, forming the VPN-IPv6 NLRI (AFI 2, SAFI 128, RFC 4659). Carried per route range to mirror the IxNetwork RESTpy BgpV6L3VpnRouteProperty Distinguisher* attributes and RFC 4364's per-NLRI RD semantics; route ranges in the same VRF may use different RDs.
+// The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv6 prefix in this route range, forming the VPN-IPv6 NLRI (AFI 2, SAFI 128, RFC 4659). Carried per route range to match RFC 4364's per-NLRI RD semantics; route ranges in the same VRF may use different RDs.
 // RouteDistinguisher returns a BgpRouteDistinguisher
 func (obj *bgpL3VpnV6RouteRange) RouteDistinguisher() BgpRouteDistinguisher {
 	if obj.obj.RouteDistinguisher == nil {
@@ -868,7 +868,7 @@ func (obj *bgpL3VpnV6RouteRange) RouteDistinguisher() BgpRouteDistinguisher {
 	return obj.routeDistinguisherHolder
 }
 
-// The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv6 prefix in this route range, forming the VPN-IPv6 NLRI (AFI 2, SAFI 128, RFC 4659). Carried per route range to mirror the IxNetwork RESTpy BgpV6L3VpnRouteProperty Distinguisher* attributes and RFC 4364's per-NLRI RD semantics; route ranges in the same VRF may use different RDs.
+// The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv6 prefix in this route range, forming the VPN-IPv6 NLRI (AFI 2, SAFI 128, RFC 4659). Carried per route range to match RFC 4364's per-NLRI RD semantics; route ranges in the same VRF may use different RDs.
 // SetRouteDistinguisher sets the BgpRouteDistinguisher value in the BgpL3VpnV6RouteRange object
 func (obj *bgpL3VpnV6RouteRange) SetRouteDistinguisher(value BgpRouteDistinguisher) BgpL3VpnV6RouteRange {
 

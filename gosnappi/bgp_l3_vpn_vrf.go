@@ -262,10 +262,8 @@ func (obj *bgpL3VpnVrf) setNil() {
 // Route Distinguisher (RFC 4364 Section 4.1), so its prefixes are
 // advertised as VPN-IPv4 NLRI (AFI 1, SAFI 128) or VPN-IPv6 NLRI (AFI 2,
 // SAFI 128, RFC 4659) instead of plain unicast NLRI. The RD is carried
-// per route range - not once per VRF - to mirror the IxNetwork RESTpy
-// BgpL3VpnRouteProperty / BgpV6L3VpnRouteProperty objects (whose
-// Distinguisher* attributes are per route range) and RFC 4364's per-NLRI
-// RD semantics, so route ranges in the same VRF may advertise different
+// per route range - not once per VRF - matching RFC 4364's per-NLRI RD
+// semantics, so route ranges in the same VRF may advertise different
 // RDs (RFC 4364 Section 4.1 / 4.3.5, e.g. a multihomed CE).
 //
 // The BGP capability device.bgp.capability.ipv4_mpls_vpn must be enabled

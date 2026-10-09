@@ -318,10 +318,12 @@ type BgpPrefixIpv4MplsVpnUnicastState interface {
 	SetIpv6NextHop(value string) BgpPrefixIpv4MplsVpnUnicastState
 	// HasIpv6NextHop checks if Ipv6NextHop has been set in BgpPrefixIpv4MplsVpnUnicastState
 	HasIpv6NextHop() bool
-	// Labels returns []uint32, set in BgpPrefixIpv4MplsVpnUnicastState.
-	Labels() []uint32
-	// SetLabels assigns []uint32 provided by user to BgpPrefixIpv4MplsVpnUnicastState
-	SetLabels(value []uint32) BgpPrefixIpv4MplsVpnUnicastState
+	// Label returns uint32, set in BgpPrefixIpv4MplsVpnUnicastState.
+	Label() uint32
+	// SetLabel assigns uint32 provided by user to BgpPrefixIpv4MplsVpnUnicastState
+	SetLabel(value uint32) BgpPrefixIpv4MplsVpnUnicastState
+	// HasLabel checks if Label has been set in BgpPrefixIpv4MplsVpnUnicastState
+	HasLabel() bool
 	// Communities returns BgpPrefixIpv4MplsVpnUnicastStateResultBgpCommunityIterIter, set in BgpPrefixIpv4MplsVpnUnicastState
 	Communities() BgpPrefixIpv4MplsVpnUnicastStateResultBgpCommunityIter
 	// ExtendedCommunities returns BgpPrefixIpv4MplsVpnUnicastStateResultExtendedCommunityIterIter, set in BgpPrefixIpv4MplsVpnUnicastState
@@ -517,24 +519,25 @@ func (obj *bgpPrefixIpv4MplsVpnUnicastState) SetIpv6NextHop(value string) BgpPre
 	return obj
 }
 
-// One or more MPLS VPN Label 24 bit values bound to this VPN-IPv4 prefix (RFC 4364 Section 3).
-// Labels returns a []uint32
-func (obj *bgpPrefixIpv4MplsVpnUnicastState) Labels() []uint32 {
-	if obj.obj.Labels == nil {
-		obj.obj.Labels = make([]uint32, 0)
-	}
-	return obj.obj.Labels
+// The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to this VPN-IPv4 prefix. RFC 4364 assigns exactly one label per route, matching the configured mpls_labels range on Bgp.L3vpn.V4RouteRange.
+// Label returns a uint32
+func (obj *bgpPrefixIpv4MplsVpnUnicastState) Label() uint32 {
+
+	return *obj.obj.Label
+
 }
 
-// One or more MPLS VPN Label 24 bit values bound to this VPN-IPv4 prefix (RFC 4364 Section 3).
-// SetLabels sets the []uint32 value in the BgpPrefixIpv4MplsVpnUnicastState object
-func (obj *bgpPrefixIpv4MplsVpnUnicastState) SetLabels(value []uint32) BgpPrefixIpv4MplsVpnUnicastState {
+// The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to this VPN-IPv4 prefix. RFC 4364 assigns exactly one label per route, matching the configured mpls_labels range on Bgp.L3vpn.V4RouteRange.
+// Label returns a uint32
+func (obj *bgpPrefixIpv4MplsVpnUnicastState) HasLabel() bool {
+	return obj.obj.Label != nil
+}
 
-	if obj.obj.Labels == nil {
-		obj.obj.Labels = make([]uint32, 0)
-	}
-	obj.obj.Labels = value
+// The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to this VPN-IPv4 prefix. RFC 4364 assigns exactly one label per route, matching the configured mpls_labels range on Bgp.L3vpn.V4RouteRange.
+// SetLabel sets the uint32 value in the BgpPrefixIpv4MplsVpnUnicastState object
+func (obj *bgpPrefixIpv4MplsVpnUnicastState) SetLabel(value uint32) BgpPrefixIpv4MplsVpnUnicastState {
 
+	obj.obj.Label = &value
 	return obj
 }
 
@@ -817,15 +820,12 @@ func (obj *bgpPrefixIpv4MplsVpnUnicastState) validateObj(vObj *validation, set_d
 
 	}
 
-	if obj.obj.Labels != nil {
+	if obj.obj.Label != nil {
 
-		for _, item := range obj.obj.Labels {
-			if item > 255 {
-				vObj.validationErrors = append(
-					vObj.validationErrors,
-					fmt.Sprintf("min(uint32) <= BgpPrefixIpv4MplsVpnUnicastState.Labels <= 255 but Got %d", item))
-			}
-
+		if *obj.obj.Label > 1048575 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("0 <= BgpPrefixIpv4MplsVpnUnicastState.Label <= 1048575 but Got %d", *obj.obj.Label))
 		}
 
 	}

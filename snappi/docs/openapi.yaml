@@ -10801,10 +10801,8 @@ components:
         Route Distinguisher (RFC 4364 Section 4.1), so its prefixes are
         advertised as VPN-IPv4 NLRI (AFI 1, SAFI 128) or VPN-IPv6 NLRI (AFI 2,
         SAFI 128, RFC 4659) instead of plain unicast NLRI. The RD is carried
-        per route range - not once per VRF - to mirror the IxNetwork RESTpy
-        BgpL3VpnRouteProperty / BgpV6L3VpnRouteProperty objects (whose
-        Distinguisher* attributes are per route range) and RFC 4364's per-NLRI
-        RD semantics, so route ranges in the same VRF may advertise different
+        per route range - not once per VRF - matching RFC 4364's per-NLRI RD
+        semantics, so route ranges in the same VRF may advertise different
         RDs (RFC 4364 Section 4.1 / 4.3.5, e.g. a multihomed CE).
 
         The BGP capability device.bgp.capability.ipv4_mpls_vpn must be enabled
@@ -10850,7 +10848,7 @@ components:
           x-field-uid: 5
     Bgp.L3vpn.V4RouteRange:
       description: |-
-        Emulated VPN-IPv4 customer route range belonging to a Bgp.L3vpn.Vrf (RFC 4364). Same shape as the plain Bgp.V4RouteRange, plus a per route range route_distinguisher. The Route Distinguisher (RFC 4364 Section 4.1) is carried here, on the route range, rather than once on the parent VRF - matching the IxNetwork RESTpy BgpL3VpnRouteProperty object, whose Distinguisher* attributes are per route range, and RFC 4364's per-NLRI RD semantics. This lets different route ranges in the same VRF advertise different RDs (RFC 4364 Section 4.1 / 4.3.5, e.g. a multihomed CE whose prefix must stay distinct per PE). The VPN dataplane label is the existing mpls_labels field (RFC 4364 Section 3). The route range is kept independent of the shared Bgp.V4RouteRange so the VPN-only route_distinguisher does not leak into plain (non-VPN) BGP route ranges.
+        Emulated VPN-IPv4 customer route range belonging to a Bgp.L3vpn.Vrf (RFC 4364). Same shape as the plain Bgp.V4RouteRange, plus a per route range route_distinguisher. The Route Distinguisher (RFC 4364 Section 4.1) is carried here, on the route range, rather than once on the parent VRF - matching RFC 4364's per-NLRI RD semantics. This lets different route ranges in the same VRF advertise different RDs (RFC 4364 Section 4.1 / 4.3.5, e.g. a multihomed CE whose prefix must stay distinct per PE). The VPN dataplane label is the existing mpls_labels field (RFC 4364 Section 3). The route range is kept independent of the shared Bgp.V4RouteRange so the VPN-only route_distinguisher does not leak into plain (non-VPN) BGP route ranges.
       type: object
       required:
       - name
@@ -10948,17 +10946,17 @@ components:
             $ref: '#/components/schemas/Bgp.ExtendedCommunity'
         mpls_labels:
           description: |-
-            The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv4 prefix in this route range. RFC 4364 assigns exactly one label per route - Section 4.3.2 only discusses whether that value is shared across routes in a VRF or attachment circuit, not stacking multiple labels per route. Matches the IxNetwork RESTpy BgpL3VpnRouteProperty LabelStart/LabelEnd/LabelStep attributes, which likewise expose a single auto-incrementing label per route range. This intentionally does not reuse the Bgp.MplsLabelBindings schema, which models a label stack (RFC 3107/8277) for plain BGP-LU route ranges.
+            The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv4 prefix in this route range. RFC 4364 assigns exactly one label per route - Section 4.3.2 only discusses whether that value is shared across routes in a VRF or attachment circuit, not stacking multiple labels per route.
           $ref: '#/components/schemas/RouteMplsLabelValue'
           x-field-uid: 12
         route_distinguisher:
           description: |-
-            The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv4 prefix in this route range, forming the VPN-IPv4 NLRI (AFI 1, SAFI 128). Carried per route range to mirror the IxNetwork RESTpy BgpL3VpnRouteProperty Distinguisher* attributes and RFC 4364's per-NLRI RD semantics; route ranges in the same VRF may use different RDs.
+            The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv4 prefix in this route range, forming the VPN-IPv4 NLRI (AFI 1, SAFI 128). Carried per route range to match RFC 4364's per-NLRI RD semantics; route ranges in the same VRF may use different RDs.
           $ref: '#/components/schemas/Bgp.RouteDistinguisher'
           x-field-uid: 13
     Bgp.L3vpn.V6RouteRange:
       description: |-
-        Emulated VPN-IPv6 customer route range belonging to a Bgp.L3vpn.Vrf (RFC 4659, 6VPE). Same shape as the plain Bgp.V6RouteRange, except the dataplane binding is selected via service_binding, a choice that currently offers only a VPN MPLS label (RFC 4364 Section 3) but keeps the route range independent of the shared Bgp.V6RouteRange/ Bgp.MplsLabelBindings schemas so that an additional dataplane binding (for example an SRv6 Service SID, RFC 9252) can be added later as a new choice value without a breaking change. The Route Distinguisher (RFC 4364 Section 4.1) is carried per route range via route_distinguisher - matching the IxNetwork RESTpy BgpV6L3VpnRouteProperty Distinguisher* attributes and RFC 4364's per-NLRI RD semantics - rather than once on the parent VRF, so different route ranges in the same VRF may advertise different RDs.
+        Emulated VPN-IPv6 customer route range belonging to a Bgp.L3vpn.Vrf (RFC 4659, 6VPE). Same shape as the plain Bgp.V6RouteRange, except the dataplane binding is selected via service_binding, a choice that currently offers only a VPN MPLS label (RFC 4364 Section 3). The Route Distinguisher (RFC 4364 Section 4.1) is carried per route range via route_distinguisher - matching RFC 4364's per-NLRI RD semantics - rather than once on the parent VRF, so different route ranges in the same VRF may advertise different RDs.
       type: object
       required:
       - name
@@ -11061,7 +11059,7 @@ components:
           x-field-uid: 12
         route_distinguisher:
           description: |-
-            The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv6 prefix in this route range, forming the VPN-IPv6 NLRI (AFI 2, SAFI 128, RFC 4659). Carried per route range to mirror the IxNetwork RESTpy BgpV6L3VpnRouteProperty Distinguisher* attributes and RFC 4364's per-NLRI RD semantics; route ranges in the same VRF may use different RDs.
+            The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv6 prefix in this route range, forming the VPN-IPv6 NLRI (AFI 2, SAFI 128, RFC 4659). Carried per route range to match RFC 4364's per-NLRI RD semantics; route ranges in the same VRF may use different RDs.
           $ref: '#/components/schemas/Bgp.RouteDistinguisher'
           x-field-uid: 13
     Bgp.L3vpn.V6ServiceBinding:
@@ -11084,7 +11082,7 @@ components:
           - mpls_labels
         mpls_labels:
           description: |-
-            The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv6 prefix in this route range. RFC 4364 assigns exactly one label per route - Section 4.3.2 only discusses whether that value is shared across routes in a VRF or attachment circuit, not stacking multiple labels per route. Matches the IxNetwork RESTpy BgpV6L3VpnRouteProperty LabelStart/LabelEnd/LabelStep attributes, which likewise expose a single auto-incrementing label per route range rather than the label stack (RFC 3107/8277) modeled by Bgp.MplsLabelBindings for plain BGP-LU route ranges.
+            The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv6 prefix in this route range. RFC 4364 assigns exactly one label per route - Section 4.3.2 only discusses whether that value is shared across routes in a VRF or attachment circuit.
           $ref: '#/components/schemas/RouteMplsLabelValue'
           x-field-uid: 2
     Bgp.V6Peer:
@@ -28692,14 +28690,13 @@ components:
             The IPv6 address of the egress interface.
           type: string
           format: ipv6
-        labels:
+        label:
           description: |-
-            One or more MPLS VPN Label 24 bit values bound to this VPN-IPv4 prefix (RFC 4364 Section 3).
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 255
+            The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to this VPN-IPv4 prefix. RFC 4364 assigns exactly one label per route, matching the configured mpls_labels range on Bgp.L3vpn.V4RouteRange.
+          type: integer
+          format: uint32
+          minimum: 0
+          maximum: 1048575
           x-field-uid: 8
         communities:
           x-field-uid: 9
@@ -28784,14 +28781,13 @@ components:
             The IPv6 address of the egress interface.
           type: string
           format: ipv6
-        labels:
+        label:
           description: |-
-            One or more MPLS VPN Label 24 bit values bound to this VPN-IPv6 prefix (RFC 4364 Section 3, RFC 4659).
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 255
+            The single VPN dataplane MPLS label (RFC 4364 Section 3, RFC 4659) bound to this VPN-IPv6 prefix. RFC 4364 assigns exactly one label per route, matching the configured mpls_labels range on Bgp.L3vpn.V6RouteRange.
+          type: integer
+          format: uint32
+          minimum: 0
+          maximum: 1048575
           x-field-uid: 8
         communities:
           x-field-uid: 9

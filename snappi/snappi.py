@@ -38203,7 +38203,7 @@ class BgpL3vpnV4RouteRange(OpenApiObject):
         # type: () -> RouteMplsLabelValue
         """mpls_labels getter
 
-        A container of MPLS Prefix Label Value/Index in the address range.A container of MPLS Prefix Label Value/Index in the address range.A container of MPLS Prefix Label Value/Index in the address range.The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv4 prefix in this route range. RFC 4364 assigns exactly one label per route Section 4.3.2 only discusses whether that value is shared across routes in VRF or attachment circuit, not stacking multiple labels per route. Matches the IxNetwork RESTpy BgpL3VpnRouteProperty LabelStart/LabelEnd/LabelStep attributes, which likewise expose single auto-incrementing label per route range. This intentionally does not reuse the Bgp.MplsLabelBindings schema, which models label stack (RFC 3107/8277) for plain BGP-LU route ranges.
+        A container of MPLS Prefix Label Value/Index in the address range.A container of MPLS Prefix Label Value/Index in the address range.A container of MPLS Prefix Label Value/Index in the address range.The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv4 prefix in this route range. RFC 4364 assigns exactly one label per route Section 4.3.2 only discusses whether that value is shared across routes in VRF or attachment circuit, not stacking multiple labels per route.
 
         Returns: RouteMplsLabelValue
         """
@@ -38214,7 +38214,7 @@ class BgpL3vpnV4RouteRange(OpenApiObject):
         # type: () -> BgpRouteDistinguisher
         """route_distinguisher getter
 
-        BGP Route Distinguisher.BGP Route Distinguisher.BGP Route Distinguisher.The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv4 prefix in this route range, forming the VPN-IPv4 NLRI (AFI 1, SAFI 128). Carried per route range to mirror the IxNetwork RESTpy BgpL3VpnRouteProperty Distinguisher* attributes and RFC 4364's per-NLRI RD semantics; route ranges in the same VRF may use different RDs.
+        BGP Route Distinguisher.BGP Route Distinguisher.BGP Route Distinguisher.The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv4 prefix in this route range, forming the VPN-IPv4 NLRI (AFI 1, SAFI 128). Carried per route range to match RFC 4364's per-NLRI RD semantics; route ranges in the same VRF may use different RDs.
 
         Returns: BgpRouteDistinguisher
         """
@@ -38262,7 +38262,7 @@ class BgpL3vpnV4RouteRangeIter(OpenApiIter):
         # type: (Union[Literal["local_ip"], Literal["manual"]],Union[Literal["ipv4"], Literal["ipv6"]],str,str,str) -> BgpL3vpnV4RouteRangeIter
         """Factory method that creates an instance of the BgpL3vpnV4RouteRange class
 
-        Emulated VPN-IPv4 customer route range belonging to Bgp.L3vpn.Vrf (RFC 4364). Same shape as the plain Bgp.V4RouteRange, plus per route range route_distinguisher. The Route Distinguisher (RFC 4364 Section 4.1) is carried here, on the route range, rather than once on the parent VRF matching the IxNetwork RESTpy BgpL3VpnRouteProperty object, whose Distinguisher* attributes are per route range, and RFC 4364's per-NLRI RD semantics. This lets different route ranges in the same VRF advertise different RDs (RFC 4364 Section 4.1 4.3.5, e.g. multihomed CE whose prefix must stay distinct per PE). The VPN dataplane label is the existing mpls_labels field (RFC 4364 Section 3). The route range is kept independent of the shared Bgp.V4RouteRange so the VPN-only route_distinguisher does not leak into plain (non-VPN) BGP route ranges.
+        Emulated VPN-IPv4 customer route range belonging to Bgp.L3vpn.Vrf (RFC 4364). Same shape as the plain Bgp.V4RouteRange, plus per route range route_distinguisher. The Route Distinguisher (RFC 4364 Section 4.1) is carried here, on the route range, rather than once on the parent VRF matching RFC 4364's per-NLRI RD semantics. This lets different route ranges in the same VRF advertise different RDs (RFC 4364 Section 4.1 4.3.5, e.g. multihomed CE whose prefix must stay distinct per PE). The VPN dataplane label is the existing mpls_labels field (RFC 4364 Section 3). The route range is kept independent of the shared Bgp.V4RouteRange so the VPN-only route_distinguisher does not leak into plain (non-VPN) BGP route ranges.
 
         Returns: BgpL3vpnV4RouteRangeIter
         """
@@ -38288,7 +38288,7 @@ class BgpL3vpnV4RouteRangeIter(OpenApiIter):
         # type: (Union[Literal["local_ip"], Literal["manual"]],Union[Literal["ipv4"], Literal["ipv6"]],str,str,str) -> BgpL3vpnV4RouteRange
         """Add method that creates and returns an instance of the BgpL3vpnV4RouteRange class
 
-        Emulated VPN-IPv4 customer route range belonging to Bgp.L3vpn.Vrf (RFC 4364). Same shape as the plain Bgp.V4RouteRange, plus per route range route_distinguisher. The Route Distinguisher (RFC 4364 Section 4.1) is carried here, on the route range, rather than once on the parent VRF matching the IxNetwork RESTpy BgpL3VpnRouteProperty object, whose Distinguisher* attributes are per route range, and RFC 4364's per-NLRI RD semantics. This lets different route ranges in the same VRF advertise different RDs (RFC 4364 Section 4.1 4.3.5, e.g. multihomed CE whose prefix must stay distinct per PE). The VPN dataplane label is the existing mpls_labels field (RFC 4364 Section 3). The route range is kept independent of the shared Bgp.V4RouteRange so the VPN-only route_distinguisher does not leak into plain (non-VPN) BGP route ranges.
+        Emulated VPN-IPv4 customer route range belonging to Bgp.L3vpn.Vrf (RFC 4364). Same shape as the plain Bgp.V4RouteRange, plus per route range route_distinguisher. The Route Distinguisher (RFC 4364 Section 4.1) is carried here, on the route range, rather than once on the parent VRF matching RFC 4364's per-NLRI RD semantics. This lets different route ranges in the same VRF advertise different RDs (RFC 4364 Section 4.1 4.3.5, e.g. multihomed CE whose prefix must stay distinct per PE). The VPN dataplane label is the existing mpls_labels field (RFC 4364 Section 3). The route range is kept independent of the shared Bgp.V4RouteRange so the VPN-only route_distinguisher does not leak into plain (non-VPN) BGP route ranges.
 
         Returns: BgpL3vpnV4RouteRange
         """
@@ -38582,7 +38582,7 @@ class BgpL3vpnV6RouteRange(OpenApiObject):
         # type: () -> BgpRouteDistinguisher
         """route_distinguisher getter
 
-        BGP Route Distinguisher.BGP Route Distinguisher.BGP Route Distinguisher.The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv6 prefix in this route range, forming the VPN-IPv6 NLRI (AFI 2, SAFI 128, RFC 4659). Carried per route range to mirror the IxNetwork RESTpy BgpV6L3VpnRouteProperty Distinguisher* attributes and RFC 4364's per-NLRI RD semantics; route ranges in the same VRF may use different RDs.
+        BGP Route Distinguisher.BGP Route Distinguisher.BGP Route Distinguisher.The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv6 prefix in this route range, forming the VPN-IPv6 NLRI (AFI 2, SAFI 128, RFC 4659). Carried per route range to match RFC 4364's per-NLRI RD semantics; route ranges in the same VRF may use different RDs.
 
         Returns: BgpRouteDistinguisher
         """
@@ -38700,7 +38700,7 @@ class BgpL3vpnV6RouteRangeIter(OpenApiIter):
         # type: (Union[Literal["local_ip"], Literal["manual"]],Union[Literal["ipv4"], Literal["ipv6"]],str,str,str) -> BgpL3vpnV6RouteRangeIter
         """Factory method that creates an instance of the BgpL3vpnV6RouteRange class
 
-        Emulated VPN-IPv6 customer route range belonging to Bgp.L3vpn.Vrf (RFC 4659, 6VPE). Same shape as the plain Bgp.V6RouteRange, except the dataplane binding is selected via service_binding, choice that currently offers only VPN MPLS label (RFC 4364 Section 3) but keeps the route range independent of the shared Bgp.V6RouteRange/ Bgp.MplsLabelBindings schemas so that an additional dataplane binding (for example an SRv6 Service SID, RFC 9252) can be added later as new choice value without breaking change. The Route Distinguisher (RFC 4364 Section 4.1) is carried per route range via route_distinguisher matching the IxNetwork RESTpy BgpV6L3VpnRouteProperty Distinguisher* attributes and RFC 4364's per-NLRI RD semantics rather than once on the parent VRF, so different route ranges in the same VRF may advertise different RDs.
+        Emulated VPN-IPv6 customer route range belonging to Bgp.L3vpn.Vrf (RFC 4659, 6VPE). Same shape as the plain Bgp.V6RouteRange, except the dataplane binding is selected via service_binding, choice that currently offers only VPN MPLS label (RFC 4364 Section 3). The Route Distinguisher (RFC 4364 Section 4.1) is carried per route range via route_distinguisher matching RFC 4364's per-NLRI RD semantics rather than once on the parent VRF, so different route ranges in the same VRF may advertise different RDs.
 
         Returns: BgpL3vpnV6RouteRangeIter
         """
@@ -38726,7 +38726,7 @@ class BgpL3vpnV6RouteRangeIter(OpenApiIter):
         # type: (Union[Literal["local_ip"], Literal["manual"]],Union[Literal["ipv4"], Literal["ipv6"]],str,str,str) -> BgpL3vpnV6RouteRange
         """Add method that creates and returns an instance of the BgpL3vpnV6RouteRange class
 
-        Emulated VPN-IPv6 customer route range belonging to Bgp.L3vpn.Vrf (RFC 4659, 6VPE). Same shape as the plain Bgp.V6RouteRange, except the dataplane binding is selected via service_binding, choice that currently offers only VPN MPLS label (RFC 4364 Section 3) but keeps the route range independent of the shared Bgp.V6RouteRange/ Bgp.MplsLabelBindings schemas so that an additional dataplane binding (for example an SRv6 Service SID, RFC 9252) can be added later as new choice value without breaking change. The Route Distinguisher (RFC 4364 Section 4.1) is carried per route range via route_distinguisher matching the IxNetwork RESTpy BgpV6L3VpnRouteProperty Distinguisher* attributes and RFC 4364's per-NLRI RD semantics rather than once on the parent VRF, so different route ranges in the same VRF may advertise different RDs.
+        Emulated VPN-IPv6 customer route range belonging to Bgp.L3vpn.Vrf (RFC 4659, 6VPE). Same shape as the plain Bgp.V6RouteRange, except the dataplane binding is selected via service_binding, choice that currently offers only VPN MPLS label (RFC 4364 Section 3). The Route Distinguisher (RFC 4364 Section 4.1) is carried per route range via route_distinguisher matching RFC 4364's per-NLRI RD semantics rather than once on the parent VRF, so different route ranges in the same VRF may advertise different RDs.
 
         Returns: BgpL3vpnV6RouteRange
         """
@@ -38776,7 +38776,7 @@ class BgpL3vpnVrfIter(OpenApiIter):
         # type: (str) -> BgpL3vpnVrfIter
         """Factory method that creates an instance of the BgpL3vpnVrf class
 
-        A BGP/MPLS Layer VPN VRF (RFC 4364). Groups Route Target. import/export policy with set of customer (PE-CE learned or locally. originated) IPv4/IPv6 route ranges. Each route range carries its own. Route Distinguisher (RFC 4364 Section 4.1), so its prefixes are. advertised as VPN-IPv4 NLRI (AFI 1, SAFI 128) or VPN-IPv6 NLRI (AFI 2,. SAFI 128, RFC 4659) instead of plain unicast NLRI. The RD is carried. per route range not once per VRF to mirror the IxNetwork RESTpy. BgpL3VpnRouteProperty BgpV6L3VpnRouteProperty objects (whose. Distinguisher* attributes are per route range) and RFC 4364's per-NLRI. RD semantics, so route ranges in the same VRF may advertise different. RDs (RFC 4364 Section 4.1 4.3.5, e.g. multihomed CE).. The BGP capability device.bgp.capability.ipv4_mpls_vpn must be enabled. on the peer for VPN-IPv4 NLRI to be negotiated and advertised, and. device.bgp.capability.ipv6_mpls_vpn for VPN-IPv6 NLRI.
+        A BGP/MPLS Layer VPN VRF (RFC 4364). Groups Route Target. import/export policy with set of customer (PE-CE learned or locally. originated) IPv4/IPv6 route ranges. Each route range carries its own. Route Distinguisher (RFC 4364 Section 4.1), so its prefixes are. advertised as VPN-IPv4 NLRI (AFI 1, SAFI 128) or VPN-IPv6 NLRI (AFI 2,. SAFI 128, RFC 4659) instead of plain unicast NLRI. The RD is carried. per route range not once per VRF matching RFC 4364's per-NLRI RD. semantics, so route ranges in the same VRF may advertise different. RDs (RFC 4364 Section 4.1 4.3.5, e.g. multihomed CE).. The BGP capability device.bgp.capability.ipv4_mpls_vpn must be enabled. on the peer for VPN-IPv4 NLRI to be negotiated and advertised, and. device.bgp.capability.ipv6_mpls_vpn for VPN-IPv6 NLRI.
 
         Returns: BgpL3vpnVrfIter
         """
@@ -38788,7 +38788,7 @@ class BgpL3vpnVrfIter(OpenApiIter):
         # type: (str) -> BgpL3vpnVrf
         """Add method that creates and returns an instance of the BgpL3vpnVrf class
 
-        A BGP/MPLS Layer VPN VRF (RFC 4364). Groups Route Target. import/export policy with set of customer (PE-CE learned or locally. originated) IPv4/IPv6 route ranges. Each route range carries its own. Route Distinguisher (RFC 4364 Section 4.1), so its prefixes are. advertised as VPN-IPv4 NLRI (AFI 1, SAFI 128) or VPN-IPv6 NLRI (AFI 2,. SAFI 128, RFC 4659) instead of plain unicast NLRI. The RD is carried. per route range not once per VRF to mirror the IxNetwork RESTpy. BgpL3VpnRouteProperty BgpV6L3VpnRouteProperty objects (whose. Distinguisher* attributes are per route range) and RFC 4364's per-NLRI. RD semantics, so route ranges in the same VRF may advertise different. RDs (RFC 4364 Section 4.1 4.3.5, e.g. multihomed CE).. The BGP capability device.bgp.capability.ipv4_mpls_vpn must be enabled. on the peer for VPN-IPv4 NLRI to be negotiated and advertised, and. device.bgp.capability.ipv6_mpls_vpn for VPN-IPv6 NLRI.
+        A BGP/MPLS Layer VPN VRF (RFC 4364). Groups Route Target. import/export policy with set of customer (PE-CE learned or locally. originated) IPv4/IPv6 route ranges. Each route range carries its own. Route Distinguisher (RFC 4364 Section 4.1), so its prefixes are. advertised as VPN-IPv4 NLRI (AFI 1, SAFI 128) or VPN-IPv6 NLRI (AFI 2,. SAFI 128, RFC 4659) instead of plain unicast NLRI. The RD is carried. per route range not once per VRF matching RFC 4364's per-NLRI RD. semantics, so route ranges in the same VRF may advertise different. RDs (RFC 4364 Section 4.1 4.3.5, e.g. multihomed CE).. The BGP capability device.bgp.capability.ipv4_mpls_vpn must be enabled. on the peer for VPN-IPv4 NLRI to be negotiated and advertised, and. device.bgp.capability.ipv6_mpls_vpn for VPN-IPv6 NLRI.
 
         Returns: BgpL3vpnVrf
         """
@@ -199442,11 +199442,11 @@ class BgpPrefixIpv4MplsVpnUnicastState(OpenApiObject):
             "type": str,
             "format": "ipv6",
         },
-        "labels": {
-            "type": list,
-            "itemtype": int,
-            "itemformat": "uint32",
-            "maximum": 255,
+        "label": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 1048575,
         },
         "communities": {"type": "ResultBgpCommunityIter"},
         "extended_communities": {"type": "ResultExtendedCommunityIter"},
@@ -199481,7 +199481,7 @@ class BgpPrefixIpv4MplsVpnUnicastState(OpenApiObject):
         path_id=None,
         ipv4_next_hop=None,
         ipv6_next_hop=None,
-        labels=None,
+        label=None,
         local_preference=None,
         multi_exit_discriminator=None,
     ):
@@ -199494,7 +199494,7 @@ class BgpPrefixIpv4MplsVpnUnicastState(OpenApiObject):
         self._set_property("path_id", path_id)
         self._set_property("ipv4_next_hop", ipv4_next_hop)
         self._set_property("ipv6_next_hop", ipv6_next_hop)
-        self._set_property("labels", labels)
+        self._set_property("label", label)
         self._set_property("local_preference", local_preference)
         self._set_property("multi_exit_discriminator", multi_exit_discriminator)
 
@@ -199507,7 +199507,7 @@ class BgpPrefixIpv4MplsVpnUnicastState(OpenApiObject):
         path_id=None,
         ipv4_next_hop=None,
         ipv6_next_hop=None,
-        labels=None,
+        label=None,
         local_preference=None,
         multi_exit_discriminator=None,
     ):
@@ -199663,25 +199663,25 @@ class BgpPrefixIpv4MplsVpnUnicastState(OpenApiObject):
         self._set_property("ipv6_next_hop", value)
 
     @property
-    def labels(self):
-        # type: () -> List[int]
-        """labels getter
+    def label(self):
+        # type: () -> int
+        """label getter
 
-        One or more MPLS VPN Label 24 bit values bound to this VPN-IPv4 prefix (RFC 4364 Section 3).
+        The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to this VPN-IPv4 prefix. RFC 4364 assigns exactly one label per route, matching the configured mpls_labels range on Bgp.L3vpn.V4RouteRange.
 
-        Returns: List[int]
+        Returns: int
         """
-        return self._get_property("labels")
+        return self._get_property("label")
 
-    @labels.setter
-    def labels(self, value):
-        """labels setter
+    @label.setter
+    def label(self, value):
+        """label setter
 
-        One or more MPLS VPN Label 24 bit values bound to this VPN-IPv4 prefix (RFC 4364 Section 3).
+        The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to this VPN-IPv4 prefix. RFC 4364 assigns exactly one label per route, matching the configured mpls_labels range on Bgp.L3vpn.V4RouteRange.
 
-        value: List[int]
+        value: int
         """
-        self._set_property("labels", value)
+        self._set_property("label", value)
 
     @property
     def communities(self):
@@ -199807,11 +199807,11 @@ class BgpPrefixIpv4MplsVpnUnicastStateIter(OpenApiIter):
         path_id=None,
         ipv4_next_hop=None,
         ipv6_next_hop=None,
-        labels=None,
+        label=None,
         local_preference=None,
         multi_exit_discriminator=None,
     ):
-        # type: (str,str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,List[int],int,int) -> BgpPrefixIpv4MplsVpnUnicastStateIter
+        # type: (str,str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,int,int,int) -> BgpPrefixIpv4MplsVpnUnicastStateIter
         """Factory method that creates an instance of the BgpPrefixIpv4MplsVpnUnicastState class
 
         BGP/MPLS L3VPN (RFC 4364) VPN-IPv4 learned prefix, received under the VPN-IPv4 AFI/SAFI (AFI 1, SAFI 128).
@@ -199827,7 +199827,7 @@ class BgpPrefixIpv4MplsVpnUnicastStateIter(OpenApiIter):
             path_id=path_id,
             ipv4_next_hop=ipv4_next_hop,
             ipv6_next_hop=ipv6_next_hop,
-            labels=labels,
+            label=label,
             local_preference=local_preference,
             multi_exit_discriminator=multi_exit_discriminator,
         )
@@ -199843,11 +199843,11 @@ class BgpPrefixIpv4MplsVpnUnicastStateIter(OpenApiIter):
         path_id=None,
         ipv4_next_hop=None,
         ipv6_next_hop=None,
-        labels=None,
+        label=None,
         local_preference=None,
         multi_exit_discriminator=None,
     ):
-        # type: (str,str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,List[int],int,int) -> BgpPrefixIpv4MplsVpnUnicastState
+        # type: (str,str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,int,int,int) -> BgpPrefixIpv4MplsVpnUnicastState
         """Add method that creates and returns an instance of the BgpPrefixIpv4MplsVpnUnicastState class
 
         BGP/MPLS L3VPN (RFC 4364) VPN-IPv4 learned prefix, received under the VPN-IPv4 AFI/SAFI (AFI 1, SAFI 128).
@@ -199863,7 +199863,7 @@ class BgpPrefixIpv4MplsVpnUnicastStateIter(OpenApiIter):
             path_id=path_id,
             ipv4_next_hop=ipv4_next_hop,
             ipv6_next_hop=ipv6_next_hop,
-            labels=labels,
+            label=label,
             local_preference=local_preference,
             multi_exit_discriminator=multi_exit_discriminator,
         )
@@ -199902,11 +199902,11 @@ class BgpPrefixIpv6MplsVpnUnicastState(OpenApiObject):
             "type": str,
             "format": "ipv6",
         },
-        "labels": {
-            "type": list,
-            "itemtype": int,
-            "itemformat": "uint32",
-            "maximum": 255,
+        "label": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 1048575,
         },
         "communities": {"type": "ResultBgpCommunityIter"},
         "extended_communities": {"type": "ResultExtendedCommunityIter"},
@@ -199941,7 +199941,7 @@ class BgpPrefixIpv6MplsVpnUnicastState(OpenApiObject):
         path_id=None,
         ipv4_next_hop=None,
         ipv6_next_hop=None,
-        labels=None,
+        label=None,
         local_preference=None,
         multi_exit_discriminator=None,
     ):
@@ -199954,7 +199954,7 @@ class BgpPrefixIpv6MplsVpnUnicastState(OpenApiObject):
         self._set_property("path_id", path_id)
         self._set_property("ipv4_next_hop", ipv4_next_hop)
         self._set_property("ipv6_next_hop", ipv6_next_hop)
-        self._set_property("labels", labels)
+        self._set_property("label", label)
         self._set_property("local_preference", local_preference)
         self._set_property("multi_exit_discriminator", multi_exit_discriminator)
 
@@ -199967,7 +199967,7 @@ class BgpPrefixIpv6MplsVpnUnicastState(OpenApiObject):
         path_id=None,
         ipv4_next_hop=None,
         ipv6_next_hop=None,
-        labels=None,
+        label=None,
         local_preference=None,
         multi_exit_discriminator=None,
     ):
@@ -200123,25 +200123,25 @@ class BgpPrefixIpv6MplsVpnUnicastState(OpenApiObject):
         self._set_property("ipv6_next_hop", value)
 
     @property
-    def labels(self):
-        # type: () -> List[int]
-        """labels getter
+    def label(self):
+        # type: () -> int
+        """label getter
 
-        One or more MPLS VPN Label 24 bit values bound to this VPN-IPv6 prefix (RFC 4364 Section 3, RFC 4659).
+        The single VPN dataplane MPLS label (RFC 4364 Section 3, RFC 4659) bound to this VPN-IPv6 prefix. RFC 4364 assigns exactly one label per route, matching the configured mpls_labels range on Bgp.L3vpn.V6RouteRange.
 
-        Returns: List[int]
+        Returns: int
         """
-        return self._get_property("labels")
+        return self._get_property("label")
 
-    @labels.setter
-    def labels(self, value):
-        """labels setter
+    @label.setter
+    def label(self, value):
+        """label setter
 
-        One or more MPLS VPN Label 24 bit values bound to this VPN-IPv6 prefix (RFC 4364 Section 3, RFC 4659).
+        The single VPN dataplane MPLS label (RFC 4364 Section 3, RFC 4659) bound to this VPN-IPv6 prefix. RFC 4364 assigns exactly one label per route, matching the configured mpls_labels range on Bgp.L3vpn.V6RouteRange.
 
-        value: List[int]
+        value: int
         """
-        self._set_property("labels", value)
+        self._set_property("label", value)
 
     @property
     def communities(self):
@@ -200267,11 +200267,11 @@ class BgpPrefixIpv6MplsVpnUnicastStateIter(OpenApiIter):
         path_id=None,
         ipv4_next_hop=None,
         ipv6_next_hop=None,
-        labels=None,
+        label=None,
         local_preference=None,
         multi_exit_discriminator=None,
     ):
-        # type: (str,str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,List[int],int,int) -> BgpPrefixIpv6MplsVpnUnicastStateIter
+        # type: (str,str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,int,int,int) -> BgpPrefixIpv6MplsVpnUnicastStateIter
         """Factory method that creates an instance of the BgpPrefixIpv6MplsVpnUnicastState class
 
         BGP/MPLS L3VPN (RFC 4659) VPN-IPv6 (6VPE) learned prefix, received under the VPN-IPv6 AFI/SAFI (AFI 2, SAFI 128).
@@ -200287,7 +200287,7 @@ class BgpPrefixIpv6MplsVpnUnicastStateIter(OpenApiIter):
             path_id=path_id,
             ipv4_next_hop=ipv4_next_hop,
             ipv6_next_hop=ipv6_next_hop,
-            labels=labels,
+            label=label,
             local_preference=local_preference,
             multi_exit_discriminator=multi_exit_discriminator,
         )
@@ -200303,11 +200303,11 @@ class BgpPrefixIpv6MplsVpnUnicastStateIter(OpenApiIter):
         path_id=None,
         ipv4_next_hop=None,
         ipv6_next_hop=None,
-        labels=None,
+        label=None,
         local_preference=None,
         multi_exit_discriminator=None,
     ):
-        # type: (str,str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,List[int],int,int) -> BgpPrefixIpv6MplsVpnUnicastState
+        # type: (str,str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,int,int,int) -> BgpPrefixIpv6MplsVpnUnicastState
         """Add method that creates and returns an instance of the BgpPrefixIpv6MplsVpnUnicastState class
 
         BGP/MPLS L3VPN (RFC 4659) VPN-IPv6 (6VPE) learned prefix, received under the VPN-IPv6 AFI/SAFI (AFI 2, SAFI 128).
@@ -200323,7 +200323,7 @@ class BgpPrefixIpv6MplsVpnUnicastStateIter(OpenApiIter):
             path_id=path_id,
             ipv4_next_hop=ipv4_next_hop,
             ipv6_next_hop=ipv6_next_hop,
-            labels=labels,
+            label=label,
             local_preference=local_preference,
             multi_exit_discriminator=multi_exit_discriminator,
         )
