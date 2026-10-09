@@ -290,20 +290,14 @@ type Ospfv2OpaqueLsaTrafficEngineering interface {
 	// HasLinkId checks if LinkId has been set in Ospfv2OpaqueLsaTrafficEngineering
 	HasLinkId() bool
 	// LinkAttributes returns Ospfv2LsaLinkTrafficEngineering, set in Ospfv2OpaqueLsaTrafficEngineering.
-	// Ospfv2LsaLinkTrafficEngineering is traffic engineering attributes for a link, sourced from the Link TLV sub-TLVs of the
-	// Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of
-	// the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).
-	// This is the attribute set of the link, not a transcription of the sub-TLVs that
-	// carried it: a property here names the attribute, and the description of each names
-	// the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.
+	// Ospfv2LsaLinkTrafficEngineering is traffic engineering attributes of a link, sourced from the sub-TLVs of the Link TLV
+	// of the Traffic Engineering Opaque LSA (RFC 3630 Section 2.5, RFC 7308,
+	// RFC 4203 Section 1.3).
 	LinkAttributes() Ospfv2LsaLinkTrafficEngineering
 	// SetLinkAttributes assigns Ospfv2LsaLinkTrafficEngineering provided by user to Ospfv2OpaqueLsaTrafficEngineering.
-	// Ospfv2LsaLinkTrafficEngineering is traffic engineering attributes for a link, sourced from the Link TLV sub-TLVs of the
-	// Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of
-	// the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).
-	// This is the attribute set of the link, not a transcription of the sub-TLVs that
-	// carried it: a property here names the attribute, and the description of each names
-	// the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.
+	// Ospfv2LsaLinkTrafficEngineering is traffic engineering attributes of a link, sourced from the sub-TLVs of the Link TLV
+	// of the Traffic Engineering Opaque LSA (RFC 3630 Section 2.5, RFC 7308,
+	// RFC 4203 Section 1.3).
 	SetLinkAttributes(value Ospfv2LsaLinkTrafficEngineering) Ospfv2OpaqueLsaTrafficEngineering
 	// HasLinkAttributes checks if LinkAttributes has been set in Ospfv2OpaqueLsaTrafficEngineering
 	HasLinkAttributes() bool

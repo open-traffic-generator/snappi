@@ -346,7 +346,7 @@ func (obj *flowRouter) SetMode(value FlowRouterModeEnum) FlowRouter {
 	return obj
 }
 
-// description is TBD
+// TBD
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
@@ -371,7 +371,7 @@ func (obj *flowRouter) TxNames() []string {
 	return obj.obj.TxNames
 }
 
-// description is TBD
+// TBD
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
@@ -399,7 +399,7 @@ func (obj *flowRouter) SetTxNames(value []string) FlowRouter {
 	return obj
 }
 
-// description is TBD
+// TBD
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
@@ -424,7 +424,7 @@ func (obj *flowRouter) RxNames() []string {
 	return obj.obj.RxNames
 }
 
-// description is TBD
+// TBD
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name

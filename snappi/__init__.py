@@ -1853,8 +1853,6 @@ from .snappi import Ospfv2OpaqueLsa
 from .snappi import Ospfv2OpaqueLsaTlvInformation
 from .snappi import Ospfv2OpaqueLsaTrafficEngineering
 from .snappi import Ospfv2LsaLinkTrafficEngineering
-from .snappi import Ospfv2LsaMsd
-from .snappi import Ospfv2LsaMsdIter
 from .snappi import Ospfv2OpaqueLsaRouterInformation
 from .snappi import Ospfv2LsaSrCapability
 from .snappi import Ospfv2LsaSrgb
@@ -1862,6 +1860,8 @@ from .snappi import Ospfv2LsaSrgbIter
 from .snappi import Ospfv2LsaSrlb
 from .snappi import Ospfv2LsaSrlbIter
 from .snappi import Ospfv2LsaRiCapabilities
+from .snappi import Ospfv2LsaMsd
+from .snappi import Ospfv2LsaMsdIter
 from .snappi import Ospfv2OpaqueLsaExtendedPrefix
 from .snappi import Ospfv2LsaPrefixSid
 from .snappi import Ospfv2LsaPrefixSidFlags
@@ -1871,6 +1871,7 @@ from .snappi import Ospfv2OpaqueLsaExtendedLink
 from .snappi import Ospfv2LsaAdjacencySid
 from .snappi import Ospfv2LsaAdjSidFlags
 from .snappi import Ospfv2LsaAdjacencySidIter
+from .snappi import Ospfv2LsaExtendedLinkAttributes
 from .snappi import Ospfv2OpaqueLsaUnknownOpaqueType
 from .snappi import Ospfv2OpaqueLsaTlv
 from .snappi import Ospfv2OpaqueLsaTlvIter

@@ -6460,8 +6460,8 @@ class Layer1(OpenApiObject):
     SGMII = "sgmii"  # type: str
 
     _STATUS = {
-        "ieee_media_defaults": "ieee_media_defaults property in schema Layer1 is under_review, This field is currently under review for pending exploration on use cases",
-        "auto_negotiate": "auto_negotiate property in schema Layer1 is under_review, This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.",
+        "ieee_media_defaults": "ieee_media_defaults property in schema Layer1 is under-review, This field is currently under review for pending exploration on use cases",
+        "auto_negotiate": "auto_negotiate property in schema Layer1 is under-review, This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.",
     }  # type: Dict[str, Union(type)]
 
     def __init__(
@@ -54249,7 +54249,7 @@ class Flow(OpenApiObject):
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
     _STATUS = {
-        "egress_packet": "egress_packet property in schema Flow is under_review, The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.",
+        "egress_packet": "egress_packet property in schema Flow is under-review, The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.",
     }  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, name=None):
@@ -208835,7 +208835,7 @@ class Ospfv2OpaqueLsaTrafficEngineering(OpenApiObject):
         # type: () -> Ospfv2LsaLinkTrafficEngineering
         """link_attributes getter
 
-        Traffic engineering attributes for link, sourced from the Link TLV sub-TLVs of the. Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of. the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).. This is the attribute set of the link, not transcription of the sub-TLVs that. carried it: property here names the attribute, and the description of each names. the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.Traffic engineering attributes for link, sourced from the Link TLV sub-TLVs of the. Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of. the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).. This is the attribute set of the link, not transcription of the sub-TLVs that. carried it: property here names the attribute, and the description of each names. the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.Traffic engineering attributes for link, sourced from the Link TLV sub-TLVs of the. Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of. the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).. This is the attribute set of the link, not transcription of the sub-TLVs that. carried it: property here names the attribute, and the description of each names. the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.Traffic engineering attributes for link, sourced from the Link TLV sub-TLVs of the. Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of. the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).. This is the attribute set of the link, not transcription of the sub-TLVs that. carried it: property here names the attribute, and the description of each names. the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.The traffic engineering attributes of the link, decoded from the sub-TLVs of the. Link TLV, TLV type (RFC 3630 Section 2.5).
+        Traffic engineering attributes of link, sourced from the sub-TLVs of the Link TLV. of the Traffic Engineering Opaque LSA (RFC 3630 Section 2.5, RFC 7308,. RFC 4203 Section 1.3).Traffic engineering attributes of link, sourced from the sub-TLVs of the Link TLV. of the Traffic Engineering Opaque LSA (RFC 3630 Section 2.5, RFC 7308,. RFC 4203 Section 1.3).Traffic engineering attributes of link, sourced from the sub-TLVs of the Link TLV. of the Traffic Engineering Opaque LSA (RFC 3630 Section 2.5, RFC 7308,. RFC 4203 Section 1.3).Traffic engineering attributes of link, sourced from the sub-TLVs of the Link TLV. of the Traffic Engineering Opaque LSA (RFC 3630 Section 2.5, RFC 7308,. RFC 4203 Section 1.3).The traffic engineering attributes of the link, decoded from the sub-TLVs of the. Link TLV, TLV type (RFC 3630 Section 2.5).
 
         Returns: Ospfv2LsaLinkTrafficEngineering
         """
@@ -208894,7 +208894,6 @@ class Ospfv2LsaLinkTrafficEngineering(OpenApiObject):
             "itemtype": int,
             "itemformat": "uint32",
         },
-        "link_msd": {"type": "Ospfv2LsaMsdIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -209106,7 +209105,7 @@ class Ospfv2LsaLinkTrafficEngineering(OpenApiObject):
         # type: () -> int
         """administrative_group getter
 
-        The Administrative Group sub-TLV bitmask, sourced from either the TE Link TLV. sub-type (RFC 3630 Section 2.5.9) or the OSPFv2 Extended Link TLV sub-type 19. (RFC 9492 Section 6.2).
+        The Administrative Group sub-TLV, sub-type (RFC 3630 Section 2.5.9).
 
         Returns: int
         """
@@ -209116,7 +209115,7 @@ class Ospfv2LsaLinkTrafficEngineering(OpenApiObject):
     def administrative_group(self, value):
         """administrative_group setter
 
-        The Administrative Group sub-TLV bitmask, sourced from either the TE Link TLV. sub-type (RFC 3630 Section 2.5.9) or the OSPFv2 Extended Link TLV sub-type 19. (RFC 9492 Section 6.2).
+        The Administrative Group sub-TLV, sub-type (RFC 3630 Section 2.5.9).
 
         value: int
         """
@@ -209127,7 +209126,7 @@ class Ospfv2LsaLinkTrafficEngineering(OpenApiObject):
         # type: () -> List[int]
         """extended_administrative_group getter
 
-        The Extended Administrative Group, sourced from either the TE Link TLV sub-type 26. (RFC 7308) or the OSPFv2 Extended Link TLV sub-type 20 (RFC 9492 Section 6.3), as one. or more additional 32-bit administrative-group words beyond administrative_group.
+        The Extended Administrative Group sub-TLV, sub-type 26 (RFC 7308), one or more. additional 32-bit words beyond administrative_group.
 
         Returns: List[int]
         """
@@ -209137,7 +209136,7 @@ class Ospfv2LsaLinkTrafficEngineering(OpenApiObject):
     def extended_administrative_group(self, value):
         """extended_administrative_group setter
 
-        The Extended Administrative Group, sourced from either the TE Link TLV sub-type 26. (RFC 7308) or the OSPFv2 Extended Link TLV sub-type 20 (RFC 9492 Section 6.3), as one. or more additional 32-bit administrative-group words beyond administrative_group.
+        The Extended Administrative Group sub-TLV, sub-type 26 (RFC 7308), one or more. additional 32-bit words beyond administrative_group.
 
         value: List[int]
         """
@@ -209148,7 +209147,7 @@ class Ospfv2LsaLinkTrafficEngineering(OpenApiObject):
         # type: () -> List[int]
         """srlg getter
 
-        The Shared Risk Link Group (SRLG) membership of this link, sourced from either the TE. Link TLV sub-type 16 (RFC 4203 Section 1.3) or the OSPFv2 Extended Link TLV sub-type 11. (RFC 9492 Section 6.1).
+        The Shared Risk Link Group (SRLG) sub-TLV, sub-type 16 (RFC 4203 Section 1.3).
 
         Returns: List[int]
         """
@@ -209158,155 +209157,11 @@ class Ospfv2LsaLinkTrafficEngineering(OpenApiObject):
     def srlg(self, value):
         """srlg setter
 
-        The Shared Risk Link Group (SRLG) membership of this link, sourced from either the TE. Link TLV sub-type 16 (RFC 4203 Section 1.3) or the OSPFv2 Extended Link TLV sub-type 11. (RFC 9492 Section 6.1).
+        The Shared Risk Link Group (SRLG) sub-TLV, sub-type 16 (RFC 4203 Section 1.3).
 
         value: List[int]
         """
         self._set_property("srlg", value)
-
-    @property
-    def link_msd(self):
-        # type: () -> Ospfv2LsaMsdIter
-        """link_msd getter
-
-        One or more Maximum SID Depth (MSD) values for this link, decoded from the Link MSD sub-TLV of the OSPFv2 Extended Link TLV, sub-type (RFC 8476 Section 3).
-
-        Returns: Ospfv2LsaMsdIter
-        """
-        return self._get_property(
-            "link_msd", Ospfv2LsaMsdIter, self._parent, self._choice
-        )
-
-
-class Ospfv2LsaMsd(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "msd_type": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 255,
-        },
-        "msd_value": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 255,
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, msd_type=None, msd_value=None):
-        super(Ospfv2LsaMsd, self).__init__()
-        self._parent = parent
-        self._set_property("msd_type", msd_type)
-        self._set_property("msd_value", msd_value)
-
-    def set(self, msd_type=None, msd_value=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def msd_type(self):
-        # type: () -> int
-        """msd_type getter
-
-        The MSD-Type, identifying the kind of Maximum SID Depth being advertised (IGP MSD-Types registry, RFC 8491).
-
-        Returns: int
-        """
-        return self._get_property("msd_type")
-
-    @msd_type.setter
-    def msd_type(self, value):
-        """msd_type setter
-
-        The MSD-Type, identifying the kind of Maximum SID Depth being advertised (IGP MSD-Types registry, RFC 8491).
-
-        value: int
-        """
-        self._set_property("msd_type", value)
-
-    @property
-    def msd_value(self):
-        # type: () -> int
-        """msd_value getter
-
-        The MSD-Value: the maximum number of SIDs the router or link supports in the SID. stack. value of indicates no capability to impose any stack depth.
-
-        Returns: int
-        """
-        return self._get_property("msd_value")
-
-    @msd_value.setter
-    def msd_value(self, value):
-        """msd_value setter
-
-        The MSD-Value: the maximum number of SIDs the router or link supports in the SID. stack. value of indicates no capability to impose any stack depth.
-
-        value: int
-        """
-        self._set_property("msd_value", value)
-
-
-class Ospfv2LsaMsdIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(Ospfv2LsaMsdIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[Ospfv2LsaMsd]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> Ospfv2LsaMsdIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> Ospfv2LsaMsd
-        return self._next()
-
-    def next(self):
-        # type: () -> Ospfv2LsaMsd
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, Ospfv2LsaMsd):
-            raise Exception("Item is not an instance of Ospfv2LsaMsd")
-
-    def msd(self, msd_type=None, msd_value=None):
-        # type: (int,int) -> Ospfv2LsaMsdIter
-        """Factory method that creates an instance of the Ospfv2LsaMsd class
-
-        A single (MSD-Type, MSD-Value) pair from Node MSD or Link MSD TLV/sub-TLV (RFC 8476 Sections 2, 3).
-
-        Returns: Ospfv2LsaMsdIter
-        """
-        item = Ospfv2LsaMsd(parent=self._parent, msd_type=msd_type, msd_value=msd_value)
-        self._add(item)
-        return self
-
-    def add(self, msd_type=None, msd_value=None):
-        # type: (int,int) -> Ospfv2LsaMsd
-        """Add method that creates and returns an instance of the Ospfv2LsaMsd class
-
-        A single (MSD-Type, MSD-Value) pair from Node MSD or Link MSD TLV/sub-TLV (RFC 8476 Sections 2, 3).
-
-        Returns: Ospfv2LsaMsd
-        """
-        item = Ospfv2LsaMsd(parent=self._parent, msd_type=msd_type, msd_value=msd_value)
-        self._add(item)
-        return item
 
 
 class Ospfv2OpaqueLsaRouterInformation(OpenApiObject):
@@ -209912,6 +209767,137 @@ class Ospfv2LsaRiCapabilities(OpenApiObject):
         self._set_property("functional_capabilities", value)
 
 
+class Ospfv2LsaMsd(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "msd_type": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "msd_value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, msd_type=None, msd_value=None):
+        super(Ospfv2LsaMsd, self).__init__()
+        self._parent = parent
+        self._set_property("msd_type", msd_type)
+        self._set_property("msd_value", msd_value)
+
+    def set(self, msd_type=None, msd_value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def msd_type(self):
+        # type: () -> int
+        """msd_type getter
+
+        The MSD-Type, identifying the kind of Maximum SID Depth being advertised (IGP MSD-Types registry, RFC 8491).
+
+        Returns: int
+        """
+        return self._get_property("msd_type")
+
+    @msd_type.setter
+    def msd_type(self, value):
+        """msd_type setter
+
+        The MSD-Type, identifying the kind of Maximum SID Depth being advertised (IGP MSD-Types registry, RFC 8491).
+
+        value: int
+        """
+        self._set_property("msd_type", value)
+
+    @property
+    def msd_value(self):
+        # type: () -> int
+        """msd_value getter
+
+        The MSD-Value: the maximum number of SIDs the router or link supports in the SID. stack. value of indicates no capability to impose any stack depth.
+
+        Returns: int
+        """
+        return self._get_property("msd_value")
+
+    @msd_value.setter
+    def msd_value(self, value):
+        """msd_value setter
+
+        The MSD-Value: the maximum number of SIDs the router or link supports in the SID. stack. value of indicates no capability to impose any stack depth.
+
+        value: int
+        """
+        self._set_property("msd_value", value)
+
+
+class Ospfv2LsaMsdIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2LsaMsdIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2LsaMsd]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2LsaMsdIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2LsaMsd
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2LsaMsd
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2LsaMsd):
+            raise Exception("Item is not an instance of Ospfv2LsaMsd")
+
+    def msd(self, msd_type=None, msd_value=None):
+        # type: (int,int) -> Ospfv2LsaMsdIter
+        """Factory method that creates an instance of the Ospfv2LsaMsd class
+
+        A single (MSD-Type, MSD-Value) pair from Node MSD or Link MSD TLV/sub-TLV (RFC 8476 Sections 2, 3).
+
+        Returns: Ospfv2LsaMsdIter
+        """
+        item = Ospfv2LsaMsd(parent=self._parent, msd_type=msd_type, msd_value=msd_value)
+        self._add(item)
+        return self
+
+    def add(self, msd_type=None, msd_value=None):
+        # type: (int,int) -> Ospfv2LsaMsd
+        """Add method that creates and returns an instance of the Ospfv2LsaMsd class
+
+        A single (MSD-Type, MSD-Value) pair from Node MSD or Link MSD TLV/sub-TLV (RFC 8476 Sections 2, 3).
+
+        Returns: Ospfv2LsaMsd
+        """
+        item = Ospfv2LsaMsd(parent=self._parent, msd_type=msd_type, msd_value=msd_value)
+        self._add(item)
+        return item
+
+
 class Ospfv2OpaqueLsaExtendedPrefix(OpenApiObject):
     __slots__ = "_parent"
 
@@ -210400,7 +210386,7 @@ class Ospfv2OpaqueLsaExtendedLink(OpenApiObject):
             "format": "ipv4",
         },
         "adjacency_sids": {"type": "Ospfv2LsaAdjacencySidIter"},
-        "link_attributes": {"type": "Ospfv2LsaLinkTrafficEngineering"},
+        "link_attributes": {"type": "Ospfv2LsaExtendedLinkAttributes"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -210504,14 +210490,14 @@ class Ospfv2OpaqueLsaExtendedLink(OpenApiObject):
 
     @property
     def link_attributes(self):
-        # type: () -> Ospfv2LsaLinkTrafficEngineering
+        # type: () -> Ospfv2LsaExtendedLinkAttributes
         """link_attributes getter
 
-        Traffic engineering attributes for link, sourced from the Link TLV sub-TLVs of the. Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of. the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).. This is the attribute set of the link, not transcription of the sub-TLVs that. carried it: property here names the attribute, and the description of each names. the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.Traffic engineering attributes for link, sourced from the Link TLV sub-TLVs of the. Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of. the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).. This is the attribute set of the link, not transcription of the sub-TLVs that. carried it: property here names the attribute, and the description of each names. the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.Traffic engineering attributes for link, sourced from the Link TLV sub-TLVs of the. Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of. the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).. This is the attribute set of the link, not transcription of the sub-TLVs that. carried it: property here names the attribute, and the description of each names. the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.Traffic engineering attributes for link, sourced from the Link TLV sub-TLVs of the. Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of. the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).. This is the attribute set of the link, not transcription of the sub-TLVs that. carried it: property here names the attribute, and the description of each names. the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.Traffic engineering link attributes associated with this Extended Link. This. object represents the supported link-attribute set and does not expose the. underlying OSPF sub-TLV structure: it is semantic grouping of the attribute. values advertised for the link, not decode of one sub-TLV instance. The. values are sourced from the application-specific and legacy link attribute. sub-TLVs of the Extended Link TLV (RFC 9492 Section 6), and RFC 9492 allows an. attribute to be advertised more than once, per application, so which instance. value came from is not recoverable from this object.
+        Traffic engineering attributes of link, sourced from the sub-TLVs of the OSPFv2. Extended Link TLV: the application-specific ASLA sub-TLV (RFC 9492 Section 6), the. direct (non-application-specific) Maximum Bandwidth sub-TLV (RFC 9492 Section 7,. sub-type 23), and the Link MSD sub-TLV (RFC 8476 Section 3, sub-type 6).. link_type, local/remote interface addresses, maximum_reservable_bandwidth and. unreserved_bandwidths are not included: RFC 9492 defines no OSPFv2 encoding,. application-specific or direct, for any of them on this TLV.Traffic engineering attributes of link, sourced from the sub-TLVs of the OSPFv2. Extended Link TLV: the application-specific ASLA sub-TLV (RFC 9492 Section 6), the. direct (non-application-specific) Maximum Bandwidth sub-TLV (RFC 9492 Section 7,. sub-type 23), and the Link MSD sub-TLV (RFC 8476 Section 3, sub-type 6).. link_type, local/remote interface addresses, maximum_reservable_bandwidth and. unreserved_bandwidths are not included: RFC 9492 defines no OSPFv2 encoding,. application-specific or direct, for any of them on this TLV.Traffic engineering attributes of link, sourced from the sub-TLVs of the OSPFv2. Extended Link TLV: the application-specific ASLA sub-TLV (RFC 9492 Section 6), the. direct (non-application-specific) Maximum Bandwidth sub-TLV (RFC 9492 Section 7,. sub-type 23), and the Link MSD sub-TLV (RFC 8476 Section 3, sub-type 6).. link_type, local/remote interface addresses, maximum_reservable_bandwidth and. unreserved_bandwidths are not included: RFC 9492 defines no OSPFv2 encoding,. application-specific or direct, for any of them on this TLV.Traffic engineering attributes of link, sourced from the sub-TLVs of the OSPFv2. Extended Link TLV: the application-specific ASLA sub-TLV (RFC 9492 Section 6), the. direct (non-application-specific) Maximum Bandwidth sub-TLV (RFC 9492 Section 7,. sub-type 23), and the Link MSD sub-TLV (RFC 8476 Section 3, sub-type 6).. link_type, local/remote interface addresses, maximum_reservable_bandwidth and. unreserved_bandwidths are not included: RFC 9492 defines no OSPFv2 encoding,. application-specific or direct, for any of them on this TLV.Traffic engineering link attributes associated with this Extended Link. This. object represents the supported link-attribute set and does not expose the. underlying OSPF sub-TLV structure: it is semantic grouping of the attribute. values advertised for the link, not decode of one sub-TLV instance. The. values are sourced from the ASLA sub-TLV (RFC 9492 Section 6), the direct. Maximum Bandwidth sub-TLV (RFC 9492 Section 7) and the Link MSD sub-TLV. (RFC 8476 Section 3) of the Extended Link TLV, and RFC 9492 allows an. attribute to be advertised more than once, per application, so which instance. value came from is not recoverable from this object.
 
-        Returns: Ospfv2LsaLinkTrafficEngineering
+        Returns: Ospfv2LsaExtendedLinkAttributes
         """
-        return self._get_property("link_attributes", Ospfv2LsaLinkTrafficEngineering)
+        return self._get_property("link_attributes", Ospfv2LsaExtendedLinkAttributes)
 
 
 class Ospfv2LsaAdjacencySid(OpenApiObject):
@@ -210908,6 +210894,191 @@ class Ospfv2LsaAdjacencySidIter(OpenApiIter):
         )
         self._add(item)
         return item
+
+
+class Ospfv2LsaExtendedLinkAttributes(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "te_metric": {
+            "type": int,
+            "format": "uint32",
+        },
+        "maximum_bandwidth": {
+            "type": float,
+            "format": "float",
+        },
+        "administrative_group": {
+            "type": int,
+            "format": "uint32",
+        },
+        "extended_administrative_group": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "srlg": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "link_msd": {"type": "Ospfv2LsaMsdIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        te_metric=None,
+        maximum_bandwidth=None,
+        administrative_group=None,
+        extended_administrative_group=None,
+        srlg=None,
+    ):
+        super(Ospfv2LsaExtendedLinkAttributes, self).__init__()
+        self._parent = parent
+        self._set_property("te_metric", te_metric)
+        self._set_property("maximum_bandwidth", maximum_bandwidth)
+        self._set_property("administrative_group", administrative_group)
+        self._set_property(
+            "extended_administrative_group", extended_administrative_group
+        )
+        self._set_property("srlg", srlg)
+
+    def set(
+        self,
+        te_metric=None,
+        maximum_bandwidth=None,
+        administrative_group=None,
+        extended_administrative_group=None,
+        srlg=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def te_metric(self):
+        # type: () -> int
+        """te_metric getter
+
+        The TE Metric ASLA sub-TLV, type 22 (RFC 9492 Section 6).
+
+        Returns: int
+        """
+        return self._get_property("te_metric")
+
+    @te_metric.setter
+    def te_metric(self, value):
+        """te_metric setter
+
+        The TE Metric ASLA sub-TLV, type 22 (RFC 9492 Section 6).
+
+        value: int
+        """
+        self._set_property("te_metric", value)
+
+    @property
+    def maximum_bandwidth(self):
+        # type: () -> float
+        """maximum_bandwidth getter
+
+        The Maximum Bandwidth sub-TLV, sub-type 23 (RFC 9492 Section 7), in bytes per. second. Maximum Bandwidth is an application-independent attribute and MUST NOT. be advertised inside the ASLA sub-TLV; this direct sub-TLV, using the same format. as RFC 3630, is how it is advertised on this LSA instead.
+
+        Returns: float
+        """
+        return self._get_property("maximum_bandwidth")
+
+    @maximum_bandwidth.setter
+    def maximum_bandwidth(self, value):
+        """maximum_bandwidth setter
+
+        The Maximum Bandwidth sub-TLV, sub-type 23 (RFC 9492 Section 7), in bytes per. second. Maximum Bandwidth is an application-independent attribute and MUST NOT. be advertised inside the ASLA sub-TLV; this direct sub-TLV, using the same format. as RFC 3630, is how it is advertised on this LSA instead.
+
+        value: float
+        """
+        self._set_property("maximum_bandwidth", value)
+
+    @property
+    def administrative_group(self):
+        # type: () -> int
+        """administrative_group getter
+
+        The Administrative Group ASLA sub-TLV, type 19 (RFC 9492 Section 6.2).
+
+        Returns: int
+        """
+        return self._get_property("administrative_group")
+
+    @administrative_group.setter
+    def administrative_group(self, value):
+        """administrative_group setter
+
+        The Administrative Group ASLA sub-TLV, type 19 (RFC 9492 Section 6.2).
+
+        value: int
+        """
+        self._set_property("administrative_group", value)
+
+    @property
+    def extended_administrative_group(self):
+        # type: () -> List[int]
+        """extended_administrative_group getter
+
+        The Extended Administrative Group ASLA sub-TLV, type 20 (RFC 9492 Section 6.3).
+
+        Returns: List[int]
+        """
+        return self._get_property("extended_administrative_group")
+
+    @extended_administrative_group.setter
+    def extended_administrative_group(self, value):
+        """extended_administrative_group setter
+
+        The Extended Administrative Group ASLA sub-TLV, type 20 (RFC 9492 Section 6.3).
+
+        value: List[int]
+        """
+        self._set_property("extended_administrative_group", value)
+
+    @property
+    def srlg(self):
+        # type: () -> List[int]
+        """srlg getter
+
+        The Shared Risk Link Group (SRLG) ASLA sub-TLV, type 11 (RFC 9492 Section 6.1).
+
+        Returns: List[int]
+        """
+        return self._get_property("srlg")
+
+    @srlg.setter
+    def srlg(self, value):
+        """srlg setter
+
+        The Shared Risk Link Group (SRLG) ASLA sub-TLV, type 11 (RFC 9492 Section 6.1).
+
+        value: List[int]
+        """
+        self._set_property("srlg", value)
+
+    @property
+    def link_msd(self):
+        # type: () -> Ospfv2LsaMsdIter
+        """link_msd getter
+
+        The Link MSD sub-TLV, sub-type (RFC 8476 Section 3).
+
+        Returns: Ospfv2LsaMsdIter
+        """
+        return self._get_property(
+            "link_msd", Ospfv2LsaMsdIter, self._parent, self._choice
+        )
 
 
 class Ospfv2OpaqueLsaUnknownOpaqueType(OpenApiObject):

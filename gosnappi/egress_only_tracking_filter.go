@@ -270,10 +270,10 @@ type EgressOnlyTrackingFilter interface {
 	setChoice(value EgressOnlyTrackingFilterChoiceEnum) EgressOnlyTrackingFilter
 	// HasChoice checks if Choice has been set in EgressOnlyTrackingFilter
 	HasChoice() bool
-	// getter for None to set choice.
-	None()
 	// getter for AutoMacsec to set choice.
 	AutoMacsec()
+	// getter for None to set choice.
+	None()
 }
 
 type EgressOnlyTrackingFilterChoiceEnum string
@@ -291,14 +291,14 @@ func (obj *egressOnlyTrackingFilter) Choice() EgressOnlyTrackingFilterChoiceEnum
 	return EgressOnlyTrackingFilterChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for None to set choice
-func (obj *egressOnlyTrackingFilter) None() {
-	obj.setChoice(EgressOnlyTrackingFilterChoice.NONE)
-}
-
 // getter for AutoMacsec to set choice
 func (obj *egressOnlyTrackingFilter) AutoMacsec() {
 	obj.setChoice(EgressOnlyTrackingFilterChoice.AUTO_MACSEC)
+}
+
+// getter for None to set choice
+func (obj *egressOnlyTrackingFilter) None() {
+	obj.setChoice(EgressOnlyTrackingFilterChoice.NONE)
 }
 
 // If a packet does not match the filter it will not be considered for egress tracking. Currently two options are provided: none: All packets will be considered for egress only tracking. auto_macsec: This requires that MACsec enabled Ethernet interface should be configured on this port.  This filter will ensure that only packets with Ethernet Type set to MACsec (0x88E5) and  destined to traffic Rx device(s) will be considered for egress only tracking

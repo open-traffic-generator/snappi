@@ -17,7 +17,7 @@ type ospfv2OpaqueLsaExtendedLink struct {
 	marshaller           marshalOspfv2OpaqueLsaExtendedLink
 	unMarshaller         unMarshalOspfv2OpaqueLsaExtendedLink
 	adjacencySidsHolder  Ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter
-	linkAttributesHolder Ospfv2LsaLinkTrafficEngineering
+	linkAttributesHolder Ospfv2LsaExtendedLinkAttributes
 }
 
 func NewOspfv2OpaqueLsaExtendedLink() Ospfv2OpaqueLsaExtendedLink {
@@ -299,22 +299,24 @@ type Ospfv2OpaqueLsaExtendedLink interface {
 	HasLinkData() bool
 	// AdjacencySids returns Ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIterIter, set in Ospfv2OpaqueLsaExtendedLink
 	AdjacencySids() Ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter
-	// LinkAttributes returns Ospfv2LsaLinkTrafficEngineering, set in Ospfv2OpaqueLsaExtendedLink.
-	// Ospfv2LsaLinkTrafficEngineering is traffic engineering attributes for a link, sourced from the Link TLV sub-TLVs of the
-	// Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of
-	// the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).
-	// This is the attribute set of the link, not a transcription of the sub-TLVs that
-	// carried it: a property here names the attribute, and the description of each names
-	// the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.
-	LinkAttributes() Ospfv2LsaLinkTrafficEngineering
-	// SetLinkAttributes assigns Ospfv2LsaLinkTrafficEngineering provided by user to Ospfv2OpaqueLsaExtendedLink.
-	// Ospfv2LsaLinkTrafficEngineering is traffic engineering attributes for a link, sourced from the Link TLV sub-TLVs of the
-	// Traffic Engineering Opaque LSA (RFC 3630 Section 2.5) and the corresponding sub-TLVs of
-	// the Extended Link TLV of the OSPFv2 Extended Link Opaque LSA (RFC 9492).
-	// This is the attribute set of the link, not a transcription of the sub-TLVs that
-	// carried it: a property here names the attribute, and the description of each names
-	// the sub-TLV or sub-TLVs it can be sourced from, in either of the two encodings.
-	SetLinkAttributes(value Ospfv2LsaLinkTrafficEngineering) Ospfv2OpaqueLsaExtendedLink
+	// LinkAttributes returns Ospfv2LsaExtendedLinkAttributes, set in Ospfv2OpaqueLsaExtendedLink.
+	// Ospfv2LsaExtendedLinkAttributes is traffic engineering attributes of a link, sourced from the sub-TLVs of the OSPFv2
+	// Extended Link TLV: the application-specific ASLA sub-TLV (RFC 9492 Section 6), the
+	// direct (non-application-specific) Maximum Bandwidth sub-TLV (RFC 9492 Section 7,
+	// sub-type 23), and the Link MSD sub-TLV (RFC 8476 Section 3, sub-type 6).
+	// link_type, local/remote interface addresses, maximum_reservable_bandwidth and
+	// unreserved_bandwidths are not included: RFC 9492 defines no OSPFv2 encoding,
+	// application-specific or direct, for any of them on this TLV.
+	LinkAttributes() Ospfv2LsaExtendedLinkAttributes
+	// SetLinkAttributes assigns Ospfv2LsaExtendedLinkAttributes provided by user to Ospfv2OpaqueLsaExtendedLink.
+	// Ospfv2LsaExtendedLinkAttributes is traffic engineering attributes of a link, sourced from the sub-TLVs of the OSPFv2
+	// Extended Link TLV: the application-specific ASLA sub-TLV (RFC 9492 Section 6), the
+	// direct (non-application-specific) Maximum Bandwidth sub-TLV (RFC 9492 Section 7,
+	// sub-type 23), and the Link MSD sub-TLV (RFC 8476 Section 3, sub-type 6).
+	// link_type, local/remote interface addresses, maximum_reservable_bandwidth and
+	// unreserved_bandwidths are not included: RFC 9492 defines no OSPFv2 encoding,
+	// application-specific or direct, for any of them on this TLV.
+	SetLinkAttributes(value Ospfv2LsaExtendedLinkAttributes) Ospfv2OpaqueLsaExtendedLink
 	// HasLinkAttributes checks if LinkAttributes has been set in Ospfv2OpaqueLsaExtendedLink
 	HasLinkAttributes() bool
 	setNil()
@@ -511,17 +513,18 @@ func (obj *ospfv2OpaqueLsaExtendedLinkOspfv2LsaAdjacencySidIter) appendHolderSli
 // object represents the supported link-attribute set and does not expose the
 // underlying OSPF sub-TLV structure: it is a semantic grouping of the attribute
 // values advertised for the link, not a decode of one sub-TLV instance. The
-// values are sourced from the application-specific and legacy link attribute
-// sub-TLVs of the Extended Link TLV (RFC 9492 Section 6), and RFC 9492 allows an
+// values are sourced from the ASLA sub-TLV (RFC 9492 Section 6), the direct
+// Maximum Bandwidth sub-TLV (RFC 9492 Section 7) and the Link MSD sub-TLV
+// (RFC 8476 Section 3) of the Extended Link TLV, and RFC 9492 allows an
 // attribute to be advertised more than once, per application, so which instance
 // a value came from is not recoverable from this object.
-// LinkAttributes returns a Ospfv2LsaLinkTrafficEngineering
-func (obj *ospfv2OpaqueLsaExtendedLink) LinkAttributes() Ospfv2LsaLinkTrafficEngineering {
+// LinkAttributes returns a Ospfv2LsaExtendedLinkAttributes
+func (obj *ospfv2OpaqueLsaExtendedLink) LinkAttributes() Ospfv2LsaExtendedLinkAttributes {
 	if obj.obj.LinkAttributes == nil {
-		obj.obj.LinkAttributes = NewOspfv2LsaLinkTrafficEngineering().msg()
+		obj.obj.LinkAttributes = NewOspfv2LsaExtendedLinkAttributes().msg()
 	}
 	if obj.linkAttributesHolder == nil {
-		obj.linkAttributesHolder = &ospfv2LsaLinkTrafficEngineering{obj: obj.obj.LinkAttributes}
+		obj.linkAttributesHolder = &ospfv2LsaExtendedLinkAttributes{obj: obj.obj.LinkAttributes}
 	}
 	return obj.linkAttributesHolder
 }
@@ -530,11 +533,12 @@ func (obj *ospfv2OpaqueLsaExtendedLink) LinkAttributes() Ospfv2LsaLinkTrafficEng
 // object represents the supported link-attribute set and does not expose the
 // underlying OSPF sub-TLV structure: it is a semantic grouping of the attribute
 // values advertised for the link, not a decode of one sub-TLV instance. The
-// values are sourced from the application-specific and legacy link attribute
-// sub-TLVs of the Extended Link TLV (RFC 9492 Section 6), and RFC 9492 allows an
+// values are sourced from the ASLA sub-TLV (RFC 9492 Section 6), the direct
+// Maximum Bandwidth sub-TLV (RFC 9492 Section 7) and the Link MSD sub-TLV
+// (RFC 8476 Section 3) of the Extended Link TLV, and RFC 9492 allows an
 // attribute to be advertised more than once, per application, so which instance
 // a value came from is not recoverable from this object.
-// LinkAttributes returns a Ospfv2LsaLinkTrafficEngineering
+// LinkAttributes returns a Ospfv2LsaExtendedLinkAttributes
 func (obj *ospfv2OpaqueLsaExtendedLink) HasLinkAttributes() bool {
 	return obj.obj.LinkAttributes != nil
 }
@@ -543,12 +547,13 @@ func (obj *ospfv2OpaqueLsaExtendedLink) HasLinkAttributes() bool {
 // object represents the supported link-attribute set and does not expose the
 // underlying OSPF sub-TLV structure: it is a semantic grouping of the attribute
 // values advertised for the link, not a decode of one sub-TLV instance. The
-// values are sourced from the application-specific and legacy link attribute
-// sub-TLVs of the Extended Link TLV (RFC 9492 Section 6), and RFC 9492 allows an
+// values are sourced from the ASLA sub-TLV (RFC 9492 Section 6), the direct
+// Maximum Bandwidth sub-TLV (RFC 9492 Section 7) and the Link MSD sub-TLV
+// (RFC 8476 Section 3) of the Extended Link TLV, and RFC 9492 allows an
 // attribute to be advertised more than once, per application, so which instance
 // a value came from is not recoverable from this object.
-// SetLinkAttributes sets the Ospfv2LsaLinkTrafficEngineering value in the Ospfv2OpaqueLsaExtendedLink object
-func (obj *ospfv2OpaqueLsaExtendedLink) SetLinkAttributes(value Ospfv2LsaLinkTrafficEngineering) Ospfv2OpaqueLsaExtendedLink {
+// SetLinkAttributes sets the Ospfv2LsaExtendedLinkAttributes value in the Ospfv2OpaqueLsaExtendedLink object
+func (obj *ospfv2OpaqueLsaExtendedLink) SetLinkAttributes(value Ospfv2LsaExtendedLinkAttributes) Ospfv2OpaqueLsaExtendedLink {
 
 	obj.linkAttributesHolder = nil
 	obj.obj.LinkAttributes = value.msg()
