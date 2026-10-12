@@ -1,4 +1,4 @@
-# Open Traffic Generator API 1.61.0
+# Open Traffic Generator API 1.62.0
 # License: MIT
 
 import importlib
@@ -1681,7 +1681,7 @@ class LagPort(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        The name of port object that will be part of the LAG. . x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port object that will be part of the LAG. . x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -1691,7 +1691,7 @@ class LagPort(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        The name of port object that will be part of the LAG. . x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port object that will be part of the LAG. . x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -6460,8 +6460,8 @@ class Layer1(OpenApiObject):
     SGMII = "sgmii"  # type: str
 
     _STATUS = {
-        "ieee_media_defaults": "ieee_media_defaults property in schema Layer1 is under-review, This field is currently under review for pending exploration on use cases",
-        "auto_negotiate": "auto_negotiate property in schema Layer1 is under-review, This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.",
+        "ieee_media_defaults": "ieee_media_defaults property in schema Layer1 is under_review, This field is currently under review for pending exploration on use cases",
+        "auto_negotiate": "auto_negotiate property in schema Layer1 is under_review, This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.",
     }  # type: Dict[str, Union(type)]
 
     def __init__(
@@ -6507,7 +6507,7 @@ class Layer1(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        A list of unique names of port objects that will share the. choice settings. . x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        A list of unique names of port objects that will share the. choice settings. . x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -6517,7 +6517,7 @@ class Layer1(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        A list of unique names of port objects that will share the. choice settings. . x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        A list of unique names of port objects that will share the. choice settings. . x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -6614,7 +6614,7 @@ class Layer1(OpenApiObject):
         # type: () -> bool
         """ieee_media_defaults getter
 
-        Under Review: This field is currently under review for pending exploration on use cases. Under Review: This field is currently under review for pending exploration on use cases. Set to true to override the auto_negotiate, link_training. and rs_fec settings for gigabit ethernet interfaces.
+        Under Review: This field is currently under review for pending exploration on use cases. Set to true to override the auto_negotiate, link_training. and rs_fec settings for gigabit ethernet interfaces.
 
         Returns: bool
         """
@@ -6624,7 +6624,7 @@ class Layer1(OpenApiObject):
     def ieee_media_defaults(self, value):
         """ieee_media_defaults setter
 
-        Under Review: This field is currently under review for pending exploration on use cases. Under Review: This field is currently under review for pending exploration on use cases. Set to true to override the auto_negotiate, link_training. and rs_fec settings for gigabit ethernet interfaces.
+        Under Review: This field is currently under review for pending exploration on use cases. Set to true to override the auto_negotiate, link_training. and rs_fec settings for gigabit ethernet interfaces.
 
         value: bool
         """
@@ -6635,7 +6635,7 @@ class Layer1(OpenApiObject):
         # type: () -> bool
         """auto_negotiate getter
 
-        Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Enable/disable auto negotiation.
+        Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Enable/disable auto negotiation.
 
         Returns: bool
         """
@@ -6645,7 +6645,7 @@ class Layer1(OpenApiObject):
     def auto_negotiate(self, value):
         """auto_negotiate setter
 
-        Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Enable/disable auto negotiation.
+        Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Enable/disable auto negotiation.
 
         value: bool
         """
@@ -7498,7 +7498,7 @@ class Capture(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -7508,7 +7508,7 @@ class Capture(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -9121,7 +9121,7 @@ class EthernetConnection(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        Name of the port that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        Name of the port that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -9131,7 +9131,7 @@ class EthernetConnection(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        Name of the port that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        Name of the port that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -9142,7 +9142,7 @@ class EthernetConnection(OpenApiObject):
         # type: () -> str
         """lag_name getter
 
-        Name of the LAG that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        Name of the LAG that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Lag/properties/name.
 
         Returns: str
         """
@@ -9152,7 +9152,7 @@ class EthernetConnection(OpenApiObject):
     def lag_name(self, value):
         """lag_name setter
 
-        Name of the LAG that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        Name of the LAG that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Lag/properties/name.
 
         value: str
         """
@@ -9163,7 +9163,7 @@ class EthernetConnection(OpenApiObject):
         # type: () -> str
         """vxlan_name getter
 
-        Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.. x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name. . x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name.
+        Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.. x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name.
 
         Returns: str
         """
@@ -9173,7 +9173,7 @@ class EthernetConnection(OpenApiObject):
     def vxlan_name(self, value):
         """vxlan_name setter
 
-        Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.. x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name. . x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name.
+        Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.. x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name.
 
         value: str
         """
@@ -9221,7 +9221,7 @@ class EthernetSimulatedLink(OpenApiObject):
         # type: () -> str
         """remote_simulated_link getter
 
-        Name of the remote end of the simulated interface which also must be simulated_link on device which might be acting either as an unconnected device in simulated topology ( all ethernet links of type simulated_link or an emulated device connected to the Device Under Test (has at atleast one ethernet interface with connection to the port or. lag connected to the DUT). x-constraint:. #/components/schemas/Device.Ethernet/properties/name. . x-constraint:. #/components/schemas/Device.Ethernet/properties/name.
+        Name of the remote end of the simulated interface which also must be simulated_link on device which might be acting either as an unconnected device in simulated topology ( all ethernet links of type simulated_link or an emulated device connected to the Device Under Test (has at atleast one ethernet interface with connection to the port or. lag connected to the DUT). x-constraint:. #/components/schemas/Device.Ethernet/properties/name.
 
         Returns: str
         """
@@ -9231,7 +9231,7 @@ class EthernetSimulatedLink(OpenApiObject):
     def remote_simulated_link(self, value):
         """remote_simulated_link setter
 
-        Name of the remote end of the simulated interface which also must be simulated_link on device which might be acting either as an unconnected device in simulated topology ( all ethernet links of type simulated_link or an emulated device connected to the Device Under Test (has at atleast one ethernet interface with connection to the port or. lag connected to the DUT). x-constraint:. #/components/schemas/Device.Ethernet/properties/name. . x-constraint:. #/components/schemas/Device.Ethernet/properties/name.
+        Name of the remote end of the simulated interface which also must be simulated_link on device which might be acting either as an unconnected device in simulated topology ( all ethernet links of type simulated_link or an emulated device connected to the Device Under Test (has at atleast one ethernet interface with connection to the port or. lag connected to the DUT). x-constraint:. #/components/schemas/Device.Ethernet/properties/name.
 
         value: str
         """
@@ -12560,7 +12560,7 @@ class DeviceIpv4Loopback(OpenApiObject):
         # type: () -> str
         """eth_name getter
 
-        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: str
         """
@@ -12570,7 +12570,7 @@ class DeviceIpv4Loopback(OpenApiObject):
     def eth_name(self, value):
         """eth_name setter
 
-        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: str
         """
@@ -12719,7 +12719,7 @@ class DeviceIpv6Loopback(OpenApiObject):
         # type: () -> str
         """eth_name getter
 
-        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: str
         """
@@ -12729,7 +12729,7 @@ class DeviceIpv6Loopback(OpenApiObject):
     def eth_name(self, value):
         """eth_name setter
 
-        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: str
         """
@@ -13206,7 +13206,7 @@ class IsisInterface(OpenApiObject):
         # type: () -> str
         """eth_name getter
 
-        The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. The underlying Ethernet Interface can an emulated or simulated interface. simulated ethernet interface can be assumed to be connected by primary (internal to simulated topology) or secondary link (connected to device behind different simulated topology).. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. The underlying Ethernet Interface can an emulated or simulated interface. simulated ethernet interface can be assumed to be connected by primary (internal to simulated topology) or secondary link (connected to device behind different simulated topology).. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: str
         """
@@ -13216,7 +13216,7 @@ class IsisInterface(OpenApiObject):
     def eth_name(self, value):
         """eth_name setter
 
-        The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. The underlying Ethernet Interface can an emulated or simulated interface. simulated ethernet interface can be assumed to be connected by primary (internal to simulated topology) or secondary link (connected to device behind different simulated topology).. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. The underlying Ethernet Interface can an emulated or simulated interface. simulated ethernet interface can be assumed to be connected by primary (internal to simulated topology) or secondary link (connected to device behind different simulated topology).. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: str
         """
@@ -15264,7 +15264,7 @@ class IsisSRv6AdjSid(OpenApiObject):
         # type: () -> str
         """custom_locator_reference getter
 
-        Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".. x-constraint:. /components/schemas/IsisSRv6.Locator/properties/locator_name. . x-constraint:. /components/schemas/IsisSRv6.Locator/properties/locator_name.
+        Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".. x-constraint:. /components/schemas/IsisSRv6.Locator/properties/locator_name.
 
         Returns: str
         """
@@ -15274,7 +15274,7 @@ class IsisSRv6AdjSid(OpenApiObject):
     def custom_locator_reference(self, value):
         """custom_locator_reference setter
 
-        Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".. x-constraint:. /components/schemas/IsisSRv6.Locator/properties/locator_name. . x-constraint:. /components/schemas/IsisSRv6.Locator/properties/locator_name.
+        Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".. x-constraint:. /components/schemas/IsisSRv6.Locator/properties/locator_name.
 
         value: str
         """
@@ -19857,7 +19857,7 @@ class BgpV4Interface(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The unique name of the IPv4, Loopback IPv4 interface or DHCPv4 client used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. /components/schemas/Device.Dhcpv4client/properties/name.
+        The unique name of the IPv4, Loopback IPv4 interface or DHCPv4 client used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. /components/schemas/Device.Dhcpv4client/properties/name.
 
         Returns: str
         """
@@ -19867,7 +19867,7 @@ class BgpV4Interface(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The unique name of the IPv4, Loopback IPv4 interface or DHCPv4 client used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. /components/schemas/Device.Dhcpv4client/properties/name.
+        The unique name of the IPv4, Loopback IPv4 interface or DHCPv4 client used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. /components/schemas/Device.Dhcpv4client/properties/name.
 
         value: str
         """
@@ -24041,7 +24041,7 @@ class BgpV4RouteRange(OpenApiObject):
         # type: () -> BgpExtCommunityIter
         """ext_communities getter
 
-        Deprecated: This property is deprecated in favor of property extended_communities. Deprecated: This property is deprecated in favor of property extended_communities. Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first Bytes of the community encode type and sub-type fields and the last Bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two byte local administrator id. When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for administrator_ipv4_address is four byte IPv4 address followed by two byte local administrator id. When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from IANA's "ETHER TYPES" registry e.g IPv4 (protocol type 0x0800), IPv6 (protocol type 0x86dd), and MPLS (protocol type 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format. When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates occur for the same MAC address. Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
+        Deprecated: This property is deprecated in favor of property extended_communities. Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first Bytes of the community encode type and sub-type fields and the last Bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two byte local administrator id. When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for administrator_ipv4_address is four byte IPv4 address followed by two byte local administrator id. When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from IANA's "ETHER TYPES" registry e.g IPv4 (protocol type 0x0800), IPv6 (protocol type 0x86dd), and MPLS (protocol type 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format. When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates occur for the same MAC address. Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
 
         Returns: BgpExtCommunityIter
         """
@@ -26541,7 +26541,7 @@ class BgpV6RouteRange(OpenApiObject):
         # type: () -> BgpExtCommunityIter
         """ext_communities getter
 
-        Deprecated: This property is deprecated in favor of property extended_communities. Deprecated: This property is deprecated in favor of property extended_communities. Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first Bytes of the community encode type and sub-type fields and the last Bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two byte local administrator id. When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for administrator_ipv4_address is four byte IPv4 address followed by two byte local administrator id. When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from IANA's "ETHER TYPES" registry e.g IPv4 (protocol type 0x0800), IPv6 (protocol type 0x86dd), and MPLS (protocol type 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format. When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates occur for the same MAC address. Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
+        Deprecated: This property is deprecated in favor of property extended_communities. Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first Bytes of the community encode type and sub-type fields and the last Bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two byte local administrator id. When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for administrator_ipv4_address is four byte IPv4 address followed by two byte local administrator id. When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from IANA's "ETHER TYPES" registry e.g IPv4 (protocol type 0x0800), IPv6 (protocol type 0x86dd), and MPLS (protocol type 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format. When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates occur for the same MAC address. Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
 
         Returns: BgpExtCommunityIter
         """
@@ -37938,7 +37938,7 @@ class BgpV6Interface(OpenApiObject):
         # type: () -> str
         """ipv6_name getter
 
-        The unique name of IPv6 Loopback IPv6 interface or DHCPv4 client used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. /components/schemas/Device.Dhcpv6client/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. /components/schemas/Device.Dhcpv6client/properties/name.
+        The unique name of IPv6 Loopback IPv6 interface or DHCPv4 client used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. /components/schemas/Device.Dhcpv6client/properties/name.
 
         Returns: str
         """
@@ -37948,7 +37948,7 @@ class BgpV6Interface(OpenApiObject):
     def ipv6_name(self, value):
         """ipv6_name setter
 
-        The unique name of IPv6 Loopback IPv6 interface or DHCPv4 client used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. /components/schemas/Device.Dhcpv6client/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. /components/schemas/Device.Dhcpv6client/properties/name.
+        The unique name of IPv6 Loopback IPv6 interface or DHCPv4 client used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. /components/schemas/Device.Dhcpv6client/properties/name.
 
         value: str
         """
@@ -39567,7 +39567,7 @@ class VxlanV4Tunnel(OpenApiObject):
         # type: () -> str
         """source_interface getter
 
-        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         Returns: str
         """
@@ -39577,7 +39577,7 @@ class VxlanV4Tunnel(OpenApiObject):
     def source_interface(self, value):
         """source_interface setter
 
-        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         value: str
         """
@@ -40177,7 +40177,7 @@ class VxlanV6Tunnel(OpenApiObject):
         # type: () -> str
         """source_interface getter
 
-        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
+        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         Returns: str
         """
@@ -40187,7 +40187,7 @@ class VxlanV6Tunnel(OpenApiObject):
     def source_interface(self, value):
         """source_interface setter
 
-        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
+        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         value: str
         """
@@ -40793,7 +40793,7 @@ class RsvpIpv4Interface(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The globally unique name of the IPv4 interface connected to the DUT. This name must match the "name" field of the "ipv4_addresses" on top which this RSVP interface is configured. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The globally unique name of the IPv4 interface connected to the DUT. This name must match the "name" field of the "ipv4_addresses" on top which this RSVP interface is configured. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         Returns: str
         """
@@ -40803,7 +40803,7 @@ class RsvpIpv4Interface(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The globally unique name of the IPv4 interface connected to the DUT. This name must match the "name" field of the "ipv4_addresses" on top which this RSVP interface is configured. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The globally unique name of the IPv4 interface connected to the DUT. This name must match the "name" field of the "ipv4_addresses" on top which this RSVP interface is configured. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         value: str
         """
@@ -41161,7 +41161,7 @@ class RsvpLspIpv4Interface(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks" on which this LSP interface is configured.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks" on which this LSP interface is configured.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         Returns: str
         """
@@ -41171,7 +41171,7 @@ class RsvpLspIpv4Interface(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks" on which this LSP interface is configured.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks" on which this LSP interface is configured.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         value: str
         """
@@ -43221,7 +43221,7 @@ class DhcpServerV4(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The unique name of the IPv4 on which DHCPv4 server will run.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The unique name of the IPv4 on which DHCPv4 server will run.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         Returns: str
         """
@@ -43231,7 +43231,7 @@ class DhcpServerV4(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The unique name of the IPv4 on which DHCPv4 server will run.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The unique name of the IPv4 on which DHCPv4 server will run.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         value: str
         """
@@ -43827,7 +43827,7 @@ class DhcpServerV6(OpenApiObject):
         # type: () -> str
         """ipv6_name getter
 
-        The unique name of the IPv6 on which DHCPv6 server will run.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        The unique name of the IPv6 on which DHCPv6 server will run.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         Returns: str
         """
@@ -43837,7 +43837,7 @@ class DhcpServerV6(OpenApiObject):
     def ipv6_name(self, value):
         """ipv6_name setter
 
-        The unique name of the IPv6 on which DHCPv6 server will run.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        The unique name of the IPv6 on which DHCPv6 server will run.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         value: str
         """
@@ -45281,6 +45281,7 @@ class DeviceOspfv2Router(OpenApiObject):
         "capabilities": {"type": "Ospfv2Options"},
         "interfaces": {"type": "Ospfv2InterfaceIter"},
         "v4_routes": {"type": "Ospfv2V4RouteRangeIter"},
+        "segment_routing": {"type": "Ospfv2SegmentRouting"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("interfaces", "name")  # type: tuple(str)
@@ -45513,6 +45514,17 @@ class DeviceOspfv2Router(OpenApiObject):
         return self._get_property(
             "v4_routes", Ospfv2V4RouteRangeIter, self._parent, self._choice
         )
+
+    @property
+    def segment_routing(self):
+        # type: () -> Ospfv2SegmentRouting
+        """segment_routing getter
+
+        Segment Routing (SR) allows for flexible definition of end-to-end paths within IGP. topologies by encoding paths as sequences of topological sub-paths, called "segments".. In OSPFv2 the SR-specific information is advertised using Opaque LSAs. The router level. Segment Routing capabilities (SR-Algorithm, SID/Label Range (SRGB), SR Local Block (SRLB)). are carried in the Router Information (RI) Opaque LSA.. Reference: https://datatracker.ietf.org/doc/html/rfc8665.. An implementation may advertise the SR capabilities with default values if user does. not set any of the properties of Segment Routing.. router's own Node (loopback) Prefix-SID is not separate object here: model the. loopback as an ordinary device.ospfv2.router.v4_routes entry with an. Ospfv2SR.PrefixSid attached, and set n_flag on that route range's Extended Prefix flags. (route_origin.<type>.flags.n_flag) to identify it as the router's own prefix. (RFC 7684).Segment Routing (SR) allows for flexible definition of end-to-end paths within IGP. topologies by encoding paths as sequences of topological sub-paths, called "segments".. In OSPFv2 the SR-specific information is advertised using Opaque LSAs. The router level. Segment Routing capabilities (SR-Algorithm, SID/Label Range (SRGB), SR Local Block (SRLB)). are carried in the Router Information (RI) Opaque LSA.. Reference: https://datatracker.ietf.org/doc/html/rfc8665.. An implementation may advertise the SR capabilities with default values if user does. not set any of the properties of Segment Routing.. router's own Node (loopback) Prefix-SID is not separate object here: model the. loopback as an ordinary device.ospfv2.router.v4_routes entry with an. Ospfv2SR.PrefixSid attached, and set n_flag on that route range's Extended Prefix flags. (route_origin.<type>.flags.n_flag) to identify it as the router's own prefix. (RFC 7684).Segment Routing (SR) allows for flexible definition of end-to-end paths within IGP. topologies by encoding paths as sequences of topological sub-paths, called "segments".. In OSPFv2 the SR-specific information is advertised using Opaque LSAs. The router level. Segment Routing capabilities (SR-Algorithm, SID/Label Range (SRGB), SR Local Block (SRLB)). are carried in the Router Information (RI) Opaque LSA.. Reference: https://datatracker.ietf.org/doc/html/rfc8665.. An implementation may advertise the SR capabilities with default values if user does. not set any of the properties of Segment Routing.. router's own Node (loopback) Prefix-SID is not separate object here: model the. loopback as an ordinary device.ospfv2.router.v4_routes entry with an. Ospfv2SR.PrefixSid attached, and set n_flag on that route range's Extended Prefix flags. (route_origin.<type>.flags.n_flag) to identify it as the router's own prefix. (RFC 7684).Optional Segment Routing (SR) configuration for this OSPFv2 router.
+
+        Returns: Ospfv2SegmentRouting
+        """
+        return self._get_property("segment_routing", Ospfv2SegmentRouting)
 
 
 class Ospfv2RouterId(OpenApiObject):
@@ -45957,6 +45969,7 @@ class Ospfv2Interface(OpenApiObject):
             "itemformat": "uint32",
             "maximum": 16777215,
         },
+        "adjacency_sids": {"type": "Ospfv2InterfaceAdjacencySidIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("name", "ipv4_name")  # type: tuple(str)
@@ -46005,7 +46018,7 @@ class Ospfv2Interface(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The globally unique name of the IPv4 interface connected to the DUT. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The globally unique name of the IPv4 interface on which OSPFv2 is running. The underlying Ethernet of this IPv4 interface may be an emulated interface (Ethernet connection of type port_name lag_name, i.e. connected to port and the DUT) or simulated interface (Ethernet connection of type simulated_link). When the underlying Ethernet uses simulated_link, this OSPFv2 interface belongs to simulated router inside simulated topology behind the emulated router, connected either by primary link (internal to the simulated topology) or secondary link (to device behind different simulated topology). This is how OSPFv2 simulated topologies are built a simulated router is an ordinary Device running ospfv2 whose Ethernets use simulated_link connections. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         Returns: str
         """
@@ -46015,7 +46028,7 @@ class Ospfv2Interface(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The globally unique name of the IPv4 interface connected to the DUT. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The globally unique name of the IPv4 interface on which OSPFv2 is running. The underlying Ethernet of this IPv4 interface may be an emulated interface (Ethernet connection of type port_name lag_name, i.e. connected to port and the DUT) or simulated interface (Ethernet connection of type simulated_link). When the underlying Ethernet uses simulated_link, this OSPFv2 interface belongs to simulated router inside simulated topology behind the emulated router, connected either by primary link (internal to the simulated topology) or secondary link (to device behind different simulated topology). This is how OSPFv2 simulated topologies are built a simulated router is an ordinary Device running ospfv2 whose Ethernets use simulated_link connections. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         value: str
         """
@@ -46111,6 +46124,22 @@ class Ospfv2Interface(OpenApiObject):
         value: List[int]
         """
         self._set_property("srlg_values", value)
+
+    @property
+    def adjacency_sids(self):
+        # type: () -> Ospfv2InterfaceAdjacencySidIter
+        """adjacency_sids getter
+
+        List of OSPFv2 Adjacency SID sub-TLVs advertised in the Extended Link Opaque LSA for this interface (RFC 8665). Typically used on point-to-point links.
+
+        Returns: Ospfv2InterfaceAdjacencySidIter
+        """
+        return self._get_property(
+            "adjacency_sids",
+            Ospfv2InterfaceAdjacencySidIter,
+            self._parent,
+            self._choice,
+        )
 
 
 class Ospfv2InterfaceArea(OpenApiObject):
@@ -46661,6 +46690,7 @@ class Ospfv2InterfaceAdvanced(OpenApiObject):
         "routing_metric": {
             "type": int,
             "format": "uint32",
+            "minimum": 1,
             "maximum": 65535,
         },
         "priority": {
@@ -46758,7 +46788,7 @@ class Ospfv2InterfaceAdvanced(OpenApiObject):
         # type: () -> int
         """routing_metric getter
 
-        Routing metric associated with the interface..
+        Routing metric (interface output cost) associated with the interface.. It is advertised as the 16-bit TOS metric of the corresponding link in the. Router-LSA (RFC 2328 Appendix A.4.2); the interface output cost has valid. range of to 65535 (RFC 2328 Section C.3). This applies equally to emulated. and simulated OSPFv2 interfaces.
 
         Returns: int
         """
@@ -46768,7 +46798,7 @@ class Ospfv2InterfaceAdvanced(OpenApiObject):
     def routing_metric(self, value):
         """routing_metric setter
 
-        Routing metric associated with the interface..
+        Routing metric (interface output cost) associated with the interface.. It is advertised as the 16-bit TOS metric of the corresponding link in the. Router-LSA (RFC 2328 Appendix A.4.2); the interface output cost has valid. range of to 65535 (RFC 2328 Section C.3). This applies equally to emulated. and simulated OSPFv2 interfaces.
 
         value: int
         """
@@ -47053,6 +47083,333 @@ class Ospfv2InterfaceLinkProtection(OpenApiObject):
         self._set_property("reserved_80", value)
 
 
+class Ospfv2InterfaceAdjacencySid(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "sid_values",
+                "sid_indices",
+            ],
+        },
+        "sid_values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "minimum": 16,
+            "maximum": 1048575,
+        },
+        "sid_indices": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 4294967295,
+        },
+        "b_flag": {"type": bool},
+        "g_flag": {"type": bool},
+        "p_flag": {"type": bool},
+        "weight": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "sid_values",
+        "b_flag": False,
+        "g_flag": False,
+        "p_flag": False,
+        "weight": 0,
+    }  # type: Dict[str, Union(type)]
+
+    SID_VALUES = "sid_values"  # type: str
+    SID_INDICES = "sid_indices"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        choice=None,
+        sid_values=None,
+        sid_indices=None,
+        b_flag=False,
+        g_flag=False,
+        p_flag=False,
+        weight=0,
+    ):
+        super(Ospfv2InterfaceAdjacencySid, self).__init__()
+        self._parent = parent
+        self._set_property("sid_values", sid_values)
+        self._set_property("sid_indices", sid_indices)
+        self._set_property("b_flag", b_flag)
+        self._set_property("g_flag", g_flag)
+        self._set_property("p_flag", p_flag)
+        self._set_property("weight", weight)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(
+        self,
+        sid_values=None,
+        sid_indices=None,
+        b_flag=None,
+        g_flag=None,
+        p_flag=None,
+        weight=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["sid_indices"], Literal["sid_values"]]
+        """choice getter
+
+        Choice of whether the Adjacency SID carries absolute values (local labels) or relative. indices. This choice sets the V-Flag (Value/Index) and the L-Flag (Local/Global) of the. Adjacency SID sub-TLV as follows:. sid_values: V-Flag and L-Flag are set (both 1). Each Adj-SID carries 3-octet local. label value with local significance, typically from the SRLB. Please refer to. device.ospfv2.segment_routing.srlb_ranges.. sid_indices: V-Flag and L-Flag are unset (both 0). Each Adj-SID carries 4-octet. index that is an offset into the SRGB.. RFC 8665 Section states all other V-Flag/L-Flag combinations are invalid and MUST be. ignored by receiver, so and are intentionally coupled here rather than exposed as. independent properties.. user needs to configure at least one entry of SID value or SID index.
+
+        Returns: Union[Literal["sid_indices"], Literal["sid_values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Choice of whether the Adjacency SID carries absolute values (local labels) or relative. indices. This choice sets the V-Flag (Value/Index) and the L-Flag (Local/Global) of the. Adjacency SID sub-TLV as follows:. sid_values: V-Flag and L-Flag are set (both 1). Each Adj-SID carries 3-octet local. label value with local significance, typically from the SRLB. Please refer to. device.ospfv2.segment_routing.srlb_ranges.. sid_indices: V-Flag and L-Flag are unset (both 0). Each Adj-SID carries 4-octet. index that is an offset into the SRGB.. RFC 8665 Section states all other V-Flag/L-Flag combinations are invalid and MUST be. ignored by receiver, so and are intentionally coupled here rather than exposed as. independent properties.. user needs to configure at least one entry of SID value or SID index.
+
+        value: Union[Literal["sid_indices"], Literal["sid_values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def sid_values(self):
+        # type: () -> List[int]
+        """sid_values getter
+
+        The corresponding Adjacency SID as one or more absolute local label values for the link. Used when the choice is sid_values.
+
+        Returns: List[int]
+        """
+        return self._get_property("sid_values")
+
+    @sid_values.setter
+    def sid_values(self, value):
+        """sid_values setter
+
+        The corresponding Adjacency SID as one or more absolute local label values for the link. Used when the choice is sid_values.
+
+        value: List[int]
+        """
+        self._set_property("sid_values", value, "sid_values")
+
+    @property
+    def sid_indices(self):
+        # type: () -> List[int]
+        """sid_indices getter
+
+        One or more Adjacency SID indices, relative to the SRGB. Used when the choice is sid_indices.
+
+        Returns: List[int]
+        """
+        return self._get_property("sid_indices")
+
+    @sid_indices.setter
+    def sid_indices(self, value):
+        """sid_indices setter
+
+        One or more Adjacency SID indices, relative to the SRGB. Used when the choice is sid_indices.
+
+        value: List[int]
+        """
+        self._set_property("sid_indices", value, "sid_indices")
+
+    @property
+    def b_flag(self):
+        # type: () -> bool
+        """b_flag getter
+
+        B-Flag: Backup Flag.. If set, the Adjacency SID is eligible for protection, for example using. Fast Reroute (FRR) Loop-Free Alternate (LFA).
+
+        Returns: bool
+        """
+        return self._get_property("b_flag")
+
+    @b_flag.setter
+    def b_flag(self, value):
+        """b_flag setter
+
+        B-Flag: Backup Flag.. If set, the Adjacency SID is eligible for protection, for example using. Fast Reroute (FRR) Loop-Free Alternate (LFA).
+
+        value: bool
+        """
+        self._set_property("b_flag", value)
+
+    @property
+    def g_flag(self):
+        # type: () -> bool
+        """g_flag getter
+
+        G-Flag: Group Flag.. When set, the G-Flag indicates that the Adj-SID refers to group of adjacencies and. therefore MAY be assigned to other adjacencies as well.
+
+        Returns: bool
+        """
+        return self._get_property("g_flag")
+
+    @g_flag.setter
+    def g_flag(self, value):
+        """g_flag setter
+
+        G-Flag: Group Flag.. When set, the G-Flag indicates that the Adj-SID refers to group of adjacencies and. therefore MAY be assigned to other adjacencies as well.
+
+        value: bool
+        """
+        self._set_property("g_flag", value)
+
+    @property
+    def p_flag(self):
+        # type: () -> bool
+        """p_flag getter
+
+        P-Flag: Persistent Flag.. When set, the P-Flag indicates that the Adj-SID is persistently allocated, i.e. the. Adj-SID value remains consistent across router restart and/or interface flap.
+
+        Returns: bool
+        """
+        return self._get_property("p_flag")
+
+    @p_flag.setter
+    def p_flag(self, value):
+        """p_flag setter
+
+        P-Flag: Persistent Flag.. When set, the P-Flag indicates that the Adj-SID is persistently allocated, i.e. the. Adj-SID value remains consistent across router restart and/or interface flap.
+
+        value: bool
+        """
+        self._set_property("p_flag", value)
+
+    @property
+    def weight(self):
+        # type: () -> int
+        """weight getter
+
+        The value represents the weight of the Adj-SID for the purpose of load balancing.
+
+        Returns: int
+        """
+        return self._get_property("weight")
+
+    @weight.setter
+    def weight(self, value):
+        """weight setter
+
+        The value represents the weight of the Adj-SID for the purpose of load balancing.
+
+        value: int
+        """
+        self._set_property("weight", value)
+
+
+class Ospfv2InterfaceAdjacencySidIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2InterfaceAdjacencySidIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2InterfaceAdjacencySid]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2InterfaceAdjacencySidIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2InterfaceAdjacencySid
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2InterfaceAdjacencySid
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2InterfaceAdjacencySid):
+            raise Exception("Item is not an instance of Ospfv2InterfaceAdjacencySid")
+
+    def adjacencysid(
+        self,
+        sid_values=None,
+        sid_indices=None,
+        b_flag=False,
+        g_flag=False,
+        p_flag=False,
+        weight=0,
+    ):
+        # type: (List[int],List[int],bool,bool,bool,int) -> Ospfv2InterfaceAdjacencySidIter
+        """Factory method that creates an instance of the Ospfv2InterfaceAdjacencySid class
+
+        Optional container for the OSPFv2 Adjacency SID sub-TLV.. The Adjacency SID sub-TLV is carried inside the OSPFv2 Extended Link TLV of the. Extended Link Opaque LSA and describes segment associated with specific adjacency. (typically point-to-point link).. Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-adjacency-sid-sub-tlv.
+
+        Returns: Ospfv2InterfaceAdjacencySidIter
+        """
+        item = Ospfv2InterfaceAdjacencySid(
+            parent=self._parent,
+            choice=self._choice,
+            sid_values=sid_values,
+            sid_indices=sid_indices,
+            b_flag=b_flag,
+            g_flag=g_flag,
+            p_flag=p_flag,
+            weight=weight,
+        )
+        self._add(item)
+        return self
+
+    def add(
+        self,
+        sid_values=None,
+        sid_indices=None,
+        b_flag=False,
+        g_flag=False,
+        p_flag=False,
+        weight=0,
+    ):
+        # type: (List[int],List[int],bool,bool,bool,int) -> Ospfv2InterfaceAdjacencySid
+        """Add method that creates and returns an instance of the Ospfv2InterfaceAdjacencySid class
+
+        Optional container for the OSPFv2 Adjacency SID sub-TLV.. The Adjacency SID sub-TLV is carried inside the OSPFv2 Extended Link TLV of the. Extended Link Opaque LSA and describes segment associated with specific adjacency. (typically point-to-point link).. Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-adjacency-sid-sub-tlv.
+
+        Returns: Ospfv2InterfaceAdjacencySid
+        """
+        item = Ospfv2InterfaceAdjacencySid(
+            parent=self._parent,
+            choice=self._choice,
+            sid_values=sid_values,
+            sid_indices=sid_indices,
+            b_flag=b_flag,
+            g_flag=g_flag,
+            p_flag=p_flag,
+            weight=weight,
+        )
+        self._add(item)
+        return item
+
+
 class Ospfv2InterfaceIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
@@ -47125,6 +47482,7 @@ class Ospfv2V4RouteRange(OpenApiObject):
             "maximum": 16777215,
         },
         "route_origin": {"type": "Ospfv2V4RRRouteOrigin"},
+        "prefix_sids": {"type": "Ospfv2SRPrefixSidIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("name",)  # type: tuple(str)
@@ -47213,6 +47571,19 @@ class Ospfv2V4RouteRange(OpenApiObject):
         Returns: Ospfv2V4RRRouteOrigin
         """
         return self._get_property("route_origin", Ospfv2V4RRRouteOrigin)
+
+    @property
+    def prefix_sids(self):
+        # type: () -> Ospfv2SRPrefixSidIter
+        """prefix_sids getter
+
+        A list of OSPFv2 Prefix-SID sub-TLVs advertised in the Extended Prefix Opaque LSA for this group of IPv4 route addresses (RFC 8665).
+
+        Returns: Ospfv2SRPrefixSidIter
+        """
+        return self._get_property(
+            "prefix_sids", Ospfv2SRPrefixSidIter, self._parent, self._choice
+        )
 
 
 class Ospfv2V4RRRouteOrigin(OpenApiObject):
@@ -47591,6 +47962,333 @@ class Ospfv2V4RRNssaExternal(OpenApiObject):
         self._set_property("propagation", value)
 
 
+class Ospfv2SRPrefixSid(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "sid_values",
+                "sid_indices",
+            ],
+        },
+        "sid_values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "minimum": 16,
+            "maximum": 1048575,
+        },
+        "sid_indices": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 4294967295,
+        },
+        "np_flag": {"type": bool},
+        "m_flag": {"type": bool},
+        "e_flag": {"type": bool},
+        "algorithm": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "sid_indices",
+        "np_flag": False,
+        "m_flag": False,
+        "e_flag": False,
+        "algorithm": 0,
+    }  # type: Dict[str, Union(type)]
+
+    SID_VALUES = "sid_values"  # type: str
+    SID_INDICES = "sid_indices"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        choice=None,
+        sid_values=None,
+        sid_indices=None,
+        np_flag=False,
+        m_flag=False,
+        e_flag=False,
+        algorithm=0,
+    ):
+        super(Ospfv2SRPrefixSid, self).__init__()
+        self._parent = parent
+        self._set_property("sid_values", sid_values)
+        self._set_property("sid_indices", sid_indices)
+        self._set_property("np_flag", np_flag)
+        self._set_property("m_flag", m_flag)
+        self._set_property("e_flag", e_flag)
+        self._set_property("algorithm", algorithm)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(
+        self,
+        sid_values=None,
+        sid_indices=None,
+        np_flag=None,
+        m_flag=None,
+        e_flag=None,
+        algorithm=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["sid_indices"], Literal["sid_values"]]
+        """choice getter
+
+        Choice of whether the Prefix-SID carries absolute values (local labels) or relative. indices into the SRGB. This choice sets the V-Flag (Value/Index) and the L-Flag. (Local/Global) of the Prefix-SID sub-TLV as follows:. sid_indices: V-Flag and L-Flag are unset (both 0). Each Prefix-SID carries 4-octet. index that is an offset into the SRGB advertised by the router. Please refer to. device.ospfv2.segment_routing.srgb_ranges.. sid_values: V-Flag and L-Flag are set (both 1). Each Prefix-SID carries 3-octet. local label value with local significance.. RFC 8665 Section states all other V-Flag/L-Flag combinations are invalid and MUST be. ignored by receiver, so and are intentionally coupled here rather than exposed as. independent properties.. user needs to configure at least one entry of SID value or SID index. If no entry is. configured, an implementation may advertise an appropriate default SID value/index. based on the choice, e.g. the first value from the SRGB range.
+
+        Returns: Union[Literal["sid_indices"], Literal["sid_values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Choice of whether the Prefix-SID carries absolute values (local labels) or relative. indices into the SRGB. This choice sets the V-Flag (Value/Index) and the L-Flag. (Local/Global) of the Prefix-SID sub-TLV as follows:. sid_indices: V-Flag and L-Flag are unset (both 0). Each Prefix-SID carries 4-octet. index that is an offset into the SRGB advertised by the router. Please refer to. device.ospfv2.segment_routing.srgb_ranges.. sid_values: V-Flag and L-Flag are set (both 1). Each Prefix-SID carries 3-octet. local label value with local significance.. RFC 8665 Section states all other V-Flag/L-Flag combinations are invalid and MUST be. ignored by receiver, so and are intentionally coupled here rather than exposed as. independent properties.. user needs to configure at least one entry of SID value or SID index. If no entry is. configured, an implementation may advertise an appropriate default SID value/index. based on the choice, e.g. the first value from the SRGB range.
+
+        value: Union[Literal["sid_indices"], Literal["sid_values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def sid_values(self):
+        # type: () -> List[int]
+        """sid_values getter
+
+        SID/Label as one or more absolute local label values associated with the IGP Prefix segment attached to the specific IPv4 prefix. Used when the choice is sid_values.
+
+        Returns: List[int]
+        """
+        return self._get_property("sid_values")
+
+    @sid_values.setter
+    def sid_values(self, value):
+        """sid_values setter
+
+        SID/Label as one or more absolute local label values associated with the IGP Prefix segment attached to the specific IPv4 prefix. Used when the choice is sid_values.
+
+        value: List[int]
+        """
+        self._set_property("sid_values", value, "sid_values")
+
+    @property
+    def sid_indices(self):
+        # type: () -> List[int]
+        """sid_indices getter
+
+        One or more SID/Label indices associated with the IGP Prefix segment attached to the specific IPv4 prefix. Each index is an offset into the SRGB. Used when the choice is sid_indices.
+
+        Returns: List[int]
+        """
+        return self._get_property("sid_indices")
+
+    @sid_indices.setter
+    def sid_indices(self, value):
+        """sid_indices setter
+
+        One or more SID/Label indices associated with the IGP Prefix segment attached to the specific IPv4 prefix. Each index is an offset into the SRGB. Used when the choice is sid_indices.
+
+        value: List[int]
+        """
+        self._set_property("sid_indices", value, "sid_indices")
+
+    @property
+    def np_flag(self):
+        # type: () -> bool
+        """np_flag getter
+
+        NP-Flag: No-PHP (No Penultimate Hop-Popping) Flag.. If set, then the penultimate hop MUST NOT pop the Prefix-SID before delivering the. packet to the node that advertised the Prefix-SID.
+
+        Returns: bool
+        """
+        return self._get_property("np_flag")
+
+    @np_flag.setter
+    def np_flag(self, value):
+        """np_flag setter
+
+        NP-Flag: No-PHP (No Penultimate Hop-Popping) Flag.. If set, then the penultimate hop MUST NOT pop the Prefix-SID before delivering the. packet to the node that advertised the Prefix-SID.
+
+        value: bool
+        """
+        self._set_property("np_flag", value)
+
+    @property
+    def m_flag(self):
+        # type: () -> bool
+        """m_flag getter
+
+        M-Flag: Mapping Server Flag.. If set, then the SID was advertised by an SR Mapping Server. When set, the NP-Flag and. the E-Flag MUST be ignored on reception.
+
+        Returns: bool
+        """
+        return self._get_property("m_flag")
+
+    @m_flag.setter
+    def m_flag(self, value):
+        """m_flag setter
+
+        M-Flag: Mapping Server Flag.. If set, then the SID was advertised by an SR Mapping Server. When set, the NP-Flag and. the E-Flag MUST be ignored on reception.
+
+        value: bool
+        """
+        self._set_property("m_flag", value)
+
+    @property
+    def e_flag(self):
+        # type: () -> bool
+        """e_flag getter
+
+        E-Flag: Explicit-Null Flag.. If set, any upstream neighbor of the Prefix-SID originator MUST replace the Prefix-SID. with the Explicit-NULL label before forwarding the packet.
+
+        Returns: bool
+        """
+        return self._get_property("e_flag")
+
+    @e_flag.setter
+    def e_flag(self, value):
+        """e_flag setter
+
+        E-Flag: Explicit-Null Flag.. If set, any upstream neighbor of the Prefix-SID originator MUST replace the Prefix-SID. with the Explicit-NULL label before forwarding the packet.
+
+        value: bool
+        """
+        self._set_property("e_flag", value)
+
+    @property
+    def algorithm(self):
+        # type: () -> int
+        """algorithm getter
+
+        The Segment Routing Algorithm the Prefix-SID is associated with. The value matches an. algorithm advertised in the SR-Algorithm TLV, e.g. for SPF or for Strict SPF.. Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-sr-algorithm-tlv.
+
+        Returns: int
+        """
+        return self._get_property("algorithm")
+
+    @algorithm.setter
+    def algorithm(self, value):
+        """algorithm setter
+
+        The Segment Routing Algorithm the Prefix-SID is associated with. The value matches an. algorithm advertised in the SR-Algorithm TLV, e.g. for SPF or for Strict SPF.. Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-sr-algorithm-tlv.
+
+        value: int
+        """
+        self._set_property("algorithm", value)
+
+
+class Ospfv2SRPrefixSidIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2SRPrefixSidIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2SRPrefixSid]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2SRPrefixSidIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2SRPrefixSid
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2SRPrefixSid
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2SRPrefixSid):
+            raise Exception("Item is not an instance of Ospfv2SRPrefixSid")
+
+    def prefixsid(
+        self,
+        sid_values=None,
+        sid_indices=None,
+        np_flag=False,
+        m_flag=False,
+        e_flag=False,
+        algorithm=0,
+    ):
+        # type: (List[int],List[int],bool,bool,bool,int) -> Ospfv2SRPrefixSidIter
+        """Factory method that creates an instance of the Ospfv2SRPrefixSid class
+
+        This contains the properties of an OSPFv2 Prefix-SID sub-TLV and its attributes.. The Prefix-SID sub-TLV is carried inside the OSPFv2 Extended Prefix TLV of the. Extended Prefix Opaque LSA and is associated with specific IPv4 prefix.. Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-prefix-sid-sub-tlv.. router's own Node (loopback) Prefix-SID is modeled the same way: attach this object to. the route range covering the router's loopback address and set n_flag on that route. range's Extended Prefix flags (route_origin.<type>.flags.n_flag, RFC 7684) to identify it. as the router's own prefix.
+
+        Returns: Ospfv2SRPrefixSidIter
+        """
+        item = Ospfv2SRPrefixSid(
+            parent=self._parent,
+            choice=self._choice,
+            sid_values=sid_values,
+            sid_indices=sid_indices,
+            np_flag=np_flag,
+            m_flag=m_flag,
+            e_flag=e_flag,
+            algorithm=algorithm,
+        )
+        self._add(item)
+        return self
+
+    def add(
+        self,
+        sid_values=None,
+        sid_indices=None,
+        np_flag=False,
+        m_flag=False,
+        e_flag=False,
+        algorithm=0,
+    ):
+        # type: (List[int],List[int],bool,bool,bool,int) -> Ospfv2SRPrefixSid
+        """Add method that creates and returns an instance of the Ospfv2SRPrefixSid class
+
+        This contains the properties of an OSPFv2 Prefix-SID sub-TLV and its attributes.. The Prefix-SID sub-TLV is carried inside the OSPFv2 Extended Prefix TLV of the. Extended Prefix Opaque LSA and is associated with specific IPv4 prefix.. Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-prefix-sid-sub-tlv.. router's own Node (loopback) Prefix-SID is modeled the same way: attach this object to. the route range covering the router's loopback address and set n_flag on that route. range's Extended Prefix flags (route_origin.<type>.flags.n_flag, RFC 7684) to identify it. as the router's own prefix.
+
+        Returns: Ospfv2SRPrefixSid
+        """
+        item = Ospfv2SRPrefixSid(
+            parent=self._parent,
+            choice=self._choice,
+            sid_values=sid_values,
+            sid_indices=sid_indices,
+            np_flag=np_flag,
+            m_flag=m_flag,
+            e_flag=e_flag,
+            algorithm=algorithm,
+        )
+        self._add(item)
+        return item
+
+
 class Ospfv2V4RouteRangeIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
@@ -47625,7 +48323,7 @@ class Ospfv2V4RouteRangeIter(OpenApiIter):
         # type: (str,int) -> Ospfv2V4RouteRangeIter
         """Factory method that creates an instance of the Ospfv2V4RouteRange class
 
-        Emulated OSPFv2 IPv4 routes.
+        A group of OSPFv2 IPv4 routes advertised by this OSPFv2 router.. The router may be an emulated router (connected to the DUT via port) or simulated. router inside simulated topology (its Ethernet uses simulated_link connection). The. route_origin choice selects the OSPFv2 LSA/route type (intra_area, inter_area,. external_type_1, external_type_2, nssa_external), and prefix_sids attaches the Segment. Routing Prefix-SID(s) for these routes.
 
         Returns: Ospfv2V4RouteRangeIter
         """
@@ -47637,11 +48335,361 @@ class Ospfv2V4RouteRangeIter(OpenApiIter):
         # type: (str,int) -> Ospfv2V4RouteRange
         """Add method that creates and returns an instance of the Ospfv2V4RouteRange class
 
-        Emulated OSPFv2 IPv4 routes.
+        A group of OSPFv2 IPv4 routes advertised by this OSPFv2 router.. The router may be an emulated router (connected to the DUT via port) or simulated. router inside simulated topology (its Ethernet uses simulated_link connection). The. route_origin choice selects the OSPFv2 LSA/route type (intra_area, inter_area,. external_type_1, external_type_2, nssa_external), and prefix_sids attaches the Segment. Routing Prefix-SID(s) for these routes.
 
         Returns: Ospfv2V4RouteRange
         """
         item = Ospfv2V4RouteRange(parent=self._parent, name=name, metric=metric)
+        self._add(item)
+        return item
+
+
+class Ospfv2SegmentRouting(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "algorithms": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "srgb_ranges": {"type": "Ospfv2SRSrgbIter"},
+        "srlb_ranges": {"type": "Ospfv2SRSrlbIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, algorithms=None):
+        super(Ospfv2SegmentRouting, self).__init__()
+        self._parent = parent
+        self._set_property("algorithms", algorithms)
+
+    def set(self, algorithms=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def algorithms(self):
+        # type: () -> List[int]
+        """algorithms getter
+
+        The SR-Algorithm TLV, if present, carries one or more Segment Routing Algorithms that. the router supports when calculating reachability to other nodes or to prefixes. attached to these nodes.. 0: SPF algorithm based on link metric.. 1: Strict SPF algorithm based on link metric.. Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-sr-algorithm-tlv.. When the originating router does not advertise the SR-Algorithm TLV, it implies that. algorithm is the only algorithm supported. When advertised, algorithm MUST be. present while non-zero algorithms MAY be present.
+
+        Returns: List[int]
+        """
+        return self._get_property("algorithms")
+
+    @algorithms.setter
+    def algorithms(self, value):
+        """algorithms setter
+
+        The SR-Algorithm TLV, if present, carries one or more Segment Routing Algorithms that. the router supports when calculating reachability to other nodes or to prefixes. attached to these nodes.. 0: SPF algorithm based on link metric.. 1: Strict SPF algorithm based on link metric.. Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-sr-algorithm-tlv.. When the originating router does not advertise the SR-Algorithm TLV, it implies that. algorithm is the only algorithm supported. When advertised, algorithm MUST be. present while non-zero algorithms MAY be present.
+
+        value: List[int]
+        """
+        self._set_property("algorithms", value)
+
+    @property
+    def srgb_ranges(self):
+        # type: () -> Ospfv2SRSrgbIter
+        """srgb_ranges getter
+
+        The list of Segment Routing Global Block (SRGB) ranges advertised in the. SID/Label Range TLV of the RI Opaque LSA.. If no SRGB range is configured, an implementation should advertise one SRGB range with. default values.
+
+        Returns: Ospfv2SRSrgbIter
+        """
+        return self._get_property(
+            "srgb_ranges", Ospfv2SRSrgbIter, self._parent, self._choice
+        )
+
+    @property
+    def srlb_ranges(self):
+        # type: () -> Ospfv2SRSrlbIter
+        """srlb_ranges getter
+
+        The list of SR Local Block (SRLB) ranges advertised in the SR Local Block TLV of the. RI Opaque LSA. The SRLB contains the range of labels the node has reserved for local. SIDs, for example Adjacency SIDs.
+
+        Returns: Ospfv2SRSrlbIter
+        """
+        return self._get_property(
+            "srlb_ranges", Ospfv2SRSrlbIter, self._parent, self._choice
+        )
+
+
+class Ospfv2SRSrgb(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "starting_sid": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 4294967295,
+        },
+        "range": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 16777215,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "starting_sid": 16000,
+        "range": 8000,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, starting_sid=16000, range=8000):
+        super(Ospfv2SRSrgb, self).__init__()
+        self._parent = parent
+        self._set_property("starting_sid", starting_sid)
+        self._set_property("range", range)
+
+    def set(self, starting_sid=None, range=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def starting_sid(self):
+        # type: () -> int
+        """starting_sid getter
+
+        The first value of the SRGB range provided by the SID/Label sub-TLV.
+
+        Returns: int
+        """
+        return self._get_property("starting_sid")
+
+    @starting_sid.setter
+    def starting_sid(self, value):
+        """starting_sid setter
+
+        The first value of the SRGB range provided by the SID/Label sub-TLV.
+
+        value: int
+        """
+        self._set_property("starting_sid", value)
+
+    @property
+    def range(self):
+        # type: () -> int
+        """range getter
+
+        The Range Size, i.e. the number of SIDs in this SRGB range. MUST be greater than zero.
+
+        Returns: int
+        """
+        return self._get_property("range")
+
+    @range.setter
+    def range(self, value):
+        """range setter
+
+        The Range Size, i.e. the number of SIDs in this SRGB range. MUST be greater than zero.
+
+        value: int
+        """
+        self._set_property("range", value)
+
+
+class Ospfv2SRSrgbIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2SRSrgbIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2SRSrgb]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2SRSrgbIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2SRSrgb
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2SRSrgb
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2SRSrgb):
+            raise Exception("Item is not an instance of Ospfv2SRSrgb")
+
+    def srgb(self, starting_sid=16000, range=8000):
+        # type: (int,int) -> Ospfv2SRSrgbIter
+        """Factory method that creates an instance of the Ospfv2SRSrgb class
+
+        This contains the properties of single Segment Routing Global Block (SRGB) range.. The SID/Label Range TLV carries the size of the range and mandatory SID/Label sub-TLV. that provides the first (base) SID/Label value of the range.. Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-sidlabel-range-tlv.
+
+        Returns: Ospfv2SRSrgbIter
+        """
+        item = Ospfv2SRSrgb(parent=self._parent, starting_sid=starting_sid, range=range)
+        self._add(item)
+        return self
+
+    def add(self, starting_sid=16000, range=8000):
+        # type: (int,int) -> Ospfv2SRSrgb
+        """Add method that creates and returns an instance of the Ospfv2SRSrgb class
+
+        This contains the properties of single Segment Routing Global Block (SRGB) range.. The SID/Label Range TLV carries the size of the range and mandatory SID/Label sub-TLV. that provides the first (base) SID/Label value of the range.. Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-sidlabel-range-tlv.
+
+        Returns: Ospfv2SRSrgb
+        """
+        item = Ospfv2SRSrgb(parent=self._parent, starting_sid=starting_sid, range=range)
+        self._add(item)
+        return item
+
+
+class Ospfv2SRSrlb(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "starting_sid": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 4294967295,
+        },
+        "range": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 16777215,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "starting_sid": 16000,
+        "range": 8000,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, starting_sid=16000, range=8000):
+        super(Ospfv2SRSrlb, self).__init__()
+        self._parent = parent
+        self._set_property("starting_sid", starting_sid)
+        self._set_property("range", range)
+
+    def set(self, starting_sid=None, range=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def starting_sid(self):
+        # type: () -> int
+        """starting_sid getter
+
+        The first value of the SRLB range provided by the SID/Label sub-TLV.
+
+        Returns: int
+        """
+        return self._get_property("starting_sid")
+
+    @starting_sid.setter
+    def starting_sid(self, value):
+        """starting_sid setter
+
+        The first value of the SRLB range provided by the SID/Label sub-TLV.
+
+        value: int
+        """
+        self._set_property("starting_sid", value)
+
+    @property
+    def range(self):
+        # type: () -> int
+        """range getter
+
+        The Range Size, i.e. the number of SIDs in this SRLB range. MUST be greater than zero.
+
+        Returns: int
+        """
+        return self._get_property("range")
+
+    @range.setter
+    def range(self, value):
+        """range setter
+
+        The Range Size, i.e. the number of SIDs in this SRLB range. MUST be greater than zero.
+
+        value: int
+        """
+        self._set_property("range", value)
+
+
+class Ospfv2SRSrlbIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2SRSrlbIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2SRSrlb]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2SRSrlbIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2SRSrlb
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2SRSrlb
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2SRSrlb):
+            raise Exception("Item is not an instance of Ospfv2SRSrlb")
+
+    def srlb(self, starting_sid=16000, range=8000):
+        # type: (int,int) -> Ospfv2SRSrlbIter
+        """Factory method that creates an instance of the Ospfv2SRSrlb class
+
+        This contains the properties of single SR Local Block (SRLB) range.. The SR Local Block TLV carries the size of the range and mandatory SID/Label sub-TLV. that provides the first (base) SID/Label value of the local block.. Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-sr-local-block-tlv.
+
+        Returns: Ospfv2SRSrlbIter
+        """
+        item = Ospfv2SRSrlb(parent=self._parent, starting_sid=starting_sid, range=range)
+        self._add(item)
+        return self
+
+    def add(self, starting_sid=16000, range=8000):
+        # type: (int,int) -> Ospfv2SRSrlb
+        """Add method that creates and returns an instance of the Ospfv2SRSrlb class
+
+        This contains the properties of single SR Local Block (SRLB) range.. The SR Local Block TLV carries the size of the range and mandatory SID/Label sub-TLV. that provides the first (base) SID/Label value of the local block.. Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-sr-local-block-tlv.
+
+        Returns: Ospfv2SRSrlb
+        """
+        item = Ospfv2SRSrlb(parent=self._parent, starting_sid=starting_sid, range=range)
         self._add(item)
         return item
 
@@ -47709,7 +48757,7 @@ class DeviceMacsecEthernetInterface(OpenApiObject):
         # type: () -> str
         """eth_name getter
 
-        The unique name of the Ethernet interface on which MACsec is enabled.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface on which MACsec is enabled.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: str
         """
@@ -47719,7 +48767,7 @@ class DeviceMacsecEthernetInterface(OpenApiObject):
     def eth_name(self, value):
         """eth_name setter
 
-        The unique name of the Ethernet interface on which MACsec is enabled.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface on which MACsec is enabled.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: str
         """
@@ -49470,7 +50518,7 @@ class Ospfv3Interface(OpenApiObject):
         # type: () -> str
         """ipv6_name getter
 
-        The globally unique name of the IPv6 interface connected to the DUT. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        The globally unique name of the IPv6 interface connected to the DUT. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         Returns: str
         """
@@ -49480,7 +50528,7 @@ class Ospfv3Interface(OpenApiObject):
     def ipv6_name(self, value):
         """ipv6_name setter
 
-        The globally unique name of the IPv6 interface connected to the DUT. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        The globally unique name of the IPv6 interface connected to the DUT. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         value: str
         """
@@ -50725,7 +51773,7 @@ class Rocev2V4Interface(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The unique name of the IPv4 interface, used as the source IP for this list of RoCEv2 peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The unique name of the IPv4 interface, used as the source IP for this list of RoCEv2 peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         Returns: str
         """
@@ -50735,7 +51783,7 @@ class Rocev2V4Interface(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The unique name of the IPv4 interface, used as the source IP for this list of RoCEv2 peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The unique name of the IPv4 interface, used as the source IP for this list of RoCEv2 peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         value: str
         """
@@ -51460,7 +52508,7 @@ class Rocev2V6Interface(OpenApiObject):
         # type: () -> str
         """ipv6_name getter
 
-        The unique name of IPv6 used as the source IP for this list of RoCEv2 peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        The unique name of IPv6 used as the source IP for this list of RoCEv2 peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         Returns: str
         """
@@ -51470,7 +52518,7 @@ class Rocev2V6Interface(OpenApiObject):
     def ipv6_name(self, value):
         """ipv6_name setter
 
-        The unique name of IPv6 used as the source IP for this list of RoCEv2 peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        The unique name of IPv6 used as the source IP for this list of RoCEv2 peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         value: str
         """
@@ -51796,7 +52844,7 @@ class DeviceBmpV4Interface(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The unique name of the IPv4 interface used as the source IP for the BMP Server.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The unique name of the IPv4 interface used as the source IP for the BMP Server.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         Returns: str
         """
@@ -51806,7 +52854,7 @@ class DeviceBmpV4Interface(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The unique name of the IPv4 interface used as the source IP for the BMP Server.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The unique name of the IPv4 interface used as the source IP for the BMP Server.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         value: str
         """
@@ -52885,7 +53933,7 @@ class DeviceBmpV6Interface(OpenApiObject):
         # type: () -> str
         """ipv6_name getter
 
-        The unique name of the IPv6 interface used as the source IP for BMP Server.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        The unique name of the IPv6 interface used as the source IP for BMP Server.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         Returns: str
         """
@@ -52895,7 +53943,7 @@ class DeviceBmpV6Interface(OpenApiObject):
     def ipv6_name(self, value):
         """ipv6_name setter
 
-        The unique name of the IPv6 interface used as the source IP for BMP Server.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        The unique name of the IPv6 interface used as the source IP for BMP Server.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         value: str
         """
@@ -53201,7 +54249,7 @@ class Flow(OpenApiObject):
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
     _STATUS = {
-        "egress_packet": "egress_packet property in schema Flow is under-review, The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.",
+        "egress_packet": "egress_packet property in schema Flow is under_review, The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.",
     }  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, name=None):
@@ -53241,7 +54289,7 @@ class Flow(OpenApiObject):
         # type: () -> FlowHeaderIter
         """egress_packet getter
 
-        Under Review: The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.. Under Review: The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.. The list of protocol headers defining the shape of all intended packets in corresponding flow as it is received. by traffic-generator port.. For all protocol headers, only the `metric_tags` property is configurable.
+        Under Review: The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.. The list of protocol headers defining the shape of all intended packets in corresponding flow as it is received. by traffic-generator port.. For all protocol headers, only the `metric_tags` property is configurable.
 
         Returns: FlowHeaderIter
         """
@@ -53447,7 +54495,7 @@ class FlowPort(OpenApiObject):
         # type: () -> str
         """tx_name getter
 
-        The unique name of port that is the transmit port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        The unique name of port that is the transmit port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         Returns: str
         """
@@ -53457,7 +54505,7 @@ class FlowPort(OpenApiObject):
     def tx_name(self, value):
         """tx_name setter
 
-        The unique name of port that is the transmit port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        The unique name of port that is the transmit port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         value: str
         """
@@ -53470,7 +54518,7 @@ class FlowPort(OpenApiObject):
         # type: () -> str
         """rx_name getter
 
-        Deprecated: This property is deprecated in favor of property rx_names. Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         Returns: str
         """
@@ -53480,7 +54528,7 @@ class FlowPort(OpenApiObject):
     def rx_name(self, value):
         """rx_name setter
 
-        Deprecated: This property is deprecated in favor of property rx_names. Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         value: str
         """
@@ -53491,7 +54539,7 @@ class FlowPort(OpenApiObject):
         # type: () -> List[str]
         """rx_names getter
 
-        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         Returns: List[str]
         """
@@ -53501,7 +54549,7 @@ class FlowPort(OpenApiObject):
     def rx_names(self, value):
         """rx_names setter
 
-        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         value: List[str]
         """
@@ -53588,7 +54636,7 @@ class FlowRouter(OpenApiObject):
         # type: () -> List[str]
         """tx_names getter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. /components/schemas/Device.Dhcpv6client/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. /components/schemas/Device.Dhcpv6client/properties/name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. /components/schemas/Device.Dhcpv6client/properties/name.
 
         Returns: List[str]
         """
@@ -53598,7 +54646,7 @@ class FlowRouter(OpenApiObject):
     def tx_names(self, value):
         """tx_names setter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. /components/schemas/Device.Dhcpv6client/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. /components/schemas/Device.Dhcpv6client/properties/name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. /components/schemas/Device.Dhcpv6client/properties/name.
 
         value: List[str]
         """
@@ -53611,7 +54659,7 @@ class FlowRouter(OpenApiObject):
         # type: () -> List[str]
         """rx_names getter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv6client/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv6client/properties/name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv6client/properties/name.
 
         Returns: List[str]
         """
@@ -53621,7 +54669,7 @@ class FlowRouter(OpenApiObject):
     def rx_names(self, value):
         """rx_names setter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv6client/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv6client/properties/name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv4client/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Device.Dhcpv6client/properties/name.
 
         value: List[str]
         """
@@ -53634,7 +54682,7 @@ class FlowRouter(OpenApiObject):
         # type: () -> bool
         """bidirectional getter
 
-        Allows traffic sub-flow(s) to be created on both forward and reverse directions between the device endpoint pairs. When enabled, traffic is sent from <b>tx_names rx_names</b> as well as from <b>rx_names tx_names</b>.. The bidirectional option creates two separate sub-flows under the same flow name, Only the flow endpoints are reversed automatically for the reverse sub-flow.. The implementation should create two sub-flows with full endpoint source and. destination reversal, including eth.src/eth.dst, ip.src/ip.dst,. udp.src/udp.dst, and tcp.src/tcp.dst.. For bidirectional flows, metrics are reported for each generated sub-flow separately.. Both sub-flows share the same flow name but are differentiated by their. port_tx and port_rx values, which are reversed for the reverse sub-flow.. Consequently, flow metrics for bidirectional flow are exposed as two. separate metric entries, one for each traffic direction.
+        Allows traffic sub-flow(s) to be created on both forward and reverse directions between the device endpoint pairs. When enabled, traffic is sent from <b>tx_names to rx_names</b> as well as from <b>rx_names to tx_names</b>.. The bidirectional option creates two separate sub-flows under the same flow name, Only the flow endpoints are reversed automatically for the reverse sub-flow.. The implementation should create two sub-flows with full endpoint source and. destination reversal, including eth.src/eth.dst, ip.src/ip.dst,. udp.src/udp.dst, and tcp.src/tcp.dst.. For bidirectional flows, metrics are reported for each generated sub-flow separately.. Both sub-flows share the same flow name but are differentiated by their. port_tx and port_rx values, which are reversed for the reverse sub-flow.. Consequently, flow metrics for bidirectional flow are exposed as two. separate metric entries, one for each traffic direction.
 
         Returns: bool
         """
@@ -53644,7 +54692,7 @@ class FlowRouter(OpenApiObject):
     def bidirectional(self, value):
         """bidirectional setter
 
-        Allows traffic sub-flow(s) to be created on both forward and reverse directions between the device endpoint pairs. When enabled, traffic is sent from <b>tx_names rx_names</b> as well as from <b>rx_names tx_names</b>.. The bidirectional option creates two separate sub-flows under the same flow name, Only the flow endpoints are reversed automatically for the reverse sub-flow.. The implementation should create two sub-flows with full endpoint source and. destination reversal, including eth.src/eth.dst, ip.src/ip.dst,. udp.src/udp.dst, and tcp.src/tcp.dst.. For bidirectional flows, metrics are reported for each generated sub-flow separately.. Both sub-flows share the same flow name but are differentiated by their. port_tx and port_rx values, which are reversed for the reverse sub-flow.. Consequently, flow metrics for bidirectional flow are exposed as two. separate metric entries, one for each traffic direction.
+        Allows traffic sub-flow(s) to be created on both forward and reverse directions between the device endpoint pairs. When enabled, traffic is sent from <b>tx_names to rx_names</b> as well as from <b>rx_names to tx_names</b>.. The bidirectional option creates two separate sub-flows under the same flow name, Only the flow endpoints are reversed automatically for the reverse sub-flow.. The implementation should create two sub-flows with full endpoint source and. destination reversal, including eth.src/eth.dst, ip.src/ip.dst,. udp.src/udp.dst, and tcp.src/tcp.dst.. For bidirectional flows, metrics are reported for each generated sub-flow separately.. Both sub-flows share the same flow name but are differentiated by their. port_tx and port_rx values, which are reversed for the reverse sub-flow.. Consequently, flow metrics for bidirectional flow are exposed as two. separate metric entries, one for each traffic direction.
 
         value: bool
         """
@@ -161534,7 +162582,7 @@ class PerPortOptions(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        The name of port for which this settings will be applied to.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port for which this settings will be applied to.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -161544,7 +162592,7 @@ class PerPortOptions(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        The name of port for which this settings will be applied to.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port for which this settings will be applied to.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -163727,7 +164775,7 @@ class LldpConnection(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        Name of the test port on which LLDP is configured on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        Name of the test port on which LLDP is configured on.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -163737,7 +164785,7 @@ class LldpConnection(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        Name of the test port on which LLDP is configured on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        Name of the test port on which LLDP is configured on.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -164732,7 +165780,7 @@ class Rocev2TxPorts(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        The name of port for which this settings will be applied to.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port for which this settings will be applied to.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -164742,7 +165790,7 @@ class Rocev2TxPorts(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        The name of port for which this settings will be applied to.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port for which this settings will be applied to.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -164967,7 +166015,7 @@ class Rocev2Flow(OpenApiObject):
         # type: () -> str
         """tx_endpoint getter
 
-        The unique name of an emulated device that will be transmitting the flows.. x-constraint:. /components/schemas/Rocev2.QPs/properties/qp_name. . x-constraint:. /components/schemas/Rocev2.QPs/properties/qp_name.
+        The unique name of an emulated device that will be transmitting the flows.. x-constraint:. /components/schemas/Rocev2.QPs/properties/qp_name.
 
         Returns: str
         """
@@ -164977,7 +166025,7 @@ class Rocev2Flow(OpenApiObject):
     def tx_endpoint(self, value):
         """tx_endpoint setter
 
-        The unique name of an emulated device that will be transmitting the flows.. x-constraint:. /components/schemas/Rocev2.QPs/properties/qp_name. . x-constraint:. /components/schemas/Rocev2.QPs/properties/qp_name.
+        The unique name of an emulated device that will be transmitting the flows.. x-constraint:. /components/schemas/Rocev2.QPs/properties/qp_name.
 
         value: str
         """
@@ -164990,7 +166038,7 @@ class Rocev2Flow(OpenApiObject):
         # type: () -> str
         """rx_endpoint getter
 
-        The unique name of remote QP or port which be receiving the packets for the flow.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Rocev2.QPs/properties/qp_name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Rocev2.QPs/properties/qp_name.
+        The unique name of remote QP or port which be receiving the packets for the flow.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Rocev2.QPs/properties/qp_name.
 
         Returns: str
         """
@@ -165000,7 +166048,7 @@ class Rocev2Flow(OpenApiObject):
     def rx_endpoint(self, value):
         """rx_endpoint setter
 
-        The unique name of remote QP or port which be receiving the packets for the flow.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Rocev2.QPs/properties/qp_name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Rocev2.QPs/properties/qp_name.
+        The unique name of remote QP or port which be receiving the packets for the flow.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Rocev2.QPs/properties/qp_name.
 
         value: str
         """
@@ -165454,7 +166502,7 @@ class EgressOnlyTracking(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        Name of the received port this egress tracking rule/specification has to be applied.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        Name of the received port this egress tracking rule/specification has to be applied.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -165464,7 +166512,7 @@ class EgressOnlyTracking(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        Name of the received port this egress tracking rule/specification has to be applied.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        Name of the received port this egress tracking rule/specification has to be applied.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -166303,6 +167351,7 @@ class ProtocolsUpdate(OpenApiObject):
 
     _TYPES = {
         "isis": {"type": "UpdateProtocolConfigIsis"},
+        "ospfv2": {"type": "UpdateProtocolConfigOspfv2"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -166325,6 +167374,17 @@ class ProtocolsUpdate(OpenApiObject):
         Returns: UpdateProtocolConfigIsis
         """
         return self._get_property("isis", UpdateProtocolConfigIsis)
+
+    @property
+    def ospfv2(self):
+        # type: () -> UpdateProtocolConfigOspfv2
+        """ospfv2 getter
+
+        A container for OSPFv2 properties to be updated. Presence of this object indicates that one or more OSPFv2 properties require updating.A container for OSPFv2 properties to be updated. Presence of this object indicates that one or more OSPFv2 properties require updating.A container for OSPFv2 properties to be updated. Presence of this object indicates that one or more OSPFv2 properties require updating.A container for OSPFv2 properties to be updated. Presence of this object indicates that one or more OSPFv2 properties require updating.OSPFv2 protocol attribute updates to apply.
+
+        Returns: UpdateProtocolConfigOspfv2
+        """
+        return self._get_property("ospfv2", UpdateProtocolConfigOspfv2)
 
 
 class UpdateProtocolConfigIsis(OpenApiObject):
@@ -166393,7 +167453,7 @@ class UpdateProtocolConfigIsisInterfaceUpdateGroup(OpenApiObject):
         # type: () -> List[str]
         """names getter
 
-        The names of the IS-IS interfaces to which all attribute updates in this group will be applied.. x-constraint:. /components/schemas/Isis.Interface/properties/name. . x-constraint:. /components/schemas/Isis.Interface/properties/name.
+        The names of the IS-IS interfaces to which all attribute updates in this group will be applied.. x-constraint:. /components/schemas/Isis.Interface/properties/name.
 
         Returns: List[str]
         """
@@ -166403,7 +167463,7 @@ class UpdateProtocolConfigIsisInterfaceUpdateGroup(OpenApiObject):
     def names(self, value):
         """names setter
 
-        The names of the IS-IS interfaces to which all attribute updates in this group will be applied.. x-constraint:. /components/schemas/Isis.Interface/properties/name. . x-constraint:. /components/schemas/Isis.Interface/properties/name.
+        The names of the IS-IS interfaces to which all attribute updates in this group will be applied.. x-constraint:. /components/schemas/Isis.Interface/properties/name.
 
         value: List[str]
         """
@@ -166630,6 +167690,316 @@ class UpdateProtocolConfigIsisInterfaceUpdateGroupIter(OpenApiIter):
         Returns: UpdateProtocolConfigIsisInterfaceUpdateGroup
         """
         item = UpdateProtocolConfigIsisInterfaceUpdateGroup(
+            parent=self._parent, names=names
+        )
+        self._add(item)
+        return item
+
+
+class UpdateProtocolConfigOspfv2(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "interfaces": {"type": "UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(UpdateProtocolConfigOspfv2, self).__init__()
+        self._parent = parent
+
+    @property
+    def interfaces(self):
+        # type: () -> UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter
+        """interfaces getter
+
+        List of OSPFv2 interface update groups. One update group targets one or more OSPFv2 interfaces.. Use multiple update groups to handle asymmetric changes across different subsets of interfaces.. All interfaces listed in names in each update group receive every attribute update specified in the attributes list.. If the session is up but true on-the-fly update is not supported for an attribute (e.g. metric change on an emulated interface),. warning is returned indicating that the session will be disabled and re-enabled, and the updated attribute will be reflected. once the session comes back up.. An error should be returned if any provided name is not found in the current configuration's list of OSPFv2 interface names.
+
+        Returns: UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter
+        """
+        return self._get_property(
+            "interfaces",
+            UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class UpdateProtocolConfigOspfv2InterfaceUpdateGroup(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "names": {
+            "type": list,
+            "itemtype": str,
+        },
+        "attributes": {"type": "UpdateProtocolConfigOspfv2InterfaceAttributeIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, names=None):
+        super(UpdateProtocolConfigOspfv2InterfaceUpdateGroup, self).__init__()
+        self._parent = parent
+        self._set_property("names", names)
+
+    def set(self, names=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def names(self):
+        # type: () -> List[str]
+        """names getter
+
+        The names of the OSPFv2 interfaces to which all attribute updates in this group will be applied.. x-constraint:. /components/schemas/Ospfv2.Interface/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("names")
+
+    @names.setter
+    def names(self, value):
+        """names setter
+
+        The names of the OSPFv2 interfaces to which all attribute updates in this group will be applied.. x-constraint:. /components/schemas/Ospfv2.Interface/properties/name.
+
+        value: List[str]
+        """
+        self._set_property("names", value)
+
+    @property
+    def attributes(self):
+        # type: () -> UpdateProtocolConfigOspfv2InterfaceAttributeIter
+        """attributes getter
+
+        The list of interface attribute updates to apply. Each entry selects one attribute via the choice discriminator. Multiple attributes can be updated in single group without repeating the names list.
+
+        Returns: UpdateProtocolConfigOspfv2InterfaceAttributeIter
+        """
+        return self._get_property(
+            "attributes",
+            UpdateProtocolConfigOspfv2InterfaceAttributeIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class UpdateProtocolConfigOspfv2InterfaceAttribute(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "routing_metric",
+            ],
+        },
+        "routing_metric": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "routing_metric": 10,
+    }  # type: Dict[str, Union(type)]
+
+    ROUTING_METRIC = "routing_metric"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, routing_metric=10):
+        super(UpdateProtocolConfigOspfv2InterfaceAttribute, self).__init__()
+        self._parent = parent
+        self._set_property("routing_metric", routing_metric)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, routing_metric=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["routing_metric"]]
+        """choice getter
+
+        The interface attribute to be updated.
+
+        Returns: Union[Literal["routing_metric"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The interface attribute to be updated.
+
+        value: Union[Literal["routing_metric"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def routing_metric(self):
+        # type: () -> int
+        """routing_metric getter
+
+        The routing metric (interface output cost) to be updated on the OSPFv2. interface. It is advertised as the 16-bit TOS metric of the corresponding. link in the Router-LSA (RFC 2328 Appendix A.4.2); the interface output cost. has valid range of to 65535 (RFC 2328 Section C.3). This applies equally. to emulated and simulated OSPFv2 interfaces, since simulated router. originates its own Router-LSA carrying the same 16-bit link metric.. On simulated OSPFv2 interface (no real adjacency with the DUT; the interface. belongs to simulated router inside simulated topology), updating the metric. is true on-the-fly operation: the OSPFv2 session remains in the Up state and. the simulated router re-originates its Router-LSA (with an incremented LS. Sequence Number) carrying the new metric, which neighbors receive without any. session interruption.. On an emulated OSPFv2 interface (real adjacency with the DUT), true. on-the-fly metric update may not be supported. In that case the implementation. should return warning, disable the session, re-enable it with the updated. metric, and reflect the new value in the Router-LSA once the session comes. back up.
+
+        Returns: int
+        """
+        return self._get_property("routing_metric")
+
+    @routing_metric.setter
+    def routing_metric(self, value):
+        """routing_metric setter
+
+        The routing metric (interface output cost) to be updated on the OSPFv2. interface. It is advertised as the 16-bit TOS metric of the corresponding. link in the Router-LSA (RFC 2328 Appendix A.4.2); the interface output cost. has valid range of to 65535 (RFC 2328 Section C.3). This applies equally. to emulated and simulated OSPFv2 interfaces, since simulated router. originates its own Router-LSA carrying the same 16-bit link metric.. On simulated OSPFv2 interface (no real adjacency with the DUT; the interface. belongs to simulated router inside simulated topology), updating the metric. is true on-the-fly operation: the OSPFv2 session remains in the Up state and. the simulated router re-originates its Router-LSA (with an incremented LS. Sequence Number) carrying the new metric, which neighbors receive without any. session interruption.. On an emulated OSPFv2 interface (real adjacency with the DUT), true. on-the-fly metric update may not be supported. In that case the implementation. should return warning, disable the session, re-enable it with the updated. metric, and reflect the new value in the Router-LSA once the session comes. back up.
+
+        value: int
+        """
+        self._set_property("routing_metric", value, "routing_metric")
+
+
+class UpdateProtocolConfigOspfv2InterfaceAttributeIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(UpdateProtocolConfigOspfv2InterfaceAttributeIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[UpdateProtocolConfigOspfv2InterfaceAttribute]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> UpdateProtocolConfigOspfv2InterfaceAttributeIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> UpdateProtocolConfigOspfv2InterfaceAttribute
+        return self._next()
+
+    def next(self):
+        # type: () -> UpdateProtocolConfigOspfv2InterfaceAttribute
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, UpdateProtocolConfigOspfv2InterfaceAttribute):
+            raise Exception(
+                "Item is not an instance of UpdateProtocolConfigOspfv2InterfaceAttribute"
+            )
+
+    def attribute(self, routing_metric=10):
+        # type: (int) -> UpdateProtocolConfigOspfv2InterfaceAttributeIter
+        """Factory method that creates an instance of the UpdateProtocolConfigOspfv2InterfaceAttribute class
+
+        A single OSPFv2 interface attribute update. The choice field identifies which attribute is being changed.
+
+        Returns: UpdateProtocolConfigOspfv2InterfaceAttributeIter
+        """
+        item = UpdateProtocolConfigOspfv2InterfaceAttribute(
+            parent=self._parent, choice=self._choice, routing_metric=routing_metric
+        )
+        self._add(item)
+        return self
+
+    def add(self, routing_metric=10):
+        # type: (int) -> UpdateProtocolConfigOspfv2InterfaceAttribute
+        """Add method that creates and returns an instance of the UpdateProtocolConfigOspfv2InterfaceAttribute class
+
+        A single OSPFv2 interface attribute update. The choice field identifies which attribute is being changed.
+
+        Returns: UpdateProtocolConfigOspfv2InterfaceAttribute
+        """
+        item = UpdateProtocolConfigOspfv2InterfaceAttribute(
+            parent=self._parent, choice=self._choice, routing_metric=routing_metric
+        )
+        self._add(item)
+        return item
+
+
+class UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[UpdateProtocolConfigOspfv2InterfaceUpdateGroup]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> UpdateProtocolConfigOspfv2InterfaceUpdateGroup
+        return self._next()
+
+    def next(self):
+        # type: () -> UpdateProtocolConfigOspfv2InterfaceUpdateGroup
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, UpdateProtocolConfigOspfv2InterfaceUpdateGroup):
+            raise Exception(
+                "Item is not an instance of UpdateProtocolConfigOspfv2InterfaceUpdateGroup"
+            )
+
+    def updategroup(self, names=None):
+        # type: (List[str]) -> UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter
+        """Factory method that creates an instance of the UpdateProtocolConfigOspfv2InterfaceUpdateGroup class
+
+        An update group targeting one or more OSPFv2 interfaces. All interfaces listed in names receive every attribute update specified in the attributes list. Use multiple update groups to apply different updates to different subsets of interfaces (asymmetric updates).. If the session is up but true on-the-fly update is not supported for an attribute (e.g. metric change on an emulated interface): warning is returned indicating that the session will be disabled and re-enabled,. and the updated attribute will be reflected once the session comes back up. An error should be returned if any provided name is not found in the current configuration's list of OSPFv2 interface names.
+
+        Returns: UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter
+        """
+        item = UpdateProtocolConfigOspfv2InterfaceUpdateGroup(
+            parent=self._parent, names=names
+        )
+        self._add(item)
+        return self
+
+    def add(self, names=None):
+        # type: (List[str]) -> UpdateProtocolConfigOspfv2InterfaceUpdateGroup
+        """Add method that creates and returns an instance of the UpdateProtocolConfigOspfv2InterfaceUpdateGroup class
+
+        An update group targeting one or more OSPFv2 interfaces. All interfaces listed in names receive every attribute update specified in the attributes list. Use multiple update groups to apply different updates to different subsets of interfaces (asymmetric updates).. If the session is up but true on-the-fly update is not supported for an attribute (e.g. metric change on an emulated interface): warning is returned indicating that the session will be disabled and re-enabled,. and the updated attribute will be reflected once the session comes back up. An error should be returned if any provided name is not found in the current configuration's list of OSPFv2 interface names.
+
+        Returns: UpdateProtocolConfigOspfv2InterfaceUpdateGroup
+        """
+        item = UpdateProtocolConfigOspfv2InterfaceUpdateGroup(
             parent=self._parent, names=names
         )
         self._add(item)
@@ -166905,7 +168275,7 @@ class ConfigDeleteResources(OpenApiObject):
         # type: () -> List[str]
         """flows getter
 
-        List of flows that will be deleted from existing configuration on the traffic generator.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
+        List of flows that will be deleted from existing configuration on the traffic generator.. x-constraint:. /components/schemas/Flow/properties/name.
 
         Returns: List[str]
         """
@@ -166915,7 +168285,7 @@ class ConfigDeleteResources(OpenApiObject):
     def flows(self, value):
         """flows setter
 
-        List of flows that will be deleted from existing configuration on the traffic generator.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
+        List of flows that will be deleted from existing configuration on the traffic generator.. x-constraint:. /components/schemas/Flow/properties/name.
 
         value: List[str]
         """
@@ -167201,7 +168571,7 @@ class StatePortLink(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -167211,7 +168581,7 @@ class StatePortLink(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -167283,7 +168653,7 @@ class StatePortCapture(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        The names of ports to which the capture state will be applied to. If the list of port_names is empty or null the state will be applied to all configured ports.. If the list is not empty any port that is not included in the list of port_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of ports to which the capture state will be applied to. If the list of port_names is empty or null the state will be applied to all configured ports.. If the list is not empty any port that is not included in the list of port_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -167293,7 +168663,7 @@ class StatePortCapture(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        The names of ports to which the capture state will be applied to. If the list of port_names is empty or null the state will be applied to all configured ports.. If the list is not empty any port that is not included in the list of port_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of ports to which the capture state will be applied to. If the list of port_names is empty or null the state will be applied to all configured ports.. If the list is not empty any port that is not included in the list of port_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -167435,7 +168805,7 @@ class StateProtocol(OpenApiObject):
         # type: () -> StateProtocolOspfv2
         """Factory property that returns an instance of the StateProtocolOspfv2 class
 
-        Sets state of configured OSPFv2 routers.
+        Sets state of configured OSPFv2 routers and Links.
 
         Returns: StateProtocolOspfv2
         """
@@ -167585,7 +168955,7 @@ class StateProtocolRoute(OpenApiObject):
         # type: () -> List[str]
         """names getter
 
-        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. . x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name.
+        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name.
 
         Returns: List[str]
         """
@@ -167595,7 +168965,7 @@ class StateProtocolRoute(OpenApiObject):
     def names(self, value):
         """names setter
 
-        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. . x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name.
+        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name.
 
         value: List[str]
         """
@@ -167751,7 +169121,7 @@ class StateProtocolLacpAdmin(OpenApiObject):
         # type: () -> List[str]
         """lag_member_names getter
 
-        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -167761,7 +169131,7 @@ class StateProtocolLacpAdmin(OpenApiObject):
     def lag_member_names(self, value):
         """lag_member_names setter
 
-        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -167833,7 +169203,7 @@ class StateProtocolLacpMemberPorts(OpenApiObject):
         # type: () -> List[str]
         """lag_member_names getter
 
-        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -167843,7 +169213,7 @@ class StateProtocolLacpMemberPorts(OpenApiObject):
     def lag_member_names(self, value):
         """lag_member_names setter
 
-        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -167983,7 +169353,7 @@ class StateProtocolBgpPeers(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         Returns: List[str]
         """
@@ -167993,7 +169363,7 @@ class StateProtocolBgpPeers(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         value: List[str]
         """
@@ -168149,7 +169519,7 @@ class StateProtocolIsisRouters(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         Returns: List[str]
         """
@@ -168159,7 +169529,7 @@ class StateProtocolIsisRouters(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         value: List[str]
         """
@@ -168231,7 +169601,7 @@ class StateProtocolIsisSimLinks(OpenApiObject):
         # type: () -> List[str]
         """names getter
 
-        The names of ISIS Simulated Links to control. If no names are specified then all ISIS Simulated Links in the configuration will be affected... x-constraint:. /components/schemas/Isis.Interface/properties/name. . x-constraint:. /components/schemas/Isis.Interface/properties/name.
+        The names of ISIS Simulated Links to control. If no names are specified then all ISIS Simulated Links in the configuration will be affected... x-constraint:. /components/schemas/Isis.Interface/properties/name.
 
         Returns: List[str]
         """
@@ -168241,7 +169611,7 @@ class StateProtocolIsisSimLinks(OpenApiObject):
     def names(self, value):
         """names setter
 
-        The names of ISIS Simulated Links to control. If no names are specified then all ISIS Simulated Links in the configuration will be affected... x-constraint:. /components/schemas/Isis.Interface/properties/name. . x-constraint:. /components/schemas/Isis.Interface/properties/name.
+        The names of ISIS Simulated Links to control. If no names are specified then all ISIS Simulated Links in the configuration will be affected... x-constraint:. /components/schemas/Isis.Interface/properties/name.
 
         value: List[str]
         """
@@ -168252,7 +169622,7 @@ class StateProtocolIsisSimLinks(OpenApiObject):
         # type: () -> Union[Literal["down"], Literal["up"]]
         """state getter
 
-        Sets the Control State of one or more Simulated Links to UP or DOWN. The state change is applied bidirectionally a link between IS-IS Routers and is affected in both directions simultaneously.. Setting Control State to DOWN transitions the selected Simulated Links to disconnected state. Both the Simulated/Emulated Router hosting the link and the neighboring router at the far end will remove the link from the Extended IS Reachability TLV in their next LSP transmission (with an incremented Sequence Number).. Setting Control State to UP reconnects the selected Simulated Links. Both routers will re-advertise the neighbor relationship in their next LSP Update.. Example:. Suppose Emulated Router ER (680000000003) is connected to Simulated Routers: ST1('770000000001'), ST2('770000000002') and ST3('770000000003') in ring topology.. ER <--> ST1 <--> ST2(A) <--> ST3(B) <--> ER. Before the AB Link Down operation between ST2 ST3 the neighbors of ST2 ST3 will be seen as in ISIS Link State PDU (LSP) information in Get State. LSP-ID of ST2: 770000000002-00-00: IS-Reachability Neighbors ['770000000001', '770000000003']. LSP-ID of ST3: 770000000003-00-00: IS-Reachability Neighbors ['770000000002', '770000000001']. After the AB Link Down operation between ST2 ST3 the neighbors of ST2 ST3 will be seen as in ISIS Link State PDU (LSP) information in Get State. LSP-ID of ST2: 770000000002-00-00: IS-Reachability Neighbors ['770000000001']. LSP-ID of ST3: 770000000003-00-00: IS-Reachability Neighbors ['770000000001']
+        Sets the Control State of one or more Simulated Links to UP or DOWN. The state change is applied bidirectionally a link between IS-IS Routers and is affected. in both directions simultaneously.. Setting Control State to DOWN transitions the selected Simulated Links to disconnected state. Both the Simulated/Emulated Router hosting the link and the neighboring router at the far end will remove the link from the Extended IS Reachability TLV in their next LSP transmission (with an incremented Sequence Number).. Setting Control State to UP reconnects the selected Simulated Links. Both routers will re-advertise the neighbor relationship in their next LSP Update.. Example:. Suppose Emulated Router ER (680000000003) is connected to Simulated Routers: ST1('770000000001'), ST2('770000000002') and ST3('770000000003') in ring topology.. ER <--> ST1 <--> ST2(A) <--> ST3(B) <--> ER. Before the AB Link Down operation between ST2 ST3 the neighbors of ST2 ST3 will be seen as in ISIS Link State PDU (LSP) information in Get State. LSP-ID of ST2: 770000000002-00-00: IS-Reachability Neighbors ['770000000001', '770000000003']. LSP-ID of ST3: 770000000003-00-00: IS-Reachability Neighbors ['770000000002', '770000000001']. After the AB Link Down operation between ST2 ST3 the neighbors of ST2 ST3 will be seen as in ISIS Link State PDU (LSP) information in Get State. LSP-ID of ST2: 770000000002-00-00: IS-Reachability Neighbors ['770000000001']. LSP-ID of ST3: 770000000003-00-00: IS-Reachability Neighbors ['770000000001']
 
         Returns: Union[Literal["down"], Literal["up"]]
         """
@@ -168262,7 +169632,7 @@ class StateProtocolIsisSimLinks(OpenApiObject):
     def state(self, value):
         """state setter
 
-        Sets the Control State of one or more Simulated Links to UP or DOWN. The state change is applied bidirectionally a link between IS-IS Routers and is affected in both directions simultaneously.. Setting Control State to DOWN transitions the selected Simulated Links to disconnected state. Both the Simulated/Emulated Router hosting the link and the neighboring router at the far end will remove the link from the Extended IS Reachability TLV in their next LSP transmission (with an incremented Sequence Number).. Setting Control State to UP reconnects the selected Simulated Links. Both routers will re-advertise the neighbor relationship in their next LSP Update.. Example:. Suppose Emulated Router ER (680000000003) is connected to Simulated Routers: ST1('770000000001'), ST2('770000000002') and ST3('770000000003') in ring topology.. ER <--> ST1 <--> ST2(A) <--> ST3(B) <--> ER. Before the AB Link Down operation between ST2 ST3 the neighbors of ST2 ST3 will be seen as in ISIS Link State PDU (LSP) information in Get State. LSP-ID of ST2: 770000000002-00-00: IS-Reachability Neighbors ['770000000001', '770000000003']. LSP-ID of ST3: 770000000003-00-00: IS-Reachability Neighbors ['770000000002', '770000000001']. After the AB Link Down operation between ST2 ST3 the neighbors of ST2 ST3 will be seen as in ISIS Link State PDU (LSP) information in Get State. LSP-ID of ST2: 770000000002-00-00: IS-Reachability Neighbors ['770000000001']. LSP-ID of ST3: 770000000003-00-00: IS-Reachability Neighbors ['770000000001']
+        Sets the Control State of one or more Simulated Links to UP or DOWN. The state change is applied bidirectionally a link between IS-IS Routers and is affected. in both directions simultaneously.. Setting Control State to DOWN transitions the selected Simulated Links to disconnected state. Both the Simulated/Emulated Router hosting the link and the neighboring router at the far end will remove the link from the Extended IS Reachability TLV in their next LSP transmission (with an incremented Sequence Number).. Setting Control State to UP reconnects the selected Simulated Links. Both routers will re-advertise the neighbor relationship in their next LSP Update.. Example:. Suppose Emulated Router ER (680000000003) is connected to Simulated Routers: ST1('770000000001'), ST2('770000000002') and ST3('770000000003') in ring topology.. ER <--> ST1 <--> ST2(A) <--> ST3(B) <--> ER. Before the AB Link Down operation between ST2 ST3 the neighbors of ST2 ST3 will be seen as in ISIS Link State PDU (LSP) information in Get State. LSP-ID of ST2: 770000000002-00-00: IS-Reachability Neighbors ['770000000001', '770000000003']. LSP-ID of ST3: 770000000003-00-00: IS-Reachability Neighbors ['770000000002', '770000000001']. After the AB Link Down operation between ST2 ST3 the neighbors of ST2 ST3 will be seen as in ISIS Link State PDU (LSP) information in Get State. LSP-ID of ST2: 770000000002-00-00: IS-Reachability Neighbors ['770000000001']. LSP-ID of ST3: 770000000003-00-00: IS-Reachability Neighbors ['770000000001']
 
         value: Union[Literal["down"], Literal["up"]]
         """
@@ -168277,9 +169647,11 @@ class StateProtocolOspfv2(OpenApiObject):
             "type": str,
             "enum": [
                 "routers",
+                "simulated_links",
             ],
         },
         "routers": {"type": "StateProtocolOspfv2Routers"},
+        "simulated_links": {"type": "StateProtocolOspfv2SimLinks"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("choice",)  # type: tuple(str)
@@ -168287,6 +169659,7 @@ class StateProtocolOspfv2(OpenApiObject):
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
     ROUTERS = "routers"  # type: str
+    SIMULATED_LINKS = "simulated_links"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -168316,13 +169689,26 @@ class StateProtocolOspfv2(OpenApiObject):
         )
 
     @property
+    def simulated_links(self):
+        # type: () -> StateProtocolOspfv2SimLinks
+        """Factory property that returns an instance of the StateProtocolOspfv2SimLinks class
+
+        Sets the state of one or more configured OSPFv2 Simulated Links (Interfaces).
+
+        Returns: StateProtocolOspfv2SimLinks
+        """
+        return self._get_property(
+            "simulated_links", StateProtocolOspfv2SimLinks, self, "simulated_links"
+        )
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["routers"]]
+        # type: () -> Union[Literal["routers"], Literal["simulated_links"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["routers"]]
+        Returns: Union[Literal["routers"], Literal["simulated_links"]]
         """
         return self._get_property("choice")
 
@@ -168332,7 +169718,7 @@ class StateProtocolOspfv2(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["routers"]]
+        value: Union[Literal["routers"], Literal["simulated_links"]]
         """
         if value is None:
             raise TypeError("Cannot set required property choice as None")
@@ -168381,7 +169767,7 @@ class StateProtocolOspfv2Routers(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of OSPFv2 routers for which the state has to be applied. An empty or null list will control all OSPFv2 routers.. x-constraint:. /components/schemas/Device.Ospfv2/properties/name. . x-constraint:. /components/schemas/Device.Ospfv2/properties/name.
+        The names of OSPFv2 routers for which the state has to be applied. An empty or null list will control all OSPFv2 routers.. x-constraint:. /components/schemas/Device.Ospfv2/properties/name.
 
         Returns: List[str]
         """
@@ -168391,7 +169777,7 @@ class StateProtocolOspfv2Routers(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of OSPFv2 routers for which the state has to be applied. An empty or null list will control all OSPFv2 routers.. x-constraint:. /components/schemas/Device.Ospfv2/properties/name. . x-constraint:. /components/schemas/Device.Ospfv2/properties/name.
+        The names of OSPFv2 routers for which the state has to be applied. An empty or null list will control all OSPFv2 routers.. x-constraint:. /components/schemas/Device.Ospfv2/properties/name.
 
         value: List[str]
         """
@@ -168418,6 +169804,86 @@ class StateProtocolOspfv2Routers(OpenApiObject):
         """
         if value is None:
             raise TypeError("Cannot set required property state as None")
+        self._set_property("state", value)
+
+
+class StateProtocolOspfv2SimLinks(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "names": {
+            "type": list,
+            "itemtype": str,
+        },
+        "state": {
+            "type": str,
+            "enum": [
+                "down",
+                "up",
+            ],
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    DOWN = "down"  # type: str
+    UP = "up"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, names=None, state=None):
+        super(StateProtocolOspfv2SimLinks, self).__init__()
+        self._parent = parent
+        self._set_property("names", names)
+        self._set_property("state", state)
+
+    def set(self, names=None, state=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def names(self):
+        # type: () -> List[str]
+        """names getter
+
+        The names of OSPFv2 Simulated Links to control. If no names are specified then all OSPFv2 Simulated Links in the configuration will be affected.. x-constraint:. /components/schemas/Ospfv2.Interface/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("names")
+
+    @names.setter
+    def names(self, value):
+        """names setter
+
+        The names of OSPFv2 Simulated Links to control. If no names are specified then all OSPFv2 Simulated Links in the configuration will be affected.. x-constraint:. /components/schemas/Ospfv2.Interface/properties/name.
+
+        value: List[str]
+        """
+        self._set_property("names", value)
+
+    @property
+    def state(self):
+        # type: () -> Union[Literal["down"], Literal["up"]]
+        """state getter
+
+        Sets the Control State of one or more Simulated Links to UP or DOWN.. The state change is applied bidirectionally a link between OSPFv2 Routers and is affected. in both directions simultaneously.. Setting Control State to DOWN transitions the selected Simulated Links to disconnected state.. Both the Simulated/Emulated Router hosting the link and the neighboring router at the far end. will remove the link from their Router-LSA (Type LSA, RFC 2328 Section 12.4.1) in their next. LSA re-origination (with an incremented LS Sequence Number), and flood the updated Router-LSA so. all routers in the area recompute the SPF tree.. Setting Control State to UP reconnects the selected Simulated Links.. Both routers will re-advertise the adjacency as link in their next Router-LSA update.. Example:. Suppose Emulated Router ER is connected to Simulated Routers:. ST1, ST2 and ST3 in ring topology.. ER <--> ST1 <--> ST2(A) <--> ST3(B) <--> ER. Before the AB Link Down operation between ST2 ST3 the neighbors of ST2 ST3 will be seen. as link entries in their Router-LSA (Type LSA) information in Get State:. Router-LSA of ST2: links to ST1 and ST3. Router-LSA of ST3: links to ST2 and ER. After the AB Link Down operation between ST2 ST3 the neighbors of ST2 ST3 will be seen. as link entries in their Router-LSA (Type LSA) information in Get State:. Router-LSA of ST2: links to ST1. Router-LSA of ST3: links to ER
+
+        Returns: Union[Literal["down"], Literal["up"]]
+        """
+        return self._get_property("state")
+
+    @state.setter
+    def state(self, value):
+        """state setter
+
+        Sets the Control State of one or more Simulated Links to UP or DOWN.. The state change is applied bidirectionally a link between OSPFv2 Routers and is affected. in both directions simultaneously.. Setting Control State to DOWN transitions the selected Simulated Links to disconnected state.. Both the Simulated/Emulated Router hosting the link and the neighboring router at the far end. will remove the link from their Router-LSA (Type LSA, RFC 2328 Section 12.4.1) in their next. LSA re-origination (with an incremented LS Sequence Number), and flood the updated Router-LSA so. all routers in the area recompute the SPF tree.. Setting Control State to UP reconnects the selected Simulated Links.. Both routers will re-advertise the adjacency as link in their next Router-LSA update.. Example:. Suppose Emulated Router ER is connected to Simulated Routers:. ST1, ST2 and ST3 in ring topology.. ER <--> ST1 <--> ST2(A) <--> ST3(B) <--> ER. Before the AB Link Down operation between ST2 ST3 the neighbors of ST2 ST3 will be seen. as link entries in their Router-LSA (Type LSA) information in Get State:. Router-LSA of ST2: links to ST1 and ST3. Router-LSA of ST3: links to ST2 and ER. After the AB Link Down operation between ST2 ST3 the neighbors of ST2 ST3 will be seen. as link entries in their Router-LSA (Type LSA) information in Get State:. Router-LSA of ST2: links to ST1. Router-LSA of ST3: links to ER
+
+        value: Union[Literal["down"], Literal["up"]]
+        """
         self._set_property("state", value)
 
 
@@ -168533,7 +169999,7 @@ class StateProtocolOspfv3Routers(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of OSPFv3 routers for which the state has to be applied. An empty or null list will control all OSPFv3 routers.. x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name. . x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name.
+        The names of OSPFv3 routers for which the state has to be applied. An empty or null list will control all OSPFv3 routers.. x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name.
 
         Returns: List[str]
         """
@@ -168543,7 +170009,7 @@ class StateProtocolOspfv3Routers(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of OSPFv3 routers for which the state has to be applied. An empty or null list will control all OSPFv3 routers.. x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name. . x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name.
+        The names of OSPFv3 routers for which the state has to be applied. An empty or null list will control all OSPFv3 routers.. x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name.
 
         value: List[str]
         """
@@ -168683,7 +170149,7 @@ class StateProtocolRocev2Peers(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of RoCEv2 peers for which the state has to be applied. An empty or null list will control all RoCEv2 peers.. x-constraint:. /components/schemas/Rocev2.V4Peer/properties/name. /components/schemas/Rocev2.V6Peer/properties/name. . x-constraint:. /components/schemas/Rocev2.V4Peer/properties/name. /components/schemas/Rocev2.V6Peer/properties/name.
+        The names of RoCEv2 peers for which the state has to be applied. An empty or null list will control all RoCEv2 peers.. x-constraint:. /components/schemas/Rocev2.V4Peer/properties/name. /components/schemas/Rocev2.V6Peer/properties/name.
 
         Returns: List[str]
         """
@@ -168693,7 +170159,7 @@ class StateProtocolRocev2Peers(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of RoCEv2 peers for which the state has to be applied. An empty or null list will control all RoCEv2 peers.. x-constraint:. /components/schemas/Rocev2.V4Peer/properties/name. /components/schemas/Rocev2.V6Peer/properties/name. . x-constraint:. /components/schemas/Rocev2.V4Peer/properties/name. /components/schemas/Rocev2.V6Peer/properties/name.
+        The names of RoCEv2 peers for which the state has to be applied. An empty or null list will control all RoCEv2 peers.. x-constraint:. /components/schemas/Rocev2.V4Peer/properties/name. /components/schemas/Rocev2.V6Peer/properties/name.
 
         value: List[str]
         """
@@ -168839,7 +170305,7 @@ class StateTrafficFlowTransmit(OpenApiObject):
         # type: () -> List[str]
         """flow_names getter
 
-        The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.. If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
+        The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.. If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Flow/properties/name.
 
         Returns: List[str]
         """
@@ -168849,7 +170315,7 @@ class StateTrafficFlowTransmit(OpenApiObject):
     def flow_names(self, value):
         """flow_names setter
 
-        The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.. If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
+        The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.. If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Flow/properties/name.
 
         value: List[str]
         """
@@ -169203,7 +170669,7 @@ class ActionProtocolIpv4PingRequest(OpenApiObject):
         # type: () -> str
         """src_name getter
 
-        Name of source IPv4 interface to be used.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        Name of source IPv4 interface to be used.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         Returns: str
         """
@@ -169213,7 +170679,7 @@ class ActionProtocolIpv4PingRequest(OpenApiObject):
     def src_name(self, value):
         """src_name setter
 
-        Name of source IPv4 interface to be used.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        Name of source IPv4 interface to be used.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         value: str
         """
@@ -169432,7 +170898,7 @@ class ActionProtocolIpv6PingRequest(OpenApiObject):
         # type: () -> str
         """src_name getter
 
-        Name of source IPv6 interface to be used.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
+        Name of source IPv6 interface to be used.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         Returns: str
         """
@@ -169442,7 +170908,7 @@ class ActionProtocolIpv6PingRequest(OpenApiObject):
     def src_name(self, value):
         """src_name setter
 
-        Name of source IPv6 interface to be used.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
+        Name of source IPv6 interface to be used.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         value: str
         """
@@ -169791,7 +171257,7 @@ class ActionProtocolBgpNotification(OpenApiObject):
         # type: () -> List[str]
         """names getter
 
-        The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         Returns: List[str]
         """
@@ -169801,7 +171267,7 @@ class ActionProtocolBgpNotification(OpenApiObject):
     def names(self, value):
         """names setter
 
-        The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         value: List[str]
         """
@@ -170302,7 +171768,7 @@ class ActionProtocolBgpInitiateGracefulRestart(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of device BGP peers objects to control.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of device BGP peers objects to control.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         Returns: List[str]
         """
@@ -170312,7 +171778,7 @@ class ActionProtocolBgpInitiateGracefulRestart(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of device BGP peers objects to control.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of device BGP peers objects to control.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         value: List[str]
         """
@@ -170695,7 +172161,7 @@ class ActionProtocolIsisInitiateRestart(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of device objects to control.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of device objects to control.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         Returns: List[str]
         """
@@ -170705,7 +172171,7 @@ class ActionProtocolIsisInitiateRestart(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of device objects to control.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of device objects to control.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         value: List[str]
         """
@@ -170946,7 +172412,7 @@ class ActionProtocolIsisOverloadBit(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of IS-IS routers on which to apply the overload bit state. If no names are specified then the action is applied to all configured IS-IS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of IS-IS routers on which to apply the overload bit state. If no names are specified then the action is applied to all configured IS-IS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         Returns: List[str]
         """
@@ -170956,7 +172422,7 @@ class ActionProtocolIsisOverloadBit(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of IS-IS routers on which to apply the overload bit state. If no names are specified then the action is applied to all configured IS-IS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of IS-IS routers on which to apply the overload bit state. If no names are specified then the action is applied to all configured IS-IS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         value: List[str]
         """
@@ -171083,7 +172549,7 @@ class ActionPortReboot(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -171093,7 +172559,7 @@ class ActionPortReboot(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -171456,7 +172922,7 @@ class ActionResponseProtocolIpv4PingResponse(OpenApiObject):
         # type: () -> str
         """src_name getter
 
-        Name of source IPv4 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        Name of source IPv4 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         Returns: str
         """
@@ -171466,7 +172932,7 @@ class ActionResponseProtocolIpv4PingResponse(OpenApiObject):
     def src_name(self, value):
         """src_name setter
 
-        Name of source IPv4 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        Name of source IPv4 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         value: str
         """
@@ -171728,7 +173194,7 @@ class ActionResponseProtocolIpv6PingResponse(OpenApiObject):
         # type: () -> str
         """src_name getter
 
-        Name of source IPv6 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
+        Name of source IPv6 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         Returns: str
         """
@@ -171738,7 +173204,7 @@ class ActionResponseProtocolIpv6PingResponse(OpenApiObject):
     def src_name(self, value):
         """src_name setter
 
-        Name of source IPv6 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
+        Name of source IPv6 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         value: str
         """
@@ -172320,7 +173786,7 @@ class PortMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        The names of objects to return results for. An empty list will return all port row results.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of objects to return results for. An empty list will return all port row results.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -172330,7 +173796,7 @@ class PortMetricsRequest(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        The names of objects to return results for. An empty list will return all port row results.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of objects to return results for. An empty list will return all port row results.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -172432,7 +173898,7 @@ class FlowMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """flow_names getter
 
-        Flow metrics will be retrieved for these flow names.. If no flow names are specified then all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
+        Flow metrics will be retrieved for these flow names.. If no flow names are specified then all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name.
 
         Returns: List[str]
         """
@@ -172442,7 +173908,7 @@ class FlowMetricsRequest(OpenApiObject):
     def flow_names(self, value):
         """flow_names setter
 
-        Flow metrics will be retrieved for these flow names.. If no flow names are specified then all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
+        Flow metrics will be retrieved for these flow names.. If no flow names are specified then all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name.
 
         value: List[str]
         """
@@ -172826,7 +174292,7 @@ class Bgpv4MetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of BGPv4 peers to return results for. An empty list will return results for all BGPv4 peers.. x-constraint:. /components/schemas/Bgp.V4peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4peer/properties/name.
+        The names of BGPv4 peers to return results for. An empty list will return results for all BGPv4 peers.. x-constraint:. /components/schemas/Bgp.V4peer/properties/name.
 
         Returns: List[str]
         """
@@ -172836,7 +174302,7 @@ class Bgpv4MetricsRequest(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of BGPv4 peers to return results for. An empty list will return results for all BGPv4 peers.. x-constraint:. /components/schemas/Bgp.V4peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4peer/properties/name.
+        The names of BGPv4 peers to return results for. An empty list will return results for all BGPv4 peers.. x-constraint:. /components/schemas/Bgp.V4peer/properties/name.
 
         value: List[str]
         """
@@ -172935,7 +174401,7 @@ class Bgpv6MetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of BGPv6 peers to return results for. An empty list will return results for all BGPv6 peers.. x-constraint:. /components/schemas/Bgp.V6peer/properties/name. . x-constraint:. /components/schemas/Bgp.V6peer/properties/name.
+        The names of BGPv6 peers to return results for. An empty list will return results for all BGPv6 peers.. x-constraint:. /components/schemas/Bgp.V6peer/properties/name.
 
         Returns: List[str]
         """
@@ -172945,7 +174411,7 @@ class Bgpv6MetricsRequest(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of BGPv6 peers to return results for. An empty list will return results for all BGPv6 peers.. x-constraint:. /components/schemas/Bgp.V6peer/properties/name. . x-constraint:. /components/schemas/Bgp.V6peer/properties/name.
+        The names of BGPv6 peers to return results for. An empty list will return results for all BGPv6 peers.. x-constraint:. /components/schemas/Bgp.V6peer/properties/name.
 
         value: List[str]
         """
@@ -173072,7 +174538,7 @@ class IsisMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         Returns: List[str]
         """
@@ -173082,7 +174548,7 @@ class IsisMetricsRequest(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         value: List[str]
         """
@@ -173169,7 +174635,7 @@ class LagMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """lag_names getter
 
-        The names of LAGs to return results for. An empty list will return results for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        The names of LAGs to return results for. An empty list will return results for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name.
 
         Returns: List[str]
         """
@@ -173179,7 +174645,7 @@ class LagMetricsRequest(OpenApiObject):
     def lag_names(self, value):
         """lag_names setter
 
-        The names of LAGs to return results for. An empty list will return results for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        The names of LAGs to return results for. An empty list will return results for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name.
 
         value: List[str]
         """
@@ -173283,7 +174749,7 @@ class LacpMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """lag_names getter
 
-        The names of LAG (ports group) for which LACP metrics to be returned. An empty list will return metrics for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        The names of LAG (ports group) for which LACP metrics to be returned. An empty list will return metrics for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name.
 
         Returns: List[str]
         """
@@ -173293,7 +174759,7 @@ class LacpMetricsRequest(OpenApiObject):
     def lag_names(self, value):
         """lag_names setter
 
-        The names of LAG (ports group) for which LACP metrics to be returned. An empty list will return metrics for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        The names of LAG (ports group) for which LACP metrics to be returned. An empty list will return metrics for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name.
 
         value: List[str]
         """
@@ -173304,7 +174770,7 @@ class LacpMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """lag_member_port_names getter
 
-        The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -173314,7 +174780,7 @@ class LacpMetricsRequest(OpenApiObject):
     def lag_member_port_names(self, value):
         """lag_member_port_names setter
 
-        The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -173393,7 +174859,7 @@ class LldpMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """lldp_names getter
 
-        The names of LLDP instances to return results for. An empty list will return results for all LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name. . x-constraint:. /components/schemas/Lldp/properties/name.
+        The names of LLDP instances to return results for. An empty list will return results for all LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name.
 
         Returns: List[str]
         """
@@ -173403,7 +174869,7 @@ class LldpMetricsRequest(OpenApiObject):
     def lldp_names(self, value):
         """lldp_names setter
 
-        The names of LLDP instances to return results for. An empty list will return results for all LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name. . x-constraint:. /components/schemas/Lldp/properties/name.
+        The names of LLDP instances to return results for. An empty list will return results for all LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name.
 
         value: List[str]
         """
@@ -173530,7 +174996,7 @@ class RsvpMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name. . x-constraint:. /components/schemas/Device.Rsvp/properties/name.
+        The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name.
 
         Returns: List[str]
         """
@@ -173540,7 +175006,7 @@ class RsvpMetricsRequest(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name. . x-constraint:. /components/schemas/Device.Rsvp/properties/name.
+        The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name.
 
         value: List[str]
         """
@@ -173621,7 +175087,7 @@ class Dhcpv4ClientMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """client_names getter
 
-        The names of DHCPv4 clients to return results for. An empty list will return results for all DHCPv4 client.. x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name.
+        The names of DHCPv4 clients to return results for. An empty list will return results for all DHCPv4 client.. x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name.
 
         Returns: List[str]
         """
@@ -173631,7 +175097,7 @@ class Dhcpv4ClientMetricsRequest(OpenApiObject):
     def client_names(self, value):
         """client_names setter
 
-        The names of DHCPv4 clients to return results for. An empty list will return results for all DHCPv4 client.. x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name.
+        The names of DHCPv4 clients to return results for. An empty list will return results for all DHCPv4 client.. x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name.
 
         value: List[str]
         """
@@ -173712,7 +175178,7 @@ class Dhcpv4ServerMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """server_names getter
 
-        The names of DHCPv4 Servers to return results for. An empty list will return results for all DHCPv4 Server.. x-constraint:. /components/schemas/Device.Dhcpv4Server/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv4Server/properties/name.
+        The names of DHCPv4 Servers to return results for. An empty list will return results for all DHCPv4 Server.. x-constraint:. /components/schemas/Device.Dhcpv4Server/properties/name.
 
         Returns: List[str]
         """
@@ -173722,7 +175188,7 @@ class Dhcpv4ServerMetricsRequest(OpenApiObject):
     def server_names(self, value):
         """server_names setter
 
-        The names of DHCPv4 Servers to return results for. An empty list will return results for all DHCPv4 Server.. x-constraint:. /components/schemas/Device.Dhcpv4Server/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv4Server/properties/name.
+        The names of DHCPv4 Servers to return results for. An empty list will return results for all DHCPv4 Server.. x-constraint:. /components/schemas/Device.Dhcpv4Server/properties/name.
 
         value: List[str]
         """
@@ -173815,7 +175281,7 @@ class Dhcpv6ClientMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """client_names getter
 
-        The names of DHCPv6 clients to return results for. An empty list will return results for all DHCPv6 client.. x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name.
+        The names of DHCPv6 clients to return results for. An empty list will return results for all DHCPv6 client.. x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name.
 
         Returns: List[str]
         """
@@ -173825,7 +175291,7 @@ class Dhcpv6ClientMetricsRequest(OpenApiObject):
     def client_names(self, value):
         """client_names setter
 
-        The names of DHCPv6 clients to return results for. An empty list will return results for all DHCPv6 client.. x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name.
+        The names of DHCPv6 clients to return results for. An empty list will return results for all DHCPv6 client.. x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name.
 
         value: List[str]
         """
@@ -173922,7 +175388,7 @@ class Dhcpv6ServerMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """server_names getter
 
-        The names of DHCPv6 Servers to return results for. An empty list will return results for all DHCPv6 Server.. x-constraint:. /components/schemas/Device.Dhcpv6Server/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv6Server/properties/name.
+        The names of DHCPv6 Servers to return results for. An empty list will return results for all DHCPv6 Server.. x-constraint:. /components/schemas/Device.Dhcpv6Server/properties/name.
 
         Returns: List[str]
         """
@@ -173932,7 +175398,7 @@ class Dhcpv6ServerMetricsRequest(OpenApiObject):
     def server_names(self, value):
         """server_names setter
 
-        The names of DHCPv6 Servers to return results for. An empty list will return results for all DHCPv6 Server.. x-constraint:. /components/schemas/Device.Dhcpv6Server/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv6Server/properties/name.
+        The names of DHCPv6 Servers to return results for. An empty list will return results for all DHCPv6 Server.. x-constraint:. /components/schemas/Device.Dhcpv6Server/properties/name.
 
         value: List[str]
         """
@@ -174065,7 +175531,7 @@ class Ospfv2MetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of OSPFv2 routers to return results for. An empty list will return results for all OSPFv2 router.. x-constraint:. /components/schemas/Device.Ospfv2/properties/name. . x-constraint:. /components/schemas/Device.Ospfv2/properties/name.
+        The names of OSPFv2 routers to return results for. An empty list will return results for all OSPFv2 router.. x-constraint:. /components/schemas/Device.Ospfv2/properties/name.
 
         Returns: List[str]
         """
@@ -174075,7 +175541,7 @@ class Ospfv2MetricsRequest(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of OSPFv2 routers to return results for. An empty list will return results for all OSPFv2 router.. x-constraint:. /components/schemas/Device.Ospfv2/properties/name. . x-constraint:. /components/schemas/Device.Ospfv2/properties/name.
+        The names of OSPFv2 routers to return results for. An empty list will return results for all OSPFv2 router.. x-constraint:. /components/schemas/Device.Ospfv2/properties/name.
 
         value: List[str]
         """
@@ -174134,7 +175600,7 @@ class ConvergenceRequest(OpenApiObject):
         # type: () -> List[str]
         """flow_names getter
 
-        Convergence metrics will be retrieved for these flow names.. If no flow names are specified then convergence metrics for all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
+        Convergence metrics will be retrieved for these flow names.. If no flow names are specified then convergence metrics for all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name.
 
         Returns: List[str]
         """
@@ -174144,7 +175610,7 @@ class ConvergenceRequest(OpenApiObject):
     def flow_names(self, value):
         """flow_names setter
 
-        Convergence metrics will be retrieved for these flow names.. If no flow names are specified then convergence metrics for all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
+        Convergence metrics will be retrieved for these flow names.. If no flow names are specified then convergence metrics for all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name.
 
         value: List[str]
         """
@@ -174228,7 +175694,7 @@ class MacsecMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """secure_entity_names getter
 
-        The names of secure entities(secYs) to return results for. An empty list will return results for all secYs.. x-constraint:. /components/schemas/SecureEntity/properties/name. . x-constraint:. /components/schemas/SecureEntity/properties/name.
+        The names of secure entities(secYs) to return results for. An empty list will return results for all secYs.. x-constraint:. /components/schemas/SecureEntity/properties/name.
 
         Returns: List[str]
         """
@@ -174238,7 +175704,7 @@ class MacsecMetricsRequest(OpenApiObject):
     def secure_entity_names(self, value):
         """secure_entity_names setter
 
-        The names of secure entities(secYs) to return results for. An empty list will return results for all secYs.. x-constraint:. /components/schemas/SecureEntity/properties/name. . x-constraint:. /components/schemas/SecureEntity/properties/name.
+        The names of secure entities(secYs) to return results for. An empty list will return results for all secYs.. x-constraint:. /components/schemas/SecureEntity/properties/name.
 
         value: List[str]
         """
@@ -174325,7 +175791,7 @@ class MkaMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of peers to return results for. An empty list will return results for all peers.. x-constraint:. /components/schemas/Mka/properties/name. . x-constraint:. /components/schemas/Mka/properties/name.
+        The names of peers to return results for. An empty list will return results for all peers.. x-constraint:. /components/schemas/Mka/properties/name.
 
         Returns: List[str]
         """
@@ -174335,7 +175801,7 @@ class MkaMetricsRequest(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of peers to return results for. An empty list will return results for all peers.. x-constraint:. /components/schemas/Mka/properties/name. . x-constraint:. /components/schemas/Mka/properties/name.
+        The names of peers to return results for. An empty list will return results for all peers.. x-constraint:. /components/schemas/Mka/properties/name.
 
         value: List[str]
         """
@@ -174464,7 +175930,7 @@ class Ospfv3MetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of OSPFv3 routers to return results for. An empty list will return results for all OSPFv3 routers.. x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name. . x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name.
+        The names of OSPFv3 routers to return results for. An empty list will return results for all OSPFv3 routers.. x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name.
 
         Returns: List[str]
         """
@@ -174474,7 +175940,7 @@ class Ospfv3MetricsRequest(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of OSPFv3 routers to return results for. An empty list will return results for all OSPFv3 routers.. x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name. . x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name.
+        The names of OSPFv3 routers to return results for. An empty list will return results for all OSPFv3 routers.. x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name.
 
         value: List[str]
         """
@@ -174641,7 +176107,7 @@ class Rocev2IPv4ColumnNames(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of RoCEv2 over IPv4 peers to return results for. An empty list will return results for all RoCEv2 peers.. x-constraint:. /components/schemas/Rocev2.V4peer/properties/name. . x-constraint:. /components/schemas/Rocev2.V4peer/properties/name.
+        The names of RoCEv2 over IPv4 peers to return results for. An empty list will return results for all RoCEv2 peers.. x-constraint:. /components/schemas/Rocev2.V4peer/properties/name.
 
         Returns: List[str]
         """
@@ -174651,7 +176117,7 @@ class Rocev2IPv4ColumnNames(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of RoCEv2 over IPv4 peers to return results for. An empty list will return results for all RoCEv2 peers.. x-constraint:. /components/schemas/Rocev2.V4peer/properties/name. . x-constraint:. /components/schemas/Rocev2.V4peer/properties/name.
+        The names of RoCEv2 over IPv4 peers to return results for. An empty list will return results for all RoCEv2 peers.. x-constraint:. /components/schemas/Rocev2.V4peer/properties/name.
 
         value: List[str]
         """
@@ -174818,7 +176284,7 @@ class Rocev2IPv6ColumnNames(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of RoCEv2 over IPv6 peers to return results for. An empty list will return results for all RoCEv2 peers.. x-constraint:. /components/schemas/Rocev2.V6peer/properties/name. . x-constraint:. /components/schemas/Rocev2.V6peer/properties/name.
+        The names of RoCEv2 over IPv6 peers to return results for. An empty list will return results for all RoCEv2 peers.. x-constraint:. /components/schemas/Rocev2.V6peer/properties/name.
 
         Returns: List[str]
         """
@@ -174828,7 +176294,7 @@ class Rocev2IPv6ColumnNames(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of RoCEv2 over IPv6 peers to return results for. An empty list will return results for all RoCEv2 peers.. x-constraint:. /components/schemas/Rocev2.V6peer/properties/name. . x-constraint:. /components/schemas/Rocev2.V6peer/properties/name.
+        The names of RoCEv2 over IPv6 peers to return results for. An empty list will return results for all RoCEv2 peers.. x-constraint:. /components/schemas/Rocev2.V6peer/properties/name.
 
         value: List[str]
         """
@@ -175071,7 +176537,7 @@ class EgressOnlyTrackingMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        Egress only tracking metrics will be retrieved for these port names.. If no port-names are provided, egress_only_tracking metrics will be returned for all ports. which have one or more egress_only_tracking enabled.. x-constraint:. /components/schemas/EgressOnlyTracking/properties/port_name. . x-constraint:. /components/schemas/EgressOnlyTracking/properties/port_name.
+        Egress only tracking metrics will be retrieved for these port names.. If no port-names are provided, egress_only_tracking metrics will be returned for all ports. which have one or more egress_only_tracking enabled.. x-constraint:. /components/schemas/EgressOnlyTracking/properties/port_name.
 
         Returns: List[str]
         """
@@ -175081,7 +176547,7 @@ class EgressOnlyTrackingMetricsRequest(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        Egress only tracking metrics will be retrieved for these port names.. If no port-names are provided, egress_only_tracking metrics will be returned for all ports. which have one or more egress_only_tracking enabled.. x-constraint:. /components/schemas/EgressOnlyTracking/properties/port_name. . x-constraint:. /components/schemas/EgressOnlyTracking/properties/port_name.
+        Egress only tracking metrics will be retrieved for these port names.. If no port-names are provided, egress_only_tracking metrics will be returned for all ports. which have one or more egress_only_tracking enabled.. x-constraint:. /components/schemas/EgressOnlyTracking/properties/port_name.
 
         value: List[str]
         """
@@ -175270,7 +176736,7 @@ class BmpServerMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """server_names getter
 
-        The names of BMP Servers to return results for. An empty list will return results for all BMP Servers.. x-constraint:. /components/schemas/Device.Bmp.ServerV4/properties/name. /components/schemas/Device.Bmp.ServerV6/properties/name. . x-constraint:. /components/schemas/Device.Bmp.ServerV4/properties/name. /components/schemas/Device.Bmp.ServerV6/properties/name.
+        The names of BMP Servers to return results for. An empty list will return results for all BMP Servers.. x-constraint:. /components/schemas/Device.Bmp.ServerV4/properties/name. /components/schemas/Device.Bmp.ServerV6/properties/name.
 
         Returns: List[str]
         """
@@ -175280,7 +176746,7 @@ class BmpServerMetricsRequest(OpenApiObject):
     def server_names(self, value):
         """server_names setter
 
-        The names of BMP Servers to return results for. An empty list will return results for all BMP Servers.. x-constraint:. /components/schemas/Device.Bmp.ServerV4/properties/name. /components/schemas/Device.Bmp.ServerV6/properties/name. . x-constraint:. /components/schemas/Device.Bmp.ServerV4/properties/name. /components/schemas/Device.Bmp.ServerV6/properties/name.
+        The names of BMP Servers to return results for. An empty list will return results for all BMP Servers.. x-constraint:. /components/schemas/Device.Bmp.ServerV4/properties/name. /components/schemas/Device.Bmp.ServerV6/properties/name.
 
         value: List[str]
         """
@@ -175879,7 +177345,7 @@ class PortMetric(OpenApiObject):
         # type: () -> str
         """name getter
 
-        The name of configured port. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of configured port. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -175889,7 +177355,7 @@ class PortMetric(OpenApiObject):
     def name(self, value):
         """name setter
 
-        The name of configured port. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of configured port. x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -180748,7 +182214,7 @@ class LagMetric(OpenApiObject):
         # type: () -> str
         """name getter
 
-        The name of configured LAG. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        The name of configured LAG. x-constraint:. /components/schemas/Lag/properties/name.
 
         Returns: str
         """
@@ -180758,7 +182224,7 @@ class LagMetric(OpenApiObject):
     def name(self, value):
         """name setter
 
-        The name of configured LAG. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        The name of configured LAG. x-constraint:. /components/schemas/Lag/properties/name.
 
         value: str
         """
@@ -186320,7 +187786,7 @@ class ConvergenceEvent(OpenApiObject):
         # type: () -> str
         """source getter
 
-        The source of the event. The source MUST be the value of one of the x-constraint paths,. which means the source MUST be unique name in the configuration. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Flow/properties/name. /components/schemas/Device.Bgpv4Route/properties/name. /components/schemas/Device.Bgpv6Route/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Flow/properties/name. /components/schemas/Device.Bgpv4Route/properties/name. /components/schemas/Device.Bgpv6Route/properties/name.
+        The source of the event. The source MUST be the value of one of the x-constraint paths,. which means the source MUST be unique name in the configuration. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Flow/properties/name. /components/schemas/Device.Bgpv4Route/properties/name. /components/schemas/Device.Bgpv6Route/properties/name.
 
         Returns: str
         """
@@ -186330,7 +187796,7 @@ class ConvergenceEvent(OpenApiObject):
     def source(self, value):
         """source setter
 
-        The source of the event. The source MUST be the value of one of the x-constraint paths,. which means the source MUST be unique name in the configuration. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Flow/properties/name. /components/schemas/Device.Bgpv4Route/properties/name. /components/schemas/Device.Bgpv6Route/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Flow/properties/name. /components/schemas/Device.Bgpv4Route/properties/name. /components/schemas/Device.Bgpv6Route/properties/name.
+        The source of the event. The source MUST be the value of one of the x-constraint paths,. which means the source MUST be unique name in the configuration. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Flow/properties/name. /components/schemas/Device.Bgpv4Route/properties/name. /components/schemas/Device.Bgpv6Route/properties/name.
 
         value: str
         """
@@ -192947,7 +194413,7 @@ class Neighborsv4StatesRequest(OpenApiObject):
         # type: () -> List[str]
         """ethernet_names getter
 
-        The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (ARP cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (ARP cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: List[str]
         """
@@ -192957,7 +194423,7 @@ class Neighborsv4StatesRequest(OpenApiObject):
     def ethernet_names(self, value):
         """ethernet_names setter
 
-        The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (ARP cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (ARP cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: List[str]
         """
@@ -192995,7 +194461,7 @@ class Neighborsv6StatesRequest(OpenApiObject):
         # type: () -> List[str]
         """ethernet_names getter
 
-        The names of Ethernet interfaces for which Neighbor state (NDISC cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (NDISC cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The names of Ethernet interfaces for which Neighbor state (NDISC cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (NDISC cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: List[str]
         """
@@ -193005,7 +194471,7 @@ class Neighborsv6StatesRequest(OpenApiObject):
     def ethernet_names(self, value):
         """ethernet_names setter
 
-        The names of Ethernet interfaces for which Neighbor state (NDISC cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (NDISC cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The names of Ethernet interfaces for which Neighbor state (NDISC cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (NDISC cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: List[str]
         """
@@ -193061,7 +194527,7 @@ class BgpPrefixStateRequest(OpenApiObject):
         # type: () -> List[str]
         """bgp_peer_names getter
 
-        The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         Returns: List[str]
         """
@@ -193071,7 +194537,7 @@ class BgpPrefixStateRequest(OpenApiObject):
     def bgp_peer_names(self, value):
         """bgp_peer_names setter
 
-        The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         value: List[str]
         """
@@ -193572,7 +195038,7 @@ class IsisLspsStateRequest(OpenApiObject):
         # type: () -> List[str]
         """isis_router_names getter
 
-        The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         Returns: List[str]
         """
@@ -193582,7 +195048,7 @@ class IsisLspsStateRequest(OpenApiObject):
     def isis_router_names(self, value):
         """isis_router_names setter
 
-        The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         value: List[str]
         """
@@ -193625,7 +195091,7 @@ class LldpNeighborsStateRequest(OpenApiObject):
         # type: () -> List[str]
         """lldp_names getter
 
-        The names of LLDP instances for which neighbor information will be retrieved. If no names are specified then the results will contain neighbor information for all configured LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name. . x-constraint:. /components/schemas/Lldp/properties/name.
+        The names of LLDP instances for which neighbor information will be retrieved. If no names are specified then the results will contain neighbor information for all configured LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name.
 
         Returns: List[str]
         """
@@ -193635,7 +195101,7 @@ class LldpNeighborsStateRequest(OpenApiObject):
     def lldp_names(self, value):
         """lldp_names setter
 
-        The names of LLDP instances for which neighbor information will be retrieved. If no names are specified then the results will contain neighbor information for all configured LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name. . x-constraint:. /components/schemas/Lldp/properties/name.
+        The names of LLDP instances for which neighbor information will be retrieved. If no names are specified then the results will contain neighbor information for all configured LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name.
 
         value: List[str]
         """
@@ -193694,7 +195160,7 @@ class RsvpLspsStateRequest(OpenApiObject):
         # type: () -> List[str]
         """rsvp_router_names getter
 
-        The names of RSVP-TE routers for which learned information is requested. An empty list will return results for all RSVP=TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name. . x-constraint:. /components/schemas/Device.Rsvp/properties/name.
+        The names of RSVP-TE routers for which learned information is requested. An empty list will return results for all RSVP=TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name.
 
         Returns: List[str]
         """
@@ -193704,7 +195170,7 @@ class RsvpLspsStateRequest(OpenApiObject):
     def rsvp_router_names(self, value):
         """rsvp_router_names setter
 
-        The names of RSVP-TE routers for which learned information is requested. An empty list will return results for all RSVP=TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name. . x-constraint:. /components/schemas/Device.Rsvp/properties/name.
+        The names of RSVP-TE routers for which learned information is requested. An empty list will return results for all RSVP=TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name.
 
         value: List[str]
         """
@@ -193742,7 +195208,7 @@ class Dhcpv4InterfaceStateRequest(OpenApiObject):
         # type: () -> List[str]
         """dhcp_client_names getter
 
-        The names of DHCPv4 client to return results for. An empty list will return results for all DHCPv4 Client address information.. x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name.
+        The names of DHCPv4 client to return results for. An empty list will return results for all DHCPv4 Client address information.. x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name.
 
         Returns: List[str]
         """
@@ -193752,7 +195218,7 @@ class Dhcpv4InterfaceStateRequest(OpenApiObject):
     def dhcp_client_names(self, value):
         """dhcp_client_names setter
 
-        The names of DHCPv4 client to return results for. An empty list will return results for all DHCPv4 Client address information.. x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name.
+        The names of DHCPv4 client to return results for. An empty list will return results for all DHCPv4 Client address information.. x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name.
 
         value: List[str]
         """
@@ -193790,7 +195256,7 @@ class Dhcpv4LeaseStateRequest(OpenApiObject):
         # type: () -> List[str]
         """dhcp_server_names getter
 
-        The names of DHCPv4 server to return results for. An empty list will return results for all DHCPv4 servers.. x-constraint:. /components/schemas/Device.Dhcpv4server/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv4server/properties/name.
+        The names of DHCPv4 server to return results for. An empty list will return results for all DHCPv4 servers.. x-constraint:. /components/schemas/Device.Dhcpv4server/properties/name.
 
         Returns: List[str]
         """
@@ -193800,7 +195266,7 @@ class Dhcpv4LeaseStateRequest(OpenApiObject):
     def dhcp_server_names(self, value):
         """dhcp_server_names setter
 
-        The names of DHCPv4 server to return results for. An empty list will return results for all DHCPv4 servers.. x-constraint:. /components/schemas/Device.Dhcpv4server/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv4server/properties/name.
+        The names of DHCPv4 server to return results for. An empty list will return results for all DHCPv4 servers.. x-constraint:. /components/schemas/Device.Dhcpv4server/properties/name.
 
         value: List[str]
         """
@@ -193838,7 +195304,7 @@ class Dhcpv6InterfaceStateRequest(OpenApiObject):
         # type: () -> List[str]
         """dhcp_client_names getter
 
-        The names of DHCPv6 client to return results for. An empty list will return results for all DHCPv6 Client address information.. x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name.
+        The names of DHCPv6 client to return results for. An empty list will return results for all DHCPv6 Client address information.. x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name.
 
         Returns: List[str]
         """
@@ -193848,7 +195314,7 @@ class Dhcpv6InterfaceStateRequest(OpenApiObject):
     def dhcp_client_names(self, value):
         """dhcp_client_names setter
 
-        The names of DHCPv6 client to return results for. An empty list will return results for all DHCPv6 Client address information.. x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name.
+        The names of DHCPv6 client to return results for. An empty list will return results for all DHCPv6 Client address information.. x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name.
 
         value: List[str]
         """
@@ -193886,7 +195352,7 @@ class Dhcpv6LeaseStateRequest(OpenApiObject):
         # type: () -> List[str]
         """dhcp_server_names getter
 
-        The names of DHCPv6 server to return results for. An empty list will return results for all DHCPv6 servers.. x-constraint:. /components/schemas/Device.Dhcpv6server/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv6server/properties/name.
+        The names of DHCPv6 server to return results for. An empty list will return results for all DHCPv6 servers.. x-constraint:. /components/schemas/Device.Dhcpv6server/properties/name.
 
         Returns: List[str]
         """
@@ -193896,7 +195362,7 @@ class Dhcpv6LeaseStateRequest(OpenApiObject):
     def dhcp_server_names(self, value):
         """dhcp_server_names setter
 
-        The names of DHCPv6 server to return results for. An empty list will return results for all DHCPv6 servers.. x-constraint:. /components/schemas/Device.Dhcpv6server/properties/name. . x-constraint:. /components/schemas/Device.Dhcpv6server/properties/name.
+        The names of DHCPv6 server to return results for. An empty list will return results for all DHCPv6 servers.. x-constraint:. /components/schemas/Device.Dhcpv6server/properties/name.
 
         value: List[str]
         """
@@ -193934,7 +195400,7 @@ class Ospfv2LsasStateRequest(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of OSPFv2 routers for which learned information is requested. An empty list will return results for all OSPFv2 routers.. x-constraint:. /components/schemas/Device.Ospfv2Router/properties/name. . x-constraint:. /components/schemas/Device.Ospfv2Router/properties/name.
+        The names of OSPFv2 routers for which learned information is requested. An empty list will return results for all OSPFv2 routers.. x-constraint:. /components/schemas/Device.Ospfv2Router/properties/name.
 
         Returns: List[str]
         """
@@ -193944,7 +195410,7 @@ class Ospfv2LsasStateRequest(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of OSPFv2 routers for which learned information is requested. An empty list will return results for all OSPFv2 routers.. x-constraint:. /components/schemas/Device.Ospfv2Router/properties/name. . x-constraint:. /components/schemas/Device.Ospfv2Router/properties/name.
+        The names of OSPFv2 routers for which learned information is requested. An empty list will return results for all OSPFv2 routers.. x-constraint:. /components/schemas/Device.Ospfv2Router/properties/name.
 
         value: List[str]
         """
@@ -193982,7 +195448,7 @@ class Ospfv3LsasStateRequest(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of OSPFv3 routers for which learned information is requested. An empty list will return results for all OSPFv3 routers.. x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name. . x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name.
+        The names of OSPFv3 routers for which learned information is requested. An empty list will return results for all OSPFv3 routers.. x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name.
 
         Returns: List[str]
         """
@@ -193992,7 +195458,7 @@ class Ospfv3LsasStateRequest(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of OSPFv3 routers for which learned information is requested. An empty list will return results for all OSPFv3 routers.. x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name. . x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name.
+        The names of OSPFv3 routers for which learned information is requested. An empty list will return results for all OSPFv3 routers.. x-constraint:. /components/schemas/Ospfv3.RouterInstance/properties/name.
 
         value: List[str]
         """
@@ -194030,7 +195496,7 @@ class IsisIIHsStateRequest(OpenApiObject):
         # type: () -> List[str]
         """isis_router_names getter
 
-        The names of ISIS routers for which learned information is requested. An empty list will return results of IIH States for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS routers for which learned information is requested. An empty list will return results of IIH States for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         Returns: List[str]
         """
@@ -194040,7 +195506,7 @@ class IsisIIHsStateRequest(OpenApiObject):
     def isis_router_names(self, value):
         """isis_router_names setter
 
-        The names of ISIS routers for which learned information is requested. An empty list will return results of IIH States for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS routers for which learned information is requested. An empty list will return results of IIH States for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         value: List[str]
         """
@@ -194078,7 +195544,7 @@ class BmpServersStateRequest(OpenApiObject):
         # type: () -> List[str]
         """bmp_server_names getter
 
-        The names of the BMP Servers to return results for. An empty list will return results for all BMP Servers.. x-constraint:. /components/schemas/Device.Bmp.ServerV4/properties/name. /components/schemas/Device.Bmp.ServerV6/properties/name. . x-constraint:. /components/schemas/Device.Bmp.ServerV4/properties/name. /components/schemas/Device.Bmp.ServerV6/properties/name.
+        The names of the BMP Servers to return results for. An empty list will return results for all BMP Servers.. x-constraint:. /components/schemas/Device.Bmp.ServerV4/properties/name. /components/schemas/Device.Bmp.ServerV6/properties/name.
 
         Returns: List[str]
         """
@@ -194088,7 +195554,7 @@ class BmpServersStateRequest(OpenApiObject):
     def bmp_server_names(self, value):
         """bmp_server_names setter
 
-        The names of the BMP Servers to return results for. An empty list will return results for all BMP Servers.. x-constraint:. /components/schemas/Device.Bmp.ServerV4/properties/name. /components/schemas/Device.Bmp.ServerV6/properties/name. . x-constraint:. /components/schemas/Device.Bmp.ServerV4/properties/name. /components/schemas/Device.Bmp.ServerV6/properties/name.
+        The names of the BMP Servers to return results for. An empty list will return results for all BMP Servers.. x-constraint:. /components/schemas/Device.Bmp.ServerV4/properties/name. /components/schemas/Device.Bmp.ServerV6/properties/name.
 
         value: List[str]
         """
@@ -205725,7 +207191,7 @@ class Ospfv2LsaState(OpenApiObject):
         # type: () -> Ospfv2OpaqueLsaIter
         """opaque_lsas getter
 
-        One or more OSPFv2 Link-Scope Opaque-LSA Type 9.
+        One or more OSPFv2 Opaque LSAs Type 9, Type 10, or Type 11.
 
         Returns: Ospfv2OpaqueLsaIter
         """
@@ -207040,6 +208506,14 @@ class Ospfv2OpaqueLsa(OpenApiObject):
                 "domain",
             ],
         },
+        "tlv_information": {"type": "Ospfv2OpaqueLsaTlvInformation"},
+        "id": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 16777215,
+        },
+        "unknown_tlvs": {"type": "Ospfv2OpaqueLsaTlvIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -207052,12 +208526,13 @@ class Ospfv2OpaqueLsa(OpenApiObject):
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, type=None):
+    def __init__(self, parent=None, type=None, id=None):
         super(Ospfv2OpaqueLsa, self).__init__()
         self._parent = parent
         self._set_property("type", type)
+        self._set_property("id", id)
 
-    def set(self, type=None):
+    def set(self, type=None, id=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -207078,7 +208553,7 @@ class Ospfv2OpaqueLsa(OpenApiObject):
         # type: () -> Union[Literal["area"], Literal["domain"], Literal["local"]]
         """type getter
 
-        The type of Opaque TE LSAs. The LSA type.
+        The flooding scope of the Opaque LSA, determined by the LSA's LS Type. (RFC 5250 Section 4): local (Type 9, not flooded beyond the local link),. area (Type 10, flooded throughout the area) or domain (Type 11, flooded. throughout the Autonomous System, excluding stub areas).
 
         Returns: Union[Literal["area"], Literal["domain"], Literal["local"]]
         """
@@ -207088,11 +208563,2732 @@ class Ospfv2OpaqueLsa(OpenApiObject):
     def type(self, value):
         """type setter
 
-        The type of Opaque TE LSAs. The LSA type.
+        The flooding scope of the Opaque LSA, determined by the LSA's LS Type. (RFC 5250 Section 4): local (Type 9, not flooded beyond the local link),. area (Type 10, flooded throughout the area) or domain (Type 11, flooded. throughout the Autonomous System, excluding stub areas).
 
         value: Union[Literal["area"], Literal["domain"], Literal["local"]]
         """
         self._set_property("type", value)
+
+    @property
+    def tlv_information(self):
+        # type: () -> Ospfv2OpaqueLsaTlvInformation
+        """tlv_information getter
+
+        The decoded body of an OSPFv2 Opaque LSA, selected by Opaque Type. (RFC 5250 Section 3).. choice names the Opaque Type of the LSA, so reading choice is enough to know what. to read next. There are two cases:. 1. The Opaque Type is decoded by this model: choice is also the name of the field. carrying the decoded payload (traffic_engineering, router_information,. extended_prefixes, extended_link).. 2. The Opaque Type is not decoded by this model: choice is unknown, the numeric. Opaque Type is reported in unknown.opaque_type, and the TLVs of the LSA are. reported raw in the parent LSA's unknown_tlvs. This is the single escape hatch for. every Opaque Type this model does not decode, whichever the reason assigned by. IANA but not decoded here (grace-LSA Opaque Type 3, L1VPN Opaque Type 5,. Inter-AS-TE-v2 Opaque Type and the rest), not assigned by IANA, reserved for. private use, or assigned by IANA after this version of the model.. The choice values are not copy of the IANA registry and are not kept in step with. it; the registry is the authoritative list of assigned Opaque Types:. https://www.iana.org/assignments/ospf-opaque-types/ospf-opaque-types.xhtml. unknown_tlvs is not limited to case 2: TLV of decoded Opaque Type that this. model does not itself decode is reported there too, which is why it stays on the. parent LSA rather than inside this object.The decoded body of an OSPFv2 Opaque LSA, selected by Opaque Type. (RFC 5250 Section 3).. choice names the Opaque Type of the LSA, so reading choice is enough to know what. to read next. There are two cases:. 1. The Opaque Type is decoded by this model: choice is also the name of the field. carrying the decoded payload (traffic_engineering, router_information,. extended_prefixes, extended_link).. 2. The Opaque Type is not decoded by this model: choice is unknown, the numeric. Opaque Type is reported in unknown.opaque_type, and the TLVs of the LSA are. reported raw in the parent LSA's unknown_tlvs. This is the single escape hatch for. every Opaque Type this model does not decode, whichever the reason assigned by. IANA but not decoded here (grace-LSA Opaque Type 3, L1VPN Opaque Type 5,. Inter-AS-TE-v2 Opaque Type and the rest), not assigned by IANA, reserved for. private use, or assigned by IANA after this version of the model.. The choice values are not copy of the IANA registry and are not kept in step with. it; the registry is the authoritative list of assigned Opaque Types:. https://www.iana.org/assignments/ospf-opaque-types/ospf-opaque-types.xhtml. unknown_tlvs is not limited to case 2: TLV of decoded Opaque Type that this. model does not itself decode is reported there too, which is why it stays on the. parent LSA rather than inside this object.The decoded body of an OSPFv2 Opaque LSA, selected by Opaque Type. (RFC 5250 Section 3).. choice names the Opaque Type of the LSA, so reading choice is enough to know what. to read next. There are two cases:. 1. The Opaque Type is decoded by this model: choice is also the name of the field. carrying the decoded payload (traffic_engineering, router_information,. extended_prefixes, extended_link).. 2. The Opaque Type is not decoded by this model: choice is unknown, the numeric. Opaque Type is reported in unknown.opaque_type, and the TLVs of the LSA are. reported raw in the parent LSA's unknown_tlvs. This is the single escape hatch for. every Opaque Type this model does not decode, whichever the reason assigned by. IANA but not decoded here (grace-LSA Opaque Type 3, L1VPN Opaque Type 5,. Inter-AS-TE-v2 Opaque Type and the rest), not assigned by IANA, reserved for. private use, or assigned by IANA after this version of the model.. The choice values are not copy of the IANA registry and are not kept in step with. it; the registry is the authoritative list of assigned Opaque Types:. https://www.iana.org/assignments/ospf-opaque-types/ospf-opaque-types.xhtml. unknown_tlvs is not limited to case 2: TLV of decoded Opaque Type that this. model does not itself decode is reported there too, which is why it stays on the. parent LSA rather than inside this object.The type of information carried in the body of the Opaque LSA, decoded from the. Opaque Type in the most significant octet of the LSA's Link State ID. (RFC 5250 Section 3), together with the decoded contents of that Opaque Type.
+
+        Returns: Ospfv2OpaqueLsaTlvInformation
+        """
+        return self._get_property("tlv_information", Ospfv2OpaqueLsaTlvInformation)
+
+    @property
+    def id(self):
+        # type: () -> int
+        """id getter
+
+        The Opaque ID, decoded from the least significant three octets of the LSA's Link State ID (RFC 5250 Section 3). Used to further distinguish LSAs of the same Opaque Type originated by the same router.
+
+        Returns: int
+        """
+        return self._get_property("id")
+
+    @id.setter
+    def id(self, value):
+        """id setter
+
+        The Opaque ID, decoded from the least significant three octets of the LSA's Link State ID (RFC 5250 Section 3). Used to further distinguish LSAs of the same Opaque Type originated by the same router.
+
+        value: int
+        """
+        self._set_property("id", value)
+
+    @property
+    def unknown_tlvs(self):
+        # type: () -> Ospfv2OpaqueLsaTlvIter
+        """unknown_tlvs getter
+
+        Top-level TLVs carried in the body of the Opaque LSA that are not decoded into. tlv_information, returned raw in the generic type/length/value TLV format used by. all OSPFv2 Opaque LSAs (RFC 7770 Section 2, RFC 8665, RFC 9492).
+
+        Returns: Ospfv2OpaqueLsaTlvIter
+        """
+        return self._get_property(
+            "unknown_tlvs", Ospfv2OpaqueLsaTlvIter, self._parent, self._choice
+        )
+
+
+class Ospfv2OpaqueLsaTlvInformation(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "traffic_engineering",
+                "router_information",
+                "extended_prefixes",
+                "extended_link",
+                "unknown",
+            ],
+        },
+        "traffic_engineering": {"type": "Ospfv2OpaqueLsaTrafficEngineering"},
+        "router_information": {"type": "Ospfv2OpaqueLsaRouterInformation"},
+        "extended_prefixes": {"type": "Ospfv2OpaqueLsaExtendedPrefixIter"},
+        "extended_link": {"type": "Ospfv2OpaqueLsaExtendedLink"},
+        "unknown": {"type": "Ospfv2OpaqueLsaUnknownOpaqueType"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    TRAFFIC_ENGINEERING = "traffic_engineering"  # type: str
+    ROUTER_INFORMATION = "router_information"  # type: str
+    EXTENDED_PREFIXES = "extended_prefixes"  # type: str
+    EXTENDED_LINK = "extended_link"  # type: str
+    UNKNOWN = "unknown"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2OpaqueLsaTlvInformation, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def traffic_engineering(self):
+        # type: () -> Ospfv2OpaqueLsaTrafficEngineering
+        """Factory property that returns an instance of the Ospfv2OpaqueLsaTrafficEngineering class
+
+        The decoded Traffic Engineering Opaque LSA contents, Opaque Type 1. (RFC 3630 Section 2.4). TE LSA contains one top-level TLV (RFC 3630 Section 2.4):. either the Router Address TLV, reported as router_address, or the Link TLV,. reported as link_id plus link_attributes. Only one Link TLV is carried in each LSA. and each of its sub-TLVs occurs at most once (RFC 3630 Section 2.4.2), so both are. single-valued here.
+
+        Returns: Ospfv2OpaqueLsaTrafficEngineering
+        """
+        return self._get_property(
+            "traffic_engineering",
+            Ospfv2OpaqueLsaTrafficEngineering,
+            self,
+            "traffic_engineering",
+        )
+
+    @property
+    def router_information(self):
+        # type: () -> Ospfv2OpaqueLsaRouterInformation
+        """Factory property that returns an instance of the Ospfv2OpaqueLsaRouterInformation class
+
+        The decoded contents of one Router Information (RI) Opaque LSA instance, Opaque. Type (RFC 7770 Section 2).. Everything reported here describes the router named by the parent LSA's. header.advertising_router_id, but not necessarily all of it: router may originate. more than one RI LSA instance, for example when its capabilities do not fit in one. LSA, and each instance is separate Opaque LSA carrying its own Opaque ID. (RFC 7770 Section 2.1). This object therefore reports what one instance carried,. not the complete Router Information of the router.
+
+        Returns: Ospfv2OpaqueLsaRouterInformation
+        """
+        return self._get_property(
+            "router_information",
+            Ospfv2OpaqueLsaRouterInformation,
+            self,
+            "router_information",
+        )
+
+    @property
+    def extended_link(self):
+        # type: () -> Ospfv2OpaqueLsaExtendedLink
+        """Factory property that returns an instance of the Ospfv2OpaqueLsaExtendedLink class
+
+        A decoded OSPFv2 Extended Link TLV of an Extended Link Opaque LSA, TLV type 1. (RFC 7684 Section 3.1).. The TLV repeats the Link Type, Link ID and Link Data of the Router-LSA link it extends,. so correlate it to that link by matching link_id, and link_data when the same link_id. is advertised more than once, against router_lsas[].links[] of the Router-LSA whose. header.advertising_router_id equals that of this Opaque LSA.
+
+        Returns: Ospfv2OpaqueLsaExtendedLink
+        """
+        return self._get_property(
+            "extended_link", Ospfv2OpaqueLsaExtendedLink, self, "extended_link"
+        )
+
+    @property
+    def unknown(self):
+        # type: () -> Ospfv2OpaqueLsaUnknownOpaqueType
+        """Factory property that returns an instance of the Ospfv2OpaqueLsaUnknownOpaqueType class
+
+        The Opaque Type of an OSPFv2 Opaque LSA that this model does not decode. (RFC 5250 Section 3).. Reported as the numeric wire value, so an Opaque Type this model does not decode. is still fully identifiable, whichever the reason assigned by IANA but not. decoded here, not assigned by IANA, reserved for private use, or assigned by IANA. after this version of the model.
+
+        Returns: Ospfv2OpaqueLsaUnknownOpaqueType
+        """
+        return self._get_property(
+            "unknown", Ospfv2OpaqueLsaUnknownOpaqueType, self, "unknown"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["extended_link"], Literal["extended_prefixes"], Literal["router_information"], Literal["traffic_engineering"], Literal["unknown"]]
+        """choice getter
+
+        The Opaque Type carried in the most significant octet of the LSA's Link State ID (RFC 5250 Section 3), when this model decodes that Opaque Type; unknown otherwise.
+
+        Returns: Union[Literal["extended_link"], Literal["extended_prefixes"], Literal["router_information"], Literal["traffic_engineering"], Literal["unknown"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The Opaque Type carried in the most significant octet of the LSA's Link State ID (RFC 5250 Section 3), when this model decodes that Opaque Type; unknown otherwise.
+
+        value: Union[Literal["extended_link"], Literal["extended_prefixes"], Literal["router_information"], Literal["traffic_engineering"], Literal["unknown"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def extended_prefixes(self):
+        # type: () -> Ospfv2OpaqueLsaExtendedPrefixIter
+        """extended_prefixes getter
+
+        The decoded OSPFv2 Extended Prefix TLVs of an Extended Prefix Opaque LSA.. One Extended Prefix Opaque LSA can carry more than one Extended Prefix TLV, each. describing different prefix (RFC 7684 Section 2.1).
+
+        Returns: Ospfv2OpaqueLsaExtendedPrefixIter
+        """
+        return self._get_property(
+            "extended_prefixes",
+            Ospfv2OpaqueLsaExtendedPrefixIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class Ospfv2OpaqueLsaTrafficEngineering(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "router_address": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "link_id": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "link_attributes": {"type": "Ospfv2LsaLinkTrafficEngineering"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, router_address=None, link_id=None):
+        super(Ospfv2OpaqueLsaTrafficEngineering, self).__init__()
+        self._parent = parent
+        self._set_property("router_address", router_address)
+        self._set_property("link_id", link_id)
+
+    def set(self, router_address=None, link_id=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def router_address(self):
+        # type: () -> str
+        """router_address getter
+
+        The stable IPv4 address of the advertising router, decoded from the Router Address. TLV, TLV type (RFC 3630 Section 2.4.1). Present instead of link_id and. link_attributes when the LSA carries Router Address TLV.
+
+        Returns: str
+        """
+        return self._get_property("router_address")
+
+    @router_address.setter
+    def router_address(self, value):
+        """router_address setter
+
+        The stable IPv4 address of the advertising router, decoded from the Router Address. TLV, TLV type (RFC 3630 Section 2.4.1). Present instead of link_id and. link_attributes when the LSA carries Router Address TLV.
+
+        value: str
+        """
+        self._set_property("router_address", value)
+
+    @property
+    def link_id(self):
+        # type: () -> str
+        """link_id getter
+
+        The identifier of the link the Link TLV describes, decoded from its Link ID. sub-TLV, sub-type (RFC 3630 Section 2.5.2): the Router ID of the neighbor for a. point-to-point link, or the interface address of the Designated Router for a. multi-access link. Correlate the link attributes to the link they describe by. matching router_lsas[].links[].id of the Router-LSA whose. header.advertising_router_id equals that of this Opaque LSA.
+
+        Returns: str
+        """
+        return self._get_property("link_id")
+
+    @link_id.setter
+    def link_id(self, value):
+        """link_id setter
+
+        The identifier of the link the Link TLV describes, decoded from its Link ID. sub-TLV, sub-type (RFC 3630 Section 2.5.2): the Router ID of the neighbor for a. point-to-point link, or the interface address of the Designated Router for a. multi-access link. Correlate the link attributes to the link they describe by. matching router_lsas[].links[].id of the Router-LSA whose. header.advertising_router_id equals that of this Opaque LSA.
+
+        value: str
+        """
+        self._set_property("link_id", value)
+
+    @property
+    def link_attributes(self):
+        # type: () -> Ospfv2LsaLinkTrafficEngineering
+        """link_attributes getter
+
+        Traffic engineering attributes of link, sourced from the sub-TLVs of the Link TLV. of the Traffic Engineering Opaque LSA (RFC 3630 Section 2.5, RFC 7308,. RFC 4203 Section 1.3).Traffic engineering attributes of link, sourced from the sub-TLVs of the Link TLV. of the Traffic Engineering Opaque LSA (RFC 3630 Section 2.5, RFC 7308,. RFC 4203 Section 1.3).Traffic engineering attributes of link, sourced from the sub-TLVs of the Link TLV. of the Traffic Engineering Opaque LSA (RFC 3630 Section 2.5, RFC 7308,. RFC 4203 Section 1.3).Traffic engineering attributes of link, sourced from the sub-TLVs of the Link TLV. of the Traffic Engineering Opaque LSA (RFC 3630 Section 2.5, RFC 7308,. RFC 4203 Section 1.3).The traffic engineering attributes of the link, decoded from the sub-TLVs of the. Link TLV, TLV type (RFC 3630 Section 2.5).
+
+        Returns: Ospfv2LsaLinkTrafficEngineering
+        """
+        return self._get_property("link_attributes", Ospfv2LsaLinkTrafficEngineering)
+
+
+class Ospfv2LsaLinkTrafficEngineering(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "link_type": {
+            "type": str,
+            "enum": [
+                "point_to_point",
+                "multi_access",
+            ],
+        },
+        "local_interface_ip_addresses": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "ipv4",
+        },
+        "remote_interface_ip_addresses": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "ipv4",
+        },
+        "te_metric": {
+            "type": int,
+            "format": "uint32",
+        },
+        "maximum_bandwidth": {
+            "type": float,
+            "format": "float",
+        },
+        "maximum_reservable_bandwidth": {
+            "type": float,
+            "format": "float",
+        },
+        "unreserved_bandwidths": {
+            "type": list,
+            "itemtype": float,
+            "itemformat": "float",
+        },
+        "administrative_group": {
+            "type": int,
+            "format": "uint32",
+        },
+        "extended_administrative_group": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "srlg": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    POINT_TO_POINT = "point_to_point"  # type: str
+    MULTI_ACCESS = "multi_access"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        link_type=None,
+        local_interface_ip_addresses=None,
+        remote_interface_ip_addresses=None,
+        te_metric=None,
+        maximum_bandwidth=None,
+        maximum_reservable_bandwidth=None,
+        unreserved_bandwidths=None,
+        administrative_group=None,
+        extended_administrative_group=None,
+        srlg=None,
+    ):
+        super(Ospfv2LsaLinkTrafficEngineering, self).__init__()
+        self._parent = parent
+        self._set_property("link_type", link_type)
+        self._set_property("local_interface_ip_addresses", local_interface_ip_addresses)
+        self._set_property(
+            "remote_interface_ip_addresses", remote_interface_ip_addresses
+        )
+        self._set_property("te_metric", te_metric)
+        self._set_property("maximum_bandwidth", maximum_bandwidth)
+        self._set_property("maximum_reservable_bandwidth", maximum_reservable_bandwidth)
+        self._set_property("unreserved_bandwidths", unreserved_bandwidths)
+        self._set_property("administrative_group", administrative_group)
+        self._set_property(
+            "extended_administrative_group", extended_administrative_group
+        )
+        self._set_property("srlg", srlg)
+
+    def set(
+        self,
+        link_type=None,
+        local_interface_ip_addresses=None,
+        remote_interface_ip_addresses=None,
+        te_metric=None,
+        maximum_bandwidth=None,
+        maximum_reservable_bandwidth=None,
+        unreserved_bandwidths=None,
+        administrative_group=None,
+        extended_administrative_group=None,
+        srlg=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def link_type(self):
+        # type: () -> Union[Literal["multi_access"], Literal["point_to_point"]]
+        """link_type getter
+
+        The Link Type sub-TLV, sub-type (RFC 3630 Section 2.5.1).
+
+        Returns: Union[Literal["multi_access"], Literal["point_to_point"]]
+        """
+        return self._get_property("link_type")
+
+    @link_type.setter
+    def link_type(self, value):
+        """link_type setter
+
+        The Link Type sub-TLV, sub-type (RFC 3630 Section 2.5.1).
+
+        value: Union[Literal["multi_access"], Literal["point_to_point"]]
+        """
+        self._set_property("link_type", value)
+
+    @property
+    def local_interface_ip_addresses(self):
+        # type: () -> List[str]
+        """local_interface_ip_addresses getter
+
+        The Local Interface IP Address sub-TLV, sub-type (RFC 3630 Section 2.5.3).
+
+        Returns: List[str]
+        """
+        return self._get_property("local_interface_ip_addresses")
+
+    @local_interface_ip_addresses.setter
+    def local_interface_ip_addresses(self, value):
+        """local_interface_ip_addresses setter
+
+        The Local Interface IP Address sub-TLV, sub-type (RFC 3630 Section 2.5.3).
+
+        value: List[str]
+        """
+        self._set_property("local_interface_ip_addresses", value)
+
+    @property
+    def remote_interface_ip_addresses(self):
+        # type: () -> List[str]
+        """remote_interface_ip_addresses getter
+
+        The Remote Interface IP Address sub-TLV, sub-type (RFC 3630 Section 2.5.4).
+
+        Returns: List[str]
+        """
+        return self._get_property("remote_interface_ip_addresses")
+
+    @remote_interface_ip_addresses.setter
+    def remote_interface_ip_addresses(self, value):
+        """remote_interface_ip_addresses setter
+
+        The Remote Interface IP Address sub-TLV, sub-type (RFC 3630 Section 2.5.4).
+
+        value: List[str]
+        """
+        self._set_property("remote_interface_ip_addresses", value)
+
+    @property
+    def te_metric(self):
+        # type: () -> int
+        """te_metric getter
+
+        The Traffic Engineering Metric sub-TLV, sub-type (RFC 3630 Section 2.5.5).
+
+        Returns: int
+        """
+        return self._get_property("te_metric")
+
+    @te_metric.setter
+    def te_metric(self, value):
+        """te_metric setter
+
+        The Traffic Engineering Metric sub-TLV, sub-type (RFC 3630 Section 2.5.5).
+
+        value: int
+        """
+        self._set_property("te_metric", value)
+
+    @property
+    def maximum_bandwidth(self):
+        # type: () -> float
+        """maximum_bandwidth getter
+
+        The Maximum Bandwidth sub-TLV, sub-type 6, in bytes per second. (RFC 3630 Section 2.5.6).
+
+        Returns: float
+        """
+        return self._get_property("maximum_bandwidth")
+
+    @maximum_bandwidth.setter
+    def maximum_bandwidth(self, value):
+        """maximum_bandwidth setter
+
+        The Maximum Bandwidth sub-TLV, sub-type 6, in bytes per second. (RFC 3630 Section 2.5.6).
+
+        value: float
+        """
+        self._set_property("maximum_bandwidth", value)
+
+    @property
+    def maximum_reservable_bandwidth(self):
+        # type: () -> float
+        """maximum_reservable_bandwidth getter
+
+        The Maximum Reservable Bandwidth sub-TLV, sub-type 7, in bytes per second. (RFC 3630 Section 2.5.7).
+
+        Returns: float
+        """
+        return self._get_property("maximum_reservable_bandwidth")
+
+    @maximum_reservable_bandwidth.setter
+    def maximum_reservable_bandwidth(self, value):
+        """maximum_reservable_bandwidth setter
+
+        The Maximum Reservable Bandwidth sub-TLV, sub-type 7, in bytes per second. (RFC 3630 Section 2.5.7).
+
+        value: float
+        """
+        self._set_property("maximum_reservable_bandwidth", value)
+
+    @property
+    def unreserved_bandwidths(self):
+        # type: () -> List[float]
+        """unreserved_bandwidths getter
+
+        The Unreserved Bandwidth sub-TLV, sub-type 8: bandwidth reservable at each of the. eight priority levels 0-7, in bytes per second (RFC 3630 Section 2.5.8).
+
+        Returns: List[float]
+        """
+        return self._get_property("unreserved_bandwidths")
+
+    @unreserved_bandwidths.setter
+    def unreserved_bandwidths(self, value):
+        """unreserved_bandwidths setter
+
+        The Unreserved Bandwidth sub-TLV, sub-type 8: bandwidth reservable at each of the. eight priority levels 0-7, in bytes per second (RFC 3630 Section 2.5.8).
+
+        value: List[float]
+        """
+        self._set_property("unreserved_bandwidths", value)
+
+    @property
+    def administrative_group(self):
+        # type: () -> int
+        """administrative_group getter
+
+        The Administrative Group sub-TLV, sub-type (RFC 3630 Section 2.5.9).
+
+        Returns: int
+        """
+        return self._get_property("administrative_group")
+
+    @administrative_group.setter
+    def administrative_group(self, value):
+        """administrative_group setter
+
+        The Administrative Group sub-TLV, sub-type (RFC 3630 Section 2.5.9).
+
+        value: int
+        """
+        self._set_property("administrative_group", value)
+
+    @property
+    def extended_administrative_group(self):
+        # type: () -> List[int]
+        """extended_administrative_group getter
+
+        The Extended Administrative Group sub-TLV, sub-type 26 (RFC 7308), one or more. additional 32-bit words beyond administrative_group.
+
+        Returns: List[int]
+        """
+        return self._get_property("extended_administrative_group")
+
+    @extended_administrative_group.setter
+    def extended_administrative_group(self, value):
+        """extended_administrative_group setter
+
+        The Extended Administrative Group sub-TLV, sub-type 26 (RFC 7308), one or more. additional 32-bit words beyond administrative_group.
+
+        value: List[int]
+        """
+        self._set_property("extended_administrative_group", value)
+
+    @property
+    def srlg(self):
+        # type: () -> List[int]
+        """srlg getter
+
+        The Shared Risk Link Group (SRLG) sub-TLV, sub-type 16 (RFC 4203 Section 1.3).
+
+        Returns: List[int]
+        """
+        return self._get_property("srlg")
+
+    @srlg.setter
+    def srlg(self, value):
+        """srlg setter
+
+        The Shared Risk Link Group (SRLG) sub-TLV, sub-type 16 (RFC 4203 Section 1.3).
+
+        value: List[int]
+        """
+        self._set_property("srlg", value)
+
+
+class Ospfv2OpaqueLsaRouterInformation(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "sr_capability": {"type": "Ospfv2LsaSrCapability"},
+        "ri_capabilities": {"type": "Ospfv2LsaRiCapabilities"},
+        "node_msd": {"type": "Ospfv2LsaMsdIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(Ospfv2OpaqueLsaRouterInformation, self).__init__()
+        self._parent = parent
+
+    @property
+    def sr_capability(self):
+        # type: () -> Ospfv2LsaSrCapability
+        """sr_capability getter
+
+        The Segment Routing capability learned from the Router Information (RI) Opaque LSA:. the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV.. Reference: https://datatracker.ietf.org/doc/html/rfc8665.The Segment Routing capability learned from the Router Information (RI) Opaque LSA:. the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV.. Reference: https://datatracker.ietf.org/doc/html/rfc8665.The Segment Routing capability learned from the Router Information (RI) Opaque LSA:. the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV.. Reference: https://datatracker.ietf.org/doc/html/rfc8665.The Segment Routing capability learned from the Router Information (RI) Opaque LSA:. the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV.. Reference: https://datatracker.ietf.org/doc/html/rfc8665.The Segment Routing capability of the advertising router, decoded from the. SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV. (RFC 8665 Sections 3.1, 3.2, 3.3).
+
+        Returns: Ospfv2LsaSrCapability
+        """
+        return self._get_property("sr_capability", Ospfv2LsaSrCapability)
+
+    @property
+    def ri_capabilities(self):
+        # type: () -> Ospfv2LsaRiCapabilities
+        """ri_capabilities getter
+
+        The Router Informational Capabilities (TLV type 1) and Router Functional Capabilities. (TLV type 2) learned from the Router Information (RI) Opaque LSA (RFC 7770 Sections 2.5,. 2.6).The Router Informational Capabilities (TLV type 1) and Router Functional Capabilities. (TLV type 2) learned from the Router Information (RI) Opaque LSA (RFC 7770 Sections 2.5,. 2.6).The Router Informational Capabilities (TLV type 1) and Router Functional Capabilities. (TLV type 2) learned from the Router Information (RI) Opaque LSA (RFC 7770 Sections 2.5,. 2.6).The Router Informational Capabilities (TLV type 1) and Router Functional Capabilities. (TLV type 2) learned from the Router Information (RI) Opaque LSA (RFC 7770 Sections 2.5,. 2.6).The Router Informational and Functional Capabilities of the advertising router,. decoded from the Router Informational Capabilities TLV and the Router Functional. Capabilities TLV (RFC 7770 Sections 2.5, 2.6).
+
+        Returns: Ospfv2LsaRiCapabilities
+        """
+        return self._get_property("ri_capabilities", Ospfv2LsaRiCapabilities)
+
+    @property
+    def node_msd(self):
+        # type: () -> Ospfv2LsaMsdIter
+        """node_msd getter
+
+        One or more Maximum SID Depth (MSD) values of the advertising router, decoded from. the Node MSD TLV (RFC 8476 Section 2).
+
+        Returns: Ospfv2LsaMsdIter
+        """
+        return self._get_property(
+            "node_msd", Ospfv2LsaMsdIter, self._parent, self._choice
+        )
+
+
+class Ospfv2LsaSrCapability(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "algorithms": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "srgb_ranges": {"type": "Ospfv2LsaSrgbIter"},
+        "srlb_ranges": {"type": "Ospfv2LsaSrlbIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, algorithms=None):
+        super(Ospfv2LsaSrCapability, self).__init__()
+        self._parent = parent
+        self._set_property("algorithms", algorithms)
+
+    def set(self, algorithms=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def algorithms(self):
+        # type: () -> List[int]
+        """algorithms getter
+
+        The Segment Routing algorithms advertised in the SR-Algorithm TLV (0 SPF, = Strict SPF).
+
+        Returns: List[int]
+        """
+        return self._get_property("algorithms")
+
+    @algorithms.setter
+    def algorithms(self, value):
+        """algorithms setter
+
+        The Segment Routing algorithms advertised in the SR-Algorithm TLV (0 SPF, = Strict SPF).
+
+        value: List[int]
+        """
+        self._set_property("algorithms", value)
+
+    @property
+    def srgb_ranges(self):
+        # type: () -> Ospfv2LsaSrgbIter
+        """srgb_ranges getter
+
+        The learned Segment Routing Global Block (SRGB) ranges from the SID/Label Range TLV.
+
+        Returns: Ospfv2LsaSrgbIter
+        """
+        return self._get_property(
+            "srgb_ranges", Ospfv2LsaSrgbIter, self._parent, self._choice
+        )
+
+    @property
+    def srlb_ranges(self):
+        # type: () -> Ospfv2LsaSrlbIter
+        """srlb_ranges getter
+
+        The learned SR Local Block (SRLB) ranges from the SR Local Block TLV.
+
+        Returns: Ospfv2LsaSrlbIter
+        """
+        return self._get_property(
+            "srlb_ranges", Ospfv2LsaSrlbIter, self._parent, self._choice
+        )
+
+
+class Ospfv2LsaSrgb(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "starting_sid": {
+            "type": int,
+            "format": "uint32",
+        },
+        "range": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, starting_sid=None, range=None):
+        super(Ospfv2LsaSrgb, self).__init__()
+        self._parent = parent
+        self._set_property("starting_sid", starting_sid)
+        self._set_property("range", range)
+
+    def set(self, starting_sid=None, range=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def starting_sid(self):
+        # type: () -> int
+        """starting_sid getter
+
+        The first value (base SID/label) of the SRGB range.
+
+        Returns: int
+        """
+        return self._get_property("starting_sid")
+
+    @starting_sid.setter
+    def starting_sid(self, value):
+        """starting_sid setter
+
+        The first value (base SID/label) of the SRGB range.
+
+        value: int
+        """
+        self._set_property("starting_sid", value)
+
+    @property
+    def range(self):
+        # type: () -> int
+        """range getter
+
+        The number of SIDs in this SRGB range.
+
+        Returns: int
+        """
+        return self._get_property("range")
+
+    @range.setter
+    def range(self, value):
+        """range setter
+
+        The number of SIDs in this SRGB range.
+
+        value: int
+        """
+        self._set_property("range", value)
+
+
+class Ospfv2LsaSrgbIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2LsaSrgbIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2LsaSrgb]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2LsaSrgbIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2LsaSrgb
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2LsaSrgb
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2LsaSrgb):
+            raise Exception("Item is not an instance of Ospfv2LsaSrgb")
+
+    def srgb(self, starting_sid=None, range=None):
+        # type: (int,int) -> Ospfv2LsaSrgbIter
+        """Factory method that creates an instance of the Ospfv2LsaSrgb class
+
+        A learned Segment Routing Global Block (SRGB) range.
+
+        Returns: Ospfv2LsaSrgbIter
+        """
+        item = Ospfv2LsaSrgb(
+            parent=self._parent, starting_sid=starting_sid, range=range
+        )
+        self._add(item)
+        return self
+
+    def add(self, starting_sid=None, range=None):
+        # type: (int,int) -> Ospfv2LsaSrgb
+        """Add method that creates and returns an instance of the Ospfv2LsaSrgb class
+
+        A learned Segment Routing Global Block (SRGB) range.
+
+        Returns: Ospfv2LsaSrgb
+        """
+        item = Ospfv2LsaSrgb(
+            parent=self._parent, starting_sid=starting_sid, range=range
+        )
+        self._add(item)
+        return item
+
+
+class Ospfv2LsaSrlb(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "starting_sid": {
+            "type": int,
+            "format": "uint32",
+        },
+        "range": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, starting_sid=None, range=None):
+        super(Ospfv2LsaSrlb, self).__init__()
+        self._parent = parent
+        self._set_property("starting_sid", starting_sid)
+        self._set_property("range", range)
+
+    def set(self, starting_sid=None, range=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def starting_sid(self):
+        # type: () -> int
+        """starting_sid getter
+
+        The first value (base SID/label) of the SRLB range.
+
+        Returns: int
+        """
+        return self._get_property("starting_sid")
+
+    @starting_sid.setter
+    def starting_sid(self, value):
+        """starting_sid setter
+
+        The first value (base SID/label) of the SRLB range.
+
+        value: int
+        """
+        self._set_property("starting_sid", value)
+
+    @property
+    def range(self):
+        # type: () -> int
+        """range getter
+
+        The number of SIDs in this SRLB range.
+
+        Returns: int
+        """
+        return self._get_property("range")
+
+    @range.setter
+    def range(self, value):
+        """range setter
+
+        The number of SIDs in this SRLB range.
+
+        value: int
+        """
+        self._set_property("range", value)
+
+
+class Ospfv2LsaSrlbIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2LsaSrlbIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2LsaSrlb]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2LsaSrlbIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2LsaSrlb
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2LsaSrlb
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2LsaSrlb):
+            raise Exception("Item is not an instance of Ospfv2LsaSrlb")
+
+    def srlb(self, starting_sid=None, range=None):
+        # type: (int,int) -> Ospfv2LsaSrlbIter
+        """Factory method that creates an instance of the Ospfv2LsaSrlb class
+
+        A learned SR Local Block (SRLB) range.
+
+        Returns: Ospfv2LsaSrlbIter
+        """
+        item = Ospfv2LsaSrlb(
+            parent=self._parent, starting_sid=starting_sid, range=range
+        )
+        self._add(item)
+        return self
+
+    def add(self, starting_sid=None, range=None):
+        # type: (int,int) -> Ospfv2LsaSrlb
+        """Add method that creates and returns an instance of the Ospfv2LsaSrlb class
+
+        A learned SR Local Block (SRLB) range.
+
+        Returns: Ospfv2LsaSrlb
+        """
+        item = Ospfv2LsaSrlb(
+            parent=self._parent, starting_sid=starting_sid, range=range
+        )
+        self._add(item)
+        return item
+
+
+class Ospfv2LsaRiCapabilities(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "graceful_restart": {"type": bool},
+        "graceful_restart_helper": {"type": bool},
+        "stub_router_support": {"type": bool},
+        "traffic_engineering_support": {"type": bool},
+        "point_to_point_over_lan": {"type": bool},
+        "experimental_te": {"type": bool},
+        "functional_capabilities": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        graceful_restart=None,
+        graceful_restart_helper=None,
+        stub_router_support=None,
+        traffic_engineering_support=None,
+        point_to_point_over_lan=None,
+        experimental_te=None,
+        functional_capabilities=None,
+    ):
+        super(Ospfv2LsaRiCapabilities, self).__init__()
+        self._parent = parent
+        self._set_property("graceful_restart", graceful_restart)
+        self._set_property("graceful_restart_helper", graceful_restart_helper)
+        self._set_property("stub_router_support", stub_router_support)
+        self._set_property("traffic_engineering_support", traffic_engineering_support)
+        self._set_property("point_to_point_over_lan", point_to_point_over_lan)
+        self._set_property("experimental_te", experimental_te)
+        self._set_property("functional_capabilities", functional_capabilities)
+
+    def set(
+        self,
+        graceful_restart=None,
+        graceful_restart_helper=None,
+        stub_router_support=None,
+        traffic_engineering_support=None,
+        point_to_point_over_lan=None,
+        experimental_te=None,
+        functional_capabilities=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def graceful_restart(self):
+        # type: () -> bool
+        """graceful_restart getter
+
+        Informational Capabilities bit 0: the router is Graceful Restart capable (RFC 7770 Section 2.5).
+
+        Returns: bool
+        """
+        return self._get_property("graceful_restart")
+
+    @graceful_restart.setter
+    def graceful_restart(self, value):
+        """graceful_restart setter
+
+        Informational Capabilities bit 0: the router is Graceful Restart capable (RFC 7770 Section 2.5).
+
+        value: bool
+        """
+        self._set_property("graceful_restart", value)
+
+    @property
+    def graceful_restart_helper(self):
+        # type: () -> bool
+        """graceful_restart_helper getter
+
+        Informational Capabilities bit 1: the router is Graceful Restart Helper capable (RFC 7770 Section 2.5).
+
+        Returns: bool
+        """
+        return self._get_property("graceful_restart_helper")
+
+    @graceful_restart_helper.setter
+    def graceful_restart_helper(self, value):
+        """graceful_restart_helper setter
+
+        Informational Capabilities bit 1: the router is Graceful Restart Helper capable (RFC 7770 Section 2.5).
+
+        value: bool
+        """
+        self._set_property("graceful_restart_helper", value)
+
+    @property
+    def stub_router_support(self):
+        # type: () -> bool
+        """stub_router_support getter
+
+        Informational Capabilities bit 2: the router supports OSPF Stub Router functionality (RFC 7770 Section 2.5).
+
+        Returns: bool
+        """
+        return self._get_property("stub_router_support")
+
+    @stub_router_support.setter
+    def stub_router_support(self, value):
+        """stub_router_support setter
+
+        Informational Capabilities bit 2: the router supports OSPF Stub Router functionality (RFC 7770 Section 2.5).
+
+        value: bool
+        """
+        self._set_property("stub_router_support", value)
+
+    @property
+    def traffic_engineering_support(self):
+        # type: () -> bool
+        """traffic_engineering_support getter
+
+        Informational Capabilities bit 3: the router supports OSPF Traffic Engineering (RFC 7770 Section 2.5).
+
+        Returns: bool
+        """
+        return self._get_property("traffic_engineering_support")
+
+    @traffic_engineering_support.setter
+    def traffic_engineering_support(self, value):
+        """traffic_engineering_support setter
+
+        Informational Capabilities bit 3: the router supports OSPF Traffic Engineering (RFC 7770 Section 2.5).
+
+        value: bool
+        """
+        self._set_property("traffic_engineering_support", value)
+
+    @property
+    def point_to_point_over_lan(self):
+        # type: () -> bool
+        """point_to_point_over_lan getter
+
+        Informational Capabilities bit 4: the router supports point-to-point operation over LAN (RFC 7770 Section 2.5).
+
+        Returns: bool
+        """
+        return self._get_property("point_to_point_over_lan")
+
+    @point_to_point_over_lan.setter
+    def point_to_point_over_lan(self, value):
+        """point_to_point_over_lan setter
+
+        Informational Capabilities bit 4: the router supports point-to-point operation over LAN (RFC 7770 Section 2.5).
+
+        value: bool
+        """
+        self._set_property("point_to_point_over_lan", value)
+
+    @property
+    def experimental_te(self):
+        # type: () -> bool
+        """experimental_te getter
+
+        Informational Capabilities bit 5: the router supports Experimental Traffic Engineering (RFC 7770 Section 2.5).
+
+        Returns: bool
+        """
+        return self._get_property("experimental_te")
+
+    @experimental_te.setter
+    def experimental_te(self, value):
+        """experimental_te setter
+
+        Informational Capabilities bit 5: the router supports Experimental Traffic Engineering (RFC 7770 Section 2.5).
+
+        value: bool
+        """
+        self._set_property("experimental_te", value)
+
+    @property
+    def functional_capabilities(self):
+        # type: () -> int
+        """functional_capabilities getter
+
+        The raw 32-bit Router Functional Capabilities bitmask (RFC 7770 Section 2.6). No. capability bits are assigned in this registry as of RFC 7770; returned raw since there. are no named bits to decode.
+
+        Returns: int
+        """
+        return self._get_property("functional_capabilities")
+
+    @functional_capabilities.setter
+    def functional_capabilities(self, value):
+        """functional_capabilities setter
+
+        The raw 32-bit Router Functional Capabilities bitmask (RFC 7770 Section 2.6). No. capability bits are assigned in this registry as of RFC 7770; returned raw since there. are no named bits to decode.
+
+        value: int
+        """
+        self._set_property("functional_capabilities", value)
+
+
+class Ospfv2LsaMsd(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "msd_type": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "msd_value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, msd_type=None, msd_value=None):
+        super(Ospfv2LsaMsd, self).__init__()
+        self._parent = parent
+        self._set_property("msd_type", msd_type)
+        self._set_property("msd_value", msd_value)
+
+    def set(self, msd_type=None, msd_value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def msd_type(self):
+        # type: () -> int
+        """msd_type getter
+
+        The MSD-Type, identifying the kind of Maximum SID Depth being advertised (IGP MSD-Types registry, RFC 8491).
+
+        Returns: int
+        """
+        return self._get_property("msd_type")
+
+    @msd_type.setter
+    def msd_type(self, value):
+        """msd_type setter
+
+        The MSD-Type, identifying the kind of Maximum SID Depth being advertised (IGP MSD-Types registry, RFC 8491).
+
+        value: int
+        """
+        self._set_property("msd_type", value)
+
+    @property
+    def msd_value(self):
+        # type: () -> int
+        """msd_value getter
+
+        The MSD-Value: the maximum number of SIDs the router or link supports in the SID. stack. value of indicates no capability to impose any stack depth.
+
+        Returns: int
+        """
+        return self._get_property("msd_value")
+
+    @msd_value.setter
+    def msd_value(self, value):
+        """msd_value setter
+
+        The MSD-Value: the maximum number of SIDs the router or link supports in the SID. stack. value of indicates no capability to impose any stack depth.
+
+        value: int
+        """
+        self._set_property("msd_value", value)
+
+
+class Ospfv2LsaMsdIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2LsaMsdIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2LsaMsd]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2LsaMsdIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2LsaMsd
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2LsaMsd
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2LsaMsd):
+            raise Exception("Item is not an instance of Ospfv2LsaMsd")
+
+    def msd(self, msd_type=None, msd_value=None):
+        # type: (int,int) -> Ospfv2LsaMsdIter
+        """Factory method that creates an instance of the Ospfv2LsaMsd class
+
+        A single (MSD-Type, MSD-Value) pair from Node MSD or Link MSD TLV/sub-TLV (RFC 8476 Sections 2, 3).
+
+        Returns: Ospfv2LsaMsdIter
+        """
+        item = Ospfv2LsaMsd(parent=self._parent, msd_type=msd_type, msd_value=msd_value)
+        self._add(item)
+        return self
+
+    def add(self, msd_type=None, msd_value=None):
+        # type: (int,int) -> Ospfv2LsaMsd
+        """Add method that creates and returns an instance of the Ospfv2LsaMsd class
+
+        A single (MSD-Type, MSD-Value) pair from Node MSD or Link MSD TLV/sub-TLV (RFC 8476 Sections 2, 3).
+
+        Returns: Ospfv2LsaMsd
+        """
+        item = Ospfv2LsaMsd(parent=self._parent, msd_type=msd_type, msd_value=msd_value)
+        self._add(item)
+        return item
+
+
+class Ospfv2OpaqueLsaExtendedPrefix(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "prefix": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "prefix_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 32,
+        },
+        "prefix_sids": {"type": "Ospfv2LsaPrefixSidIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, prefix=None, prefix_length=None):
+        super(Ospfv2OpaqueLsaExtendedPrefix, self).__init__()
+        self._parent = parent
+        self._set_property("prefix", prefix)
+        self._set_property("prefix_length", prefix_length)
+
+    def set(self, prefix=None, prefix_length=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def prefix(self):
+        # type: () -> str
+        """prefix getter
+
+        The IPv4 address prefix the TLV applies to, decoded from the Address Prefix field. (RFC 7684 Section 2.1).
+
+        Returns: str
+        """
+        return self._get_property("prefix")
+
+    @prefix.setter
+    def prefix(self, value):
+        """prefix setter
+
+        The IPv4 address prefix the TLV applies to, decoded from the Address Prefix field. (RFC 7684 Section 2.1).
+
+        value: str
+        """
+        self._set_property("prefix", value)
+
+    @property
+    def prefix_length(self):
+        # type: () -> int
+        """prefix_length getter
+
+        The length in bits of prefix, decoded from the Prefix Length field. (RFC 7684 Section 2.1).
+
+        Returns: int
+        """
+        return self._get_property("prefix_length")
+
+    @prefix_length.setter
+    def prefix_length(self, value):
+        """prefix_length setter
+
+        The length in bits of prefix, decoded from the Prefix Length field. (RFC 7684 Section 2.1).
+
+        value: int
+        """
+        self._set_property("prefix_length", value)
+
+    @property
+    def prefix_sids(self):
+        # type: () -> Ospfv2LsaPrefixSidIter
+        """prefix_sids getter
+
+        The Prefix-SIDs advertised for this prefix, decoded from the Prefix-SID. sub-TLV, sub-type (RFC 8665 Section 5). The Prefix-SID sub-TLV may appear. more than once in the parent TLV, one per Segment Routing algorithm, so this. is list; each entry names its algorithm.
+
+        Returns: Ospfv2LsaPrefixSidIter
+        """
+        return self._get_property(
+            "prefix_sids", Ospfv2LsaPrefixSidIter, self._parent, self._choice
+        )
+
+
+class Ospfv2LsaPrefixSid(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "sid": {
+            "type": int,
+            "format": "uint32",
+        },
+        "flags": {"type": "Ospfv2LsaPrefixSidFlags"},
+        "algorithm": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "mt_id": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 127,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, sid=None, algorithm=None, mt_id=None):
+        super(Ospfv2LsaPrefixSid, self).__init__()
+        self._parent = parent
+        self._set_property("sid", sid)
+        self._set_property("algorithm", algorithm)
+        self._set_property("mt_id", mt_id)
+
+    def set(self, sid=None, algorithm=None, mt_id=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def sid(self):
+        # type: () -> int
+        """sid getter
+
+        The SID/Label value or index associated with the IGP Prefix segment attached to the prefix. flags.v_flag tells which of the two it is.
+
+        Returns: int
+        """
+        return self._get_property("sid")
+
+    @sid.setter
+    def sid(self, value):
+        """sid setter
+
+        The SID/Label value or index associated with the IGP Prefix segment attached to the prefix. flags.v_flag tells which of the two it is.
+
+        value: int
+        """
+        self._set_property("sid", value)
+
+    @property
+    def flags(self):
+        # type: () -> Ospfv2LsaPrefixSidFlags
+        """flags getter
+
+        One-octet flags of the OSPFv2 Prefix-SID sub-TLV (RFC 8665).One-octet flags of the OSPFv2 Prefix-SID sub-TLV (RFC 8665).One-octet flags of the OSPFv2 Prefix-SID sub-TLV (RFC 8665).Flags associated with the Prefix-SID.
+
+        Returns: Ospfv2LsaPrefixSidFlags
+        """
+        return self._get_property("flags", Ospfv2LsaPrefixSidFlags)
+
+    @property
+    def algorithm(self):
+        # type: () -> int
+        """algorithm getter
+
+        The Segment Routing algorithm the Prefix-SID is associated with, decoded from the Algorithm field (RFC 8665 Section 5).
+
+        Returns: int
+        """
+        return self._get_property("algorithm")
+
+    @algorithm.setter
+    def algorithm(self, value):
+        """algorithm setter
+
+        The Segment Routing algorithm the Prefix-SID is associated with, decoded from the Algorithm field (RFC 8665 Section 5).
+
+        value: int
+        """
+        self._set_property("algorithm", value)
+
+    @property
+    def mt_id(self):
+        # type: () -> int
+        """mt_id getter
+
+        The Multi-Topology ID the Prefix-SID applies to, decoded from the MT-ID field. (RFC 8665 Section 5, RFC 4915). Together with prefix and algorithm it. identifies the Prefix-SID: RFC 8665 Section requires all Prefix-SIDs. advertised for the same prefix, topology and algorithm to be ignored, so the. entries of prefix_sids are distinguished by this field and algorithm.. The MT-ID field is one octet wide on the wire, but RFC 4915 Section 3.7. defines only 0-127 as valid MT-ID values 128-255 are invalid and SHOULD be. ignored on receipt, so value in that range is never reported here. The. maximum matches the range statement on the equivalent mt-id leaf of the IETF. OSPF Segment Routing YANG model.
+
+        Returns: int
+        """
+        return self._get_property("mt_id")
+
+    @mt_id.setter
+    def mt_id(self, value):
+        """mt_id setter
+
+        The Multi-Topology ID the Prefix-SID applies to, decoded from the MT-ID field. (RFC 8665 Section 5, RFC 4915). Together with prefix and algorithm it. identifies the Prefix-SID: RFC 8665 Section requires all Prefix-SIDs. advertised for the same prefix, topology and algorithm to be ignored, so the. entries of prefix_sids are distinguished by this field and algorithm.. The MT-ID field is one octet wide on the wire, but RFC 4915 Section 3.7. defines only 0-127 as valid MT-ID values 128-255 are invalid and SHOULD be. ignored on receipt, so value in that range is never reported here. The. maximum matches the range statement on the equivalent mt-id leaf of the IETF. OSPF Segment Routing YANG model.
+
+        value: int
+        """
+        self._set_property("mt_id", value)
+
+
+class Ospfv2LsaPrefixSidFlags(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "np_flag": {"type": bool},
+        "m_flag": {"type": bool},
+        "e_flag": {"type": bool},
+        "v_flag": {"type": bool},
+        "l_flag": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        np_flag=None,
+        m_flag=None,
+        e_flag=None,
+        v_flag=None,
+        l_flag=None,
+    ):
+        super(Ospfv2LsaPrefixSidFlags, self).__init__()
+        self._parent = parent
+        self._set_property("np_flag", np_flag)
+        self._set_property("m_flag", m_flag)
+        self._set_property("e_flag", e_flag)
+        self._set_property("v_flag", v_flag)
+        self._set_property("l_flag", l_flag)
+
+    def set(self, np_flag=None, m_flag=None, e_flag=None, v_flag=None, l_flag=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def np_flag(self):
+        # type: () -> bool
+        """np_flag getter
+
+        NP-Flag (No-PHP): if set, the penultimate hop MUST NOT pop the Prefix-SID before delivering the packet to the advertising node.
+
+        Returns: bool
+        """
+        return self._get_property("np_flag")
+
+    @np_flag.setter
+    def np_flag(self, value):
+        """np_flag setter
+
+        NP-Flag (No-PHP): if set, the penultimate hop MUST NOT pop the Prefix-SID before delivering the packet to the advertising node.
+
+        value: bool
+        """
+        self._set_property("np_flag", value)
+
+    @property
+    def m_flag(self):
+        # type: () -> bool
+        """m_flag getter
+
+        M-Flag (Mapping Server): if set, the SID was advertised by an SR Mapping Server.
+
+        Returns: bool
+        """
+        return self._get_property("m_flag")
+
+    @m_flag.setter
+    def m_flag(self, value):
+        """m_flag setter
+
+        M-Flag (Mapping Server): if set, the SID was advertised by an SR Mapping Server.
+
+        value: bool
+        """
+        self._set_property("m_flag", value)
+
+    @property
+    def e_flag(self):
+        # type: () -> bool
+        """e_flag getter
+
+        E-Flag (Explicit-Null): if set, the upstream neighbor MUST replace the Prefix-SID with the Explicit-NULL label before forwarding.
+
+        Returns: bool
+        """
+        return self._get_property("e_flag")
+
+    @e_flag.setter
+    def e_flag(self, value):
+        """e_flag setter
+
+        E-Flag (Explicit-Null): if set, the upstream neighbor MUST replace the Prefix-SID with the Explicit-NULL label before forwarding.
+
+        value: bool
+        """
+        self._set_property("e_flag", value)
+
+    @property
+    def v_flag(self):
+        # type: () -> bool
+        """v_flag getter
+
+        V-Flag (Value): if set, the Prefix-SID carries an absolute value (label); if clear, an index.
+
+        Returns: bool
+        """
+        return self._get_property("v_flag")
+
+    @v_flag.setter
+    def v_flag(self, value):
+        """v_flag setter
+
+        V-Flag (Value): if set, the Prefix-SID carries an absolute value (label); if clear, an index.
+
+        value: bool
+        """
+        self._set_property("v_flag", value)
+
+    @property
+    def l_flag(self):
+        # type: () -> bool
+        """l_flag getter
+
+        L-Flag (Local): if set, the value/index carried by the Prefix-SID has local significance.
+
+        Returns: bool
+        """
+        return self._get_property("l_flag")
+
+    @l_flag.setter
+    def l_flag(self, value):
+        """l_flag setter
+
+        L-Flag (Local): if set, the value/index carried by the Prefix-SID has local significance.
+
+        value: bool
+        """
+        self._set_property("l_flag", value)
+
+
+class Ospfv2LsaPrefixSidIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2LsaPrefixSidIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2LsaPrefixSid]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2LsaPrefixSidIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2LsaPrefixSid
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2LsaPrefixSid
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2LsaPrefixSid):
+            raise Exception("Item is not an instance of Ospfv2LsaPrefixSid")
+
+    def prefixsid(self, sid=None, algorithm=None, mt_id=None):
+        # type: (int,int,int) -> Ospfv2LsaPrefixSidIter
+        """Factory method that creates an instance of the Ospfv2LsaPrefixSid class
+
+        The learned OSPFv2 Prefix-SID and its attributes, decoded from one Prefix-SID sub-TLV. of the Extended Prefix Opaque LSA (RFC 8665 Section 5). One object per Prefix-SID. sub-TLV instance.
+
+        Returns: Ospfv2LsaPrefixSidIter
+        """
+        item = Ospfv2LsaPrefixSid(
+            parent=self._parent, sid=sid, algorithm=algorithm, mt_id=mt_id
+        )
+        self._add(item)
+        return self
+
+    def add(self, sid=None, algorithm=None, mt_id=None):
+        # type: (int,int,int) -> Ospfv2LsaPrefixSid
+        """Add method that creates and returns an instance of the Ospfv2LsaPrefixSid class
+
+        The learned OSPFv2 Prefix-SID and its attributes, decoded from one Prefix-SID sub-TLV. of the Extended Prefix Opaque LSA (RFC 8665 Section 5). One object per Prefix-SID. sub-TLV instance.
+
+        Returns: Ospfv2LsaPrefixSid
+        """
+        item = Ospfv2LsaPrefixSid(
+            parent=self._parent, sid=sid, algorithm=algorithm, mt_id=mt_id
+        )
+        self._add(item)
+        return item
+
+
+class Ospfv2OpaqueLsaExtendedPrefixIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2OpaqueLsaExtendedPrefixIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2OpaqueLsaExtendedPrefix]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2OpaqueLsaExtendedPrefixIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2OpaqueLsaExtendedPrefix
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2OpaqueLsaExtendedPrefix
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2OpaqueLsaExtendedPrefix):
+            raise Exception("Item is not an instance of Ospfv2OpaqueLsaExtendedPrefix")
+
+    def extendedprefix(self, prefix=None, prefix_length=None):
+        # type: (str,int) -> Ospfv2OpaqueLsaExtendedPrefixIter
+        """Factory method that creates an instance of the Ospfv2OpaqueLsaExtendedPrefix class
+
+        A decoded OSPFv2 Extended Prefix TLV of an Extended Prefix Opaque LSA, TLV type 1. (RFC 7684 Section 2.1).. The TLV names the prefix it applies to in its own body, so no reference to another LSA. is needed to identify it. Correlate it to the LSA that advertises that prefix by. matching prefix against router_lsas[].links[].id of stub link for an intra-area. prefix, or against header.lsa_id of network_summary_lsas[] for an inter-area prefix,. external_as_lsas[] for an AS-external prefix or nssa_lsas[] for an NSSA-external. prefix. RFC 2328 Sections 12.4.3 and 12.4.4 define the Link State ID of Summary-LSA. and of an AS-External-LSA as the prefix itself, and RFC 3101 gives the NSSA-LSA the. same format, so that correlation is direct value match rather than new lookup.
+
+        Returns: Ospfv2OpaqueLsaExtendedPrefixIter
+        """
+        item = Ospfv2OpaqueLsaExtendedPrefix(
+            parent=self._parent, prefix=prefix, prefix_length=prefix_length
+        )
+        self._add(item)
+        return self
+
+    def add(self, prefix=None, prefix_length=None):
+        # type: (str,int) -> Ospfv2OpaqueLsaExtendedPrefix
+        """Add method that creates and returns an instance of the Ospfv2OpaqueLsaExtendedPrefix class
+
+        A decoded OSPFv2 Extended Prefix TLV of an Extended Prefix Opaque LSA, TLV type 1. (RFC 7684 Section 2.1).. The TLV names the prefix it applies to in its own body, so no reference to another LSA. is needed to identify it. Correlate it to the LSA that advertises that prefix by. matching prefix against router_lsas[].links[].id of stub link for an intra-area. prefix, or against header.lsa_id of network_summary_lsas[] for an inter-area prefix,. external_as_lsas[] for an AS-external prefix or nssa_lsas[] for an NSSA-external. prefix. RFC 2328 Sections 12.4.3 and 12.4.4 define the Link State ID of Summary-LSA. and of an AS-External-LSA as the prefix itself, and RFC 3101 gives the NSSA-LSA the. same format, so that correlation is direct value match rather than new lookup.
+
+        Returns: Ospfv2OpaqueLsaExtendedPrefix
+        """
+        item = Ospfv2OpaqueLsaExtendedPrefix(
+            parent=self._parent, prefix=prefix, prefix_length=prefix_length
+        )
+        self._add(item)
+        return item
+
+
+class Ospfv2OpaqueLsaExtendedLink(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "link_type": {
+            "type": str,
+            "enum": [
+                "point_to_point",
+                "stub",
+                "transit",
+                "virtual",
+            ],
+        },
+        "link_id": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "link_data": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "adjacency_sids": {"type": "Ospfv2LsaAdjacencySidIter"},
+        "link_attributes": {"type": "Ospfv2LsaExtendedLinkAttributes"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    POINT_TO_POINT = "point_to_point"  # type: str
+    STUB = "stub"  # type: str
+    TRANSIT = "transit"  # type: str
+    VIRTUAL = "virtual"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, link_type=None, link_id=None, link_data=None):
+        super(Ospfv2OpaqueLsaExtendedLink, self).__init__()
+        self._parent = parent
+        self._set_property("link_type", link_type)
+        self._set_property("link_id", link_id)
+        self._set_property("link_data", link_data)
+
+    def set(self, link_type=None, link_id=None, link_data=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def link_type(self):
+        # type: () -> Union[Literal["point_to_point"], Literal["stub"], Literal["transit"], Literal["virtual"]]
+        """link_type getter
+
+        The type of the link the TLV extends, decoded from the Link Type field. (RFC 7684 Section 3.1). Carries the same value as the Type field of the. corresponding Router-LSA link (RFC 2328 Section A.4.2).
+
+        Returns: Union[Literal["point_to_point"], Literal["stub"], Literal["transit"], Literal["virtual"]]
+        """
+        return self._get_property("link_type")
+
+    @link_type.setter
+    def link_type(self, value):
+        """link_type setter
+
+        The type of the link the TLV extends, decoded from the Link Type field. (RFC 7684 Section 3.1). Carries the same value as the Type field of the. corresponding Router-LSA link (RFC 2328 Section A.4.2).
+
+        value: Union[Literal["point_to_point"], Literal["stub"], Literal["transit"], Literal["virtual"]]
+        """
+        self._set_property("link_type", value)
+
+    @property
+    def link_id(self):
+        # type: () -> str
+        """link_id getter
+
+        The identifier of the link the TLV extends, decoded from the Link ID field. (RFC 7684 Section 3.1).
+
+        Returns: str
+        """
+        return self._get_property("link_id")
+
+    @link_id.setter
+    def link_id(self, value):
+        """link_id setter
+
+        The identifier of the link the TLV extends, decoded from the Link ID field. (RFC 7684 Section 3.1).
+
+        value: str
+        """
+        self._set_property("link_id", value)
+
+    @property
+    def link_data(self):
+        # type: () -> str
+        """link_data getter
+
+        The data of the link the TLV extends, decoded from the Link Data field. (RFC 7684 Section 3.1). Distinguishes two links that share link_id, such as. parallel point-to-point links to the same neighbor.
+
+        Returns: str
+        """
+        return self._get_property("link_data")
+
+    @link_data.setter
+    def link_data(self, value):
+        """link_data setter
+
+        The data of the link the TLV extends, decoded from the Link Data field. (RFC 7684 Section 3.1). Distinguishes two links that share link_id, such as. parallel point-to-point links to the same neighbor.
+
+        value: str
+        """
+        self._set_property("link_data", value)
+
+    @property
+    def adjacency_sids(self):
+        # type: () -> Ospfv2LsaAdjacencySidIter
+        """adjacency_sids getter
+
+        The Adjacency-SIDs advertised for this link, decoded from the Adj-SID sub-TLV,. sub-type 2, and the LAN Adj-SID sub-TLV, sub-type (RFC 8665 Sections 6.1,. 6.2). One entry per sub-TLV instance, in the order the sub-TLVs appear in the. Extended Link TLV, with entry.type naming which of the two sub-TLVs each entry. was decoded from; the two forms may be mixed in this list. Both sub-TLVs may. appear multiple times in one Extended Link TLV a router may allocate more. than one Adj-SID to an adjacency, and LAN Adj-SID is advertised per neighbor. on multi-access link so this is list.
+
+        Returns: Ospfv2LsaAdjacencySidIter
+        """
+        return self._get_property(
+            "adjacency_sids", Ospfv2LsaAdjacencySidIter, self._parent, self._choice
+        )
+
+    @property
+    def link_attributes(self):
+        # type: () -> Ospfv2LsaExtendedLinkAttributes
+        """link_attributes getter
+
+        Traffic engineering attributes of link, sourced from the sub-TLVs of the OSPFv2. Extended Link TLV: the application-specific ASLA sub-TLV (RFC 9492 Section 6), the. direct (non-application-specific) Maximum Bandwidth sub-TLV (RFC 9492 Section 7,. sub-type 23), and the Link MSD sub-TLV (RFC 8476 Section 3, sub-type 6).. link_type, local/remote interface addresses, maximum_reservable_bandwidth and. unreserved_bandwidths are not included: RFC 9492 defines no OSPFv2 encoding,. application-specific or direct, for any of them on this TLV.Traffic engineering attributes of link, sourced from the sub-TLVs of the OSPFv2. Extended Link TLV: the application-specific ASLA sub-TLV (RFC 9492 Section 6), the. direct (non-application-specific) Maximum Bandwidth sub-TLV (RFC 9492 Section 7,. sub-type 23), and the Link MSD sub-TLV (RFC 8476 Section 3, sub-type 6).. link_type, local/remote interface addresses, maximum_reservable_bandwidth and. unreserved_bandwidths are not included: RFC 9492 defines no OSPFv2 encoding,. application-specific or direct, for any of them on this TLV.Traffic engineering attributes of link, sourced from the sub-TLVs of the OSPFv2. Extended Link TLV: the application-specific ASLA sub-TLV (RFC 9492 Section 6), the. direct (non-application-specific) Maximum Bandwidth sub-TLV (RFC 9492 Section 7,. sub-type 23), and the Link MSD sub-TLV (RFC 8476 Section 3, sub-type 6).. link_type, local/remote interface addresses, maximum_reservable_bandwidth and. unreserved_bandwidths are not included: RFC 9492 defines no OSPFv2 encoding,. application-specific or direct, for any of them on this TLV.Traffic engineering attributes of link, sourced from the sub-TLVs of the OSPFv2. Extended Link TLV: the application-specific ASLA sub-TLV (RFC 9492 Section 6), the. direct (non-application-specific) Maximum Bandwidth sub-TLV (RFC 9492 Section 7,. sub-type 23), and the Link MSD sub-TLV (RFC 8476 Section 3, sub-type 6).. link_type, local/remote interface addresses, maximum_reservable_bandwidth and. unreserved_bandwidths are not included: RFC 9492 defines no OSPFv2 encoding,. application-specific or direct, for any of them on this TLV.Traffic engineering link attributes associated with this Extended Link. This. object represents the supported link-attribute set and does not expose the. underlying OSPF sub-TLV structure: it is semantic grouping of the attribute. values advertised for the link, not decode of one sub-TLV instance. The. values are sourced from the ASLA sub-TLV (RFC 9492 Section 6), the direct. Maximum Bandwidth sub-TLV (RFC 9492 Section 7) and the Link MSD sub-TLV. (RFC 8476 Section 3) of the Extended Link TLV, and RFC 9492 allows an. attribute to be advertised more than once, per application, so which instance. value came from is not recoverable from this object.
+
+        Returns: Ospfv2LsaExtendedLinkAttributes
+        """
+        return self._get_property("link_attributes", Ospfv2LsaExtendedLinkAttributes)
+
+
+class Ospfv2LsaAdjacencySid(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "type": {
+            "type": str,
+            "enum": [
+                "adj_sid",
+                "lan_adj_sid",
+            ],
+        },
+        "sid": {
+            "type": int,
+            "format": "uint32",
+        },
+        "flags": {"type": "Ospfv2LsaAdjSidFlags"},
+        "weight": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "neighbor_id": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "mt_id": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 127,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    ADJ_SID = "adj_sid"  # type: str
+    LAN_ADJ_SID = "lan_adj_sid"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        type=None,
+        sid=None,
+        weight=None,
+        neighbor_id=None,
+        mt_id=None,
+    ):
+        super(Ospfv2LsaAdjacencySid, self).__init__()
+        self._parent = parent
+        self._set_property("type", type)
+        self._set_property("sid", sid)
+        self._set_property("weight", weight)
+        self._set_property("neighbor_id", neighbor_id)
+        self._set_property("mt_id", mt_id)
+
+    def set(self, type=None, sid=None, weight=None, neighbor_id=None, mt_id=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def type(self):
+        # type: () -> Union[Literal["adj_sid"], Literal["lan_adj_sid"]]
+        """type getter
+
+        The sub-TLV this object was decoded from: adj_sid for the Adj-SID sub-TLV,. Extended Link sub-TLV type (RFC 8665 Section 6.1), or lan_adj_sid for the LAN. Adj-SID sub-TLV, type (RFC 8665 Section 6.2). It is not property of the SID. itself, it names the wire encoding this object came from, and it is what tells. you whether to expect neighbor_id.
+
+        Returns: Union[Literal["adj_sid"], Literal["lan_adj_sid"]]
+        """
+        return self._get_property("type")
+
+    @type.setter
+    def type(self, value):
+        """type setter
+
+        The sub-TLV this object was decoded from: adj_sid for the Adj-SID sub-TLV,. Extended Link sub-TLV type (RFC 8665 Section 6.1), or lan_adj_sid for the LAN. Adj-SID sub-TLV, type (RFC 8665 Section 6.2). It is not property of the SID. itself, it names the wire encoding this object came from, and it is what tells. you whether to expect neighbor_id.
+
+        value: Union[Literal["adj_sid"], Literal["lan_adj_sid"]]
+        """
+        self._set_property("type", value)
+
+    @property
+    def sid(self):
+        # type: () -> int
+        """sid getter
+
+        The SID/Label value or index associated with the adjacency. flags.v_flag tells which of the two it is.
+
+        Returns: int
+        """
+        return self._get_property("sid")
+
+    @sid.setter
+    def sid(self, value):
+        """sid setter
+
+        The SID/Label value or index associated with the adjacency. flags.v_flag tells which of the two it is.
+
+        value: int
+        """
+        self._set_property("sid", value)
+
+    @property
+    def flags(self):
+        # type: () -> Ospfv2LsaAdjSidFlags
+        """flags getter
+
+        The one-octet Flags field of the sub-TLV this Adjacency-SID was decoded from. The. Adj-SID sub-TLV and the LAN Adj-SID sub-TLV define the same flags in the same bit. positions (RFC 8665 Sections 6.1, 6.2), so one object covers both.The one-octet Flags field of the sub-TLV this Adjacency-SID was decoded from. The. Adj-SID sub-TLV and the LAN Adj-SID sub-TLV define the same flags in the same bit. positions (RFC 8665 Sections 6.1, 6.2), so one object covers both.The one-octet Flags field of the sub-TLV this Adjacency-SID was decoded from. The. Adj-SID sub-TLV and the LAN Adj-SID sub-TLV define the same flags in the same bit. positions (RFC 8665 Sections 6.1, 6.2), so one object covers both.Flags associated with the Adjacency-SID.
+
+        Returns: Ospfv2LsaAdjSidFlags
+        """
+        return self._get_property("flags", Ospfv2LsaAdjSidFlags)
+
+    @property
+    def weight(self):
+        # type: () -> int
+        """weight getter
+
+        The weight of the Adjacency-SID for the purpose of load balancing, decoded from the Weight field (RFC 8665 Sections 6.1, 6.2).
+
+        Returns: int
+        """
+        return self._get_property("weight")
+
+    @weight.setter
+    def weight(self, value):
+        """weight setter
+
+        The weight of the Adjacency-SID for the purpose of load balancing, decoded from the Weight field (RFC 8665 Sections 6.1, 6.2).
+
+        value: int
+        """
+        self._set_property("weight", value)
+
+    @property
+    def neighbor_id(self):
+        # type: () -> str
+        """neighbor_id getter
+
+        The Router ID of the neighbor the LAN Adjacency-SID is advertised for, decoded. from the Neighbor ID field of the LAN Adj-SID sub-TLV (RFC 8665 Section 6.2).. Present only when type is lan_adj_sid, and the field that tells one LAN. Adjacency-SID from another on the same multi-access link. The Adj-SID sub-TLV,. sub-type 2, has no Neighbor ID field, so it is absent when type is adj_sid:. the adjacency is then identified by the link the parent Extended Link TLV. describes.
+
+        Returns: str
+        """
+        return self._get_property("neighbor_id")
+
+    @neighbor_id.setter
+    def neighbor_id(self, value):
+        """neighbor_id setter
+
+        The Router ID of the neighbor the LAN Adjacency-SID is advertised for, decoded. from the Neighbor ID field of the LAN Adj-SID sub-TLV (RFC 8665 Section 6.2).. Present only when type is lan_adj_sid, and the field that tells one LAN. Adjacency-SID from another on the same multi-access link. The Adj-SID sub-TLV,. sub-type 2, has no Neighbor ID field, so it is absent when type is adj_sid:. the adjacency is then identified by the link the parent Extended Link TLV. describes.
+
+        value: str
+        """
+        self._set_property("neighbor_id", value)
+
+    @property
+    def mt_id(self):
+        # type: () -> int
+        """mt_id getter
+
+        The Multi-Topology ID the Adjacency-SID applies to, decoded from the MT-ID. field of either sub-TLV (RFC 8665 Sections 6.1, 6.2, RFC 4915).. The MT-ID field is one octet wide on the wire, but RFC 4915 Section 3.7. defines only 0-127 as valid MT-ID values 128-255 are invalid and SHOULD be. ignored on receipt, so value in that range is never reported here. The. maximum matches the range statement on the equivalent mt-id leaf of the IETF. OSPF Segment Routing YANG model.
+
+        Returns: int
+        """
+        return self._get_property("mt_id")
+
+    @mt_id.setter
+    def mt_id(self, value):
+        """mt_id setter
+
+        The Multi-Topology ID the Adjacency-SID applies to, decoded from the MT-ID. field of either sub-TLV (RFC 8665 Sections 6.1, 6.2, RFC 4915).. The MT-ID field is one octet wide on the wire, but RFC 4915 Section 3.7. defines only 0-127 as valid MT-ID values 128-255 are invalid and SHOULD be. ignored on receipt, so value in that range is never reported here. The. maximum matches the range statement on the equivalent mt-id leaf of the IETF. OSPF Segment Routing YANG model.
+
+        value: int
+        """
+        self._set_property("mt_id", value)
+
+
+class Ospfv2LsaAdjSidFlags(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "b_flag": {"type": bool},
+        "g_flag": {"type": bool},
+        "p_flag": {"type": bool},
+        "v_flag": {"type": bool},
+        "l_flag": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        b_flag=None,
+        g_flag=None,
+        p_flag=None,
+        v_flag=None,
+        l_flag=None,
+    ):
+        super(Ospfv2LsaAdjSidFlags, self).__init__()
+        self._parent = parent
+        self._set_property("b_flag", b_flag)
+        self._set_property("g_flag", g_flag)
+        self._set_property("p_flag", p_flag)
+        self._set_property("v_flag", v_flag)
+        self._set_property("l_flag", l_flag)
+
+    def set(self, b_flag=None, g_flag=None, p_flag=None, v_flag=None, l_flag=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def b_flag(self):
+        # type: () -> bool
+        """b_flag getter
+
+        B-Flag (Backup): the Adjacency-SID is eligible for protection.
+
+        Returns: bool
+        """
+        return self._get_property("b_flag")
+
+    @b_flag.setter
+    def b_flag(self, value):
+        """b_flag setter
+
+        B-Flag (Backup): the Adjacency-SID is eligible for protection.
+
+        value: bool
+        """
+        self._set_property("b_flag", value)
+
+    @property
+    def g_flag(self):
+        # type: () -> bool
+        """g_flag getter
+
+        G-Flag (Group): the Adjacency-SID refers to group of adjacencies.
+
+        Returns: bool
+        """
+        return self._get_property("g_flag")
+
+    @g_flag.setter
+    def g_flag(self, value):
+        """g_flag setter
+
+        G-Flag (Group): the Adjacency-SID refers to group of adjacencies.
+
+        value: bool
+        """
+        self._set_property("g_flag", value)
+
+    @property
+    def p_flag(self):
+        # type: () -> bool
+        """p_flag getter
+
+        P-Flag (Persistent): the Adjacency-SID is persistently allocated.
+
+        Returns: bool
+        """
+        return self._get_property("p_flag")
+
+    @p_flag.setter
+    def p_flag(self, value):
+        """p_flag setter
+
+        P-Flag (Persistent): the Adjacency-SID is persistently allocated.
+
+        value: bool
+        """
+        self._set_property("p_flag", value)
+
+    @property
+    def v_flag(self):
+        # type: () -> bool
+        """v_flag getter
+
+        V-Flag (Value): if set, the Adj-SID carries an absolute value (label); if clear, an index.
+
+        Returns: bool
+        """
+        return self._get_property("v_flag")
+
+    @v_flag.setter
+    def v_flag(self, value):
+        """v_flag setter
+
+        V-Flag (Value): if set, the Adj-SID carries an absolute value (label); if clear, an index.
+
+        value: bool
+        """
+        self._set_property("v_flag", value)
+
+    @property
+    def l_flag(self):
+        # type: () -> bool
+        """l_flag getter
+
+        L-Flag (Local): if set, the value/index carried by the Adj-SID has local significance.
+
+        Returns: bool
+        """
+        return self._get_property("l_flag")
+
+    @l_flag.setter
+    def l_flag(self, value):
+        """l_flag setter
+
+        L-Flag (Local): if set, the value/index carried by the Adj-SID has local significance.
+
+        value: bool
+        """
+        self._set_property("l_flag", value)
+
+
+class Ospfv2LsaAdjacencySidIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2LsaAdjacencySidIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2LsaAdjacencySid]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2LsaAdjacencySidIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2LsaAdjacencySid
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2LsaAdjacencySid
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2LsaAdjacencySid):
+            raise Exception("Item is not an instance of Ospfv2LsaAdjacencySid")
+
+    def adjacencysid(
+        self, type=None, sid=None, weight=None, neighbor_id=None, mt_id=None
+    ):
+        # type: (Union[Literal["adj_sid"], Literal["lan_adj_sid"]],int,int,str,int) -> Ospfv2LsaAdjacencySidIter
+        """Factory method that creates an instance of the Ospfv2LsaAdjacencySid class
+
+        A learned OSPFv2 Adjacency-SID and its attributes.. One object of this type represents exactly one sub-TLV instance on the wire, and. that sub-TLV is either an Adj-SID sub-TLV, sub-type (RFC 8665 Section 6.1), or a. LAN Adj-SID sub-TLV, sub-type (RFC 8665 Section 6.2). The two are deliberately. modelled by one object because they carry the same information about the same kind. of thing a SID for an adjacency over the link the parent Extended Link TLV. describes and differ only in that the LAN form names the neighbor the SID is for.. type says which of the two sub-TLVs this object was decoded from, and is the field. to read before interpreting the rest: neighbor_id is present only for. type lan_adj_sid, because only the LAN Adj-SID sub-TLV carries Neighbor ID. field. Every other field of this object is decoded from field that both sub-TLVs. carry.. This object is never an aggregate of several sub-TLVs: link that advertises more. than one Adj-SID, or one LAN Adj-SID per neighbor, is reported as that many entries. of Ospfv2.OpaqueLsa.ExtendedLink/adjacency_sids, each with its own type. Both. sub-TLVs may appear multiple times in one Extended Link TLV (RFC 8665. Sections 6.1, 6.2), and the two forms may be mixed in the same list.
+
+        Returns: Ospfv2LsaAdjacencySidIter
+        """
+        item = Ospfv2LsaAdjacencySid(
+            parent=self._parent,
+            type=type,
+            sid=sid,
+            weight=weight,
+            neighbor_id=neighbor_id,
+            mt_id=mt_id,
+        )
+        self._add(item)
+        return self
+
+    def add(self, type=None, sid=None, weight=None, neighbor_id=None, mt_id=None):
+        # type: (Union[Literal["adj_sid"], Literal["lan_adj_sid"]],int,int,str,int) -> Ospfv2LsaAdjacencySid
+        """Add method that creates and returns an instance of the Ospfv2LsaAdjacencySid class
+
+        A learned OSPFv2 Adjacency-SID and its attributes.. One object of this type represents exactly one sub-TLV instance on the wire, and. that sub-TLV is either an Adj-SID sub-TLV, sub-type (RFC 8665 Section 6.1), or a. LAN Adj-SID sub-TLV, sub-type (RFC 8665 Section 6.2). The two are deliberately. modelled by one object because they carry the same information about the same kind. of thing a SID for an adjacency over the link the parent Extended Link TLV. describes and differ only in that the LAN form names the neighbor the SID is for.. type says which of the two sub-TLVs this object was decoded from, and is the field. to read before interpreting the rest: neighbor_id is present only for. type lan_adj_sid, because only the LAN Adj-SID sub-TLV carries Neighbor ID. field. Every other field of this object is decoded from field that both sub-TLVs. carry.. This object is never an aggregate of several sub-TLVs: link that advertises more. than one Adj-SID, or one LAN Adj-SID per neighbor, is reported as that many entries. of Ospfv2.OpaqueLsa.ExtendedLink/adjacency_sids, each with its own type. Both. sub-TLVs may appear multiple times in one Extended Link TLV (RFC 8665. Sections 6.1, 6.2), and the two forms may be mixed in the same list.
+
+        Returns: Ospfv2LsaAdjacencySid
+        """
+        item = Ospfv2LsaAdjacencySid(
+            parent=self._parent,
+            type=type,
+            sid=sid,
+            weight=weight,
+            neighbor_id=neighbor_id,
+            mt_id=mt_id,
+        )
+        self._add(item)
+        return item
+
+
+class Ospfv2LsaExtendedLinkAttributes(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "te_metric": {
+            "type": int,
+            "format": "uint32",
+        },
+        "maximum_bandwidth": {
+            "type": float,
+            "format": "float",
+        },
+        "administrative_group": {
+            "type": int,
+            "format": "uint32",
+        },
+        "extended_administrative_group": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "srlg": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "link_msd": {"type": "Ospfv2LsaMsdIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        te_metric=None,
+        maximum_bandwidth=None,
+        administrative_group=None,
+        extended_administrative_group=None,
+        srlg=None,
+    ):
+        super(Ospfv2LsaExtendedLinkAttributes, self).__init__()
+        self._parent = parent
+        self._set_property("te_metric", te_metric)
+        self._set_property("maximum_bandwidth", maximum_bandwidth)
+        self._set_property("administrative_group", administrative_group)
+        self._set_property(
+            "extended_administrative_group", extended_administrative_group
+        )
+        self._set_property("srlg", srlg)
+
+    def set(
+        self,
+        te_metric=None,
+        maximum_bandwidth=None,
+        administrative_group=None,
+        extended_administrative_group=None,
+        srlg=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def te_metric(self):
+        # type: () -> int
+        """te_metric getter
+
+        The TE Metric ASLA sub-TLV, type 22 (RFC 9492 Section 6).
+
+        Returns: int
+        """
+        return self._get_property("te_metric")
+
+    @te_metric.setter
+    def te_metric(self, value):
+        """te_metric setter
+
+        The TE Metric ASLA sub-TLV, type 22 (RFC 9492 Section 6).
+
+        value: int
+        """
+        self._set_property("te_metric", value)
+
+    @property
+    def maximum_bandwidth(self):
+        # type: () -> float
+        """maximum_bandwidth getter
+
+        The Maximum Bandwidth sub-TLV, sub-type 23 (RFC 9492 Section 7), in bytes per. second. Maximum Bandwidth is an application-independent attribute and MUST NOT. be advertised inside the ASLA sub-TLV; this direct sub-TLV, using the same format. as RFC 3630, is how it is advertised on this LSA instead.
+
+        Returns: float
+        """
+        return self._get_property("maximum_bandwidth")
+
+    @maximum_bandwidth.setter
+    def maximum_bandwidth(self, value):
+        """maximum_bandwidth setter
+
+        The Maximum Bandwidth sub-TLV, sub-type 23 (RFC 9492 Section 7), in bytes per. second. Maximum Bandwidth is an application-independent attribute and MUST NOT. be advertised inside the ASLA sub-TLV; this direct sub-TLV, using the same format. as RFC 3630, is how it is advertised on this LSA instead.
+
+        value: float
+        """
+        self._set_property("maximum_bandwidth", value)
+
+    @property
+    def administrative_group(self):
+        # type: () -> int
+        """administrative_group getter
+
+        The Administrative Group ASLA sub-TLV, type 19 (RFC 9492 Section 6.2).
+
+        Returns: int
+        """
+        return self._get_property("administrative_group")
+
+    @administrative_group.setter
+    def administrative_group(self, value):
+        """administrative_group setter
+
+        The Administrative Group ASLA sub-TLV, type 19 (RFC 9492 Section 6.2).
+
+        value: int
+        """
+        self._set_property("administrative_group", value)
+
+    @property
+    def extended_administrative_group(self):
+        # type: () -> List[int]
+        """extended_administrative_group getter
+
+        The Extended Administrative Group ASLA sub-TLV, type 20 (RFC 9492 Section 6.3).
+
+        Returns: List[int]
+        """
+        return self._get_property("extended_administrative_group")
+
+    @extended_administrative_group.setter
+    def extended_administrative_group(self, value):
+        """extended_administrative_group setter
+
+        The Extended Administrative Group ASLA sub-TLV, type 20 (RFC 9492 Section 6.3).
+
+        value: List[int]
+        """
+        self._set_property("extended_administrative_group", value)
+
+    @property
+    def srlg(self):
+        # type: () -> List[int]
+        """srlg getter
+
+        The Shared Risk Link Group (SRLG) ASLA sub-TLV, type 11 (RFC 9492 Section 6.1).
+
+        Returns: List[int]
+        """
+        return self._get_property("srlg")
+
+    @srlg.setter
+    def srlg(self, value):
+        """srlg setter
+
+        The Shared Risk Link Group (SRLG) ASLA sub-TLV, type 11 (RFC 9492 Section 6.1).
+
+        value: List[int]
+        """
+        self._set_property("srlg", value)
+
+    @property
+    def link_msd(self):
+        # type: () -> Ospfv2LsaMsdIter
+        """link_msd getter
+
+        The Link MSD sub-TLV, sub-type (RFC 8476 Section 3).
+
+        Returns: Ospfv2LsaMsdIter
+        """
+        return self._get_property(
+            "link_msd", Ospfv2LsaMsdIter, self._parent, self._choice
+        )
+
+
+class Ospfv2OpaqueLsaUnknownOpaqueType(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "opaque_type": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, opaque_type=None):
+        super(Ospfv2OpaqueLsaUnknownOpaqueType, self).__init__()
+        self._parent = parent
+        self._set_property("opaque_type", opaque_type)
+
+    def set(self, opaque_type=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def opaque_type(self):
+        # type: () -> int
+        """opaque_type getter
+
+        The Opaque Type carried in the most significant octet of the LSA's Link State. ID, as the numeric value on the wire (RFC 5250 Section 3). The authoritative. list of assigned Opaque Types is the IANA registry:. https://www.iana.org/assignments/ospf-opaque-types/ospf-opaque-types.xhtml
+
+        Returns: int
+        """
+        return self._get_property("opaque_type")
+
+    @opaque_type.setter
+    def opaque_type(self, value):
+        """opaque_type setter
+
+        The Opaque Type carried in the most significant octet of the LSA's Link State. ID, as the numeric value on the wire (RFC 5250 Section 3). The authoritative. list of assigned Opaque Types is the IANA registry:. https://www.iana.org/assignments/ospf-opaque-types/ospf-opaque-types.xhtml
+
+        value: int
+        """
+        self._set_property("opaque_type", value)
+
+
+class Ospfv2OpaqueLsaTlv(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "type": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "value": {
+            "type": str,
+            "format": "hex",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, type=None, length=None, value=None):
+        super(Ospfv2OpaqueLsaTlv, self).__init__()
+        self._parent = parent
+        self._set_property("type", type)
+        self._set_property("length", length)
+        self._set_property("value", value)
+
+    def set(self, type=None, length=None, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def type(self):
+        # type: () -> int
+        """type getter
+
+        The TLV Type field, as the numeric value carried on the wire. Its meaning is. scoped by the parent LSA's tlv_information.choice; the authoritative list of. assigned TLV types is the IANA OSPFv2 parameters registry:. https://www.iana.org/assignments/ospfv2-parameters/ospfv2-parameters.xhtml
+
+        Returns: int
+        """
+        return self._get_property("type")
+
+    @type.setter
+    def type(self, value):
+        """type setter
+
+        The TLV Type field, as the numeric value carried on the wire. Its meaning is. scoped by the parent LSA's tlv_information.choice; the authoritative list of. assigned TLV types is the IANA OSPFv2 parameters registry:. https://www.iana.org/assignments/ospfv2-parameters/ospfv2-parameters.xhtml
+
+        value: int
+        """
+        self._set_property("type", value)
+
+    @property
+    def length(self):
+        # type: () -> int
+        """length getter
+
+        The TLV Length field, in octets, of the value field.
+
+        Returns: int
+        """
+        return self._get_property("length")
+
+    @length.setter
+    def length(self, value):
+        """length setter
+
+        The TLV Length field, in octets, of the value field.
+
+        value: int
+        """
+        self._set_property("length", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        The raw byte contents of the TLV Value field, as hex characters. Two hex characters per octet, so the string is twice length characters long.
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        The raw byte contents of the TLV Value field, as hex characters. Two hex characters per octet, so the string is twice length characters long.
+
+        value: str
+        """
+        self._set_property("value", value)
+
+
+class Ospfv2OpaqueLsaTlvIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2OpaqueLsaTlvIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2OpaqueLsaTlv]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2OpaqueLsaTlvIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2OpaqueLsaTlv
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2OpaqueLsaTlv
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2OpaqueLsaTlv):
+            raise Exception("Item is not an instance of Ospfv2OpaqueLsaTlv")
+
+    def tlv(self, type=None, length=None, value=None):
+        # type: (int,int,str) -> Ospfv2OpaqueLsaTlvIter
+        """Factory method that creates an instance of the Ospfv2OpaqueLsaTlv class
+
+        A top-level TLV carried in the body of an OSPFv2 Opaque LSA that is not decoded. into structured field elsewhere in the model, reported in the generic wire format. every OSPFv2 Opaque LSA TLV shares: 2-octet Type, 2-octet Length and the Value. octets (RFC 7770 Section 2.3).. type is the numeric wire value, so TLV type this model has never heard of is. still fully representable and its content is never lost. The Value is reported as. one opaque blob, including for TLV whose Value is itself sub-TLV sequence:. nothing in the TLV header says the Value is sub-TLV sequence, and TLV reported. here is by definition one this model does not decode.
+
+        Returns: Ospfv2OpaqueLsaTlvIter
+        """
+        item = Ospfv2OpaqueLsaTlv(
+            parent=self._parent, type=type, length=length, value=value
+        )
+        self._add(item)
+        return self
+
+    def add(self, type=None, length=None, value=None):
+        # type: (int,int,str) -> Ospfv2OpaqueLsaTlv
+        """Add method that creates and returns an instance of the Ospfv2OpaqueLsaTlv class
+
+        A top-level TLV carried in the body of an OSPFv2 Opaque LSA that is not decoded. into structured field elsewhere in the model, reported in the generic wire format. every OSPFv2 Opaque LSA TLV shares: 2-octet Type, 2-octet Length and the Value. octets (RFC 7770 Section 2.3).. type is the numeric wire value, so TLV type this model has never heard of is. still fully representable and its content is never lost. The Value is reported as. one opaque blob, including for TLV whose Value is itself sub-TLV sequence:. nothing in the TLV header says the Value is sub-TLV sequence, and TLV reported. here is by definition one this model does not decode.
+
+        Returns: Ospfv2OpaqueLsaTlv
+        """
+        item = Ospfv2OpaqueLsaTlv(
+            parent=self._parent, type=type, length=length, value=value
+        )
+        self._add(item)
+        return item
 
 
 class Ospfv2OpaqueLsaIter(OpenApiIter):
@@ -207125,27 +211321,27 @@ class Ospfv2OpaqueLsaIter(OpenApiIter):
         if not isinstance(item, Ospfv2OpaqueLsa):
             raise Exception("Item is not an instance of Ospfv2OpaqueLsa")
 
-    def opaquelsa(self, type=None):
-        # type: (Union[Literal["area"], Literal["domain"], Literal["local"]]) -> Ospfv2OpaqueLsaIter
+    def opaquelsa(self, type=None, id=None):
+        # type: (Union[Literal["area"], Literal["domain"], Literal["local"]],int) -> Ospfv2OpaqueLsaIter
         """Factory method that creates an instance of the Ospfv2OpaqueLsa class
 
-        Contents of OSPFv2 Opaque LSA Type 7.
+        Contents of OSPFv2 Opaque LSA Type 9/10/11 (RFC 5250).. The Link State ID of an Opaque LSA is not plain IPv4 address; it is split into. an Opaque Type (most significant octet) and an Opaque ID (remaining three octets),. decoded here as tlv_information.choice and id (RFC 5250 Section 3). header.lsa_id. carries the raw, undecoded Link State ID value.. The Segment Routing and Traffic Engineering information carried by an Opaque LSA is. reported on this object, in the LSA it was actually advertised in, rather than on the. Router-LSA, Summary-LSA, AS-External-LSA or NSSA-LSA that describes the router, link. or prefix it applies to. The decoded contents are reported under tlv_information,. whose choice names the Opaque Type and selects the contents of that Opaque Type. directly; every top-level TLV of the LSA that the model does not decode is reported. raw in unknown_tlvs. Each decoded object documents how to correlate it back to the. LSA that advertises the router, link or prefix it describes.
 
         Returns: Ospfv2OpaqueLsaIter
         """
-        item = Ospfv2OpaqueLsa(parent=self._parent, type=type)
+        item = Ospfv2OpaqueLsa(parent=self._parent, type=type, id=id)
         self._add(item)
         return self
 
-    def add(self, type=None):
-        # type: (Union[Literal["area"], Literal["domain"], Literal["local"]]) -> Ospfv2OpaqueLsa
+    def add(self, type=None, id=None):
+        # type: (Union[Literal["area"], Literal["domain"], Literal["local"]],int) -> Ospfv2OpaqueLsa
         """Add method that creates and returns an instance of the Ospfv2OpaqueLsa class
 
-        Contents of OSPFv2 Opaque LSA Type 7.
+        Contents of OSPFv2 Opaque LSA Type 9/10/11 (RFC 5250).. The Link State ID of an Opaque LSA is not plain IPv4 address; it is split into. an Opaque Type (most significant octet) and an Opaque ID (remaining three octets),. decoded here as tlv_information.choice and id (RFC 5250 Section 3). header.lsa_id. carries the raw, undecoded Link State ID value.. The Segment Routing and Traffic Engineering information carried by an Opaque LSA is. reported on this object, in the LSA it was actually advertised in, rather than on the. Router-LSA, Summary-LSA, AS-External-LSA or NSSA-LSA that describes the router, link. or prefix it applies to. The decoded contents are reported under tlv_information,. whose choice names the Opaque Type and selects the contents of that Opaque Type. directly; every top-level TLV of the LSA that the model does not decode is reported. raw in unknown_tlvs. Each decoded object documents how to correlate it back to the. LSA that advertises the router, link or prefix it describes.
 
         Returns: Ospfv2OpaqueLsa
         """
-        item = Ospfv2OpaqueLsa(parent=self._parent, type=type)
+        item = Ospfv2OpaqueLsa(parent=self._parent, type=type, id=id)
         self._add(item)
         return item
 
@@ -212409,7 +216605,7 @@ class CaptureRequest(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        The name of port capture is started on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port capture is started on.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -212419,7 +216615,7 @@ class CaptureRequest(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        The name of port capture is started on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port capture is started on.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -212762,8 +216958,8 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "1.61.0"
-        self._version_meta.sdk_version = "1.61.1"
+        self._version_meta.api_spec_version = "1.62.0"
+        self._version_meta.sdk_version = "1.62.0"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False

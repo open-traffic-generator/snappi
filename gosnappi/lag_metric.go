@@ -337,9 +337,6 @@ type LagMetric interface {
 // x-constraint:
 // - /components/schemas/Lag/properties/name
 //
-// x-constraint:
-// - /components/schemas/Lag/properties/name
-//
 // Name returns a string
 func (obj *lagMetric) Name() string {
 
@@ -352,18 +349,12 @@ func (obj *lagMetric) Name() string {
 // x-constraint:
 // - /components/schemas/Lag/properties/name
 //
-// x-constraint:
-// - /components/schemas/Lag/properties/name
-//
 // Name returns a string
 func (obj *lagMetric) HasName() bool {
 	return obj.obj.Name != nil
 }
 
 // The name of a configured LAG
-//
-// x-constraint:
-// - /components/schemas/Lag/properties/name
 //
 // x-constraint:
 // - /components/schemas/Lag/properties/name

@@ -346,22 +346,7 @@ func (obj *flowRouter) SetMode(value FlowRouterModeEnum) FlowRouter {
 	return obj
 }
 
-// TBD
-//
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
-// - /components/schemas/Device.Ipv4/properties/name
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Bgp.V4RouteRange/properties/name
-// - /components/schemas/Bgp.V6RouteRange/properties/name
-// - /components/schemas/Bgp.CMacIpRange/properties/name
-// - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-// - /components/schemas/Isis.V4RouteRange/properties/name
-// - /components/schemas/Isis.V6RouteRange/properties/name
-// - /components/schemas/Ospfv2.V4RouteRange/properties/name
-// - /components/schemas/Ospfv3.V6RouteRange/properties/name
-// - /components/schemas/Device.Dhcpv4client/properties/name
-// - /components/schemas/Device.Dhcpv6client/properties/name
+// description is TBD
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
@@ -386,22 +371,7 @@ func (obj *flowRouter) TxNames() []string {
 	return obj.obj.TxNames
 }
 
-// TBD
-//
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
-// - /components/schemas/Device.Ipv4/properties/name
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Bgp.V4RouteRange/properties/name
-// - /components/schemas/Bgp.V6RouteRange/properties/name
-// - /components/schemas/Bgp.CMacIpRange/properties/name
-// - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-// - /components/schemas/Isis.V4RouteRange/properties/name
-// - /components/schemas/Isis.V6RouteRange/properties/name
-// - /components/schemas/Ospfv2.V4RouteRange/properties/name
-// - /components/schemas/Ospfv3.V6RouteRange/properties/name
-// - /components/schemas/Device.Dhcpv4client/properties/name
-// - /components/schemas/Device.Dhcpv6client/properties/name
+// description is TBD
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
@@ -429,22 +399,7 @@ func (obj *flowRouter) SetTxNames(value []string) FlowRouter {
 	return obj
 }
 
-// TBD
-//
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
-// - /components/schemas/Device.Ipv4/properties/name
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Bgp.V4RouteRange/properties/name
-// - /components/schemas/Bgp.V6RouteRange/properties/name
-// - /components/schemas/Bgp.CMacIpRange/properties/name
-// - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-// - /components/schemas/Isis.V4RouteRange/properties/name
-// - /components/schemas/Isis.V6RouteRange/properties/name
-// - /components/schemas/Device.Dhcpv4client/properties/name
-// - /components/schemas/Ospfv2.V4RouteRange/properties/name
-// - /components/schemas/Ospfv3.V6RouteRange/properties/name
-// - /components/schemas/Device.Dhcpv6client/properties/name
+// description is TBD
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
@@ -469,22 +424,7 @@ func (obj *flowRouter) RxNames() []string {
 	return obj.obj.RxNames
 }
 
-// TBD
-//
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
-// - /components/schemas/Device.Ipv4/properties/name
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Bgp.V4RouteRange/properties/name
-// - /components/schemas/Bgp.V6RouteRange/properties/name
-// - /components/schemas/Bgp.CMacIpRange/properties/name
-// - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-// - /components/schemas/Isis.V4RouteRange/properties/name
-// - /components/schemas/Isis.V6RouteRange/properties/name
-// - /components/schemas/Device.Dhcpv4client/properties/name
-// - /components/schemas/Ospfv2.V4RouteRange/properties/name
-// - /components/schemas/Ospfv3.V6RouteRange/properties/name
-// - /components/schemas/Device.Dhcpv6client/properties/name
+// description is TBD
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
@@ -513,7 +453,7 @@ func (obj *flowRouter) SetRxNames(value []string) FlowRouter {
 }
 
 // Allows traffic sub-flow(s) to be created on both forward and reverse directions between the device endpoint pairs.
-// When enabled, traffic is sent from <b>tx_names → rx_names</b> as well as from <b>rx_names → tx_names</b>.
+// When enabled, traffic is sent from <b>tx_names to rx_names</b> as well as from <b>rx_names to tx_names</b>.
 // The bidirectional option creates two separate sub-flows under the same flow name, Only the flow endpoints are reversed automatically for the reverse sub-flow.
 //
 // The implementation should create two sub-flows with full endpoint source and
@@ -533,7 +473,7 @@ func (obj *flowRouter) Bidirectional() bool {
 }
 
 // Allows traffic sub-flow(s) to be created on both forward and reverse directions between the device endpoint pairs.
-// When enabled, traffic is sent from <b>tx_names → rx_names</b> as well as from <b>rx_names → tx_names</b>.
+// When enabled, traffic is sent from <b>tx_names to rx_names</b> as well as from <b>rx_names to tx_names</b>.
 // The bidirectional option creates two separate sub-flows under the same flow name, Only the flow endpoints are reversed automatically for the reverse sub-flow.
 //
 // The implementation should create two sub-flows with full endpoint source and
@@ -551,7 +491,7 @@ func (obj *flowRouter) HasBidirectional() bool {
 }
 
 // Allows traffic sub-flow(s) to be created on both forward and reverse directions between the device endpoint pairs.
-// When enabled, traffic is sent from <b>tx_names → rx_names</b> as well as from <b>rx_names → tx_names</b>.
+// When enabled, traffic is sent from <b>tx_names to rx_names</b> as well as from <b>rx_names to tx_names</b>.
 // The bidirectional option creates two separate sub-flows under the same flow name, Only the flow endpoints are reversed automatically for the reverse sub-flow.
 //
 // The implementation should create two sub-flows with full endpoint source and

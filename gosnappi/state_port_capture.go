@@ -280,9 +280,6 @@ type StatePortCapture interface {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // PortNames returns a []string
 func (obj *statePortCapture) PortNames() []string {
 	if obj.obj.PortNames == nil {
@@ -293,9 +290,6 @@ func (obj *statePortCapture) PortNames() []string {
 
 // The names of ports to which the capture state will be applied to. If the list of port_names is empty or null the state will be applied to all configured ports.
 // If the list is not empty any port that is not included in the list of port_names MUST be ignored and not included in the state change.
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name

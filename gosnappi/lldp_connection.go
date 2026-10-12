@@ -315,9 +315,6 @@ func (obj *lldpConnection) setChoice(value LldpConnectionChoiceEnum) LldpConnect
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // PortName returns a string
 func (obj *lldpConnection) PortName() string {
 
@@ -334,18 +331,12 @@ func (obj *lldpConnection) PortName() string {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // PortName returns a string
 func (obj *lldpConnection) HasPortName() bool {
 	return obj.obj.PortName != nil
 }
 
 // Name of the test port on which LLDP is configured on.
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name

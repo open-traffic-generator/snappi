@@ -471,8 +471,6 @@ func (obj *flowFlowHeaderIter) appendHolderSlice(item FlowHeader) FlowFlowHeader
 
 // Under Review: The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.
 //
-// Under Review: The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.
-//
 // The list of protocol headers defining the shape of all
 // intended packets in corresponding flow as it is received
 // by traffic-generator port.
@@ -675,6 +673,7 @@ func (obj *flow) validateObj(vObj *validation, set_default bool) {
 	}
 
 	if len(obj.obj.EgressPacket) != 0 {
+		obj.addWarnings("EgressPacket property in schema Flow is under review, The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.")
 
 		if set_default {
 			obj.EgressPacket().clearHolderSlice()

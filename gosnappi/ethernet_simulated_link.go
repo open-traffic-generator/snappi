@@ -285,9 +285,6 @@ type EthernetSimulatedLink interface {
 // x-constraint:
 // - #/components/schemas/Device.Ethernet/properties/name
 //
-// x-constraint:
-// - #/components/schemas/Device.Ethernet/properties/name
-//
 // RemoteSimulatedLink returns a string
 func (obj *ethernetSimulatedLink) RemoteSimulatedLink() string {
 
@@ -302,9 +299,6 @@ func (obj *ethernetSimulatedLink) RemoteSimulatedLink() string {
 // x-constraint:
 // - #/components/schemas/Device.Ethernet/properties/name
 //
-// x-constraint:
-// - #/components/schemas/Device.Ethernet/properties/name
-//
 // RemoteSimulatedLink returns a string
 func (obj *ethernetSimulatedLink) HasRemoteSimulatedLink() bool {
 	return obj.obj.RemoteSimulatedLink != nil
@@ -313,9 +307,6 @@ func (obj *ethernetSimulatedLink) HasRemoteSimulatedLink() bool {
 // Name of the remote end of the simulated interface which also must be a simulated_link on a device which might be acting either as an unconnected device in a simulated topology
 // ( all ethernet links of type simulated_link ) or an emulated device connected to the Device Under Test (has at atleast one ethernet interface with connection to the port or
 // lag connected to the DUT)
-//
-// x-constraint:
-// - #/components/schemas/Device.Ethernet/properties/name
 //
 // x-constraint:
 // - #/components/schemas/Device.Ethernet/properties/name
