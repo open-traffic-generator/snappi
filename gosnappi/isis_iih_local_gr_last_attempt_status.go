@@ -284,10 +284,10 @@ type IsisIIHLocalGRLastAttemptStatus interface {
 	setChoice(value IsisIIHLocalGRLastAttemptStatusChoiceEnum) IsisIIHLocalGRLastAttemptStatus
 	// HasChoice checks if Choice has been set in IsisIIHLocalGRLastAttemptStatus
 	HasChoice() bool
-	// getter for Unavailable to set choice.
-	Unavailable()
 	// getter for Inprogress to set choice.
 	Inprogress()
+	// getter for Unavailable to set choice.
+	Unavailable()
 	// Succeeded returns IsisIIHLocalGRLastAttemptSucceeded, set in IsisIIHLocalGRLastAttemptStatus.
 	// IsisIIHLocalGRLastAttemptSucceeded is this container contains details about the successful status of the last Graceful Restart initiated by this router.
 	Succeeded() IsisIIHLocalGRLastAttemptSucceeded
@@ -326,14 +326,14 @@ func (obj *isisIIHLocalGRLastAttemptStatus) Choice() IsisIIHLocalGRLastAttemptSt
 	return IsisIIHLocalGRLastAttemptStatusChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for Unavailable to set choice
-func (obj *isisIIHLocalGRLastAttemptStatus) Unavailable() {
-	obj.setChoice(IsisIIHLocalGRLastAttemptStatusChoice.UNAVAILABLE)
-}
-
 // getter for Inprogress to set choice
 func (obj *isisIIHLocalGRLastAttemptStatus) Inprogress() {
 	obj.setChoice(IsisIIHLocalGRLastAttemptStatusChoice.INPROGRESS)
+}
+
+// getter for Unavailable to set choice
+func (obj *isisIIHLocalGRLastAttemptStatus) Unavailable() {
+	obj.setChoice(IsisIIHLocalGRLastAttemptStatusChoice.UNAVAILABLE)
 }
 
 // description is TBD

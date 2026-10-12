@@ -486,8 +486,7 @@ components:
       - ethernet
       properties:
         port_name:
-          description: "The name of a port object that will be part of the LAG. \n\
-            \nx-constraint:\n- /components/schemas/Port/properties/name\n"
+          description: "The name of a port object that will be part of the LAG. "
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -751,32 +750,22 @@ components:
           - vxlan_name
           - simulated_link
         port_name:
-          description: |
+          description: |-
             Name of the port that the Ethernet interface is configured on.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
           x-field-uid: 2
         lag_name:
-          description: |
+          description: |-
             Name of the LAG that the Ethernet interface is configured on.
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: string
           x-constraint:
           - /components/schemas/Lag/properties/name
           x-field-uid: 3
         vxlan_name:
-          description: |
+          description: |-
             Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.
-
-            x-constraint:
-            - #/components/schemas/Vxlan.V4Tunnel/properties/name
-            - #/components/schemas/Vxlan.V6Tunnel/properties/name
           type: string
           x-constraint:
           - '#/components/schemas/Vxlan.V4Tunnel/properties/name'
@@ -797,7 +786,7 @@ components:
             \ an unconnected device in a simulated topology \n( all ethernet links\
             \ of type simulated_link ) or an emulated device connected to the Device\
             \ Under Test (has at atleast one ethernet interface with connection to\
-            \ the port or\n lag connected to the DUT)\n\nx-constraint:\n- #/components/schemas/Device.Ethernet/properties/name\n"
+            \ the port or\n lag connected to the DUT)"
           x-constraint:
           - '#/components/schemas/Device.Ethernet/properties/name'
           x-field-uid: 1
@@ -933,11 +922,8 @@ components:
       - name
       properties:
         eth_name:
-          description: |
+          description: |-
             The unique name of the Ethernet interface behind which this Loopback  interface will be created.
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ethernet/properties/name
@@ -1037,7 +1023,7 @@ components:
       properties:
         eth_name:
           description: "The unique name of the Ethernet interface behind which this\
-            \ Loopback \n interface will be created.\n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n"
+            \ Loopback \n interface will be created."
           type: string
           x-constraint:
           - /components/schemas/Device.Ethernet/properties/name
@@ -2016,11 +2002,8 @@ components:
       - secure_entity
       properties:
         eth_name:
-          description: |
+          description: |-
             The unique name of the Ethernet interface on which MACsec is enabled.
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ethernet/properties/name
@@ -3341,7 +3324,7 @@ components:
       properties:
         port_names:
           description: "A list of unique names of port objects that will share the\n\
-            choice settings. \n\nx-constraint:\n- /components/schemas/Port/properties/name\n"
+            choice settings. "
           type: array
           items:
             type: string
@@ -3433,25 +3416,21 @@ components:
           x-field-uid: 5
         ieee_media_defaults:
           description: |-
-            Under Review: This field is currently under review for pending exploration on use cases
-
             Set to true to override the auto_negotiate, link_training
             and rs_fec settings for gigabit ethernet interfaces.
           type: boolean
           x-field-uid: 6
           x-status:
-            status: under-review
+            status: under_review
             information: This field is currently under review for pending exploration
               on use cases
         auto_negotiate:
           description: |-
-            Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
-
             Enable/disable auto negotiation.
           type: boolean
           x-field-uid: 7
           x-status:
-            status: under-review
+            status: under_review
             information: This field is currently under review for pending exploration
               on use cases, given that a separate configuration called `AutoNegotiation`
               already exists.
@@ -3653,11 +3632,8 @@ components:
       - name
       properties:
         port_names:
-          description: |
+          description: |-
             The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -4096,11 +4072,8 @@ components:
       - name
       properties:
         eth_name:
-          description: |
+          description: |-
             The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. The underlying Ethernet Interface can an emulated or simulated interface. A simulated ethernet interface can be assumed to be connected by  a primary (internal to a simulated topology)  or a secondary link (connected to a device behind a different simulated topology).
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ethernet/properties/name
@@ -4897,11 +4870,8 @@ components:
           - auto
           - custom_locator_reference
         custom_locator_reference:
-          description: |
+          description: |-
             Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of a locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".
-
-            x-constraint:
-            - /components/schemas/IsisSRv6.Locator/properties/locator_name
           type: string
           x-constraint:
           - /components/schemas/IsisSRv6.Locator/properties/locator_name
@@ -6287,13 +6257,8 @@ components:
       - ipv4_name
       properties:
         ipv4_name:
-          description: |
+          description: |-
             The unique name of the IPv4,  Loopback IPv4 interface or DHCPv4 client used as the source IP for this list of BGP peers.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
-            - /components/schemas/Device.Dhcpv4client/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -7291,8 +7256,6 @@ components:
             information: This property is deprecated in favor of property extended_communities
           x-field-uid: 11
           description: |-
-            Deprecated: This property is deprecated in favor of property extended_communities
-
             Optional Extended Community settings. The Extended Communities Attribute is a transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities  attributes are utilized to trigger routing decisions, such as acceptance, rejection,  preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first 2 Bytes of the community encode a type and sub-type fields and the last 6 Bytes carry a unique set of data in a format defined by the type and sub-type field. Extended communities provide a larger  range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for  administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two  byte local administrator id.  When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for  administrator_ipv4_address is a four byte IPv4 address followed by a two byte local administrator id.  When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes  contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from  IANA's "ETHER TYPES" registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format.  When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the  last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates  occur for the same MAC address.  Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
           type: array
           items:
@@ -7880,8 +7843,6 @@ components:
             information: This property is deprecated in favor of property extended_communities
           x-field-uid: 11
           description: |-
-            Deprecated: This property is deprecated in favor of property extended_communities
-
             Optional Extended Community settings. The Extended Communities Attribute is a transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities  attributes are utilized to trigger routing decisions, such as acceptance, rejection,  preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first 2 Bytes of the community encode a type and sub-type fields and the last 6 Bytes carry a unique set of data in a format defined by the type and sub-type field. Extended communities provide a larger  range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for  administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two  byte local administrator id.  When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for  administrator_ipv4_address is a four byte IPv4 address followed by a two byte local administrator id.  When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes  contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from  IANA's "ETHER TYPES" registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format.  When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the  last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates  occur for the same MAC address.  Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
           type: array
           items:
@@ -10903,13 +10864,8 @@ components:
       - ipv6_name
       properties:
         ipv6_name:
-          description: |
+          description: |-
             The unique name of IPv6 Loopback IPv6 interface or DHCPv4 client used as the source IP for this list of BGP peers.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Device.Ipv6Loopback/properties/name
-            - /components/schemas/Device.Dhcpv6client/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
@@ -11222,12 +11178,8 @@ components:
       - name
       properties:
         source_interface:
-          description: |
+          description: |-
             Determines the source interface.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -11261,12 +11213,8 @@ components:
       - name
       properties:
         source_interface:
-          description: |
+          description: |-
             Determines the source interface.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Device.Ipv6Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
@@ -11469,8 +11417,7 @@ components:
         ipv4_name:
           description: "The globally unique name of the IPv4 interface connected to\
             \ the DUT. This name must match the \"name\" field of the \"ipv4_addresses\"\
-            \ on top which this RSVP interface is configured.          \n\nx-constraint:\n\
-            - /components/schemas/Device.Ipv4/properties/name\n"
+            \ on top which this RSVP interface is configured.          "
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -11556,12 +11503,8 @@ components:
       - ipv4_name
       properties:
         ipv4_name:
-          description: |
+          description: |-
             The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for  the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks"  on which this LSP interface is configured.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -12127,11 +12070,8 @@ components:
           type: string
           x-unique: global
         ipv4_name:
-          description: |
+          description: |-
             The unique name of the IPv4 on which DHCPv4 server will run.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -12247,11 +12187,8 @@ components:
           type: string
           x-unique: global
         ipv6_name:
-          description: |
+          description: |-
             The unique name of the IPv6 on which DHCPv6 server will run.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
@@ -12695,7 +12632,7 @@ components:
             \ link (to a device behind a different simulated topology). This is how\
             \ OSPFv2 simulated topologies are built - a simulated router is an ordinary\
             \ Device running ospfv2 whose Ethernets use simulated_link connections.\
-            \            \n\nx-constraint:\n- /components/schemas/Device.Ipv4/properties/name\n"
+            \            "
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -13671,7 +13608,7 @@ components:
           x-unique: global
         ipv6_name:
           description: "The globally unique name of the IPv6 interface connected to\
-            \ the DUT.            \n\nx-constraint:\n- /components/schemas/Device.Ipv6/properties/name\n"
+            \ the DUT.            "
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
@@ -14004,11 +13941,8 @@ components:
       - ipv4_name
       properties:
         ipv4_name:
-          description: |
+          description: |-
             The unique name of the IPv4 interface, used as the source IP for this list of RoCEv2 peers.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -14175,11 +14109,8 @@ components:
       - ipv6_name
       properties:
         ipv6_name:
-          description: |
+          description: |-
             The unique name of IPv6 used as the source IP for this list of RoCEv2 peers.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
@@ -14256,11 +14187,8 @@ components:
       - servers
       properties:
         ipv4_name:
-          description: |
+          description: |-
             The unique name of the IPv4 interface used as the source IP for the BMP Server.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -14281,11 +14209,8 @@ components:
       - servers
       properties:
         ipv6_name:
-          description: |
+          description: |-
             The unique name of the IPv6 interface used as the source IP for BMP Server.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
@@ -14632,17 +14557,15 @@ components:
             $ref: '#/components/schemas/Flow.Header'
           x-field-uid: 2
         egress_packet:
-          description: "Under Review: The packet header schema for egress tracking\
-            \ currently exposes unwanted fields. The query structure for tagged metrics\
-            \ inside flows metrics requires documenting expected response format.\n\
-            \nThe list of protocol headers defining the shape of all \nintended packets\
-            \ in corresponding flow as it is received\nby traffic-generator port.\n\
-            \nFor all protocol headers, only the `metric_tags` property is configurable."
+          description: "The list of protocol headers defining the shape of all \n\
+            intended packets in corresponding flow as it is received\nby traffic-generator\
+            \ port.\n\nFor all protocol headers, only the `metric_tags` property is\
+            \ configurable."
           type: array
           items:
             $ref: '#/components/schemas/Flow.Header'
           x-status:
-            status: under-review
+            status: under_review
             information: The packet header schema for egress tracking currently exposes
               unwanted fields. The query structure for tagged metrics inside flows
               metrics requires documenting expected response format.
@@ -14725,26 +14648,16 @@ components:
       - tx_name
       properties:
         tx_name:
-          description: |
+          description: |-
             The unique name of a port that is the transmit port.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
           - /components/schemas/Lag/properties/name
           x-field-uid: 1
         rx_name:
-          description: |
-            Deprecated: This property is deprecated in favor of property rx_names
-
+          description: |-
             The unique name of a port that is the intended receive port.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
           x-status:
             status: deprecated
             information: This property is deprecated in favor of property rx_names
@@ -14754,12 +14667,8 @@ components:
           - /components/schemas/Lag/properties/name
           x-field-uid: 2
         rx_names:
-          description: |
+          description: |-
             Unique name of ports or lags that are intended receive endpoints.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
           type: array
           items:
             description: |-
@@ -14851,23 +14760,6 @@ components:
           - Bgp V4RouteRange 1
           - Bgp V6RouteRange 1
           x-field-uid: 2
-          description: |
-            TBD
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Bgp.CMacIpRange/properties/name
-            - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-            - /components/schemas/Isis.V4RouteRange/properties/name
-            - /components/schemas/Isis.V6RouteRange/properties/name
-            - /components/schemas/Ospfv2.V4RouteRange/properties/name
-            - /components/schemas/Ospfv3.V6RouteRange/properties/name
-            - /components/schemas/Device.Dhcpv4client/properties/name
-            - /components/schemas/Device.Dhcpv6client/properties/name
         rx_names:
           type: array
           items:
@@ -14897,23 +14789,6 @@ components:
           - Bgp V4RouteRange 1
           - Bgp V6RouteRange 1
           x-field-uid: 3
-          description: |
-            TBD
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Bgp.CMacIpRange/properties/name
-            - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-            - /components/schemas/Isis.V4RouteRange/properties/name
-            - /components/schemas/Isis.V6RouteRange/properties/name
-            - /components/schemas/Device.Dhcpv4client/properties/name
-            - /components/schemas/Ospfv2.V4RouteRange/properties/name
-            - /components/schemas/Ospfv3.V6RouteRange/properties/name
-            - /components/schemas/Device.Dhcpv6client/properties/name
         bidirectional:
           description: "Allows traffic sub-flow(s) to be created on both forward and\
             \ reverse directions between the device endpoint pairs. \nWhen enabled,\
@@ -19248,9 +19123,7 @@ components:
           x-field-uid: 1
         source:
           description: "Constrain the events being returned by specifying event sources.\
-            \ \nIf the list is empty then all event sources will be returned. \n\n\
-            x-constraint:\n- /components/schemas/Port/properties/name\n- /components/schemas/Bgp.V4RouteRange/name\n\
-            - /components/schemas/Bgp.V6RouteRange/name\n"
+            \ \nIf the list is empty then all event sources will be returned. "
           type: array
           items:
             type: string
@@ -19351,11 +19224,8 @@ components:
           enum:
           - port_name
         port_name:
-          description: |
+          description: |-
             Name of the test port on which LLDP is configured on.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -19610,11 +19480,8 @@ components:
       type: object
       properties:
         port_name:
-          description: |
+          description: |-
             The name of port for which this settings will be applied to.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -19667,22 +19534,15 @@ components:
       - name
       properties:
         tx_endpoint:
-          description: |
+          description: |-
             The unique name of an emulated device that will be transmitting the flows.
-
-            x-constraint:
-            - /components/schemas/Rocev2.QPs/properties/qp_name
           type: string
           x-constraint:
           - /components/schemas/Rocev2.QPs/properties/qp_name
           x-field-uid: 1
         rx_endpoint:
-          description: |
+          description: |-
             The unique name of remote QP or port which be receiving the packets for the flow.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Rocev2.QPs/properties/qp_name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -19782,11 +19642,8 @@ components:
       - port_name
       properties:
         port_name:
-          description: |
+          description: |-
             Name of the received port this egress tracking rule/specification has to be applied.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -19909,11 +19766,8 @@ components:
       type: object
       properties:
         port_name:
-          description: |
+          description: |-
             The name of port for which this settings will be applied to.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -20614,11 +20468,8 @@ components:
       type: object
       properties:
         names:
-          description: |
+          description: |-
             The names of the IS-IS interfaces to which all attribute updates in this group will be applied.
-
-            x-constraint:
-            - /components/schemas/Isis.Interface/properties/name
           type: array
           items:
             type: string
@@ -20697,11 +20548,8 @@ components:
       type: object
       properties:
         names:
-          description: |
+          description: |-
             The names of the OSPFv2 interfaces to which all attribute updates in this group will be applied.
-
-            x-constraint:
-            - /components/schemas/Ospfv2.Interface/properties/name
           type: array
           items:
             type: string
@@ -20810,11 +20658,8 @@ components:
           enum:
           - flows
         flows:
-          description: |
+          description: |-
             List of flows that will be deleted from existing configuration on the traffic generator.
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
           type: array
           items:
             type: string
@@ -20958,11 +20803,8 @@ components:
       - state
       properties:
         port_names:
-          description: |
+          description: |-
             The names of target ports. An empty or null list will target all ports.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -20990,12 +20832,9 @@ components:
       - state
       properties:
         port_names:
-          description: |
+          description: |-
             The names of ports to which the capture state will be applied to. If the list of port_names is empty or null the state will be applied to all configured ports.
             If the list is not empty any port that is not included in the list of port_names MUST be ignored and not included in the state change.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -21021,11 +20860,8 @@ components:
       type: object
       properties:
         port_names:
-          description: |
+          description: |-
             The names of target ports. An empty or null list will target all ports.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -21040,12 +20876,9 @@ components:
       - state
       properties:
         flow_names:
-          description: |
+          description: |-
             The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.
             If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
           type: array
           items:
             type: string
@@ -21104,16 +20937,8 @@ components:
       - state
       properties:
         names:
-          description: |
+          description: |-
             The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Isis.V4RouteRange/properties/name
-            - /components/schemas/Isis.V6RouteRange/properties/name
-            - /components/schemas/Ospfv2.V4RouteRange/properties/name
-            - /components/schemas/Ospfv3.V6RouteRange/properties/name
           type: array
           items:
             type: string
@@ -21169,11 +20994,8 @@ components:
       - state
       properties:
         lag_member_names:
-          description: |
+          description: |-
             The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -21200,11 +21022,8 @@ components:
       - state
       properties:
         lag_member_names:
-          description: |
+          description: |-
             The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -21249,12 +21068,8 @@ components:
       - state
       properties:
         peer_names:
-          description: |
+          description: |-
             The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
           type: array
           items:
             type: string
@@ -21309,11 +21124,8 @@ components:
       - state
       properties:
         router_names:
-          description: |
+          description: |-
             The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
           type: array
           items:
             type: string
@@ -21366,11 +21178,8 @@ components:
       - state
       properties:
         router_names:
-          description: |
+          description: |-
             The names of OSPFv2 routers for which the state has to be applied. An empty or null list will control all OSPFv2 routers.
-
-            x-constraint:
-            - /components/schemas/Device.Ospfv2/properties/name
           type: array
           items:
             type: string
@@ -21398,11 +21207,8 @@ components:
       type: object
       properties:
         names:
-          description: |
+          description: |-
             The names of OSPFv2 Simulated Links to control. If no names are specified then all OSPFv2 Simulated Links in the configuration will be affected.
-
-            x-constraint:
-            - /components/schemas/Ospfv2.Interface/properties/name
           type: array
           items:
             type: string
@@ -21472,11 +21278,8 @@ components:
       - state
       properties:
         router_names:
-          description: |
+          description: |-
             The names of OSPFv3 routers for which the state has to be applied. An empty or null list will control all OSPFv3 routers.
-
-            x-constraint:
-            - /components/schemas/Ospfv3.RouterInstance/properties/name
           type: array
           items:
             type: string
@@ -21523,12 +21326,8 @@ components:
       - state
       properties:
         peer_names:
-          description: |
+          description: |-
             The names of RoCEv2 peers for which the state has to be applied. An empty or null list will control all RoCEv2 peers.
-
-            x-constraint:
-            - /components/schemas/Rocev2.V4Peer/properties/name
-            - /components/schemas/Rocev2.V6Peer/properties/name
           type: array
           items:
             type: string
@@ -21557,11 +21356,8 @@ components:
       type: object
       properties:
         names:
-          description: |
+          description: |-
             The names of ISIS Simulated Links to control. If no names are specified then all ISIS Simulated Links in the configuration will be affected..
-
-            x-constraint:
-            - /components/schemas/Isis.Interface/properties/name
           type: array
           items:
             type: string
@@ -21792,12 +21588,8 @@ components:
       type: object
       properties:
         src_name:
-          description: |
+          description: |-
             Name of source IPv4 interface to be used.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -21831,12 +21623,8 @@ components:
       - result
       properties:
         src_name:
-          description: |
+          description: |-
             Name of source IPv4 interface used for ping.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -21916,12 +21704,8 @@ components:
       type: object
       properties:
         src_name:
-          description: |
+          description: |-
             Name of source IPv6 interface to be used.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Device.Ipv6Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
@@ -21955,12 +21739,8 @@ components:
       - result
       properties:
         src_name:
-          description: |
+          description: |-
             Name of source IPv6 interface used for ping.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Device.Ipv6Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
@@ -22020,12 +21800,8 @@ components:
       type: object
       properties:
         names:
-          description: |
+          description: |-
             The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
           type: array
           items:
             type: string
@@ -22099,12 +21875,8 @@ components:
       type: object
       properties:
         peer_names:
-          description: |
+          description: |-
             The names of device BGP peers objects to control.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
           type: array
           items:
             type: string
@@ -22229,11 +22001,8 @@ components:
       type: object
       properties:
         router_names:
-          description: |
+          description: |-
             The names of device objects to control.
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
           type: array
           items:
             type: string
@@ -22319,11 +22088,8 @@ components:
       type: object
       properties:
         router_names:
-          description: |
+          description: |-
             The names of IS-IS routers on which to apply the overload bit state. If no names are specified then the action is applied to all configured IS-IS routers.
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
           type: array
           items:
             type: string
@@ -22699,11 +22465,8 @@ components:
       type: object
       properties:
         port_names:
-          description: |
+          description: |-
             The names of objects to return results for. An empty list will return all port row results.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -22765,11 +22528,8 @@ components:
       type: object
       properties:
         name:
-          description: |
+          description: |-
             The name of a configured port
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -22904,12 +22664,9 @@ components:
       type: object
       properties:
         flow_names:
-          description: |
+          description: |-
             Flow metrics will be retrieved for these flow names.
             If no flow names are specified then all flows will be returned.
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
           type: array
           items:
             type: string
@@ -23441,11 +23198,8 @@ components:
       type: object
       properties:
         peer_names:
-          description: |
+          description: |-
             The names of BGPv4 peers to return results for. An empty list will return results for all BGPv4 peers.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4peer/properties/name
           type: array
           items:
             type: string
@@ -23647,11 +23401,8 @@ components:
       type: object
       properties:
         peer_names:
-          description: |
+          description: |-
             The names of BGPv6 peers to return results for. An empty list will return results for all BGPv6 peers.
-
-            x-constraint:
-            - /components/schemas/Bgp.V6peer/properties/name
           type: array
           items:
             type: string
@@ -23853,11 +23604,8 @@ components:
       type: object
       properties:
         router_names:
-          description: |
+          description: |-
             The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
           type: array
           items:
             type: string
@@ -24159,11 +23907,8 @@ components:
       type: object
       properties:
         lag_names:
-          description: |
+          description: |-
             The names of LAGs to return results for. An empty list will return results for all LAGs.
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: array
           items:
             type: string
@@ -24213,11 +23958,8 @@ components:
       type: object
       properties:
         name:
-          description: |
+          description: |-
             The name of a configured LAG
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: string
           x-constraint:
           - /components/schemas/Lag/properties/name
@@ -24292,11 +24034,8 @@ components:
       type: object
       properties:
         lag_names:
-          description: |
+          description: |-
             The names of LAG (ports group) for which LACP metrics to be returned. An empty list will return metrics for all LAGs.
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: array
           items:
             type: string
@@ -24304,11 +24043,8 @@ components:
           - /components/schemas/Lag/properties/name
           x-field-uid: 1
         lag_member_port_names:
-          description: |
+          description: |-
             The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -24498,11 +24234,8 @@ components:
       type: object
       properties:
         lldp_names:
-          description: |
+          description: |-
             The names of LLDP instances to return results for. An empty list will return results for all LLDP instances.
-
-            x-constraint:
-            - /components/schemas/Lldp/properties/name
           type: array
           items:
             type: string
@@ -24588,11 +24321,8 @@ components:
       type: object
       properties:
         router_names:
-          description: |
+          description: |-
             The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.
-
-            x-constraint:
-            - /components/schemas/Device.Rsvp/properties/name
           type: array
           items:
             type: string
@@ -24885,11 +24615,8 @@ components:
       type: object
       properties:
         client_names:
-          description: |
+          description: |-
             The names of DHCPv4 clients to return results for. An empty list will return results for all DHCPv4 client.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv4client/properties/name
           type: array
           items:
             type: string
@@ -24984,11 +24711,8 @@ components:
       type: object
       properties:
         server_names:
-          description: |
+          description: |-
             The names of DHCPv4 Servers to return results for. An empty list will return results for all DHCPv4 Server.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv4Server/properties/name
           type: array
           items:
             type: string
@@ -25083,11 +24807,8 @@ components:
       type: object
       properties:
         client_names:
-          description: |
+          description: |-
             The names of DHCPv6 clients to return results for. An empty list will return results for all DHCPv6 client.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv6client/properties/name
           type: array
           items:
             type: string
@@ -25236,11 +24957,8 @@ components:
       type: object
       properties:
         server_names:
-          description: |
+          description: |-
             The names of DHCPv6 Servers to return results for. An empty list will return results for all DHCPv6 Server.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv6Server/properties/name
           type: array
           items:
             type: string
@@ -25407,11 +25125,8 @@ components:
       type: object
       properties:
         router_names:
-          description: |
+          description: |-
             The names of OSPFv2 routers to return results for. An empty list will return results for all OSPFv2 router.
-
-            x-constraint:
-            - /components/schemas/Device.Ospfv2/properties/name
           type: array
           items:
             type: string
@@ -25742,12 +25457,9 @@ components:
       type: object
       properties:
         flow_names:
-          description: |
+          description: |-
             Convergence metrics will be retrieved for these flow names.
             If no flow names are specified then convergence metrics for all flows will be returned.
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
           type: array
           items:
             type: string
@@ -25821,9 +25533,7 @@ components:
         source:
           description: "The source of the event. \nThe source MUST be the value of\
             \ one of the x-constraint paths,\nwhich means the source MUST be a unique\
-            \ name in the configuration. \n\nx-constraint:\n- /components/schemas/Port/properties/name\n\
-            - /components/schemas/Flow/properties/name\n- /components/schemas/Device.Bgpv4Route/properties/name\n\
-            - /components/schemas/Device.Bgpv6Route/properties/name\n"
+            \ name in the configuration. "
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -25849,11 +25559,8 @@ components:
       type: object
       properties:
         secure_entity_names:
-          description: |
+          description: |-
             The names of secure entities(secYs) to return results for. An empty list will return results for all secYs.
-
-            x-constraint:
-            - /components/schemas/SecureEntity/properties/name
           type: array
           items:
             type: string
@@ -26063,11 +25770,8 @@ components:
       type: object
       properties:
         peer_names:
-          description: |
+          description: |-
             The names of peers to return results for. An empty list will return results for all peers.
-
-            x-constraint:
-            - /components/schemas/Mka/properties/name
           type: array
           items:
             type: string
@@ -26196,11 +25900,8 @@ components:
       type: object
       properties:
         router_names:
-          description: |
+          description: |-
             The names of OSPFv3 routers to return results for. An empty list will return results for all OSPFv3 routers.
-
-            x-constraint:
-            - /components/schemas/Ospfv3.RouterInstance/properties/name
           type: array
           items:
             type: string
@@ -26534,11 +26235,8 @@ components:
       properties:
         peer_names:
           type: array
-          description: |
+          description: |-
             The names of RoCEv2 over IPv4 peers to return results for. An empty list will return results for all RoCEv2 peers.
-
-            x-constraint:
-            - /components/schemas/Rocev2.V4peer/properties/name
           items:
             type: string
           x-constraint:
@@ -26726,11 +26424,8 @@ components:
       type: object
       properties:
         peer_names:
-          description: |
+          description: |-
             The names of RoCEv2 over IPv6 peers to return results for. An empty list will return results for all RoCEv2 peers.
-
-            x-constraint:
-            - /components/schemas/Rocev2.V6peer/properties/name
           type: array
           items:
             type: string
@@ -27221,13 +26916,10 @@ components:
       type: object
       properties:
         port_names:
-          description: |
+          description: |-
             Egress only tracking metrics will be retrieved for these port names.
             If no port-names are provided, egress_only_tracking metrics will be returned for all ports
             which have one or more egress_only_tracking enabled.
-
-            x-constraint:
-            - /components/schemas/EgressOnlyTracking/properties/port_name
           type: array
           items:
             type: string
@@ -27462,12 +27154,8 @@ components:
       type: object
       properties:
         server_names:
-          description: |
+          description: |-
             The names of BMP Servers to return results for. An empty list will return results for all BMP Servers.
-
-            x-constraint:
-            - /components/schemas/Device.Bmp.ServerV4/properties/name
-            - /components/schemas/Device.Bmp.ServerV6/properties/name
           type: array
           items:
             type: string
@@ -27842,11 +27530,8 @@ components:
       type: object
       properties:
         ethernet_names:
-          description: |
+          description: |-
             The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (ARP cache entries) for all available Ethernet interfaces.
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
           type: array
           items:
             type: string
@@ -27884,11 +27569,8 @@ components:
       type: object
       properties:
         ethernet_names:
-          description: |
+          description: |-
             The names of Ethernet interfaces for which Neighbor state (NDISC cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (NDISC cache entries) for all available Ethernet interfaces.
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
           type: array
           items:
             type: string
@@ -27926,12 +27608,8 @@ components:
       type: object
       properties:
         bgp_peer_names:
-          description: |
+          description: |-
             The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
           type: array
           items:
             type: string
@@ -28871,11 +28549,8 @@ components:
       type: object
       properties:
         isis_router_names:
-          description: |
+          description: |-
             The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
           type: array
           items:
             type: string
@@ -29660,11 +29335,8 @@ components:
       type: object
       properties:
         lldp_names:
-          description: |
+          description: |-
             The names of LLDP instances for which neighbor information will be retrieved. If no names are specified then the results will contain neighbor information for all configured LLDP instances.
-
-            x-constraint:
-            - /components/schemas/Lldp/properties/name
           type: array
           items:
             type: string
@@ -29895,11 +29567,8 @@ components:
       type: object
       properties:
         rsvp_router_names:
-          description: |
+          description: |-
             The names of RSVP-TE routers for which learned information is requested. An empty list will return results for all RSVP=TE routers.
-
-            x-constraint:
-            - /components/schemas/Device.Rsvp/properties/name
           type: array
           items:
             type: string
@@ -30099,11 +29768,8 @@ components:
       type: object
       properties:
         dhcp_client_names:
-          description: |
+          description: |-
             The names of DHCPv4 client to return results for. An empty list will return results for all DHCPv4 Client address information.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv4client/properties/name
           type: array
           items:
             type: string
@@ -30161,11 +29827,8 @@ components:
       type: object
       properties:
         dhcp_server_names:
-          description: |
+          description: |-
             The names of DHCPv4 server to return results for. An empty list will return results for all DHCPv4 servers.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv4server/properties/name
           type: array
           items:
             type: string
@@ -30242,11 +29905,8 @@ components:
       type: object
       properties:
         dhcp_client_names:
-          description: |
+          description: |-
             The names of DHCPv6 client to return results for. An empty list will return results for all DHCPv6 Client address information.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv6client/properties/name
           type: array
           items:
             type: string
@@ -30330,11 +29990,8 @@ components:
       type: object
       properties:
         dhcp_server_names:
-          description: |
+          description: |-
             The names of DHCPv6 server to return results for. An empty list will return results for all DHCPv6 servers.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv6server/properties/name
           type: array
           items:
             type: string
@@ -30411,11 +30068,8 @@ components:
       type: object
       properties:
         router_names:
-          description: |
+          description: |-
             The names of OSPFv2 routers for which learned information is requested. An empty list will return results for all OSPFv2 routers.
-
-            x-constraint:
-            - /components/schemas/Device.Ospfv2Router/properties/name
           type: array
           items:
             type: string
@@ -31587,11 +31241,8 @@ components:
       type: object
       properties:
         router_names:
-          description: |
+          description: |-
             The names of OSPFv3 routers for which learned information is requested. An empty list will return results for all OSPFv3 routers.
-
-            x-constraint:
-            - /components/schemas/Ospfv3.RouterInstance/properties/name
           type: array
           items:
             type: string
@@ -31967,11 +31618,8 @@ components:
       type: object
       properties:
         isis_router_names:
-          description: |
+          description: |-
             The names of ISIS routers for which learned information is requested. An empty list will return results of IIH States for all ISIS routers.
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
           type: array
           items:
             type: string
@@ -32328,12 +31976,8 @@ components:
       type: object
       properties:
         bmp_server_names:
-          description: |
+          description: |-
             The names of the BMP Servers  to return results for. An empty list will return results for all BMP Servers.
-
-            x-constraint:
-            - /components/schemas/Device.Bmp.ServerV4/properties/name
-            - /components/schemas/Device.Bmp.ServerV6/properties/name
           type: array
           items:
             type: string
@@ -32835,11 +32479,8 @@ components:
       - port_name
       properties:
         port_name:
-          description: |
+          description: |-
             The name of a port a capture is started on.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name

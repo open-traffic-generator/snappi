@@ -11123,7 +11123,7 @@ message FlowRouter {
   // default = Mode.Enum.mesh
   optional Mode.Enum mode = 1;
 
-  // TBD
+  // Description missing in models
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -11142,7 +11142,7 @@ message FlowRouter {
   // 
   repeated string tx_names = 2;
 
-  // TBD
+  // Description missing in models
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
