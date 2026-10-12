@@ -6460,8 +6460,8 @@ class Layer1(OpenApiObject):
     SGMII = "sgmii"  # type: str
 
     _STATUS = {
-        "ieee_media_defaults": "ieee_media_defaults property in schema Layer1 is under-review, This field is currently under review for pending exploration on use cases",
-        "auto_negotiate": "auto_negotiate property in schema Layer1 is under-review, This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.",
+        "ieee_media_defaults": "ieee_media_defaults property in schema Layer1 is under_review, This field is currently under review for pending exploration on use cases",
+        "auto_negotiate": "auto_negotiate property in schema Layer1 is under_review, This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.",
     }  # type: Dict[str, Union(type)]
 
     def __init__(
@@ -53201,7 +53201,7 @@ class Flow(OpenApiObject):
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
     _STATUS = {
-        "egress_packet": "egress_packet property in schema Flow is under-review, The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.",
+        "egress_packet": "egress_packet property in schema Flow is under_review, The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.",
     }  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, name=None):

@@ -684,6 +684,16 @@ func (obj *layer1) validateObj(vObj *validation, set_default bool) {
 
 	}
 
+	// IeeeMediaDefaults is under_review
+	if obj.obj.IeeeMediaDefaults != nil {
+		obj.addWarnings("IeeeMediaDefaults property in schema Layer1 is under review, This field is currently under review for pending exploration on use cases")
+	}
+
+	// AutoNegotiate is under_review
+	if obj.obj.AutoNegotiate != nil {
+		obj.addWarnings("AutoNegotiate property in schema Layer1 is under review, This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.")
+	}
+
 	if obj.obj.AutoNegotiation != nil {
 
 		obj.AutoNegotiation().validateObj(vObj, set_default)
