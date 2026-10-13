@@ -1749,8 +1749,15 @@ from .snappi import BgpPrefixIpv4MplsUnicastStateIter
 from .snappi import BgpPrefixIpv6MplsUnicastState
 from .snappi import BgpPrefixIpv6MplsUnicastStateIter
 from .snappi import BgpPrefixIpv4MplsVpnUnicastState
+from .snappi import BgpPrefixIpv4MplsVpnUnicastMatchedVrfRoutes
+from .snappi import BgpPrefixIpv4MplsVpnUnicastVrfRoute
+from .snappi import BgpPrefixIpv4MplsVpnUnicastVrfRouteIter
 from .snappi import BgpPrefixIpv4MplsVpnUnicastStateIter
 from .snappi import BgpPrefixIpv6MplsVpnUnicastState
+from .snappi import BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes
+from .snappi import BgpPrefixIpv6MplsVpnUnicastVrfRoute
+from .snappi import BgpPrefixIpv6MplsVpnUnicastServiceBinding
+from .snappi import BgpPrefixIpv6MplsVpnUnicastVrfRouteIter
 from .snappi import BgpPrefixIpv6MplsVpnUnicastStateIter
 from .snappi import BgpPrefixesStateIter
 from .snappi import IsisLspsState

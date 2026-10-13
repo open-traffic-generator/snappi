@@ -13,12 +13,10 @@ import (
 // ***** BgpPrefixIpv6MplsVpnUnicastState *****
 type bgpPrefixIpv6MplsVpnUnicastState struct {
 	validation
-	obj                       *otg.BgpPrefixIpv6MplsVpnUnicastState
-	marshaller                marshalBgpPrefixIpv6MplsVpnUnicastState
-	unMarshaller              unMarshalBgpPrefixIpv6MplsVpnUnicastState
-	communitiesHolder         BgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter
-	extendedCommunitiesHolder BgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter
-	asPathHolder              ResultBgpAsPath
+	obj                    *otg.BgpPrefixIpv6MplsVpnUnicastState
+	marshaller             marshalBgpPrefixIpv6MplsVpnUnicastState
+	unMarshaller           unMarshalBgpPrefixIpv6MplsVpnUnicastState
+	matchedVrfRoutesHolder BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes
 }
 
 func NewBgpPrefixIpv6MplsVpnUnicastState() BgpPrefixIpv6MplsVpnUnicastState {
@@ -246,9 +244,7 @@ func (obj *bgpPrefixIpv6MplsVpnUnicastState) Clone() (BgpPrefixIpv6MplsVpnUnicas
 }
 
 func (obj *bgpPrefixIpv6MplsVpnUnicastState) setNil() {
-	obj.communitiesHolder = nil
-	obj.extendedCommunitiesHolder = nil
-	obj.asPathHolder = nil
+	obj.matchedVrfRoutesHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -276,514 +272,86 @@ type BgpPrefixIpv6MplsVpnUnicastState interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// RouteDistinguisher returns string, set in BgpPrefixIpv6MplsVpnUnicastState.
-	RouteDistinguisher() string
-	// SetRouteDistinguisher assigns string provided by user to BgpPrefixIpv6MplsVpnUnicastState
-	SetRouteDistinguisher(value string) BgpPrefixIpv6MplsVpnUnicastState
-	// HasRouteDistinguisher checks if RouteDistinguisher has been set in BgpPrefixIpv6MplsVpnUnicastState
-	HasRouteDistinguisher() bool
-	// Ipv6Address returns string, set in BgpPrefixIpv6MplsVpnUnicastState.
-	Ipv6Address() string
-	// SetIpv6Address assigns string provided by user to BgpPrefixIpv6MplsVpnUnicastState
-	SetIpv6Address(value string) BgpPrefixIpv6MplsVpnUnicastState
-	// HasIpv6Address checks if Ipv6Address has been set in BgpPrefixIpv6MplsVpnUnicastState
-	HasIpv6Address() bool
-	// PrefixLength returns uint32, set in BgpPrefixIpv6MplsVpnUnicastState.
-	PrefixLength() uint32
-	// SetPrefixLength assigns uint32 provided by user to BgpPrefixIpv6MplsVpnUnicastState
-	SetPrefixLength(value uint32) BgpPrefixIpv6MplsVpnUnicastState
-	// HasPrefixLength checks if PrefixLength has been set in BgpPrefixIpv6MplsVpnUnicastState
-	HasPrefixLength() bool
-	// Origin returns BgpPrefixIpv6MplsVpnUnicastStateOriginEnum, set in BgpPrefixIpv6MplsVpnUnicastState
-	Origin() BgpPrefixIpv6MplsVpnUnicastStateOriginEnum
-	// SetOrigin assigns BgpPrefixIpv6MplsVpnUnicastStateOriginEnum provided by user to BgpPrefixIpv6MplsVpnUnicastState
-	SetOrigin(value BgpPrefixIpv6MplsVpnUnicastStateOriginEnum) BgpPrefixIpv6MplsVpnUnicastState
-	// HasOrigin checks if Origin has been set in BgpPrefixIpv6MplsVpnUnicastState
-	HasOrigin() bool
-	// PathId returns uint32, set in BgpPrefixIpv6MplsVpnUnicastState.
-	PathId() uint32
-	// SetPathId assigns uint32 provided by user to BgpPrefixIpv6MplsVpnUnicastState
-	SetPathId(value uint32) BgpPrefixIpv6MplsVpnUnicastState
-	// HasPathId checks if PathId has been set in BgpPrefixIpv6MplsVpnUnicastState
-	HasPathId() bool
-	// Ipv4NextHop returns string, set in BgpPrefixIpv6MplsVpnUnicastState.
-	Ipv4NextHop() string
-	// SetIpv4NextHop assigns string provided by user to BgpPrefixIpv6MplsVpnUnicastState
-	SetIpv4NextHop(value string) BgpPrefixIpv6MplsVpnUnicastState
-	// HasIpv4NextHop checks if Ipv4NextHop has been set in BgpPrefixIpv6MplsVpnUnicastState
-	HasIpv4NextHop() bool
-	// Ipv6NextHop returns string, set in BgpPrefixIpv6MplsVpnUnicastState.
-	Ipv6NextHop() string
-	// SetIpv6NextHop assigns string provided by user to BgpPrefixIpv6MplsVpnUnicastState
-	SetIpv6NextHop(value string) BgpPrefixIpv6MplsVpnUnicastState
-	// HasIpv6NextHop checks if Ipv6NextHop has been set in BgpPrefixIpv6MplsVpnUnicastState
-	HasIpv6NextHop() bool
-	// Label returns uint32, set in BgpPrefixIpv6MplsVpnUnicastState.
-	Label() uint32
-	// SetLabel assigns uint32 provided by user to BgpPrefixIpv6MplsVpnUnicastState
-	SetLabel(value uint32) BgpPrefixIpv6MplsVpnUnicastState
-	// HasLabel checks if Label has been set in BgpPrefixIpv6MplsVpnUnicastState
-	HasLabel() bool
-	// Communities returns BgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIterIter, set in BgpPrefixIpv6MplsVpnUnicastState
-	Communities() BgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter
-	// ExtendedCommunities returns BgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIterIter, set in BgpPrefixIpv6MplsVpnUnicastState
-	ExtendedCommunities() BgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter
-	// AsPath returns ResultBgpAsPath, set in BgpPrefixIpv6MplsVpnUnicastState.
-	// ResultBgpAsPath is this attribute identifies the autonomous systems through  which routing information carried in this UPDATE message has passed.
-	AsPath() ResultBgpAsPath
-	// SetAsPath assigns ResultBgpAsPath provided by user to BgpPrefixIpv6MplsVpnUnicastState.
-	// ResultBgpAsPath is this attribute identifies the autonomous systems through  which routing information carried in this UPDATE message has passed.
-	SetAsPath(value ResultBgpAsPath) BgpPrefixIpv6MplsVpnUnicastState
-	// HasAsPath checks if AsPath has been set in BgpPrefixIpv6MplsVpnUnicastState
-	HasAsPath() bool
-	// LocalPreference returns uint32, set in BgpPrefixIpv6MplsVpnUnicastState.
-	LocalPreference() uint32
-	// SetLocalPreference assigns uint32 provided by user to BgpPrefixIpv6MplsVpnUnicastState
-	SetLocalPreference(value uint32) BgpPrefixIpv6MplsVpnUnicastState
-	// HasLocalPreference checks if LocalPreference has been set in BgpPrefixIpv6MplsVpnUnicastState
-	HasLocalPreference() bool
-	// MultiExitDiscriminator returns uint32, set in BgpPrefixIpv6MplsVpnUnicastState.
-	MultiExitDiscriminator() uint32
-	// SetMultiExitDiscriminator assigns uint32 provided by user to BgpPrefixIpv6MplsVpnUnicastState
-	SetMultiExitDiscriminator(value uint32) BgpPrefixIpv6MplsVpnUnicastState
-	// HasMultiExitDiscriminator checks if MultiExitDiscriminator has been set in BgpPrefixIpv6MplsVpnUnicastState
-	HasMultiExitDiscriminator() bool
+	// Choice returns BgpPrefixIpv6MplsVpnUnicastStateChoiceEnum, set in BgpPrefixIpv6MplsVpnUnicastState
+	Choice() BgpPrefixIpv6MplsVpnUnicastStateChoiceEnum
+	// setChoice assigns BgpPrefixIpv6MplsVpnUnicastStateChoiceEnum provided by user to BgpPrefixIpv6MplsVpnUnicastState
+	setChoice(value BgpPrefixIpv6MplsVpnUnicastStateChoiceEnum) BgpPrefixIpv6MplsVpnUnicastState
+	// HasChoice checks if Choice has been set in BgpPrefixIpv6MplsVpnUnicastState
+	HasChoice() bool
+	// MatchedVrfRoutes returns BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes, set in BgpPrefixIpv6MplsVpnUnicastState.
+	// BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes is the local VRFs that this received VPN-IPv6 NLRI was imported into via Route Target matching (RFC 4364 Section 4.3.1), each with its own copy of the received path attributes.
+	MatchedVrfRoutes() BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes
+	// SetMatchedVrfRoutes assigns BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes provided by user to BgpPrefixIpv6MplsVpnUnicastState.
+	// BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes is the local VRFs that this received VPN-IPv6 NLRI was imported into via Route Target matching (RFC 4364 Section 4.3.1), each with its own copy of the received path attributes.
+	SetMatchedVrfRoutes(value BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes) BgpPrefixIpv6MplsVpnUnicastState
+	// HasMatchedVrfRoutes checks if MatchedVrfRoutes has been set in BgpPrefixIpv6MplsVpnUnicastState
+	HasMatchedVrfRoutes() bool
 	setNil()
 }
 
-// The Route Distinguisher (RFC 4364 Section 4.1) received as part of the VPN-IPv6 NLRI, formatted as a colon separated value, for example "60005:100" or "1.1.1.1:100".
-// RouteDistinguisher returns a string
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) RouteDistinguisher() string {
+type BgpPrefixIpv6MplsVpnUnicastStateChoiceEnum string
 
-	return *obj.obj.RouteDistinguisher
-
-}
-
-// The Route Distinguisher (RFC 4364 Section 4.1) received as part of the VPN-IPv6 NLRI, formatted as a colon separated value, for example "60005:100" or "1.1.1.1:100".
-// RouteDistinguisher returns a string
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) HasRouteDistinguisher() bool {
-	return obj.obj.RouteDistinguisher != nil
-}
-
-// The Route Distinguisher (RFC 4364 Section 4.1) received as part of the VPN-IPv6 NLRI, formatted as a colon separated value, for example "60005:100" or "1.1.1.1:100".
-// SetRouteDistinguisher sets the string value in the BgpPrefixIpv6MplsVpnUnicastState object
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) SetRouteDistinguisher(value string) BgpPrefixIpv6MplsVpnUnicastState {
-
-	obj.obj.RouteDistinguisher = &value
-	return obj
-}
-
-// An IPv6 unicast address.
-// Ipv6Address returns a string
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) Ipv6Address() string {
-
-	return *obj.obj.Ipv6Address
-
-}
-
-// An IPv6 unicast address.
-// Ipv6Address returns a string
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) HasIpv6Address() bool {
-	return obj.obj.Ipv6Address != nil
-}
-
-// An IPv6 unicast address.
-// SetIpv6Address sets the string value in the BgpPrefixIpv6MplsVpnUnicastState object
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) SetIpv6Address(value string) BgpPrefixIpv6MplsVpnUnicastState {
-
-	obj.obj.Ipv6Address = &value
-	return obj
-}
-
-// description is TBD
-// PrefixLength returns a uint32
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) PrefixLength() uint32 {
-
-	return *obj.obj.PrefixLength
-
-}
-
-// description is TBD
-// PrefixLength returns a uint32
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) HasPrefixLength() bool {
-	return obj.obj.PrefixLength != nil
-}
-
-// description is TBD
-// SetPrefixLength sets the uint32 value in the BgpPrefixIpv6MplsVpnUnicastState object
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) SetPrefixLength(value uint32) BgpPrefixIpv6MplsVpnUnicastState {
-
-	obj.obj.PrefixLength = &value
-	return obj
-}
-
-type BgpPrefixIpv6MplsVpnUnicastStateOriginEnum string
-
-// Enum of Origin on BgpPrefixIpv6MplsVpnUnicastState
-var BgpPrefixIpv6MplsVpnUnicastStateOrigin = struct {
-	IGP        BgpPrefixIpv6MplsVpnUnicastStateOriginEnum
-	EGP        BgpPrefixIpv6MplsVpnUnicastStateOriginEnum
-	INCOMPLETE BgpPrefixIpv6MplsVpnUnicastStateOriginEnum
+// Enum of Choice on BgpPrefixIpv6MplsVpnUnicastState
+var BgpPrefixIpv6MplsVpnUnicastStateChoice = struct {
+	MATCHED_VRF_ROUTES BgpPrefixIpv6MplsVpnUnicastStateChoiceEnum
 }{
-	IGP:        BgpPrefixIpv6MplsVpnUnicastStateOriginEnum("igp"),
-	EGP:        BgpPrefixIpv6MplsVpnUnicastStateOriginEnum("egp"),
-	INCOMPLETE: BgpPrefixIpv6MplsVpnUnicastStateOriginEnum("incomplete"),
+	MATCHED_VRF_ROUTES: BgpPrefixIpv6MplsVpnUnicastStateChoiceEnum("matched_vrf_routes"),
 }
 
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) Origin() BgpPrefixIpv6MplsVpnUnicastStateOriginEnum {
-	return BgpPrefixIpv6MplsVpnUnicastStateOriginEnum(obj.obj.Origin.Enum().String())
+func (obj *bgpPrefixIpv6MplsVpnUnicastState) Choice() BgpPrefixIpv6MplsVpnUnicastStateChoiceEnum {
+	return BgpPrefixIpv6MplsVpnUnicastStateChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// The origin of the prefix.
-// Origin returns a string
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) HasOrigin() bool {
-	return obj.obj.Origin != nil
+// Selects how this received VPN-IPv6 NLRI is reported. Currently the only supported view groups the prefix by the local VRF(s) (RFC 4364 Section 4.3.1 Route Target import) it was matched into.
+// Choice returns a string
+func (obj *bgpPrefixIpv6MplsVpnUnicastState) HasChoice() bool {
+	return obj.obj.Choice != nil
 }
 
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) SetOrigin(value BgpPrefixIpv6MplsVpnUnicastStateOriginEnum) BgpPrefixIpv6MplsVpnUnicastState {
-	intValue, ok := otg.BgpPrefixIpv6MplsVpnUnicastState_Origin_Enum_value[string(value)]
+func (obj *bgpPrefixIpv6MplsVpnUnicastState) setChoice(value BgpPrefixIpv6MplsVpnUnicastStateChoiceEnum) BgpPrefixIpv6MplsVpnUnicastState {
+	intValue, ok := otg.BgpPrefixIpv6MplsVpnUnicastState_Choice_Enum_value[string(value)]
 	if !ok {
 		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
-			"%s is not a valid choice on BgpPrefixIpv6MplsVpnUnicastStateOriginEnum", string(value)))
+			"%s is not a valid choice on BgpPrefixIpv6MplsVpnUnicastStateChoiceEnum", string(value)))
 		return obj
 	}
-	enumValue := otg.BgpPrefixIpv6MplsVpnUnicastState_Origin_Enum(intValue)
-	obj.obj.Origin = &enumValue
+	enumValue := otg.BgpPrefixIpv6MplsVpnUnicastState_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	obj.obj.MatchedVrfRoutes = nil
+	obj.matchedVrfRoutesHolder = nil
 
-	return obj
-}
-
-// The path id.
-// PathId returns a uint32
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) PathId() uint32 {
-
-	return *obj.obj.PathId
-
-}
-
-// The path id.
-// PathId returns a uint32
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) HasPathId() bool {
-	return obj.obj.PathId != nil
-}
-
-// The path id.
-// SetPathId sets the uint32 value in the BgpPrefixIpv6MplsVpnUnicastState object
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) SetPathId(value uint32) BgpPrefixIpv6MplsVpnUnicastState {
-
-	obj.obj.PathId = &value
-	return obj
-}
-
-// The IPv4 address of the egress interface.
-// Ipv4NextHop returns a string
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) Ipv4NextHop() string {
-
-	return *obj.obj.Ipv4NextHop
-
-}
-
-// The IPv4 address of the egress interface.
-// Ipv4NextHop returns a string
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) HasIpv4NextHop() bool {
-	return obj.obj.Ipv4NextHop != nil
-}
-
-// The IPv4 address of the egress interface.
-// SetIpv4NextHop sets the string value in the BgpPrefixIpv6MplsVpnUnicastState object
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) SetIpv4NextHop(value string) BgpPrefixIpv6MplsVpnUnicastState {
-
-	obj.obj.Ipv4NextHop = &value
-	return obj
-}
-
-// The IPv6 address of the egress interface.
-// Ipv6NextHop returns a string
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) Ipv6NextHop() string {
-
-	return *obj.obj.Ipv6NextHop
-
-}
-
-// The IPv6 address of the egress interface.
-// Ipv6NextHop returns a string
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) HasIpv6NextHop() bool {
-	return obj.obj.Ipv6NextHop != nil
-}
-
-// The IPv6 address of the egress interface.
-// SetIpv6NextHop sets the string value in the BgpPrefixIpv6MplsVpnUnicastState object
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) SetIpv6NextHop(value string) BgpPrefixIpv6MplsVpnUnicastState {
-
-	obj.obj.Ipv6NextHop = &value
-	return obj
-}
-
-// The single VPN dataplane MPLS label (RFC 4364 Section 3, RFC 4659) bound to this VPN-IPv6 prefix. RFC 4364 assigns exactly one label per route, matching the configured mpls_labels range on Bgp.L3vpn.V6RouteRange.
-// Label returns a uint32
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) Label() uint32 {
-
-	return *obj.obj.Label
-
-}
-
-// The single VPN dataplane MPLS label (RFC 4364 Section 3, RFC 4659) bound to this VPN-IPv6 prefix. RFC 4364 assigns exactly one label per route, matching the configured mpls_labels range on Bgp.L3vpn.V6RouteRange.
-// Label returns a uint32
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) HasLabel() bool {
-	return obj.obj.Label != nil
-}
-
-// The single VPN dataplane MPLS label (RFC 4364 Section 3, RFC 4659) bound to this VPN-IPv6 prefix. RFC 4364 assigns exactly one label per route, matching the configured mpls_labels range on Bgp.L3vpn.V6RouteRange.
-// SetLabel sets the uint32 value in the BgpPrefixIpv6MplsVpnUnicastState object
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) SetLabel(value uint32) BgpPrefixIpv6MplsVpnUnicastState {
-
-	obj.obj.Label = &value
-	return obj
-}
-
-// Optional community attributes.
-// Communities returns a []ResultBgpCommunity
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) Communities() BgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter {
-	if len(obj.obj.Communities) == 0 {
-		obj.obj.Communities = []*otg.ResultBgpCommunity{}
+	if value == BgpPrefixIpv6MplsVpnUnicastStateChoice.MATCHED_VRF_ROUTES {
+		obj.obj.MatchedVrfRoutes = NewBgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes().msg()
 	}
-	if obj.communitiesHolder == nil {
-		obj.communitiesHolder = newBgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter(&obj.obj.Communities).setMsg(obj)
-	}
-	return obj.communitiesHolder
-}
 
-type bgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter struct {
-	obj                     *bgpPrefixIpv6MplsVpnUnicastState
-	resultBgpCommunitySlice []ResultBgpCommunity
-	fieldPtr                *[]*otg.ResultBgpCommunity
-}
-
-func newBgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter(ptr *[]*otg.ResultBgpCommunity) BgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter {
-	return &bgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter{fieldPtr: ptr}
-}
-
-type BgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter interface {
-	setMsg(*bgpPrefixIpv6MplsVpnUnicastState) BgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter
-	Items() []ResultBgpCommunity
-	Add() ResultBgpCommunity
-	Append(items ...ResultBgpCommunity) BgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter
-	Set(index int, newObj ResultBgpCommunity) BgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter
-	Clear() BgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter
-	clearHolderSlice() BgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter
-	appendHolderSlice(item ResultBgpCommunity) BgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter
-}
-
-func (obj *bgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter) setMsg(msg *bgpPrefixIpv6MplsVpnUnicastState) BgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter {
-	obj.clearHolderSlice()
-	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&resultBgpCommunity{obj: val})
-	}
-	obj.obj = msg
-	return obj
-}
-
-func (obj *bgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter) Items() []ResultBgpCommunity {
-	return obj.resultBgpCommunitySlice
-}
-
-func (obj *bgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter) Add() ResultBgpCommunity {
-	newObj := &otg.ResultBgpCommunity{}
-	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &resultBgpCommunity{obj: newObj}
-	newLibObj.setDefault()
-	obj.resultBgpCommunitySlice = append(obj.resultBgpCommunitySlice, newLibObj)
-	return newLibObj
-}
-
-func (obj *bgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter) Append(items ...ResultBgpCommunity) BgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter {
-	for _, item := range items {
-		newObj := item.msg()
-		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.resultBgpCommunitySlice = append(obj.resultBgpCommunitySlice, item)
-	}
-	return obj
-}
-
-func (obj *bgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter) Set(index int, newObj ResultBgpCommunity) BgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter {
-	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.resultBgpCommunitySlice[index] = newObj
-	return obj
-}
-func (obj *bgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter) Clear() BgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter {
-	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.ResultBgpCommunity{}
-		obj.resultBgpCommunitySlice = []ResultBgpCommunity{}
-	}
-	return obj
-}
-func (obj *bgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter) clearHolderSlice() BgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter {
-	if len(obj.resultBgpCommunitySlice) > 0 {
-		obj.resultBgpCommunitySlice = []ResultBgpCommunity{}
-	}
-	return obj
-}
-func (obj *bgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter) appendHolderSlice(item ResultBgpCommunity) BgpPrefixIpv6MplsVpnUnicastStateResultBgpCommunityIter {
-	obj.resultBgpCommunitySlice = append(obj.resultBgpCommunitySlice, item)
-	return obj
-}
-
-// Optional received Extended Community attributes, including the Route Target(s) (RFC 4360) attached to this VPN-IPv6 route. Each received Extended Community attribute is available for retrieval in two forms. Support of the 'raw' format in which all 8 bytes (16 hex characters) is always present and available for use. In addition, if supported by the implementation, the Extended Community attribute may also be retrieved in the 'structured' format which is an optional field.
-// ExtendedCommunities returns a []ResultExtendedCommunity
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) ExtendedCommunities() BgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter {
-	if len(obj.obj.ExtendedCommunities) == 0 {
-		obj.obj.ExtendedCommunities = []*otg.ResultExtendedCommunity{}
-	}
-	if obj.extendedCommunitiesHolder == nil {
-		obj.extendedCommunitiesHolder = newBgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter(&obj.obj.ExtendedCommunities).setMsg(obj)
-	}
-	return obj.extendedCommunitiesHolder
-}
-
-type bgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter struct {
-	obj                          *bgpPrefixIpv6MplsVpnUnicastState
-	resultExtendedCommunitySlice []ResultExtendedCommunity
-	fieldPtr                     *[]*otg.ResultExtendedCommunity
-}
-
-func newBgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter(ptr *[]*otg.ResultExtendedCommunity) BgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter {
-	return &bgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter{fieldPtr: ptr}
-}
-
-type BgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter interface {
-	setMsg(*bgpPrefixIpv6MplsVpnUnicastState) BgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter
-	Items() []ResultExtendedCommunity
-	Add() ResultExtendedCommunity
-	Append(items ...ResultExtendedCommunity) BgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter
-	Set(index int, newObj ResultExtendedCommunity) BgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter
-	Clear() BgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter
-	clearHolderSlice() BgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter
-	appendHolderSlice(item ResultExtendedCommunity) BgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter
-}
-
-func (obj *bgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter) setMsg(msg *bgpPrefixIpv6MplsVpnUnicastState) BgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter {
-	obj.clearHolderSlice()
-	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&resultExtendedCommunity{obj: val})
-	}
-	obj.obj = msg
-	return obj
-}
-
-func (obj *bgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter) Items() []ResultExtendedCommunity {
-	return obj.resultExtendedCommunitySlice
-}
-
-func (obj *bgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter) Add() ResultExtendedCommunity {
-	newObj := &otg.ResultExtendedCommunity{}
-	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &resultExtendedCommunity{obj: newObj}
-	newLibObj.setDefault()
-	obj.resultExtendedCommunitySlice = append(obj.resultExtendedCommunitySlice, newLibObj)
-	return newLibObj
-}
-
-func (obj *bgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter) Append(items ...ResultExtendedCommunity) BgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter {
-	for _, item := range items {
-		newObj := item.msg()
-		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.resultExtendedCommunitySlice = append(obj.resultExtendedCommunitySlice, item)
-	}
-	return obj
-}
-
-func (obj *bgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter) Set(index int, newObj ResultExtendedCommunity) BgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter {
-	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.resultExtendedCommunitySlice[index] = newObj
-	return obj
-}
-func (obj *bgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter) Clear() BgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter {
-	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.ResultExtendedCommunity{}
-		obj.resultExtendedCommunitySlice = []ResultExtendedCommunity{}
-	}
-	return obj
-}
-func (obj *bgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter) clearHolderSlice() BgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter {
-	if len(obj.resultExtendedCommunitySlice) > 0 {
-		obj.resultExtendedCommunitySlice = []ResultExtendedCommunity{}
-	}
-	return obj
-}
-func (obj *bgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter) appendHolderSlice(item ResultExtendedCommunity) BgpPrefixIpv6MplsVpnUnicastStateResultExtendedCommunityIter {
-	obj.resultExtendedCommunitySlice = append(obj.resultExtendedCommunitySlice, item)
 	return obj
 }
 
 // description is TBD
-// AsPath returns a ResultBgpAsPath
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) AsPath() ResultBgpAsPath {
-	if obj.obj.AsPath == nil {
-		obj.obj.AsPath = NewResultBgpAsPath().msg()
+// MatchedVrfRoutes returns a BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes
+func (obj *bgpPrefixIpv6MplsVpnUnicastState) MatchedVrfRoutes() BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes {
+	if obj.obj.MatchedVrfRoutes == nil {
+		obj.setChoice(BgpPrefixIpv6MplsVpnUnicastStateChoice.MATCHED_VRF_ROUTES)
 	}
-	if obj.asPathHolder == nil {
-		obj.asPathHolder = &resultBgpAsPath{obj: obj.obj.AsPath}
+	if obj.matchedVrfRoutesHolder == nil {
+		obj.matchedVrfRoutesHolder = &bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes{obj: obj.obj.MatchedVrfRoutes}
 	}
-	return obj.asPathHolder
+	return obj.matchedVrfRoutesHolder
 }
 
 // description is TBD
-// AsPath returns a ResultBgpAsPath
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) HasAsPath() bool {
-	return obj.obj.AsPath != nil
+// MatchedVrfRoutes returns a BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes
+func (obj *bgpPrefixIpv6MplsVpnUnicastState) HasMatchedVrfRoutes() bool {
+	return obj.obj.MatchedVrfRoutes != nil
 }
 
 // description is TBD
-// SetAsPath sets the ResultBgpAsPath value in the BgpPrefixIpv6MplsVpnUnicastState object
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) SetAsPath(value ResultBgpAsPath) BgpPrefixIpv6MplsVpnUnicastState {
+// SetMatchedVrfRoutes sets the BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes value in the BgpPrefixIpv6MplsVpnUnicastState object
+func (obj *bgpPrefixIpv6MplsVpnUnicastState) SetMatchedVrfRoutes(value BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes) BgpPrefixIpv6MplsVpnUnicastState {
+	obj.setChoice(BgpPrefixIpv6MplsVpnUnicastStateChoice.MATCHED_VRF_ROUTES)
+	obj.matchedVrfRoutesHolder = nil
+	obj.obj.MatchedVrfRoutes = value.msg()
 
-	obj.asPathHolder = nil
-	obj.obj.AsPath = value.msg()
-
-	return obj
-}
-
-// The local preference is a well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
-// LocalPreference returns a uint32
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) LocalPreference() uint32 {
-
-	return *obj.obj.LocalPreference
-
-}
-
-// The local preference is a well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
-// LocalPreference returns a uint32
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) HasLocalPreference() bool {
-	return obj.obj.LocalPreference != nil
-}
-
-// The local preference is a well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
-// SetLocalPreference sets the uint32 value in the BgpPrefixIpv6MplsVpnUnicastState object
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) SetLocalPreference(value uint32) BgpPrefixIpv6MplsVpnUnicastState {
-
-	obj.obj.LocalPreference = &value
-	return obj
-}
-
-// The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
-// MultiExitDiscriminator returns a uint32
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) MultiExitDiscriminator() uint32 {
-
-	return *obj.obj.MultiExitDiscriminator
-
-}
-
-// The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
-// MultiExitDiscriminator returns a uint32
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) HasMultiExitDiscriminator() bool {
-	return obj.obj.MultiExitDiscriminator != nil
-}
-
-// The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
-// SetMultiExitDiscriminator sets the uint32 value in the BgpPrefixIpv6MplsVpnUnicastState object
-func (obj *bgpPrefixIpv6MplsVpnUnicastState) SetMultiExitDiscriminator(value uint32) BgpPrefixIpv6MplsVpnUnicastState {
-
-	obj.obj.MultiExitDiscriminator = &value
 	return obj
 }
 
@@ -792,79 +360,37 @@ func (obj *bgpPrefixIpv6MplsVpnUnicastState) validateObj(vObj *validation, set_d
 		obj.setDefault()
 	}
 
-	if obj.obj.PrefixLength != nil {
+	if obj.obj.MatchedVrfRoutes != nil {
 
-		if *obj.obj.PrefixLength > 128 {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf("0 <= BgpPrefixIpv6MplsVpnUnicastState.PrefixLength <= 128 but Got %d", *obj.obj.PrefixLength))
-		}
-
-	}
-
-	if obj.obj.Ipv4NextHop != nil {
-
-		err := obj.validateIpv4(obj.Ipv4NextHop())
-		if err != nil {
-			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on BgpPrefixIpv6MplsVpnUnicastState.Ipv4NextHop"))
-		}
-
-	}
-
-	if obj.obj.Ipv6NextHop != nil {
-
-		err := obj.validateIpv6(obj.Ipv6NextHop())
-		if err != nil {
-			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on BgpPrefixIpv6MplsVpnUnicastState.Ipv6NextHop"))
-		}
-
-	}
-
-	if obj.obj.Label != nil {
-
-		if *obj.obj.Label > 1048575 {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf("0 <= BgpPrefixIpv6MplsVpnUnicastState.Label <= 1048575 but Got %d", *obj.obj.Label))
-		}
-
-	}
-
-	if len(obj.obj.Communities) != 0 {
-
-		if set_default {
-			obj.Communities().clearHolderSlice()
-			for _, item := range obj.obj.Communities {
-				obj.Communities().appendHolderSlice(&resultBgpCommunity{obj: item})
-			}
-		}
-		for _, item := range obj.Communities().Items() {
-			item.validateObj(vObj, set_default)
-		}
-
-	}
-
-	if len(obj.obj.ExtendedCommunities) != 0 {
-
-		if set_default {
-			obj.ExtendedCommunities().clearHolderSlice()
-			for _, item := range obj.obj.ExtendedCommunities {
-				obj.ExtendedCommunities().appendHolderSlice(&resultExtendedCommunity{obj: item})
-			}
-		}
-		for _, item := range obj.ExtendedCommunities().Items() {
-			item.validateObj(vObj, set_default)
-		}
-
-	}
-
-	if obj.obj.AsPath != nil {
-
-		obj.AsPath().validateObj(vObj, set_default)
+		obj.MatchedVrfRoutes().validateObj(vObj, set_default)
 	}
 
 }
 
 func (obj *bgpPrefixIpv6MplsVpnUnicastState) setDefault() {
+	var choices_set int = 0
+	var choice BgpPrefixIpv6MplsVpnUnicastStateChoiceEnum
+
+	if obj.obj.MatchedVrfRoutes != nil {
+		choices_set += 1
+		choice = BgpPrefixIpv6MplsVpnUnicastStateChoice.MATCHED_VRF_ROUTES
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(BgpPrefixIpv6MplsVpnUnicastStateChoice.MATCHED_VRF_ROUTES)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in BgpPrefixIpv6MplsVpnUnicastState")
+			}
+		} else {
+			intVal := otg.BgpPrefixIpv6MplsVpnUnicastState_Choice_Enum_value[string(choice)]
+			enumValue := otg.BgpPrefixIpv6MplsVpnUnicastState_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
+	}
 
 }
