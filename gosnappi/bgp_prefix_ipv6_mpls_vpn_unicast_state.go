@@ -279,10 +279,10 @@ type BgpPrefixIpv6MplsVpnUnicastState interface {
 	// HasChoice checks if Choice has been set in BgpPrefixIpv6MplsVpnUnicastState
 	HasChoice() bool
 	// MatchedVrfRoutes returns BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes, set in BgpPrefixIpv6MplsVpnUnicastState.
-	// BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes is the local VRFs that this received VPN-IPv6 NLRI was imported into via Route Target matching (RFC 4364 Section 4.3.1), each with its own copy of the received path attributes.
+	// BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes is the local VRFs that received VPN-IPv6 NLRIs were imported into via Route Target matching (RFC 4364 Section 4.3.1), each with its own list of matched routes.
 	MatchedVrfRoutes() BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes
 	// SetMatchedVrfRoutes assigns BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes provided by user to BgpPrefixIpv6MplsVpnUnicastState.
-	// BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes is the local VRFs that this received VPN-IPv6 NLRI was imported into via Route Target matching (RFC 4364 Section 4.3.1), each with its own copy of the received path attributes.
+	// BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes is the local VRFs that received VPN-IPv6 NLRIs were imported into via Route Target matching (RFC 4364 Section 4.3.1), each with its own list of matched routes.
 	SetMatchedVrfRoutes(value BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes) BgpPrefixIpv6MplsVpnUnicastState
 	// HasMatchedVrfRoutes checks if MatchedVrfRoutes has been set in BgpPrefixIpv6MplsVpnUnicastState
 	HasMatchedVrfRoutes() bool

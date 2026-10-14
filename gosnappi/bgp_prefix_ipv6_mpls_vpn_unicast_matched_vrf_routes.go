@@ -16,7 +16,7 @@ type bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes struct {
 	obj          *otg.BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes
 	marshaller   marshalBgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes
 	unMarshaller unMarshalBgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes
-	vrfsHolder   BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter
+	vrfsHolder   BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter
 }
 
 func NewBgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes() BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes {
@@ -250,7 +250,7 @@ func (obj *bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes is the local VRFs that this received VPN-IPv6 NLRI was imported into via Route Target matching (RFC 4364 Section 4.3.1), each with its own copy of the received path attributes.
+// BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes is the local VRFs that received VPN-IPv6 NLRIs were imported into via Route Target matching (RFC 4364 Section 4.3.1), each with its own list of matched routes.
 type BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes interface {
 	Validation
 	// msg marshals BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes to protobuf object *otg.BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes
@@ -272,95 +272,95 @@ type BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// Vrfs returns BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIterIter, set in BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes
-	Vrfs() BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter
+	// Vrfs returns BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIterIter, set in BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes
+	Vrfs() BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter
 	setNil()
 }
 
-// One entry per local VRF (Bgp.L3vpn.Vrf) that imported this prefix. The same VPN-IPv6 NLRI can be imported into more than one VRF when multiple VRFs' route_target_import values match one of the route's Route Target Extended Communities.
-// Vrfs returns a []BgpPrefixIpv6MplsVpnUnicastVrfRoute
-func (obj *bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes) Vrfs() BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter {
+// One entry per local VRF (Bgp.L3vpn.Vrf) that imported one or more VPN-IPv6 routes. The same VPN-IPv6 NLRI can be imported into more than one VRF when multiple VRFs' route_target_import values match one of the route's Route Target Extended Communities, in which case it appears under each matching VRF's routes.
+// Vrfs returns a []BgpPrefixIpv6MplsVpnUnicastVrf
+func (obj *bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes) Vrfs() BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter {
 	if len(obj.obj.Vrfs) == 0 {
-		obj.obj.Vrfs = []*otg.BgpPrefixIpv6MplsVpnUnicastVrfRoute{}
+		obj.obj.Vrfs = []*otg.BgpPrefixIpv6MplsVpnUnicastVrf{}
 	}
 	if obj.vrfsHolder == nil {
-		obj.vrfsHolder = newBgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter(&obj.obj.Vrfs).setMsg(obj)
+		obj.vrfsHolder = newBgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter(&obj.obj.Vrfs).setMsg(obj)
 	}
 	return obj.vrfsHolder
 }
 
-type bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter struct {
-	obj                                      *bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes
-	bgpPrefixIpv6MplsVpnUnicastVrfRouteSlice []BgpPrefixIpv6MplsVpnUnicastVrfRoute
-	fieldPtr                                 *[]*otg.BgpPrefixIpv6MplsVpnUnicastVrfRoute
+type bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter struct {
+	obj                                 *bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes
+	bgpPrefixIpv6MplsVpnUnicastVrfSlice []BgpPrefixIpv6MplsVpnUnicastVrf
+	fieldPtr                            *[]*otg.BgpPrefixIpv6MplsVpnUnicastVrf
 }
 
-func newBgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter(ptr *[]*otg.BgpPrefixIpv6MplsVpnUnicastVrfRoute) BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter {
-	return &bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter{fieldPtr: ptr}
+func newBgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter(ptr *[]*otg.BgpPrefixIpv6MplsVpnUnicastVrf) BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter {
+	return &bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter{fieldPtr: ptr}
 }
 
-type BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter interface {
-	setMsg(*bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes) BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter
-	Items() []BgpPrefixIpv6MplsVpnUnicastVrfRoute
-	Add() BgpPrefixIpv6MplsVpnUnicastVrfRoute
-	Append(items ...BgpPrefixIpv6MplsVpnUnicastVrfRoute) BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter
-	Set(index int, newObj BgpPrefixIpv6MplsVpnUnicastVrfRoute) BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter
-	Clear() BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter
-	clearHolderSlice() BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter
-	appendHolderSlice(item BgpPrefixIpv6MplsVpnUnicastVrfRoute) BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter
+type BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter interface {
+	setMsg(*bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes) BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter
+	Items() []BgpPrefixIpv6MplsVpnUnicastVrf
+	Add() BgpPrefixIpv6MplsVpnUnicastVrf
+	Append(items ...BgpPrefixIpv6MplsVpnUnicastVrf) BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter
+	Set(index int, newObj BgpPrefixIpv6MplsVpnUnicastVrf) BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter
+	Clear() BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter
+	clearHolderSlice() BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter
+	appendHolderSlice(item BgpPrefixIpv6MplsVpnUnicastVrf) BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter
 }
 
-func (obj *bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter) setMsg(msg *bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes) BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter {
+func (obj *bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter) setMsg(msg *bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes) BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter {
 	obj.clearHolderSlice()
 	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&bgpPrefixIpv6MplsVpnUnicastVrfRoute{obj: val})
+		obj.appendHolderSlice(&bgpPrefixIpv6MplsVpnUnicastVrf{obj: val})
 	}
 	obj.obj = msg
 	return obj
 }
 
-func (obj *bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter) Items() []BgpPrefixIpv6MplsVpnUnicastVrfRoute {
-	return obj.bgpPrefixIpv6MplsVpnUnicastVrfRouteSlice
+func (obj *bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter) Items() []BgpPrefixIpv6MplsVpnUnicastVrf {
+	return obj.bgpPrefixIpv6MplsVpnUnicastVrfSlice
 }
 
-func (obj *bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter) Add() BgpPrefixIpv6MplsVpnUnicastVrfRoute {
-	newObj := &otg.BgpPrefixIpv6MplsVpnUnicastVrfRoute{}
+func (obj *bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter) Add() BgpPrefixIpv6MplsVpnUnicastVrf {
+	newObj := &otg.BgpPrefixIpv6MplsVpnUnicastVrf{}
 	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &bgpPrefixIpv6MplsVpnUnicastVrfRoute{obj: newObj}
+	newLibObj := &bgpPrefixIpv6MplsVpnUnicastVrf{obj: newObj}
 	newLibObj.setDefault()
-	obj.bgpPrefixIpv6MplsVpnUnicastVrfRouteSlice = append(obj.bgpPrefixIpv6MplsVpnUnicastVrfRouteSlice, newLibObj)
+	obj.bgpPrefixIpv6MplsVpnUnicastVrfSlice = append(obj.bgpPrefixIpv6MplsVpnUnicastVrfSlice, newLibObj)
 	return newLibObj
 }
 
-func (obj *bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter) Append(items ...BgpPrefixIpv6MplsVpnUnicastVrfRoute) BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter {
+func (obj *bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter) Append(items ...BgpPrefixIpv6MplsVpnUnicastVrf) BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter {
 	for _, item := range items {
 		newObj := item.msg()
 		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.bgpPrefixIpv6MplsVpnUnicastVrfRouteSlice = append(obj.bgpPrefixIpv6MplsVpnUnicastVrfRouteSlice, item)
+		obj.bgpPrefixIpv6MplsVpnUnicastVrfSlice = append(obj.bgpPrefixIpv6MplsVpnUnicastVrfSlice, item)
 	}
 	return obj
 }
 
-func (obj *bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter) Set(index int, newObj BgpPrefixIpv6MplsVpnUnicastVrfRoute) BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter {
+func (obj *bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter) Set(index int, newObj BgpPrefixIpv6MplsVpnUnicastVrf) BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter {
 	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.bgpPrefixIpv6MplsVpnUnicastVrfRouteSlice[index] = newObj
+	obj.bgpPrefixIpv6MplsVpnUnicastVrfSlice[index] = newObj
 	return obj
 }
-func (obj *bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter) Clear() BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter {
+func (obj *bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter) Clear() BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter {
 	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.BgpPrefixIpv6MplsVpnUnicastVrfRoute{}
-		obj.bgpPrefixIpv6MplsVpnUnicastVrfRouteSlice = []BgpPrefixIpv6MplsVpnUnicastVrfRoute{}
+		*obj.fieldPtr = []*otg.BgpPrefixIpv6MplsVpnUnicastVrf{}
+		obj.bgpPrefixIpv6MplsVpnUnicastVrfSlice = []BgpPrefixIpv6MplsVpnUnicastVrf{}
 	}
 	return obj
 }
-func (obj *bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter) clearHolderSlice() BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter {
-	if len(obj.bgpPrefixIpv6MplsVpnUnicastVrfRouteSlice) > 0 {
-		obj.bgpPrefixIpv6MplsVpnUnicastVrfRouteSlice = []BgpPrefixIpv6MplsVpnUnicastVrfRoute{}
+func (obj *bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter) clearHolderSlice() BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter {
+	if len(obj.bgpPrefixIpv6MplsVpnUnicastVrfSlice) > 0 {
+		obj.bgpPrefixIpv6MplsVpnUnicastVrfSlice = []BgpPrefixIpv6MplsVpnUnicastVrf{}
 	}
 	return obj
 }
-func (obj *bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter) appendHolderSlice(item BgpPrefixIpv6MplsVpnUnicastVrfRoute) BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfRouteIter {
-	obj.bgpPrefixIpv6MplsVpnUnicastVrfRouteSlice = append(obj.bgpPrefixIpv6MplsVpnUnicastVrfRouteSlice, item)
+func (obj *bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter) appendHolderSlice(item BgpPrefixIpv6MplsVpnUnicastVrf) BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutesBgpPrefixIpv6MplsVpnUnicastVrfIter {
+	obj.bgpPrefixIpv6MplsVpnUnicastVrfSlice = append(obj.bgpPrefixIpv6MplsVpnUnicastVrfSlice, item)
 	return obj
 }
 
@@ -374,7 +374,7 @@ func (obj *bgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes) validateObj(vObj *valida
 		if set_default {
 			obj.Vrfs().clearHolderSlice()
 			for _, item := range obj.obj.Vrfs {
-				obj.Vrfs().appendHolderSlice(&bgpPrefixIpv6MplsVpnUnicastVrfRoute{obj: item})
+				obj.Vrfs().appendHolderSlice(&bgpPrefixIpv6MplsVpnUnicastVrf{obj: item})
 			}
 		}
 		for _, item := range obj.Vrfs().Items() {

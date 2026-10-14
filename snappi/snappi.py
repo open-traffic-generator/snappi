@@ -199451,7 +199451,7 @@ class BgpPrefixIpv4MplsVpnUnicastState(OpenApiObject):
         # type: () -> BgpPrefixIpv4MplsVpnUnicastMatchedVrfRoutes
         """Factory property that returns an instance of the BgpPrefixIpv4MplsVpnUnicastMatchedVrfRoutes class
 
-        The local VRFs that this received VPN-IPv4 NLRI was imported into via Route Target matching (RFC 4364 Section 4.3.1), each with its own copy of the received path attributes.
+        The local VRFs that received VPN-IPv4 NLRIs were imported into via Route Target matching (RFC 4364 Section 4.3.1), each with its own list of matched routes.
 
         Returns: BgpPrefixIpv4MplsVpnUnicastMatchedVrfRoutes
         """
@@ -199488,7 +199488,7 @@ class BgpPrefixIpv4MplsVpnUnicastMatchedVrfRoutes(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "vrfs": {"type": "BgpPrefixIpv4MplsVpnUnicastVrfRouteIter"},
+        "vrfs": {"type": "BgpPrefixIpv4MplsVpnUnicastVrfIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -199503,23 +199503,81 @@ class BgpPrefixIpv4MplsVpnUnicastMatchedVrfRoutes(OpenApiObject):
 
     @property
     def vrfs(self):
-        # type: () -> BgpPrefixIpv4MplsVpnUnicastVrfRouteIter
+        # type: () -> BgpPrefixIpv4MplsVpnUnicastVrfIter
         """vrfs getter
 
-        One entry per local VRF (Bgp.L3vpn.Vrf) that imported this prefix. The same VPN-IPv4 NLRI can be imported into more than one VRF when multiple VRFs' route_target_import values match one of the route's Route Target Extended Communities.
+        One entry per local VRF (Bgp.L3vpn.Vrf) that imported one or more VPN-IPv4 routes. The same VPN-IPv4 NLRI can be imported into more than one VRF when multiple VRFs' route_target_import values match one of the route's Route Target Extended Communities, in which case it appears under each matching VRF's routes.
 
-        Returns: BgpPrefixIpv4MplsVpnUnicastVrfRouteIter
+        Returns: BgpPrefixIpv4MplsVpnUnicastVrfIter
         """
         return self._get_property(
-            "vrfs", BgpPrefixIpv4MplsVpnUnicastVrfRouteIter, self._parent, self._choice
+            "vrfs", BgpPrefixIpv4MplsVpnUnicastVrfIter, self._parent, self._choice
         )
 
 
-class BgpPrefixIpv4MplsVpnUnicastVrfRoute(OpenApiObject):
+class BgpPrefixIpv4MplsVpnUnicastVrf(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
         "name": {"type": str},
+        "routes": {"type": "BgpPrefixIpv4MplsVpnUnicastRouteIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, name=None):
+        super(BgpPrefixIpv4MplsVpnUnicastVrf, self).__init__()
+        self._parent = parent
+        self._set_property("name", name)
+
+    def set(self, name=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def name(self):
+        # type: () -> str
+        """name getter
+
+        The name of the local VRF (Bgp.L3vpn.Vrf) that imported these routes.
+
+        Returns: str
+        """
+        return self._get_property("name")
+
+    @name.setter
+    def name(self, value):
+        """name setter
+
+        The name of the local VRF (Bgp.L3vpn.Vrf) that imported these routes.
+
+        value: str
+        """
+        self._set_property("name", value)
+
+    @property
+    def routes(self):
+        # type: () -> BgpPrefixIpv4MplsVpnUnicastRouteIter
+        """routes getter
+
+        The VPN-IPv4 routes imported into this VRF.
+
+        Returns: BgpPrefixIpv4MplsVpnUnicastRouteIter
+        """
+        return self._get_property(
+            "routes", BgpPrefixIpv4MplsVpnUnicastRouteIter, self._parent, self._choice
+        )
+
+
+class BgpPrefixIpv4MplsVpnUnicastRoute(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
         "route_distinguisher": {"type": str},
         "ipv4_address": {"type": str},
         "prefix_length": {
@@ -199579,7 +199637,6 @@ class BgpPrefixIpv4MplsVpnUnicastVrfRoute(OpenApiObject):
     def __init__(
         self,
         parent=None,
-        name=None,
         route_distinguisher=None,
         ipv4_address=None,
         prefix_length=None,
@@ -199591,9 +199648,8 @@ class BgpPrefixIpv4MplsVpnUnicastVrfRoute(OpenApiObject):
         local_preference=None,
         multi_exit_discriminator=None,
     ):
-        super(BgpPrefixIpv4MplsVpnUnicastVrfRoute, self).__init__()
+        super(BgpPrefixIpv4MplsVpnUnicastRoute, self).__init__()
         self._parent = parent
-        self._set_property("name", name)
         self._set_property("route_distinguisher", route_distinguisher)
         self._set_property("ipv4_address", ipv4_address)
         self._set_property("prefix_length", prefix_length)
@@ -199607,7 +199663,6 @@ class BgpPrefixIpv4MplsVpnUnicastVrfRoute(OpenApiObject):
 
     def set(
         self,
-        name=None,
         route_distinguisher=None,
         ipv4_address=None,
         prefix_length=None,
@@ -199622,27 +199677,6 @@ class BgpPrefixIpv4MplsVpnUnicastVrfRoute(OpenApiObject):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
-
-    @property
-    def name(self):
-        # type: () -> str
-        """name getter
-
-        The name of the local VRF (Bgp.L3vpn.Vrf) that imported this prefix.
-
-        Returns: str
-        """
-        return self._get_property("name")
-
-    @name.setter
-    def name(self, value):
-        """name setter
-
-        The name of the local VRF (Bgp.L3vpn.Vrf) that imported this prefix.
-
-        value: str
-        """
-        self._set_property("name", value)
 
     @property
     def route_distinguisher(self):
@@ -199895,41 +199929,40 @@ class BgpPrefixIpv4MplsVpnUnicastVrfRoute(OpenApiObject):
         self._set_property("multi_exit_discriminator", value)
 
 
-class BgpPrefixIpv4MplsVpnUnicastVrfRouteIter(OpenApiIter):
+class BgpPrefixIpv4MplsVpnUnicastRouteIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
     _GETITEM_RETURNS_CHOICE_OBJECT = False
 
     def __init__(self, parent=None, choice=None):
-        super(BgpPrefixIpv4MplsVpnUnicastVrfRouteIter, self).__init__()
+        super(BgpPrefixIpv4MplsVpnUnicastRouteIter, self).__init__()
         self._parent = parent
         self._choice = choice
 
     def __getitem__(self, key):
-        # type: (str) -> Union[BgpPrefixIpv4MplsVpnUnicastVrfRoute]
+        # type: (str) -> Union[BgpPrefixIpv4MplsVpnUnicastRoute]
         return self._getitem(key)
 
     def __iter__(self):
-        # type: () -> BgpPrefixIpv4MplsVpnUnicastVrfRouteIter
+        # type: () -> BgpPrefixIpv4MplsVpnUnicastRouteIter
         return self._iter()
 
     def __next__(self):
-        # type: () -> BgpPrefixIpv4MplsVpnUnicastVrfRoute
+        # type: () -> BgpPrefixIpv4MplsVpnUnicastRoute
         return self._next()
 
     def next(self):
-        # type: () -> BgpPrefixIpv4MplsVpnUnicastVrfRoute
+        # type: () -> BgpPrefixIpv4MplsVpnUnicastRoute
         return self._next()
 
     def _instanceOf(self, item):
-        if not isinstance(item, BgpPrefixIpv4MplsVpnUnicastVrfRoute):
+        if not isinstance(item, BgpPrefixIpv4MplsVpnUnicastRoute):
             raise Exception(
-                "Item is not an instance of BgpPrefixIpv4MplsVpnUnicastVrfRoute"
+                "Item is not an instance of BgpPrefixIpv4MplsVpnUnicastRoute"
             )
 
-    def vrfroute(
+    def route(
         self,
-        name=None,
         route_distinguisher=None,
         ipv4_address=None,
         prefix_length=None,
@@ -199941,16 +199974,15 @@ class BgpPrefixIpv4MplsVpnUnicastVrfRouteIter(OpenApiIter):
         local_preference=None,
         multi_exit_discriminator=None,
     ):
-        # type: (str,str,str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,int,int,int) -> BgpPrefixIpv4MplsVpnUnicastVrfRouteIter
-        """Factory method that creates an instance of the BgpPrefixIpv4MplsVpnUnicastVrfRoute class
+        # type: (str,str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,int,int,int) -> BgpPrefixIpv4MplsVpnUnicastRouteIter
+        """Factory method that creates an instance of the BgpPrefixIpv4MplsVpnUnicastRoute class
 
-        A VPN-IPv4 prefix as imported into single local VRF, with the path attributes received for that NLRI (RFC 4364).
+        A VPN-IPv4 prefix imported into VRF, with the path attributes received for that NLRI (RFC 4364).
 
-        Returns: BgpPrefixIpv4MplsVpnUnicastVrfRouteIter
+        Returns: BgpPrefixIpv4MplsVpnUnicastRouteIter
         """
-        item = BgpPrefixIpv4MplsVpnUnicastVrfRoute(
+        item = BgpPrefixIpv4MplsVpnUnicastRoute(
             parent=self._parent,
-            name=name,
             route_distinguisher=route_distinguisher,
             ipv4_address=ipv4_address,
             prefix_length=prefix_length,
@@ -199967,7 +199999,6 @@ class BgpPrefixIpv4MplsVpnUnicastVrfRouteIter(OpenApiIter):
 
     def add(
         self,
-        name=None,
         route_distinguisher=None,
         ipv4_address=None,
         prefix_length=None,
@@ -199979,16 +200010,15 @@ class BgpPrefixIpv4MplsVpnUnicastVrfRouteIter(OpenApiIter):
         local_preference=None,
         multi_exit_discriminator=None,
     ):
-        # type: (str,str,str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,int,int,int) -> BgpPrefixIpv4MplsVpnUnicastVrfRoute
-        """Add method that creates and returns an instance of the BgpPrefixIpv4MplsVpnUnicastVrfRoute class
+        # type: (str,str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,int,int,int) -> BgpPrefixIpv4MplsVpnUnicastRoute
+        """Add method that creates and returns an instance of the BgpPrefixIpv4MplsVpnUnicastRoute class
 
-        A VPN-IPv4 prefix as imported into single local VRF, with the path attributes received for that NLRI (RFC 4364).
+        A VPN-IPv4 prefix imported into VRF, with the path attributes received for that NLRI (RFC 4364).
 
-        Returns: BgpPrefixIpv4MplsVpnUnicastVrfRoute
+        Returns: BgpPrefixIpv4MplsVpnUnicastRoute
         """
-        item = BgpPrefixIpv4MplsVpnUnicastVrfRoute(
+        item = BgpPrefixIpv4MplsVpnUnicastRoute(
             parent=self._parent,
-            name=name,
             route_distinguisher=route_distinguisher,
             ipv4_address=ipv4_address,
             prefix_length=prefix_length,
@@ -200000,6 +200030,61 @@ class BgpPrefixIpv4MplsVpnUnicastVrfRouteIter(OpenApiIter):
             local_preference=local_preference,
             multi_exit_discriminator=multi_exit_discriminator,
         )
+        self._add(item)
+        return item
+
+
+class BgpPrefixIpv4MplsVpnUnicastVrfIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpPrefixIpv4MplsVpnUnicastVrfIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpPrefixIpv4MplsVpnUnicastVrf]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpPrefixIpv4MplsVpnUnicastVrfIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpPrefixIpv4MplsVpnUnicastVrf
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpPrefixIpv4MplsVpnUnicastVrf
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpPrefixIpv4MplsVpnUnicastVrf):
+            raise Exception("Item is not an instance of BgpPrefixIpv4MplsVpnUnicastVrf")
+
+    def vrf(self, name=None):
+        # type: (str) -> BgpPrefixIpv4MplsVpnUnicastVrfIter
+        """Factory method that creates an instance of the BgpPrefixIpv4MplsVpnUnicastVrf class
+
+        A single local VRF (Bgp.L3vpn.Vrf) and the VPN-IPv4 routes that were imported into it.
+
+        Returns: BgpPrefixIpv4MplsVpnUnicastVrfIter
+        """
+        item = BgpPrefixIpv4MplsVpnUnicastVrf(parent=self._parent, name=name)
+        self._add(item)
+        return self
+
+    def add(self, name=None):
+        # type: (str) -> BgpPrefixIpv4MplsVpnUnicastVrf
+        """Add method that creates and returns an instance of the BgpPrefixIpv4MplsVpnUnicastVrf class
+
+        A single local VRF (Bgp.L3vpn.Vrf) and the VPN-IPv4 routes that were imported into it.
+
+        Returns: BgpPrefixIpv4MplsVpnUnicastVrf
+        """
+        item = BgpPrefixIpv4MplsVpnUnicastVrf(parent=self._parent, name=name)
         self._add(item)
         return item
 
@@ -200068,7 +200153,7 @@ class BgpPrefixIpv4MplsVpnUnicastStateIter(OpenApiIter):
         # type: () -> BgpPrefixIpv4MplsVpnUnicastStateIter
         """Factory method that creates an instance of the BgpPrefixIpv4MplsVpnUnicastMatchedVrfRoutes class
 
-        The local VRFs that this received VPN-IPv4 NLRI was imported into via Route Target matching (RFC 4364 Section 4.3.1), each with its own copy of the received path attributes.
+        The local VRFs that received VPN-IPv4 NLRIs were imported into via Route Target matching (RFC 4364 Section 4.3.1), each with its own list of matched routes.
 
         Returns: BgpPrefixIpv4MplsVpnUnicastStateIter
         """
@@ -200119,7 +200204,7 @@ class BgpPrefixIpv6MplsVpnUnicastState(OpenApiObject):
         # type: () -> BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes
         """Factory property that returns an instance of the BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes class
 
-        The local VRFs that this received VPN-IPv6 NLRI was imported into via Route Target matching (RFC 4364 Section 4.3.1), each with its own copy of the received path attributes.
+        The local VRFs that received VPN-IPv6 NLRIs were imported into via Route Target matching (RFC 4364 Section 4.3.1), each with its own list of matched routes.
 
         Returns: BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes
         """
@@ -200156,7 +200241,7 @@ class BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "vrfs": {"type": "BgpPrefixIpv6MplsVpnUnicastVrfRouteIter"},
+        "vrfs": {"type": "BgpPrefixIpv6MplsVpnUnicastVrfIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -200171,23 +200256,81 @@ class BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes(OpenApiObject):
 
     @property
     def vrfs(self):
-        # type: () -> BgpPrefixIpv6MplsVpnUnicastVrfRouteIter
+        # type: () -> BgpPrefixIpv6MplsVpnUnicastVrfIter
         """vrfs getter
 
-        One entry per local VRF (Bgp.L3vpn.Vrf) that imported this prefix. The same VPN-IPv6 NLRI can be imported into more than one VRF when multiple VRFs' route_target_import values match one of the route's Route Target Extended Communities.
+        One entry per local VRF (Bgp.L3vpn.Vrf) that imported one or more VPN-IPv6 routes. The same VPN-IPv6 NLRI can be imported into more than one VRF when multiple VRFs' route_target_import values match one of the route's Route Target Extended Communities, in which case it appears under each matching VRF's routes.
 
-        Returns: BgpPrefixIpv6MplsVpnUnicastVrfRouteIter
+        Returns: BgpPrefixIpv6MplsVpnUnicastVrfIter
         """
         return self._get_property(
-            "vrfs", BgpPrefixIpv6MplsVpnUnicastVrfRouteIter, self._parent, self._choice
+            "vrfs", BgpPrefixIpv6MplsVpnUnicastVrfIter, self._parent, self._choice
         )
 
 
-class BgpPrefixIpv6MplsVpnUnicastVrfRoute(OpenApiObject):
+class BgpPrefixIpv6MplsVpnUnicastVrf(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
         "name": {"type": str},
+        "routes": {"type": "BgpPrefixIpv6MplsVpnUnicastRouteIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, name=None):
+        super(BgpPrefixIpv6MplsVpnUnicastVrf, self).__init__()
+        self._parent = parent
+        self._set_property("name", name)
+
+    def set(self, name=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def name(self):
+        # type: () -> str
+        """name getter
+
+        The name of the local VRF (Bgp.L3vpn.Vrf) that imported these routes.
+
+        Returns: str
+        """
+        return self._get_property("name")
+
+    @name.setter
+    def name(self, value):
+        """name setter
+
+        The name of the local VRF (Bgp.L3vpn.Vrf) that imported these routes.
+
+        value: str
+        """
+        self._set_property("name", value)
+
+    @property
+    def routes(self):
+        # type: () -> BgpPrefixIpv6MplsVpnUnicastRouteIter
+        """routes getter
+
+        The VPN-IPv6 routes imported into this VRF.
+
+        Returns: BgpPrefixIpv6MplsVpnUnicastRouteIter
+        """
+        return self._get_property(
+            "routes", BgpPrefixIpv6MplsVpnUnicastRouteIter, self._parent, self._choice
+        )
+
+
+class BgpPrefixIpv6MplsVpnUnicastRoute(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
         "route_distinguisher": {"type": str},
         "ipv6_address": {"type": str},
         "prefix_length": {
@@ -200242,7 +200385,6 @@ class BgpPrefixIpv6MplsVpnUnicastVrfRoute(OpenApiObject):
     def __init__(
         self,
         parent=None,
-        name=None,
         route_distinguisher=None,
         ipv6_address=None,
         prefix_length=None,
@@ -200253,9 +200395,8 @@ class BgpPrefixIpv6MplsVpnUnicastVrfRoute(OpenApiObject):
         local_preference=None,
         multi_exit_discriminator=None,
     ):
-        super(BgpPrefixIpv6MplsVpnUnicastVrfRoute, self).__init__()
+        super(BgpPrefixIpv6MplsVpnUnicastRoute, self).__init__()
         self._parent = parent
-        self._set_property("name", name)
         self._set_property("route_distinguisher", route_distinguisher)
         self._set_property("ipv6_address", ipv6_address)
         self._set_property("prefix_length", prefix_length)
@@ -200268,7 +200409,6 @@ class BgpPrefixIpv6MplsVpnUnicastVrfRoute(OpenApiObject):
 
     def set(
         self,
-        name=None,
         route_distinguisher=None,
         ipv6_address=None,
         prefix_length=None,
@@ -200282,27 +200422,6 @@ class BgpPrefixIpv6MplsVpnUnicastVrfRoute(OpenApiObject):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
-
-    @property
-    def name(self):
-        # type: () -> str
-        """name getter
-
-        The name of the local VRF (Bgp.L3vpn.Vrf) that imported this prefix.
-
-        Returns: str
-        """
-        return self._get_property("name")
-
-    @name.setter
-    def name(self, value):
-        """name setter
-
-        The name of the local VRF (Bgp.L3vpn.Vrf) that imported this prefix.
-
-        value: str
-        """
-        self._set_property("name", value)
 
     @property
     def route_distinguisher(self):
@@ -200636,41 +200755,40 @@ class BgpPrefixIpv6MplsVpnUnicastServiceBinding(OpenApiObject):
         self._set_property("label", value, "label")
 
 
-class BgpPrefixIpv6MplsVpnUnicastVrfRouteIter(OpenApiIter):
+class BgpPrefixIpv6MplsVpnUnicastRouteIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
     _GETITEM_RETURNS_CHOICE_OBJECT = False
 
     def __init__(self, parent=None, choice=None):
-        super(BgpPrefixIpv6MplsVpnUnicastVrfRouteIter, self).__init__()
+        super(BgpPrefixIpv6MplsVpnUnicastRouteIter, self).__init__()
         self._parent = parent
         self._choice = choice
 
     def __getitem__(self, key):
-        # type: (str) -> Union[BgpPrefixIpv6MplsVpnUnicastVrfRoute]
+        # type: (str) -> Union[BgpPrefixIpv6MplsVpnUnicastRoute]
         return self._getitem(key)
 
     def __iter__(self):
-        # type: () -> BgpPrefixIpv6MplsVpnUnicastVrfRouteIter
+        # type: () -> BgpPrefixIpv6MplsVpnUnicastRouteIter
         return self._iter()
 
     def __next__(self):
-        # type: () -> BgpPrefixIpv6MplsVpnUnicastVrfRoute
+        # type: () -> BgpPrefixIpv6MplsVpnUnicastRoute
         return self._next()
 
     def next(self):
-        # type: () -> BgpPrefixIpv6MplsVpnUnicastVrfRoute
+        # type: () -> BgpPrefixIpv6MplsVpnUnicastRoute
         return self._next()
 
     def _instanceOf(self, item):
-        if not isinstance(item, BgpPrefixIpv6MplsVpnUnicastVrfRoute):
+        if not isinstance(item, BgpPrefixIpv6MplsVpnUnicastRoute):
             raise Exception(
-                "Item is not an instance of BgpPrefixIpv6MplsVpnUnicastVrfRoute"
+                "Item is not an instance of BgpPrefixIpv6MplsVpnUnicastRoute"
             )
 
-    def vrfroute(
+    def route(
         self,
-        name=None,
         route_distinguisher=None,
         ipv6_address=None,
         prefix_length=None,
@@ -200681,16 +200799,15 @@ class BgpPrefixIpv6MplsVpnUnicastVrfRouteIter(OpenApiIter):
         local_preference=None,
         multi_exit_discriminator=None,
     ):
-        # type: (str,str,str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,int,int) -> BgpPrefixIpv6MplsVpnUnicastVrfRouteIter
-        """Factory method that creates an instance of the BgpPrefixIpv6MplsVpnUnicastVrfRoute class
+        # type: (str,str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,int,int) -> BgpPrefixIpv6MplsVpnUnicastRouteIter
+        """Factory method that creates an instance of the BgpPrefixIpv6MplsVpnUnicastRoute class
 
-        A VPN-IPv6 prefix as imported into single local VRF, with the path attributes received for that NLRI (RFC 4364, RFC 4659).
+        A VPN-IPv6 prefix imported into VRF, with the path attributes received for that NLRI (RFC 4364, RFC 4659).
 
-        Returns: BgpPrefixIpv6MplsVpnUnicastVrfRouteIter
+        Returns: BgpPrefixIpv6MplsVpnUnicastRouteIter
         """
-        item = BgpPrefixIpv6MplsVpnUnicastVrfRoute(
+        item = BgpPrefixIpv6MplsVpnUnicastRoute(
             parent=self._parent,
-            name=name,
             route_distinguisher=route_distinguisher,
             ipv6_address=ipv6_address,
             prefix_length=prefix_length,
@@ -200706,7 +200823,6 @@ class BgpPrefixIpv6MplsVpnUnicastVrfRouteIter(OpenApiIter):
 
     def add(
         self,
-        name=None,
         route_distinguisher=None,
         ipv6_address=None,
         prefix_length=None,
@@ -200717,16 +200833,15 @@ class BgpPrefixIpv6MplsVpnUnicastVrfRouteIter(OpenApiIter):
         local_preference=None,
         multi_exit_discriminator=None,
     ):
-        # type: (str,str,str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,int,int) -> BgpPrefixIpv6MplsVpnUnicastVrfRoute
-        """Add method that creates and returns an instance of the BgpPrefixIpv6MplsVpnUnicastVrfRoute class
+        # type: (str,str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,int,int) -> BgpPrefixIpv6MplsVpnUnicastRoute
+        """Add method that creates and returns an instance of the BgpPrefixIpv6MplsVpnUnicastRoute class
 
-        A VPN-IPv6 prefix as imported into single local VRF, with the path attributes received for that NLRI (RFC 4364, RFC 4659).
+        A VPN-IPv6 prefix imported into VRF, with the path attributes received for that NLRI (RFC 4364, RFC 4659).
 
-        Returns: BgpPrefixIpv6MplsVpnUnicastVrfRoute
+        Returns: BgpPrefixIpv6MplsVpnUnicastRoute
         """
-        item = BgpPrefixIpv6MplsVpnUnicastVrfRoute(
+        item = BgpPrefixIpv6MplsVpnUnicastRoute(
             parent=self._parent,
-            name=name,
             route_distinguisher=route_distinguisher,
             ipv6_address=ipv6_address,
             prefix_length=prefix_length,
@@ -200737,6 +200852,61 @@ class BgpPrefixIpv6MplsVpnUnicastVrfRouteIter(OpenApiIter):
             local_preference=local_preference,
             multi_exit_discriminator=multi_exit_discriminator,
         )
+        self._add(item)
+        return item
+
+
+class BgpPrefixIpv6MplsVpnUnicastVrfIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpPrefixIpv6MplsVpnUnicastVrfIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpPrefixIpv6MplsVpnUnicastVrf]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpPrefixIpv6MplsVpnUnicastVrfIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpPrefixIpv6MplsVpnUnicastVrf
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpPrefixIpv6MplsVpnUnicastVrf
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpPrefixIpv6MplsVpnUnicastVrf):
+            raise Exception("Item is not an instance of BgpPrefixIpv6MplsVpnUnicastVrf")
+
+    def vrf(self, name=None):
+        # type: (str) -> BgpPrefixIpv6MplsVpnUnicastVrfIter
+        """Factory method that creates an instance of the BgpPrefixIpv6MplsVpnUnicastVrf class
+
+        A single local VRF (Bgp.L3vpn.Vrf) and the VPN-IPv6 routes that were imported into it.
+
+        Returns: BgpPrefixIpv6MplsVpnUnicastVrfIter
+        """
+        item = BgpPrefixIpv6MplsVpnUnicastVrf(parent=self._parent, name=name)
+        self._add(item)
+        return self
+
+    def add(self, name=None):
+        # type: (str) -> BgpPrefixIpv6MplsVpnUnicastVrf
+        """Add method that creates and returns an instance of the BgpPrefixIpv6MplsVpnUnicastVrf class
+
+        A single local VRF (Bgp.L3vpn.Vrf) and the VPN-IPv6 routes that were imported into it.
+
+        Returns: BgpPrefixIpv6MplsVpnUnicastVrf
+        """
+        item = BgpPrefixIpv6MplsVpnUnicastVrf(parent=self._parent, name=name)
         self._add(item)
         return item
 
@@ -200805,7 +200975,7 @@ class BgpPrefixIpv6MplsVpnUnicastStateIter(OpenApiIter):
         # type: () -> BgpPrefixIpv6MplsVpnUnicastStateIter
         """Factory method that creates an instance of the BgpPrefixIpv6MplsVpnUnicastMatchedVrfRoutes class
 
-        The local VRFs that this received VPN-IPv6 NLRI was imported into via Route Target matching (RFC 4364 Section 4.3.1), each with its own copy of the received path attributes.
+        The local VRFs that received VPN-IPv6 NLRIs were imported into via Route Target matching (RFC 4364 Section 4.3.1), each with its own list of matched routes.
 
         Returns: BgpPrefixIpv6MplsVpnUnicastStateIter
         """

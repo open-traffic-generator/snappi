@@ -28657,43 +28657,55 @@ components:
           x-field-uid: 2
     BgpPrefixIpv4MplsVpnUnicast.MatchedVrfRoutes:
       description: |-
-        The local VRFs that this received VPN-IPv4 NLRI was imported into via Route Target matching (RFC 4364 Section 4.3.1), each with its own copy of the received path attributes.
+        The local VRFs that received VPN-IPv4 NLRIs were imported into via Route Target matching (RFC 4364 Section 4.3.1), each with its own list of matched routes.
       type: object
       properties:
         vrfs:
           description: |-
-            One entry per local VRF (Bgp.L3vpn.Vrf) that imported this prefix. The same VPN-IPv4 NLRI can be imported into more than one VRF when multiple VRFs' route_target_import values match one of the route's Route Target Extended Communities.
+            One entry per local VRF (Bgp.L3vpn.Vrf) that imported one or more VPN-IPv4 routes. The same VPN-IPv4 NLRI can be imported into more than one VRF when multiple VRFs' route_target_import values match one of the route's Route Target Extended Communities, in which case it appears under each matching VRF's routes.
           type: array
           items:
-            $ref: '#/components/schemas/BgpPrefixIpv4MplsVpnUnicast.VrfRoute'
+            $ref: '#/components/schemas/BgpPrefixIpv4MplsVpnUnicast.Vrf'
           x-field-uid: 1
-    BgpPrefixIpv4MplsVpnUnicast.VrfRoute:
+    BgpPrefixIpv4MplsVpnUnicast.Vrf:
       description: |-
-        A VPN-IPv4 prefix as imported into a single local VRF, with the path attributes received for that NLRI (RFC 4364).
+        A single local VRF (Bgp.L3vpn.Vrf) and the VPN-IPv4 routes that were imported into it.
       type: object
       properties:
         name:
           description: |-
-            The name of the local VRF (Bgp.L3vpn.Vrf) that imported this prefix.
+            The name of the local VRF (Bgp.L3vpn.Vrf) that imported these routes.
           type: string
           x-field-uid: 1
+        routes:
+          description: |-
+            The VPN-IPv4 routes imported into this VRF.
+          type: array
+          items:
+            $ref: '#/components/schemas/BgpPrefixIpv4MplsVpnUnicast.Route'
+          x-field-uid: 2
+    BgpPrefixIpv4MplsVpnUnicast.Route:
+      description: |-
+        A VPN-IPv4 prefix imported into a VRF, with the path attributes received for that NLRI (RFC 4364).
+      type: object
+      properties:
         route_distinguisher:
           description: |-
             The Route Distinguisher (RFC 4364 Section 4.1) received as part of the VPN-IPv4 NLRI, formatted as a colon separated value, for example "60005:100" or "1.1.1.1:100".
           type: string
-          x-field-uid: 2
+          x-field-uid: 1
         ipv4_address:
           description: |-
             An IPv4 unicast address.
           type: string
-          x-field-uid: 3
+          x-field-uid: 2
         prefix_length:
           type: integer
           format: uint32
           maximum: 32
-          x-field-uid: 4
+          x-field-uid: 3
         origin:
-          x-field-uid: 5
+          x-field-uid: 4
           description: |-
             The origin of the prefix.
           type: string
@@ -28709,19 +28721,19 @@ components:
           - egp
           - incomplete
         path_id:
-          x-field-uid: 6
+          x-field-uid: 5
           description: |-
             The path id.
           type: integer
           format: uint32
         ipv4_next_hop:
-          x-field-uid: 7
+          x-field-uid: 6
           description: |-
             The IPv4 address of the egress interface.
           type: string
           format: ipv4
         ipv6_next_hop:
-          x-field-uid: 8
+          x-field-uid: 7
           description: |-
             The IPv6 address of the egress interface.
           type: string
@@ -28733,9 +28745,9 @@ components:
           format: uint32
           minimum: 0
           maximum: 1048575
-          x-field-uid: 9
+          x-field-uid: 8
         communities:
-          x-field-uid: 10
+          x-field-uid: 9
           description: |-
             Optional community attributes.
           type: array
@@ -28747,18 +28759,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Result.ExtendedCommunity'
-          x-field-uid: 11
+          x-field-uid: 10
         as_path:
-          x-field-uid: 12
+          x-field-uid: 11
           $ref: '#/components/schemas/Result.BgpAsPath'
         local_preference:
-          x-field-uid: 13
+          x-field-uid: 12
           description: |-
             The local preference is a well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
           type: integer
           format: uint32
         multi_exit_discriminator:
-          x-field-uid: 14
+          x-field-uid: 13
           description: |-
             The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
           type: integer
@@ -28784,43 +28796,55 @@ components:
           x-field-uid: 2
     BgpPrefixIpv6MplsVpnUnicast.MatchedVrfRoutes:
       description: |-
-        The local VRFs that this received VPN-IPv6 NLRI was imported into via Route Target matching (RFC 4364 Section 4.3.1), each with its own copy of the received path attributes.
+        The local VRFs that received VPN-IPv6 NLRIs were imported into via Route Target matching (RFC 4364 Section 4.3.1), each with its own list of matched routes.
       type: object
       properties:
         vrfs:
           description: |-
-            One entry per local VRF (Bgp.L3vpn.Vrf) that imported this prefix. The same VPN-IPv6 NLRI can be imported into more than one VRF when multiple VRFs' route_target_import values match one of the route's Route Target Extended Communities.
+            One entry per local VRF (Bgp.L3vpn.Vrf) that imported one or more VPN-IPv6 routes. The same VPN-IPv6 NLRI can be imported into more than one VRF when multiple VRFs' route_target_import values match one of the route's Route Target Extended Communities, in which case it appears under each matching VRF's routes.
           type: array
           items:
-            $ref: '#/components/schemas/BgpPrefixIpv6MplsVpnUnicast.VrfRoute'
+            $ref: '#/components/schemas/BgpPrefixIpv6MplsVpnUnicast.Vrf'
           x-field-uid: 1
-    BgpPrefixIpv6MplsVpnUnicast.VrfRoute:
+    BgpPrefixIpv6MplsVpnUnicast.Vrf:
       description: |-
-        A VPN-IPv6 prefix as imported into a single local VRF, with the path attributes received for that NLRI (RFC 4364, RFC 4659).
+        A single local VRF (Bgp.L3vpn.Vrf) and the VPN-IPv6 routes that were imported into it.
       type: object
       properties:
         name:
           description: |-
-            The name of the local VRF (Bgp.L3vpn.Vrf) that imported this prefix.
+            The name of the local VRF (Bgp.L3vpn.Vrf) that imported these routes.
           type: string
           x-field-uid: 1
+        routes:
+          description: |-
+            The VPN-IPv6 routes imported into this VRF.
+          type: array
+          items:
+            $ref: '#/components/schemas/BgpPrefixIpv6MplsVpnUnicast.Route'
+          x-field-uid: 2
+    BgpPrefixIpv6MplsVpnUnicast.Route:
+      description: |-
+        A VPN-IPv6 prefix imported into a VRF, with the path attributes received for that NLRI (RFC 4364, RFC 4659).
+      type: object
+      properties:
         route_distinguisher:
           description: |-
             The Route Distinguisher (RFC 4364 Section 4.1) received as part of the VPN-IPv6 NLRI, formatted as a colon separated value, for example "60005:100" or "1.1.1.1:100".
           type: string
-          x-field-uid: 2
+          x-field-uid: 1
         ipv6_address:
           description: |-
             An IPv6 unicast address.
           type: string
-          x-field-uid: 3
+          x-field-uid: 2
         prefix_length:
           type: integer
           format: uint32
           maximum: 128
-          x-field-uid: 4
+          x-field-uid: 3
         origin:
-          x-field-uid: 5
+          x-field-uid: 4
           description: |-
             The origin of the prefix.
           type: string
@@ -28836,19 +28860,19 @@ components:
           - egp
           - incomplete
         path_id:
-          x-field-uid: 6
+          x-field-uid: 5
           description: |-
             The path id.
           type: integer
           format: uint32
         ipv4_next_hop:
-          x-field-uid: 7
+          x-field-uid: 6
           description: |-
             The IPv4 address of the egress interface.
           type: string
           format: ipv4
         ipv6_next_hop:
-          x-field-uid: 8
+          x-field-uid: 7
           description: |-
             The IPv6 address of the egress interface.
           type: string
@@ -28857,9 +28881,9 @@ components:
           description: |-
             The VPN dataplane binding received for this VPN-IPv6 prefix.
           $ref: '#/components/schemas/BgpPrefixIpv6MplsVpnUnicast.ServiceBinding'
-          x-field-uid: 9
+          x-field-uid: 8
         communities:
-          x-field-uid: 10
+          x-field-uid: 9
           description: |-
             Optional community attributes.
           type: array
@@ -28871,18 +28895,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Result.ExtendedCommunity'
-          x-field-uid: 11
+          x-field-uid: 10
         as_path:
-          x-field-uid: 12
+          x-field-uid: 11
           $ref: '#/components/schemas/Result.BgpAsPath'
         local_preference:
-          x-field-uid: 13
+          x-field-uid: 12
           description: |-
             The local preference is a well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
           type: integer
           format: uint32
         multi_exit_discriminator:
-          x-field-uid: 14
+          x-field-uid: 13
           description: |-
             The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
           type: integer
