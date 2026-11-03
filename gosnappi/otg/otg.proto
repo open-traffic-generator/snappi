@@ -1259,7 +1259,6 @@ message Layer1 {
       speed_200_gbps = 11;
       speed_400_gbps = 12;
       speed_800_gbps = 13;
-      custom_speed = 14;
     }
   }
   // Set the speed if supported. When no speed is explicitly set, the current
@@ -1314,8 +1313,31 @@ message Layer1 {
   // required = true
   optional string name = 10;
 
-  // Vendor specific custom speed.
-  optional string custom_speed = 11;
+  message Mode {
+    enum Enum {
+      unspecified = 0;
+      mode_no_change = 1;
+      mode_default = 2;
+      mode_macsec_128 = 3;
+      mode_macsec_256 = 4;
+      mode_high_stream = 5;
+    }
+  }
+  // Set the mode of the test interface if supported, in addition to the speed.
+  // When no mode is explicitly set, mode_no_change applies i.e. the current
+  // mode of the underlying test interface shall be retained.
+  // Use mode_default to switch the test interface to the default mode of the
+  // configured speed i.e. the mode to which the hardware port boots up.
+  // Use mode_macsec_128 or mode_macsec_256 to choose 128-bit or 256-bit
+  // MACsec encryption respectively.
+  // Use mode_high_stream to switch the test interface to the high stream mode
+  // of the configured speed.
+  // If the requested mode is not supported for the configured speed or by the
+  // underlying test interface, an error shall be returned. If the current mode
+  // differs from the requested mode, the test interface shall be switched to the
+  // requested mode before the remaining layer1 settings are applied.
+  // default = Mode.Enum.mode_no_change
+  optional Mode.Enum mode = 11;
 }
 
 // Configuration for auto negotiation settings

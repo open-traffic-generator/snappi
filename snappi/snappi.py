@@ -2609,7 +2609,6 @@ class Layer1(OpenApiObject):
                 "speed_200_gbps",
                 "speed_400_gbps",
                 "speed_800_gbps",
-                "custom_speed",
             ],
         },
         "media": {
@@ -2632,7 +2631,16 @@ class Layer1(OpenApiObject):
         "auto_negotiation": {"type": "Layer1AutoNegotiation"},
         "flow_control": {"type": "Layer1FlowControl"},
         "name": {"type": str},
-        "custom_speed": {"type": str},
+        "mode": {
+            "type": str,
+            "enum": [
+                "mode_no_change",
+                "mode_default",
+                "mode_macsec_128",
+                "mode_macsec_256",
+                "mode_high_stream",
+            ],
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ("port_names", "name")  # type: tuple(str)
@@ -2640,6 +2648,7 @@ class Layer1(OpenApiObject):
     _DEFAULTS = {
         "promiscuous": True,
         "mtu": 1500,
+        "mode": "mode_no_change",
     }  # type: Dict[str, Union(type)]
 
     SPEED_10_FD_MBPS = "speed_10_fd_mbps"  # type: str
@@ -2655,11 +2664,16 @@ class Layer1(OpenApiObject):
     SPEED_200_GBPS = "speed_200_gbps"  # type: str
     SPEED_400_GBPS = "speed_400_gbps"  # type: str
     SPEED_800_GBPS = "speed_800_gbps"  # type: str
-    CUSTOM_SPEED = "custom_speed"  # type: str
 
     COPPER = "copper"  # type: str
     FIBER = "fiber"  # type: str
     SGMII = "sgmii"  # type: str
+
+    MODE_NO_CHANGE = "mode_no_change"  # type: str
+    MODE_DEFAULT = "mode_default"  # type: str
+    MODE_MACSEC_128 = "mode_macsec_128"  # type: str
+    MODE_MACSEC_256 = "mode_macsec_256"  # type: str
+    MODE_HIGH_STREAM = "mode_high_stream"  # type: str
 
     _STATUS = {
         "ieee_media_defaults": "ieee_media_defaults property in schema Layer1 is under-review, This field is currently under review for pending exploration on use cases",
@@ -2677,7 +2691,7 @@ class Layer1(OpenApiObject):
         ieee_media_defaults=None,
         auto_negotiate=None,
         name=None,
-        custom_speed=None,
+        mode="mode_no_change",
     ):
         super(Layer1, self).__init__()
         self._parent = parent
@@ -2689,7 +2703,7 @@ class Layer1(OpenApiObject):
         self._set_property("ieee_media_defaults", ieee_media_defaults)
         self._set_property("auto_negotiate", auto_negotiate)
         self._set_property("name", name)
-        self._set_property("custom_speed", custom_speed)
+        self._set_property("mode", mode)
 
     def set(
         self,
@@ -2701,7 +2715,7 @@ class Layer1(OpenApiObject):
         ieee_media_defaults=None,
         auto_negotiate=None,
         name=None,
-        custom_speed=None,
+        mode=None,
     ):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
@@ -2732,12 +2746,12 @@ class Layer1(OpenApiObject):
 
     @property
     def speed(self):
-        # type: () -> Union[Literal["custom_speed"], Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"], Literal["speed_800_gbps"]]
+        # type: () -> Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"], Literal["speed_800_gbps"]]
         """speed getter
 
         Set the speed if supported. When no speed is explicitly set, the current. speed of underlying test interface shall be assumed.
 
-        Returns: Union[Literal["custom_speed"], Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"], Literal["speed_800_gbps"]]
+        Returns: Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"], Literal["speed_800_gbps"]]
         """
         return self._get_property("speed")
 
@@ -2747,7 +2761,7 @@ class Layer1(OpenApiObject):
 
         Set the speed if supported. When no speed is explicitly set, the current. speed of underlying test interface shall be assumed.
 
-        value: Union[Literal["custom_speed"], Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"], Literal["speed_800_gbps"]]
+        value: Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"], Literal["speed_800_gbps"]]
         """
         self._set_property("speed", value)
 
@@ -2902,25 +2916,25 @@ class Layer1(OpenApiObject):
         self._set_property("name", value)
 
     @property
-    def custom_speed(self):
-        # type: () -> str
-        """custom_speed getter
+    def mode(self):
+        # type: () -> Union[Literal["mode_default"], Literal["mode_high_stream"], Literal["mode_macsec_128"], Literal["mode_macsec_256"], Literal["mode_no_change"]]
+        """mode getter
 
-        Vendor specific custom speed.
+        Set the mode of the test interface if supported, in addition to the speed.. When no mode is explicitly set, mode_no_change applies i.e. the current. mode of the underlying test interface shall be retained.. Use mode_default to switch the test interface to the default mode of the. configured speed i.e. the mode to which the hardware port boots up.. Use mode_macsec_128 or mode_macsec_256 to choose 128-bit or 256-bit. MACsec encryption respectively.. Use mode_high_stream to switch the test interface to the high stream mode. of the configured speed.. If the requested mode is not supported for the configured speed or by the. underlying test interface, an error shall be returned. If the current mode. differs from the requested mode, the test interface shall be switched to the. requested mode before the remaining layer1 settings are applied.
 
-        Returns: str
+        Returns: Union[Literal["mode_default"], Literal["mode_high_stream"], Literal["mode_macsec_128"], Literal["mode_macsec_256"], Literal["mode_no_change"]]
         """
-        return self._get_property("custom_speed")
+        return self._get_property("mode")
 
-    @custom_speed.setter
-    def custom_speed(self, value):
-        """custom_speed setter
+    @mode.setter
+    def mode(self, value):
+        """mode setter
 
-        Vendor specific custom speed.
+        Set the mode of the test interface if supported, in addition to the speed.. When no mode is explicitly set, mode_no_change applies i.e. the current. mode of the underlying test interface shall be retained.. Use mode_default to switch the test interface to the default mode of the. configured speed i.e. the mode to which the hardware port boots up.. Use mode_macsec_128 or mode_macsec_256 to choose 128-bit or 256-bit. MACsec encryption respectively.. Use mode_high_stream to switch the test interface to the high stream mode. of the configured speed.. If the requested mode is not supported for the configured speed or by the. underlying test interface, an error shall be returned. If the current mode. differs from the requested mode, the test interface shall be switched to the. requested mode before the remaining layer1 settings are applied.
 
-        value: str
+        value: Union[Literal["mode_default"], Literal["mode_high_stream"], Literal["mode_macsec_128"], Literal["mode_macsec_256"], Literal["mode_no_change"]]
         """
-        self._set_property("custom_speed", value)
+        self._set_property("mode", value)
 
 
 class Layer1AutoNegotiation(OpenApiObject):
@@ -3603,9 +3617,9 @@ class Layer1Iter(OpenApiIter):
         ieee_media_defaults=None,
         auto_negotiate=None,
         name=None,
-        custom_speed=None,
+        mode="mode_no_change",
     ):
-        # type: (List[str],Union[Literal["custom_speed"], Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"], Literal["speed_800_gbps"]],Union[Literal["copper"], Literal["fiber"], Literal["sgmii"]],bool,int,bool,bool,str,str) -> Layer1Iter
+        # type: (List[str],Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"], Literal["speed_800_gbps"]],Union[Literal["copper"], Literal["fiber"], Literal["sgmii"]],bool,int,bool,bool,str,Union[Literal["mode_default"], Literal["mode_high_stream"], Literal["mode_macsec_128"], Literal["mode_macsec_256"], Literal["mode_no_change"]]) -> Layer1Iter
         """Factory method that creates an instance of the Layer1 class
 
         A container for layer1 settings.
@@ -3622,7 +3636,7 @@ class Layer1Iter(OpenApiIter):
             ieee_media_defaults=ieee_media_defaults,
             auto_negotiate=auto_negotiate,
             name=name,
-            custom_speed=custom_speed,
+            mode=mode,
         )
         self._add(item)
         return self
@@ -3637,9 +3651,9 @@ class Layer1Iter(OpenApiIter):
         ieee_media_defaults=None,
         auto_negotiate=None,
         name=None,
-        custom_speed=None,
+        mode="mode_no_change",
     ):
-        # type: (List[str],Union[Literal["custom_speed"], Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"], Literal["speed_800_gbps"]],Union[Literal["copper"], Literal["fiber"], Literal["sgmii"]],bool,int,bool,bool,str,str) -> Layer1
+        # type: (List[str],Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"], Literal["speed_800_gbps"]],Union[Literal["copper"], Literal["fiber"], Literal["sgmii"]],bool,int,bool,bool,str,Union[Literal["mode_default"], Literal["mode_high_stream"], Literal["mode_macsec_128"], Literal["mode_macsec_256"], Literal["mode_no_change"]]) -> Layer1
         """Add method that creates and returns an instance of the Layer1 class
 
         A container for layer1 settings.
@@ -3656,7 +3670,7 @@ class Layer1Iter(OpenApiIter):
             ieee_media_defaults=ieee_media_defaults,
             auto_negotiate=auto_negotiate,
             name=name,
-            custom_speed=custom_speed,
+            mode=mode,
         )
         self._add(item)
         return item

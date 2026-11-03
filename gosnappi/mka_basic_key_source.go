@@ -278,10 +278,10 @@ type MkaBasicKeySource interface {
 	setChoice(value MkaBasicKeySourceChoiceEnum) MkaBasicKeySource
 	// HasChoice checks if Choice has been set in MkaBasicKeySource
 	HasChoice() bool
-	// getter for Msk to set choice.
-	Msk()
 	// getter for Psk to set choice.
 	Psk()
+	// getter for Msk to set choice.
+	Msk()
 	// Psks returns MkaBasicKeySourceMkaBasicKeySourcePskIterIter, set in MkaBasicKeySource
 	Psks() MkaBasicKeySourceMkaBasicKeySourcePskIter
 	setNil()
@@ -302,14 +302,14 @@ func (obj *mkaBasicKeySource) Choice() MkaBasicKeySourceChoiceEnum {
 	return MkaBasicKeySourceChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for Msk to set choice
-func (obj *mkaBasicKeySource) Msk() {
-	obj.setChoice(MkaBasicKeySourceChoice.MSK)
-}
-
 // getter for Psk to set choice
 func (obj *mkaBasicKeySource) Psk() {
 	obj.setChoice(MkaBasicKeySourceChoice.PSK)
+}
+
+// getter for Msk to set choice
+func (obj *mkaBasicKeySource) Msk() {
+	obj.setChoice(MkaBasicKeySourceChoice.MSK)
 }
 
 // Key source. Choose one from PSK or MSK.

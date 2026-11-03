@@ -1936,8 +1936,6 @@ components:
               x-field-uid: 12
             speed_800_gbps:
               x-field-uid: 13
-            custom_speed:
-              x-field-uid: 14
           enum:
           - speed_10_fd_mbps
           - speed_10_hd_mbps
@@ -1952,7 +1950,6 @@ components:
           - speed_200_gbps
           - speed_400_gbps
           - speed_800_gbps
-          - custom_speed
         media:
           description: |-
             Set the type of media for test interface if supported. When no media
@@ -2025,11 +2022,41 @@ components:
             Globally unique name of an object. It also serves as the primary key for arrays of objects.
           type: string
           x-unique: global
-        custom_speed:
+        mode:
           description: |-
-            Vendor specific custom speed.
+            Set the mode of the test interface if supported, in addition to the speed.
+            When no mode is explicitly set, mode_no_change applies i.e. the current
+            mode of the underlying test interface shall be retained.
+            Use mode_default to switch the test interface to the default mode of the
+            configured speed i.e. the mode to which the hardware port boots up.
+            Use mode_macsec_128 or mode_macsec_256 to choose 128-bit or 256-bit
+            MACsec encryption respectively.
+            Use mode_high_stream to switch the test interface to the high stream mode
+            of the configured speed.
+            If the requested mode is not supported for the configured speed or by the
+            underlying test interface, an error shall be returned. If the current mode
+            differs from the requested mode, the test interface shall be switched to the
+            requested mode before the remaining layer1 settings are applied.
           type: string
+          default: mode_no_change
           x-field-uid: 11
+          x-enum:
+            mode_no_change:
+              x-field-uid: 1
+            mode_default:
+              x-field-uid: 2
+            mode_macsec_128:
+              x-field-uid: 3
+            mode_macsec_256:
+              x-field-uid: 4
+            mode_high_stream:
+              x-field-uid: 5
+          enum:
+          - mode_no_change
+          - mode_default
+          - mode_macsec_128
+          - mode_macsec_256
+          - mode_high_stream
     Layer1.AutoNegotiation:
       description: |-
         Configuration for auto negotiation settings

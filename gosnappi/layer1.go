@@ -338,12 +338,12 @@ type Layer1 interface {
 	Name() string
 	// SetName assigns string provided by user to Layer1
 	SetName(value string) Layer1
-	// CustomSpeed returns string, set in Layer1.
-	CustomSpeed() string
-	// SetCustomSpeed assigns string provided by user to Layer1
-	SetCustomSpeed(value string) Layer1
-	// HasCustomSpeed checks if CustomSpeed has been set in Layer1
-	HasCustomSpeed() bool
+	// Mode returns Layer1ModeEnum, set in Layer1
+	Mode() Layer1ModeEnum
+	// SetMode assigns Layer1ModeEnum provided by user to Layer1
+	SetMode(value Layer1ModeEnum) Layer1
+	// HasMode checks if Mode has been set in Layer1
+	HasMode() bool
 	setNil()
 }
 
@@ -395,7 +395,6 @@ var Layer1Speed = struct {
 	SPEED_200_GBPS    Layer1SpeedEnum
 	SPEED_400_GBPS    Layer1SpeedEnum
 	SPEED_800_GBPS    Layer1SpeedEnum
-	CUSTOM_SPEED      Layer1SpeedEnum
 }{
 	SPEED_10_FD_MBPS:  Layer1SpeedEnum("speed_10_fd_mbps"),
 	SPEED_10_HD_MBPS:  Layer1SpeedEnum("speed_10_hd_mbps"),
@@ -410,7 +409,6 @@ var Layer1Speed = struct {
 	SPEED_200_GBPS:    Layer1SpeedEnum("speed_200_gbps"),
 	SPEED_400_GBPS:    Layer1SpeedEnum("speed_400_gbps"),
 	SPEED_800_GBPS:    Layer1SpeedEnum("speed_800_gbps"),
-	CUSTOM_SPEED:      Layer1SpeedEnum("custom_speed"),
 }
 
 func (obj *layer1) Speed() Layer1SpeedEnum {
@@ -659,25 +657,55 @@ func (obj *layer1) SetName(value string) Layer1 {
 	return obj
 }
 
-// Vendor specific custom speed.
-// CustomSpeed returns a string
-func (obj *layer1) CustomSpeed() string {
+type Layer1ModeEnum string
 
-	return *obj.obj.CustomSpeed
-
+// Enum of Mode on Layer1
+var Layer1Mode = struct {
+	MODE_NO_CHANGE   Layer1ModeEnum
+	MODE_DEFAULT     Layer1ModeEnum
+	MODE_MACSEC_128  Layer1ModeEnum
+	MODE_MACSEC_256  Layer1ModeEnum
+	MODE_HIGH_STREAM Layer1ModeEnum
+}{
+	MODE_NO_CHANGE:   Layer1ModeEnum("mode_no_change"),
+	MODE_DEFAULT:     Layer1ModeEnum("mode_default"),
+	MODE_MACSEC_128:  Layer1ModeEnum("mode_macsec_128"),
+	MODE_MACSEC_256:  Layer1ModeEnum("mode_macsec_256"),
+	MODE_HIGH_STREAM: Layer1ModeEnum("mode_high_stream"),
 }
 
-// Vendor specific custom speed.
-// CustomSpeed returns a string
-func (obj *layer1) HasCustomSpeed() bool {
-	return obj.obj.CustomSpeed != nil
+func (obj *layer1) Mode() Layer1ModeEnum {
+	return Layer1ModeEnum(obj.obj.Mode.Enum().String())
 }
 
-// Vendor specific custom speed.
-// SetCustomSpeed sets the string value in the Layer1 object
-func (obj *layer1) SetCustomSpeed(value string) Layer1 {
+// Set the mode of the test interface if supported, in addition to the speed.
+// When no mode is explicitly set, mode_no_change applies i.e. the current
+// mode of the underlying test interface shall be retained.
+// Use mode_default to switch the test interface to the default mode of the
+// configured speed i.e. the mode to which the hardware port boots up.
+// Use mode_macsec_128 or mode_macsec_256 to choose 128-bit or 256-bit
+// MACsec encryption respectively.
+// Use mode_high_stream to switch the test interface to the high stream mode
+// of the configured speed.
+// If the requested mode is not supported for the configured speed or by the
+// underlying test interface, an error shall be returned. If the current mode
+// differs from the requested mode, the test interface shall be switched to the
+// requested mode before the remaining layer1 settings are applied.
+// Mode returns a string
+func (obj *layer1) HasMode() bool {
+	return obj.obj.Mode != nil
+}
 
-	obj.obj.CustomSpeed = &value
+func (obj *layer1) SetMode(value Layer1ModeEnum) Layer1 {
+	intValue, ok := otg.Layer1_Mode_Enum_value[string(value)]
+	if !ok {
+		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
+			"%s is not a valid choice on Layer1ModeEnum", string(value)))
+		return obj
+	}
+	enumValue := otg.Layer1_Mode_Enum(intValue)
+	obj.obj.Mode = &enumValue
+
 	return obj
 }
 
@@ -718,6 +746,10 @@ func (obj *layer1) setDefault() {
 	}
 	if obj.obj.Mtu == nil {
 		obj.SetMtu(1500)
+	}
+	if obj.obj.Mode == nil {
+		obj.SetMode(Layer1Mode.MODE_NO_CHANGE)
+
 	}
 
 }
