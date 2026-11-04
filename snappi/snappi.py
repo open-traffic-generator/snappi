@@ -6432,6 +6432,16 @@ class Layer1(OpenApiObject):
         "auto_negotiation": {"type": "Layer1AutoNegotiation"},
         "flow_control": {"type": "Layer1FlowControl"},
         "name": {"type": str},
+        "mode": {
+            "type": str,
+            "enum": [
+                "mode_no_change",
+                "mode_default",
+                "mode_macsec_128",
+                "mode_macsec_256",
+                "mode_high_stream",
+            ],
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ("port_names", "name")  # type: tuple(str)
@@ -6439,6 +6449,7 @@ class Layer1(OpenApiObject):
     _DEFAULTS = {
         "promiscuous": True,
         "mtu": 1500,
+        "mode": "mode_no_change",
     }  # type: Dict[str, Union(type)]
 
     SPEED_10_FD_MBPS = "speed_10_fd_mbps"  # type: str
@@ -6459,6 +6470,12 @@ class Layer1(OpenApiObject):
     FIBER = "fiber"  # type: str
     SGMII = "sgmii"  # type: str
 
+    MODE_NO_CHANGE = "mode_no_change"  # type: str
+    MODE_DEFAULT = "mode_default"  # type: str
+    MODE_MACSEC_128 = "mode_macsec_128"  # type: str
+    MODE_MACSEC_256 = "mode_macsec_256"  # type: str
+    MODE_HIGH_STREAM = "mode_high_stream"  # type: str
+
     _STATUS = {
         "ieee_media_defaults": "ieee_media_defaults property in schema Layer1 is under_review, This field is currently under review for pending exploration on use cases",
         "auto_negotiate": "auto_negotiate property in schema Layer1 is under_review, This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.",
@@ -6475,6 +6492,7 @@ class Layer1(OpenApiObject):
         ieee_media_defaults=None,
         auto_negotiate=None,
         name=None,
+        mode="mode_no_change",
     ):
         super(Layer1, self).__init__()
         self._parent = parent
@@ -6486,6 +6504,7 @@ class Layer1(OpenApiObject):
         self._set_property("ieee_media_defaults", ieee_media_defaults)
         self._set_property("auto_negotiate", auto_negotiate)
         self._set_property("name", name)
+        self._set_property("mode", mode)
 
     def set(
         self,
@@ -6497,6 +6516,7 @@ class Layer1(OpenApiObject):
         ieee_media_defaults=None,
         auto_negotiate=None,
         name=None,
+        mode=None,
     ):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
@@ -6695,6 +6715,27 @@ class Layer1(OpenApiObject):
         if value is None:
             raise TypeError("Cannot set required property name as None")
         self._set_property("name", value)
+
+    @property
+    def mode(self):
+        # type: () -> Union[Literal["mode_default"], Literal["mode_high_stream"], Literal["mode_macsec_128"], Literal["mode_macsec_256"], Literal["mode_no_change"]]
+        """mode getter
+
+        Set the mode of the test interface if supported, in addition to the speed.. When no mode is explicitly set, mode_no_change applies i.e. the current. mode of the underlying test interface shall be retained.. Use mode_default to switch the test interface to the default mode of the. configured speed i.e. the mode to which the hardware port boots up.. Use mode_macsec_128 or mode_macsec_256 to choose 128-bit or 256-bit. MACsec encryption respectively.. Use mode_high_stream to switch the test interface to the high stream mode. of the configured speed.. If the requested mode is not supported for the configured speed or by the. underlying test interface, an error shall be returned. If the current mode. differs from the requested mode, the test interface shall be switched to the. requested mode before the remaining layer1 settings are applied.
+
+        Returns: Union[Literal["mode_default"], Literal["mode_high_stream"], Literal["mode_macsec_128"], Literal["mode_macsec_256"], Literal["mode_no_change"]]
+        """
+        return self._get_property("mode")
+
+    @mode.setter
+    def mode(self, value):
+        """mode setter
+
+        Set the mode of the test interface if supported, in addition to the speed.. When no mode is explicitly set, mode_no_change applies i.e. the current. mode of the underlying test interface shall be retained.. Use mode_default to switch the test interface to the default mode of the. configured speed i.e. the mode to which the hardware port boots up.. Use mode_macsec_128 or mode_macsec_256 to choose 128-bit or 256-bit. MACsec encryption respectively.. Use mode_high_stream to switch the test interface to the high stream mode. of the configured speed.. If the requested mode is not supported for the configured speed or by the. underlying test interface, an error shall be returned. If the current mode. differs from the requested mode, the test interface shall be switched to the. requested mode before the remaining layer1 settings are applied.
+
+        value: Union[Literal["mode_default"], Literal["mode_high_stream"], Literal["mode_macsec_128"], Literal["mode_macsec_256"], Literal["mode_no_change"]]
+        """
+        self._set_property("mode", value)
 
 
 class Layer1AutoNegotiation(OpenApiObject):
@@ -7377,8 +7418,9 @@ class Layer1Iter(OpenApiIter):
         ieee_media_defaults=None,
         auto_negotiate=None,
         name=None,
+        mode="mode_no_change",
     ):
-        # type: (List[str],Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"], Literal["speed_800_gbps"]],Union[Literal["copper"], Literal["fiber"], Literal["sgmii"]],bool,int,bool,bool,str) -> Layer1Iter
+        # type: (List[str],Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"], Literal["speed_800_gbps"]],Union[Literal["copper"], Literal["fiber"], Literal["sgmii"]],bool,int,bool,bool,str,Union[Literal["mode_default"], Literal["mode_high_stream"], Literal["mode_macsec_128"], Literal["mode_macsec_256"], Literal["mode_no_change"]]) -> Layer1Iter
         """Factory method that creates an instance of the Layer1 class
 
         A container for layer1 settings.
@@ -7395,6 +7437,7 @@ class Layer1Iter(OpenApiIter):
             ieee_media_defaults=ieee_media_defaults,
             auto_negotiate=auto_negotiate,
             name=name,
+            mode=mode,
         )
         self._add(item)
         return self
@@ -7409,8 +7452,9 @@ class Layer1Iter(OpenApiIter):
         ieee_media_defaults=None,
         auto_negotiate=None,
         name=None,
+        mode="mode_no_change",
     ):
-        # type: (List[str],Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"], Literal["speed_800_gbps"]],Union[Literal["copper"], Literal["fiber"], Literal["sgmii"]],bool,int,bool,bool,str) -> Layer1
+        # type: (List[str],Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"], Literal["speed_800_gbps"]],Union[Literal["copper"], Literal["fiber"], Literal["sgmii"]],bool,int,bool,bool,str,Union[Literal["mode_default"], Literal["mode_high_stream"], Literal["mode_macsec_128"], Literal["mode_macsec_256"], Literal["mode_no_change"]]) -> Layer1
         """Add method that creates and returns an instance of the Layer1 class
 
         A container for layer1 settings.
@@ -7427,6 +7471,7 @@ class Layer1Iter(OpenApiIter):
             ieee_media_defaults=ieee_media_defaults,
             auto_negotiate=auto_negotiate,
             name=name,
+            mode=mode,
         )
         self._add(item)
         return item
