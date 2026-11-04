@@ -169999,7 +169999,7 @@ class StateProtocolRoute(OpenApiObject):
         # type: () -> List[str]
         """names getter
 
-        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name.
+        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Bgp.L3vpn.V4RouteRange/properties/name. /components/schemas/Bgp.L3vpn.V6RouteRange/properties/name.
 
         Returns: List[str]
         """
@@ -170009,7 +170009,7 @@ class StateProtocolRoute(OpenApiObject):
     def names(self, value):
         """names setter
 
-        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name.
+        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/Ospfv2.V4RouteRange/properties/name. /components/schemas/Ospfv3.V6RouteRange/properties/name. /components/schemas/Bgp.L3vpn.V4RouteRange/properties/name. /components/schemas/Bgp.L3vpn.V6RouteRange/properties/name.
 
         value: List[str]
         """

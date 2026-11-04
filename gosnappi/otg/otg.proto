@@ -16597,6 +16597,8 @@ message StateProtocolRoute {
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // - /components/schemas/Ospfv2.V4RouteRange/properties/name
   // - /components/schemas/Ospfv3.V6RouteRange/properties/name
+  // - /components/schemas/Bgp.L3vpn.V4RouteRange/properties/name
+  // - /components/schemas/Bgp.L3vpn.V6RouteRange/properties/name
   // 
   repeated string names = 1;
 

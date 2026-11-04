@@ -284,10 +284,10 @@ type IsisIIHNeighborGRLastAttemptStatus interface {
 	setChoice(value IsisIIHNeighborGRLastAttemptStatusChoiceEnum) IsisIIHNeighborGRLastAttemptStatus
 	// HasChoice checks if Choice has been set in IsisIIHNeighborGRLastAttemptStatus
 	HasChoice() bool
-	// getter for Inprogress to set choice.
-	Inprogress()
 	// getter for Unavailable to set choice.
 	Unavailable()
+	// getter for Inprogress to set choice.
+	Inprogress()
 	// Succeeded returns IsisIIHNeighborGRLastAttemptSucceeded, set in IsisIIHNeighborGRLastAttemptStatus.
 	// IsisIIHNeighborGRLastAttemptSucceeded is this object contains the result of a successful graceful restart status in the last attempted by a Neighbor.
 	Succeeded() IsisIIHNeighborGRLastAttemptSucceeded
@@ -326,14 +326,14 @@ func (obj *isisIIHNeighborGRLastAttemptStatus) Choice() IsisIIHNeighborGRLastAtt
 	return IsisIIHNeighborGRLastAttemptStatusChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for Inprogress to set choice
-func (obj *isisIIHNeighborGRLastAttemptStatus) Inprogress() {
-	obj.setChoice(IsisIIHNeighborGRLastAttemptStatusChoice.INPROGRESS)
-}
-
 // getter for Unavailable to set choice
 func (obj *isisIIHNeighborGRLastAttemptStatus) Unavailable() {
 	obj.setChoice(IsisIIHNeighborGRLastAttemptStatusChoice.UNAVAILABLE)
+}
+
+// getter for Inprogress to set choice
+func (obj *isisIIHNeighborGRLastAttemptStatus) Inprogress() {
+	obj.setChoice(IsisIIHNeighborGRLastAttemptStatusChoice.INPROGRESS)
 }
 
 // description is TBD

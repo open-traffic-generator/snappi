@@ -88699,6 +88699,8 @@ type StateProtocolRoute struct {
 	// - /components/schemas/Isis.V6RouteRange/properties/name
 	// - /components/schemas/Ospfv2.V4RouteRange/properties/name
 	// - /components/schemas/Ospfv3.V6RouteRange/properties/name
+	// - /components/schemas/Bgp.L3vpn.V4RouteRange/properties/name
+	// - /components/schemas/Bgp.L3vpn.V6RouteRange/properties/name
 	Names []string `protobuf:"bytes,1,rep,name=names,proto3" json:"names,omitempty"`
 	// Route states
 	// required = true
