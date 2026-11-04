@@ -80,6 +80,7 @@ def test_defaults(api):
             {
                 "auto_negotiate": True,
                 "ieee_media_defaults": True,
+                "mode": "mode_no_change",
                 "mtu": 1500,
                 "name": "abc",
                 "port_names": ["test"],
