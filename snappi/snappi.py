@@ -1,4 +1,4 @@
-# Open Traffic Generator API 1.46.0
+# Open Traffic Generator API 1.62.0
 # License: MIT
 
 import importlib
@@ -1657,6 +1657,7 @@ class LagPort(OpenApiObject):
         "port_name": {"type": str},
         "lacp": {"type": "LagPortLacp"},
         "ethernet": {"type": "DeviceEthernetBase"},
+        "macsec": {"type": "LagPortMacsec"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("port_name", "ethernet")  # type: tuple(str)
@@ -1719,6 +1720,17 @@ class LagPort(OpenApiObject):
         Returns: DeviceEthernetBase
         """
         return self._get_property("ethernet", DeviceEthernetBase)
+
+    @property
+    def macsec(self):
+        # type: () -> LagPortMacsec
+        """macsec getter
+
+        Configuration of MACsec per LAG member port. This MACsec configuration per LAG member port and MACsec configuration in any Ethernet device a) on this port or b) on this LAG are mutually exclusive.Configuration of MACsec per LAG member port. This MACsec configuration per LAG member port and MACsec configuration in any Ethernet device a) on this port or b) on this LAG are mutually exclusive.Configuration of MACsec per LAG member port. This MACsec configuration per LAG member port and MACsec configuration in any Ethernet device a) on this port or b) on this LAG are mutually exclusive.
+
+        Returns: LagPortMacsec
+        """
+        return self._get_property("macsec", LagPortMacsec)
 
 
 class LagPortLacp(OpenApiObject):
@@ -2230,6 +2242,3795 @@ class DeviceVlanIter(OpenApiIter):
         return item
 
 
+class LagPortMacsec(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "secure_entity": {"type": "LagPortMacsecSecureEntity"},
+        "exclude_protocols": {"type": "LagPortMacsecExcludeProtocols"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("secure_entity",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(LagPortMacsec, self).__init__()
+        self._parent = parent
+
+    @property
+    def secure_entity(self):
+        # type: () -> LagPortMacsecSecureEntity
+        """secure_entity getter
+
+        Configuration of Secure Entity (SecY) per LAG member port.Configuration of Secure Entity (SecY) per LAG member port.Configuration of Secure Entity (SecY) per LAG member port.This contains the properties of Secure Entity (SecY) per LAG member port.
+
+        Returns: LagPortMacsecSecureEntity
+        """
+        return self._get_property("secure_entity", LagPortMacsecSecureEntity)
+
+    @property
+    def exclude_protocols(self):
+        # type: () -> LagPortMacsecExcludeProtocols
+        """exclude_protocols getter
+
+        Protocols excluded from MACsec encapsulation at Tx from the LAG member port.Protocols excluded from MACsec encapsulation at Tx from the LAG member port.Protocols excluded from MACsec encapsulation at Tx from the LAG member port.Protocols excluded from MACsec encapsulation at Tx from the LAG member port.
+
+        Returns: LagPortMacsecExcludeProtocols
+        """
+        return self._get_property("exclude_protocols", LagPortMacsecExcludeProtocols)
+
+
+class LagPortMacsecSecureEntity(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "name": {"type": str},
+        "key_generation_protocol": {"type": "SecureEntityKeyGenerationProtocol"},
+        "data_plane": {"type": "LagPortMacsecSecureEntityDataPlane"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("name", "key_generation_protocol")  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, name=None):
+        super(LagPortMacsecSecureEntity, self).__init__()
+        self._parent = parent
+        self._set_property("name", name)
+
+    def set(self, name=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def name(self):
+        # type: () -> str
+        """name getter
+
+        Globally unique name of an object. It also serves as the primary key for arrays of objects.
+
+        Returns: str
+        """
+        return self._get_property("name")
+
+    @name.setter
+    def name(self, value):
+        """name setter
+
+        Globally unique name of an object. It also serves as the primary key for arrays of objects.
+
+        value: str
+        """
+        if value is None:
+            raise TypeError("Cannot set required property name as None")
+        self._set_property("name", value)
+
+    @property
+    def key_generation_protocol(self):
+        # type: () -> SecureEntityKeyGenerationProtocol
+        """key_generation_protocol getter
+
+        Container of Key generation protocol configuration.Container of Key generation protocol configuration.Container of Key generation protocol configuration.This contains the properties of key generation protocol of Secure Entity (SecY).
+
+        Returns: SecureEntityKeyGenerationProtocol
+        """
+        return self._get_property(
+            "key_generation_protocol", SecureEntityKeyGenerationProtocol
+        )
+
+    @property
+    def data_plane(self):
+        # type: () -> LagPortMacsecSecureEntityDataPlane
+        """data_plane getter
+
+        A container of data plane properties.A container of data plane properties.A container of data plane properties.This contains the properties of data plane of Secure Entity (SecY).
+
+        Returns: LagPortMacsecSecureEntityDataPlane
+        """
+        return self._get_property("data_plane", LagPortMacsecSecureEntityDataPlane)
+
+
+class SecureEntityKeyGenerationProtocol(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "mka",
+                "static_key",
+            ],
+        },
+        "mka": {"type": "Mka"},
+        "static_key": {"type": "SecureEntityStaticKey"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "mka",
+    }  # type: Dict[str, Union(type)]
+
+    MKA = "mka"  # type: str
+    STATIC_KEY = "static_key"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(SecureEntityKeyGenerationProtocol, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def mka(self):
+        # type: () -> Mka
+        """Factory property that returns an instance of the Mka class
+
+        Configuration of MKA Key Agreement Entity (KaY). Reference https://1.ieee802.org/security/802-1x/.
+
+        Returns: Mka
+        """
+        return self._get_property("mka", Mka, self, "mka")
+
+    @property
+    def static_key(self):
+        # type: () -> SecureEntityStaticKey
+        """Factory property that returns an instance of the SecureEntityStaticKey class
+
+        A container of static key properties for secure entity(SecY). This configuration is applicable when no dynamic key management protocol i.e. MACsec key agreement(MKA) is configured. If MKA is configured, any static key configuration is not applicable.
+
+        Returns: SecureEntityStaticKey
+        """
+        return self._get_property(
+            "static_key", SecureEntityStaticKey, self, "static_key"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["mka"], Literal["static_key"]]
+        """choice getter
+
+        Key generation protocol choices. Choose "mka" for dynamic key distribution using MACsec key agreement(MKA) protocol. Choose "static_key" for static configuration of secure association key(SAK).
+
+        Returns: Union[Literal["mka"], Literal["static_key"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Key generation protocol choices. Choose "mka" for dynamic key distribution using MACsec key agreement(MKA) protocol. Choose "static_key" for static configuration of secure association key(SAK).
+
+        value: Union[Literal["mka"], Literal["static_key"]]
+        """
+        self._set_property("choice", value)
+
+
+class Mka(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "name": {"type": str},
+        "basic": {"type": "MkaBasic"},
+        "key_server": {"type": "MkaKeyServer"},
+        "tx": {"type": "MkaTx"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("name", "basic", "tx")  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, name=None):
+        super(Mka, self).__init__()
+        self._parent = parent
+        self._set_property("name", name)
+
+    def set(self, name=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def name(self):
+        # type: () -> str
+        """name getter
+
+        Globally unique name of an object. It also serves as the primary key for arrays of objects.
+
+        Returns: str
+        """
+        return self._get_property("name")
+
+    @name.setter
+    def name(self, value):
+        """name setter
+
+        Globally unique name of an object. It also serves as the primary key for arrays of objects.
+
+        value: str
+        """
+        if value is None:
+            raise TypeError("Cannot set required property name as None")
+        self._set_property("name", value)
+
+    @property
+    def basic(self):
+        # type: () -> MkaBasic
+        """basic getter
+
+        A container of basic properties for KaY.A container of basic properties for KaY.A container of basic properties for KaY.A container of basic properties for KaY.This contains the basic properties of KaY.
+
+        Returns: MkaBasic
+        """
+        return self._get_property("basic", MkaBasic)
+
+    @property
+    def key_server(self):
+        # type: () -> MkaKeyServer
+        """key_server getter
+
+        Key server attributes of KaY.Key server attributes of KaY.Key server attributes of KaY.Key server attributes of KaY.Key server attributes.
+
+        Returns: MkaKeyServer
+        """
+        return self._get_property("key_server", MkaKeyServer)
+
+    @property
+    def tx(self):
+        # type: () -> MkaTx
+        """tx getter
+
+        A container of Tx properties.A container of Tx properties.A container of Tx properties.A container of Tx properties.Tx Properties.
+
+        Returns: MkaTx
+        """
+        return self._get_property("tx", MkaTx)
+
+
+class MkaBasic(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "key_derivation_function": {
+            "type": str,
+            "enum": [
+                "aes_cmac_128",
+                "aes_cmac_256",
+            ],
+        },
+        "key_source": {"type": "MkaBasicKeySource"},
+        "actor_priority": {
+            "type": str,
+            "format": "hex",
+            "minLength": 1,
+            "maxLength": 2,
+        },
+        "macsec_desired": {"type": bool},
+        "macsec_capability": {
+            "type": str,
+            "enum": [
+                "macsec_not_implemented",
+                "macsec_integrity_without_confidentiality",
+                "macsec_integrity_with_no_confidentiality_offset",
+                "macsec_integrity_with_confidentiality_offset",
+            ],
+        },
+        "supported_cipher_suites": {"type": "MkaBasicSupportedCipherSuites"},
+        "eapol_ethernet_type": {
+            "type": str,
+            "format": "hex",
+            "minLength": 1,
+            "maxLength": 4,
+        },
+        "mka_version": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 255,
+        },
+        "mka_hello_time": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 500,
+            "maximum": 10000,
+        },
+        "mka_life_time": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 255,
+        },
+        "send_icv_indicatior_in_mkpdu": {"type": bool},
+        "delay_protect": {"type": bool},
+        "rekey_mode": {"type": "MkaBasicRekeyMode"},
+        "psk_chain_start_time": {"type": "MkaBasicPskChainStartTime"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("key_source",)  # type: tuple(str)
+
+    _DEFAULTS = {
+        "key_derivation_function": "aes_cmac_128",
+        "actor_priority": "70",
+        "macsec_desired": True,
+        "macsec_capability": "macsec_integrity_with_confidentiality_offset",
+        "eapol_ethernet_type": "888E",
+        "mka_version": 3,
+        "mka_hello_time": 2000,
+        "mka_life_time": 6,
+        "send_icv_indicatior_in_mkpdu": True,
+        "delay_protect": False,
+    }  # type: Dict[str, Union(type)]
+
+    AES_CMAC_128 = "aes_cmac_128"  # type: str
+    AES_CMAC_256 = "aes_cmac_256"  # type: str
+
+    MACSEC_NOT_IMPLEMENTED = "macsec_not_implemented"  # type: str
+    MACSEC_INTEGRITY_WITHOUT_CONFIDENTIALITY = (
+        "macsec_integrity_without_confidentiality"
+    )  # type: str
+    MACSEC_INTEGRITY_WITH_NO_CONFIDENTIALITY_OFFSET = (
+        "macsec_integrity_with_no_confidentiality_offset"
+    )  # type: str
+    MACSEC_INTEGRITY_WITH_CONFIDENTIALITY_OFFSET = (
+        "macsec_integrity_with_confidentiality_offset"
+    )  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        key_derivation_function="aes_cmac_128",
+        actor_priority="70",
+        macsec_desired=True,
+        macsec_capability="macsec_integrity_with_confidentiality_offset",
+        eapol_ethernet_type="888E",
+        mka_version=3,
+        mka_hello_time=2000,
+        mka_life_time=6,
+        send_icv_indicatior_in_mkpdu=True,
+        delay_protect=False,
+    ):
+        super(MkaBasic, self).__init__()
+        self._parent = parent
+        self._set_property("key_derivation_function", key_derivation_function)
+        self._set_property("actor_priority", actor_priority)
+        self._set_property("macsec_desired", macsec_desired)
+        self._set_property("macsec_capability", macsec_capability)
+        self._set_property("eapol_ethernet_type", eapol_ethernet_type)
+        self._set_property("mka_version", mka_version)
+        self._set_property("mka_hello_time", mka_hello_time)
+        self._set_property("mka_life_time", mka_life_time)
+        self._set_property("send_icv_indicatior_in_mkpdu", send_icv_indicatior_in_mkpdu)
+        self._set_property("delay_protect", delay_protect)
+
+    def set(
+        self,
+        key_derivation_function=None,
+        actor_priority=None,
+        macsec_desired=None,
+        macsec_capability=None,
+        eapol_ethernet_type=None,
+        mka_version=None,
+        mka_hello_time=None,
+        mka_life_time=None,
+        send_icv_indicatior_in_mkpdu=None,
+        delay_protect=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def key_derivation_function(self):
+        # type: () -> Union[Literal["aes_cmac_128"], Literal["aes_cmac_256"]]
+        """key_derivation_function getter
+
+        Key Derivation Function.
+
+        Returns: Union[Literal["aes_cmac_128"], Literal["aes_cmac_256"]]
+        """
+        return self._get_property("key_derivation_function")
+
+    @key_derivation_function.setter
+    def key_derivation_function(self, value):
+        """key_derivation_function setter
+
+        Key Derivation Function.
+
+        value: Union[Literal["aes_cmac_128"], Literal["aes_cmac_256"]]
+        """
+        self._set_property("key_derivation_function", value)
+
+    @property
+    def key_source(self):
+        # type: () -> MkaBasicKeySource
+        """key_source getter
+
+        The container for key source settings.The container for key source settings.The container for key source settings.Key source.
+
+        Returns: MkaBasicKeySource
+        """
+        return self._get_property("key_source", MkaBasicKeySource)
+
+    @property
+    def actor_priority(self):
+        # type: () -> str
+        """actor_priority getter
+
+        Actor priority.
+
+        Returns: str
+        """
+        return self._get_property("actor_priority")
+
+    @actor_priority.setter
+    def actor_priority(self, value):
+        """actor_priority setter
+
+        Actor priority.
+
+        value: str
+        """
+        self._set_property("actor_priority", value)
+
+    @property
+    def macsec_desired(self):
+        # type: () -> bool
+        """macsec_desired getter
+
+        Determines whether MACsec is desired or not. It is advertised in periodic Hellos.
+
+        Returns: bool
+        """
+        return self._get_property("macsec_desired")
+
+    @macsec_desired.setter
+    def macsec_desired(self, value):
+        """macsec_desired setter
+
+        Determines whether MACsec is desired or not. It is advertised in periodic Hellos.
+
+        value: bool
+        """
+        self._set_property("macsec_desired", value)
+
+    @property
+    def macsec_capability(self):
+        # type: () -> Union[Literal["macsec_integrity_with_confidentiality_offset"], Literal["macsec_integrity_with_no_confidentiality_offset"], Literal["macsec_integrity_without_confidentiality"], Literal["macsec_not_implemented"]]
+        """macsec_capability getter
+
+        MACSec Capability.
+
+        Returns: Union[Literal["macsec_integrity_with_confidentiality_offset"], Literal["macsec_integrity_with_no_confidentiality_offset"], Literal["macsec_integrity_without_confidentiality"], Literal["macsec_not_implemented"]]
+        """
+        return self._get_property("macsec_capability")
+
+    @macsec_capability.setter
+    def macsec_capability(self, value):
+        """macsec_capability setter
+
+        MACSec Capability.
+
+        value: Union[Literal["macsec_integrity_with_confidentiality_offset"], Literal["macsec_integrity_with_no_confidentiality_offset"], Literal["macsec_integrity_without_confidentiality"], Literal["macsec_not_implemented"]]
+        """
+        self._set_property("macsec_capability", value)
+
+    @property
+    def supported_cipher_suites(self):
+        # type: () -> MkaBasicSupportedCipherSuites
+        """supported_cipher_suites getter
+
+        The container for supported cipher suites.The container for supported cipher suites.The container for supported cipher suites.Supported Cipher Suites.
+
+        Returns: MkaBasicSupportedCipherSuites
+        """
+        return self._get_property(
+            "supported_cipher_suites", MkaBasicSupportedCipherSuites
+        )
+
+    @property
+    def eapol_ethernet_type(self):
+        # type: () -> str
+        """eapol_ethernet_type getter
+
+        EAPOL Ethernet type.
+
+        Returns: str
+        """
+        return self._get_property("eapol_ethernet_type")
+
+    @eapol_ethernet_type.setter
+    def eapol_ethernet_type(self, value):
+        """eapol_ethernet_type setter
+
+        EAPOL Ethernet type.
+
+        value: str
+        """
+        self._set_property("eapol_ethernet_type", value)
+
+    @property
+    def mka_version(self):
+        # type: () -> int
+        """mka_version getter
+
+        MKA Version.
+
+        Returns: int
+        """
+        return self._get_property("mka_version")
+
+    @mka_version.setter
+    def mka_version(self, value):
+        """mka_version setter
+
+        MKA Version.
+
+        value: int
+        """
+        self._set_property("mka_version", value)
+
+    @property
+    def mka_hello_time(self):
+        # type: () -> int
+        """mka_hello_time getter
+
+        MKA Hello Time (msec).
+
+        Returns: int
+        """
+        return self._get_property("mka_hello_time")
+
+    @mka_hello_time.setter
+    def mka_hello_time(self, value):
+        """mka_hello_time setter
+
+        MKA Hello Time (msec).
+
+        value: int
+        """
+        self._set_property("mka_hello_time", value)
+
+    @property
+    def mka_life_time(self):
+        # type: () -> int
+        """mka_life_time getter
+
+        MKA Life Time (sec).
+
+        Returns: int
+        """
+        return self._get_property("mka_life_time")
+
+    @mka_life_time.setter
+    def mka_life_time(self, value):
+        """mka_life_time setter
+
+        MKA Life Time (sec).
+
+        value: int
+        """
+        self._set_property("mka_life_time", value)
+
+    @property
+    def send_icv_indicatior_in_mkpdu(self):
+        # type: () -> bool
+        """send_icv_indicatior_in_mkpdu getter
+
+        Send ICV Indicator in MKPDU.
+
+        Returns: bool
+        """
+        return self._get_property("send_icv_indicatior_in_mkpdu")
+
+    @send_icv_indicatior_in_mkpdu.setter
+    def send_icv_indicatior_in_mkpdu(self, value):
+        """send_icv_indicatior_in_mkpdu setter
+
+        Send ICV Indicator in MKPDU.
+
+        value: bool
+        """
+        self._set_property("send_icv_indicatior_in_mkpdu", value)
+
+    @property
+    def delay_protect(self):
+        # type: () -> bool
+        """delay_protect getter
+
+        Delay Protect or not. When delay protect is enabled, it guards against delaying the delivery of MACsec encrypted frames by an attacker to the recipient.
+
+        Returns: bool
+        """
+        return self._get_property("delay_protect")
+
+    @delay_protect.setter
+    def delay_protect(self, value):
+        """delay_protect setter
+
+        Delay Protect or not. When delay protect is enabled, it guards against delaying the delivery of MACsec encrypted frames by an attacker to the recipient.
+
+        value: bool
+        """
+        self._set_property("delay_protect", value)
+
+    @property
+    def rekey_mode(self):
+        # type: () -> MkaBasicRekeyMode
+        """rekey_mode getter
+
+        Rekey mode.Rekey mode.Rekey mode.Rekey Mode.
+
+        Returns: MkaBasicRekeyMode
+        """
+        return self._get_property("rekey_mode", MkaBasicRekeyMode)
+
+    @property
+    def psk_chain_start_time(self):
+        # type: () -> MkaBasicPskChainStartTime
+        """psk_chain_start_time getter
+
+        Pre-shared key(PSK) chain start time in UTC time format DD-MM-YYYY HH:MM:SS. For any key in chain, key start offset time and end offset time will be relative to this chain start time. There can be two cases depending on number of keys in key chain. 1) Single key in key chain Test port and DUT need not be time synced for single key if key chain start time is set to some past time. As default key chain start time is Unix epoch time, default value suffices for single key in chain. 2) More than one key Test program should set key chain start time to some future time e.g. few minutes ahead of current time in both test config and DUT config. This requires both test port and DUT to be time synced.Pre-shared key(PSK) chain start time in UTC time format DD-MM-YYYY HH:MM:SS. For any key in chain, key start offset time and end offset time will be relative to this chain start time. There can be two cases depending on number of keys in key chain. 1) Single key in key chain Test port and DUT need not be time synced for single key if key chain start time is set to some past time. As default key chain start time is Unix epoch time, default value suffices for single key in chain. 2) More than one key Test program should set key chain start time to some future time e.g. few minutes ahead of current time in both test config and DUT config. This requires both test port and DUT to be time synced.Pre-shared key(PSK) chain start time in UTC time format DD-MM-YYYY HH:MM:SS. For any key in chain, key start offset time and end offset time will be relative to this chain start time. There can be two cases depending on number of keys in key chain. 1) Single key in key chain Test port and DUT need not be time synced for single key if key chain start time is set to some past time. As default key chain start time is Unix epoch time, default value suffices for single key in chain. 2) More than one key Test program should set key chain start time to some future time e.g. few minutes ahead of current time in both test config and DUT config. This requires both test port and DUT to be time synced.
+
+        Returns: MkaBasicPskChainStartTime
+        """
+        return self._get_property("psk_chain_start_time", MkaBasicPskChainStartTime)
+
+
+class MkaBasicKeySource(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "psk",
+            ],
+        },
+        "psks": {"type": "MkaBasicKeySourcePskIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "psk",
+    }  # type: Dict[str, Union(type)]
+
+    PSK = "psk"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(MkaBasicKeySource, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["psk"]]
+        """choice getter
+
+        Key source. Current choice is PSK only.
+
+        Returns: Union[Literal["psk"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Key source. Current choice is PSK only.
+
+        value: Union[Literal["psk"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def psks(self):
+        # type: () -> MkaBasicKeySourcePskIter
+        """psks getter
+
+        PSK chain.
+
+        Returns: MkaBasicKeySourcePskIter
+        """
+        return self._get_property(
+            "psks", MkaBasicKeySourcePskIter, self._parent, self._choice
+        )
+
+
+class MkaBasicKeySourcePsk(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "cak_value": {
+            "type": str,
+            "format": "hex",
+            "minLength": 1,
+            "maxLength": 64,
+        },
+        "cak_name": {
+            "type": str,
+            "format": "hex",
+            "minLength": 1,
+            "maxLength": 64,
+        },
+        "start_offset_time": {"type": "MkaBasicStartOffsetTime"},
+        "end_offset_time": {"type": "MkaBasicEndOffsetTime"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "cak_value": "F123456789ABCDEF0123456789ABCDEF",
+        "cak_name": "ABCD",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, cak_value="F123456789ABCDEF0123456789ABCDEF", cak_name="ABCD"
+    ):
+        super(MkaBasicKeySourcePsk, self).__init__()
+        self._parent = parent
+        self._set_property("cak_value", cak_value)
+        self._set_property("cak_name", cak_name)
+
+    def set(self, cak_value=None, cak_name=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def cak_value(self):
+        # type: () -> str
+        """cak_value getter
+
+        Connectivity association key(CAK) value. It can be 128 bits or 256 bits long depending on the chosen MKA key derivation function.
+
+        Returns: str
+        """
+        return self._get_property("cak_value")
+
+    @cak_value.setter
+    def cak_value(self, value):
+        """cak_value setter
+
+        Connectivity association key(CAK) value. It can be 128 bits or 256 bits long depending on the chosen MKA key derivation function.
+
+        value: str
+        """
+        self._set_property("cak_value", value)
+
+    @property
+    def cak_name(self):
+        # type: () -> str
+        """cak_name getter
+
+        Connectivity association key(CAK) name. The value should be in sync with CAK name in DUT.
+
+        Returns: str
+        """
+        return self._get_property("cak_name")
+
+    @cak_name.setter
+    def cak_name(self, value):
+        """cak_name setter
+
+        Connectivity association key(CAK) name. The value should be in sync with CAK name in DUT.
+
+        value: str
+        """
+        self._set_property("cak_name", value)
+
+    @property
+    def start_offset_time(self):
+        # type: () -> MkaBasicStartOffsetTime
+        """start_offset_time getter
+
+        Key start offset time in HH:MM. This is relative to key chain start time.Key start offset time in HH:MM. This is relative to key chain start time.Key start offset time in HH:MM. This is relative to key chain start time.
+
+        Returns: MkaBasicStartOffsetTime
+        """
+        return self._get_property("start_offset_time", MkaBasicStartOffsetTime)
+
+    @property
+    def end_offset_time(self):
+        # type: () -> MkaBasicEndOffsetTime
+        """end_offset_time getter
+
+        Key end offset time in HH:MM. This is relative to key chain start time. value of "00:00" makes the key valid for lifetime.Key end offset time in HH:MM. This is relative to key chain start time. value of "00:00" makes the key valid for lifetime.Key end offset time in HH:MM. This is relative to key chain start time. value of "00:00" makes the key valid for lifetime.
+
+        Returns: MkaBasicEndOffsetTime
+        """
+        return self._get_property("end_offset_time", MkaBasicEndOffsetTime)
+
+
+class MkaBasicStartOffsetTime(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "hh": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+        },
+        "mm": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 59,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "hh": 0,
+        "mm": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, hh=0, mm=0):
+        super(MkaBasicStartOffsetTime, self).__init__()
+        self._parent = parent
+        self._set_property("hh", hh)
+        self._set_property("mm", mm)
+
+    def set(self, hh=None, mm=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def hh(self):
+        # type: () -> int
+        """hh getter
+
+        Hours in HH format.
+
+        Returns: int
+        """
+        return self._get_property("hh")
+
+    @hh.setter
+    def hh(self, value):
+        """hh setter
+
+        Hours in HH format.
+
+        value: int
+        """
+        self._set_property("hh", value)
+
+    @property
+    def mm(self):
+        # type: () -> int
+        """mm getter
+
+        Minutes in MM format.
+
+        Returns: int
+        """
+        return self._get_property("mm")
+
+    @mm.setter
+    def mm(self, value):
+        """mm setter
+
+        Minutes in MM format.
+
+        value: int
+        """
+        self._set_property("mm", value)
+
+
+class MkaBasicEndOffsetTime(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "hh": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+        },
+        "mm": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 59,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "hh": 0,
+        "mm": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, hh=0, mm=0):
+        super(MkaBasicEndOffsetTime, self).__init__()
+        self._parent = parent
+        self._set_property("hh", hh)
+        self._set_property("mm", mm)
+
+    def set(self, hh=None, mm=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def hh(self):
+        # type: () -> int
+        """hh getter
+
+        Hours in HH format.
+
+        Returns: int
+        """
+        return self._get_property("hh")
+
+    @hh.setter
+    def hh(self, value):
+        """hh setter
+
+        Hours in HH format.
+
+        value: int
+        """
+        self._set_property("hh", value)
+
+    @property
+    def mm(self):
+        # type: () -> int
+        """mm getter
+
+        Minutes in MM format.
+
+        Returns: int
+        """
+        return self._get_property("mm")
+
+    @mm.setter
+    def mm(self, value):
+        """mm setter
+
+        Minutes in MM format.
+
+        value: int
+        """
+        self._set_property("mm", value)
+
+
+class MkaBasicKeySourcePskIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(MkaBasicKeySourcePskIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[MkaBasicKeySourcePsk]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> MkaBasicKeySourcePskIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> MkaBasicKeySourcePsk
+        return self._next()
+
+    def next(self):
+        # type: () -> MkaBasicKeySourcePsk
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, MkaBasicKeySourcePsk):
+            raise Exception("Item is not an instance of MkaBasicKeySourcePsk")
+
+    def psk(self, cak_value="F123456789ABCDEF0123456789ABCDEF", cak_name="ABCD"):
+        # type: (str,str) -> MkaBasicKeySourcePskIter
+        """Factory method that creates an instance of the MkaBasicKeySourcePsk class
+
+        The container for Pre-shared key(PSK).
+
+        Returns: MkaBasicKeySourcePskIter
+        """
+        item = MkaBasicKeySourcePsk(
+            parent=self._parent, cak_value=cak_value, cak_name=cak_name
+        )
+        self._add(item)
+        return self
+
+    def add(self, cak_value="F123456789ABCDEF0123456789ABCDEF", cak_name="ABCD"):
+        # type: (str,str) -> MkaBasicKeySourcePsk
+        """Add method that creates and returns an instance of the MkaBasicKeySourcePsk class
+
+        The container for Pre-shared key(PSK).
+
+        Returns: MkaBasicKeySourcePsk
+        """
+        item = MkaBasicKeySourcePsk(
+            parent=self._parent, cak_value=cak_value, cak_name=cak_name
+        )
+        self._add(item)
+        return item
+
+
+class MkaBasicSupportedCipherSuites(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "gcm_aes_128": {"type": bool},
+        "gcm_aes_256": {"type": bool},
+        "gcm_aes_xpn_128": {"type": bool},
+        "gcm_aes_xpn_256": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "gcm_aes_128": True,
+        "gcm_aes_256": True,
+        "gcm_aes_xpn_128": True,
+        "gcm_aes_xpn_256": True,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        gcm_aes_128=True,
+        gcm_aes_256=True,
+        gcm_aes_xpn_128=True,
+        gcm_aes_xpn_256=True,
+    ):
+        super(MkaBasicSupportedCipherSuites, self).__init__()
+        self._parent = parent
+        self._set_property("gcm_aes_128", gcm_aes_128)
+        self._set_property("gcm_aes_256", gcm_aes_256)
+        self._set_property("gcm_aes_xpn_128", gcm_aes_xpn_128)
+        self._set_property("gcm_aes_xpn_256", gcm_aes_xpn_256)
+
+    def set(
+        self,
+        gcm_aes_128=None,
+        gcm_aes_256=None,
+        gcm_aes_xpn_128=None,
+        gcm_aes_xpn_256=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def gcm_aes_128(self):
+        # type: () -> bool
+        """gcm_aes_128 getter
+
+        GCM-AES-128.
+
+        Returns: bool
+        """
+        return self._get_property("gcm_aes_128")
+
+    @gcm_aes_128.setter
+    def gcm_aes_128(self, value):
+        """gcm_aes_128 setter
+
+        GCM-AES-128.
+
+        value: bool
+        """
+        self._set_property("gcm_aes_128", value)
+
+    @property
+    def gcm_aes_256(self):
+        # type: () -> bool
+        """gcm_aes_256 getter
+
+        GCM-AES-256.
+
+        Returns: bool
+        """
+        return self._get_property("gcm_aes_256")
+
+    @gcm_aes_256.setter
+    def gcm_aes_256(self, value):
+        """gcm_aes_256 setter
+
+        GCM-AES-256.
+
+        value: bool
+        """
+        self._set_property("gcm_aes_256", value)
+
+    @property
+    def gcm_aes_xpn_128(self):
+        # type: () -> bool
+        """gcm_aes_xpn_128 getter
+
+        GCM-AES-XPN-128.
+
+        Returns: bool
+        """
+        return self._get_property("gcm_aes_xpn_128")
+
+    @gcm_aes_xpn_128.setter
+    def gcm_aes_xpn_128(self, value):
+        """gcm_aes_xpn_128 setter
+
+        GCM-AES-XPN-128.
+
+        value: bool
+        """
+        self._set_property("gcm_aes_xpn_128", value)
+
+    @property
+    def gcm_aes_xpn_256(self):
+        # type: () -> bool
+        """gcm_aes_xpn_256 getter
+
+        GCM-AES-XPN-256.
+
+        Returns: bool
+        """
+        return self._get_property("gcm_aes_xpn_256")
+
+    @gcm_aes_xpn_256.setter
+    def gcm_aes_xpn_256(self, value):
+        """gcm_aes_xpn_256 setter
+
+        GCM-AES-XPN-256.
+
+        value: bool
+        """
+        self._set_property("gcm_aes_xpn_256", value)
+
+
+class MkaBasicRekeyMode(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "dont_rekey",
+                "timer_based",
+                "pn_based",
+            ],
+        },
+        "timer_based": {"type": "MkaBasicRekeyModeTimerBased"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "dont_rekey",
+    }  # type: Dict[str, Union(type)]
+
+    DONT_REKEY = "dont_rekey"  # type: str
+    TIMER_BASED = "timer_based"  # type: str
+    PN_BASED = "pn_based"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(MkaBasicRekeyMode, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def timer_based(self):
+        # type: () -> MkaBasicRekeyModeTimerBased
+        """Factory property that returns an instance of the MkaBasicRekeyModeTimerBased class
+
+        Timer based periodic rekey properties.
+
+        Returns: MkaBasicRekeyModeTimerBased
+        """
+        return self._get_property(
+            "timer_based", MkaBasicRekeyModeTimerBased, self, "timer_based"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["dont_rekey"], Literal["pn_based"], Literal["timer_based"]]
+        """choice getter
+
+        Mode choices.
+
+        Returns: Union[Literal["dont_rekey"], Literal["pn_based"], Literal["timer_based"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Mode choices.
+
+        value: Union[Literal["dont_rekey"], Literal["pn_based"], Literal["timer_based"]]
+        """
+        self._set_property("choice", value)
+
+
+class MkaBasicRekeyModeTimerBased(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "continuous",
+                "fixed_count",
+            ],
+        },
+        "fixed_count": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 65535,
+        },
+        "interval": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 30,
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "continuous",
+        "fixed_count": 10,
+        "interval": 300,
+    }  # type: Dict[str, Union(type)]
+
+    CONTINUOUS = "continuous"  # type: str
+    FIXED_COUNT = "fixed_count"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, fixed_count=10, interval=300):
+        super(MkaBasicRekeyModeTimerBased, self).__init__()
+        self._parent = parent
+        self._set_property("fixed_count", fixed_count)
+        self._set_property("interval", interval)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, fixed_count=None, interval=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["continuous"], Literal["fixed_count"]]
+        """choice getter
+
+        Periodic Rekey count.
+
+        Returns: Union[Literal["continuous"], Literal["fixed_count"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Periodic Rekey count.
+
+        value: Union[Literal["continuous"], Literal["fixed_count"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def fixed_count(self):
+        # type: () -> int
+        """fixed_count getter
+
+        Fixed rekey attempts.
+
+        Returns: int
+        """
+        return self._get_property("fixed_count")
+
+    @fixed_count.setter
+    def fixed_count(self, value):
+        """fixed_count setter
+
+        Fixed rekey attempts.
+
+        value: int
+        """
+        self._set_property("fixed_count", value, "fixed_count")
+
+    @property
+    def interval(self):
+        # type: () -> int
+        """interval getter
+
+        Periodic rekey interval (sec).
+
+        Returns: int
+        """
+        return self._get_property("interval")
+
+    @interval.setter
+    def interval(self, value):
+        """interval setter
+
+        Periodic rekey interval (sec).
+
+        value: int
+        """
+        self._set_property("interval", value)
+
+
+class MkaBasicPskChainStartTime(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "utc",
+            ],
+        },
+        "utc": {"type": "MkaBasicTimeUtc"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "utc",
+    }  # type: Dict[str, Union(type)]
+
+    UTC = "utc"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(MkaBasicPskChainStartTime, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def utc(self):
+        # type: () -> MkaBasicTimeUtc
+        """Factory property that returns an instance of the MkaBasicTimeUtc class
+
+        Coordinated Universal Time(UTC).
+
+        Returns: MkaBasicTimeUtc
+        """
+        return self._get_property("utc", MkaBasicTimeUtc, self, "utc")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["utc"]]
+        """choice getter
+
+        Timezone choice. Currently only Coordinated Universal Time(UTC) is supported.
+
+        Returns: Union[Literal["utc"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Timezone choice. Currently only Coordinated Universal Time(UTC) is supported.
+
+        value: Union[Literal["utc"]]
+        """
+        self._set_property("choice", value)
+
+
+class MkaBasicTimeUtc(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "day": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 31,
+        },
+        "month": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 12,
+        },
+        "year": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 9999,
+        },
+        "hour": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 23,
+        },
+        "minute": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 59,
+        },
+        "second": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 59,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "day": 1,
+        "month": 1,
+        "year": 1970,
+        "hour": 0,
+        "minute": 0,
+        "second": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, day=1, month=1, year=1970, hour=0, minute=0, second=0
+    ):
+        super(MkaBasicTimeUtc, self).__init__()
+        self._parent = parent
+        self._set_property("day", day)
+        self._set_property("month", month)
+        self._set_property("year", year)
+        self._set_property("hour", hour)
+        self._set_property("minute", minute)
+        self._set_property("second", second)
+
+    def set(self, day=None, month=None, year=None, hour=None, minute=None, second=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def day(self):
+        # type: () -> int
+        """day getter
+
+        Day of the month in DD format.
+
+        Returns: int
+        """
+        return self._get_property("day")
+
+    @day.setter
+    def day(self, value):
+        """day setter
+
+        Day of the month in DD format.
+
+        value: int
+        """
+        self._set_property("day", value)
+
+    @property
+    def month(self):
+        # type: () -> int
+        """month getter
+
+        Month of the year in MM format.
+
+        Returns: int
+        """
+        return self._get_property("month")
+
+    @month.setter
+    def month(self, value):
+        """month setter
+
+        Month of the year in MM format.
+
+        value: int
+        """
+        self._set_property("month", value)
+
+    @property
+    def year(self):
+        # type: () -> int
+        """year getter
+
+        Year from the start of common era(CE) in YYYY format.
+
+        Returns: int
+        """
+        return self._get_property("year")
+
+    @year.setter
+    def year(self, value):
+        """year setter
+
+        Year from the start of common era(CE) in YYYY format.
+
+        value: int
+        """
+        self._set_property("year", value)
+
+    @property
+    def hour(self):
+        # type: () -> int
+        """hour getter
+
+        Hour of the day in HH format.
+
+        Returns: int
+        """
+        return self._get_property("hour")
+
+    @hour.setter
+    def hour(self, value):
+        """hour setter
+
+        Hour of the day in HH format.
+
+        value: int
+        """
+        self._set_property("hour", value)
+
+    @property
+    def minute(self):
+        # type: () -> int
+        """minute getter
+
+        Minute of the hour in MM format.
+
+        Returns: int
+        """
+        return self._get_property("minute")
+
+    @minute.setter
+    def minute(self, value):
+        """minute setter
+
+        Minute of the hour in MM format.
+
+        value: int
+        """
+        self._set_property("minute", value)
+
+    @property
+    def second(self):
+        # type: () -> int
+        """second getter
+
+        Second of the minute in SS format.
+
+        Returns: int
+        """
+        return self._get_property("second")
+
+    @second.setter
+    def second(self, value):
+        """second setter
+
+        Second of the minute in SS format.
+
+        value: int
+        """
+        self._set_property("second", value)
+
+
+class MkaKeyServer(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "confidentialty_offset": {
+            "type": str,
+            "enum": [
+                "no_confidentiality",
+                "no_confidentiality_offset",
+                "confidentiality_offset_30_octets",
+                "confidentiality_offset_50_octets",
+            ],
+        },
+        "cipher_suite": {
+            "type": str,
+            "enum": [
+                "gcm_aes_128",
+                "gcm_aes_256",
+                "gcm_aes_xpn_128",
+                "gcm_aes_xpn_256",
+            ],
+        },
+        "starting_key_number": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+        },
+        "starting_distributed_an": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 3,
+        },
+        "rekey_threshold_pn": {
+            "type": str,
+            "format": "hex",
+            "minLength": 1,
+            "maxLength": 8,
+        },
+        "rekey_threshold_xpn": {
+            "type": str,
+            "format": "hex",
+            "minLength": 1,
+            "maxLength": 16,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "confidentialty_offset": "no_confidentiality_offset",
+        "cipher_suite": "gcm_aes_128",
+        "starting_key_number": 1,
+        "starting_distributed_an": 0,
+        "rekey_threshold_pn": "C0000000",
+        "rekey_threshold_xpn": "C000000000000000",
+    }  # type: Dict[str, Union(type)]
+
+    NO_CONFIDENTIALITY = "no_confidentiality"  # type: str
+    NO_CONFIDENTIALITY_OFFSET = "no_confidentiality_offset"  # type: str
+    CONFIDENTIALITY_OFFSET_30_OCTETS = "confidentiality_offset_30_octets"  # type: str
+    CONFIDENTIALITY_OFFSET_50_OCTETS = "confidentiality_offset_50_octets"  # type: str
+
+    GCM_AES_128 = "gcm_aes_128"  # type: str
+    GCM_AES_256 = "gcm_aes_256"  # type: str
+    GCM_AES_XPN_128 = "gcm_aes_xpn_128"  # type: str
+    GCM_AES_XPN_256 = "gcm_aes_xpn_256"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        confidentialty_offset="no_confidentiality_offset",
+        cipher_suite="gcm_aes_128",
+        starting_key_number=1,
+        starting_distributed_an=0,
+        rekey_threshold_pn="C0000000",
+        rekey_threshold_xpn="C000000000000000",
+    ):
+        super(MkaKeyServer, self).__init__()
+        self._parent = parent
+        self._set_property("confidentialty_offset", confidentialty_offset)
+        self._set_property("cipher_suite", cipher_suite)
+        self._set_property("starting_key_number", starting_key_number)
+        self._set_property("starting_distributed_an", starting_distributed_an)
+        self._set_property("rekey_threshold_pn", rekey_threshold_pn)
+        self._set_property("rekey_threshold_xpn", rekey_threshold_xpn)
+
+    def set(
+        self,
+        confidentialty_offset=None,
+        cipher_suite=None,
+        starting_key_number=None,
+        starting_distributed_an=None,
+        rekey_threshold_pn=None,
+        rekey_threshold_xpn=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def confidentialty_offset(self):
+        # type: () -> Union[Literal["confidentiality_offset_30_octets"], Literal["confidentiality_offset_50_octets"], Literal["no_confidentiality"], Literal["no_confidentiality_offset"]]
+        """confidentialty_offset getter
+
+        Confidentiality Offset.
+
+        Returns: Union[Literal["confidentiality_offset_30_octets"], Literal["confidentiality_offset_50_octets"], Literal["no_confidentiality"], Literal["no_confidentiality_offset"]]
+        """
+        return self._get_property("confidentialty_offset")
+
+    @confidentialty_offset.setter
+    def confidentialty_offset(self, value):
+        """confidentialty_offset setter
+
+        Confidentiality Offset.
+
+        value: Union[Literal["confidentiality_offset_30_octets"], Literal["confidentiality_offset_50_octets"], Literal["no_confidentiality"], Literal["no_confidentiality_offset"]]
+        """
+        self._set_property("confidentialty_offset", value)
+
+    @property
+    def cipher_suite(self):
+        # type: () -> Union[Literal["gcm_aes_128"], Literal["gcm_aes_256"], Literal["gcm_aes_xpn_128"], Literal["gcm_aes_xpn_256"]]
+        """cipher_suite getter
+
+        The cipher suite. Choose one from GCM-AES-128 GCM-AES-256 GCM-AES-XPN-128 GCM-AES-XPN-256
+
+        Returns: Union[Literal["gcm_aes_128"], Literal["gcm_aes_256"], Literal["gcm_aes_xpn_128"], Literal["gcm_aes_xpn_256"]]
+        """
+        return self._get_property("cipher_suite")
+
+    @cipher_suite.setter
+    def cipher_suite(self, value):
+        """cipher_suite setter
+
+        The cipher suite. Choose one from GCM-AES-128 GCM-AES-256 GCM-AES-XPN-128 GCM-AES-XPN-256
+
+        value: Union[Literal["gcm_aes_128"], Literal["gcm_aes_256"], Literal["gcm_aes_xpn_128"], Literal["gcm_aes_xpn_256"]]
+        """
+        self._set_property("cipher_suite", value)
+
+    @property
+    def starting_key_number(self):
+        # type: () -> int
+        """starting_key_number getter
+
+        Starting Key Number.
+
+        Returns: int
+        """
+        return self._get_property("starting_key_number")
+
+    @starting_key_number.setter
+    def starting_key_number(self, value):
+        """starting_key_number setter
+
+        Starting Key Number.
+
+        value: int
+        """
+        self._set_property("starting_key_number", value)
+
+    @property
+    def starting_distributed_an(self):
+        # type: () -> int
+        """starting_distributed_an getter
+
+        Starting Distributed AN.
+
+        Returns: int
+        """
+        return self._get_property("starting_distributed_an")
+
+    @starting_distributed_an.setter
+    def starting_distributed_an(self, value):
+        """starting_distributed_an setter
+
+        Starting Distributed AN.
+
+        value: int
+        """
+        self._set_property("starting_distributed_an", value)
+
+    @property
+    def rekey_threshold_pn(self):
+        # type: () -> str
+        """rekey_threshold_pn getter
+
+        Determines the PN rekey threshold.
+
+        Returns: str
+        """
+        return self._get_property("rekey_threshold_pn")
+
+    @rekey_threshold_pn.setter
+    def rekey_threshold_pn(self, value):
+        """rekey_threshold_pn setter
+
+        Determines the PN rekey threshold.
+
+        value: str
+        """
+        self._set_property("rekey_threshold_pn", value)
+
+    @property
+    def rekey_threshold_xpn(self):
+        # type: () -> str
+        """rekey_threshold_xpn getter
+
+        Determines the XPN rekey threshold.
+
+        Returns: str
+        """
+        return self._get_property("rekey_threshold_xpn")
+
+    @rekey_threshold_xpn.setter
+    def rekey_threshold_xpn(self, value):
+        """rekey_threshold_xpn setter
+
+        Determines the XPN rekey threshold.
+
+        value: str
+        """
+        self._set_property("rekey_threshold_xpn", value)
+
+
+class MkaTx(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "secure_channels": {"type": "MkaTxScIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("secure_channels",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(MkaTx, self).__init__()
+        self._parent = parent
+
+    @property
+    def secure_channels(self):
+        # type: () -> MkaTxScIter
+        """secure_channels getter
+
+        Tx secure channels.
+
+        Returns: MkaTxScIter
+        """
+        return self._get_property(
+            "secure_channels", MkaTxScIter, self._parent, self._choice
+        )
+
+
+class MkaTxSc(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "name": {"type": str},
+        "system_id": {
+            "type": str,
+            "format": "mac",
+        },
+        "port_id": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 65535,
+        },
+        "starting_message_number": {
+            "type": int,
+            "format": "uint64",
+            "minimum": 1,
+            "maximum": 4294967295,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("name", "system_id")  # type: tuple(str)
+
+    _DEFAULTS = {
+        "port_id": 1,
+        "starting_message_number": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        name=None,
+        system_id=None,
+        port_id=1,
+        starting_message_number=1,
+    ):
+        super(MkaTxSc, self).__init__()
+        self._parent = parent
+        self._set_property("name", name)
+        self._set_property("system_id", system_id)
+        self._set_property("port_id", port_id)
+        self._set_property("starting_message_number", starting_message_number)
+
+    def set(
+        self, name=None, system_id=None, port_id=None, starting_message_number=None
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def name(self):
+        # type: () -> str
+        """name getter
+
+        Tx SC name.
+
+        Returns: str
+        """
+        return self._get_property("name")
+
+    @name.setter
+    def name(self, value):
+        """name setter
+
+        Tx SC name.
+
+        value: str
+        """
+        if value is None:
+            raise TypeError("Cannot set required property name as None")
+        self._set_property("name", value)
+
+    @property
+    def system_id(self):
+        # type: () -> str
+        """system_id getter
+
+        System ID.
+
+        Returns: str
+        """
+        return self._get_property("system_id")
+
+    @system_id.setter
+    def system_id(self, value):
+        """system_id setter
+
+        System ID.
+
+        value: str
+        """
+        if value is None:
+            raise TypeError("Cannot set required property system_id as None")
+        self._set_property("system_id", value)
+
+    @property
+    def port_id(self):
+        # type: () -> int
+        """port_id getter
+
+        Port ID.
+
+        Returns: int
+        """
+        return self._get_property("port_id")
+
+    @port_id.setter
+    def port_id(self, value):
+        """port_id setter
+
+        Port ID.
+
+        value: int
+        """
+        self._set_property("port_id", value)
+
+    @property
+    def starting_message_number(self):
+        # type: () -> int
+        """starting_message_number getter
+
+        Starting Message Number.
+
+        Returns: int
+        """
+        return self._get_property("starting_message_number")
+
+    @starting_message_number.setter
+    def starting_message_number(self, value):
+        """starting_message_number setter
+
+        Starting Message Number.
+
+        value: int
+        """
+        self._set_property("starting_message_number", value)
+
+
+class MkaTxScIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(MkaTxScIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[MkaTxSc]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> MkaTxScIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> MkaTxSc
+        return self._next()
+
+    def next(self):
+        # type: () -> MkaTxSc
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, MkaTxSc):
+            raise Exception("Item is not an instance of MkaTxSc")
+
+    def txsc(self, name=None, system_id=None, port_id=1, starting_message_number=1):
+        # type: (str,str,int,int) -> MkaTxScIter
+        """Factory method that creates an instance of the MkaTxSc class
+
+        Tx secure channel(SC) properties.
+
+        Returns: MkaTxScIter
+        """
+        item = MkaTxSc(
+            parent=self._parent,
+            name=name,
+            system_id=system_id,
+            port_id=port_id,
+            starting_message_number=starting_message_number,
+        )
+        self._add(item)
+        return self
+
+    def add(self, name=None, system_id=None, port_id=1, starting_message_number=1):
+        # type: (str,str,int,int) -> MkaTxSc
+        """Add method that creates and returns an instance of the MkaTxSc class
+
+        Tx secure channel(SC) properties.
+
+        Returns: MkaTxSc
+        """
+        item = MkaTxSc(
+            parent=self._parent,
+            name=name,
+            system_id=system_id,
+            port_id=port_id,
+            starting_message_number=starting_message_number,
+        )
+        self._add(item)
+        return item
+
+
+class SecureEntityStaticKey(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "cipher_suite": {
+            "type": str,
+            "enum": [
+                "gcm_aes_128",
+                "gcm_aes_256",
+                "gcm_aes_xpn_128",
+                "gcm_aes_xpn_256",
+            ],
+        },
+        "confidentiality": {"type": bool},
+        "confidentiality_offset": {
+            "type": str,
+            "enum": [
+                "fifty",
+                "thirty",
+                "zero",
+            ],
+        },
+        "tx": {"type": "SecureEntityStaticKeyTx"},
+        "rx": {"type": "SecureEntityStaticKeyRx"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "cipher_suite": "gcm_aes_128",
+        "confidentiality": True,
+        "confidentiality_offset": "zero",
+    }  # type: Dict[str, Union(type)]
+
+    GCM_AES_128 = "gcm_aes_128"  # type: str
+    GCM_AES_256 = "gcm_aes_256"  # type: str
+    GCM_AES_XPN_128 = "gcm_aes_xpn_128"  # type: str
+    GCM_AES_XPN_256 = "gcm_aes_xpn_256"  # type: str
+
+    FIFTY = "fifty"  # type: str
+    THIRTY = "thirty"  # type: str
+    ZERO = "zero"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        cipher_suite="gcm_aes_128",
+        confidentiality=True,
+        confidentiality_offset="zero",
+    ):
+        super(SecureEntityStaticKey, self).__init__()
+        self._parent = parent
+        self._set_property("cipher_suite", cipher_suite)
+        self._set_property("confidentiality", confidentiality)
+        self._set_property("confidentiality_offset", confidentiality_offset)
+
+    def set(self, cipher_suite=None, confidentiality=None, confidentiality_offset=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def cipher_suite(self):
+        # type: () -> Union[Literal["gcm_aes_128"], Literal["gcm_aes_256"], Literal["gcm_aes_xpn_128"], Literal["gcm_aes_xpn_256"]]
+        """cipher_suite getter
+
+        The cipher suite. Choose one from GCM-AES-128 GCM-AES-128 GCM-AES-256 GCM-AES-XPN-128 GCM-AES-XPN-256
+
+        Returns: Union[Literal["gcm_aes_128"], Literal["gcm_aes_256"], Literal["gcm_aes_xpn_128"], Literal["gcm_aes_xpn_256"]]
+        """
+        return self._get_property("cipher_suite")
+
+    @cipher_suite.setter
+    def cipher_suite(self, value):
+        """cipher_suite setter
+
+        The cipher suite. Choose one from GCM-AES-128 GCM-AES-128 GCM-AES-256 GCM-AES-XPN-128 GCM-AES-XPN-256
+
+        value: Union[Literal["gcm_aes_128"], Literal["gcm_aes_256"], Literal["gcm_aes_xpn_128"], Literal["gcm_aes_xpn_256"]]
+        """
+        self._set_property("cipher_suite", value)
+
+    @property
+    def confidentiality(self):
+        # type: () -> bool
+        """confidentiality getter
+
+        Encrypt or not.
+
+        Returns: bool
+        """
+        return self._get_property("confidentiality")
+
+    @confidentiality.setter
+    def confidentiality(self, value):
+        """confidentiality setter
+
+        Encrypt or not.
+
+        value: bool
+        """
+        self._set_property("confidentiality", value)
+
+    @property
+    def confidentiality_offset(self):
+        # type: () -> Union[Literal["fifty"], Literal["thirty"], Literal["zero"]]
+        """confidentiality_offset getter
+
+        Confidentiality offset.
+
+        Returns: Union[Literal["fifty"], Literal["thirty"], Literal["zero"]]
+        """
+        return self._get_property("confidentiality_offset")
+
+    @confidentiality_offset.setter
+    def confidentiality_offset(self, value):
+        """confidentiality_offset setter
+
+        Confidentiality offset.
+
+        value: Union[Literal["fifty"], Literal["thirty"], Literal["zero"]]
+        """
+        self._set_property("confidentiality_offset", value)
+
+    @property
+    def tx(self):
+        # type: () -> SecureEntityStaticKeyTx
+        """tx getter
+
+        A container of static key Tx properties.A container of static key Tx properties.A container of static key Tx properties.A container of static key Tx properties.Tx properties of SecY.
+
+        Returns: SecureEntityStaticKeyTx
+        """
+        return self._get_property("tx", SecureEntityStaticKeyTx)
+
+    @property
+    def rx(self):
+        # type: () -> SecureEntityStaticKeyRx
+        """rx getter
+
+        A container of static key Rx properties.A container of static key Rx properties.A container of static key Rx properties.A container of static key Rx properties.Rx properties of SecY.
+
+        Returns: SecureEntityStaticKeyRx
+        """
+        return self._get_property("rx", SecureEntityStaticKeyRx)
+
+
+class SecureEntityStaticKeyTx(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "secure_channels": {"type": "SecureEntityStaticKeyTxScIter"},
+        "rekey_mode": {"type": "SecureEntityStaticKeyRekeyMode"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(SecureEntityStaticKeyTx, self).__init__()
+        self._parent = parent
+
+    @property
+    def secure_channels(self):
+        # type: () -> SecureEntityStaticKeyTxScIter
+        """secure_channels getter
+
+        Tx secure channels.
+
+        Returns: SecureEntityStaticKeyTxScIter
+        """
+        return self._get_property(
+            "secure_channels", SecureEntityStaticKeyTxScIter, self._parent, self._choice
+        )
+
+    @property
+    def rekey_mode(self):
+        # type: () -> SecureEntityStaticKeyRekeyMode
+        """rekey_mode getter
+
+        Rekey mode.Rekey mode.Rekey mode.
+
+        Returns: SecureEntityStaticKeyRekeyMode
+        """
+        return self._get_property("rekey_mode", SecureEntityStaticKeyRekeyMode)
+
+
+class SecureEntityStaticKeyTxSc(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "system_id": {
+            "type": str,
+            "format": "mac",
+        },
+        "port_id": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 65535,
+        },
+        "saks": {"type": "SecureEntityStaticKeySakIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "port_id": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, system_id=None, port_id=1):
+        super(SecureEntityStaticKeyTxSc, self).__init__()
+        self._parent = parent
+        self._set_property("system_id", system_id)
+        self._set_property("port_id", port_id)
+
+    def set(self, system_id=None, port_id=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def system_id(self):
+        # type: () -> str
+        """system_id getter
+
+        System ID.
+
+        Returns: str
+        """
+        return self._get_property("system_id")
+
+    @system_id.setter
+    def system_id(self, value):
+        """system_id setter
+
+        System ID.
+
+        value: str
+        """
+        self._set_property("system_id", value)
+
+    @property
+    def port_id(self):
+        # type: () -> int
+        """port_id getter
+
+        Port ID.
+
+        Returns: int
+        """
+        return self._get_property("port_id")
+
+    @port_id.setter
+    def port_id(self, value):
+        """port_id setter
+
+        Port ID.
+
+        value: int
+        """
+        self._set_property("port_id", value)
+
+    @property
+    def saks(self):
+        # type: () -> SecureEntityStaticKeySakIter
+        """saks getter
+
+        Tx SAK pool.
+
+        Returns: SecureEntityStaticKeySakIter
+        """
+        return self._get_property(
+            "saks", SecureEntityStaticKeySakIter, self._parent, self._choice
+        )
+
+
+class SecureEntityStaticKeySak(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "sak": {
+            "type": str,
+            "format": "hex",
+            "minLength": 1,
+            "maxLength": 64,
+        },
+        "ssci": {
+            "type": str,
+            "format": "hex",
+            "minLength": 1,
+            "maxLength": 8,
+        },
+        "salt": {
+            "type": str,
+            "format": "hex",
+            "minLength": 1,
+            "maxLength": 24,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "sak": "F123456789ABCDEF0123456789ABCDEF",
+        "ssci": "00000001",
+        "salt": "000000000000000000000001",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        sak="F123456789ABCDEF0123456789ABCDEF",
+        ssci="00000001",
+        salt="000000000000000000000001",
+    ):
+        super(SecureEntityStaticKeySak, self).__init__()
+        self._parent = parent
+        self._set_property("sak", sak)
+        self._set_property("ssci", ssci)
+        self._set_property("salt", salt)
+
+    def set(self, sak=None, ssci=None, salt=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def sak(self):
+        # type: () -> str
+        """sak getter
+
+        Secure association key(SAK) bits as hex string. Either 128 bits or 256 bits depending on the chosen cipher suite.
+
+        Returns: str
+        """
+        return self._get_property("sak")
+
+    @sak.setter
+    def sak(self, value):
+        """sak setter
+
+        Secure association key(SAK) bits as hex string. Either 128 bits or 256 bits depending on the chosen cipher suite.
+
+        value: str
+        """
+        self._set_property("sak", value)
+
+    @property
+    def ssci(self):
+        # type: () -> str
+        """ssci getter
+
+        4 bytes short SCI(SSCI) used in case of XPN cipher suites.
+
+        Returns: str
+        """
+        return self._get_property("ssci")
+
+    @ssci.setter
+    def ssci(self, value):
+        """ssci setter
+
+        4 bytes short SCI(SSCI) used in case of XPN cipher suites.
+
+        value: str
+        """
+        self._set_property("ssci", value)
+
+    @property
+    def salt(self):
+        # type: () -> str
+        """salt getter
+
+        12 bytes salt used in case of XPN cipher suites.
+
+        Returns: str
+        """
+        return self._get_property("salt")
+
+    @salt.setter
+    def salt(self, value):
+        """salt setter
+
+        12 bytes salt used in case of XPN cipher suites.
+
+        value: str
+        """
+        self._set_property("salt", value)
+
+
+class SecureEntityStaticKeySakIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(SecureEntityStaticKeySakIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[SecureEntityStaticKeySak]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> SecureEntityStaticKeySakIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> SecureEntityStaticKeySak
+        return self._next()
+
+    def next(self):
+        # type: () -> SecureEntityStaticKeySak
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, SecureEntityStaticKeySak):
+            raise Exception("Item is not an instance of SecureEntityStaticKeySak")
+
+    def sak(
+        self,
+        sak="F123456789ABCDEF0123456789ABCDEF",
+        ssci="00000001",
+        salt="000000000000000000000001",
+    ):
+        # type: (str,str,str) -> SecureEntityStaticKeySakIter
+        """Factory method that creates an instance of the SecureEntityStaticKeySak class
+
+        The container for SAK.
+
+        Returns: SecureEntityStaticKeySakIter
+        """
+        item = SecureEntityStaticKeySak(
+            parent=self._parent, sak=sak, ssci=ssci, salt=salt
+        )
+        self._add(item)
+        return self
+
+    def add(
+        self,
+        sak="F123456789ABCDEF0123456789ABCDEF",
+        ssci="00000001",
+        salt="000000000000000000000001",
+    ):
+        # type: (str,str,str) -> SecureEntityStaticKeySak
+        """Add method that creates and returns an instance of the SecureEntityStaticKeySak class
+
+        The container for SAK.
+
+        Returns: SecureEntityStaticKeySak
+        """
+        item = SecureEntityStaticKeySak(
+            parent=self._parent, sak=sak, ssci=ssci, salt=salt
+        )
+        self._add(item)
+        return item
+
+
+class SecureEntityStaticKeyTxScIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(SecureEntityStaticKeyTxScIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[SecureEntityStaticKeyTxSc]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> SecureEntityStaticKeyTxScIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> SecureEntityStaticKeyTxSc
+        return self._next()
+
+    def next(self):
+        # type: () -> SecureEntityStaticKeyTxSc
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, SecureEntityStaticKeyTxSc):
+            raise Exception("Item is not an instance of SecureEntityStaticKeyTxSc")
+
+    def txsc(self, system_id=None, port_id=1):
+        # type: (str,int) -> SecureEntityStaticKeyTxScIter
+        """Factory method that creates an instance of the SecureEntityStaticKeyTxSc class
+
+        Tx SC setting for static key.
+
+        Returns: SecureEntityStaticKeyTxScIter
+        """
+        item = SecureEntityStaticKeyTxSc(
+            parent=self._parent, system_id=system_id, port_id=port_id
+        )
+        self._add(item)
+        return self
+
+    def add(self, system_id=None, port_id=1):
+        # type: (str,int) -> SecureEntityStaticKeyTxSc
+        """Add method that creates and returns an instance of the SecureEntityStaticKeyTxSc class
+
+        Tx SC setting for static key.
+
+        Returns: SecureEntityStaticKeyTxSc
+        """
+        item = SecureEntityStaticKeyTxSc(
+            parent=self._parent, system_id=system_id, port_id=port_id
+        )
+        self._add(item)
+        return item
+
+
+class SecureEntityStaticKeyRekeyMode(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "dont_rekey",
+                "timer_based",
+                "pn_based",
+            ],
+        },
+        "timer_based": {"type": "SecureEntityStaticKeyRekeyModeTimerBased"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "dont_rekey",
+    }  # type: Dict[str, Union(type)]
+
+    DONT_REKEY = "dont_rekey"  # type: str
+    TIMER_BASED = "timer_based"  # type: str
+    PN_BASED = "pn_based"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(SecureEntityStaticKeyRekeyMode, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def timer_based(self):
+        # type: () -> SecureEntityStaticKeyRekeyModeTimerBased
+        """Factory property that returns an instance of the SecureEntityStaticKeyRekeyModeTimerBased class
+
+        Timer based periodic rekey properties.
+
+        Returns: SecureEntityStaticKeyRekeyModeTimerBased
+        """
+        return self._get_property(
+            "timer_based", SecureEntityStaticKeyRekeyModeTimerBased, self, "timer_based"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["dont_rekey"], Literal["pn_based"], Literal["timer_based"]]
+        """choice getter
+
+        Rekey mode choices.
+
+        Returns: Union[Literal["dont_rekey"], Literal["pn_based"], Literal["timer_based"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Rekey mode choices.
+
+        value: Union[Literal["dont_rekey"], Literal["pn_based"], Literal["timer_based"]]
+        """
+        self._set_property("choice", value)
+
+
+class SecureEntityStaticKeyRekeyModeTimerBased(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "continuous",
+                "fixed_count",
+            ],
+        },
+        "fixed_count": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 65535,
+        },
+        "interval": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 30,
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "continuous",
+        "fixed_count": 10,
+        "interval": 300,
+    }  # type: Dict[str, Union(type)]
+
+    CONTINUOUS = "continuous"  # type: str
+    FIXED_COUNT = "fixed_count"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, fixed_count=10, interval=300):
+        super(SecureEntityStaticKeyRekeyModeTimerBased, self).__init__()
+        self._parent = parent
+        self._set_property("fixed_count", fixed_count)
+        self._set_property("interval", interval)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, fixed_count=None, interval=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["continuous"], Literal["fixed_count"]]
+        """choice getter
+
+        Periodic rekey attempt choices.
+
+        Returns: Union[Literal["continuous"], Literal["fixed_count"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Periodic rekey attempt choices.
+
+        value: Union[Literal["continuous"], Literal["fixed_count"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def fixed_count(self):
+        # type: () -> int
+        """fixed_count getter
+
+        Fixed rekey attempts.
+
+        Returns: int
+        """
+        return self._get_property("fixed_count")
+
+    @fixed_count.setter
+    def fixed_count(self, value):
+        """fixed_count setter
+
+        Fixed rekey attempts.
+
+        value: int
+        """
+        self._set_property("fixed_count", value, "fixed_count")
+
+    @property
+    def interval(self):
+        # type: () -> int
+        """interval getter
+
+        Periodic rekey interval (sec).
+
+        Returns: int
+        """
+        return self._get_property("interval")
+
+    @interval.setter
+    def interval(self, value):
+        """interval setter
+
+        Periodic rekey interval (sec).
+
+        value: int
+        """
+        self._set_property("interval", value)
+
+
+class SecureEntityStaticKeyRx(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "secure_channels": {"type": "SecureEntityStaticKeyRxScIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(SecureEntityStaticKeyRx, self).__init__()
+        self._parent = parent
+
+    @property
+    def secure_channels(self):
+        # type: () -> SecureEntityStaticKeyRxScIter
+        """secure_channels getter
+
+        Rx secure channels.
+
+        Returns: SecureEntityStaticKeyRxScIter
+        """
+        return self._get_property(
+            "secure_channels", SecureEntityStaticKeyRxScIter, self._parent, self._choice
+        )
+
+
+class SecureEntityStaticKeyRxSc(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "dut_sci_system_id": {
+            "type": str,
+            "format": "mac",
+        },
+        "dut_sci_port_id": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 65535,
+        },
+        "dut_msb_xpn": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 4294967295,
+        },
+        "saks": {"type": "SecureEntityStaticKeySakIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "dut_sci_port_id": 1,
+        "dut_msb_xpn": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, dut_sci_system_id=None, dut_sci_port_id=1, dut_msb_xpn=0
+    ):
+        super(SecureEntityStaticKeyRxSc, self).__init__()
+        self._parent = parent
+        self._set_property("dut_sci_system_id", dut_sci_system_id)
+        self._set_property("dut_sci_port_id", dut_sci_port_id)
+        self._set_property("dut_msb_xpn", dut_msb_xpn)
+
+    def set(self, dut_sci_system_id=None, dut_sci_port_id=None, dut_msb_xpn=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def dut_sci_system_id(self):
+        # type: () -> str
+        """dut_sci_system_id getter
+
+        System ID in DUT SCI.
+
+        Returns: str
+        """
+        return self._get_property("dut_sci_system_id")
+
+    @dut_sci_system_id.setter
+    def dut_sci_system_id(self, value):
+        """dut_sci_system_id setter
+
+        System ID in DUT SCI.
+
+        value: str
+        """
+        self._set_property("dut_sci_system_id", value)
+
+    @property
+    def dut_sci_port_id(self):
+        # type: () -> int
+        """dut_sci_port_id getter
+
+        Port ID in DUT SCI.
+
+        Returns: int
+        """
+        return self._get_property("dut_sci_port_id")
+
+    @dut_sci_port_id.setter
+    def dut_sci_port_id(self, value):
+        """dut_sci_port_id setter
+
+        Port ID in DUT SCI.
+
+        value: int
+        """
+        self._set_property("dut_sci_port_id", value)
+
+    @property
+    def dut_msb_xpn(self):
+        # type: () -> int
+        """dut_msb_xpn getter
+
+        DUT MSB of XPN. The 32 most significant bits of the XPN that DUT will be using to construct the 64 bits XPN value when test starts.
+
+        Returns: int
+        """
+        return self._get_property("dut_msb_xpn")
+
+    @dut_msb_xpn.setter
+    def dut_msb_xpn(self, value):
+        """dut_msb_xpn setter
+
+        DUT MSB of XPN. The 32 most significant bits of the XPN that DUT will be using to construct the 64 bits XPN value when test starts.
+
+        value: int
+        """
+        self._set_property("dut_msb_xpn", value)
+
+    @property
+    def saks(self):
+        # type: () -> SecureEntityStaticKeySakIter
+        """saks getter
+
+        Rx SAK pool.
+
+        Returns: SecureEntityStaticKeySakIter
+        """
+        return self._get_property(
+            "saks", SecureEntityStaticKeySakIter, self._parent, self._choice
+        )
+
+
+class SecureEntityStaticKeyRxScIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(SecureEntityStaticKeyRxScIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[SecureEntityStaticKeyRxSc]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> SecureEntityStaticKeyRxScIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> SecureEntityStaticKeyRxSc
+        return self._next()
+
+    def next(self):
+        # type: () -> SecureEntityStaticKeyRxSc
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, SecureEntityStaticKeyRxSc):
+            raise Exception("Item is not an instance of SecureEntityStaticKeyRxSc")
+
+    def rxsc(self, dut_sci_system_id=None, dut_sci_port_id=1, dut_msb_xpn=0):
+        # type: (str,int,int) -> SecureEntityStaticKeyRxScIter
+        """Factory method that creates an instance of the SecureEntityStaticKeyRxSc class
+
+        Rx SC settings.
+
+        Returns: SecureEntityStaticKeyRxScIter
+        """
+        item = SecureEntityStaticKeyRxSc(
+            parent=self._parent,
+            dut_sci_system_id=dut_sci_system_id,
+            dut_sci_port_id=dut_sci_port_id,
+            dut_msb_xpn=dut_msb_xpn,
+        )
+        self._add(item)
+        return self
+
+    def add(self, dut_sci_system_id=None, dut_sci_port_id=1, dut_msb_xpn=0):
+        # type: (str,int,int) -> SecureEntityStaticKeyRxSc
+        """Add method that creates and returns an instance of the SecureEntityStaticKeyRxSc class
+
+        Rx SC settings.
+
+        Returns: SecureEntityStaticKeyRxSc
+        """
+        item = SecureEntityStaticKeyRxSc(
+            parent=self._parent,
+            dut_sci_system_id=dut_sci_system_id,
+            dut_sci_port_id=dut_sci_port_id,
+            dut_msb_xpn=dut_msb_xpn,
+        )
+        self._add(item)
+        return item
+
+
+class LagPortMacsecSecureEntityDataPlane(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "encapsulation",
+                "no_encapsulation",
+            ],
+        },
+        "encapsulation": {"type": "LagPortMacsecSecureEntityDataPlaneEncapsulation"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "encapsulation",
+    }  # type: Dict[str, Union(type)]
+
+    ENCAPSULATION = "encapsulation"  # type: str
+    NO_ENCAPSULATION = "no_encapsulation"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(LagPortMacsecSecureEntityDataPlane, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def encapsulation(self):
+        # type: () -> LagPortMacsecSecureEntityDataPlaneEncapsulation
+        """Factory property that returns an instance of the LagPortMacsecSecureEntityDataPlaneEncapsulation class
+
+        A container of encapsulation properties for secure entity(SecY).
+
+        Returns: LagPortMacsecSecureEntityDataPlaneEncapsulation
+        """
+        return self._get_property(
+            "encapsulation",
+            LagPortMacsecSecureEntityDataPlaneEncapsulation,
+            self,
+            "encapsulation",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["encapsulation"], Literal["no_encapsulation"]]
+        """choice getter
+
+        Choose "encapsulation" so that data packets are sent with MACsec encapsulation. Choose "no_encapsulation" so that data packets are sent without MACsec encapsulation.
+
+        Returns: Union[Literal["encapsulation"], Literal["no_encapsulation"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Choose "encapsulation" so that data packets are sent with MACsec encapsulation. Choose "no_encapsulation" so that data packets are sent without MACsec encapsulation.
+
+        value: Union[Literal["encapsulation"], Literal["no_encapsulation"]]
+        """
+        self._set_property("choice", value)
+
+
+class LagPortMacsecSecureEntityDataPlaneEncapsulation(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "tx": {"type": "LagPortMacsecSecureEntityDataPlaneTx"},
+        "rx": {"type": "LagPortMacsecSecureEntityDataPlaneRx"},
+        "crypto_engine": {"type": "LagPortMacsecSecureEntityCryptoEngine"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("crypto_engine",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(LagPortMacsecSecureEntityDataPlaneEncapsulation, self).__init__()
+        self._parent = parent
+
+    @property
+    def tx(self):
+        # type: () -> LagPortMacsecSecureEntityDataPlaneTx
+        """tx getter
+
+        A container of Tx properties of SecY.A container of Tx properties of SecY.A container of Tx properties of SecY.A container of Tx properties of SecY.Tx properties of SecY.
+
+        Returns: LagPortMacsecSecureEntityDataPlaneTx
+        """
+        return self._get_property("tx", LagPortMacsecSecureEntityDataPlaneTx)
+
+    @property
+    def rx(self):
+        # type: () -> LagPortMacsecSecureEntityDataPlaneRx
+        """rx getter
+
+        A container for Rx settings of SecY.A container for Rx settings of SecY.A container for Rx settings of SecY.A container for Rx settings of SecY.Rx properties of SecY.
+
+        Returns: LagPortMacsecSecureEntityDataPlaneRx
+        """
+        return self._get_property("rx", LagPortMacsecSecureEntityDataPlaneRx)
+
+    @property
+    def crypto_engine(self):
+        # type: () -> LagPortMacsecSecureEntityCryptoEngine
+        """crypto_engine getter
+
+        A container of crypto engine properties of SecY.A container of crypto engine properties of SecY.A container of crypto engine properties of SecY.A container of crypto engine properties of SecY.Crypto engine properties of SecY.
+
+        Returns: LagPortMacsecSecureEntityCryptoEngine
+        """
+        return self._get_property(
+            "crypto_engine", LagPortMacsecSecureEntityCryptoEngine
+        )
+
+
+class LagPortMacsecSecureEntityDataPlaneTx(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "end_station": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "end_station": False,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, end_station=False):
+        super(LagPortMacsecSecureEntityDataPlaneTx, self).__init__()
+        self._parent = parent
+        self._set_property("end_station", end_station)
+
+    def set(self, end_station=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def end_station(self):
+        # type: () -> bool
+        """end_station getter
+
+        End station or not.
+
+        Returns: bool
+        """
+        return self._get_property("end_station")
+
+    @end_station.setter
+    def end_station(self, value):
+        """end_station setter
+
+        End station or not.
+
+        value: bool
+        """
+        self._set_property("end_station", value)
+
+
+class LagPortMacsecSecureEntityDataPlaneRx(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "replay_protection": {"type": bool},
+        "replay_window": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+        },
+        "validate_frames": {
+            "type": "LagPortMacsecSecureEntityDataPlaneRxValidateFrames"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "replay_protection": False,
+        "replay_window": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, replay_protection=False, replay_window=1):
+        super(LagPortMacsecSecureEntityDataPlaneRx, self).__init__()
+        self._parent = parent
+        self._set_property("replay_protection", replay_protection)
+        self._set_property("replay_window", replay_window)
+
+    def set(self, replay_protection=None, replay_window=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def replay_protection(self):
+        # type: () -> bool
+        """replay_protection getter
+
+        Enable replay protection or not.
+
+        Returns: bool
+        """
+        return self._get_property("replay_protection")
+
+    @replay_protection.setter
+    def replay_protection(self, value):
+        """replay_protection setter
+
+        Enable replay protection or not.
+
+        value: bool
+        """
+        self._set_property("replay_protection", value)
+
+    @property
+    def replay_window(self):
+        # type: () -> int
+        """replay_window getter
+
+        Replay window size.
+
+        Returns: int
+        """
+        return self._get_property("replay_window")
+
+    @replay_window.setter
+    def replay_window(self, value):
+        """replay_window setter
+
+        Replay window size.
+
+        value: int
+        """
+        self._set_property("replay_window", value)
+
+    @property
+    def validate_frames(self):
+        # type: () -> LagPortMacsecSecureEntityDataPlaneRxValidateFrames
+        """validate_frames getter
+
+        Controls validation of received frames.Controls validation of received frames.Controls validation of received frames.
+
+        Returns: LagPortMacsecSecureEntityDataPlaneRxValidateFrames
+        """
+        return self._get_property(
+            "validate_frames", LagPortMacsecSecureEntityDataPlaneRxValidateFrames
+        )
+
+
+class LagPortMacsecSecureEntityDataPlaneRxValidateFrames(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "check",
+                "strict",
+            ],
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "check",
+    }  # type: Dict[str, Union(type)]
+
+    CHECK = "check"  # type: str
+    STRICT = "strict"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(LagPortMacsecSecureEntityDataPlaneRxValidateFrames, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["check"], Literal["strict"]]
+        """choice getter
+
+        Controls validation of received frames. check enable validation, do not discard invalid frames and increment in_pkts_invalid stats. strict enable validation and discard invalid frames and increment in_pkts_not_valid stats.
+
+        Returns: Union[Literal["check"], Literal["strict"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Controls validation of received frames. check enable validation, do not discard invalid frames and increment in_pkts_invalid stats. strict enable validation and discard invalid frames and increment in_pkts_not_valid stats.
+
+        value: Union[Literal["check"], Literal["strict"]]
+        """
+        self._set_property("choice", value)
+
+
+class LagPortMacsecSecureEntityCryptoEngine(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "encrypt_decrypt",
+            ],
+        },
+        "encrypt_decrypt": {
+            "type": "LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "encrypt_decrypt",
+    }  # type: Dict[str, Union(type)]
+
+    ENCRYPT_DECRYPT = "encrypt_decrypt"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(LagPortMacsecSecureEntityCryptoEngine, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def encrypt_decrypt(self):
+        # type: () -> LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt
+        """Factory property that returns an instance of the LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt class
+
+        The container for configuration of crypto engine of encrypt and decrypt type.
+
+        Returns: LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt
+        """
+        return self._get_property(
+            "encrypt_decrypt",
+            LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt,
+            self,
+            "encrypt_decrypt",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["encrypt_decrypt"]]
+        """choice getter
+
+        Engine type based on encryption and/ or decryption capability. Supported type: encrypt_decrypt engine can both encrypt transmitted packets and decrypt packets on arrival. Such engine can have hardware acceleration for faster encryption/ decryption. As both encryption and decryption are possible, stateful (e.g. TCP) traffic can be sent/ received.
+
+        Returns: Union[Literal["encrypt_decrypt"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Engine type based on encryption and/ or decryption capability. Supported type: encrypt_decrypt engine can both encrypt transmitted packets and decrypt packets on arrival. Such engine can have hardware acceleration for faster encryption/ decryption. As both encryption and decryption are possible, stateful (e.g. TCP) traffic can be sent/ received.
+
+        value: Union[Literal["encrypt_decrypt"]]
+        """
+        self._set_property("choice", value)
+
+
+class LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "tx_pn": {"type": "LagPortMacsecSecureEntityCryptoEngineEncryptDecryptTxPn"},
+        "hardware_acceleration": {
+            "type": "LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt, self).__init__()
+        self._parent = parent
+
+    @property
+    def tx_pn(self):
+        # type: () -> LagPortMacsecSecureEntityCryptoEngineEncryptDecryptTxPn
+        """tx_pn getter
+
+        Tx packet number(PN) configuration.Tx packet number(PN) configuration.Tx packet number(PN) configuration.Tx packet number(PN) configuration.
+
+        Returns: LagPortMacsecSecureEntityCryptoEngineEncryptDecryptTxPn
+        """
+        return self._get_property(
+            "tx_pn", LagPortMacsecSecureEntityCryptoEngineEncryptDecryptTxPn
+        )
+
+    @property
+    def hardware_acceleration(self):
+        # type: () -> LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
+        """hardware_acceleration getter
+
+        Hardware acceleration configuration for offloading MACsec processing to hardware.Hardware acceleration configuration for offloading MACsec processing to hardware.Hardware acceleration configuration for offloading MACsec processing to hardware.Hardware acceleration configuration for offloading MACsec processing to hardware.
+
+        Returns: LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
+        """
+        return self._get_property(
+            "hardware_acceleration",
+            LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration,
+        )
+
+
+class LagPortMacsecSecureEntityCryptoEngineEncryptDecryptTxPn(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "starting_pn": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+        },
+        "starting_xpn": {
+            "type": str,
+            "format": "hex",
+            "minimum": 1,
+            "minLength": 1,
+            "maxLength": 16,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "starting_pn": 1,
+        "starting_xpn": "01",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, starting_pn=1, starting_xpn="01"):
+        super(LagPortMacsecSecureEntityCryptoEngineEncryptDecryptTxPn, self).__init__()
+        self._parent = parent
+        self._set_property("starting_pn", starting_pn)
+        self._set_property("starting_xpn", starting_xpn)
+
+    def set(self, starting_pn=None, starting_xpn=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def starting_pn(self):
+        # type: () -> int
+        """starting_pn getter
+
+        The starting packet number(PN).
+
+        Returns: int
+        """
+        return self._get_property("starting_pn")
+
+    @starting_pn.setter
+    def starting_pn(self, value):
+        """starting_pn setter
+
+        The starting packet number(PN).
+
+        value: int
+        """
+        self._set_property("starting_pn", value)
+
+    @property
+    def starting_xpn(self):
+        # type: () -> str
+        """starting_xpn getter
+
+        The starting extended packet number(XPN).
+
+        Returns: str
+        """
+        return self._get_property("starting_xpn")
+
+    @starting_xpn.setter
+    def starting_xpn(self, value):
+        """starting_xpn setter
+
+        The starting extended packet number(XPN).
+
+        value: str
+        """
+        self._set_property("starting_xpn", value)
+
+
+class LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration(
+    OpenApiObject
+):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "none",
+                "inline_crypto",
+            ],
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "none",
+    }  # type: Dict[str, Union(type)]
+
+    NONE = "none"  # type: str
+    INLINE_CRYPTO = "inline_crypto"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(
+            LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration,
+            self,
+        ).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["inline_crypto"], Literal["none"]]
+        """choice getter
+
+        Hardware acceleration types.
+
+        Returns: Union[Literal["inline_crypto"], Literal["none"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Hardware acceleration types.
+
+        value: Union[Literal["inline_crypto"], Literal["none"]]
+        """
+        self._set_property("choice", value)
+
+
+class LagPortMacsecExcludeProtocols(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "none",
+                "per_protocol",
+            ],
+        },
+        "per_protocol": {"type": "LagPortMacsecExcludeProtocolsPerProtocol"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "none",
+    }  # type: Dict[str, Union(type)]
+
+    NONE = "none"  # type: str
+    PER_PROTOCOL = "per_protocol"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(LagPortMacsecExcludeProtocols, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def per_protocol(self):
+        # type: () -> LagPortMacsecExcludeProtocolsPerProtocol
+        """Factory property that returns an instance of the LagPortMacsecExcludeProtocolsPerProtocol class
+
+        Per protocol choice to exclude from MACsec encapsulation at Tx from this LAG member port.
+
+        Returns: LagPortMacsecExcludeProtocolsPerProtocol
+        """
+        return self._get_property(
+            "per_protocol",
+            LagPortMacsecExcludeProtocolsPerProtocol,
+            self,
+            "per_protocol",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["none"], Literal["per_protocol"]]
+        """choice getter
+
+        Choose none to exclude no protocols i.e. all protocols are MACsec encapsulated at Tx. Choose per_protocol to opt per protocol.
+
+        Returns: Union[Literal["none"], Literal["per_protocol"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Choose none to exclude no protocols i.e. all protocols are MACsec encapsulated at Tx. Choose per_protocol to opt per protocol.
+
+        value: Union[Literal["none"], Literal["per_protocol"]]
+        """
+        self._set_property("choice", value)
+
+
+class LagPortMacsecExcludeProtocolsPerProtocol(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "lacp": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "lacp": False,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, lacp=False):
+        super(LagPortMacsecExcludeProtocolsPerProtocol, self).__init__()
+        self._parent = parent
+        self._set_property("lacp", lacp)
+
+    def set(self, lacp=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def lacp(self):
+        # type: () -> bool
+        """lacp getter
+
+        Determines whether LACP should be excluded from MACsec encapsulation or not.
+
+        Returns: bool
+        """
+        return self._get_property("lacp")
+
+    @lacp.setter
+    def lacp(self, value):
+        """lacp setter
+
+        Determines whether LACP should be excluded from MACsec encapsulation or not.
+
+        value: bool
+        """
+        self._set_property("lacp", value)
+
+
 class LagPortIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
@@ -2624,23 +6425,13 @@ class Layer1(OpenApiObject):
             "type": int,
             "format": "uint32",
             "minimum": 64,
-            "maximum": 9000,
+            "maximum": 14000,
         },
         "ieee_media_defaults": {"type": bool},
         "auto_negotiate": {"type": bool},
         "auto_negotiation": {"type": "Layer1AutoNegotiation"},
         "flow_control": {"type": "Layer1FlowControl"},
         "name": {"type": str},
-        "mode": {
-            "type": str,
-            "enum": [
-                "mode_no_change",
-                "mode_default",
-                "mode_macsec_128",
-                "mode_macsec_256",
-                "mode_high_stream",
-            ],
-        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ("port_names", "name")  # type: tuple(str)
@@ -2648,7 +6439,6 @@ class Layer1(OpenApiObject):
     _DEFAULTS = {
         "promiscuous": True,
         "mtu": 1500,
-        "mode": "mode_no_change",
     }  # type: Dict[str, Union(type)]
 
     SPEED_10_FD_MBPS = "speed_10_fd_mbps"  # type: str
@@ -2669,15 +6459,9 @@ class Layer1(OpenApiObject):
     FIBER = "fiber"  # type: str
     SGMII = "sgmii"  # type: str
 
-    MODE_NO_CHANGE = "mode_no_change"  # type: str
-    MODE_DEFAULT = "mode_default"  # type: str
-    MODE_MACSEC_128 = "mode_macsec_128"  # type: str
-    MODE_MACSEC_256 = "mode_macsec_256"  # type: str
-    MODE_HIGH_STREAM = "mode_high_stream"  # type: str
-
     _STATUS = {
-        "ieee_media_defaults": "ieee_media_defaults property in schema Layer1 is under-review, This field is currently under review for pending exploration on use cases",
-        "auto_negotiate": "auto_negotiate property in schema Layer1 is under-review, This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.",
+        "ieee_media_defaults": "ieee_media_defaults property in schema Layer1 is under_review, This field is currently under review for pending exploration on use cases",
+        "auto_negotiate": "auto_negotiate property in schema Layer1 is under_review, This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.",
     }  # type: Dict[str, Union(type)]
 
     def __init__(
@@ -2691,7 +6475,6 @@ class Layer1(OpenApiObject):
         ieee_media_defaults=None,
         auto_negotiate=None,
         name=None,
-        mode="mode_no_change",
     ):
         super(Layer1, self).__init__()
         self._parent = parent
@@ -2703,7 +6486,6 @@ class Layer1(OpenApiObject):
         self._set_property("ieee_media_defaults", ieee_media_defaults)
         self._set_property("auto_negotiate", auto_negotiate)
         self._set_property("name", name)
-        self._set_property("mode", mode)
 
     def set(
         self,
@@ -2715,7 +6497,6 @@ class Layer1(OpenApiObject):
         ieee_media_defaults=None,
         auto_negotiate=None,
         name=None,
-        mode=None,
     ):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
@@ -2914,27 +6695,6 @@ class Layer1(OpenApiObject):
         if value is None:
             raise TypeError("Cannot set required property name as None")
         self._set_property("name", value)
-
-    @property
-    def mode(self):
-        # type: () -> Union[Literal["mode_default"], Literal["mode_high_stream"], Literal["mode_macsec_128"], Literal["mode_macsec_256"], Literal["mode_no_change"]]
-        """mode getter
-
-        Set the mode of the test interface if supported, in addition to the speed.. When no mode is explicitly set, mode_no_change applies i.e. the current. mode of the underlying test interface shall be retained.. Use mode_default to switch the test interface to the default mode of the. configured speed i.e. the mode to which the hardware port boots up.. Use mode_macsec_128 or mode_macsec_256 to choose 128-bit or 256-bit. MACsec encryption respectively.. Use mode_high_stream to switch the test interface to the high stream mode. of the configured speed.. If the requested mode is not supported for the configured speed or by the. underlying test interface, an error shall be returned. If the current mode. differs from the requested mode, the test interface shall be switched to the. requested mode before the remaining layer1 settings are applied.
-
-        Returns: Union[Literal["mode_default"], Literal["mode_high_stream"], Literal["mode_macsec_128"], Literal["mode_macsec_256"], Literal["mode_no_change"]]
-        """
-        return self._get_property("mode")
-
-    @mode.setter
-    def mode(self, value):
-        """mode setter
-
-        Set the mode of the test interface if supported, in addition to the speed.. When no mode is explicitly set, mode_no_change applies i.e. the current. mode of the underlying test interface shall be retained.. Use mode_default to switch the test interface to the default mode of the. configured speed i.e. the mode to which the hardware port boots up.. Use mode_macsec_128 or mode_macsec_256 to choose 128-bit or 256-bit. MACsec encryption respectively.. Use mode_high_stream to switch the test interface to the high stream mode. of the configured speed.. If the requested mode is not supported for the configured speed or by the. underlying test interface, an error shall be returned. If the current mode. differs from the requested mode, the test interface shall be switched to the. requested mode before the remaining layer1 settings are applied.
-
-        value: Union[Literal["mode_default"], Literal["mode_high_stream"], Literal["mode_macsec_128"], Literal["mode_macsec_256"], Literal["mode_no_change"]]
-        """
-        self._set_property("mode", value)
 
 
 class Layer1AutoNegotiation(OpenApiObject):
@@ -3617,9 +7377,8 @@ class Layer1Iter(OpenApiIter):
         ieee_media_defaults=None,
         auto_negotiate=None,
         name=None,
-        mode="mode_no_change",
     ):
-        # type: (List[str],Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"], Literal["speed_800_gbps"]],Union[Literal["copper"], Literal["fiber"], Literal["sgmii"]],bool,int,bool,bool,str,Union[Literal["mode_default"], Literal["mode_high_stream"], Literal["mode_macsec_128"], Literal["mode_macsec_256"], Literal["mode_no_change"]]) -> Layer1Iter
+        # type: (List[str],Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"], Literal["speed_800_gbps"]],Union[Literal["copper"], Literal["fiber"], Literal["sgmii"]],bool,int,bool,bool,str) -> Layer1Iter
         """Factory method that creates an instance of the Layer1 class
 
         A container for layer1 settings.
@@ -3636,7 +7395,6 @@ class Layer1Iter(OpenApiIter):
             ieee_media_defaults=ieee_media_defaults,
             auto_negotiate=auto_negotiate,
             name=name,
-            mode=mode,
         )
         self._add(item)
         return self
@@ -3651,9 +7409,8 @@ class Layer1Iter(OpenApiIter):
         ieee_media_defaults=None,
         auto_negotiate=None,
         name=None,
-        mode="mode_no_change",
     ):
-        # type: (List[str],Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"], Literal["speed_800_gbps"]],Union[Literal["copper"], Literal["fiber"], Literal["sgmii"]],bool,int,bool,bool,str,Union[Literal["mode_default"], Literal["mode_high_stream"], Literal["mode_macsec_128"], Literal["mode_macsec_256"], Literal["mode_no_change"]]) -> Layer1
+        # type: (List[str],Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"], Literal["speed_800_gbps"]],Union[Literal["copper"], Literal["fiber"], Literal["sgmii"]],bool,int,bool,bool,str) -> Layer1
         """Add method that creates and returns an instance of the Layer1 class
 
         A container for layer1 settings.
@@ -3670,7 +7427,6 @@ class Layer1Iter(OpenApiIter):
             ieee_media_defaults=ieee_media_defaults,
             auto_negotiate=auto_negotiate,
             name=name,
-            mode=mode,
         )
         self._add(item)
         return item
@@ -9256,7 +13012,7 @@ class DeviceIsisRouter(OpenApiObject):
         # type: () -> IsisSegmentRouting
         """segment_routing getter
 
-        Segment Routing (SR) allows for flexible definition of end-to-end paths within IGP topologies by encoding paths as sequences of topological sub-paths, called "segments". These segments are advertised by the link-state routing protocols (IS-IS and OSPF). Prefix segments represent an ECMP-aware shortest path to prefix (or node), as per the state of the IGP topology. Adjacency segments represent hop over specific adjacency between two nodes in the IGP. A prefix segment is typically multi-hop path while an adjacency segment, in most of the cases, is one-hop path. These segments act as topological sub-paths that can be combined together to form the required path.. Reference: https://datatracker.ietf.org/doc/html/rfc8667.:w. An implementation may advertise Router Capability with default values if user does not even set the properties of Router Capability and Segment Routing Capability. Segment Routing (SR) allows for flexible definition of end-to-end paths within IGP topologies by encoding paths as sequences of topological sub-paths, called "segments". These segments are advertised by the link-state routing protocols (IS-IS and OSPF). Prefix segments represent an ECMP-aware shortest path to prefix (or node), as per the state of the IGP topology. Adjacency segments represent hop over specific adjacency between two nodes in the IGP. A prefix segment is typically multi-hop path while an adjacency segment, in most of the cases, is one-hop path. These segments act as topological sub-paths that can be combined together to form the required path.. Reference: https://datatracker.ietf.org/doc/html/rfc8667.:w. An implementation may advertise Router Capability with default values if user does not even set the properties of Router Capability and Segment Routing Capability. Segment Routing (SR) allows for flexible definition of end-to-end paths within IGP topologies by encoding paths as sequences of topological sub-paths, called "segments". These segments are advertised by the link-state routing protocols (IS-IS and OSPF). Prefix segments represent an ECMP-aware shortest path to prefix (or node), as per the state of the IGP topology. Adjacency segments represent hop over specific adjacency between two nodes in the IGP. A prefix segment is typically multi-hop path while an adjacency segment, in most of the cases, is one-hop path. These segments act as topological sub-paths that can be combined together to form the required path.. Reference: https://datatracker.ietf.org/doc/html/rfc8667.:w. An implementation may advertise Router Capability with default values if user does not even set the properties of Router Capability and Segment Routing Capability. Optional Segment Routing (SR).
+        Segment Routing (SR) allows for flexible definition of end-to-end paths within IGP topologies by encoding paths as sequences of topological sub-paths,. called "segments". These segments are advertised by the link-state routing protocols (IS-IS and OSPF).. Prefix segments represent an ECMP-aware shortest path to prefix (or node), as per the state of the IGP topology.. Adjacency segments represent hop over specific adjacency between two nodes in the IGP.. prefix segment is typically multi-hop path while an adjacency segment, in most of the cases, is one-hop path.. These segments act as topological sub-paths that can be combined together to form the required path.. Reference: https://datatracker.ietf.org/doc/html/rfc8667.. An implementation may advertise Router Capability with default values if user does not even set the properties. of Router Capability and Segment Routing Capability.Segment Routing (SR) allows for flexible definition of end-to-end paths within IGP topologies by encoding paths as sequences of topological sub-paths,. called "segments". These segments are advertised by the link-state routing protocols (IS-IS and OSPF).. Prefix segments represent an ECMP-aware shortest path to prefix (or node), as per the state of the IGP topology.. Adjacency segments represent hop over specific adjacency between two nodes in the IGP.. prefix segment is typically multi-hop path while an adjacency segment, in most of the cases, is one-hop path.. These segments act as topological sub-paths that can be combined together to form the required path.. Reference: https://datatracker.ietf.org/doc/html/rfc8667.. An implementation may advertise Router Capability with default values if user does not even set the properties. of Router Capability and Segment Routing Capability.Segment Routing (SR) allows for flexible definition of end-to-end paths within IGP topologies by encoding paths as sequences of topological sub-paths,. called "segments". These segments are advertised by the link-state routing protocols (IS-IS and OSPF).. Prefix segments represent an ECMP-aware shortest path to prefix (or node), as per the state of the IGP topology.. Adjacency segments represent hop over specific adjacency between two nodes in the IGP.. prefix segment is typically multi-hop path while an adjacency segment, in most of the cases, is one-hop path.. These segments act as topological sub-paths that can be combined together to form the required path.. Reference: https://datatracker.ietf.org/doc/html/rfc8667.. An implementation may advertise Router Capability with default values if user does not even set the properties. of Router Capability and Segment Routing Capability.Optional Segment Routing (SR).
 
         Returns: IsisSegmentRouting
         """
@@ -9393,6 +13149,7 @@ class IsisInterface(OpenApiObject):
         },
         "name": {"type": str},
         "adjacency_sids": {"type": "IsisInterfaceAdjacencySidIter"},
+        "srv6_adjacency_sids": {"type": "IsisSRv6AdjSidContainer"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("eth_name", "name")  # type: tuple(str)
@@ -9660,13 +13417,24 @@ class IsisInterface(OpenApiObject):
         # type: () -> IsisInterfaceAdjacencySidIter
         """adjacency_sids getter
 
-        List of Adjacency Segment Identifier (Adj-SID) sub-TLVs.
+        List of SR-MPLS Adjacency Segment Identifier (Adj-SID) sub-TLVs for this interface (RFC 8667).
 
         Returns: IsisInterfaceAdjacencySidIter
         """
         return self._get_property(
             "adjacency_sids", IsisInterfaceAdjacencySidIter, self._parent, self._choice
         )
+
+    @property
+    def srv6_adjacency_sids(self):
+        # type: () -> IsisSRv6AdjSidContainer
+        """srv6_adjacency_sids getter
+
+        Container for SRv6 adjacency-related sub-TLVs advertised on an IS-IS interface. Groups the list of End.X SID sub-TLVs (RFC 9352 Sections 8.1-8.2) with the per-link Maximum SID Depth (MSD) sub-TLVs (RFC 9352 Section 6) that are advertised together in the Extended IS Reachability TLV for this interface.Container for SRv6 adjacency-related sub-TLVs advertised on an IS-IS interface. Groups the list of End.X SID sub-TLVs (RFC 9352 Sections 8.1-8.2) with the per-link Maximum SID Depth (MSD) sub-TLVs (RFC 9352 Section 6) that are advertised together in the Extended IS Reachability TLV for this interface.Container for SRv6 adjacency-related sub-TLVs advertised on an IS-IS interface. Groups the list of End.X SID sub-TLVs (RFC 9352 Sections 8.1-8.2) with the per-link Maximum SID Depth (MSD) sub-TLVs (RFC 9352 Section 6) that are advertised together in the Extended IS Reachability TLV for this interface.When present, advertises SRv6 adjacency SID sub-TLVs and per-link MSD sub-TLVs for this interface. Reference: RFC 9352 Sections 6, 8.1-8.2.
+
+        Returns: IsisSRv6AdjSidContainer
+        """
+        return self._get_property("srv6_adjacency_sids", IsisSRv6AdjSidContainer)
 
 
 class IsisInterfaceLevel(OpenApiObject):
@@ -11295,6 +15063,656 @@ class IsisInterfaceAdjacencySidIter(OpenApiIter):
         )
         self._add(item)
         return item
+
+
+class IsisSRv6AdjSidContainer(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "sids": {"type": "IsisSRv6AdjSidIter"},
+        "srv6_link_msd": {"type": "IsisSRv6Msd"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(IsisSRv6AdjSidContainer, self).__init__()
+        self._parent = parent
+
+    @property
+    def sids(self):
+        # type: () -> IsisSRv6AdjSidIter
+        """sids getter
+
+        List of SRv6 Adjacency SID sub-TLVs (End.X SID) for this interface. Point-to-point interfaces advertise End.X SID sub-TLV (sub-TLV type 43); broadcast interfaces advertise LAN End.X SID sub-TLV (sub-TLV type 44). Each entry binds 128-bit SRv6 SID to this specific outgoing adjacency and advertises the associated endpoint behavior. Reference: RFC 9352 Sections 8.1-8.2.
+
+        Returns: IsisSRv6AdjSidIter
+        """
+        return self._get_property(
+            "sids", IsisSRv6AdjSidIter, self._parent, self._choice
+        )
+
+    @property
+    def srv6_link_msd(self):
+        # type: () -> IsisSRv6Msd
+        """srv6_link_msd getter
+
+        SRv6 Maximum SID Depth (MSD) sub-TLV values, used for both node-level advertisement (carried in IS-IS Router CAPABILITY TLV 242 via Node MSD sub-TLV type 23, RFC 9352 Section 6) and link-level advertisement (carried in Extended IS Reachability TLV via Link MSD sub-TLV type 15, RFC 9352 Section 6). When property is present, the corresponding MSD sub-TLV is advertised with the configured value. Omit property to suppress advertisement of that MSD type. Reference: RFC 9352 Section 6.SRv6 Maximum SID Depth (MSD) sub-TLV values, used for both node-level advertisement (carried in IS-IS Router CAPABILITY TLV 242 via Node MSD sub-TLV type 23, RFC 9352 Section 6) and link-level advertisement (carried in Extended IS Reachability TLV via Link MSD sub-TLV type 15, RFC 9352 Section 6). When property is present, the corresponding MSD sub-TLV is advertised with the configured value. Omit property to suppress advertisement of that MSD type. Reference: RFC 9352 Section 6.SRv6 Maximum SID Depth (MSD) sub-TLV values, used for both node-level advertisement (carried in IS-IS Router CAPABILITY TLV 242 via Node MSD sub-TLV type 23, RFC 9352 Section 6) and link-level advertisement (carried in Extended IS Reachability TLV via Link MSD sub-TLV type 15, RFC 9352 Section 6). When property is present, the corresponding MSD sub-TLV is advertised with the configured value. Omit property to suppress advertisement of that MSD type. Reference: RFC 9352 Section 6.When present, advertises per-link SRv6 Maximum SID Depth (MSD) sub-TLVs within the IS-IS Extended IS Reachability TLV for this interface. Each populated child object causes the corresponding link MSD sub-TLV to be advertised; omit child object to suppress that MSD type. Reference: RFC 9352 Section 6.
+
+        Returns: IsisSRv6Msd
+        """
+        return self._get_property("srv6_link_msd", IsisSRv6Msd)
+
+
+class IsisSRv6AdjSid(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "locator": {
+            "type": str,
+            "enum": [
+                "auto",
+                "custom_locator_reference",
+            ],
+        },
+        "custom_locator_reference": {"type": str},
+        "function": {
+            "type": str,
+            "format": "hex",
+        },
+        "argument": {
+            "type": str,
+            "format": "hex",
+        },
+        "endpoint_behavior": {
+            "type": str,
+            "enum": [
+                "end_x",
+                "end_x_with_psp",
+                "end_x_with_usp",
+                "end_x_with_psp_usp",
+                "end_x_with_usd",
+                "end_x_with_psp_usd",
+                "end_x_with_usp_usd",
+                "end_x_with_psp_usp_usd",
+                "end_dx4",
+                "end_dx6",
+            ],
+        },
+        "b_flag": {"type": bool},
+        "s_flag": {"type": bool},
+        "p_flag": {"type": bool},
+        "weight": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "algorithm": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "c_flag": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "locator": "auto",
+        "argument": "0000",
+        "endpoint_behavior": "end_x",
+        "b_flag": False,
+        "s_flag": False,
+        "p_flag": False,
+        "weight": 0,
+        "algorithm": 0,
+        "c_flag": False,
+    }  # type: Dict[str, Union(type)]
+
+    AUTO = "auto"  # type: str
+    CUSTOM_LOCATOR_REFERENCE = "custom_locator_reference"  # type: str
+
+    END_X = "end_x"  # type: str
+    END_X_WITH_PSP = "end_x_with_psp"  # type: str
+    END_X_WITH_USP = "end_x_with_usp"  # type: str
+    END_X_WITH_PSP_USP = "end_x_with_psp_usp"  # type: str
+    END_X_WITH_USD = "end_x_with_usd"  # type: str
+    END_X_WITH_PSP_USD = "end_x_with_psp_usd"  # type: str
+    END_X_WITH_USP_USD = "end_x_with_usp_usd"  # type: str
+    END_X_WITH_PSP_USP_USD = "end_x_with_psp_usp_usd"  # type: str
+    END_DX4 = "end_dx4"  # type: str
+    END_DX6 = "end_dx6"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        locator="auto",
+        custom_locator_reference=None,
+        function=None,
+        argument="0000",
+        endpoint_behavior="end_x",
+        b_flag=False,
+        s_flag=False,
+        p_flag=False,
+        weight=0,
+        algorithm=0,
+        c_flag=False,
+    ):
+        super(IsisSRv6AdjSid, self).__init__()
+        self._parent = parent
+        self._set_property("locator", locator)
+        self._set_property("custom_locator_reference", custom_locator_reference)
+        self._set_property("function", function)
+        self._set_property("argument", argument)
+        self._set_property("endpoint_behavior", endpoint_behavior)
+        self._set_property("b_flag", b_flag)
+        self._set_property("s_flag", s_flag)
+        self._set_property("p_flag", p_flag)
+        self._set_property("weight", weight)
+        self._set_property("algorithm", algorithm)
+        self._set_property("c_flag", c_flag)
+
+    def set(
+        self,
+        locator=None,
+        custom_locator_reference=None,
+        function=None,
+        argument=None,
+        endpoint_behavior=None,
+        b_flag=None,
+        s_flag=None,
+        p_flag=None,
+        weight=None,
+        algorithm=None,
+        c_flag=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def locator(self):
+        # type: () -> Union[Literal["auto"], Literal["custom_locator_reference"]]
+        """locator getter
+
+        Selects which locator from the IsisSRv6.Locator list to use as the locator part of this adjacency SID. 'auto' (default) uses the first locator defined in isis.segment_routing.srv6_locators suitable when only one locator is configured. 'custom_locator_reference' uses the specific locator identified by custom_locator_reference use this when multiple locators are configured and particular one must be selected, e.g. for Flex-Algo binding.
+
+        Returns: Union[Literal["auto"], Literal["custom_locator_reference"]]
+        """
+        return self._get_property("locator")
+
+    @locator.setter
+    def locator(self, value):
+        """locator setter
+
+        Selects which locator from the IsisSRv6.Locator list to use as the locator part of this adjacency SID. 'auto' (default) uses the first locator defined in isis.segment_routing.srv6_locators suitable when only one locator is configured. 'custom_locator_reference' uses the specific locator identified by custom_locator_reference use this when multiple locators are configured and particular one must be selected, e.g. for Flex-Algo binding.
+
+        value: Union[Literal["auto"], Literal["custom_locator_reference"]]
+        """
+        self._set_property("locator", value)
+
+    @property
+    def custom_locator_reference(self):
+        # type: () -> str
+        """custom_locator_reference getter
+
+        Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".. x-constraint:. /components/schemas/IsisSRv6.Locator/properties/locator_name.
+
+        Returns: str
+        """
+        return self._get_property("custom_locator_reference")
+
+    @custom_locator_reference.setter
+    def custom_locator_reference(self, value):
+        """custom_locator_reference setter
+
+        Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".. x-constraint:. /components/schemas/IsisSRv6.Locator/properties/locator_name.
+
+        value: str
+        """
+        self._set_property("custom_locator_reference", value)
+
+    @property
+    def function(self):
+        # type: () -> str
+        """function getter
+
+        The Function part of this adjacency SID expressed as hex string, occupying the function bits immediately after the locator prefix in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must match function_length in the selected IsisSRv6.Locator.sid_structure divided by - e.g. function_length 16 requires 4-nibble string. Example: "00c8" places the value 200 (0xc8) in the function field; with locator fc00:0:1:: /48 (selected via auto or custom_locator_reference) the resulting SID is fc00:0:1:c8::.
+
+        Returns: str
+        """
+        return self._get_property("function")
+
+    @function.setter
+    def function(self, value):
+        """function setter
+
+        The Function part of this adjacency SID expressed as hex string, occupying the function bits immediately after the locator prefix in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must match function_length in the selected IsisSRv6.Locator.sid_structure divided by - e.g. function_length 16 requires 4-nibble string. Example: "00c8" places the value 200 (0xc8) in the function field; with locator fc00:0:1:: /48 (selected via auto or custom_locator_reference) the resulting SID is fc00:0:1:c8::.
+
+        value: str
+        """
+        self._set_property("function", value)
+
+    @property
+    def argument(self):
+        # type: () -> str
+        """argument getter
+
+        The Argument part of this adjacency SID expressed as hex string, occupying the argument bits immediately after the function in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must equal argument_length from the selected IsisSRv6.Locator.sid_structure divided by 4. Use the default "0000" when no argument is carried (argument_length is 0).
+
+        Returns: str
+        """
+        return self._get_property("argument")
+
+    @argument.setter
+    def argument(self, value):
+        """argument setter
+
+        The Argument part of this adjacency SID expressed as hex string, occupying the argument bits immediately after the function in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must equal argument_length from the selected IsisSRv6.Locator.sid_structure divided by 4. Use the default "0000" when no argument is carried (argument_length is 0).
+
+        value: str
+        """
+        self._set_property("argument", value)
+
+    @property
+    def endpoint_behavior(self):
+        # type: () -> Union[Literal["end_dx4"], Literal["end_dx6"], Literal["end_x"], Literal["end_x_with_psp"], Literal["end_x_with_psp_usd"], Literal["end_x_with_psp_usp"], Literal["end_x_with_psp_usp_usd"], Literal["end_x_with_usd"], Literal["end_x_with_usp"], Literal["end_x_with_usp_usd"]]
+        """endpoint_behavior getter
+
+        The endpoint behavior for this adjacency SID, encoded as 2-octet behavior codepoint (RFC 8986 Section 7.4). Valid adjacency-level behaviors for End.X SID Sub-TLV types 43/44 are End.X variants (with PSP/USP/USD flavors) and per-CE cross-connect decapsulation behaviors (End.DX4, End.DX6).
+
+        Returns: Union[Literal["end_dx4"], Literal["end_dx6"], Literal["end_x"], Literal["end_x_with_psp"], Literal["end_x_with_psp_usd"], Literal["end_x_with_psp_usp"], Literal["end_x_with_psp_usp_usd"], Literal["end_x_with_usd"], Literal["end_x_with_usp"], Literal["end_x_with_usp_usd"]]
+        """
+        return self._get_property("endpoint_behavior")
+
+    @endpoint_behavior.setter
+    def endpoint_behavior(self, value):
+        """endpoint_behavior setter
+
+        The endpoint behavior for this adjacency SID, encoded as 2-octet behavior codepoint (RFC 8986 Section 7.4). Valid adjacency-level behaviors for End.X SID Sub-TLV types 43/44 are End.X variants (with PSP/USP/USD flavors) and per-CE cross-connect decapsulation behaviors (End.DX4, End.DX6).
+
+        value: Union[Literal["end_dx4"], Literal["end_dx6"], Literal["end_x"], Literal["end_x_with_psp"], Literal["end_x_with_psp_usd"], Literal["end_x_with_psp_usp"], Literal["end_x_with_psp_usp_usd"], Literal["end_x_with_usd"], Literal["end_x_with_usp"], Literal["end_x_with_usp_usd"]]
+        """
+        self._set_property("endpoint_behavior", value)
+
+    @property
+    def b_flag(self):
+        # type: () -> bool
+        """b_flag getter
+
+        Backup flag (B-flag, bit 0). When set, the End.X SID is eligible for IP Fast-ReRoute (IP-FRR) protection, indicating backup adjacency that can protect traffic when the primary adjacency fails (RFC 9352 Section 8.1).
+
+        Returns: bool
+        """
+        return self._get_property("b_flag")
+
+    @b_flag.setter
+    def b_flag(self, value):
+        """b_flag setter
+
+        Backup flag (B-flag, bit 0). When set, the End.X SID is eligible for IP Fast-ReRoute (IP-FRR) protection, indicating backup adjacency that can protect traffic when the primary adjacency fails (RFC 9352 Section 8.1).
+
+        value: bool
+        """
+        self._set_property("b_flag", value)
+
+    @property
+    def s_flag(self):
+        # type: () -> bool
+        """s_flag getter
+
+        Set flag (S-flag, bit 1). When set, the End.X SID refers to set of adjacencies (e.g., parallel links, ECMP group). The same SID value may be assigned to multiple adjacencies forming the set (RFC 9352 Section 8.1).
+
+        Returns: bool
+        """
+        return self._get_property("s_flag")
+
+    @s_flag.setter
+    def s_flag(self, value):
+        """s_flag setter
+
+        Set flag (S-flag, bit 1). When set, the End.X SID refers to set of adjacencies (e.g., parallel links, ECMP group). The same SID value may be assigned to multiple adjacencies forming the set (RFC 9352 Section 8.1).
+
+        value: bool
+        """
+        self._set_property("s_flag", value)
+
+    @property
+    def p_flag(self):
+        # type: () -> bool
+        """p_flag getter
+
+        Persistent flag (P-flag, bit 2). When set, the End.X SID value is persistently allocated and remains consistent across router restarts and interface flap events (RFC 9352 Section 8.1).
+
+        Returns: bool
+        """
+        return self._get_property("p_flag")
+
+    @p_flag.setter
+    def p_flag(self, value):
+        """p_flag setter
+
+        Persistent flag (P-flag, bit 2). When set, the End.X SID value is persistently allocated and remains consistent across router restarts and interface flap events (RFC 9352 Section 8.1).
+
+        value: bool
+        """
+        self._set_property("p_flag", value)
+
+    @property
+    def weight(self):
+        # type: () -> int
+        """weight getter
+
+        Weight for load balancing across adjacencies sharing the same End.X SID (applicable when S-flag is set). Traffic is distributed proportionally across the adjacency set according to the weight values (RFC 9352 Section 8.1).
+
+        Returns: int
+        """
+        return self._get_property("weight")
+
+    @weight.setter
+    def weight(self, value):
+        """weight setter
+
+        Weight for load balancing across adjacencies sharing the same End.X SID (applicable when S-flag is set). Traffic is distributed proportionally across the adjacency set according to the weight values (RFC 9352 Section 8.1).
+
+        value: int
+        """
+        self._set_property("weight", value)
+
+    @property
+    def algorithm(self):
+        # type: () -> int
+        """algorithm getter
+
+        IGP algorithm associated with this adjacency SID (RFC 8665). = standard SPF, = Strict SPF, 128-255 Flex-Algo (RFC 9350). Binds the adjacency SID to the corresponding topology or path computation algorithm.
+
+        Returns: int
+        """
+        return self._get_property("algorithm")
+
+    @algorithm.setter
+    def algorithm(self, value):
+        """algorithm setter
+
+        IGP algorithm associated with this adjacency SID (RFC 8665). = standard SPF, = Strict SPF, 128-255 Flex-Algo (RFC 9350). Binds the adjacency SID to the corresponding topology or path computation algorithm.
+
+        value: int
+        """
+        self._set_property("algorithm", value)
+
+    @property
+    def c_flag(self):
+        # type: () -> bool
+        """c_flag getter
+
+        Compression (uSID) flag. When set, this adjacency SID is Micro-SID (uSID) End.X per RFC 9800. headend can pack it into shared 128-bit uSID container alongside node uSIDs from the same /32 block, directing traffic over specific L3 adjacency within compressed segment list. The node-level IsisSRv6.NodeCapability.c_flag must also be set. The SID bit layout is governed by the selected IsisSRv6.Locator.sid_structure. Example using F3216 (lb=32, ln=16, fn=16, arg=0), uSID block fc00::/32, locator fc00:0:1:: /48:. c_flag=true, function "00c8" => uSID fc00:0:1:c8:: (End.X). c_flag=true, function "00c9" => uSID fc00:0:1:c9:: (End.X alternate link). For path routed via node 1's adjacency "00c8" then node End "0001", the headend builds DA fc00:0:1:c8:2:1:: encoding both hops in single 128-bit address. Reference: RFC 9800.
+
+        Returns: bool
+        """
+        return self._get_property("c_flag")
+
+    @c_flag.setter
+    def c_flag(self, value):
+        """c_flag setter
+
+        Compression (uSID) flag. When set, this adjacency SID is Micro-SID (uSID) End.X per RFC 9800. headend can pack it into shared 128-bit uSID container alongside node uSIDs from the same /32 block, directing traffic over specific L3 adjacency within compressed segment list. The node-level IsisSRv6.NodeCapability.c_flag must also be set. The SID bit layout is governed by the selected IsisSRv6.Locator.sid_structure. Example using F3216 (lb=32, ln=16, fn=16, arg=0), uSID block fc00::/32, locator fc00:0:1:: /48:. c_flag=true, function "00c8" => uSID fc00:0:1:c8:: (End.X). c_flag=true, function "00c9" => uSID fc00:0:1:c9:: (End.X alternate link). For path routed via node 1's adjacency "00c8" then node End "0001", the headend builds DA fc00:0:1:c8:2:1:: encoding both hops in single 128-bit address. Reference: RFC 9800.
+
+        value: bool
+        """
+        self._set_property("c_flag", value)
+
+
+class IsisSRv6AdjSidIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(IsisSRv6AdjSidIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[IsisSRv6AdjSid]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> IsisSRv6AdjSidIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> IsisSRv6AdjSid
+        return self._next()
+
+    def next(self):
+        # type: () -> IsisSRv6AdjSid
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, IsisSRv6AdjSid):
+            raise Exception("Item is not an instance of IsisSRv6AdjSid")
+
+    def adjsid(
+        self,
+        locator="auto",
+        custom_locator_reference=None,
+        function=None,
+        argument="0000",
+        endpoint_behavior="end_x",
+        b_flag=False,
+        s_flag=False,
+        p_flag=False,
+        weight=0,
+        algorithm=0,
+        c_flag=False,
+    ):
+        # type: (Union[Literal["auto"], Literal["custom_locator_reference"]],str,str,str,Union[Literal["end_dx4"], Literal["end_dx6"], Literal["end_x"], Literal["end_x_with_psp"], Literal["end_x_with_psp_usd"], Literal["end_x_with_psp_usp"], Literal["end_x_with_psp_usp_usd"], Literal["end_x_with_usd"], Literal["end_x_with_usp"], Literal["end_x_with_usp_usd"]],bool,bool,bool,int,int,bool) -> IsisSRv6AdjSidIter
+        """Factory method that creates an instance of the IsisSRv6AdjSid class
+
+        SRv6 Adjacency SID Sub-TLV for IS-IS interfaces. Point-to-point adjacencies use End.X SID Sub-TLV (sub-TLV type 43); LAN adjacencies use LAN End.X SID Sub-TLV (sub-TLV type 44). The End.X SID binds 128-bit SRv6 SID to specific outgoing interface and next-hop, enabling traffic steering across specific L3 adjacency. The full 128-bit SID is assembled as:. Locator (selected via locator/custom_locator_reference) Function Argument. Example given locator fc00:0:1:: /48 with sid_structure lb=32, ln=16, fn=16, arg=0:. locator auto (=> fc00:0:1::), function "00c8". => final adjacency SID: fc00:0:1:c8::. locator custom_locator_reference "loc2" (fc00:0:2:: /48), function "00c9". => final adjacency SID: fc00:0:2:c9::. Valid behaviors include End.X variants (with PSP/USP/USD flavors) and cross-connect decapsulation behaviors (End.DX4, End.DX6). Reference: RFC 9352 Sections 8.1-8.2, RFC 8986 Section 4.3. The SID bit-field structure (locator block, locator node, function, and argument lengths) is inherited from IsisSRv6.Locator.sid_structure of the selected locator per RFC 9352 Section 9. No per-adjacency structure override is defined in the RFC.
+
+        Returns: IsisSRv6AdjSidIter
+        """
+        item = IsisSRv6AdjSid(
+            parent=self._parent,
+            locator=locator,
+            custom_locator_reference=custom_locator_reference,
+            function=function,
+            argument=argument,
+            endpoint_behavior=endpoint_behavior,
+            b_flag=b_flag,
+            s_flag=s_flag,
+            p_flag=p_flag,
+            weight=weight,
+            algorithm=algorithm,
+            c_flag=c_flag,
+        )
+        self._add(item)
+        return self
+
+    def add(
+        self,
+        locator="auto",
+        custom_locator_reference=None,
+        function=None,
+        argument="0000",
+        endpoint_behavior="end_x",
+        b_flag=False,
+        s_flag=False,
+        p_flag=False,
+        weight=0,
+        algorithm=0,
+        c_flag=False,
+    ):
+        # type: (Union[Literal["auto"], Literal["custom_locator_reference"]],str,str,str,Union[Literal["end_dx4"], Literal["end_dx6"], Literal["end_x"], Literal["end_x_with_psp"], Literal["end_x_with_psp_usd"], Literal["end_x_with_psp_usp"], Literal["end_x_with_psp_usp_usd"], Literal["end_x_with_usd"], Literal["end_x_with_usp"], Literal["end_x_with_usp_usd"]],bool,bool,bool,int,int,bool) -> IsisSRv6AdjSid
+        """Add method that creates and returns an instance of the IsisSRv6AdjSid class
+
+        SRv6 Adjacency SID Sub-TLV for IS-IS interfaces. Point-to-point adjacencies use End.X SID Sub-TLV (sub-TLV type 43); LAN adjacencies use LAN End.X SID Sub-TLV (sub-TLV type 44). The End.X SID binds 128-bit SRv6 SID to specific outgoing interface and next-hop, enabling traffic steering across specific L3 adjacency. The full 128-bit SID is assembled as:. Locator (selected via locator/custom_locator_reference) Function Argument. Example given locator fc00:0:1:: /48 with sid_structure lb=32, ln=16, fn=16, arg=0:. locator auto (=> fc00:0:1::), function "00c8". => final adjacency SID: fc00:0:1:c8::. locator custom_locator_reference "loc2" (fc00:0:2:: /48), function "00c9". => final adjacency SID: fc00:0:2:c9::. Valid behaviors include End.X variants (with PSP/USP/USD flavors) and cross-connect decapsulation behaviors (End.DX4, End.DX6). Reference: RFC 9352 Sections 8.1-8.2, RFC 8986 Section 4.3. The SID bit-field structure (locator block, locator node, function, and argument lengths) is inherited from IsisSRv6.Locator.sid_structure of the selected locator per RFC 9352 Section 9. No per-adjacency structure override is defined in the RFC.
+
+        Returns: IsisSRv6AdjSid
+        """
+        item = IsisSRv6AdjSid(
+            parent=self._parent,
+            locator=locator,
+            custom_locator_reference=custom_locator_reference,
+            function=function,
+            argument=argument,
+            endpoint_behavior=endpoint_behavior,
+            b_flag=b_flag,
+            s_flag=s_flag,
+            p_flag=p_flag,
+            weight=weight,
+            algorithm=algorithm,
+            c_flag=c_flag,
+        )
+        self._add(item)
+        return item
+
+
+class IsisSRv6Msd(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "max_sl": {"type": "IsisSRv6MsdValue"},
+        "max_end_pop_srh": {"type": "IsisSRv6MsdValue"},
+        "max_h_encaps": {"type": "IsisSRv6MsdValue"},
+        "max_end_d_srh": {"type": "IsisSRv6MsdValue"},
+        "max_t_insert": {"type": "IsisSRv6MsdValue"},
+        "max_t_encaps": {"type": "IsisSRv6MsdValue"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(IsisSRv6Msd, self).__init__()
+        self._parent = parent
+
+    @property
+    def max_sl(self):
+        # type: () -> IsisSRv6MsdValue
+        """max_sl getter
+
+        A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.When present, advertises Maximum Segments Left (Max-SL, MSD type 41, RFC 9352 Section 6) the maximum value of the Segments Left field in an SRH that this node can correctly process.
+
+        Returns: IsisSRv6MsdValue
+        """
+        return self._get_property("max_sl", IsisSRv6MsdValue)
+
+    @property
+    def max_end_pop_srh(self):
+        # type: () -> IsisSRv6MsdValue
+        """max_end_pop_srh getter
+
+        A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.When present, advertises Maximum End Pop SRH (Max-End-Pop, MSD type 42, RFC 9352 Section 6) the maximum size of the SRH this node can remove when processing an End.Pop operation.
+
+        Returns: IsisSRv6MsdValue
+        """
+        return self._get_property("max_end_pop_srh", IsisSRv6MsdValue)
+
+    @property
+    def max_h_encaps(self):
+        # type: () -> IsisSRv6MsdValue
+        """max_h_encaps getter
+
+        A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.When present, advertises Maximum H.Encaps (Max-H.Encaps, MSD type 44, RFC 9352 Section 6) the maximum number of SRv6 SID encapsulations this node can perform as headend.
+
+        Returns: IsisSRv6MsdValue
+        """
+        return self._get_property("max_h_encaps", IsisSRv6MsdValue)
+
+    @property
+    def max_end_d_srh(self):
+        # type: () -> IsisSRv6MsdValue
+        """max_end_d_srh getter
+
+        A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.When present, advertises Maximum End.D SRH (Max-End-D, MSD type 45, RFC 9352 Section 6) the maximum size of the SRH this node can process when performing an End.D decapsulation function.
+
+        Returns: IsisSRv6MsdValue
+        """
+        return self._get_property("max_end_d_srh", IsisSRv6MsdValue)
+
+    @property
+    def max_t_insert(self):
+        # type: () -> IsisSRv6MsdValue
+        """max_t_insert getter
+
+        A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.When present, advertises Maximum T.Insert (Max-T.Insert, MSD type 46, RFC 9352 Section 6) the maximum size of the SRH this node can insert using T.Insert operation.
+
+        Returns: IsisSRv6MsdValue
+        """
+        return self._get_property("max_t_insert", IsisSRv6MsdValue)
+
+    @property
+    def max_t_encaps(self):
+        # type: () -> IsisSRv6MsdValue
+        """max_t_encaps getter
+
+        A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.When present, advertises Maximum T.Encaps (Max-T.Encaps, MSD type 47, RFC 9352 Section 6) the maximum size of the SRH this node can insert using T.Encaps operation.
+
+        Returns: IsisSRv6MsdValue
+        """
+        return self._get_property("max_t_encaps", IsisSRv6MsdValue)
+
+
+class IsisSRv6MsdValue(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value=None):
+        super(IsisSRv6MsdValue, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        The MSD depth value (0-255, RFC 9352 Section 6). value of indicates that the node has no capability for the corresponding SRH operation but still causes the sub-TLV to be advertised. To suppress advertisement entirely, omit the parent object.
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        The MSD depth value (0-255, RFC 9352 Section 6). value of indicates that the node has no capability for the corresponding SRH operation but still causes the sub-TLV to be advertised. To suppress advertisement entirely, omit the parent object.
+
+        value: int
+        """
+        self._set_property("value", value)
 
 
 class IsisInterfaceIter(OpenApiIter):
@@ -13570,6 +17988,7 @@ class IsisSegmentRouting(OpenApiObject):
 
     _TYPES = {
         "router_capability": {"type": "IsisRouterCapability"},
+        "srv6_locators": {"type": "IsisSRv6LocatorIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -13592,6 +18011,19 @@ class IsisSegmentRouting(OpenApiObject):
         Returns: IsisRouterCapability
         """
         return self._get_property("router_capability", IsisRouterCapability)
+
+    @property
+    def srv6_locators(self):
+        # type: () -> IsisSRv6LocatorIter
+        """srv6_locators getter
+
+        List of SRv6 Locator TLVs (TLV type 27) to be advertised by this IS-IS router. Each locator binds an IPv6 prefix to an IGP algorithm (standard SPF or Flex-Algo per RFC 9350) and carries End SID Sub-TLVs for locally instantiated node-level SRv6 SIDs. One Locator TLV is required per topology/algorithm combination. Locators are scoped to this IS-IS instance and cannot be shared across other protocol instances. Reference: RFC 9352 Section 7.1.
+
+        Returns: IsisSRv6LocatorIter
+        """
+        return self._get_property(
+            "srv6_locators", IsisSRv6LocatorIter, self._parent, self._choice
+        )
 
 
 class IsisRouterCapability(OpenApiObject):
@@ -13633,6 +18065,7 @@ class IsisRouterCapability(OpenApiObject):
             "maximum": 255,
         },
         "srlb_ranges": {"type": "IsisSRSrlbIter"},
+        "srv6_capability": {"type": "IsisSRv6NodeCapability"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -13813,6 +18246,17 @@ class IsisRouterCapability(OpenApiObject):
         return self._get_property(
             "srlb_ranges", IsisSRSrlbIter, self._parent, self._choice
         )
+
+    @property
+    def srv6_capability(self):
+        # type: () -> IsisSRv6NodeCapability
+        """srv6_capability getter
+
+        SRv6 Capabilities Sub-TLV (sub-TLV type 25) carried within the IS-IS Router CAPABILITY TLV (TLV 242, RFC 7981). Announces that this IS-IS router is an SRv6 Segment Endpoint Node and optionally supports the O-bit for OAM operations. Reference: RFC 9352 Section 2.SRv6 Capabilities Sub-TLV (sub-TLV type 25) carried within the IS-IS Router CAPABILITY TLV (TLV 242, RFC 7981). Announces that this IS-IS router is an SRv6 Segment Endpoint Node and optionally supports the O-bit for OAM operations. Reference: RFC 9352 Section 2.SRv6 Capabilities Sub-TLV (sub-TLV type 25) carried within the IS-IS Router CAPABILITY TLV (TLV 242, RFC 7981). Announces that this IS-IS router is an SRv6 Segment Endpoint Node and optionally supports the O-bit for OAM operations. Reference: RFC 9352 Section 2.SRv6 Capabilities Sub-TLV (sub-TLV type 25) carried within this Router CAPABILITY TLV. Announces that this router is an SRv6 Segment Endpoint Node and advertises optional OAM (O-flag) support and node-level SRv6 Maximum SID Depth (MSD) values. Reference: RFC 9352 Section 2, RFC 8491.
+
+        Returns: IsisSRv6NodeCapability
+        """
+        return self._get_property("srv6_capability", IsisSRv6NodeCapability)
 
 
 class IsisSRCapability(OpenApiObject):
@@ -14201,6 +18645,1064 @@ class IsisSRSrlbIter(OpenApiIter):
         return item
 
 
+class IsisSRv6NodeCapability(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "o_flag": {"type": bool},
+        "node_msds": {"type": "IsisSRv6Msd"},
+        "c_flag": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "o_flag": False,
+        "c_flag": False,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, o_flag=False, c_flag=False):
+        super(IsisSRv6NodeCapability, self).__init__()
+        self._parent = parent
+        self._set_property("o_flag", o_flag)
+        self._set_property("c_flag", c_flag)
+
+    def set(self, o_flag=None, c_flag=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def o_flag(self):
+        # type: () -> bool
+        """o_flag getter
+
+        OAM flag (bit of the Flags field in the SRv6 Capabilities Sub-TLV). When set, indicates that this router supports the use of the O-bit in the Segment Routing Header (SRH) for Operations, Administration and Maintenance (OAM) operations as defined in RFC 9259.
+
+        Returns: bool
+        """
+        return self._get_property("o_flag")
+
+    @o_flag.setter
+    def o_flag(self, value):
+        """o_flag setter
+
+        OAM flag (bit of the Flags field in the SRv6 Capabilities Sub-TLV). When set, indicates that this router supports the use of the O-bit in the Segment Routing Header (SRH) for Operations, Administration and Maintenance (OAM) operations as defined in RFC 9259.
+
+        value: bool
+        """
+        self._set_property("o_flag", value)
+
+    @property
+    def node_msds(self):
+        # type: () -> IsisSRv6Msd
+        """node_msds getter
+
+        SRv6 Maximum SID Depth (MSD) sub-TLV values, used for both node-level advertisement (carried in IS-IS Router CAPABILITY TLV 242 via Node MSD sub-TLV type 23, RFC 9352 Section 6) and link-level advertisement (carried in Extended IS Reachability TLV via Link MSD sub-TLV type 15, RFC 9352 Section 6). When property is present, the corresponding MSD sub-TLV is advertised with the configured value. Omit property to suppress advertisement of that MSD type. Reference: RFC 9352 Section 6.SRv6 Maximum SID Depth (MSD) sub-TLV values, used for both node-level advertisement (carried in IS-IS Router CAPABILITY TLV 242 via Node MSD sub-TLV type 23, RFC 9352 Section 6) and link-level advertisement (carried in Extended IS Reachability TLV via Link MSD sub-TLV type 15, RFC 9352 Section 6). When property is present, the corresponding MSD sub-TLV is advertised with the configured value. Omit property to suppress advertisement of that MSD type. Reference: RFC 9352 Section 6.SRv6 Maximum SID Depth (MSD) sub-TLV values, used for both node-level advertisement (carried in IS-IS Router CAPABILITY TLV 242 via Node MSD sub-TLV type 23, RFC 9352 Section 6) and link-level advertisement (carried in Extended IS Reachability TLV via Link MSD sub-TLV type 15, RFC 9352 Section 6). When property is present, the corresponding MSD sub-TLV is advertised with the configured value. Omit property to suppress advertisement of that MSD type. Reference: RFC 9352 Section 6.When present, advertises SRv6 Maximum SID Depth (MSD) sub-TLVs within the IS-IS Router CAPABILITY TLV (TLV 242, RFC 7981). Each populated child object causes the corresponding MSD sub-TLV to be advertised; omit child object to suppress that MSD type. Reference: RFC 9352 Section 6.
+
+        Returns: IsisSRv6Msd
+        """
+        return self._get_property("node_msds", IsisSRv6Msd)
+
+    @property
+    def c_flag(self):
+        # type: () -> bool
+        """c_flag getter
+
+        Compression (uSID) flag (RFC 9800). When set, announces that this IS-IS router supports Micro-SID (uSID) compressed SRv6 encoding. Acts as node-level prerequisite; individual End SIDs and Adj SIDs must also set their own c_flag to be treated as uSIDs. Carried in the SRv6 Capabilities Sub-TLV (sub-TLV type 25) Flags field. Reference: RFC 9352 Section 2, RFC 9800.
+
+        Returns: bool
+        """
+        return self._get_property("c_flag")
+
+    @c_flag.setter
+    def c_flag(self, value):
+        """c_flag setter
+
+        Compression (uSID) flag (RFC 9800). When set, announces that this IS-IS router supports Micro-SID (uSID) compressed SRv6 encoding. Acts as node-level prerequisite; individual End SIDs and Adj SIDs must also set their own c_flag to be treated as uSIDs. Carried in the SRv6 Capabilities Sub-TLV (sub-TLV type 25) Flags field. Reference: RFC 9352 Section 2, RFC 9800.
+
+        value: bool
+        """
+        self._set_property("c_flag", value)
+
+
+class IsisSRv6Locator(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "locator_name": {"type": str},
+        "locator": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "prefix_length": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 128,
+        },
+        "algorithm": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "metric": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 16777215,
+        },
+        "d_flag": {"type": bool},
+        "mt_id": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 4095,
+        },
+        "end_sids": {"type": "IsisSRv6EndSidIter"},
+        "sid_structure": {"type": "IsisSRv6SidStructure"},
+        "advertise_locator_as_prefix": {"type": "IsisSRv6AdvertiseLocatorAsPrefix"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("locator", "locator_name")  # type: tuple(str)
+
+    _DEFAULTS = {
+        "prefix_length": 64,
+        "algorithm": 0,
+        "metric": 0,
+        "d_flag": False,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        locator_name=None,
+        locator=None,
+        prefix_length=64,
+        algorithm=0,
+        metric=0,
+        d_flag=False,
+        mt_id=None,
+    ):
+        super(IsisSRv6Locator, self).__init__()
+        self._parent = parent
+        self._set_property("locator_name", locator_name)
+        self._set_property("locator", locator)
+        self._set_property("prefix_length", prefix_length)
+        self._set_property("algorithm", algorithm)
+        self._set_property("metric", metric)
+        self._set_property("d_flag", d_flag)
+        self._set_property("mt_id", mt_id)
+
+    def set(
+        self,
+        locator_name=None,
+        locator=None,
+        prefix_length=None,
+        algorithm=None,
+        metric=None,
+        d_flag=None,
+        mt_id=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def locator_name(self):
+        # type: () -> str
+        """locator_name getter
+
+        Globally unique name of an object. It also serves as the primary key for arrays of objects.
+
+        Returns: str
+        """
+        return self._get_property("locator_name")
+
+    @locator_name.setter
+    def locator_name(self, value):
+        """locator_name setter
+
+        Globally unique name of an object. It also serves as the primary key for arrays of objects.
+
+        value: str
+        """
+        if value is None:
+            raise TypeError("Cannot set required property locator_name as None")
+        self._set_property("locator_name", value)
+
+    @property
+    def locator(self):
+        # type: () -> str
+        """locator getter
+
+        The SRv6 locator IPv6 prefix for this TLV. This routable IPv6 prefix identifies the advertising node within the SRv6 domain. All SRv6 SIDs advertised under this locator must be allocated from this prefix.
+
+        Returns: str
+        """
+        return self._get_property("locator")
+
+    @locator.setter
+    def locator(self, value):
+        """locator setter
+
+        The SRv6 locator IPv6 prefix for this TLV. This routable IPv6 prefix identifies the advertising node within the SRv6 domain. All SRv6 SIDs advertised under this locator must be allocated from this prefix.
+
+        value: str
+        """
+        if value is None:
+            raise TypeError("Cannot set required property locator as None")
+        self._set_property("locator", value)
+
+    @property
+    def prefix_length(self):
+        # type: () -> int
+        """prefix_length getter
+
+        Number of significant bits in the locator field (1-128). Defines the length of the SRv6 locator prefix. The combined bit budget of the locator, function, and argument fields must not exceed 128 bits (RFC 9352 Section 3.1).
+
+        Returns: int
+        """
+        return self._get_property("prefix_length")
+
+    @prefix_length.setter
+    def prefix_length(self, value):
+        """prefix_length setter
+
+        Number of significant bits in the locator field (1-128). Defines the length of the SRv6 locator prefix. The combined bit budget of the locator, function, and argument fields must not exceed 128 bits (RFC 9352 Section 3.1).
+
+        value: int
+        """
+        self._set_property("prefix_length", value)
+
+    @property
+    def algorithm(self):
+        # type: () -> int
+        """algorithm getter
+
+        IGP Algorithm identifier for this locator (RFC 8665). = standard SPF, = Strict SPF. Values 128-255 represent Flexible Algorithms (Flex-Algo) as defined in RFC 9350. The algorithm determines the path computation method used to reach this locator. One Locator TLV is required per algorithm binding.
+
+        Returns: int
+        """
+        return self._get_property("algorithm")
+
+    @algorithm.setter
+    def algorithm(self, value):
+        """algorithm setter
+
+        IGP Algorithm identifier for this locator (RFC 8665). = standard SPF, = Strict SPF. Values 128-255 represent Flexible Algorithms (Flex-Algo) as defined in RFC 9350. The algorithm determines the path computation method used to reach this locator. One Locator TLV is required per algorithm binding.
+
+        value: int
+        """
+        self._set_property("algorithm", value)
+
+    @property
+    def metric(self):
+        # type: () -> int
+        """metric getter
+
+        The metric (cost) associated with this SRv6 locator prefix. Uses the same semantics as IS-IS Extended IP reachability metric (RFC 9352 Section 7.1).
+
+        Returns: int
+        """
+        return self._get_property("metric")
+
+    @metric.setter
+    def metric(self, value):
+        """metric setter
+
+        The metric (cost) associated with this SRv6 locator prefix. Uses the same semantics as IS-IS Extended IP reachability metric (RFC 9352 Section 7.1).
+
+        value: int
+        """
+        self._set_property("metric", value)
+
+    @property
+    def d_flag(self):
+        # type: () -> bool
+        """d_flag getter
+
+        Down bit (D-flag, bit of the Flags field in the SRv6 Locator TLV). MUST be set when the locator is leaked from Level to Level to prevent routing loops. Locator TLVs with the D-flag set MUST NOT be re-advertised from L1 to L2 (RFC 9352 Section 7.1).
+
+        Returns: bool
+        """
+        return self._get_property("d_flag")
+
+    @d_flag.setter
+    def d_flag(self, value):
+        """d_flag setter
+
+        Down bit (D-flag, bit of the Flags field in the SRv6 Locator TLV). MUST be set when the locator is leaked from Level to Level to prevent routing loops. Locator TLVs with the D-flag set MUST NOT be re-advertised from L1 to L2 (RFC 9352 Section 7.1).
+
+        value: bool
+        """
+        self._set_property("d_flag", value)
+
+    @property
+    def mt_id(self):
+        # type: () -> List[int]
+        """mt_id getter
+
+        List of Multi-Topology Identifiers (MT-IDs) for this locator advertisement. Specifies the IS-IS topologies this locator belongs to. = default topology. Valid range 0-4095 per RFC 5120 Section (12-bit field).
+
+        Returns: List[int]
+        """
+        return self._get_property("mt_id")
+
+    @mt_id.setter
+    def mt_id(self, value):
+        """mt_id setter
+
+        List of Multi-Topology Identifiers (MT-IDs) for this locator advertisement. Specifies the IS-IS topologies this locator belongs to. = default topology. Valid range 0-4095 per RFC 5120 Section (12-bit field).
+
+        value: List[int]
+        """
+        self._set_property("mt_id", value)
+
+    @property
+    def end_sids(self):
+        # type: () -> IsisSRv6EndSidIter
+        """end_sids getter
+
+        List of SRv6 End SID Sub-TLVs (sub-TLV type 5) associated with this locator. Each End SID advertises locally instantiated node-local SRv6 SID and its endpoint behavior (End, End.DT4, End.DT6, End.DT46 and their flavor variants). Reference: RFC 9352 Section 7.2.
+
+        Returns: IsisSRv6EndSidIter
+        """
+        return self._get_property(
+            "end_sids", IsisSRv6EndSidIter, self._parent, self._choice
+        )
+
+    @property
+    def sid_structure(self):
+        # type: () -> IsisSRv6SidStructure
+        """sid_structure getter
+
+        SRv6 SID Structure Sub-Sub-TLV (type 1), carried within SRv6 SID Sub-TLVs (End SID type 5, End.X SID type 43/44). Describes the internal bit-field decomposition of the SRv6 SID value so that receiving routers can interpret each field independently. The four length fields (lb_length ln_length function_length argument_length) MUST NOT exceed 128 bits. Required when advertising Micro-SID (uSID) SIDs to describe the compressed encoding. Example for common uSID F3216 format:. lb_length=32, ln_length=16, function_length=16, argument_length=0. Reference: RFC 9352 Section 9, RFC 9800.SRv6 SID Structure Sub-Sub-TLV (type 1), carried within SRv6 SID Sub-TLVs (End SID type 5, End.X SID type 43/44). Describes the internal bit-field decomposition of the SRv6 SID value so that receiving routers can interpret each field independently. The four length fields (lb_length ln_length function_length argument_length) MUST NOT exceed 128 bits. Required when advertising Micro-SID (uSID) SIDs to describe the compressed encoding. Example for common uSID F3216 format:. lb_length=32, ln_length=16, function_length=16, argument_length=0. Reference: RFC 9352 Section 9, RFC 9800.SRv6 SID Structure Sub-Sub-TLV (type 1), carried within SRv6 SID Sub-TLVs (End SID type 5, End.X SID type 43/44). Describes the internal bit-field decomposition of the SRv6 SID value so that receiving routers can interpret each field independently. The four length fields (lb_length ln_length function_length argument_length) MUST NOT exceed 128 bits. Required when advertising Micro-SID (uSID) SIDs to describe the compressed encoding. Example for common uSID F3216 format:. lb_length=32, ln_length=16, function_length=16, argument_length=0. Reference: RFC 9352 Section 9, RFC 9800.SRv6 SID Structure Sub-Sub-TLV (type 1) describing the internal bit-field decomposition shared by all SIDs within this locator. Specifies the Locator Block, Locator Node, Function, and Argument lengths in bits. The sum of all four lengths must not exceed 128. All End SIDs and Adjacency SIDs under this locator share the same structure. Typically set when c_flag is true (RFC 9352 Section 9).
+
+        Returns: IsisSRv6SidStructure
+        """
+        return self._get_property("sid_structure", IsisSRv6SidStructure)
+
+    @property
+    def advertise_locator_as_prefix(self):
+        # type: () -> IsisSRv6AdvertiseLocatorAsPrefix
+        """advertise_locator_as_prefix getter
+
+        Controls advertisement of the SRv6 locator prefix as an IS-IS IPv6 Reachability prefix (TLV 236/237) alongside the SRv6 Locator TLV (type 27). When this object is present the secondary prefix advertisement is enabled; when absent it is suppressed. Reference: RFC 9352 Section 7.1.Controls advertisement of the SRv6 locator prefix as an IS-IS IPv6 Reachability prefix (TLV 236/237) alongside the SRv6 Locator TLV (type 27). When this object is present the secondary prefix advertisement is enabled; when absent it is suppressed. Reference: RFC 9352 Section 7.1.Controls advertisement of the SRv6 locator prefix as an IS-IS IPv6 Reachability prefix (TLV 236/237) alongside the SRv6 Locator TLV (type 27). When this object is present the secondary prefix advertisement is enabled; when absent it is suppressed. Reference: RFC 9352 Section 7.1.When present, the locator prefix is also advertised as an IS-IS IPv6 Reachability prefix (TLV 236/237) in addition to the SRv6 Locator TLV (type 27). This enables non-SRv6-capable routers to route toward the locator as an ordinary IPv6 prefix. Absence of this object suppresses the secondary prefix advertisement.
+
+        Returns: IsisSRv6AdvertiseLocatorAsPrefix
+        """
+        return self._get_property(
+            "advertise_locator_as_prefix", IsisSRv6AdvertiseLocatorAsPrefix
+        )
+
+
+class IsisSRv6EndSid(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "function": {
+            "type": str,
+            "format": "hex",
+        },
+        "argument": {
+            "type": str,
+            "format": "hex",
+        },
+        "endpoint_behavior": {
+            "type": str,
+            "enum": [
+                "end",
+                "end_with_psp",
+                "end_with_usp",
+                "end_with_psp_usp",
+                "end_with_usd",
+                "end_with_psp_usd",
+                "end_with_usp_usd",
+                "end_with_psp_usp_usd",
+                "end_dt4",
+                "end_dt6",
+                "end_dt46",
+            ],
+        },
+        "c_flag": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "argument": "0000",
+        "endpoint_behavior": "end",
+        "c_flag": False,
+    }  # type: Dict[str, Union(type)]
+
+    END = "end"  # type: str
+    END_WITH_PSP = "end_with_psp"  # type: str
+    END_WITH_USP = "end_with_usp"  # type: str
+    END_WITH_PSP_USP = "end_with_psp_usp"  # type: str
+    END_WITH_USD = "end_with_usd"  # type: str
+    END_WITH_PSP_USD = "end_with_psp_usd"  # type: str
+    END_WITH_USP_USD = "end_with_usp_usd"  # type: str
+    END_WITH_PSP_USP_USD = "end_with_psp_usp_usd"  # type: str
+    END_DT4 = "end_dt4"  # type: str
+    END_DT6 = "end_dt6"  # type: str
+    END_DT46 = "end_dt46"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        function=None,
+        argument="0000",
+        endpoint_behavior="end",
+        c_flag=False,
+    ):
+        super(IsisSRv6EndSid, self).__init__()
+        self._parent = parent
+        self._set_property("function", function)
+        self._set_property("argument", argument)
+        self._set_property("endpoint_behavior", endpoint_behavior)
+        self._set_property("c_flag", c_flag)
+
+    def set(self, function=None, argument=None, endpoint_behavior=None, c_flag=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def function(self):
+        # type: () -> str
+        """function getter
+
+        The Function part of this End SID expressed as hex string, occupying the function bits immediately after the locator prefix in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must equal function_length from the parent IsisSRv6.Locator.sid_structure divided by - for example, function_length of 16 requires 4-nibble string. Example: "0001" with parent locator fc00:0:1:: /48 gives SID fc00:0:1:1::.
+
+        Returns: str
+        """
+        return self._get_property("function")
+
+    @function.setter
+    def function(self, value):
+        """function setter
+
+        The Function part of this End SID expressed as hex string, occupying the function bits immediately after the locator prefix in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must equal function_length from the parent IsisSRv6.Locator.sid_structure divided by - for example, function_length of 16 requires 4-nibble string. Example: "0001" with parent locator fc00:0:1:: /48 gives SID fc00:0:1:1::.
+
+        value: str
+        """
+        self._set_property("function", value)
+
+    @property
+    def argument(self):
+        # type: () -> str
+        """argument getter
+
+        The Argument part of this End SID expressed as hex string, occupying the argument bits immediately after the function in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must equal argument_length from the parent IsisSRv6.Locator.sid_structure divided by 4. Use the default "0000" when no argument is carried (argument_length is 0).
+
+        Returns: str
+        """
+        return self._get_property("argument")
+
+    @argument.setter
+    def argument(self, value):
+        """argument setter
+
+        The Argument part of this End SID expressed as hex string, occupying the argument bits immediately after the function in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must equal argument_length from the parent IsisSRv6.Locator.sid_structure divided by 4. Use the default "0000" when no argument is carried (argument_length is 0).
+
+        value: str
+        """
+        self._set_property("argument", value)
+
+    @property
+    def endpoint_behavior(self):
+        # type: () -> Union[Literal["end"], Literal["end_dt4"], Literal["end_dt46"], Literal["end_dt6"], Literal["end_with_psp"], Literal["end_with_psp_usd"], Literal["end_with_psp_usp"], Literal["end_with_psp_usp_usd"], Literal["end_with_usd"], Literal["end_with_usp"], Literal["end_with_usp_usd"]]
+        """endpoint_behavior getter
+
+        The endpoint behavior for this SRv6 End SID, encoded as 2-octet behavior codepoint (RFC 8986 Section 7.4). Defines how the router processes packets arriving with this SID as the Active Segment. Valid node-level behaviors for End SID Sub-TLV type are End variants (with PSP/USP/USD flavors) and decapsulation behaviors.
+
+        Returns: Union[Literal["end"], Literal["end_dt4"], Literal["end_dt46"], Literal["end_dt6"], Literal["end_with_psp"], Literal["end_with_psp_usd"], Literal["end_with_psp_usp"], Literal["end_with_psp_usp_usd"], Literal["end_with_usd"], Literal["end_with_usp"], Literal["end_with_usp_usd"]]
+        """
+        return self._get_property("endpoint_behavior")
+
+    @endpoint_behavior.setter
+    def endpoint_behavior(self, value):
+        """endpoint_behavior setter
+
+        The endpoint behavior for this SRv6 End SID, encoded as 2-octet behavior codepoint (RFC 8986 Section 7.4). Defines how the router processes packets arriving with this SID as the Active Segment. Valid node-level behaviors for End SID Sub-TLV type are End variants (with PSP/USP/USD flavors) and decapsulation behaviors.
+
+        value: Union[Literal["end"], Literal["end_dt4"], Literal["end_dt46"], Literal["end_dt6"], Literal["end_with_psp"], Literal["end_with_psp_usd"], Literal["end_with_psp_usp"], Literal["end_with_psp_usp_usd"], Literal["end_with_usd"], Literal["end_with_usp"], Literal["end_with_usp_usd"]]
+        """
+        self._set_property("endpoint_behavior", value)
+
+    @property
+    def c_flag(self):
+        # type: () -> bool
+        """c_flag getter
+
+        Compression (uSID) flag. When set, this End SID is Micro-SID (uSID) per RFC 9800. headend router can pack it into shared 128-bit uSID container alongside uSIDs from other nodes in the same /32 uSID block, steering multi-hop path without Segment Routing Header. The node-level IsisSRv6.NodeCapability.c_flag must also be set. The SID bit layout is governed by the parent IsisSRv6.Locator.sid_structure. Example using F3216 (lb=32, ln=16, fn=16, arg=0), uSID block fc00::/32, locator fc00:0:1:: /48:. c_flag=true, function "0001" => uSID fc00:0:1:1:: (End). c_flag=true, function "0002" => uSID fc00:0:1:2:: (End.DT46). For 2-hop path via node (End "0001") then node (End "0001"), the headend builds container DA fc00:0:1:1:2:1:: two 32-bit uSID slots [LN=1,FN=1] and [LN=2,FN=1] packed after the /32 block prefix. Reference: RFC 9800.
+
+        Returns: bool
+        """
+        return self._get_property("c_flag")
+
+    @c_flag.setter
+    def c_flag(self, value):
+        """c_flag setter
+
+        Compression (uSID) flag. When set, this End SID is Micro-SID (uSID) per RFC 9800. headend router can pack it into shared 128-bit uSID container alongside uSIDs from other nodes in the same /32 uSID block, steering multi-hop path without Segment Routing Header. The node-level IsisSRv6.NodeCapability.c_flag must also be set. The SID bit layout is governed by the parent IsisSRv6.Locator.sid_structure. Example using F3216 (lb=32, ln=16, fn=16, arg=0), uSID block fc00::/32, locator fc00:0:1:: /48:. c_flag=true, function "0001" => uSID fc00:0:1:1:: (End). c_flag=true, function "0002" => uSID fc00:0:1:2:: (End.DT46). For 2-hop path via node (End "0001") then node (End "0001"), the headend builds container DA fc00:0:1:1:2:1:: two 32-bit uSID slots [LN=1,FN=1] and [LN=2,FN=1] packed after the /32 block prefix. Reference: RFC 9800.
+
+        value: bool
+        """
+        self._set_property("c_flag", value)
+
+
+class IsisSRv6EndSidIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(IsisSRv6EndSidIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[IsisSRv6EndSid]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> IsisSRv6EndSidIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> IsisSRv6EndSid
+        return self._next()
+
+    def next(self):
+        # type: () -> IsisSRv6EndSid
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, IsisSRv6EndSid):
+            raise Exception("Item is not an instance of IsisSRv6EndSid")
+
+    def endsid(
+        self, function=None, argument="0000", endpoint_behavior="end", c_flag=False
+    ):
+        # type: (str,str,Union[Literal["end"], Literal["end_dt4"], Literal["end_dt46"], Literal["end_dt6"], Literal["end_with_psp"], Literal["end_with_psp_usd"], Literal["end_with_psp_usp"], Literal["end_with_psp_usp_usd"], Literal["end_with_usd"], Literal["end_with_usp"], Literal["end_with_usp_usd"]],bool) -> IsisSRv6EndSidIter
+        """Factory method that creates an instance of the IsisSRv6EndSid class
+
+        SRv6 End SID Sub-TLV (sub-TLV type 5) nested within the enclosing SRv6 Locator TLV (TLV type 27, RFC 9352 Section 7.2). Advertises locally instantiated, node-level SRv6 SID and its associated endpoint behavior. The locator prefix is taken from the parent IsisSRv6.Locator; only the Function and Argument fields need to be specified here. The full 128-bit SID is assembled as:. <parent locator prefix> Function Argument. Example given parent locator fc00:0:1:: /48 with sid_structure lb=32, ln=16, fn=16, arg=0:. function "0001", argument "0000" => SID fc00:0:1:1::. function "0064", argument "0000" => SID fc00:0:1:64::. Valid behaviors are End variants (with PSP/USP/USD flavors) and decapsulation behaviors (End.DT4, End.DT6, End.DT46). Reference: RFC 9352 Section 7.2, RFC 8986.
+
+        Returns: IsisSRv6EndSidIter
+        """
+        item = IsisSRv6EndSid(
+            parent=self._parent,
+            function=function,
+            argument=argument,
+            endpoint_behavior=endpoint_behavior,
+            c_flag=c_flag,
+        )
+        self._add(item)
+        return self
+
+    def add(
+        self, function=None, argument="0000", endpoint_behavior="end", c_flag=False
+    ):
+        # type: (str,str,Union[Literal["end"], Literal["end_dt4"], Literal["end_dt46"], Literal["end_dt6"], Literal["end_with_psp"], Literal["end_with_psp_usd"], Literal["end_with_psp_usp"], Literal["end_with_psp_usp_usd"], Literal["end_with_usd"], Literal["end_with_usp"], Literal["end_with_usp_usd"]],bool) -> IsisSRv6EndSid
+        """Add method that creates and returns an instance of the IsisSRv6EndSid class
+
+        SRv6 End SID Sub-TLV (sub-TLV type 5) nested within the enclosing SRv6 Locator TLV (TLV type 27, RFC 9352 Section 7.2). Advertises locally instantiated, node-level SRv6 SID and its associated endpoint behavior. The locator prefix is taken from the parent IsisSRv6.Locator; only the Function and Argument fields need to be specified here. The full 128-bit SID is assembled as:. <parent locator prefix> Function Argument. Example given parent locator fc00:0:1:: /48 with sid_structure lb=32, ln=16, fn=16, arg=0:. function "0001", argument "0000" => SID fc00:0:1:1::. function "0064", argument "0000" => SID fc00:0:1:64::. Valid behaviors are End variants (with PSP/USP/USD flavors) and decapsulation behaviors (End.DT4, End.DT6, End.DT46). Reference: RFC 9352 Section 7.2, RFC 8986.
+
+        Returns: IsisSRv6EndSid
+        """
+        item = IsisSRv6EndSid(
+            parent=self._parent,
+            function=function,
+            argument=argument,
+            endpoint_behavior=endpoint_behavior,
+            c_flag=c_flag,
+        )
+        self._add(item)
+        return item
+
+
+class IsisSRv6SidStructure(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "locator_block_length": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 128,
+        },
+        "locator_node_length": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 128,
+        },
+        "function_length": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 128,
+        },
+        "argument_length": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 128,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "locator_block_length": 32,
+        "locator_node_length": 16,
+        "function_length": 16,
+        "argument_length": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        locator_block_length=32,
+        locator_node_length=16,
+        function_length=16,
+        argument_length=0,
+    ):
+        super(IsisSRv6SidStructure, self).__init__()
+        self._parent = parent
+        self._set_property("locator_block_length", locator_block_length)
+        self._set_property("locator_node_length", locator_node_length)
+        self._set_property("function_length", function_length)
+        self._set_property("argument_length", argument_length)
+
+    def set(
+        self,
+        locator_block_length=None,
+        locator_node_length=None,
+        function_length=None,
+        argument_length=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def locator_block_length(self):
+        # type: () -> int
+        """locator_block_length getter
+
+        Number of bits in the Locator Block (LB) field of the SID. The Locator Block is the common IPv6 prefix shared across all SIDs within the same SRv6 domain block (e.g., 32 bits in the uSID F3216 format). Minimum value (a zero-bit locator block is not meaningful).
+
+        Returns: int
+        """
+        return self._get_property("locator_block_length")
+
+    @locator_block_length.setter
+    def locator_block_length(self, value):
+        """locator_block_length setter
+
+        Number of bits in the Locator Block (LB) field of the SID. The Locator Block is the common IPv6 prefix shared across all SIDs within the same SRv6 domain block (e.g., 32 bits in the uSID F3216 format). Minimum value (a zero-bit locator block is not meaningful).
+
+        value: int
+        """
+        self._set_property("locator_block_length", value)
+
+    @property
+    def locator_node_length(self):
+        # type: () -> int
+        """locator_node_length getter
+
+        Number of bits in the Locator Node (LN) field of the SID. Identifies the specific node within the Locator Block (e.g., 16 bits in the uSID F3216 format, providing up to 65534 addressable nodes per domain block).
+
+        Returns: int
+        """
+        return self._get_property("locator_node_length")
+
+    @locator_node_length.setter
+    def locator_node_length(self, value):
+        """locator_node_length setter
+
+        Number of bits in the Locator Node (LN) field of the SID. Identifies the specific node within the Locator Block (e.g., 16 bits in the uSID F3216 format, providing up to 65534 addressable nodes per domain block).
+
+        value: int
+        """
+        self._set_property("locator_node_length", value)
+
+    @property
+    def function_length(self):
+        # type: () -> int
+        """function_length getter
+
+        Number of bits in the Function field of the SID. Identifies the specific endpoint behavior instantiated on this node (e.g., 16 bits in the uSID F3216 format, supporting up to 65534 distinct functions per node).
+
+        Returns: int
+        """
+        return self._get_property("function_length")
+
+    @function_length.setter
+    def function_length(self, value):
+        """function_length setter
+
+        Number of bits in the Function field of the SID. Identifies the specific endpoint behavior instantiated on this node (e.g., 16 bits in the uSID F3216 format, supporting up to 65534 distinct functions per node).
+
+        value: int
+        """
+        self._set_property("function_length", value)
+
+    @property
+    def argument_length(self):
+        # type: () -> int
+        """argument_length getter
+
+        Number of bits in the Argument field of the SID. Carries additional per-behavior information such as VPN table identifiers or compressed next-SID encodings for Micro-SID stacking. Set to for standard SIDs that carry no argument. When non-zero in uSID context, enables packing multiple micro-segment identifiers within single 128-bit SID carrier (RFC 9800).
+
+        Returns: int
+        """
+        return self._get_property("argument_length")
+
+    @argument_length.setter
+    def argument_length(self, value):
+        """argument_length setter
+
+        Number of bits in the Argument field of the SID. Carries additional per-behavior information such as VPN table identifiers or compressed next-SID encodings for Micro-SID stacking. Set to for standard SIDs that carry no argument. When non-zero in uSID context, enables packing multiple micro-segment identifiers within single 128-bit SID carrier (RFC 9800).
+
+        value: int
+        """
+        self._set_property("argument_length", value)
+
+
+class IsisSRv6AdvertiseLocatorAsPrefix(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "route_metric": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 16777215,
+        },
+        "redistribution_type": {
+            "type": str,
+            "enum": [
+                "up",
+                "down",
+            ],
+        },
+        "route_origin": {
+            "type": str,
+            "enum": [
+                "internal",
+                "external",
+            ],
+        },
+        "prefix_attributes": {"type": "IsisSRv6PrefixAttributes"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "route_metric": 0,
+        "redistribution_type": "up",
+        "route_origin": "internal",
+    }  # type: Dict[str, Union(type)]
+
+    UP = "up"  # type: str
+    DOWN = "down"  # type: str
+
+    INTERNAL = "internal"  # type: str
+    EXTERNAL = "external"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        route_metric=0,
+        redistribution_type="up",
+        route_origin="internal",
+    ):
+        super(IsisSRv6AdvertiseLocatorAsPrefix, self).__init__()
+        self._parent = parent
+        self._set_property("route_metric", route_metric)
+        self._set_property("redistribution_type", redistribution_type)
+        self._set_property("route_origin", route_origin)
+
+    def set(self, route_metric=None, redistribution_type=None, route_origin=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def route_metric(self):
+        # type: () -> int
+        """route_metric getter
+
+        Metric value used when advertising the locator prefix in the IPv6 Reachability TLV (TLV 236/237).
+
+        Returns: int
+        """
+        return self._get_property("route_metric")
+
+    @route_metric.setter
+    def route_metric(self, value):
+        """route_metric setter
+
+        Metric value used when advertising the locator prefix in the IPv6 Reachability TLV (TLV 236/237).
+
+        value: int
+        """
+        self._set_property("route_metric", value)
+
+    @property
+    def redistribution_type(self):
+        # type: () -> Union[Literal["down"], Literal["up"]]
+        """redistribution_type getter
+
+        Controls the Up/Down redistribution bit for this locator prefix when advertised in the IPv6 Reachability TLV (TLV 236/237). 'up' normal advertisement (default); 'down' the locator has been leaked from Level to Level (RFC 5305).
+
+        Returns: Union[Literal["down"], Literal["up"]]
+        """
+        return self._get_property("redistribution_type")
+
+    @redistribution_type.setter
+    def redistribution_type(self, value):
+        """redistribution_type setter
+
+        Controls the Up/Down redistribution bit for this locator prefix when advertised in the IPv6 Reachability TLV (TLV 236/237). 'up' normal advertisement (default); 'down' the locator has been leaked from Level to Level (RFC 5305).
+
+        value: Union[Literal["down"], Literal["up"]]
+        """
+        self._set_property("redistribution_type", value)
+
+    @property
+    def route_origin(self):
+        # type: () -> Union[Literal["external"], Literal["internal"]]
+        """route_origin getter
+
+        Origin type for the locator prefix in the IPv6 Reachability TLV (TLV 236/237). 'internal' intra-area prefix (default); 'external' redistributed from another protocol.
+
+        Returns: Union[Literal["external"], Literal["internal"]]
+        """
+        return self._get_property("route_origin")
+
+    @route_origin.setter
+    def route_origin(self, value):
+        """route_origin setter
+
+        Origin type for the locator prefix in the IPv6 Reachability TLV (TLV 236/237). 'internal' intra-area prefix (default); 'external' redistributed from another protocol.
+
+        value: Union[Literal["external"], Literal["internal"]]
+        """
+        self._set_property("route_origin", value)
+
+    @property
+    def prefix_attributes(self):
+        # type: () -> IsisSRv6PrefixAttributes
+        """prefix_attributes getter
+
+        Prefix Attribute Flags Sub-TLV (sub-TLV type 4, RFC 7794) for an SRv6 locator prefix advertisement. Carried within the IS-IS IPv6 Reachability TLV (TLV 236/237) when the locator is also advertised as prefix. Presence of this object causes the sub-TLV to be included; absence suppresses it. Reference: RFC 7794.Prefix Attribute Flags Sub-TLV (sub-TLV type 4, RFC 7794) for an SRv6 locator prefix advertisement. Carried within the IS-IS IPv6 Reachability TLV (TLV 236/237) when the locator is also advertised as prefix. Presence of this object causes the sub-TLV to be included; absence suppresses it. Reference: RFC 7794.Prefix Attribute Flags Sub-TLV (sub-TLV type 4, RFC 7794) for an SRv6 locator prefix advertisement. Carried within the IS-IS IPv6 Reachability TLV (TLV 236/237) when the locator is also advertised as prefix. Presence of this object causes the sub-TLV to be included; absence suppresses it. Reference: RFC 7794.When present, the Prefix Attribute Flags Sub-TLV (sub-TLV type 4, RFC 7794) is included in this prefix advertisement, carrying the X, R, and flags. Absence suppresses the sub-TLV.
+
+        Returns: IsisSRv6PrefixAttributes
+        """
+        return self._get_property("prefix_attributes", IsisSRv6PrefixAttributes)
+
+
+class IsisSRv6PrefixAttributes(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "x_flag": {"type": bool},
+        "r_flag": {"type": bool},
+        "n_flag": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "x_flag": False,
+        "r_flag": False,
+        "n_flag": False,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, x_flag=False, r_flag=False, n_flag=False):
+        super(IsisSRv6PrefixAttributes, self).__init__()
+        self._parent = parent
+        self._set_property("x_flag", x_flag)
+        self._set_property("r_flag", r_flag)
+        self._set_property("n_flag", n_flag)
+
+    def set(self, x_flag=None, r_flag=None, n_flag=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def x_flag(self):
+        # type: () -> bool
+        """x_flag getter
+
+        External prefix flag (bit 0, RFC 7794). When set, indicates this locator prefix was redistributed from another protocol.
+
+        Returns: bool
+        """
+        return self._get_property("x_flag")
+
+    @x_flag.setter
+    def x_flag(self, value):
+        """x_flag setter
+
+        External prefix flag (bit 0, RFC 7794). When set, indicates this locator prefix was redistributed from another protocol.
+
+        value: bool
+        """
+        self._set_property("x_flag", value)
+
+    @property
+    def r_flag(self):
+        # type: () -> bool
+        """r_flag getter
+
+        Re-advertisement flag (bit 1, RFC 7794). When set, indicates this locator prefix has been leaked between IS-IS levels.
+
+        Returns: bool
+        """
+        return self._get_property("r_flag")
+
+    @r_flag.setter
+    def r_flag(self, value):
+        """r_flag setter
+
+        Re-advertisement flag (bit 1, RFC 7794). When set, indicates this locator prefix has been leaked between IS-IS levels.
+
+        value: bool
+        """
+        self._set_property("r_flag", value)
+
+    @property
+    def n_flag(self):
+        # type: () -> bool
+        """n_flag getter
+
+        Node flag (bit 2, RFC 7794). When set, indicates this prefix identifies the advertising router (e.g., loopback or router-ID prefix).
+
+        Returns: bool
+        """
+        return self._get_property("n_flag")
+
+    @n_flag.setter
+    def n_flag(self, value):
+        """n_flag setter
+
+        Node flag (bit 2, RFC 7794). When set, indicates this prefix identifies the advertising router (e.g., loopback or router-ID prefix).
+
+        value: bool
+        """
+        self._set_property("n_flag", value)
+
+
+class IsisSRv6LocatorIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(IsisSRv6LocatorIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[IsisSRv6Locator]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> IsisSRv6LocatorIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> IsisSRv6Locator
+        return self._next()
+
+    def next(self):
+        # type: () -> IsisSRv6Locator
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, IsisSRv6Locator):
+            raise Exception("Item is not an instance of IsisSRv6Locator")
+
+    def locator(
+        self,
+        locator_name=None,
+        locator=None,
+        prefix_length=64,
+        algorithm=0,
+        metric=0,
+        d_flag=False,
+        mt_id=None,
+    ):
+        # type: (str,str,int,int,int,bool,List[int]) -> IsisSRv6LocatorIter
+        """Factory method that creates an instance of the IsisSRv6Locator class
+
+        IS-IS SRv6 Locator TLV (TLV type 27), as defined in RFC 9352 Section 7.1. Advertises an SRv6 locator prefix that identifies this SRv6-capable router and binds it to specific IGP algorithm (standard SPF or Flex-Algo per RFC 9350). One Locator TLV is required per topology/algorithm combination. The SRv6 SID space is structured as: Locator prefix Function Argument, where the locator prefix is routable and the function identifies the specific endpoint behavior (RFC 8986 Section 3.1).
+
+        Returns: IsisSRv6LocatorIter
+        """
+        item = IsisSRv6Locator(
+            parent=self._parent,
+            locator_name=locator_name,
+            locator=locator,
+            prefix_length=prefix_length,
+            algorithm=algorithm,
+            metric=metric,
+            d_flag=d_flag,
+            mt_id=mt_id,
+        )
+        self._add(item)
+        return self
+
+    def add(
+        self,
+        locator_name=None,
+        locator=None,
+        prefix_length=64,
+        algorithm=0,
+        metric=0,
+        d_flag=False,
+        mt_id=None,
+    ):
+        # type: (str,str,int,int,int,bool,List[int]) -> IsisSRv6Locator
+        """Add method that creates and returns an instance of the IsisSRv6Locator class
+
+        IS-IS SRv6 Locator TLV (TLV type 27), as defined in RFC 9352 Section 7.1. Advertises an SRv6 locator prefix that identifies this SRv6-capable router and binds it to specific IGP algorithm (standard SPF or Flex-Algo per RFC 9350). One Locator TLV is required per topology/algorithm combination. The SRv6 SID space is structured as: Locator prefix Function Argument, where the locator prefix is routable and the function identifies the specific endpoint behavior (RFC 8986 Section 3.1).
+
+        Returns: IsisSRv6Locator
+        """
+        item = IsisSRv6Locator(
+            parent=self._parent,
+            locator_name=locator_name,
+            locator=locator,
+            prefix_length=prefix_length,
+            algorithm=algorithm,
+            metric=metric,
+            d_flag=d_flag,
+            mt_id=mt_id,
+        )
+        self._add(item)
+        return item
+
+
 class IsisGracefulRestart(OpenApiObject):
     __slots__ = "_parent"
 
@@ -14415,6 +19917,7 @@ class BgpV4Peer(OpenApiObject):
         "advanced": {"type": "BgpAdvanced"},
         "capability": {"type": "BgpCapability"},
         "learned_information_filter": {"type": "BgpLearnedInformationFilter"},
+        "traditional_nlri_for_ipv4_routes": {"type": bool},
         "v4_routes": {"type": "BgpV4RouteRangeIter"},
         "v6_routes": {"type": "BgpV6RouteRangeIter"},
         "v4_srte_policies": {"type": "BgpSrteV4PolicyIter"},
@@ -14428,6 +19931,7 @@ class BgpV4Peer(OpenApiObject):
 
     _DEFAULTS = {
         "as_number_width": "four",
+        "traditional_nlri_for_ipv4_routes": True,
     }  # type: Dict[str, Union(type)]
 
     IBGP = "ibgp"  # type: str
@@ -14445,6 +19949,7 @@ class BgpV4Peer(OpenApiObject):
         as_type=None,
         as_number=None,
         as_number_width="four",
+        traditional_nlri_for_ipv4_routes=True,
         name=None,
     ):
         super(BgpV4Peer, self).__init__()
@@ -14453,6 +19958,9 @@ class BgpV4Peer(OpenApiObject):
         self._set_property("as_type", as_type)
         self._set_property("as_number", as_number)
         self._set_property("as_number_width", as_number_width)
+        self._set_property(
+            "traditional_nlri_for_ipv4_routes", traditional_nlri_for_ipv4_routes
+        )
         self._set_property("name", name)
 
     def set(
@@ -14461,6 +19969,7 @@ class BgpV4Peer(OpenApiObject):
         as_type=None,
         as_number=None,
         as_number_width=None,
+        traditional_nlri_for_ipv4_routes=None,
         name=None,
     ):
         for property_name, property_value in locals().items():
@@ -14607,6 +20116,27 @@ class BgpV4Peer(OpenApiObject):
         return self._get_property(
             "learned_information_filter", BgpLearnedInformationFilter
         )
+
+    @property
+    def traditional_nlri_for_ipv4_routes(self):
+        # type: () -> bool
+        """traditional_nlri_for_ipv4_routes getter
+
+        If set to false, all IPv4 routes are advertised using MP_REACH NLRI and withdrawn using MP_UNREACH NLRI as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3. By default when set to true) all IPv4 routes are advertised using traditional or REACH_NLRI and withdrawn using UNREACH_NLRI as defined in https://datatracker.ietf.org/doc/html/rfc4271#section-4.3 This is applicable only for BGPv4 peers.
+
+        Returns: bool
+        """
+        return self._get_property("traditional_nlri_for_ipv4_routes")
+
+    @traditional_nlri_for_ipv4_routes.setter
+    def traditional_nlri_for_ipv4_routes(self, value):
+        """traditional_nlri_for_ipv4_routes setter
+
+        If set to false, all IPv4 routes are advertised using MP_REACH NLRI and withdrawn using MP_UNREACH NLRI as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3. By default when set to true) all IPv4 routes are advertised using traditional or REACH_NLRI and withdrawn using UNREACH_NLRI as defined in https://datatracker.ietf.org/doc/html/rfc4271#section-4.3 This is applicable only for BGPv4 peers.
+
+        value: bool
+        """
+        self._set_property("traditional_nlri_for_ipv4_routes", value)
 
     @property
     def v4_routes(self):
@@ -18129,6 +23659,8 @@ class BgpLearnedInformationFilter(OpenApiObject):
     _TYPES = {
         "unicast_ipv4_prefix": {"type": bool},
         "unicast_ipv6_prefix": {"type": bool},
+        "ipv4_mpls_unicast_prefix": {"type": bool},
+        "ipv6_mpls_unicast_prefix": {"type": bool},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -18136,19 +23668,34 @@ class BgpLearnedInformationFilter(OpenApiObject):
     _DEFAULTS = {
         "unicast_ipv4_prefix": False,
         "unicast_ipv6_prefix": False,
+        "ipv4_mpls_unicast_prefix": False,
+        "ipv6_mpls_unicast_prefix": False,
     }  # type: Dict[str, Union(type)]
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(
-        self, parent=None, unicast_ipv4_prefix=False, unicast_ipv6_prefix=False
+        self,
+        parent=None,
+        unicast_ipv4_prefix=False,
+        unicast_ipv6_prefix=False,
+        ipv4_mpls_unicast_prefix=False,
+        ipv6_mpls_unicast_prefix=False,
     ):
         super(BgpLearnedInformationFilter, self).__init__()
         self._parent = parent
         self._set_property("unicast_ipv4_prefix", unicast_ipv4_prefix)
         self._set_property("unicast_ipv6_prefix", unicast_ipv6_prefix)
+        self._set_property("ipv4_mpls_unicast_prefix", ipv4_mpls_unicast_prefix)
+        self._set_property("ipv6_mpls_unicast_prefix", ipv6_mpls_unicast_prefix)
 
-    def set(self, unicast_ipv4_prefix=None, unicast_ipv6_prefix=None):
+    def set(
+        self,
+        unicast_ipv4_prefix=None,
+        unicast_ipv6_prefix=None,
+        ipv4_mpls_unicast_prefix=None,
+        ipv6_mpls_unicast_prefix=None,
+    ):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -18194,6 +23741,48 @@ class BgpLearnedInformationFilter(OpenApiObject):
         value: bool
         """
         self._set_property("unicast_ipv6_prefix", value)
+
+    @property
+    def ipv4_mpls_unicast_prefix(self):
+        # type: () -> bool
+        """ipv4_mpls_unicast_prefix getter
+
+        If enabled, will store the information related to MPLS Unicast IPv4 Prefixes recieved from the peer.
+
+        Returns: bool
+        """
+        return self._get_property("ipv4_mpls_unicast_prefix")
+
+    @ipv4_mpls_unicast_prefix.setter
+    def ipv4_mpls_unicast_prefix(self, value):
+        """ipv4_mpls_unicast_prefix setter
+
+        If enabled, will store the information related to MPLS Unicast IPv4 Prefixes recieved from the peer.
+
+        value: bool
+        """
+        self._set_property("ipv4_mpls_unicast_prefix", value)
+
+    @property
+    def ipv6_mpls_unicast_prefix(self):
+        # type: () -> bool
+        """ipv6_mpls_unicast_prefix getter
+
+        If enabled, will store the information related to MPLS Unicast IPv6 Prefixes recieved from the peer.
+
+        Returns: bool
+        """
+        return self._get_property("ipv6_mpls_unicast_prefix")
+
+    @ipv6_mpls_unicast_prefix.setter
+    def ipv6_mpls_unicast_prefix(self, value):
+        """ipv6_mpls_unicast_prefix setter
+
+        If enabled, will store the information related to MPLS Unicast IPv6 Prefixes recieved from the peer.
+
+        value: bool
+        """
+        self._set_property("ipv6_mpls_unicast_prefix", value)
 
 
 class BgpV4RouteRange(OpenApiObject):
@@ -32214,9 +37803,10 @@ class BgpV4PeerIter(OpenApiIter):
         as_type=None,
         as_number=None,
         as_number_width="four",
+        traditional_nlri_for_ipv4_routes=True,
         name=None,
     ):
-        # type: (str,Union[Literal["ebgp"], Literal["ibgp"]],int,Union[Literal["four"], Literal["two"]],str) -> BgpV4PeerIter
+        # type: (str,Union[Literal["ebgp"], Literal["ibgp"]],int,Union[Literal["four"], Literal["two"]],bool,str) -> BgpV4PeerIter
         """Factory method that creates an instance of the BgpV4Peer class
 
         Configuration for emulated BGPv4 peers and routes.
@@ -32229,6 +37819,7 @@ class BgpV4PeerIter(OpenApiIter):
             as_type=as_type,
             as_number=as_number,
             as_number_width=as_number_width,
+            traditional_nlri_for_ipv4_routes=traditional_nlri_for_ipv4_routes,
             name=name,
         )
         self._add(item)
@@ -32240,9 +37831,10 @@ class BgpV4PeerIter(OpenApiIter):
         as_type=None,
         as_number=None,
         as_number_width="four",
+        traditional_nlri_for_ipv4_routes=True,
         name=None,
     ):
-        # type: (str,Union[Literal["ebgp"], Literal["ibgp"]],int,Union[Literal["four"], Literal["two"]],str) -> BgpV4Peer
+        # type: (str,Union[Literal["ebgp"], Literal["ibgp"]],int,Union[Literal["four"], Literal["two"]],bool,str) -> BgpV4Peer
         """Add method that creates and returns an instance of the BgpV4Peer class
 
         Configuration for emulated BGPv4 peers and routes.
@@ -32255,6 +37847,7 @@ class BgpV4PeerIter(OpenApiIter):
             as_type=as_type,
             as_number=as_number,
             as_number_width=as_number_width,
+            traditional_nlri_for_ipv4_routes=traditional_nlri_for_ipv4_routes,
             name=name,
         )
         self._add(item)
@@ -39688,6 +45281,7 @@ class DeviceOspfv2Router(OpenApiObject):
         "capabilities": {"type": "Ospfv2Options"},
         "interfaces": {"type": "Ospfv2InterfaceIter"},
         "v4_routes": {"type": "Ospfv2V4RouteRangeIter"},
+        "segment_routing": {"type": "Ospfv2SegmentRouting"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("interfaces", "name")  # type: tuple(str)
@@ -39920,6 +45514,17 @@ class DeviceOspfv2Router(OpenApiObject):
         return self._get_property(
             "v4_routes", Ospfv2V4RouteRangeIter, self._parent, self._choice
         )
+
+    @property
+    def segment_routing(self):
+        # type: () -> Ospfv2SegmentRouting
+        """segment_routing getter
+
+        Segment Routing (SR) allows for flexible definition of end-to-end paths within IGP. topologies by encoding paths as sequences of topological sub-paths, called "segments".. In OSPFv2 the SR-specific information is advertised using Opaque LSAs. The router level. Segment Routing capabilities (SR-Algorithm, SID/Label Range (SRGB), SR Local Block (SRLB)). are carried in the Router Information (RI) Opaque LSA.. Reference: https://datatracker.ietf.org/doc/html/rfc8665.. An implementation may advertise the SR capabilities with default values if user does. not set any of the properties of Segment Routing.. router's own Node (loopback) Prefix-SID is not separate object here: model the. loopback as an ordinary device.ospfv2.router.v4_routes entry with an. Ospfv2SR.PrefixSid attached, and set n_flag on that route range's Extended Prefix flags. (route_origin.<type>.flags.n_flag) to identify it as the router's own prefix. (RFC 7684).Segment Routing (SR) allows for flexible definition of end-to-end paths within IGP. topologies by encoding paths as sequences of topological sub-paths, called "segments".. In OSPFv2 the SR-specific information is advertised using Opaque LSAs. The router level. Segment Routing capabilities (SR-Algorithm, SID/Label Range (SRGB), SR Local Block (SRLB)). are carried in the Router Information (RI) Opaque LSA.. Reference: https://datatracker.ietf.org/doc/html/rfc8665.. An implementation may advertise the SR capabilities with default values if user does. not set any of the properties of Segment Routing.. router's own Node (loopback) Prefix-SID is not separate object here: model the. loopback as an ordinary device.ospfv2.router.v4_routes entry with an. Ospfv2SR.PrefixSid attached, and set n_flag on that route range's Extended Prefix flags. (route_origin.<type>.flags.n_flag) to identify it as the router's own prefix. (RFC 7684).Segment Routing (SR) allows for flexible definition of end-to-end paths within IGP. topologies by encoding paths as sequences of topological sub-paths, called "segments".. In OSPFv2 the SR-specific information is advertised using Opaque LSAs. The router level. Segment Routing capabilities (SR-Algorithm, SID/Label Range (SRGB), SR Local Block (SRLB)). are carried in the Router Information (RI) Opaque LSA.. Reference: https://datatracker.ietf.org/doc/html/rfc8665.. An implementation may advertise the SR capabilities with default values if user does. not set any of the properties of Segment Routing.. router's own Node (loopback) Prefix-SID is not separate object here: model the. loopback as an ordinary device.ospfv2.router.v4_routes entry with an. Ospfv2SR.PrefixSid attached, and set n_flag on that route range's Extended Prefix flags. (route_origin.<type>.flags.n_flag) to identify it as the router's own prefix. (RFC 7684).Optional Segment Routing (SR) configuration for this OSPFv2 router.
+
+        Returns: Ospfv2SegmentRouting
+        """
+        return self._get_property("segment_routing", Ospfv2SegmentRouting)
 
 
 class Ospfv2RouterId(OpenApiObject):
@@ -40364,6 +45969,7 @@ class Ospfv2Interface(OpenApiObject):
             "itemformat": "uint32",
             "maximum": 16777215,
         },
+        "adjacency_sids": {"type": "Ospfv2InterfaceAdjacencySidIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("name", "ipv4_name")  # type: tuple(str)
@@ -40412,7 +46018,7 @@ class Ospfv2Interface(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The globally unique name of the IPv4 interface connected to the DUT. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The globally unique name of the IPv4 interface on which OSPFv2 is running. The underlying Ethernet of this IPv4 interface may be an emulated interface (Ethernet connection of type port_name lag_name, i.e. connected to port and the DUT) or simulated interface (Ethernet connection of type simulated_link). When the underlying Ethernet uses simulated_link, this OSPFv2 interface belongs to simulated router inside simulated topology behind the emulated router, connected either by primary link (internal to the simulated topology) or secondary link (to device behind different simulated topology). This is how OSPFv2 simulated topologies are built a simulated router is an ordinary Device running ospfv2 whose Ethernets use simulated_link connections. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         Returns: str
         """
@@ -40422,7 +46028,7 @@ class Ospfv2Interface(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The globally unique name of the IPv4 interface connected to the DUT. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The globally unique name of the IPv4 interface on which OSPFv2 is running. The underlying Ethernet of this IPv4 interface may be an emulated interface (Ethernet connection of type port_name lag_name, i.e. connected to port and the DUT) or simulated interface (Ethernet connection of type simulated_link). When the underlying Ethernet uses simulated_link, this OSPFv2 interface belongs to simulated router inside simulated topology behind the emulated router, connected either by primary link (internal to the simulated topology) or secondary link (to device behind different simulated topology). This is how OSPFv2 simulated topologies are built a simulated router is an ordinary Device running ospfv2 whose Ethernets use simulated_link connections. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         value: str
         """
@@ -40518,6 +46124,22 @@ class Ospfv2Interface(OpenApiObject):
         value: List[int]
         """
         self._set_property("srlg_values", value)
+
+    @property
+    def adjacency_sids(self):
+        # type: () -> Ospfv2InterfaceAdjacencySidIter
+        """adjacency_sids getter
+
+        List of OSPFv2 Adjacency SID sub-TLVs advertised in the Extended Link Opaque LSA for this interface (RFC 8665). Typically used on point-to-point links.
+
+        Returns: Ospfv2InterfaceAdjacencySidIter
+        """
+        return self._get_property(
+            "adjacency_sids",
+            Ospfv2InterfaceAdjacencySidIter,
+            self._parent,
+            self._choice,
+        )
 
 
 class Ospfv2InterfaceArea(OpenApiObject):
@@ -41068,6 +46690,7 @@ class Ospfv2InterfaceAdvanced(OpenApiObject):
         "routing_metric": {
             "type": int,
             "format": "uint32",
+            "minimum": 1,
             "maximum": 65535,
         },
         "priority": {
@@ -41165,7 +46788,7 @@ class Ospfv2InterfaceAdvanced(OpenApiObject):
         # type: () -> int
         """routing_metric getter
 
-        Routing metric associated with the interface..
+        Routing metric (interface output cost) associated with the interface.. It is advertised as the 16-bit TOS metric of the corresponding link in the. Router-LSA (RFC 2328 Appendix A.4.2); the interface output cost has valid. range of to 65535 (RFC 2328 Section C.3). This applies equally to emulated. and simulated OSPFv2 interfaces.
 
         Returns: int
         """
@@ -41175,7 +46798,7 @@ class Ospfv2InterfaceAdvanced(OpenApiObject):
     def routing_metric(self, value):
         """routing_metric setter
 
-        Routing metric associated with the interface..
+        Routing metric (interface output cost) associated with the interface.. It is advertised as the 16-bit TOS metric of the corresponding link in the. Router-LSA (RFC 2328 Appendix A.4.2); the interface output cost has valid. range of to 65535 (RFC 2328 Section C.3). This applies equally to emulated. and simulated OSPFv2 interfaces.
 
         value: int
         """
@@ -41460,6 +47083,333 @@ class Ospfv2InterfaceLinkProtection(OpenApiObject):
         self._set_property("reserved_80", value)
 
 
+class Ospfv2InterfaceAdjacencySid(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "sid_values",
+                "sid_indices",
+            ],
+        },
+        "sid_values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "minimum": 16,
+            "maximum": 1048575,
+        },
+        "sid_indices": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 4294967295,
+        },
+        "b_flag": {"type": bool},
+        "g_flag": {"type": bool},
+        "p_flag": {"type": bool},
+        "weight": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "sid_values",
+        "b_flag": False,
+        "g_flag": False,
+        "p_flag": False,
+        "weight": 0,
+    }  # type: Dict[str, Union(type)]
+
+    SID_VALUES = "sid_values"  # type: str
+    SID_INDICES = "sid_indices"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        choice=None,
+        sid_values=None,
+        sid_indices=None,
+        b_flag=False,
+        g_flag=False,
+        p_flag=False,
+        weight=0,
+    ):
+        super(Ospfv2InterfaceAdjacencySid, self).__init__()
+        self._parent = parent
+        self._set_property("sid_values", sid_values)
+        self._set_property("sid_indices", sid_indices)
+        self._set_property("b_flag", b_flag)
+        self._set_property("g_flag", g_flag)
+        self._set_property("p_flag", p_flag)
+        self._set_property("weight", weight)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(
+        self,
+        sid_values=None,
+        sid_indices=None,
+        b_flag=None,
+        g_flag=None,
+        p_flag=None,
+        weight=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["sid_indices"], Literal["sid_values"]]
+        """choice getter
+
+        Choice of whether the Adjacency SID carries absolute values (local labels) or relative. indices. This choice sets the V-Flag (Value/Index) and the L-Flag (Local/Global) of the. Adjacency SID sub-TLV as follows:. sid_values: V-Flag and L-Flag are set (both 1). Each Adj-SID carries 3-octet local. label value with local significance, typically from the SRLB. Please refer to. device.ospfv2.segment_routing.srlb_ranges.. sid_indices: V-Flag and L-Flag are unset (both 0). Each Adj-SID carries 4-octet. index that is an offset into the SRGB.. RFC 8665 Section states all other V-Flag/L-Flag combinations are invalid and MUST be. ignored by receiver, so and are intentionally coupled here rather than exposed as. independent properties.. user needs to configure at least one entry of SID value or SID index.
+
+        Returns: Union[Literal["sid_indices"], Literal["sid_values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Choice of whether the Adjacency SID carries absolute values (local labels) or relative. indices. This choice sets the V-Flag (Value/Index) and the L-Flag (Local/Global) of the. Adjacency SID sub-TLV as follows:. sid_values: V-Flag and L-Flag are set (both 1). Each Adj-SID carries 3-octet local. label value with local significance, typically from the SRLB. Please refer to. device.ospfv2.segment_routing.srlb_ranges.. sid_indices: V-Flag and L-Flag are unset (both 0). Each Adj-SID carries 4-octet. index that is an offset into the SRGB.. RFC 8665 Section states all other V-Flag/L-Flag combinations are invalid and MUST be. ignored by receiver, so and are intentionally coupled here rather than exposed as. independent properties.. user needs to configure at least one entry of SID value or SID index.
+
+        value: Union[Literal["sid_indices"], Literal["sid_values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def sid_values(self):
+        # type: () -> List[int]
+        """sid_values getter
+
+        The corresponding Adjacency SID as one or more absolute local label values for the link. Used when the choice is sid_values.
+
+        Returns: List[int]
+        """
+        return self._get_property("sid_values")
+
+    @sid_values.setter
+    def sid_values(self, value):
+        """sid_values setter
+
+        The corresponding Adjacency SID as one or more absolute local label values for the link. Used when the choice is sid_values.
+
+        value: List[int]
+        """
+        self._set_property("sid_values", value, "sid_values")
+
+    @property
+    def sid_indices(self):
+        # type: () -> List[int]
+        """sid_indices getter
+
+        One or more Adjacency SID indices, relative to the SRGB. Used when the choice is sid_indices.
+
+        Returns: List[int]
+        """
+        return self._get_property("sid_indices")
+
+    @sid_indices.setter
+    def sid_indices(self, value):
+        """sid_indices setter
+
+        One or more Adjacency SID indices, relative to the SRGB. Used when the choice is sid_indices.
+
+        value: List[int]
+        """
+        self._set_property("sid_indices", value, "sid_indices")
+
+    @property
+    def b_flag(self):
+        # type: () -> bool
+        """b_flag getter
+
+        B-Flag: Backup Flag.. If set, the Adjacency SID is eligible for protection, for example using. Fast Reroute (FRR) Loop-Free Alternate (LFA).
+
+        Returns: bool
+        """
+        return self._get_property("b_flag")
+
+    @b_flag.setter
+    def b_flag(self, value):
+        """b_flag setter
+
+        B-Flag: Backup Flag.. If set, the Adjacency SID is eligible for protection, for example using. Fast Reroute (FRR) Loop-Free Alternate (LFA).
+
+        value: bool
+        """
+        self._set_property("b_flag", value)
+
+    @property
+    def g_flag(self):
+        # type: () -> bool
+        """g_flag getter
+
+        G-Flag: Group Flag.. When set, the G-Flag indicates that the Adj-SID refers to group of adjacencies and. therefore MAY be assigned to other adjacencies as well.
+
+        Returns: bool
+        """
+        return self._get_property("g_flag")
+
+    @g_flag.setter
+    def g_flag(self, value):
+        """g_flag setter
+
+        G-Flag: Group Flag.. When set, the G-Flag indicates that the Adj-SID refers to group of adjacencies and. therefore MAY be assigned to other adjacencies as well.
+
+        value: bool
+        """
+        self._set_property("g_flag", value)
+
+    @property
+    def p_flag(self):
+        # type: () -> bool
+        """p_flag getter
+
+        P-Flag: Persistent Flag.. When set, the P-Flag indicates that the Adj-SID is persistently allocated, i.e. the. Adj-SID value remains consistent across router restart and/or interface flap.
+
+        Returns: bool
+        """
+        return self._get_property("p_flag")
+
+    @p_flag.setter
+    def p_flag(self, value):
+        """p_flag setter
+
+        P-Flag: Persistent Flag.. When set, the P-Flag indicates that the Adj-SID is persistently allocated, i.e. the. Adj-SID value remains consistent across router restart and/or interface flap.
+
+        value: bool
+        """
+        self._set_property("p_flag", value)
+
+    @property
+    def weight(self):
+        # type: () -> int
+        """weight getter
+
+        The value represents the weight of the Adj-SID for the purpose of load balancing.
+
+        Returns: int
+        """
+        return self._get_property("weight")
+
+    @weight.setter
+    def weight(self, value):
+        """weight setter
+
+        The value represents the weight of the Adj-SID for the purpose of load balancing.
+
+        value: int
+        """
+        self._set_property("weight", value)
+
+
+class Ospfv2InterfaceAdjacencySidIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2InterfaceAdjacencySidIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2InterfaceAdjacencySid]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2InterfaceAdjacencySidIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2InterfaceAdjacencySid
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2InterfaceAdjacencySid
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2InterfaceAdjacencySid):
+            raise Exception("Item is not an instance of Ospfv2InterfaceAdjacencySid")
+
+    def adjacencysid(
+        self,
+        sid_values=None,
+        sid_indices=None,
+        b_flag=False,
+        g_flag=False,
+        p_flag=False,
+        weight=0,
+    ):
+        # type: (List[int],List[int],bool,bool,bool,int) -> Ospfv2InterfaceAdjacencySidIter
+        """Factory method that creates an instance of the Ospfv2InterfaceAdjacencySid class
+
+        Optional container for the OSPFv2 Adjacency SID sub-TLV.. The Adjacency SID sub-TLV is carried inside the OSPFv2 Extended Link TLV of the. Extended Link Opaque LSA and describes segment associated with specific adjacency. (typically point-to-point link).. Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-adjacency-sid-sub-tlv.
+
+        Returns: Ospfv2InterfaceAdjacencySidIter
+        """
+        item = Ospfv2InterfaceAdjacencySid(
+            parent=self._parent,
+            choice=self._choice,
+            sid_values=sid_values,
+            sid_indices=sid_indices,
+            b_flag=b_flag,
+            g_flag=g_flag,
+            p_flag=p_flag,
+            weight=weight,
+        )
+        self._add(item)
+        return self
+
+    def add(
+        self,
+        sid_values=None,
+        sid_indices=None,
+        b_flag=False,
+        g_flag=False,
+        p_flag=False,
+        weight=0,
+    ):
+        # type: (List[int],List[int],bool,bool,bool,int) -> Ospfv2InterfaceAdjacencySid
+        """Add method that creates and returns an instance of the Ospfv2InterfaceAdjacencySid class
+
+        Optional container for the OSPFv2 Adjacency SID sub-TLV.. The Adjacency SID sub-TLV is carried inside the OSPFv2 Extended Link TLV of the. Extended Link Opaque LSA and describes segment associated with specific adjacency. (typically point-to-point link).. Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-adjacency-sid-sub-tlv.
+
+        Returns: Ospfv2InterfaceAdjacencySid
+        """
+        item = Ospfv2InterfaceAdjacencySid(
+            parent=self._parent,
+            choice=self._choice,
+            sid_values=sid_values,
+            sid_indices=sid_indices,
+            b_flag=b_flag,
+            g_flag=g_flag,
+            p_flag=p_flag,
+            weight=weight,
+        )
+        self._add(item)
+        return item
+
+
 class Ospfv2InterfaceIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
@@ -41532,6 +47482,7 @@ class Ospfv2V4RouteRange(OpenApiObject):
             "maximum": 16777215,
         },
         "route_origin": {"type": "Ospfv2V4RRRouteOrigin"},
+        "prefix_sids": {"type": "Ospfv2SRPrefixSidIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("name",)  # type: tuple(str)
@@ -41620,6 +47571,19 @@ class Ospfv2V4RouteRange(OpenApiObject):
         Returns: Ospfv2V4RRRouteOrigin
         """
         return self._get_property("route_origin", Ospfv2V4RRRouteOrigin)
+
+    @property
+    def prefix_sids(self):
+        # type: () -> Ospfv2SRPrefixSidIter
+        """prefix_sids getter
+
+        A list of OSPFv2 Prefix-SID sub-TLVs advertised in the Extended Prefix Opaque LSA for this group of IPv4 route addresses (RFC 8665).
+
+        Returns: Ospfv2SRPrefixSidIter
+        """
+        return self._get_property(
+            "prefix_sids", Ospfv2SRPrefixSidIter, self._parent, self._choice
+        )
 
 
 class Ospfv2V4RRRouteOrigin(OpenApiObject):
@@ -41998,6 +47962,333 @@ class Ospfv2V4RRNssaExternal(OpenApiObject):
         self._set_property("propagation", value)
 
 
+class Ospfv2SRPrefixSid(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "sid_values",
+                "sid_indices",
+            ],
+        },
+        "sid_values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "minimum": 16,
+            "maximum": 1048575,
+        },
+        "sid_indices": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 4294967295,
+        },
+        "np_flag": {"type": bool},
+        "m_flag": {"type": bool},
+        "e_flag": {"type": bool},
+        "algorithm": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "sid_indices",
+        "np_flag": False,
+        "m_flag": False,
+        "e_flag": False,
+        "algorithm": 0,
+    }  # type: Dict[str, Union(type)]
+
+    SID_VALUES = "sid_values"  # type: str
+    SID_INDICES = "sid_indices"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        choice=None,
+        sid_values=None,
+        sid_indices=None,
+        np_flag=False,
+        m_flag=False,
+        e_flag=False,
+        algorithm=0,
+    ):
+        super(Ospfv2SRPrefixSid, self).__init__()
+        self._parent = parent
+        self._set_property("sid_values", sid_values)
+        self._set_property("sid_indices", sid_indices)
+        self._set_property("np_flag", np_flag)
+        self._set_property("m_flag", m_flag)
+        self._set_property("e_flag", e_flag)
+        self._set_property("algorithm", algorithm)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(
+        self,
+        sid_values=None,
+        sid_indices=None,
+        np_flag=None,
+        m_flag=None,
+        e_flag=None,
+        algorithm=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["sid_indices"], Literal["sid_values"]]
+        """choice getter
+
+        Choice of whether the Prefix-SID carries absolute values (local labels) or relative. indices into the SRGB. This choice sets the V-Flag (Value/Index) and the L-Flag. (Local/Global) of the Prefix-SID sub-TLV as follows:. sid_indices: V-Flag and L-Flag are unset (both 0). Each Prefix-SID carries 4-octet. index that is an offset into the SRGB advertised by the router. Please refer to. device.ospfv2.segment_routing.srgb_ranges.. sid_values: V-Flag and L-Flag are set (both 1). Each Prefix-SID carries 3-octet. local label value with local significance.. RFC 8665 Section states all other V-Flag/L-Flag combinations are invalid and MUST be. ignored by receiver, so and are intentionally coupled here rather than exposed as. independent properties.. user needs to configure at least one entry of SID value or SID index. If no entry is. configured, an implementation may advertise an appropriate default SID value/index. based on the choice, e.g. the first value from the SRGB range.
+
+        Returns: Union[Literal["sid_indices"], Literal["sid_values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Choice of whether the Prefix-SID carries absolute values (local labels) or relative. indices into the SRGB. This choice sets the V-Flag (Value/Index) and the L-Flag. (Local/Global) of the Prefix-SID sub-TLV as follows:. sid_indices: V-Flag and L-Flag are unset (both 0). Each Prefix-SID carries 4-octet. index that is an offset into the SRGB advertised by the router. Please refer to. device.ospfv2.segment_routing.srgb_ranges.. sid_values: V-Flag and L-Flag are set (both 1). Each Prefix-SID carries 3-octet. local label value with local significance.. RFC 8665 Section states all other V-Flag/L-Flag combinations are invalid and MUST be. ignored by receiver, so and are intentionally coupled here rather than exposed as. independent properties.. user needs to configure at least one entry of SID value or SID index. If no entry is. configured, an implementation may advertise an appropriate default SID value/index. based on the choice, e.g. the first value from the SRGB range.
+
+        value: Union[Literal["sid_indices"], Literal["sid_values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def sid_values(self):
+        # type: () -> List[int]
+        """sid_values getter
+
+        SID/Label as one or more absolute local label values associated with the IGP Prefix segment attached to the specific IPv4 prefix. Used when the choice is sid_values.
+
+        Returns: List[int]
+        """
+        return self._get_property("sid_values")
+
+    @sid_values.setter
+    def sid_values(self, value):
+        """sid_values setter
+
+        SID/Label as one or more absolute local label values associated with the IGP Prefix segment attached to the specific IPv4 prefix. Used when the choice is sid_values.
+
+        value: List[int]
+        """
+        self._set_property("sid_values", value, "sid_values")
+
+    @property
+    def sid_indices(self):
+        # type: () -> List[int]
+        """sid_indices getter
+
+        One or more SID/Label indices associated with the IGP Prefix segment attached to the specific IPv4 prefix. Each index is an offset into the SRGB. Used when the choice is sid_indices.
+
+        Returns: List[int]
+        """
+        return self._get_property("sid_indices")
+
+    @sid_indices.setter
+    def sid_indices(self, value):
+        """sid_indices setter
+
+        One or more SID/Label indices associated with the IGP Prefix segment attached to the specific IPv4 prefix. Each index is an offset into the SRGB. Used when the choice is sid_indices.
+
+        value: List[int]
+        """
+        self._set_property("sid_indices", value, "sid_indices")
+
+    @property
+    def np_flag(self):
+        # type: () -> bool
+        """np_flag getter
+
+        NP-Flag: No-PHP (No Penultimate Hop-Popping) Flag.. If set, then the penultimate hop MUST NOT pop the Prefix-SID before delivering the. packet to the node that advertised the Prefix-SID.
+
+        Returns: bool
+        """
+        return self._get_property("np_flag")
+
+    @np_flag.setter
+    def np_flag(self, value):
+        """np_flag setter
+
+        NP-Flag: No-PHP (No Penultimate Hop-Popping) Flag.. If set, then the penultimate hop MUST NOT pop the Prefix-SID before delivering the. packet to the node that advertised the Prefix-SID.
+
+        value: bool
+        """
+        self._set_property("np_flag", value)
+
+    @property
+    def m_flag(self):
+        # type: () -> bool
+        """m_flag getter
+
+        M-Flag: Mapping Server Flag.. If set, then the SID was advertised by an SR Mapping Server. When set, the NP-Flag and. the E-Flag MUST be ignored on reception.
+
+        Returns: bool
+        """
+        return self._get_property("m_flag")
+
+    @m_flag.setter
+    def m_flag(self, value):
+        """m_flag setter
+
+        M-Flag: Mapping Server Flag.. If set, then the SID was advertised by an SR Mapping Server. When set, the NP-Flag and. the E-Flag MUST be ignored on reception.
+
+        value: bool
+        """
+        self._set_property("m_flag", value)
+
+    @property
+    def e_flag(self):
+        # type: () -> bool
+        """e_flag getter
+
+        E-Flag: Explicit-Null Flag.. If set, any upstream neighbor of the Prefix-SID originator MUST replace the Prefix-SID. with the Explicit-NULL label before forwarding the packet.
+
+        Returns: bool
+        """
+        return self._get_property("e_flag")
+
+    @e_flag.setter
+    def e_flag(self, value):
+        """e_flag setter
+
+        E-Flag: Explicit-Null Flag.. If set, any upstream neighbor of the Prefix-SID originator MUST replace the Prefix-SID. with the Explicit-NULL label before forwarding the packet.
+
+        value: bool
+        """
+        self._set_property("e_flag", value)
+
+    @property
+    def algorithm(self):
+        # type: () -> int
+        """algorithm getter
+
+        The Segment Routing Algorithm the Prefix-SID is associated with. The value matches an. algorithm advertised in the SR-Algorithm TLV, e.g. for SPF or for Strict SPF.. Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-sr-algorithm-tlv.
+
+        Returns: int
+        """
+        return self._get_property("algorithm")
+
+    @algorithm.setter
+    def algorithm(self, value):
+        """algorithm setter
+
+        The Segment Routing Algorithm the Prefix-SID is associated with. The value matches an. algorithm advertised in the SR-Algorithm TLV, e.g. for SPF or for Strict SPF.. Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-sr-algorithm-tlv.
+
+        value: int
+        """
+        self._set_property("algorithm", value)
+
+
+class Ospfv2SRPrefixSidIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2SRPrefixSidIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2SRPrefixSid]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2SRPrefixSidIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2SRPrefixSid
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2SRPrefixSid
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2SRPrefixSid):
+            raise Exception("Item is not an instance of Ospfv2SRPrefixSid")
+
+    def prefixsid(
+        self,
+        sid_values=None,
+        sid_indices=None,
+        np_flag=False,
+        m_flag=False,
+        e_flag=False,
+        algorithm=0,
+    ):
+        # type: (List[int],List[int],bool,bool,bool,int) -> Ospfv2SRPrefixSidIter
+        """Factory method that creates an instance of the Ospfv2SRPrefixSid class
+
+        This contains the properties of an OSPFv2 Prefix-SID sub-TLV and its attributes.. The Prefix-SID sub-TLV is carried inside the OSPFv2 Extended Prefix TLV of the. Extended Prefix Opaque LSA and is associated with specific IPv4 prefix.. Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-prefix-sid-sub-tlv.. router's own Node (loopback) Prefix-SID is modeled the same way: attach this object to. the route range covering the router's loopback address and set n_flag on that route. range's Extended Prefix flags (route_origin.<type>.flags.n_flag, RFC 7684) to identify it. as the router's own prefix.
+
+        Returns: Ospfv2SRPrefixSidIter
+        """
+        item = Ospfv2SRPrefixSid(
+            parent=self._parent,
+            choice=self._choice,
+            sid_values=sid_values,
+            sid_indices=sid_indices,
+            np_flag=np_flag,
+            m_flag=m_flag,
+            e_flag=e_flag,
+            algorithm=algorithm,
+        )
+        self._add(item)
+        return self
+
+    def add(
+        self,
+        sid_values=None,
+        sid_indices=None,
+        np_flag=False,
+        m_flag=False,
+        e_flag=False,
+        algorithm=0,
+    ):
+        # type: (List[int],List[int],bool,bool,bool,int) -> Ospfv2SRPrefixSid
+        """Add method that creates and returns an instance of the Ospfv2SRPrefixSid class
+
+        This contains the properties of an OSPFv2 Prefix-SID sub-TLV and its attributes.. The Prefix-SID sub-TLV is carried inside the OSPFv2 Extended Prefix TLV of the. Extended Prefix Opaque LSA and is associated with specific IPv4 prefix.. Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-prefix-sid-sub-tlv.. router's own Node (loopback) Prefix-SID is modeled the same way: attach this object to. the route range covering the router's loopback address and set n_flag on that route. range's Extended Prefix flags (route_origin.<type>.flags.n_flag, RFC 7684) to identify it. as the router's own prefix.
+
+        Returns: Ospfv2SRPrefixSid
+        """
+        item = Ospfv2SRPrefixSid(
+            parent=self._parent,
+            choice=self._choice,
+            sid_values=sid_values,
+            sid_indices=sid_indices,
+            np_flag=np_flag,
+            m_flag=m_flag,
+            e_flag=e_flag,
+            algorithm=algorithm,
+        )
+        self._add(item)
+        return item
+
+
 class Ospfv2V4RouteRangeIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
@@ -42032,7 +48323,7 @@ class Ospfv2V4RouteRangeIter(OpenApiIter):
         # type: (str,int) -> Ospfv2V4RouteRangeIter
         """Factory method that creates an instance of the Ospfv2V4RouteRange class
 
-        Emulated OSPFv2 IPv4 routes.
+        A group of OSPFv2 IPv4 routes advertised by this OSPFv2 router.. The router may be an emulated router (connected to the DUT via port) or simulated. router inside simulated topology (its Ethernet uses simulated_link connection). The. route_origin choice selects the OSPFv2 LSA/route type (intra_area, inter_area,. external_type_1, external_type_2, nssa_external), and prefix_sids attaches the Segment. Routing Prefix-SID(s) for these routes.
 
         Returns: Ospfv2V4RouteRangeIter
         """
@@ -42044,11 +48335,361 @@ class Ospfv2V4RouteRangeIter(OpenApiIter):
         # type: (str,int) -> Ospfv2V4RouteRange
         """Add method that creates and returns an instance of the Ospfv2V4RouteRange class
 
-        Emulated OSPFv2 IPv4 routes.
+        A group of OSPFv2 IPv4 routes advertised by this OSPFv2 router.. The router may be an emulated router (connected to the DUT via port) or simulated. router inside simulated topology (its Ethernet uses simulated_link connection). The. route_origin choice selects the OSPFv2 LSA/route type (intra_area, inter_area,. external_type_1, external_type_2, nssa_external), and prefix_sids attaches the Segment. Routing Prefix-SID(s) for these routes.
 
         Returns: Ospfv2V4RouteRange
         """
         item = Ospfv2V4RouteRange(parent=self._parent, name=name, metric=metric)
+        self._add(item)
+        return item
+
+
+class Ospfv2SegmentRouting(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "algorithms": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "srgb_ranges": {"type": "Ospfv2SRSrgbIter"},
+        "srlb_ranges": {"type": "Ospfv2SRSrlbIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, algorithms=None):
+        super(Ospfv2SegmentRouting, self).__init__()
+        self._parent = parent
+        self._set_property("algorithms", algorithms)
+
+    def set(self, algorithms=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def algorithms(self):
+        # type: () -> List[int]
+        """algorithms getter
+
+        The SR-Algorithm TLV, if present, carries one or more Segment Routing Algorithms that. the router supports when calculating reachability to other nodes or to prefixes. attached to these nodes.. 0: SPF algorithm based on link metric.. 1: Strict SPF algorithm based on link metric.. Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-sr-algorithm-tlv.. When the originating router does not advertise the SR-Algorithm TLV, it implies that. algorithm is the only algorithm supported. When advertised, algorithm MUST be. present while non-zero algorithms MAY be present.
+
+        Returns: List[int]
+        """
+        return self._get_property("algorithms")
+
+    @algorithms.setter
+    def algorithms(self, value):
+        """algorithms setter
+
+        The SR-Algorithm TLV, if present, carries one or more Segment Routing Algorithms that. the router supports when calculating reachability to other nodes or to prefixes. attached to these nodes.. 0: SPF algorithm based on link metric.. 1: Strict SPF algorithm based on link metric.. Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-sr-algorithm-tlv.. When the originating router does not advertise the SR-Algorithm TLV, it implies that. algorithm is the only algorithm supported. When advertised, algorithm MUST be. present while non-zero algorithms MAY be present.
+
+        value: List[int]
+        """
+        self._set_property("algorithms", value)
+
+    @property
+    def srgb_ranges(self):
+        # type: () -> Ospfv2SRSrgbIter
+        """srgb_ranges getter
+
+        The list of Segment Routing Global Block (SRGB) ranges advertised in the. SID/Label Range TLV of the RI Opaque LSA.. If no SRGB range is configured, an implementation should advertise one SRGB range with. default values.
+
+        Returns: Ospfv2SRSrgbIter
+        """
+        return self._get_property(
+            "srgb_ranges", Ospfv2SRSrgbIter, self._parent, self._choice
+        )
+
+    @property
+    def srlb_ranges(self):
+        # type: () -> Ospfv2SRSrlbIter
+        """srlb_ranges getter
+
+        The list of SR Local Block (SRLB) ranges advertised in the SR Local Block TLV of the. RI Opaque LSA. The SRLB contains the range of labels the node has reserved for local. SIDs, for example Adjacency SIDs.
+
+        Returns: Ospfv2SRSrlbIter
+        """
+        return self._get_property(
+            "srlb_ranges", Ospfv2SRSrlbIter, self._parent, self._choice
+        )
+
+
+class Ospfv2SRSrgb(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "starting_sid": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 4294967295,
+        },
+        "range": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 16777215,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "starting_sid": 16000,
+        "range": 8000,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, starting_sid=16000, range=8000):
+        super(Ospfv2SRSrgb, self).__init__()
+        self._parent = parent
+        self._set_property("starting_sid", starting_sid)
+        self._set_property("range", range)
+
+    def set(self, starting_sid=None, range=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def starting_sid(self):
+        # type: () -> int
+        """starting_sid getter
+
+        The first value of the SRGB range provided by the SID/Label sub-TLV.
+
+        Returns: int
+        """
+        return self._get_property("starting_sid")
+
+    @starting_sid.setter
+    def starting_sid(self, value):
+        """starting_sid setter
+
+        The first value of the SRGB range provided by the SID/Label sub-TLV.
+
+        value: int
+        """
+        self._set_property("starting_sid", value)
+
+    @property
+    def range(self):
+        # type: () -> int
+        """range getter
+
+        The Range Size, i.e. the number of SIDs in this SRGB range. MUST be greater than zero.
+
+        Returns: int
+        """
+        return self._get_property("range")
+
+    @range.setter
+    def range(self, value):
+        """range setter
+
+        The Range Size, i.e. the number of SIDs in this SRGB range. MUST be greater than zero.
+
+        value: int
+        """
+        self._set_property("range", value)
+
+
+class Ospfv2SRSrgbIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2SRSrgbIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2SRSrgb]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2SRSrgbIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2SRSrgb
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2SRSrgb
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2SRSrgb):
+            raise Exception("Item is not an instance of Ospfv2SRSrgb")
+
+    def srgb(self, starting_sid=16000, range=8000):
+        # type: (int,int) -> Ospfv2SRSrgbIter
+        """Factory method that creates an instance of the Ospfv2SRSrgb class
+
+        This contains the properties of single Segment Routing Global Block (SRGB) range.. The SID/Label Range TLV carries the size of the range and mandatory SID/Label sub-TLV. that provides the first (base) SID/Label value of the range.. Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-sidlabel-range-tlv.
+
+        Returns: Ospfv2SRSrgbIter
+        """
+        item = Ospfv2SRSrgb(parent=self._parent, starting_sid=starting_sid, range=range)
+        self._add(item)
+        return self
+
+    def add(self, starting_sid=16000, range=8000):
+        # type: (int,int) -> Ospfv2SRSrgb
+        """Add method that creates and returns an instance of the Ospfv2SRSrgb class
+
+        This contains the properties of single Segment Routing Global Block (SRGB) range.. The SID/Label Range TLV carries the size of the range and mandatory SID/Label sub-TLV. that provides the first (base) SID/Label value of the range.. Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-sidlabel-range-tlv.
+
+        Returns: Ospfv2SRSrgb
+        """
+        item = Ospfv2SRSrgb(parent=self._parent, starting_sid=starting_sid, range=range)
+        self._add(item)
+        return item
+
+
+class Ospfv2SRSrlb(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "starting_sid": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 4294967295,
+        },
+        "range": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 16777215,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "starting_sid": 16000,
+        "range": 8000,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, starting_sid=16000, range=8000):
+        super(Ospfv2SRSrlb, self).__init__()
+        self._parent = parent
+        self._set_property("starting_sid", starting_sid)
+        self._set_property("range", range)
+
+    def set(self, starting_sid=None, range=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def starting_sid(self):
+        # type: () -> int
+        """starting_sid getter
+
+        The first value of the SRLB range provided by the SID/Label sub-TLV.
+
+        Returns: int
+        """
+        return self._get_property("starting_sid")
+
+    @starting_sid.setter
+    def starting_sid(self, value):
+        """starting_sid setter
+
+        The first value of the SRLB range provided by the SID/Label sub-TLV.
+
+        value: int
+        """
+        self._set_property("starting_sid", value)
+
+    @property
+    def range(self):
+        # type: () -> int
+        """range getter
+
+        The Range Size, i.e. the number of SIDs in this SRLB range. MUST be greater than zero.
+
+        Returns: int
+        """
+        return self._get_property("range")
+
+    @range.setter
+    def range(self, value):
+        """range setter
+
+        The Range Size, i.e. the number of SIDs in this SRLB range. MUST be greater than zero.
+
+        value: int
+        """
+        self._set_property("range", value)
+
+
+class Ospfv2SRSrlbIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2SRSrlbIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2SRSrlb]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2SRSrlbIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2SRSrlb
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2SRSrlb
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2SRSrlb):
+            raise Exception("Item is not an instance of Ospfv2SRSrlb")
+
+    def srlb(self, starting_sid=16000, range=8000):
+        # type: (int,int) -> Ospfv2SRSrlbIter
+        """Factory method that creates an instance of the Ospfv2SRSrlb class
+
+        This contains the properties of single SR Local Block (SRLB) range.. The SR Local Block TLV carries the size of the range and mandatory SID/Label sub-TLV. that provides the first (base) SID/Label value of the local block.. Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-sr-local-block-tlv.
+
+        Returns: Ospfv2SRSrlbIter
+        """
+        item = Ospfv2SRSrlb(parent=self._parent, starting_sid=starting_sid, range=range)
+        self._add(item)
+        return self
+
+    def add(self, starting_sid=16000, range=8000):
+        # type: (int,int) -> Ospfv2SRSrlb
+        """Add method that creates and returns an instance of the Ospfv2SRSrlb class
+
+        This contains the properties of single SR Local Block (SRLB) range.. The SR Local Block TLV carries the size of the range and mandatory SID/Label sub-TLV. that provides the first (base) SID/Label value of the local block.. Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-sr-local-block-tlv.
+
+        Returns: Ospfv2SRSrlb
+        """
+        item = Ospfv2SRSrlb(parent=self._parent, starting_sid=starting_sid, range=range)
         self._add(item)
         return item
 
@@ -42219,2978 +48860,6 @@ class SecureEntity(OpenApiObject):
         return self._get_property("data_plane", SecureEntityDataPlane)
 
 
-class SecureEntityKeyGenerationProtocol(OpenApiObject):
-    __slots__ = ("_parent", "_choice")
-
-    _TYPES = {
-        "choice": {
-            "type": str,
-            "enum": [
-                "mka",
-                "static_key",
-            ],
-        },
-        "mka": {"type": "Mka"},
-        "static_key": {"type": "SecureEntityStaticKey"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "choice": "mka",
-    }  # type: Dict[str, Union(type)]
-
-    MKA = "mka"  # type: str
-    STATIC_KEY = "static_key"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, choice=None):
-        super(SecureEntityKeyGenerationProtocol, self).__init__()
-        self._parent = parent
-        if (
-            "choice" in self._DEFAULTS
-            and choice is None
-            and self._DEFAULTS["choice"] in self._TYPES
-        ):
-            getattr(self, self._DEFAULTS["choice"])
-        else:
-            self._set_property("choice", choice)
-
-    @property
-    def mka(self):
-        # type: () -> Mka
-        """Factory property that returns an instance of the Mka class
-
-        Configuration of MKA Key Agreement Entity (KaY). Reference https://1.ieee802.org/security/802-1x/.
-
-        Returns: Mka
-        """
-        return self._get_property("mka", Mka, self, "mka")
-
-    @property
-    def static_key(self):
-        # type: () -> SecureEntityStaticKey
-        """Factory property that returns an instance of the SecureEntityStaticKey class
-
-        A container of static key properties for secure entity(SecY). This configuration is applicable when no dynamic key management protocol i.e. MACsec key agreement(MKA) is configured. If MKA is configured, any static key configuration is not applicable.
-
-        Returns: SecureEntityStaticKey
-        """
-        return self._get_property(
-            "static_key", SecureEntityStaticKey, self, "static_key"
-        )
-
-    @property
-    def choice(self):
-        # type: () -> Union[Literal["mka"], Literal["static_key"]]
-        """choice getter
-
-        Key generation protocol choices. Choose "mka" for dynamic key distribution using MACsec key agreement(MKA) protocol. Choose "static_key" for static configuration of secure association key(SAK).
-
-        Returns: Union[Literal["mka"], Literal["static_key"]]
-        """
-        return self._get_property("choice")
-
-    @choice.setter
-    def choice(self, value):
-        """choice setter
-
-        Key generation protocol choices. Choose "mka" for dynamic key distribution using MACsec key agreement(MKA) protocol. Choose "static_key" for static configuration of secure association key(SAK).
-
-        value: Union[Literal["mka"], Literal["static_key"]]
-        """
-        self._set_property("choice", value)
-
-
-class Mka(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "name": {"type": str},
-        "basic": {"type": "MkaBasic"},
-        "key_server": {"type": "MkaKeyServer"},
-        "tx": {"type": "MkaTx"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ("name", "basic", "tx")  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, name=None):
-        super(Mka, self).__init__()
-        self._parent = parent
-        self._set_property("name", name)
-
-    def set(self, name=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def name(self):
-        # type: () -> str
-        """name getter
-
-        Globally unique name of an object. It also serves as the primary key for arrays of objects.
-
-        Returns: str
-        """
-        return self._get_property("name")
-
-    @name.setter
-    def name(self, value):
-        """name setter
-
-        Globally unique name of an object. It also serves as the primary key for arrays of objects.
-
-        value: str
-        """
-        if value is None:
-            raise TypeError("Cannot set required property name as None")
-        self._set_property("name", value)
-
-    @property
-    def basic(self):
-        # type: () -> MkaBasic
-        """basic getter
-
-        A container of basic properties for KaY.A container of basic properties for KaY.A container of basic properties for KaY.A container of basic properties for KaY.This contains the basic properties of KaY.
-
-        Returns: MkaBasic
-        """
-        return self._get_property("basic", MkaBasic)
-
-    @property
-    def key_server(self):
-        # type: () -> MkaKeyServer
-        """key_server getter
-
-        Key server attributes of KaY.Key server attributes of KaY.Key server attributes of KaY.Key server attributes of KaY.Key server attributes.
-
-        Returns: MkaKeyServer
-        """
-        return self._get_property("key_server", MkaKeyServer)
-
-    @property
-    def tx(self):
-        # type: () -> MkaTx
-        """tx getter
-
-        A container of Tx properties.A container of Tx properties.A container of Tx properties.A container of Tx properties.Tx Properties.
-
-        Returns: MkaTx
-        """
-        return self._get_property("tx", MkaTx)
-
-
-class MkaBasic(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "key_derivation_function": {
-            "type": str,
-            "enum": [
-                "aes_cmac_128",
-                "aes_cmac_256",
-            ],
-        },
-        "key_source": {"type": "MkaBasicKeySource"},
-        "actor_priority": {
-            "type": str,
-            "format": "hex",
-            "minLength": 1,
-            "maxLength": 2,
-        },
-        "macsec_desired": {"type": bool},
-        "macsec_capability": {
-            "type": str,
-            "enum": [
-                "macsec_not_implemented",
-                "macsec_integrity_without_confidentiality",
-                "macsec_integrity_with_no_confidentiality_offset",
-                "macsec_integrity_with_confidentiality_offset",
-            ],
-        },
-        "supported_cipher_suites": {"type": "MkaBasicSupportedCipherSuites"},
-        "eapol_ethernet_type": {
-            "type": str,
-            "format": "hex",
-            "minLength": 1,
-            "maxLength": 4,
-        },
-        "mka_version": {
-            "type": int,
-            "format": "uint32",
-        },
-        "mka_hello_time": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 500,
-            "maximum": 10000,
-        },
-        "mka_life_time": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 1,
-            "maximum": 255,
-        },
-        "send_icv_indicatior_in_mkpdu": {"type": bool},
-        "delay_protect": {"type": bool},
-        "rekey_mode": {"type": "MkaBasicRekeyMode"},
-        "psk_chain_start_time": {"type": "MkaBasicPskChainStartTime"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ("key_source",)  # type: tuple(str)
-
-    _DEFAULTS = {
-        "key_derivation_function": "aes_cmac_128",
-        "actor_priority": "70",
-        "macsec_desired": True,
-        "macsec_capability": "macsec_integrity_with_confidentiality_offset",
-        "eapol_ethernet_type": "888E",
-        "mka_version": 3,
-        "mka_hello_time": 2000,
-        "mka_life_time": 6,
-        "send_icv_indicatior_in_mkpdu": True,
-        "delay_protect": True,
-    }  # type: Dict[str, Union(type)]
-
-    AES_CMAC_128 = "aes_cmac_128"  # type: str
-    AES_CMAC_256 = "aes_cmac_256"  # type: str
-
-    MACSEC_NOT_IMPLEMENTED = "macsec_not_implemented"  # type: str
-    MACSEC_INTEGRITY_WITHOUT_CONFIDENTIALITY = (
-        "macsec_integrity_without_confidentiality"
-    )  # type: str
-    MACSEC_INTEGRITY_WITH_NO_CONFIDENTIALITY_OFFSET = (
-        "macsec_integrity_with_no_confidentiality_offset"
-    )  # type: str
-    MACSEC_INTEGRITY_WITH_CONFIDENTIALITY_OFFSET = (
-        "macsec_integrity_with_confidentiality_offset"
-    )  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self,
-        parent=None,
-        key_derivation_function="aes_cmac_128",
-        actor_priority="70",
-        macsec_desired=True,
-        macsec_capability="macsec_integrity_with_confidentiality_offset",
-        eapol_ethernet_type="888E",
-        mka_version=3,
-        mka_hello_time=2000,
-        mka_life_time=6,
-        send_icv_indicatior_in_mkpdu=True,
-        delay_protect=True,
-    ):
-        super(MkaBasic, self).__init__()
-        self._parent = parent
-        self._set_property("key_derivation_function", key_derivation_function)
-        self._set_property("actor_priority", actor_priority)
-        self._set_property("macsec_desired", macsec_desired)
-        self._set_property("macsec_capability", macsec_capability)
-        self._set_property("eapol_ethernet_type", eapol_ethernet_type)
-        self._set_property("mka_version", mka_version)
-        self._set_property("mka_hello_time", mka_hello_time)
-        self._set_property("mka_life_time", mka_life_time)
-        self._set_property("send_icv_indicatior_in_mkpdu", send_icv_indicatior_in_mkpdu)
-        self._set_property("delay_protect", delay_protect)
-
-    def set(
-        self,
-        key_derivation_function=None,
-        actor_priority=None,
-        macsec_desired=None,
-        macsec_capability=None,
-        eapol_ethernet_type=None,
-        mka_version=None,
-        mka_hello_time=None,
-        mka_life_time=None,
-        send_icv_indicatior_in_mkpdu=None,
-        delay_protect=None,
-    ):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def key_derivation_function(self):
-        # type: () -> Union[Literal["aes_cmac_128"], Literal["aes_cmac_256"]]
-        """key_derivation_function getter
-
-        Key Derivation Function.
-
-        Returns: Union[Literal["aes_cmac_128"], Literal["aes_cmac_256"]]
-        """
-        return self._get_property("key_derivation_function")
-
-    @key_derivation_function.setter
-    def key_derivation_function(self, value):
-        """key_derivation_function setter
-
-        Key Derivation Function.
-
-        value: Union[Literal["aes_cmac_128"], Literal["aes_cmac_256"]]
-        """
-        self._set_property("key_derivation_function", value)
-
-    @property
-    def key_source(self):
-        # type: () -> MkaBasicKeySource
-        """key_source getter
-
-        The container for key source settings.The container for key source settings.The container for key source settings.Key source.
-
-        Returns: MkaBasicKeySource
-        """
-        return self._get_property("key_source", MkaBasicKeySource)
-
-    @property
-    def actor_priority(self):
-        # type: () -> str
-        """actor_priority getter
-
-        Actor priority.
-
-        Returns: str
-        """
-        return self._get_property("actor_priority")
-
-    @actor_priority.setter
-    def actor_priority(self, value):
-        """actor_priority setter
-
-        Actor priority.
-
-        value: str
-        """
-        self._set_property("actor_priority", value)
-
-    @property
-    def macsec_desired(self):
-        # type: () -> bool
-        """macsec_desired getter
-
-        Determines whether MACsec is desired or not. It is advertised in periodic Hellos.
-
-        Returns: bool
-        """
-        return self._get_property("macsec_desired")
-
-    @macsec_desired.setter
-    def macsec_desired(self, value):
-        """macsec_desired setter
-
-        Determines whether MACsec is desired or not. It is advertised in periodic Hellos.
-
-        value: bool
-        """
-        self._set_property("macsec_desired", value)
-
-    @property
-    def macsec_capability(self):
-        # type: () -> Union[Literal["macsec_integrity_with_confidentiality_offset"], Literal["macsec_integrity_with_no_confidentiality_offset"], Literal["macsec_integrity_without_confidentiality"], Literal["macsec_not_implemented"]]
-        """macsec_capability getter
-
-        MACSec Capability.
-
-        Returns: Union[Literal["macsec_integrity_with_confidentiality_offset"], Literal["macsec_integrity_with_no_confidentiality_offset"], Literal["macsec_integrity_without_confidentiality"], Literal["macsec_not_implemented"]]
-        """
-        return self._get_property("macsec_capability")
-
-    @macsec_capability.setter
-    def macsec_capability(self, value):
-        """macsec_capability setter
-
-        MACSec Capability.
-
-        value: Union[Literal["macsec_integrity_with_confidentiality_offset"], Literal["macsec_integrity_with_no_confidentiality_offset"], Literal["macsec_integrity_without_confidentiality"], Literal["macsec_not_implemented"]]
-        """
-        self._set_property("macsec_capability", value)
-
-    @property
-    def supported_cipher_suites(self):
-        # type: () -> MkaBasicSupportedCipherSuites
-        """supported_cipher_suites getter
-
-        The container for supported cipher suites.The container for supported cipher suites.The container for supported cipher suites.Supported Cipher Suites.
-
-        Returns: MkaBasicSupportedCipherSuites
-        """
-        return self._get_property(
-            "supported_cipher_suites", MkaBasicSupportedCipherSuites
-        )
-
-    @property
-    def eapol_ethernet_type(self):
-        # type: () -> str
-        """eapol_ethernet_type getter
-
-        EAPOL Ethernet type.
-
-        Returns: str
-        """
-        return self._get_property("eapol_ethernet_type")
-
-    @eapol_ethernet_type.setter
-    def eapol_ethernet_type(self, value):
-        """eapol_ethernet_type setter
-
-        EAPOL Ethernet type.
-
-        value: str
-        """
-        self._set_property("eapol_ethernet_type", value)
-
-    @property
-    def mka_version(self):
-        # type: () -> int
-        """mka_version getter
-
-        MKA Version.
-
-        Returns: int
-        """
-        return self._get_property("mka_version")
-
-    @mka_version.setter
-    def mka_version(self, value):
-        """mka_version setter
-
-        MKA Version.
-
-        value: int
-        """
-        self._set_property("mka_version", value)
-
-    @property
-    def mka_hello_time(self):
-        # type: () -> int
-        """mka_hello_time getter
-
-        MKA Hello Time (msec).
-
-        Returns: int
-        """
-        return self._get_property("mka_hello_time")
-
-    @mka_hello_time.setter
-    def mka_hello_time(self, value):
-        """mka_hello_time setter
-
-        MKA Hello Time (msec).
-
-        value: int
-        """
-        self._set_property("mka_hello_time", value)
-
-    @property
-    def mka_life_time(self):
-        # type: () -> int
-        """mka_life_time getter
-
-        MKA Life Time (sec).
-
-        Returns: int
-        """
-        return self._get_property("mka_life_time")
-
-    @mka_life_time.setter
-    def mka_life_time(self, value):
-        """mka_life_time setter
-
-        MKA Life Time (sec).
-
-        value: int
-        """
-        self._set_property("mka_life_time", value)
-
-    @property
-    def send_icv_indicatior_in_mkpdu(self):
-        # type: () -> bool
-        """send_icv_indicatior_in_mkpdu getter
-
-        Send ICV Indicator in MKPDU.
-
-        Returns: bool
-        """
-        return self._get_property("send_icv_indicatior_in_mkpdu")
-
-    @send_icv_indicatior_in_mkpdu.setter
-    def send_icv_indicatior_in_mkpdu(self, value):
-        """send_icv_indicatior_in_mkpdu setter
-
-        Send ICV Indicator in MKPDU.
-
-        value: bool
-        """
-        self._set_property("send_icv_indicatior_in_mkpdu", value)
-
-    @property
-    def delay_protect(self):
-        # type: () -> bool
-        """delay_protect getter
-
-        Delay Protect or not. When delay protect is enabled, it guards against delaying the delivery of MACsec encrypted frames by an attacker to the recipient.
-
-        Returns: bool
-        """
-        return self._get_property("delay_protect")
-
-    @delay_protect.setter
-    def delay_protect(self, value):
-        """delay_protect setter
-
-        Delay Protect or not. When delay protect is enabled, it guards against delaying the delivery of MACsec encrypted frames by an attacker to the recipient.
-
-        value: bool
-        """
-        self._set_property("delay_protect", value)
-
-    @property
-    def rekey_mode(self):
-        # type: () -> MkaBasicRekeyMode
-        """rekey_mode getter
-
-        Rekey mode.Rekey mode.Rekey mode.Rekey Mode.
-
-        Returns: MkaBasicRekeyMode
-        """
-        return self._get_property("rekey_mode", MkaBasicRekeyMode)
-
-    @property
-    def psk_chain_start_time(self):
-        # type: () -> MkaBasicPskChainStartTime
-        """psk_chain_start_time getter
-
-        Pre-shared key(PSK) chain start time in UTC time format DD-MM-YYYY HH:MM:SS. If this time is set, the key start time will be relative to this value. Otherwise if this value is not set, key start time will be relative to test start time.Pre-shared key(PSK) chain start time in UTC time format DD-MM-YYYY HH:MM:SS. If this time is set, the key start time will be relative to this value. Otherwise if this value is not set, key start time will be relative to test start time.Pre-shared key(PSK) chain start time in UTC time format DD-MM-YYYY HH:MM:SS. If this time is set, the key start time will be relative to this value. Otherwise if this value is not set, key start time will be relative to test start time.
-
-        Returns: MkaBasicPskChainStartTime
-        """
-        return self._get_property("psk_chain_start_time", MkaBasicPskChainStartTime)
-
-
-class MkaBasicKeySource(OpenApiObject):
-    __slots__ = ("_parent", "_choice")
-
-    _TYPES = {
-        "choice": {
-            "type": str,
-            "enum": [
-                "psk",
-                "msk",
-            ],
-        },
-        "psks": {"type": "MkaBasicKeySourcePskIter"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "choice": "psk",
-    }  # type: Dict[str, Union(type)]
-
-    PSK = "psk"  # type: str
-    MSK = "msk"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, choice=None):
-        super(MkaBasicKeySource, self).__init__()
-        self._parent = parent
-        if (
-            "choice" in self._DEFAULTS
-            and choice is None
-            and self._DEFAULTS["choice"] in self._TYPES
-        ):
-            getattr(self, self._DEFAULTS["choice"])
-        else:
-            self._set_property("choice", choice)
-
-    @property
-    def choice(self):
-        # type: () -> Union[Literal["msk"], Literal["psk"]]
-        """choice getter
-
-        Key source. Choose one from PSK or MSK.
-
-        Returns: Union[Literal["msk"], Literal["psk"]]
-        """
-        return self._get_property("choice")
-
-    @choice.setter
-    def choice(self, value):
-        """choice setter
-
-        Key source. Choose one from PSK or MSK.
-
-        value: Union[Literal["msk"], Literal["psk"]]
-        """
-        self._set_property("choice", value)
-
-    @property
-    def psks(self):
-        # type: () -> MkaBasicKeySourcePskIter
-        """psks getter
-
-        PSK chain.
-
-        Returns: MkaBasicKeySourcePskIter
-        """
-        return self._get_property(
-            "psks", MkaBasicKeySourcePskIter, self._parent, self._choice
-        )
-
-
-class MkaBasicKeySourcePsk(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "cak_value": {
-            "type": str,
-            "format": "hex",
-            "minLength": 1,
-            "maxLength": 64,
-        },
-        "cak_name": {
-            "type": str,
-            "format": "hex",
-            "minLength": 1,
-            "maxLength": 64,
-        },
-        "start_offset_time": {"type": "MkaBasicStartOffsetTime"},
-        "end_offset_time": {"type": "MkaBasicEndOffsetTime"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "cak_value": "F123456789ABCDEF0123456789ABCDEF",
-        "cak_name": "F123456789ABCDEF0123456789ABCDEFF123456789ABCDEF0123456789ABCDEF",
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self,
-        parent=None,
-        cak_value="F123456789ABCDEF0123456789ABCDEF",
-        cak_name="F123456789ABCDEF0123456789ABCDEFF123456789ABCDEF0123456789ABCDEF",
-    ):
-        super(MkaBasicKeySourcePsk, self).__init__()
-        self._parent = parent
-        self._set_property("cak_value", cak_value)
-        self._set_property("cak_name", cak_name)
-
-    def set(self, cak_value=None, cak_name=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def cak_value(self):
-        # type: () -> str
-        """cak_value getter
-
-        Connectivity association key(CAK) value. It can be 128 bits or 256 bits long depending on the chosen MKA key derivation function.
-
-        Returns: str
-        """
-        return self._get_property("cak_value")
-
-    @cak_value.setter
-    def cak_value(self, value):
-        """cak_value setter
-
-        Connectivity association key(CAK) value. It can be 128 bits or 256 bits long depending on the chosen MKA key derivation function.
-
-        value: str
-        """
-        self._set_property("cak_value", value)
-
-    @property
-    def cak_name(self):
-        # type: () -> str
-        """cak_name getter
-
-        Connectivity association key(CAK) name.
-
-        Returns: str
-        """
-        return self._get_property("cak_name")
-
-    @cak_name.setter
-    def cak_name(self, value):
-        """cak_name setter
-
-        Connectivity association key(CAK) name.
-
-        value: str
-        """
-        self._set_property("cak_name", value)
-
-    @property
-    def start_offset_time(self):
-        # type: () -> MkaBasicStartOffsetTime
-        """start_offset_time getter
-
-        Key start offset time in HH:MM. This is relative to key chain start time.Key start offset time in HH:MM. This is relative to key chain start time.Key start offset time in HH:MM. This is relative to key chain start time.
-
-        Returns: MkaBasicStartOffsetTime
-        """
-        return self._get_property("start_offset_time", MkaBasicStartOffsetTime)
-
-    @property
-    def end_offset_time(self):
-        # type: () -> MkaBasicEndOffsetTime
-        """end_offset_time getter
-
-        Key end offset time in HH:MM. This is relative to key chain start time. value of "00:00" makes the key valid for lifetime.Key end offset time in HH:MM. This is relative to key chain start time. value of "00:00" makes the key valid for lifetime.Key end offset time in HH:MM. This is relative to key chain start time. value of "00:00" makes the key valid for lifetime.
-
-        Returns: MkaBasicEndOffsetTime
-        """
-        return self._get_property("end_offset_time", MkaBasicEndOffsetTime)
-
-
-class MkaBasicStartOffsetTime(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "hh": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 0,
-        },
-        "mm": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 0,
-            "maximum": 59,
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "hh": 0,
-        "mm": 0,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, hh=0, mm=0):
-        super(MkaBasicStartOffsetTime, self).__init__()
-        self._parent = parent
-        self._set_property("hh", hh)
-        self._set_property("mm", mm)
-
-    def set(self, hh=None, mm=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def hh(self):
-        # type: () -> int
-        """hh getter
-
-        Hours in HH format.
-
-        Returns: int
-        """
-        return self._get_property("hh")
-
-    @hh.setter
-    def hh(self, value):
-        """hh setter
-
-        Hours in HH format.
-
-        value: int
-        """
-        self._set_property("hh", value)
-
-    @property
-    def mm(self):
-        # type: () -> int
-        """mm getter
-
-        Minutes in MM format.
-
-        Returns: int
-        """
-        return self._get_property("mm")
-
-    @mm.setter
-    def mm(self, value):
-        """mm setter
-
-        Minutes in MM format.
-
-        value: int
-        """
-        self._set_property("mm", value)
-
-
-class MkaBasicEndOffsetTime(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "hh": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 0,
-        },
-        "mm": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 0,
-            "maximum": 59,
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "hh": 0,
-        "mm": 0,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, hh=0, mm=0):
-        super(MkaBasicEndOffsetTime, self).__init__()
-        self._parent = parent
-        self._set_property("hh", hh)
-        self._set_property("mm", mm)
-
-    def set(self, hh=None, mm=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def hh(self):
-        # type: () -> int
-        """hh getter
-
-        Hours in HH format.
-
-        Returns: int
-        """
-        return self._get_property("hh")
-
-    @hh.setter
-    def hh(self, value):
-        """hh setter
-
-        Hours in HH format.
-
-        value: int
-        """
-        self._set_property("hh", value)
-
-    @property
-    def mm(self):
-        # type: () -> int
-        """mm getter
-
-        Minutes in MM format.
-
-        Returns: int
-        """
-        return self._get_property("mm")
-
-    @mm.setter
-    def mm(self, value):
-        """mm setter
-
-        Minutes in MM format.
-
-        value: int
-        """
-        self._set_property("mm", value)
-
-
-class MkaBasicKeySourcePskIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(MkaBasicKeySourcePskIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[MkaBasicKeySourcePsk]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> MkaBasicKeySourcePskIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> MkaBasicKeySourcePsk
-        return self._next()
-
-    def next(self):
-        # type: () -> MkaBasicKeySourcePsk
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, MkaBasicKeySourcePsk):
-            raise Exception("Item is not an instance of MkaBasicKeySourcePsk")
-
-    def psk(
-        self,
-        cak_value="F123456789ABCDEF0123456789ABCDEF",
-        cak_name="F123456789ABCDEF0123456789ABCDEFF123456789ABCDEF0123456789ABCDEF",
-    ):
-        # type: (str,str) -> MkaBasicKeySourcePskIter
-        """Factory method that creates an instance of the MkaBasicKeySourcePsk class
-
-        The container for Pre-shared key(PSK).
-
-        Returns: MkaBasicKeySourcePskIter
-        """
-        item = MkaBasicKeySourcePsk(
-            parent=self._parent, cak_value=cak_value, cak_name=cak_name
-        )
-        self._add(item)
-        return self
-
-    def add(
-        self,
-        cak_value="F123456789ABCDEF0123456789ABCDEF",
-        cak_name="F123456789ABCDEF0123456789ABCDEFF123456789ABCDEF0123456789ABCDEF",
-    ):
-        # type: (str,str) -> MkaBasicKeySourcePsk
-        """Add method that creates and returns an instance of the MkaBasicKeySourcePsk class
-
-        The container for Pre-shared key(PSK).
-
-        Returns: MkaBasicKeySourcePsk
-        """
-        item = MkaBasicKeySourcePsk(
-            parent=self._parent, cak_value=cak_value, cak_name=cak_name
-        )
-        self._add(item)
-        return item
-
-
-class MkaBasicSupportedCipherSuites(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "gcm_aes_128": {"type": bool},
-        "gcm_aes_256": {"type": bool},
-        "gcm_aes_xpn_128": {"type": bool},
-        "gcm_aes_xpn_256": {"type": bool},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "gcm_aes_128": True,
-        "gcm_aes_256": True,
-        "gcm_aes_xpn_128": True,
-        "gcm_aes_xpn_256": True,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self,
-        parent=None,
-        gcm_aes_128=True,
-        gcm_aes_256=True,
-        gcm_aes_xpn_128=True,
-        gcm_aes_xpn_256=True,
-    ):
-        super(MkaBasicSupportedCipherSuites, self).__init__()
-        self._parent = parent
-        self._set_property("gcm_aes_128", gcm_aes_128)
-        self._set_property("gcm_aes_256", gcm_aes_256)
-        self._set_property("gcm_aes_xpn_128", gcm_aes_xpn_128)
-        self._set_property("gcm_aes_xpn_256", gcm_aes_xpn_256)
-
-    def set(
-        self,
-        gcm_aes_128=None,
-        gcm_aes_256=None,
-        gcm_aes_xpn_128=None,
-        gcm_aes_xpn_256=None,
-    ):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def gcm_aes_128(self):
-        # type: () -> bool
-        """gcm_aes_128 getter
-
-        GCM-AES-128.
-
-        Returns: bool
-        """
-        return self._get_property("gcm_aes_128")
-
-    @gcm_aes_128.setter
-    def gcm_aes_128(self, value):
-        """gcm_aes_128 setter
-
-        GCM-AES-128.
-
-        value: bool
-        """
-        self._set_property("gcm_aes_128", value)
-
-    @property
-    def gcm_aes_256(self):
-        # type: () -> bool
-        """gcm_aes_256 getter
-
-        GCM-AES-256.
-
-        Returns: bool
-        """
-        return self._get_property("gcm_aes_256")
-
-    @gcm_aes_256.setter
-    def gcm_aes_256(self, value):
-        """gcm_aes_256 setter
-
-        GCM-AES-256.
-
-        value: bool
-        """
-        self._set_property("gcm_aes_256", value)
-
-    @property
-    def gcm_aes_xpn_128(self):
-        # type: () -> bool
-        """gcm_aes_xpn_128 getter
-
-        GCM-AES-XPN-128.
-
-        Returns: bool
-        """
-        return self._get_property("gcm_aes_xpn_128")
-
-    @gcm_aes_xpn_128.setter
-    def gcm_aes_xpn_128(self, value):
-        """gcm_aes_xpn_128 setter
-
-        GCM-AES-XPN-128.
-
-        value: bool
-        """
-        self._set_property("gcm_aes_xpn_128", value)
-
-    @property
-    def gcm_aes_xpn_256(self):
-        # type: () -> bool
-        """gcm_aes_xpn_256 getter
-
-        GCM-AES-XPN-256.
-
-        Returns: bool
-        """
-        return self._get_property("gcm_aes_xpn_256")
-
-    @gcm_aes_xpn_256.setter
-    def gcm_aes_xpn_256(self, value):
-        """gcm_aes_xpn_256 setter
-
-        GCM-AES-XPN-256.
-
-        value: bool
-        """
-        self._set_property("gcm_aes_xpn_256", value)
-
-
-class MkaBasicRekeyMode(OpenApiObject):
-    __slots__ = ("_parent", "_choice")
-
-    _TYPES = {
-        "choice": {
-            "type": str,
-            "enum": [
-                "dont_rekey",
-                "timer_based",
-                "pn_based",
-            ],
-        },
-        "timer_based": {"type": "MkaBasicRekeyModeTimerBased"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "choice": "dont_rekey",
-    }  # type: Dict[str, Union(type)]
-
-    DONT_REKEY = "dont_rekey"  # type: str
-    TIMER_BASED = "timer_based"  # type: str
-    PN_BASED = "pn_based"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, choice=None):
-        super(MkaBasicRekeyMode, self).__init__()
-        self._parent = parent
-        if (
-            "choice" in self._DEFAULTS
-            and choice is None
-            and self._DEFAULTS["choice"] in self._TYPES
-        ):
-            getattr(self, self._DEFAULTS["choice"])
-        else:
-            self._set_property("choice", choice)
-
-    @property
-    def timer_based(self):
-        # type: () -> MkaBasicRekeyModeTimerBased
-        """Factory property that returns an instance of the MkaBasicRekeyModeTimerBased class
-
-        Timer based periodic rekey properties.
-
-        Returns: MkaBasicRekeyModeTimerBased
-        """
-        return self._get_property(
-            "timer_based", MkaBasicRekeyModeTimerBased, self, "timer_based"
-        )
-
-    @property
-    def choice(self):
-        # type: () -> Union[Literal["dont_rekey"], Literal["pn_based"], Literal["timer_based"]]
-        """choice getter
-
-        Mode choices.
-
-        Returns: Union[Literal["dont_rekey"], Literal["pn_based"], Literal["timer_based"]]
-        """
-        return self._get_property("choice")
-
-    @choice.setter
-    def choice(self, value):
-        """choice setter
-
-        Mode choices.
-
-        value: Union[Literal["dont_rekey"], Literal["pn_based"], Literal["timer_based"]]
-        """
-        self._set_property("choice", value)
-
-
-class MkaBasicRekeyModeTimerBased(OpenApiObject):
-    __slots__ = ("_parent", "_choice")
-
-    _TYPES = {
-        "choice": {
-            "type": str,
-            "enum": [
-                "continuous",
-                "fixed_count",
-            ],
-        },
-        "fixed_count": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 1,
-            "maximum": 65535,
-        },
-        "interval": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 30,
-            "maximum": 65535,
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "choice": "continuous",
-        "fixed_count": 10,
-        "interval": 300,
-    }  # type: Dict[str, Union(type)]
-
-    CONTINUOUS = "continuous"  # type: str
-    FIXED_COUNT = "fixed_count"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, choice=None, fixed_count=10, interval=300):
-        super(MkaBasicRekeyModeTimerBased, self).__init__()
-        self._parent = parent
-        self._set_property("fixed_count", fixed_count)
-        self._set_property("interval", interval)
-        if (
-            "choice" in self._DEFAULTS
-            and choice is None
-            and self._DEFAULTS["choice"] in self._TYPES
-        ):
-            getattr(self, self._DEFAULTS["choice"])
-        else:
-            self._set_property("choice", choice)
-
-    def set(self, fixed_count=None, interval=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def choice(self):
-        # type: () -> Union[Literal["continuous"], Literal["fixed_count"]]
-        """choice getter
-
-        Periodic Rekey count.
-
-        Returns: Union[Literal["continuous"], Literal["fixed_count"]]
-        """
-        return self._get_property("choice")
-
-    @choice.setter
-    def choice(self, value):
-        """choice setter
-
-        Periodic Rekey count.
-
-        value: Union[Literal["continuous"], Literal["fixed_count"]]
-        """
-        self._set_property("choice", value)
-
-    @property
-    def fixed_count(self):
-        # type: () -> int
-        """fixed_count getter
-
-        Fixed rekey attempts.
-
-        Returns: int
-        """
-        return self._get_property("fixed_count")
-
-    @fixed_count.setter
-    def fixed_count(self, value):
-        """fixed_count setter
-
-        Fixed rekey attempts.
-
-        value: int
-        """
-        self._set_property("fixed_count", value, "fixed_count")
-
-    @property
-    def interval(self):
-        # type: () -> int
-        """interval getter
-
-        Periodic rekey interval (sec).
-
-        Returns: int
-        """
-        return self._get_property("interval")
-
-    @interval.setter
-    def interval(self, value):
-        """interval setter
-
-        Periodic rekey interval (sec).
-
-        value: int
-        """
-        self._set_property("interval", value)
-
-
-class MkaBasicPskChainStartTime(OpenApiObject):
-    __slots__ = ("_parent", "_choice")
-
-    _TYPES = {
-        "choice": {
-            "type": str,
-            "enum": [
-                "utc",
-            ],
-        },
-        "utc": {"type": "MkaBasicTimeUtc"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "choice": "utc",
-    }  # type: Dict[str, Union(type)]
-
-    UTC = "utc"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, choice=None):
-        super(MkaBasicPskChainStartTime, self).__init__()
-        self._parent = parent
-        if (
-            "choice" in self._DEFAULTS
-            and choice is None
-            and self._DEFAULTS["choice"] in self._TYPES
-        ):
-            getattr(self, self._DEFAULTS["choice"])
-        else:
-            self._set_property("choice", choice)
-
-    @property
-    def utc(self):
-        # type: () -> MkaBasicTimeUtc
-        """Factory property that returns an instance of the MkaBasicTimeUtc class
-
-        Coordinated Universal Time(UTC).
-
-        Returns: MkaBasicTimeUtc
-        """
-        return self._get_property("utc", MkaBasicTimeUtc, self, "utc")
-
-    @property
-    def choice(self):
-        # type: () -> Union[Literal["utc"]]
-        """choice getter
-
-        Timezone choice. Currently only Coordinated Universal Time(UTC) is supported.
-
-        Returns: Union[Literal["utc"]]
-        """
-        return self._get_property("choice")
-
-    @choice.setter
-    def choice(self, value):
-        """choice setter
-
-        Timezone choice. Currently only Coordinated Universal Time(UTC) is supported.
-
-        value: Union[Literal["utc"]]
-        """
-        self._set_property("choice", value)
-
-
-class MkaBasicTimeUtc(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "day": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 1,
-            "maximum": 31,
-        },
-        "month": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 1,
-            "maximum": 12,
-        },
-        "year": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 0,
-            "maximum": 9999,
-        },
-        "hour": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 0,
-            "maximum": 23,
-        },
-        "minute": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 0,
-            "maximum": 59,
-        },
-        "second": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 0,
-            "maximum": 59,
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self,
-        parent=None,
-        day=None,
-        month=None,
-        year=None,
-        hour=None,
-        minute=None,
-        second=None,
-    ):
-        super(MkaBasicTimeUtc, self).__init__()
-        self._parent = parent
-        self._set_property("day", day)
-        self._set_property("month", month)
-        self._set_property("year", year)
-        self._set_property("hour", hour)
-        self._set_property("minute", minute)
-        self._set_property("second", second)
-
-    def set(self, day=None, month=None, year=None, hour=None, minute=None, second=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def day(self):
-        # type: () -> int
-        """day getter
-
-        Day of the month in DD format.
-
-        Returns: int
-        """
-        return self._get_property("day")
-
-    @day.setter
-    def day(self, value):
-        """day setter
-
-        Day of the month in DD format.
-
-        value: int
-        """
-        self._set_property("day", value)
-
-    @property
-    def month(self):
-        # type: () -> int
-        """month getter
-
-        Month of the year in MM format.
-
-        Returns: int
-        """
-        return self._get_property("month")
-
-    @month.setter
-    def month(self, value):
-        """month setter
-
-        Month of the year in MM format.
-
-        value: int
-        """
-        self._set_property("month", value)
-
-    @property
-    def year(self):
-        # type: () -> int
-        """year getter
-
-        Year from the start of common era(CE) in YYYY format.
-
-        Returns: int
-        """
-        return self._get_property("year")
-
-    @year.setter
-    def year(self, value):
-        """year setter
-
-        Year from the start of common era(CE) in YYYY format.
-
-        value: int
-        """
-        self._set_property("year", value)
-
-    @property
-    def hour(self):
-        # type: () -> int
-        """hour getter
-
-        Hour of the day in HH format.
-
-        Returns: int
-        """
-        return self._get_property("hour")
-
-    @hour.setter
-    def hour(self, value):
-        """hour setter
-
-        Hour of the day in HH format.
-
-        value: int
-        """
-        self._set_property("hour", value)
-
-    @property
-    def minute(self):
-        # type: () -> int
-        """minute getter
-
-        Minute of the hour in MM format.
-
-        Returns: int
-        """
-        return self._get_property("minute")
-
-    @minute.setter
-    def minute(self, value):
-        """minute setter
-
-        Minute of the hour in MM format.
-
-        value: int
-        """
-        self._set_property("minute", value)
-
-    @property
-    def second(self):
-        # type: () -> int
-        """second getter
-
-        Second of the minute in SS format.
-
-        Returns: int
-        """
-        return self._get_property("second")
-
-    @second.setter
-    def second(self, value):
-        """second setter
-
-        Second of the minute in SS format.
-
-        value: int
-        """
-        self._set_property("second", value)
-
-
-class MkaKeyServer(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "confidentialty_offset": {
-            "type": str,
-            "enum": [
-                "no_confidentiality",
-                "no_confidentiality_offset",
-                "confidentiality_offset_30_octets",
-                "confidentiality_offset_50_octets",
-            ],
-        },
-        "cipher_suite": {
-            "type": str,
-            "enum": [
-                "gcm_aes_128",
-                "gcm_aes_256",
-                "gcm_aes_xpn_128",
-                "gcm_aes_xpn_256",
-            ],
-        },
-        "starting_key_number": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 1,
-            "maximum": 65535,
-        },
-        "starting_distributed_an": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 0,
-            "maximum": 3,
-        },
-        "rekey_threshold_pn": {
-            "type": str,
-            "format": "hex",
-            "minLength": 1,
-            "maxLength": 8,
-        },
-        "rekey_threshold_xpn": {
-            "type": str,
-            "format": "hex",
-            "minLength": 1,
-            "maxLength": 16,
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "confidentialty_offset": "no_confidentiality_offset",
-        "cipher_suite": "gcm_aes_128",
-        "starting_key_number": 1,
-        "starting_distributed_an": 0,
-        "rekey_threshold_pn": "C0000000",
-        "rekey_threshold_xpn": "C000000000000000",
-    }  # type: Dict[str, Union(type)]
-
-    NO_CONFIDENTIALITY = "no_confidentiality"  # type: str
-    NO_CONFIDENTIALITY_OFFSET = "no_confidentiality_offset"  # type: str
-    CONFIDENTIALITY_OFFSET_30_OCTETS = "confidentiality_offset_30_octets"  # type: str
-    CONFIDENTIALITY_OFFSET_50_OCTETS = "confidentiality_offset_50_octets"  # type: str
-
-    GCM_AES_128 = "gcm_aes_128"  # type: str
-    GCM_AES_256 = "gcm_aes_256"  # type: str
-    GCM_AES_XPN_128 = "gcm_aes_xpn_128"  # type: str
-    GCM_AES_XPN_256 = "gcm_aes_xpn_256"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self,
-        parent=None,
-        confidentialty_offset="no_confidentiality_offset",
-        cipher_suite="gcm_aes_128",
-        starting_key_number=1,
-        starting_distributed_an=0,
-        rekey_threshold_pn="C0000000",
-        rekey_threshold_xpn="C000000000000000",
-    ):
-        super(MkaKeyServer, self).__init__()
-        self._parent = parent
-        self._set_property("confidentialty_offset", confidentialty_offset)
-        self._set_property("cipher_suite", cipher_suite)
-        self._set_property("starting_key_number", starting_key_number)
-        self._set_property("starting_distributed_an", starting_distributed_an)
-        self._set_property("rekey_threshold_pn", rekey_threshold_pn)
-        self._set_property("rekey_threshold_xpn", rekey_threshold_xpn)
-
-    def set(
-        self,
-        confidentialty_offset=None,
-        cipher_suite=None,
-        starting_key_number=None,
-        starting_distributed_an=None,
-        rekey_threshold_pn=None,
-        rekey_threshold_xpn=None,
-    ):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def confidentialty_offset(self):
-        # type: () -> Union[Literal["confidentiality_offset_30_octets"], Literal["confidentiality_offset_50_octets"], Literal["no_confidentiality"], Literal["no_confidentiality_offset"]]
-        """confidentialty_offset getter
-
-        Confidentiality Offset.
-
-        Returns: Union[Literal["confidentiality_offset_30_octets"], Literal["confidentiality_offset_50_octets"], Literal["no_confidentiality"], Literal["no_confidentiality_offset"]]
-        """
-        return self._get_property("confidentialty_offset")
-
-    @confidentialty_offset.setter
-    def confidentialty_offset(self, value):
-        """confidentialty_offset setter
-
-        Confidentiality Offset.
-
-        value: Union[Literal["confidentiality_offset_30_octets"], Literal["confidentiality_offset_50_octets"], Literal["no_confidentiality"], Literal["no_confidentiality_offset"]]
-        """
-        self._set_property("confidentialty_offset", value)
-
-    @property
-    def cipher_suite(self):
-        # type: () -> Union[Literal["gcm_aes_128"], Literal["gcm_aes_256"], Literal["gcm_aes_xpn_128"], Literal["gcm_aes_xpn_256"]]
-        """cipher_suite getter
-
-        The cipher suite. Choose one from GCM-AES-128 GCM-AES-256 GCM-AES-XPN-128 GCM-AES-XPN-256
-
-        Returns: Union[Literal["gcm_aes_128"], Literal["gcm_aes_256"], Literal["gcm_aes_xpn_128"], Literal["gcm_aes_xpn_256"]]
-        """
-        return self._get_property("cipher_suite")
-
-    @cipher_suite.setter
-    def cipher_suite(self, value):
-        """cipher_suite setter
-
-        The cipher suite. Choose one from GCM-AES-128 GCM-AES-256 GCM-AES-XPN-128 GCM-AES-XPN-256
-
-        value: Union[Literal["gcm_aes_128"], Literal["gcm_aes_256"], Literal["gcm_aes_xpn_128"], Literal["gcm_aes_xpn_256"]]
-        """
-        self._set_property("cipher_suite", value)
-
-    @property
-    def starting_key_number(self):
-        # type: () -> int
-        """starting_key_number getter
-
-        Starting Key Number.
-
-        Returns: int
-        """
-        return self._get_property("starting_key_number")
-
-    @starting_key_number.setter
-    def starting_key_number(self, value):
-        """starting_key_number setter
-
-        Starting Key Number.
-
-        value: int
-        """
-        self._set_property("starting_key_number", value)
-
-    @property
-    def starting_distributed_an(self):
-        # type: () -> int
-        """starting_distributed_an getter
-
-        Starting Distributed AN.
-
-        Returns: int
-        """
-        return self._get_property("starting_distributed_an")
-
-    @starting_distributed_an.setter
-    def starting_distributed_an(self, value):
-        """starting_distributed_an setter
-
-        Starting Distributed AN.
-
-        value: int
-        """
-        self._set_property("starting_distributed_an", value)
-
-    @property
-    def rekey_threshold_pn(self):
-        # type: () -> str
-        """rekey_threshold_pn getter
-
-        Determines the PN rekey threshold.
-
-        Returns: str
-        """
-        return self._get_property("rekey_threshold_pn")
-
-    @rekey_threshold_pn.setter
-    def rekey_threshold_pn(self, value):
-        """rekey_threshold_pn setter
-
-        Determines the PN rekey threshold.
-
-        value: str
-        """
-        self._set_property("rekey_threshold_pn", value)
-
-    @property
-    def rekey_threshold_xpn(self):
-        # type: () -> str
-        """rekey_threshold_xpn getter
-
-        Determines the XPN rekey threshold.
-
-        Returns: str
-        """
-        return self._get_property("rekey_threshold_xpn")
-
-    @rekey_threshold_xpn.setter
-    def rekey_threshold_xpn(self, value):
-        """rekey_threshold_xpn setter
-
-        Determines the XPN rekey threshold.
-
-        value: str
-        """
-        self._set_property("rekey_threshold_xpn", value)
-
-
-class MkaTx(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "secure_channels": {"type": "MkaTxScIter"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ("secure_channels",)  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None):
-        super(MkaTx, self).__init__()
-        self._parent = parent
-
-    @property
-    def secure_channels(self):
-        # type: () -> MkaTxScIter
-        """secure_channels getter
-
-        Tx secure channels.
-
-        Returns: MkaTxScIter
-        """
-        return self._get_property(
-            "secure_channels", MkaTxScIter, self._parent, self._choice
-        )
-
-
-class MkaTxSc(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "name": {"type": str},
-        "system_id": {
-            "type": str,
-            "format": "mac",
-        },
-        "port_id": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 1,
-            "maximum": 65535,
-        },
-        "starting_message_number": {
-            "type": int,
-            "format": "uint64",
-            "minimum": 1,
-            "maximum": 4294967295,
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ("name", "system_id")  # type: tuple(str)
-
-    _DEFAULTS = {
-        "port_id": 1,
-        "starting_message_number": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self,
-        parent=None,
-        name=None,
-        system_id=None,
-        port_id=1,
-        starting_message_number=1,
-    ):
-        super(MkaTxSc, self).__init__()
-        self._parent = parent
-        self._set_property("name", name)
-        self._set_property("system_id", system_id)
-        self._set_property("port_id", port_id)
-        self._set_property("starting_message_number", starting_message_number)
-
-    def set(
-        self, name=None, system_id=None, port_id=None, starting_message_number=None
-    ):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def name(self):
-        # type: () -> str
-        """name getter
-
-        Tx SC name.
-
-        Returns: str
-        """
-        return self._get_property("name")
-
-    @name.setter
-    def name(self, value):
-        """name setter
-
-        Tx SC name.
-
-        value: str
-        """
-        if value is None:
-            raise TypeError("Cannot set required property name as None")
-        self._set_property("name", value)
-
-    @property
-    def system_id(self):
-        # type: () -> str
-        """system_id getter
-
-        System ID.
-
-        Returns: str
-        """
-        return self._get_property("system_id")
-
-    @system_id.setter
-    def system_id(self, value):
-        """system_id setter
-
-        System ID.
-
-        value: str
-        """
-        if value is None:
-            raise TypeError("Cannot set required property system_id as None")
-        self._set_property("system_id", value)
-
-    @property
-    def port_id(self):
-        # type: () -> int
-        """port_id getter
-
-        Port ID.
-
-        Returns: int
-        """
-        return self._get_property("port_id")
-
-    @port_id.setter
-    def port_id(self, value):
-        """port_id setter
-
-        Port ID.
-
-        value: int
-        """
-        self._set_property("port_id", value)
-
-    @property
-    def starting_message_number(self):
-        # type: () -> int
-        """starting_message_number getter
-
-        Starting Message Number.
-
-        Returns: int
-        """
-        return self._get_property("starting_message_number")
-
-    @starting_message_number.setter
-    def starting_message_number(self, value):
-        """starting_message_number setter
-
-        Starting Message Number.
-
-        value: int
-        """
-        self._set_property("starting_message_number", value)
-
-
-class MkaTxScIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(MkaTxScIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[MkaTxSc]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> MkaTxScIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> MkaTxSc
-        return self._next()
-
-    def next(self):
-        # type: () -> MkaTxSc
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, MkaTxSc):
-            raise Exception("Item is not an instance of MkaTxSc")
-
-    def txsc(self, name=None, system_id=None, port_id=1, starting_message_number=1):
-        # type: (str,str,int,int) -> MkaTxScIter
-        """Factory method that creates an instance of the MkaTxSc class
-
-        Tx secure channel(SC) properties.
-
-        Returns: MkaTxScIter
-        """
-        item = MkaTxSc(
-            parent=self._parent,
-            name=name,
-            system_id=system_id,
-            port_id=port_id,
-            starting_message_number=starting_message_number,
-        )
-        self._add(item)
-        return self
-
-    def add(self, name=None, system_id=None, port_id=1, starting_message_number=1):
-        # type: (str,str,int,int) -> MkaTxSc
-        """Add method that creates and returns an instance of the MkaTxSc class
-
-        Tx secure channel(SC) properties.
-
-        Returns: MkaTxSc
-        """
-        item = MkaTxSc(
-            parent=self._parent,
-            name=name,
-            system_id=system_id,
-            port_id=port_id,
-            starting_message_number=starting_message_number,
-        )
-        self._add(item)
-        return item
-
-
-class SecureEntityStaticKey(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "cipher_suite": {
-            "type": str,
-            "enum": [
-                "gcm_aes_128",
-                "gcm_aes_256",
-                "gcm_aes_xpn_128",
-                "gcm_aes_xpn_256",
-            ],
-        },
-        "confidentiality": {"type": bool},
-        "confidentiality_offset": {
-            "type": str,
-            "enum": [
-                "fifty",
-                "thirty",
-                "zero",
-            ],
-        },
-        "tx": {"type": "SecureEntityStaticKeyTx"},
-        "rx": {"type": "SecureEntityStaticKeyRx"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "cipher_suite": "gcm_aes_128",
-        "confidentiality": True,
-        "confidentiality_offset": "zero",
-    }  # type: Dict[str, Union(type)]
-
-    GCM_AES_128 = "gcm_aes_128"  # type: str
-    GCM_AES_256 = "gcm_aes_256"  # type: str
-    GCM_AES_XPN_128 = "gcm_aes_xpn_128"  # type: str
-    GCM_AES_XPN_256 = "gcm_aes_xpn_256"  # type: str
-
-    FIFTY = "fifty"  # type: str
-    THIRTY = "thirty"  # type: str
-    ZERO = "zero"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self,
-        parent=None,
-        cipher_suite="gcm_aes_128",
-        confidentiality=True,
-        confidentiality_offset="zero",
-    ):
-        super(SecureEntityStaticKey, self).__init__()
-        self._parent = parent
-        self._set_property("cipher_suite", cipher_suite)
-        self._set_property("confidentiality", confidentiality)
-        self._set_property("confidentiality_offset", confidentiality_offset)
-
-    def set(self, cipher_suite=None, confidentiality=None, confidentiality_offset=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def cipher_suite(self):
-        # type: () -> Union[Literal["gcm_aes_128"], Literal["gcm_aes_256"], Literal["gcm_aes_xpn_128"], Literal["gcm_aes_xpn_256"]]
-        """cipher_suite getter
-
-        The cipher suite. Choose one from GCM-AES-128 GCM-AES-128 GCM-AES-256 GCM-AES-XPN-128 GCM-AES-XPN-256
-
-        Returns: Union[Literal["gcm_aes_128"], Literal["gcm_aes_256"], Literal["gcm_aes_xpn_128"], Literal["gcm_aes_xpn_256"]]
-        """
-        return self._get_property("cipher_suite")
-
-    @cipher_suite.setter
-    def cipher_suite(self, value):
-        """cipher_suite setter
-
-        The cipher suite. Choose one from GCM-AES-128 GCM-AES-128 GCM-AES-256 GCM-AES-XPN-128 GCM-AES-XPN-256
-
-        value: Union[Literal["gcm_aes_128"], Literal["gcm_aes_256"], Literal["gcm_aes_xpn_128"], Literal["gcm_aes_xpn_256"]]
-        """
-        self._set_property("cipher_suite", value)
-
-    @property
-    def confidentiality(self):
-        # type: () -> bool
-        """confidentiality getter
-
-        Encrypt or not.
-
-        Returns: bool
-        """
-        return self._get_property("confidentiality")
-
-    @confidentiality.setter
-    def confidentiality(self, value):
-        """confidentiality setter
-
-        Encrypt or not.
-
-        value: bool
-        """
-        self._set_property("confidentiality", value)
-
-    @property
-    def confidentiality_offset(self):
-        # type: () -> Union[Literal["fifty"], Literal["thirty"], Literal["zero"]]
-        """confidentiality_offset getter
-
-        Confidentiality offset.
-
-        Returns: Union[Literal["fifty"], Literal["thirty"], Literal["zero"]]
-        """
-        return self._get_property("confidentiality_offset")
-
-    @confidentiality_offset.setter
-    def confidentiality_offset(self, value):
-        """confidentiality_offset setter
-
-        Confidentiality offset.
-
-        value: Union[Literal["fifty"], Literal["thirty"], Literal["zero"]]
-        """
-        self._set_property("confidentiality_offset", value)
-
-    @property
-    def tx(self):
-        # type: () -> SecureEntityStaticKeyTx
-        """tx getter
-
-        A container of static key Tx properties.A container of static key Tx properties.A container of static key Tx properties.A container of static key Tx properties.Tx properties of SecY.
-
-        Returns: SecureEntityStaticKeyTx
-        """
-        return self._get_property("tx", SecureEntityStaticKeyTx)
-
-    @property
-    def rx(self):
-        # type: () -> SecureEntityStaticKeyRx
-        """rx getter
-
-        A container of static key Rx properties.A container of static key Rx properties.A container of static key Rx properties.A container of static key Rx properties.Rx properties of SecY.
-
-        Returns: SecureEntityStaticKeyRx
-        """
-        return self._get_property("rx", SecureEntityStaticKeyRx)
-
-
-class SecureEntityStaticKeyTx(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "secure_channels": {"type": "SecureEntityStaticKeyTxScIter"},
-        "rekey_mode": {"type": "SecureEntityStaticKeyRekeyMode"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None):
-        super(SecureEntityStaticKeyTx, self).__init__()
-        self._parent = parent
-
-    @property
-    def secure_channels(self):
-        # type: () -> SecureEntityStaticKeyTxScIter
-        """secure_channels getter
-
-        Tx secure channels.
-
-        Returns: SecureEntityStaticKeyTxScIter
-        """
-        return self._get_property(
-            "secure_channels", SecureEntityStaticKeyTxScIter, self._parent, self._choice
-        )
-
-    @property
-    def rekey_mode(self):
-        # type: () -> SecureEntityStaticKeyRekeyMode
-        """rekey_mode getter
-
-        Rekey mode.Rekey mode.Rekey mode.
-
-        Returns: SecureEntityStaticKeyRekeyMode
-        """
-        return self._get_property("rekey_mode", SecureEntityStaticKeyRekeyMode)
-
-
-class SecureEntityStaticKeyTxSc(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "system_id": {
-            "type": str,
-            "format": "mac",
-        },
-        "port_id": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 1,
-            "maximum": 65535,
-        },
-        "saks": {"type": "SecureEntityStaticKeySakIter"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "port_id": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, system_id=None, port_id=1):
-        super(SecureEntityStaticKeyTxSc, self).__init__()
-        self._parent = parent
-        self._set_property("system_id", system_id)
-        self._set_property("port_id", port_id)
-
-    def set(self, system_id=None, port_id=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def system_id(self):
-        # type: () -> str
-        """system_id getter
-
-        System ID.
-
-        Returns: str
-        """
-        return self._get_property("system_id")
-
-    @system_id.setter
-    def system_id(self, value):
-        """system_id setter
-
-        System ID.
-
-        value: str
-        """
-        self._set_property("system_id", value)
-
-    @property
-    def port_id(self):
-        # type: () -> int
-        """port_id getter
-
-        Port ID.
-
-        Returns: int
-        """
-        return self._get_property("port_id")
-
-    @port_id.setter
-    def port_id(self, value):
-        """port_id setter
-
-        Port ID.
-
-        value: int
-        """
-        self._set_property("port_id", value)
-
-    @property
-    def saks(self):
-        # type: () -> SecureEntityStaticKeySakIter
-        """saks getter
-
-        Tx SAK pool.
-
-        Returns: SecureEntityStaticKeySakIter
-        """
-        return self._get_property(
-            "saks", SecureEntityStaticKeySakIter, self._parent, self._choice
-        )
-
-
-class SecureEntityStaticKeySak(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "sak": {
-            "type": str,
-            "format": "hex",
-            "minLength": 1,
-            "maxLength": 64,
-        },
-        "ssci": {
-            "type": str,
-            "format": "hex",
-            "minLength": 1,
-            "maxLength": 8,
-        },
-        "salt": {
-            "type": str,
-            "format": "hex",
-            "minLength": 1,
-            "maxLength": 24,
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "sak": "F123456789ABCDEF0123456789ABCDEF",
-        "ssci": "00000001",
-        "salt": "000000000000000000000001",
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self,
-        parent=None,
-        sak="F123456789ABCDEF0123456789ABCDEF",
-        ssci="00000001",
-        salt="000000000000000000000001",
-    ):
-        super(SecureEntityStaticKeySak, self).__init__()
-        self._parent = parent
-        self._set_property("sak", sak)
-        self._set_property("ssci", ssci)
-        self._set_property("salt", salt)
-
-    def set(self, sak=None, ssci=None, salt=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def sak(self):
-        # type: () -> str
-        """sak getter
-
-        Secure association key(SAK) bits as hex string. Either 128 bits or 256 bits depending on the chosen cipher suite.
-
-        Returns: str
-        """
-        return self._get_property("sak")
-
-    @sak.setter
-    def sak(self, value):
-        """sak setter
-
-        Secure association key(SAK) bits as hex string. Either 128 bits or 256 bits depending on the chosen cipher suite.
-
-        value: str
-        """
-        self._set_property("sak", value)
-
-    @property
-    def ssci(self):
-        # type: () -> str
-        """ssci getter
-
-        4 bytes short SCI(SSCI) used in case of XPN cipher suites.
-
-        Returns: str
-        """
-        return self._get_property("ssci")
-
-    @ssci.setter
-    def ssci(self, value):
-        """ssci setter
-
-        4 bytes short SCI(SSCI) used in case of XPN cipher suites.
-
-        value: str
-        """
-        self._set_property("ssci", value)
-
-    @property
-    def salt(self):
-        # type: () -> str
-        """salt getter
-
-        12 bytes salt used in case of XPN cipher suites.
-
-        Returns: str
-        """
-        return self._get_property("salt")
-
-    @salt.setter
-    def salt(self, value):
-        """salt setter
-
-        12 bytes salt used in case of XPN cipher suites.
-
-        value: str
-        """
-        self._set_property("salt", value)
-
-
-class SecureEntityStaticKeySakIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(SecureEntityStaticKeySakIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[SecureEntityStaticKeySak]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> SecureEntityStaticKeySakIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> SecureEntityStaticKeySak
-        return self._next()
-
-    def next(self):
-        # type: () -> SecureEntityStaticKeySak
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, SecureEntityStaticKeySak):
-            raise Exception("Item is not an instance of SecureEntityStaticKeySak")
-
-    def sak(
-        self,
-        sak="F123456789ABCDEF0123456789ABCDEF",
-        ssci="00000001",
-        salt="000000000000000000000001",
-    ):
-        # type: (str,str,str) -> SecureEntityStaticKeySakIter
-        """Factory method that creates an instance of the SecureEntityStaticKeySak class
-
-        The container for SAK.
-
-        Returns: SecureEntityStaticKeySakIter
-        """
-        item = SecureEntityStaticKeySak(
-            parent=self._parent, sak=sak, ssci=ssci, salt=salt
-        )
-        self._add(item)
-        return self
-
-    def add(
-        self,
-        sak="F123456789ABCDEF0123456789ABCDEF",
-        ssci="00000001",
-        salt="000000000000000000000001",
-    ):
-        # type: (str,str,str) -> SecureEntityStaticKeySak
-        """Add method that creates and returns an instance of the SecureEntityStaticKeySak class
-
-        The container for SAK.
-
-        Returns: SecureEntityStaticKeySak
-        """
-        item = SecureEntityStaticKeySak(
-            parent=self._parent, sak=sak, ssci=ssci, salt=salt
-        )
-        self._add(item)
-        return item
-
-
-class SecureEntityStaticKeyTxScIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(SecureEntityStaticKeyTxScIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[SecureEntityStaticKeyTxSc]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> SecureEntityStaticKeyTxScIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> SecureEntityStaticKeyTxSc
-        return self._next()
-
-    def next(self):
-        # type: () -> SecureEntityStaticKeyTxSc
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, SecureEntityStaticKeyTxSc):
-            raise Exception("Item is not an instance of SecureEntityStaticKeyTxSc")
-
-    def txsc(self, system_id=None, port_id=1):
-        # type: (str,int) -> SecureEntityStaticKeyTxScIter
-        """Factory method that creates an instance of the SecureEntityStaticKeyTxSc class
-
-        Tx SC setting for static key.
-
-        Returns: SecureEntityStaticKeyTxScIter
-        """
-        item = SecureEntityStaticKeyTxSc(
-            parent=self._parent, system_id=system_id, port_id=port_id
-        )
-        self._add(item)
-        return self
-
-    def add(self, system_id=None, port_id=1):
-        # type: (str,int) -> SecureEntityStaticKeyTxSc
-        """Add method that creates and returns an instance of the SecureEntityStaticKeyTxSc class
-
-        Tx SC setting for static key.
-
-        Returns: SecureEntityStaticKeyTxSc
-        """
-        item = SecureEntityStaticKeyTxSc(
-            parent=self._parent, system_id=system_id, port_id=port_id
-        )
-        self._add(item)
-        return item
-
-
-class SecureEntityStaticKeyRekeyMode(OpenApiObject):
-    __slots__ = ("_parent", "_choice")
-
-    _TYPES = {
-        "choice": {
-            "type": str,
-            "enum": [
-                "dont_rekey",
-                "timer_based",
-                "pn_based",
-            ],
-        },
-        "timer_based": {"type": "SecureEntityStaticKeyRekeyModeTimerBased"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "choice": "dont_rekey",
-    }  # type: Dict[str, Union(type)]
-
-    DONT_REKEY = "dont_rekey"  # type: str
-    TIMER_BASED = "timer_based"  # type: str
-    PN_BASED = "pn_based"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, choice=None):
-        super(SecureEntityStaticKeyRekeyMode, self).__init__()
-        self._parent = parent
-        if (
-            "choice" in self._DEFAULTS
-            and choice is None
-            and self._DEFAULTS["choice"] in self._TYPES
-        ):
-            getattr(self, self._DEFAULTS["choice"])
-        else:
-            self._set_property("choice", choice)
-
-    @property
-    def timer_based(self):
-        # type: () -> SecureEntityStaticKeyRekeyModeTimerBased
-        """Factory property that returns an instance of the SecureEntityStaticKeyRekeyModeTimerBased class
-
-        Timer based periodic rekey properties.
-
-        Returns: SecureEntityStaticKeyRekeyModeTimerBased
-        """
-        return self._get_property(
-            "timer_based", SecureEntityStaticKeyRekeyModeTimerBased, self, "timer_based"
-        )
-
-    @property
-    def choice(self):
-        # type: () -> Union[Literal["dont_rekey"], Literal["pn_based"], Literal["timer_based"]]
-        """choice getter
-
-        Rekey mode choices.
-
-        Returns: Union[Literal["dont_rekey"], Literal["pn_based"], Literal["timer_based"]]
-        """
-        return self._get_property("choice")
-
-    @choice.setter
-    def choice(self, value):
-        """choice setter
-
-        Rekey mode choices.
-
-        value: Union[Literal["dont_rekey"], Literal["pn_based"], Literal["timer_based"]]
-        """
-        self._set_property("choice", value)
-
-
-class SecureEntityStaticKeyRekeyModeTimerBased(OpenApiObject):
-    __slots__ = ("_parent", "_choice")
-
-    _TYPES = {
-        "choice": {
-            "type": str,
-            "enum": [
-                "continuous",
-                "fixed_count",
-            ],
-        },
-        "fixed_count": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 1,
-            "maximum": 65535,
-        },
-        "interval": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 30,
-            "maximum": 65535,
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "choice": "continuous",
-        "fixed_count": 10,
-        "interval": 300,
-    }  # type: Dict[str, Union(type)]
-
-    CONTINUOUS = "continuous"  # type: str
-    FIXED_COUNT = "fixed_count"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, choice=None, fixed_count=10, interval=300):
-        super(SecureEntityStaticKeyRekeyModeTimerBased, self).__init__()
-        self._parent = parent
-        self._set_property("fixed_count", fixed_count)
-        self._set_property("interval", interval)
-        if (
-            "choice" in self._DEFAULTS
-            and choice is None
-            and self._DEFAULTS["choice"] in self._TYPES
-        ):
-            getattr(self, self._DEFAULTS["choice"])
-        else:
-            self._set_property("choice", choice)
-
-    def set(self, fixed_count=None, interval=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def choice(self):
-        # type: () -> Union[Literal["continuous"], Literal["fixed_count"]]
-        """choice getter
-
-        Periodic rekey attempt choices.
-
-        Returns: Union[Literal["continuous"], Literal["fixed_count"]]
-        """
-        return self._get_property("choice")
-
-    @choice.setter
-    def choice(self, value):
-        """choice setter
-
-        Periodic rekey attempt choices.
-
-        value: Union[Literal["continuous"], Literal["fixed_count"]]
-        """
-        self._set_property("choice", value)
-
-    @property
-    def fixed_count(self):
-        # type: () -> int
-        """fixed_count getter
-
-        Fixed rekey attempts.
-
-        Returns: int
-        """
-        return self._get_property("fixed_count")
-
-    @fixed_count.setter
-    def fixed_count(self, value):
-        """fixed_count setter
-
-        Fixed rekey attempts.
-
-        value: int
-        """
-        self._set_property("fixed_count", value, "fixed_count")
-
-    @property
-    def interval(self):
-        # type: () -> int
-        """interval getter
-
-        Periodic rekey interval (sec).
-
-        Returns: int
-        """
-        return self._get_property("interval")
-
-    @interval.setter
-    def interval(self, value):
-        """interval setter
-
-        Periodic rekey interval (sec).
-
-        value: int
-        """
-        self._set_property("interval", value)
-
-
-class SecureEntityStaticKeyRx(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "secure_channels": {"type": "SecureEntityStaticKeyRxScIter"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None):
-        super(SecureEntityStaticKeyRx, self).__init__()
-        self._parent = parent
-
-    @property
-    def secure_channels(self):
-        # type: () -> SecureEntityStaticKeyRxScIter
-        """secure_channels getter
-
-        Rx secure channels.
-
-        Returns: SecureEntityStaticKeyRxScIter
-        """
-        return self._get_property(
-            "secure_channels", SecureEntityStaticKeyRxScIter, self._parent, self._choice
-        )
-
-
-class SecureEntityStaticKeyRxSc(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "dut_sci_system_id": {
-            "type": str,
-            "format": "mac",
-        },
-        "dut_sci_port_id": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 1,
-            "maximum": 65535,
-        },
-        "dut_msb_xpn": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 0,
-            "maximum": 4294967295,
-        },
-        "saks": {"type": "SecureEntityStaticKeySakIter"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "dut_sci_port_id": 1,
-        "dut_msb_xpn": 0,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self, parent=None, dut_sci_system_id=None, dut_sci_port_id=1, dut_msb_xpn=0
-    ):
-        super(SecureEntityStaticKeyRxSc, self).__init__()
-        self._parent = parent
-        self._set_property("dut_sci_system_id", dut_sci_system_id)
-        self._set_property("dut_sci_port_id", dut_sci_port_id)
-        self._set_property("dut_msb_xpn", dut_msb_xpn)
-
-    def set(self, dut_sci_system_id=None, dut_sci_port_id=None, dut_msb_xpn=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def dut_sci_system_id(self):
-        # type: () -> str
-        """dut_sci_system_id getter
-
-        System ID in DUT SCI.
-
-        Returns: str
-        """
-        return self._get_property("dut_sci_system_id")
-
-    @dut_sci_system_id.setter
-    def dut_sci_system_id(self, value):
-        """dut_sci_system_id setter
-
-        System ID in DUT SCI.
-
-        value: str
-        """
-        self._set_property("dut_sci_system_id", value)
-
-    @property
-    def dut_sci_port_id(self):
-        # type: () -> int
-        """dut_sci_port_id getter
-
-        Port ID in DUT SCI.
-
-        Returns: int
-        """
-        return self._get_property("dut_sci_port_id")
-
-    @dut_sci_port_id.setter
-    def dut_sci_port_id(self, value):
-        """dut_sci_port_id setter
-
-        Port ID in DUT SCI.
-
-        value: int
-        """
-        self._set_property("dut_sci_port_id", value)
-
-    @property
-    def dut_msb_xpn(self):
-        # type: () -> int
-        """dut_msb_xpn getter
-
-        DUT MSB of XPN. The 32 most significant bits of the XPN that DUT will be using to construct the 64 bits XPN value when test starts.
-
-        Returns: int
-        """
-        return self._get_property("dut_msb_xpn")
-
-    @dut_msb_xpn.setter
-    def dut_msb_xpn(self, value):
-        """dut_msb_xpn setter
-
-        DUT MSB of XPN. The 32 most significant bits of the XPN that DUT will be using to construct the 64 bits XPN value when test starts.
-
-        value: int
-        """
-        self._set_property("dut_msb_xpn", value)
-
-    @property
-    def saks(self):
-        # type: () -> SecureEntityStaticKeySakIter
-        """saks getter
-
-        Rx SAK pool.
-
-        Returns: SecureEntityStaticKeySakIter
-        """
-        return self._get_property(
-            "saks", SecureEntityStaticKeySakIter, self._parent, self._choice
-        )
-
-
-class SecureEntityStaticKeyRxScIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(SecureEntityStaticKeyRxScIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[SecureEntityStaticKeyRxSc]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> SecureEntityStaticKeyRxScIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> SecureEntityStaticKeyRxSc
-        return self._next()
-
-    def next(self):
-        # type: () -> SecureEntityStaticKeyRxSc
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, SecureEntityStaticKeyRxSc):
-            raise Exception("Item is not an instance of SecureEntityStaticKeyRxSc")
-
-    def rxsc(self, dut_sci_system_id=None, dut_sci_port_id=1, dut_msb_xpn=0):
-        # type: (str,int,int) -> SecureEntityStaticKeyRxScIter
-        """Factory method that creates an instance of the SecureEntityStaticKeyRxSc class
-
-        Rx SC settings.
-
-        Returns: SecureEntityStaticKeyRxScIter
-        """
-        item = SecureEntityStaticKeyRxSc(
-            parent=self._parent,
-            dut_sci_system_id=dut_sci_system_id,
-            dut_sci_port_id=dut_sci_port_id,
-            dut_msb_xpn=dut_msb_xpn,
-        )
-        self._add(item)
-        return self
-
-    def add(self, dut_sci_system_id=None, dut_sci_port_id=1, dut_msb_xpn=0):
-        # type: (str,int,int) -> SecureEntityStaticKeyRxSc
-        """Add method that creates and returns an instance of the SecureEntityStaticKeyRxSc class
-
-        Rx SC settings.
-
-        Returns: SecureEntityStaticKeyRxSc
-        """
-        item = SecureEntityStaticKeyRxSc(
-            parent=self._parent,
-            dut_sci_system_id=dut_sci_system_id,
-            dut_sci_port_id=dut_sci_port_id,
-            dut_msb_xpn=dut_msb_xpn,
-        )
-        self._add(item)
-        return item
-
-
 class SecureEntityDataPlane(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -45270,6 +48939,7 @@ class SecureEntityDataPlaneEncapsulation(OpenApiObject):
         "tx": {"type": "SecureEntityDataPlaneTx"},
         "rx": {"type": "SecureEntityDataPlaneRx"},
         "crypto_engine": {"type": "SecureEntityCryptoEngine"},
+        "vlan_options": {"type": "SecureEntityVlanOptions"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("crypto_engine",)  # type: tuple(str)
@@ -45315,6 +48985,17 @@ class SecureEntityDataPlaneEncapsulation(OpenApiObject):
         """
         return self._get_property("crypto_engine", SecureEntityCryptoEngine)
 
+    @property
+    def vlan_options(self):
+        # type: () -> SecureEntityVlanOptions
+        """vlan_options getter
+
+        A container for VLAN options of SecY.A container for VLAN options of SecY.A container for VLAN options of SecY.A container for VLAN options of SecY.VLAN options of SecY.
+
+        Returns: SecureEntityVlanOptions
+        """
+        return self._get_property("vlan_options", SecureEntityVlanOptions)
+
 
 class SecureEntityDataPlaneTx(OpenApiObject):
     __slots__ = "_parent"
@@ -45328,12 +49009,12 @@ class SecureEntityDataPlaneTx(OpenApiObject):
 
     _DEFAULTS = {
         "end_station": False,
-        "include_sci": False,
+        "include_sci": True,
     }  # type: Dict[str, Union(type)]
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, end_station=False, include_sci=False):
+    def __init__(self, parent=None, end_station=False, include_sci=True):
         super(SecureEntityDataPlaneTx, self).__init__()
         self._parent = parent
         self._set_property("end_station", end_station)
@@ -45349,7 +49030,7 @@ class SecureEntityDataPlaneTx(OpenApiObject):
         # type: () -> bool
         """end_station getter
 
-        End station on not.
+        End station or not.
 
         Returns: bool
         """
@@ -45359,7 +49040,7 @@ class SecureEntityDataPlaneTx(OpenApiObject):
     def end_station(self, value):
         """end_station setter
 
-        End station on not.
+        End station or not.
 
         value: bool
         """
@@ -45370,7 +49051,7 @@ class SecureEntityDataPlaneTx(OpenApiObject):
         # type: () -> bool
         """include_sci getter
 
-        Include SCI on not.
+        Include SCI or not.
 
         Returns: bool
         """
@@ -45380,7 +49061,7 @@ class SecureEntityDataPlaneTx(OpenApiObject):
     def include_sci(self, value):
         """include_sci setter
 
-        Include SCI on not.
+        Include SCI or not.
 
         value: bool
         """
@@ -45424,7 +49105,7 @@ class SecureEntityDataPlaneRx(OpenApiObject):
         # type: () -> bool
         """replay_protection getter
 
-        Enable replay protection on not.
+        Enable replay protection or not.
 
         Returns: bool
         """
@@ -45434,7 +49115,7 @@ class SecureEntityDataPlaneRx(OpenApiObject):
     def replay_protection(self, value):
         """replay_protection setter
 
-        Enable replay protection on not.
+        Enable replay protection or not.
 
         value: bool
         """
@@ -45470,9 +49151,11 @@ class SecureEntityCryptoEngine(OpenApiObject):
             "type": str,
             "enum": [
                 "encrypt_only",
+                "encrypt_decrypt",
             ],
         },
         "encrypt_only": {"type": "SecureEntityCryptoEngineEncryptOnly"},
+        "encrypt_decrypt": {"type": "SecureEntityCryptoEngineEncryptDecrypt"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -45482,6 +49165,7 @@ class SecureEntityCryptoEngine(OpenApiObject):
     }  # type: Dict[str, Union(type)]
 
     ENCRYPT_ONLY = "encrypt_only"  # type: str
+    ENCRYPT_DECRYPT = "encrypt_decrypt"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -45511,13 +49195,29 @@ class SecureEntityCryptoEngine(OpenApiObject):
         )
 
     @property
+    def encrypt_decrypt(self):
+        # type: () -> SecureEntityCryptoEngineEncryptDecrypt
+        """Factory property that returns an instance of the SecureEntityCryptoEngineEncryptDecrypt class
+
+        The container for encrypt and decrypt engine configuration.
+
+        Returns: SecureEntityCryptoEngineEncryptDecrypt
+        """
+        return self._get_property(
+            "encrypt_decrypt",
+            SecureEntityCryptoEngineEncryptDecrypt,
+            self,
+            "encrypt_decrypt",
+        )
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["encrypt_only"]]
+        # type: () -> Union[Literal["encrypt_decrypt"], Literal["encrypt_only"]]
         """choice getter
 
-        Engine type based on encryption and/ or decryption capability. Supported types: encrypt_only engine can only encrypt transmitted packets but it cannot decrypt packets upon arrival. As the packets cannot be decrypted on arrival, such packets cannot be delivered to the receiving device. Hence only stateless traffic can be sent.
+        Engine type based on encryption and/ or decryption capability. Supported types: 1) encrypt_only engine can only encrypt transmitted packets but it cannot decrypt packets upon arrival. As the packets cannot be decrypted on arrival, such packets cannot be delivered to the receiving device. Hence only stateless traffic can be sent. 2) encrypt_decrypt engine can both encrypt transmitted packets and decrypt packets on arrival. Such engine can have hardware acceleration for faster encryption/ decryption. As both encryption and decryption are possible, stateful (e.g. TCP) traffic can be sent/ received.
 
-        Returns: Union[Literal["encrypt_only"]]
+        Returns: Union[Literal["encrypt_decrypt"], Literal["encrypt_only"]]
         """
         return self._get_property("choice")
 
@@ -45525,9 +49225,9 @@ class SecureEntityCryptoEngine(OpenApiObject):
     def choice(self, value):
         """choice setter
 
-        Engine type based on encryption and/ or decryption capability. Supported types: encrypt_only engine can only encrypt transmitted packets but it cannot decrypt packets upon arrival. As the packets cannot be decrypted on arrival, such packets cannot be delivered to the receiving device. Hence only stateless traffic can be sent.
+        Engine type based on encryption and/ or decryption capability. Supported types: 1) encrypt_only engine can only encrypt transmitted packets but it cannot decrypt packets upon arrival. As the packets cannot be decrypted on arrival, such packets cannot be delivered to the receiving device. Hence only stateless traffic can be sent. 2) encrypt_decrypt engine can both encrypt transmitted packets and decrypt packets on arrival. Such engine can have hardware acceleration for faster encryption/ decryption. As both encryption and decryption are possible, stateful (e.g. TCP) traffic can be sent/ received.
 
-        value: Union[Literal["encrypt_only"]]
+        value: Union[Literal["encrypt_decrypt"], Literal["encrypt_only"]]
         """
         self._set_property("choice", value)
 
@@ -45718,12 +49418,12 @@ class SecureEntityCryptoEngineEncryptOnlyFixedPn(OpenApiObject):
 
     _DEFAULTS = {
         "pn": 6,
-        "xpn": "0x06",
+        "xpn": "06",
     }  # type: Dict[str, Union(type)]
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, pn=6, xpn="0x06"):
+    def __init__(self, parent=None, pn=6, xpn="06"):
         super(SecureEntityCryptoEngineEncryptOnlyFixedPn, self).__init__()
         self._parent = parent
         self._set_property("pn", pn)
@@ -45806,14 +49506,12 @@ class SecureEntityCryptoEngineEncryptOnlyIncrementingPn(OpenApiObject):
     _DEFAULTS = {
         "count": 100,
         "starting_pn": 10000,
-        "starting_xpn": "0x010000",
+        "starting_xpn": "01",
     }  # type: Dict[str, Union(type)]
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(
-        self, parent=None, count=100, starting_pn=10000, starting_xpn="0x010000"
-    ):
+    def __init__(self, parent=None, count=100, starting_pn=10000, starting_xpn="01"):
         super(SecureEntityCryptoEngineEncryptOnlyIncrementingPn, self).__init__()
         self._parent = parent
         self._set_property("count", count)
@@ -45991,6 +49689,240 @@ class SecureEntityCryptoEngineEncryptOnlyTrafficOptions(OpenApiObject):
         value: bool
         """
         self._set_property("send_gratuitous_arp", value)
+
+
+class SecureEntityCryptoEngineEncryptDecrypt(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "tx_pn": {"type": "SecureEntityCryptoEngineEncryptDecryptTxPn"},
+        "hardware_acceleration": {
+            "type": "SecureEntityCryptoEngineEncryptDecryptHardwareAcceleration"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(SecureEntityCryptoEngineEncryptDecrypt, self).__init__()
+        self._parent = parent
+
+    @property
+    def tx_pn(self):
+        # type: () -> SecureEntityCryptoEngineEncryptDecryptTxPn
+        """tx_pn getter
+
+        Tx packet number(PN) configuration.Tx packet number(PN) configuration.Tx packet number(PN) configuration.Tx packet number(PN) configuration.
+
+        Returns: SecureEntityCryptoEngineEncryptDecryptTxPn
+        """
+        return self._get_property("tx_pn", SecureEntityCryptoEngineEncryptDecryptTxPn)
+
+    @property
+    def hardware_acceleration(self):
+        # type: () -> SecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
+        """hardware_acceleration getter
+
+        Hardware acceleration configuration for offloading MACsec processing to hardware.Hardware acceleration configuration for offloading MACsec processing to hardware.Hardware acceleration configuration for offloading MACsec processing to hardware.Hardware acceleration configuration for offloading MACsec processing to hardware.
+
+        Returns: SecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
+        """
+        return self._get_property(
+            "hardware_acceleration",
+            SecureEntityCryptoEngineEncryptDecryptHardwareAcceleration,
+        )
+
+
+class SecureEntityCryptoEngineEncryptDecryptTxPn(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "starting_pn": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+        },
+        "starting_xpn": {
+            "type": str,
+            "format": "hex",
+            "minimum": 1,
+            "minLength": 1,
+            "maxLength": 16,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "starting_pn": 1,
+        "starting_xpn": "01",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, starting_pn=1, starting_xpn="01"):
+        super(SecureEntityCryptoEngineEncryptDecryptTxPn, self).__init__()
+        self._parent = parent
+        self._set_property("starting_pn", starting_pn)
+        self._set_property("starting_xpn", starting_xpn)
+
+    def set(self, starting_pn=None, starting_xpn=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def starting_pn(self):
+        # type: () -> int
+        """starting_pn getter
+
+        The starting packet number(PN).
+
+        Returns: int
+        """
+        return self._get_property("starting_pn")
+
+    @starting_pn.setter
+    def starting_pn(self, value):
+        """starting_pn setter
+
+        The starting packet number(PN).
+
+        value: int
+        """
+        self._set_property("starting_pn", value)
+
+    @property
+    def starting_xpn(self):
+        # type: () -> str
+        """starting_xpn getter
+
+        The starting extended packet number(XPN).
+
+        Returns: str
+        """
+        return self._get_property("starting_xpn")
+
+    @starting_xpn.setter
+    def starting_xpn(self, value):
+        """starting_xpn setter
+
+        The starting extended packet number(XPN).
+
+        value: str
+        """
+        self._set_property("starting_xpn", value)
+
+
+class SecureEntityCryptoEngineEncryptDecryptHardwareAcceleration(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "none",
+                "inline_crypto",
+            ],
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "none",
+    }  # type: Dict[str, Union(type)]
+
+    NONE = "none"  # type: str
+    INLINE_CRYPTO = "inline_crypto"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(
+            SecureEntityCryptoEngineEncryptDecryptHardwareAcceleration, self
+        ).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["inline_crypto"], Literal["none"]]
+        """choice getter
+
+        Hardware acceleration types. Per port global parameters for chosen hardware acceleration mode applicable for all MACsec sessions from the test port are available at options.per_port_options.protocols.macsec.hardware_acceleration.
+
+        Returns: Union[Literal["inline_crypto"], Literal["none"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Hardware acceleration types. Per port global parameters for chosen hardware acceleration mode applicable for all MACsec sessions from the test port are available at options.per_port_options.protocols.macsec.hardware_acceleration.
+
+        value: Union[Literal["inline_crypto"], Literal["none"]]
+        """
+        self._set_property("choice", value)
+
+
+class SecureEntityVlanOptions(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "encrypt_interface_vlans": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "encrypt_interface_vlans": True,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, encrypt_interface_vlans=True):
+        super(SecureEntityVlanOptions, self).__init__()
+        self._parent = parent
+        self._set_property("encrypt_interface_vlans", encrypt_interface_vlans)
+
+    def set(self, encrypt_interface_vlans=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def encrypt_interface_vlans(self):
+        # type: () -> bool
+        """encrypt_interface_vlans getter
+
+        Send interface VLANS as encrypted or not. If it is false, VLANs go in cleartext. If hardware_accelerated.inline_crypto mode is chosen, option related to offset must be changed from default 12 (to 16 for example for single cleartext VLAN) at appropriate place to handle cleartext VLAN in receive direction.
+
+        Returns: bool
+        """
+        return self._get_property("encrypt_interface_vlans")
+
+    @encrypt_interface_vlans.setter
+    def encrypt_interface_vlans(self, value):
+        """encrypt_interface_vlans setter
+
+        Send interface VLANS as encrypted or not. If it is false, VLANs go in cleartext. If hardware_accelerated.inline_crypto mode is chosen, option related to offset must be changed from default 12 (to 16 for example for single cleartext VLAN) at appropriate place to handle cleartext VLAN in receive direction.
+
+        value: bool
+        """
+        self._set_property("encrypt_interface_vlans", value)
 
 
 class DeviceMacsecEthernetInterfaceIter(OpenApiIter):
@@ -50317,7 +54249,7 @@ class Flow(OpenApiObject):
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
     _STATUS = {
-        "egress_packet": "egress_packet property in schema Flow is under-review, The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.",
+        "egress_packet": "egress_packet property in schema Flow is under_review, The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.",
     }  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, name=None):
@@ -50643,12 +54575,14 @@ class FlowRouter(OpenApiObject):
             "type": list,
             "itemtype": str,
         },
+        "bidirectional": {"type": bool},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("tx_names", "rx_names")  # type: tuple(str)
 
     _DEFAULTS = {
         "mode": "mesh",
+        "bidirectional": False,
     }  # type: Dict[str, Union(type)]
 
     MESH = "mesh"  # type: str
@@ -50656,14 +54590,22 @@ class FlowRouter(OpenApiObject):
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, mode="mesh", tx_names=None, rx_names=None):
+    def __init__(
+        self,
+        parent=None,
+        mode="mesh",
+        tx_names=None,
+        rx_names=None,
+        bidirectional=False,
+    ):
         super(FlowRouter, self).__init__()
         self._parent = parent
         self._set_property("mode", mode)
         self._set_property("tx_names", tx_names)
         self._set_property("rx_names", rx_names)
+        self._set_property("bidirectional", bidirectional)
 
-    def set(self, mode=None, tx_names=None, rx_names=None):
+    def set(self, mode=None, tx_names=None, rx_names=None, bidirectional=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -50735,6 +54677,27 @@ class FlowRouter(OpenApiObject):
             raise TypeError("Cannot set required property rx_names as None")
         self._set_property("rx_names", value)
 
+    @property
+    def bidirectional(self):
+        # type: () -> bool
+        """bidirectional getter
+
+        Allows traffic sub-flow(s) to be created on both forward and reverse directions between the device endpoint pairs. When enabled, traffic is sent from <b>tx_names to rx_names</b> as well as from <b>rx_names to tx_names</b>.. The bidirectional option creates two separate sub-flows under the same flow name, Only the flow endpoints are reversed automatically for the reverse sub-flow.. The implementation should create two sub-flows with full endpoint source and. destination reversal, including eth.src/eth.dst, ip.src/ip.dst,. udp.src/udp.dst, and tcp.src/tcp.dst.. For bidirectional flows, metrics are reported for each generated sub-flow separately.. Both sub-flows share the same flow name but are differentiated by their. port_tx and port_rx values, which are reversed for the reverse sub-flow.. Consequently, flow metrics for bidirectional flow are exposed as two. separate metric entries, one for each traffic direction.
+
+        Returns: bool
+        """
+        return self._get_property("bidirectional")
+
+    @bidirectional.setter
+    def bidirectional(self, value):
+        """bidirectional setter
+
+        Allows traffic sub-flow(s) to be created on both forward and reverse directions between the device endpoint pairs. When enabled, traffic is sent from <b>tx_names to rx_names</b> as well as from <b>rx_names to tx_names</b>.. The bidirectional option creates two separate sub-flows under the same flow name, Only the flow endpoints are reversed automatically for the reverse sub-flow.. The implementation should create two sub-flows with full endpoint source and. destination reversal, including eth.src/eth.dst, ip.src/ip.dst,. udp.src/udp.dst, and tcp.src/tcp.dst.. For bidirectional flows, metrics are reported for each generated sub-flow separately.. Both sub-flows share the same flow name but are differentiated by their. port_tx and port_rx values, which are reversed for the reverse sub-flow.. Consequently, flow metrics for bidirectional flow are exposed as two. separate metric entries, one for each traffic direction.
+
+        value: bool
+        """
+        self._set_property("bidirectional", value)
+
 
 class FlowHeader(OpenApiObject):
     __slots__ = ("_parent", "_choice")
@@ -50767,6 +54730,7 @@ class FlowHeader(OpenApiObject):
                 "macsec",
                 "lacp",
                 "ipv6_extension_header",
+                "cfm",
             ],
         },
         "custom": {"type": "FlowCustom"},
@@ -50793,6 +54757,7 @@ class FlowHeader(OpenApiObject):
         "macsec": {"type": "FlowMacsec"},
         "lacp": {"type": "FlowLacp"},
         "ipv6_extension_header": {"type": "FlowIpv6ExtHeader"},
+        "cfm": {"type": "FlowCfm"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -50825,6 +54790,7 @@ class FlowHeader(OpenApiObject):
     MACSEC = "macsec"  # type: str
     LACP = "lacp"  # type: str
     IPV6_EXTENSION_HEADER = "ipv6_extension_header"  # type: str
+    CFM = "cfm"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -51109,13 +55075,24 @@ class FlowHeader(OpenApiObject):
         )
 
     @property
+    def cfm(self):
+        # type: () -> FlowCfm
+        """Factory property that returns an instance of the FlowCfm class
+
+        Defines the fields of Connectivity Fault Management (CFM) Packet Data Unit (PDU) as specified in IEEE 802.1Q-2018 Clause 21. CCM destination MAC is multicast address derived from the maintenance domain level (IEEE 802.1Q-2018 Table 21-3).
+
+        Returns: FlowCfm
+        """
+        return self._get_property("cfm", FlowCfm, self, "cfm")
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["ipv6_extension_header"], Literal["lacp"], Literal["macsec"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["rsvp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
+        # type: () -> Union[Literal["arp"], Literal["cfm"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["ipv6_extension_header"], Literal["lacp"], Literal["macsec"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["rsvp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
         """choice getter
 
         The available types of flow headers. If one is not provided the default ethernet packet header MUST be provided.
 
-        Returns: Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["ipv6_extension_header"], Literal["lacp"], Literal["macsec"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["rsvp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
+        Returns: Union[Literal["arp"], Literal["cfm"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["ipv6_extension_header"], Literal["lacp"], Literal["macsec"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["rsvp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
         """
         return self._get_property("choice")
 
@@ -51125,7 +55102,7 @@ class FlowHeader(OpenApiObject):
 
         The available types of flow headers. If one is not provided the default ethernet packet header MUST be provided.
 
-        value: Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["ipv6_extension_header"], Literal["lacp"], Literal["macsec"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["rsvp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
+        value: Union[Literal["arp"], Literal["cfm"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["ipv6_extension_header"], Literal["lacp"], Literal["macsec"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["rsvp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
         """
         self._set_property("choice", value)
 
@@ -57115,7 +61092,7 @@ class FlowIpv4(OpenApiObject):
         # type: () -> FlowIpv4OptionsIter
         """options getter
 
-        TBD
+        IPv4 options are optional extensions for the IPv4 header that can be utilised to provide additional information about the IPv4 datagram. It is encoded as series of type, length and value attributes. The IP header length MUST be increased to accommodate the extra bytes needed to encode the IP options. The length of the all options included to IPv4 header should not exceed 40 bytes since IPv4 Header length (4 bits) can at max specify 15 4-word octets for total of 60 bytes which includes 20 bytes needed for mandatory attributes of the IPv4 header. If the user adds multiples IPv4 options that exceeds 40 bytes and specify header length as "auto", implementation should throw error. Currently IP options supported are: 1. router_alert option allows devices to intercept packets not addressed to them directly as defined in RFC2113. 2. custom option is provided to configure user defined IP options as needed. 3. timestamp option allows routers to record their local timestamp and IP address for latency measurement and path diagnostics as defined in RFC791. 4. end_of_options option allows routers to specify the end of options list. This may only be used if the end of the options does not coincide with the end of the IP header. It is single octet value and padding is implicitly added to conform to work boundary.
 
         Returns: FlowIpv4OptionsIter
         """
@@ -67278,9 +71255,12 @@ class FlowIpv4Options(OpenApiObject):
             "enum": [
                 "router_alert",
                 "custom",
+                "timestamp",
+                "end_of_options",
             ],
         },
         "custom": {"type": "FlowIpv4OptionsCustom"},
+        "timestamp": {"type": "FlowIpv4OptionsTimestamp"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -67291,6 +71271,8 @@ class FlowIpv4Options(OpenApiObject):
 
     ROUTER_ALERT = "router_alert"  # type: str
     CUSTOM = "custom"  # type: str
+    TIMESTAMP = "timestamp"  # type: str
+    END_OF_OPTIONS = "end_of_options"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -67318,13 +71300,26 @@ class FlowIpv4Options(OpenApiObject):
         return self._get_property("custom", FlowIpv4OptionsCustom, self, "custom")
 
     @property
+    def timestamp(self):
+        # type: () -> FlowIpv4OptionsTimestamp
+        """Factory property that returns an instance of the FlowIpv4OptionsTimestamp class
+
+        IPv4 timestamp option to be appended to the IPv4 header.
+
+        Returns: FlowIpv4OptionsTimestamp
+        """
+        return self._get_property(
+            "timestamp", FlowIpv4OptionsTimestamp, self, "timestamp"
+        )
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["custom"], Literal["router_alert"]]
+        # type: () -> Union[Literal["custom"], Literal["end_of_options"], Literal["router_alert"], Literal["timestamp"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["custom"], Literal["router_alert"]]
+        Returns: Union[Literal["custom"], Literal["end_of_options"], Literal["router_alert"], Literal["timestamp"]]
         """
         return self._get_property("choice")
 
@@ -67334,7 +71329,7 @@ class FlowIpv4Options(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["custom"], Literal["router_alert"]]
+        value: Union[Literal["custom"], Literal["end_of_options"], Literal["router_alert"], Literal["timestamp"]]
         """
         self._set_property("choice", value)
 
@@ -68390,6 +72385,1536 @@ class FlowIpv4OptionsCustomLength(OpenApiObject):
         self._set_property("value", value, "value")
 
 
+class FlowIpv4OptionsTimestamp(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "pointer": {"type": "FlowIpv4OptionsTimestampPointer"},
+        "overflow": {"type": "PatternFlowIpv4OptionsTimestampOverflow"},
+        "format": {"type": "FlowIpv4OptionsTimestampFormat"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowIpv4OptionsTimestamp, self).__init__()
+        self._parent = parent
+
+    @property
+    def pointer(self):
+        # type: () -> FlowIpv4OptionsTimestampPointer
+        """pointer getter
+
+        The attribute pointer indicates the octet offset where the next router should begin recording its data.. Choices of input are,. 1. auto The OTG implementation can provide system generated value for this property. If the implementation is unable to generate value, the default value must be used.. 2. value: User can configure the pointer value.The attribute pointer indicates the octet offset where the next router should begin recording its data.. Choices of input are,. 1. auto The OTG implementation can provide system generated value for this property. If the implementation is unable to generate value, the default value must be used.. 2. value: User can configure the pointer value.The attribute pointer indicates the octet offset where the next router should begin recording its data.. Choices of input are,. 1. auto The OTG implementation can provide system generated value for this property. If the implementation is unable to generate value, the default value must be used.. 2. value: User can configure the pointer value.The attribute pointer indicates the octet offset where the next router should begin recording its data.. Choices of input are,. 1. auto The OTG implementation can provide system generated value for this property. If the implementation is unable to generate value, the default value must be used.. 2. value: User can configure the pointer value.
+
+        Returns: FlowIpv4OptionsTimestampPointer
+        """
+        return self._get_property("pointer", FlowIpv4OptionsTimestampPointer)
+
+    @property
+    def overflow(self):
+        # type: () -> PatternFlowIpv4OptionsTimestampOverflow
+        """overflow getter
+
+        A counter that indicates the number of intermediate nodes that were unable to record timestamp because the options data area was full.A counter that indicates the number of intermediate nodes that were unable to record timestamp because the options data area was full.A counter that indicates the number of intermediate nodes that were unable to record timestamp because the options data area was full.A counter that indicates the number of intermediate nodes that were unable to record timestamp because the options data area was full.A counter that indicates the number of intermediate nodes that were unable to record timestamp because the options data area was full.
+
+        Returns: PatternFlowIpv4OptionsTimestampOverflow
+        """
+        return self._get_property("overflow", PatternFlowIpv4OptionsTimestampOverflow)
+
+    @property
+    def format(self):
+        # type: () -> FlowIpv4OptionsTimestampFormat
+        """format getter
+
+        The format field defines the structural layout of the options data area and the specific recording logic routers must follow when appending timestamps and IP addresses.The format field defines the structural layout of the options data area and the specific recording logic routers must follow when appending timestamps and IP addresses.The format field defines the structural layout of the options data area and the specific recording logic routers must follow when appending timestamps and IP addresses.The format field defines the structural layout of the options data area and the specific recording logic routers must follow when appending timestamps and IP addresses.
+
+        Returns: FlowIpv4OptionsTimestampFormat
+        """
+        return self._get_property("format", FlowIpv4OptionsTimestampFormat)
+
+
+class FlowIpv4OptionsTimestampPointer(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "auto",
+                "value",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 5,
+            "maximum": 40,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "auto",
+        "value": 5,
+    }  # type: Dict[str, Union(type)]
+
+    AUTO = "auto"  # type: str
+    VALUE = "value"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=5):
+        super(FlowIpv4OptionsTimestampPointer, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auto"], Literal["value"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["auto"], Literal["value"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["auto"], Literal["value"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+
+class PatternFlowIpv4OptionsTimestampOverflow(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 15,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 15,
+        },
+        "increment": {"type": "PatternFlowIpv4OptionsTimestampOverflowCounter"},
+        "decrement": {"type": "PatternFlowIpv4OptionsTimestampOverflowCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowIpv4OptionsTimestampOverflow, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIpv4OptionsTimestampOverflowCounter
+        """Factory property that returns an instance of the PatternFlowIpv4OptionsTimestampOverflowCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv4OptionsTimestampOverflowCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIpv4OptionsTimestampOverflowCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIpv4OptionsTimestampOverflowCounter
+        """Factory property that returns an instance of the PatternFlowIpv4OptionsTimestampOverflowCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv4OptionsTimestampOverflowCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIpv4OptionsTimestampOverflowCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIpv4OptionsTimestampOverflowCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 15,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 15,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 16,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv4OptionsTimestampOverflowCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowIpv4OptionsTimestampFormat(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "timestamps",
+                "address_and_timestamps",
+                "prespecified_address_and_timestamps",
+            ],
+        },
+        "timestamps": {"type": "FlowIpv4OptionsTimestampFormatTimestampsIter"},
+        "address_and_timestamps": {
+            "type": "FlowIpv4OptionsTimestampFormatAddressAndTimestampsIter"
+        },
+        "prespecified_address_and_timestamps": {
+            "type": "FlowIpv4OptionsTimestampFormatAddressAndTimestampsIter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    TIMESTAMPS = "timestamps"  # type: str
+    ADDRESS_AND_TIMESTAMPS = "address_and_timestamps"  # type: str
+    PRESPECIFIED_ADDRESS_AND_TIMESTAMPS = (
+        "prespecified_address_and_timestamps"
+    )  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowIpv4OptionsTimestampFormat, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["address_and_timestamps"], Literal["prespecified_address_and_timestamps"], Literal["timestamps"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["address_and_timestamps"], Literal["prespecified_address_and_timestamps"], Literal["timestamps"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["address_and_timestamps"], Literal["prespecified_address_and_timestamps"], Literal["timestamps"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def timestamps(self):
+        # type: () -> FlowIpv4OptionsTimestampFormatTimestampsIter
+        """timestamps getter
+
+        A recording mode where routers append only their 32-bit universal timestamps sequentially into the options data area.
+
+        Returns: FlowIpv4OptionsTimestampFormatTimestampsIter
+        """
+        return self._get_property(
+            "timestamps",
+            FlowIpv4OptionsTimestampFormatTimestampsIter,
+            self._parent,
+            self._choice,
+        )
+
+    @property
+    def address_and_timestamps(self):
+        # type: () -> FlowIpv4OptionsTimestampFormatAddressAndTimestampsIter
+        """address_and_timestamps getter
+
+        A recording mode where each router appends its 32-bit IPv4 address followed immediately by its 32-bit universal timestamp into the options data area.
+
+        Returns: FlowIpv4OptionsTimestampFormatAddressAndTimestampsIter
+        """
+        return self._get_property(
+            "address_and_timestamps",
+            FlowIpv4OptionsTimestampFormatAddressAndTimestampsIter,
+            self._parent,
+            self._choice,
+        )
+
+    @property
+    def prespecified_address_and_timestamps(self):
+        # type: () -> FlowIpv4OptionsTimestampFormatAddressAndTimestampsIter
+        """prespecified_address_and_timestamps getter
+
+        A selective recording mode where only routers whose IPv4 addresses match the pre-listed entries in the header record their 32-bit universal timestamps into the options data area.
+
+        Returns: FlowIpv4OptionsTimestampFormatAddressAndTimestampsIter
+        """
+        return self._get_property(
+            "prespecified_address_and_timestamps",
+            FlowIpv4OptionsTimestampFormatAddressAndTimestampsIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class FlowIpv4OptionsTimestampFormatTimestamps(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "timestamp": {
+            "type": "PatternFlowIpv4OptionsTimestampFormatTimestampsTimestamp"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowIpv4OptionsTimestampFormatTimestamps, self).__init__()
+        self._parent = parent
+
+    @property
+    def timestamp(self):
+        # type: () -> PatternFlowIpv4OptionsTimestampFormatTimestampsTimestamp
+        """timestamp getter
+
+        A 32-bit value representing the time of packet processing, recorded as the number of milliseconds elapsed since midnight Universal Time (UT).A 32-bit value representing the time of packet processing, recorded as the number of milliseconds elapsed since midnight Universal Time (UT).A 32-bit value representing the time of packet processing, recorded as the number of milliseconds elapsed since midnight Universal Time (UT).
+
+        Returns: PatternFlowIpv4OptionsTimestampFormatTimestampsTimestamp
+        """
+        return self._get_property(
+            "timestamp", PatternFlowIpv4OptionsTimestampFormatTimestampsTimestamp
+        )
+
+
+class PatternFlowIpv4OptionsTimestampFormatTimestampsTimestamp(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "increment": {
+            "type": "PatternFlowIpv4OptionsTimestampFormatTimestampsTimestampCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowIpv4OptionsTimestampFormatTimestampsTimestampCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowIpv4OptionsTimestampFormatTimestampsTimestamp, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIpv4OptionsTimestampFormatTimestampsTimestampCounter
+        """Factory property that returns an instance of the PatternFlowIpv4OptionsTimestampFormatTimestampsTimestampCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv4OptionsTimestampFormatTimestampsTimestampCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIpv4OptionsTimestampFormatTimestampsTimestampCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIpv4OptionsTimestampFormatTimestampsTimestampCounter
+        """Factory property that returns an instance of the PatternFlowIpv4OptionsTimestampFormatTimestampsTimestampCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv4OptionsTimestampFormatTimestampsTimestampCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIpv4OptionsTimestampFormatTimestampsTimestampCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIpv4OptionsTimestampFormatTimestampsTimestampCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(
+            PatternFlowIpv4OptionsTimestampFormatTimestampsTimestampCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowIpv4OptionsTimestampFormatTimestampsIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowIpv4OptionsTimestampFormatTimestampsIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[FlowIpv4OptionsTimestampFormatTimestamps]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> FlowIpv4OptionsTimestampFormatTimestampsIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> FlowIpv4OptionsTimestampFormatTimestamps
+        return self._next()
+
+    def next(self):
+        # type: () -> FlowIpv4OptionsTimestampFormatTimestamps
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, FlowIpv4OptionsTimestampFormatTimestamps):
+            raise Exception(
+                "Item is not an instance of FlowIpv4OptionsTimestampFormatTimestamps"
+            )
+
+    def timestamps(self):
+        # type: () -> FlowIpv4OptionsTimestampFormatTimestampsIter
+        """Factory method that creates an instance of the FlowIpv4OptionsTimestampFormatTimestamps class
+
+        TBD
+
+        Returns: FlowIpv4OptionsTimestampFormatTimestampsIter
+        """
+        item = FlowIpv4OptionsTimestampFormatTimestamps(parent=self._parent)
+        self._add(item)
+        return self
+
+    def add(self):
+        # type: () -> FlowIpv4OptionsTimestampFormatTimestamps
+        """Add method that creates and returns an instance of the FlowIpv4OptionsTimestampFormatTimestamps class
+
+        TBD
+
+        Returns: FlowIpv4OptionsTimestampFormatTimestamps
+        """
+        item = FlowIpv4OptionsTimestampFormatTimestamps(parent=self._parent)
+        self._add(item)
+        return item
+
+
+class FlowIpv4OptionsTimestampFormatAddressAndTimestamps(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "address": {
+            "type": "PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsAddress"
+        },
+        "timestamp": {
+            "type": "PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsTimestamp"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowIpv4OptionsTimestampFormatAddressAndTimestamps, self).__init__()
+        self._parent = parent
+
+    @property
+    def address(self):
+        # type: () -> PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsAddress
+        """address getter
+
+        IPv4 address of the router interface that handled the packet, serving as network identifier for the corresponding timestamp entry.IPv4 address of the router interface that handled the packet, serving as network identifier for the corresponding timestamp entry.IPv4 address of the router interface that handled the packet, serving as network identifier for the corresponding timestamp entry.
+
+        Returns: PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsAddress
+        """
+        return self._get_property(
+            "address", PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsAddress
+        )
+
+    @property
+    def timestamp(self):
+        # type: () -> PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsTimestamp
+        """timestamp getter
+
+        A 32-bit value representing the time of packet processing, recorded as the number of milliseconds elapsed since midnight Universal Time (UT).A 32-bit value representing the time of packet processing, recorded as the number of milliseconds elapsed since midnight Universal Time (UT).A 32-bit value representing the time of packet processing, recorded as the number of milliseconds elapsed since midnight Universal Time (UT).
+
+        Returns: PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsTimestamp
+        """
+        return self._get_property(
+            "timestamp",
+            PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsTimestamp,
+        )
+
+
+class PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsAddress(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "values": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "ipv4",
+        },
+        "increment": {
+            "type": "PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsAddressCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsAddressCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": "0.0.0.0",
+        "values": ["0.0.0.0"],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value="0.0.0.0", values=["0.0.0.0"]):
+        super(
+            PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsAddress, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsAddressCounter
+        """Factory property that returns an instance of the PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsAddressCounter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsAddressCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsAddressCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsAddressCounter
+        """Factory property that returns an instance of the PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsAddressCounter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsAddressCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsAddressCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[str]
+        """values getter
+
+        TBD
+
+        Returns: List[str]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[str]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsAddressCounter(
+    OpenApiObject
+):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "step": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "0.0.0.0",
+        "step": "0.0.0.1",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start="0.0.0.0", step="0.0.0.1", count=1):
+        super(
+            PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsAddressCounter,
+            self,
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsTimestamp(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "increment": {
+            "type": "PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsTimestampCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsTimestampCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(
+            PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsTimestamp, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsTimestampCounter
+        """Factory property that returns an instance of the PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsTimestampCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsTimestampCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsTimestampCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsTimestampCounter
+        """Factory property that returns an instance of the PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsTimestampCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsTimestampCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsTimestampCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsTimestampCounter(
+    OpenApiObject
+):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(
+            PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampsTimestampCounter,
+            self,
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowIpv4OptionsTimestampFormatAddressAndTimestampsIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowIpv4OptionsTimestampFormatAddressAndTimestampsIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[FlowIpv4OptionsTimestampFormatAddressAndTimestamps]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> FlowIpv4OptionsTimestampFormatAddressAndTimestampsIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> FlowIpv4OptionsTimestampFormatAddressAndTimestamps
+        return self._next()
+
+    def next(self):
+        # type: () -> FlowIpv4OptionsTimestampFormatAddressAndTimestamps
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, FlowIpv4OptionsTimestampFormatAddressAndTimestamps):
+            raise Exception(
+                "Item is not an instance of FlowIpv4OptionsTimestampFormatAddressAndTimestamps"
+            )
+
+    def addressandtimestamps(self):
+        # type: () -> FlowIpv4OptionsTimestampFormatAddressAndTimestampsIter
+        """Factory method that creates an instance of the FlowIpv4OptionsTimestampFormatAddressAndTimestamps class
+
+        TBD
+
+        Returns: FlowIpv4OptionsTimestampFormatAddressAndTimestampsIter
+        """
+        item = FlowIpv4OptionsTimestampFormatAddressAndTimestamps(parent=self._parent)
+        self._add(item)
+        return self
+
+    def add(self):
+        # type: () -> FlowIpv4OptionsTimestampFormatAddressAndTimestamps
+        """Add method that creates and returns an instance of the FlowIpv4OptionsTimestampFormatAddressAndTimestamps class
+
+        TBD
+
+        Returns: FlowIpv4OptionsTimestampFormatAddressAndTimestamps
+        """
+        item = FlowIpv4OptionsTimestampFormatAddressAndTimestamps(parent=self._parent)
+        self._add(item)
+        return item
+
+
 class FlowIpv4OptionsIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
@@ -68401,7 +73926,7 @@ class FlowIpv4OptionsIter(OpenApiIter):
         self._choice = choice
 
     def __getitem__(self, key):
-        # type: (str) -> Union[FlowIpv4Options, FlowIpv4OptionsCustom]
+        # type: (str) -> Union[FlowIpv4Options, FlowIpv4OptionsCustom, FlowIpv4OptionsTimestamp]
         return self._getitem(key)
 
     def __iter__(self):
@@ -68424,7 +73949,7 @@ class FlowIpv4OptionsIter(OpenApiIter):
         # type: () -> FlowIpv4OptionsIter
         """Factory method that creates an instance of the FlowIpv4Options class
 
-        IPv4 options are optional extensions for the IPv4 header that can be utilised to provide additional information about the IPv4 datagram. It is encoded as series of type, length and value attributes. The IP header length MUST be increased to accommodate the extra bytes needed to encode the IP options. The length of the all options included to IPv4 header should not exceed 40 bytes since IPv4 Header length (4 bits) can at max specify 15 4-word octets for total of 60 bytes which includes 20 bytes needed for mandatory attributes of the IPv4 header. If the user adds multiples IPv4 options that exceeds 40 bytes and specify header length as "auto", implementation should throw error. Currently IP options supported are: 1. router_alert option allows devices to intercept packets not addressed to them directly as defined in RFC2113. 2. custom option is provided to configure user defined IP options as needed.
+        IPv4 options are optional extensions for the IPv4 header
 
         Returns: FlowIpv4OptionsIter
         """
@@ -68436,7 +73961,7 @@ class FlowIpv4OptionsIter(OpenApiIter):
         # type: () -> FlowIpv4Options
         """Add method that creates and returns an instance of the FlowIpv4Options class
 
-        IPv4 options are optional extensions for the IPv4 header that can be utilised to provide additional information about the IPv4 datagram. It is encoded as series of type, length and value attributes. The IP header length MUST be increased to accommodate the extra bytes needed to encode the IP options. The length of the all options included to IPv4 header should not exceed 40 bytes since IPv4 Header length (4 bits) can at max specify 15 4-word octets for total of 60 bytes which includes 20 bytes needed for mandatory attributes of the IPv4 header. If the user adds multiples IPv4 options that exceeds 40 bytes and specify header length as "auto", implementation should throw error. Currently IP options supported are: 1. router_alert option allows devices to intercept packets not addressed to them directly as defined in RFC2113. 2. custom option is provided to configure user defined IP options as needed.
+        IPv4 options are optional extensions for the IPv4 header
 
         Returns: FlowIpv4Options
         """
@@ -68458,6 +73983,20 @@ class FlowIpv4OptionsIter(OpenApiIter):
         self._add(item)
         return self
 
+    def timestamp(self):
+        # type: () -> FlowIpv4OptionsIter
+        """Factory method that creates an instance of the FlowIpv4OptionsTimestamp class
+
+        IPv4 timestamp option to be appended to the IPv4 header.
+
+        Returns: FlowIpv4OptionsIter
+        """
+        item = FlowIpv4Options()
+        item.timestamp
+        item.choice = "timestamp"
+        self._add(item)
+        return self
+
 
 class FlowIpv6(OpenApiObject):
     __slots__ = "_parent"
@@ -68471,6 +74010,7 @@ class FlowIpv6(OpenApiObject):
         "hop_limit": {"type": "PatternFlowIpv6HopLimit"},
         "src": {"type": "PatternFlowIpv6Src"},
         "dst": {"type": "PatternFlowIpv6Dst"},
+        "dst_usids": {"type": "FlowIpv6UsidDst"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -68565,11 +74105,22 @@ class FlowIpv6(OpenApiObject):
         # type: () -> PatternFlowIpv6Dst
         """dst getter
 
-        Destination addressDestination addressDestination addressDestination address
+        Destination address in IPv6 packet header. If dst_usids is configured, the locator and usids provided in that should be used to construct the IPv6 destination address instead of this field.Destination address in IPv6 packet header. If dst_usids is configured, the locator and usids provided in that should be used to construct the IPv6 destination address instead of this field.Destination address in IPv6 packet header. If dst_usids is configured, the locator and usids provided in that should be used to construct the IPv6 destination address instead of this field.Destination address in IPv6 packet header. If dst_usids is configured, the locator and usids provided in that should be used to construct the IPv6 destination address instead of this field.
 
         Returns: PatternFlowIpv6Dst
         """
         return self._get_property("dst", PatternFlowIpv6Dst)
+
+    @property
+    def dst_usids(self):
+        # type: () -> FlowIpv6UsidDst
+        """dst_usids getter
+
+        Structured input for the SRv6 uSID reduced encapsulation case (RFC 9800 Section 4) where the entire SR path fits in single 128-bit uSID container placed directly in the outer IPv6 dst, with no Segment Routing Header. The implementation packs the fields as: LB (locator_length high-order bits of locator) || uSID-1 || uSID-2 || ... || EoC (zero-pad to 128 bits).. For F3216 format (RFC 9800 Section 3): LB 32 bits, each uSID 16 bits, up to uSIDs per container. Example locator fc00::/32, locator_length 32, usids ["0001","0002","0003"]: assembled dst fc00:0:1:2:3::. When this field is present, ipv6.dst should be ignored by the implementation.Structured input for the SRv6 uSID reduced encapsulation case (RFC 9800 Section 4) where the entire SR path fits in single 128-bit uSID container placed directly in the outer IPv6 dst, with no Segment Routing Header. The implementation packs the fields as: LB (locator_length high-order bits of locator) || uSID-1 || uSID-2 || ... || EoC (zero-pad to 128 bits).. For F3216 format (RFC 9800 Section 3): LB 32 bits, each uSID 16 bits, up to uSIDs per container. Example locator fc00::/32, locator_length 32, usids ["0001","0002","0003"]: assembled dst fc00:0:1:2:3::. When this field is present, ipv6.dst should be ignored by the implementation.Structured input for the SRv6 uSID reduced encapsulation case (RFC 9800 Section 4) where the entire SR path fits in single 128-bit uSID container placed directly in the outer IPv6 dst, with no Segment Routing Header. The implementation packs the fields as: LB (locator_length high-order bits of locator) || uSID-1 || uSID-2 || ... || EoC (zero-pad to 128 bits).. For F3216 format (RFC 9800 Section 3): LB 32 bits, each uSID 16 bits, up to uSIDs per container. Example locator fc00::/32, locator_length 32, usids ["0001","0002","0003"]: assembled dst fc00:0:1:2:3::. When this field is present, ipv6.dst should be ignored by the implementation.Structured input for the SRv6 uSID reduced encapsulation case (RFC 9800 Section 4) where the entire SR path fits in single 128-bit uSID container placed directly in the outer IPv6 dst, with no Segment Routing Header. The implementation packs the fields as: LB (locator_length high-order bits of locator) || uSID-1 || uSID-2 || ... || EoC (zero-pad to 128 bits).. For F3216 format (RFC 9800 Section 3): LB 32 bits, each uSID 16 bits, up to uSIDs per container. Example locator fc00::/32, locator_length 32, usids ["0001","0002","0003"]: assembled dst fc00:0:1:2:3::. When this field is present, ipv6.dst should be ignored by the implementation.Structured uSID container for SRv6 reduced encapsulation (RFC 9800 Section 4) with no Segment Routing Header. When present, the implementation assembles the 128-bit IPv6 dst from the locator block and the ordered uSID list. Mutually exclusive with dst; do not set both. For paths requiring more than one container, use Flow.Ipv6Routing with segment_routing_usid instead.
+
+        Returns: FlowIpv6UsidDst
+        """
+        return self._get_property("dst_usids", FlowIpv6UsidDst)
 
 
 class PatternFlowIpv6Version(OpenApiObject):
@@ -72383,6 +77934,592 @@ class PatternFlowIpv6DstMetricTagIter(OpenApiIter):
         )
         self._add(item)
         return item
+
+
+class FlowIpv6UsidDst(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "locator": {"type": "PatternFlowIpv6UsidDstLocator"},
+        "locator_length": {"type": "PatternFlowIpv6UsidDstLocatorLength"},
+        "usids": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "hex",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("locator",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, usids=None):
+        super(FlowIpv6UsidDst, self).__init__()
+        self._parent = parent
+        self._set_property("usids", usids)
+
+    def set(self, usids=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def locator(self):
+        # type: () -> PatternFlowIpv6UsidDstLocator
+        """locator getter
+
+        The Locator Block (LB) IPv6 prefix shared by all uSIDs in this container (RFC 9800 Section 3). Defines the common high-order bits packed into the 128-bit dst. For F3216 this is /32 prefix (e.g., fc00::). The number of bits used is given by locator_length.The Locator Block (LB) IPv6 prefix shared by all uSIDs in this container (RFC 9800 Section 3). Defines the common high-order bits packed into the 128-bit dst. For F3216 this is /32 prefix (e.g., fc00::). The number of bits used is given by locator_length.The Locator Block (LB) IPv6 prefix shared by all uSIDs in this container (RFC 9800 Section 3). Defines the common high-order bits packed into the 128-bit dst. For F3216 this is /32 prefix (e.g., fc00::). The number of bits used is given by locator_length.
+
+        Returns: PatternFlowIpv6UsidDstLocator
+        """
+        return self._get_property("locator", PatternFlowIpv6UsidDstLocator)
+
+    @property
+    def locator_length(self):
+        # type: () -> PatternFlowIpv6UsidDstLocatorLength
+        """locator_length getter
+
+        Length of the Locator Block in bits (RFC 9800 Section 3). Determines how many high-order bits of locator are used as the LB and how many bits remain for CSID packing. Valid range: 1-112. For NEXT-CSID F3216 (RFC 9800 Section 3): 32. For REPLACE-CSID first container (RFC 9800 Section 4.2): use the LB length (e.g. 32 or 48); the outer IPv6 DA always carries fully formed SRv6 SID with LB.Length of the Locator Block in bits (RFC 9800 Section 3). Determines how many high-order bits of locator are used as the LB and how many bits remain for CSID packing. Valid range: 1-112. For NEXT-CSID F3216 (RFC 9800 Section 3): 32. For REPLACE-CSID first container (RFC 9800 Section 4.2): use the LB length (e.g. 32 or 48); the outer IPv6 DA always carries fully formed SRv6 SID with LB.Length of the Locator Block in bits (RFC 9800 Section 3). Determines how many high-order bits of locator are used as the LB and how many bits remain for CSID packing. Valid range: 1-112. For NEXT-CSID F3216 (RFC 9800 Section 3): 32. For REPLACE-CSID first container (RFC 9800 Section 4.2): use the LB length (e.g. 32 or 48); the outer IPv6 DA always carries fully formed SRv6 SID with LB.
+
+        Returns: PatternFlowIpv6UsidDstLocatorLength
+        """
+        return self._get_property("locator_length", PatternFlowIpv6UsidDstLocatorLength)
+
+    @property
+    def usids(self):
+        # type: () -> List[str]
+        """usids getter
+
+        Ordered list of uSID values (hex strings) to pack after the Locator Block (RFC 9800 Section 3). For F3216 each uSID is 16 bits (4 hex chars); up to uSIDs fit per container. The End-of-Container zero-pad is appended automatically by the implementation. The value 0x0000 is reserved as the End-of-Container marker and must not be used. Example: ["0001","0002","0003"] with locator fc00::/32 assembles to fc00:0:1:2:3::
+
+        Returns: List[str]
+        """
+        return self._get_property("usids")
+
+    @usids.setter
+    def usids(self, value):
+        """usids setter
+
+        Ordered list of uSID values (hex strings) to pack after the Locator Block (RFC 9800 Section 3). For F3216 each uSID is 16 bits (4 hex chars); up to uSIDs fit per container. The End-of-Container zero-pad is appended automatically by the implementation. The value 0x0000 is reserved as the End-of-Container marker and must not be used. Example: ["0001","0002","0003"] with locator fc00::/32 assembles to fc00:0:1:2:3::
+
+        value: List[str]
+        """
+        self._set_property("usids", value)
+
+
+class PatternFlowIpv6UsidDstLocator(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "values": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "ipv6",
+        },
+        "increment": {"type": "PatternFlowIpv6UsidDstLocatorCounter"},
+        "decrement": {"type": "PatternFlowIpv6UsidDstLocatorCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": "::0",
+        "values": ["::0"],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value="::0", values=["::0"]):
+        super(PatternFlowIpv6UsidDstLocator, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIpv6UsidDstLocatorCounter
+        """Factory property that returns an instance of the PatternFlowIpv6UsidDstLocatorCounter class
+
+        ipv6 counter pattern
+
+        Returns: PatternFlowIpv6UsidDstLocatorCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowIpv6UsidDstLocatorCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIpv6UsidDstLocatorCounter
+        """Factory property that returns an instance of the PatternFlowIpv6UsidDstLocatorCounter class
+
+        ipv6 counter pattern
+
+        Returns: PatternFlowIpv6UsidDstLocatorCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowIpv6UsidDstLocatorCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[str]
+        """values getter
+
+        TBD
+
+        Returns: List[str]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[str]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIpv6UsidDstLocatorCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "step": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "::0",
+        "step": "::1",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start="::0", step="::1", count=1):
+        super(PatternFlowIpv6UsidDstLocatorCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIpv6UsidDstLocatorLength(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "increment": {"type": "PatternFlowIpv6UsidDstLocatorLengthCounter"},
+        "decrement": {"type": "PatternFlowIpv6UsidDstLocatorLengthCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 32,
+        "values": [32],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=32, values=[32]):
+        super(PatternFlowIpv6UsidDstLocatorLength, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIpv6UsidDstLocatorLengthCounter
+        """Factory property that returns an instance of the PatternFlowIpv6UsidDstLocatorLengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv6UsidDstLocatorLengthCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowIpv6UsidDstLocatorLengthCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIpv6UsidDstLocatorLengthCounter
+        """Factory property that returns an instance of the PatternFlowIpv6UsidDstLocatorLengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv6UsidDstLocatorLengthCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowIpv6UsidDstLocatorLengthCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIpv6UsidDstLocatorLengthCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 32,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=32, step=1, count=1):
+        super(PatternFlowIpv6UsidDstLocatorLengthCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class FlowPfcPause(OpenApiObject):
@@ -133956,7 +140093,7 @@ class FlowMacsec(OpenApiObject):
         # type: () -> Union[Literal["auto"]]
         """choice getter
 
-        Currently only auto choice is allowed. If choice is auto, MACsec header is autogenerated. If auto choice is selected, MACsec protocol must be configured in device; flow.tx_rx.choice must be of type 'device' and flow.tx_rx.device.tx_names[0] must be chosen to be an endpoint that is on or behind MACSec enabled ethernet to be able to correctly auto-fill the fields of the MACsec header. If one of the conditions is not true, the implementation should return an error specifying the issue. custom choice can be added in future to allow user to set specific MACsec header fields and/ or to generate flow.tx_rx.port type of traffic with MACSec header fields explicitly specified by the user.
+        Currently only auto choice is allowed. If choice is auto, MACsec header is autogenerated. If auto choice is selected, MACsec protocol must be configured in either device or LAG members (ports); flow.tx_rx.choice must be of type 'device' and flow.tx_rx.device.tx_names[0] must be chosen to be an endpoint that is on or behind MACSec enabled ethernet to be able to correctly auto-fill the fields of the MACsec header. If one of the conditions is not true, the implementation should return an error specifying the issue. custom choice can be added in future to allow user to set specific MACsec header fields and/ or to generate flow.tx_rx.port type of traffic with MACSec header fields explicitly specified by the user.
 
         Returns: Union[Literal["auto"]]
         """
@@ -133966,7 +140103,7 @@ class FlowMacsec(OpenApiObject):
     def choice(self, value):
         """choice setter
 
-        Currently only auto choice is allowed. If choice is auto, MACsec header is autogenerated. If auto choice is selected, MACsec protocol must be configured in device; flow.tx_rx.choice must be of type 'device' and flow.tx_rx.device.tx_names[0] must be chosen to be an endpoint that is on or behind MACSec enabled ethernet to be able to correctly auto-fill the fields of the MACsec header. If one of the conditions is not true, the implementation should return an error specifying the issue. custom choice can be added in future to allow user to set specific MACsec header fields and/ or to generate flow.tx_rx.port type of traffic with MACSec header fields explicitly specified by the user.
+        Currently only auto choice is allowed. If choice is auto, MACsec header is autogenerated. If auto choice is selected, MACsec protocol must be configured in either device or LAG members (ports); flow.tx_rx.choice must be of type 'device' and flow.tx_rx.device.tx_names[0] must be chosen to be an endpoint that is on or behind MACSec enabled ethernet to be able to correctly auto-fill the fields of the MACsec header. If one of the conditions is not true, the implementation should return an error specifying the issue. custom choice can be added in future to allow user to set specific MACsec header fields and/ or to generate flow.tx_rx.port type of traffic with MACSec header fields explicitly specified by the user.
 
         value: Union[Literal["auto"]]
         """
@@ -145358,9 +151495,11 @@ class FlowIpv6Routing(OpenApiObject):
             "type": str,
             "enum": [
                 "segment_routing",
+                "segment_routing_usid",
             ],
         },
         "segment_routing": {"type": "FlowIpv6SegmentRouting"},
+        "segment_routing_usid": {"type": "FlowIpv6SegmentRoutingUsid"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -145370,6 +151509,7 @@ class FlowIpv6Routing(OpenApiObject):
     }  # type: Dict[str, Union(type)]
 
     SEGMENT_ROUTING = "segment_routing"  # type: str
+    SEGMENT_ROUTING_USID = "segment_routing_usid"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -145390,7 +151530,7 @@ class FlowIpv6Routing(OpenApiObject):
         # type: () -> FlowIpv6SegmentRouting
         """Factory property that returns an instance of the FlowIpv6SegmentRouting class
 
-        Defines the structure of the IPv6 Segment Routing Header (SRH) with Routing Type 4. This header is an IPv6 Routing header used to specify source-routed path for packet, guiding it through sequence of Segment IDs (SIDs), which are typically IPv6 addresses.
+        IPv6 Segment Routing Header (SRH, Routing Type 4, RFC 8754 Section 2) carrying full 128-bit SRv6 SIDs. Each segment list entry is complete SID (locator function argument) as 128-bit IPv6 address. Segment list encoded in reverse path order: Segment[0] is the last hop, Segment[n-1] is the first hop.
 
         Returns: FlowIpv6SegmentRouting
         """
@@ -145399,13 +151539,29 @@ class FlowIpv6Routing(OpenApiObject):
         )
 
     @property
+    def segment_routing_usid(self):
+        # type: () -> FlowIpv6SegmentRoutingUsid
+        """Factory property that returns an instance of the FlowIpv6SegmentRoutingUsid class
+
+        SRH (Routing Type 4, RFC 8754 Section 2) whose segment_list entries each. represent one 128-bit CSID container (RFC 9800 Section 4). Supports two flavors:. NEXT-CSID (locator_length 0, RFC 9800 Section 4.1):. Each SRH entry is fully formed SRv6 SID: LB (locator_length bits) || CSID-1 || ... || EoC (zeros).. F3216 (LB=32, CSID=16): locator fc00::/32, CSIDs [0x0001, 0x0002] -> fc00:0:1:2::. Processing: the router reads its own CSID from the DA function field, then. left-shifts the DA by one CSID width so the next CSID moves into the active. function position. When the shifted suffix is all-zero (End-of-Container), the. container is exhausted: segments_left is decremented and the next SRH entry. is loaded as the new DA.. REPLACE-CSID (RFC 9800 Section 4.2):. First entry (locator_length 0): fully formed SRv6 SID, same structure as NEXT-CSID.. Subsequent entries (locator_length 0): = floor(128 LNFL) CSID slots packed. into 128-bit SRH entry. Provide exactly CSIDs in wire order (left to right,. MSB first). Use "00000000" (32-bit) or "0000" (16-bit) for unused slots.. CSID width is inferred from hex string length (8 chars 32-bit, chars 16-bit).. Example LNFL=32, K=4, fully packed (4 CSIDs):. usids ["00050005","00040004","00030003","00020002"]. wire: [00050005][00040004][00030003][00020002] (MSB->LSB) -> 5:5:4:4:3:3:2:2. DA.Arg.Index starts at K-1=3; usids[3]=00020002 is processed first.. Example LNFL=32, K=4, partially used (2 CSIDs, unused MSB slots set to zero):. usids ["00000000","00000000","00030004","00010002"]. wire: [00000000][00000000][00030004][00010002] (MSB->LSB) -> ::3:4:1:2. usids[3]=00010002 is at LSB and processed first by the router.. Segment list is in reverse path order (RFC 8754 Section 2.1): segment[n-1] is the. first active container.. For single-container NEXT-CSID paths with no SRH, use ipv6.dst_usids instead.
+
+        Returns: FlowIpv6SegmentRoutingUsid
+        """
+        return self._get_property(
+            "segment_routing_usid",
+            FlowIpv6SegmentRoutingUsid,
+            self,
+            "segment_routing_usid",
+        )
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["segment_routing"]]
+        # type: () -> Union[Literal["segment_routing"], Literal["segment_routing_usid"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["segment_routing"]]
+        Returns: Union[Literal["segment_routing"], Literal["segment_routing_usid"]]
         """
         return self._get_property("choice")
 
@@ -145415,7 +151571,7 @@ class FlowIpv6Routing(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["segment_routing"]]
+        value: Union[Literal["segment_routing"], Literal["segment_routing_usid"]]
         """
         self._set_property("choice", value)
 
@@ -145429,6 +151585,7 @@ class FlowIpv6SegmentRouting(OpenApiObject):
         "flags": {"type": "FlowIpv6SegmentRoutingFlags"},
         "tag": {"type": "PatternFlowIpv6SegmentRoutingTag"},
         "segment_list": {"type": "FlowIpv6SegmentRoutingSegmentIter"},
+        "pad_tlv": {"type": "FlowIpv6SRHPadTlv"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -145446,7 +151603,7 @@ class FlowIpv6SegmentRouting(OpenApiObject):
         # type: () -> PatternFlowIpv6SegmentRoutingSegmentsLeft
         """segments_left getter
 
-        8-bit unsigned integer containing the number of remaining segments to be visited before the packet reaches its final destination. It is decremented at each segment endpoint. It points to the current active segment in the Segment List. This should not be more than the number of segments specified in the segment list. When auto is assigned the value is set to the number of segments specified.8-bit unsigned integer containing the number of remaining segments to be visited before the packet reaches its final destination. It is decremented at each segment endpoint. It points to the current active segment in the Segment List. This should not be more than the number of segments specified in the segment list. When auto is assigned the value is set to the number of segments specified.8-bit unsigned integer containing the number of remaining segments to be visited before the packet reaches its final destination. It is decremented at each segment endpoint. It points to the current active segment in the Segment List. This should not be more than the number of segments specified in the segment list. When auto is assigned the value is set to the number of segments specified.8-bit unsigned integer containing the number of remaining segments to be visited before the packet reaches its final destination. It is decremented at each segment endpoint. It points to the current active segment in the Segment List. This should not be more than the number of segments specified in the segment list. When auto is assigned the value is set to the number of segments specified.
+        Number of route segments remaining before the packet reaches its final destination (RFC 8754 Section 2.1). Decremented at each segment endpoint. When auto is assigned the value is set to the number of segments specified.Number of route segments remaining before the packet reaches its final destination (RFC 8754 Section 2.1). Decremented at each segment endpoint. When auto is assigned the value is set to the number of segments specified.Number of route segments remaining before the packet reaches its final destination (RFC 8754 Section 2.1). Decremented at each segment endpoint. When auto is assigned the value is set to the number of segments specified.Number of route segments remaining before the packet reaches its final destination (RFC 8754 Section 2.1). Decremented at each segment endpoint. When auto is assigned the value is set to the number of segments specified.
 
         Returns: PatternFlowIpv6SegmentRoutingSegmentsLeft
         """
@@ -145459,7 +151616,7 @@ class FlowIpv6SegmentRouting(OpenApiObject):
         # type: () -> PatternFlowIpv6SegmentRoutingLastEntry
         """last_entry getter
 
-        8-bit unsigned integer that contains the zero-based index of the last element in the Segment List array. For example, if the Segment List contains addresses (at indices 0, 1, 2), the value of Last Entry is 2. When auto is assigned the value should be automatically set by the implementation to one less than the number of segments specified.8-bit unsigned integer that contains the zero-based index of the last element in the Segment List array. For example, if the Segment List contains addresses (at indices 0, 1, 2), the value of Last Entry is 2. When auto is assigned the value should be automatically set by the implementation to one less than the number of segments specified.8-bit unsigned integer that contains the zero-based index of the last element in the Segment List array. For example, if the Segment List contains addresses (at indices 0, 1, 2), the value of Last Entry is 2. When auto is assigned the value should be automatically set by the implementation to one less than the number of segments specified.8-bit unsigned integer that contains the zero-based index of the last element in the Segment List array. For example, if the Segment List contains addresses (at indices 0, 1, 2), the value of Last Entry is 2. When auto is assigned the value should be automatically set by the implementation to one less than the number of segments specified.
+        Zero-based index of the last element in the Segment List (RFC 8754 Section 2.1). For example, list of SIDs has Last Entry 2. When auto is assigned the value is set to one less than the number of segments specified.Zero-based index of the last element in the Segment List (RFC 8754 Section 2.1). For example, list of SIDs has Last Entry 2. When auto is assigned the value is set to one less than the number of segments specified.Zero-based index of the last element in the Segment List (RFC 8754 Section 2.1). For example, list of SIDs has Last Entry 2. When auto is assigned the value is set to one less than the number of segments specified.Zero-based index of the last element in the Segment List (RFC 8754 Section 2.1). For example, list of SIDs has Last Entry 2. When auto is assigned the value is set to one less than the number of segments specified.
 
         Returns: PatternFlowIpv6SegmentRoutingLastEntry
         """
@@ -145481,7 +151638,7 @@ class FlowIpv6SegmentRouting(OpenApiObject):
         # type: () -> PatternFlowIpv6SegmentRoutingTag
         """tag getter
 
-        16-bit field used to tag packet as part of class or group, enabling shared properties or policy treatment. If not used, it MUST be set to zero.16-bit field used to tag packet as part of class or group, enabling shared properties or policy treatment. If not used, it MUST be set to zero.16-bit field used to tag packet as part of class or group, enabling shared properties or policy treatment. If not used, it MUST be set to zero.16-bit field used to tag packet as part of class or group, enabling shared properties or policy treatment. If not used, it MUST be set to zero.
+        16-bit field used to tag packet as part of class or group (RFC 8754 Section 2.1). If not used it MUST be set to zero.16-bit field used to tag packet as part of class or group (RFC 8754 Section 2.1). If not used it MUST be set to zero.16-bit field used to tag packet as part of class or group (RFC 8754 Section 2.1). If not used it MUST be set to zero.16-bit field used to tag packet as part of class or group (RFC 8754 Section 2.1). If not used it MUST be set to zero.
 
         Returns: PatternFlowIpv6SegmentRoutingTag
         """
@@ -145492,7 +151649,7 @@ class FlowIpv6SegmentRouting(OpenApiObject):
         # type: () -> FlowIpv6SegmentRoutingSegmentIter
         """segment_list getter
 
-        128-bit IPv6 addresses representing the nth segment in the Segment List. The Segment List is encoded starting from the last segment of the SR Policy. That is, the first element of the Segment List (Segment List[0]) contains the last segment of the SR Policy, the second element contains the penultimate segment of the SR Policy, and so on.
+        List of 128-bit SRv6 SID addresses (RFC 8754 Section 2.1), encoded in reverse path order: Segment[0] is the last segment of the SR Policy, Segment[n-1] is the first segment to visit.
 
         Returns: FlowIpv6SegmentRoutingSegmentIter
         """
@@ -145502,6 +151659,17 @@ class FlowIpv6SegmentRouting(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+    @property
+    def pad_tlv(self):
+        # type: () -> FlowIpv6SRHPadTlv
+        """pad_tlv getter
+
+        SRH Padding TLV (type 4, RFC 8754 Section 2.1). Used to align the SRH TLV block to an 8-byte boundary. The padding bytes are set to zero and are skipped by transit nodes. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 8754 Section 2.1.SRH Padding TLV (type 4, RFC 8754 Section 2.1). Used to align the SRH TLV block to an 8-byte boundary. The padding bytes are set to zero and are skipped by transit nodes. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 8754 Section 2.1.SRH Padding TLV (type 4, RFC 8754 Section 2.1). Used to align the SRH TLV block to an 8-byte boundary. The padding bytes are set to zero and are skipped by transit nodes. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 8754 Section 2.1.SRH Padding TLV (type 4, RFC 8754 Section 2.1). Used to align the SRH TLV block to an 8-byte boundary. The padding bytes are set to zero and are skipped by transit nodes. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 8754 Section 2.1.When present, includes Padding TLV (type 4, RFC 8754 Section 2.1) in the SRH TLV section to align the TLV block to an 8-byte boundary. Omit to suppress.
+
+        Returns: FlowIpv6SRHPadTlv
+        """
+        return self._get_property("pad_tlv", FlowIpv6SRHPadTlv)
 
 
 class PatternFlowIpv6SegmentRoutingSegmentsLeft(OpenApiObject):
@@ -146111,7 +152279,7 @@ class FlowIpv6SegmentRoutingFlags(OpenApiObject):
         # type: () -> PatternFlowIpv6SegmentRoutingFlagsOam
         """oam getter
 
-        OAM Flag. Indicates if the packet is an Operations, Administration, and Maintenance (OAM) packet.OAM Flag. Indicates if the packet is an Operations, Administration, and Maintenance (OAM) packet.OAM Flag. Indicates if the packet is an Operations, Administration, and Maintenance (OAM) packet.
+        (RFC 9259, section 2) OAM flag or O-flag is set at bit-2. Indicates if the packet is an Operations, Administration, and Maintenance (OAM) packet.(RFC 9259, section 2) OAM flag or O-flag is set at bit-2. Indicates if the packet is an Operations, Administration, and Maintenance (OAM) packet.(RFC 9259, section 2) OAM flag or O-flag is set at bit-2. Indicates if the packet is an Operations, Administration, and Maintenance (OAM) packet.
 
         Returns: PatternFlowIpv6SegmentRoutingFlagsOam
         """
@@ -147217,7 +153385,7 @@ class FlowIpv6SegmentRoutingSegment(OpenApiObject):
         # type: () -> PatternFlowIpv6SegmentRoutingSegmentSegment
         """segment getter
 
-        A 128-bit IPv6 address segment.A 128-bit IPv6 address segment.A 128-bit IPv6 address segment.
+        A 128-bit IPv6 SID address (RFC 8754 Section 2.1). Example: "2001:db8::1".A 128-bit IPv6 SID address (RFC 8754 Section 2.1). Example: "2001:db8::1".A 128-bit IPv6 SID address (RFC 8754 Section 2.1). Example: "2001:db8::1".
 
         Returns: PatternFlowIpv6SegmentRoutingSegmentSegment
         """
@@ -147520,7 +153688,7 @@ class FlowIpv6SegmentRoutingSegmentIter(OpenApiIter):
         # type: () -> FlowIpv6SegmentRoutingSegmentIter
         """Factory method that creates an instance of the FlowIpv6SegmentRoutingSegment class
 
-        TBD
+        One entry in the SRH Segment List (RFC 8754 Section 2.1). single 128-bit SRv6 SID address for full-SID encoding (locator function argument packed into one IPv6 address).
 
         Returns: FlowIpv6SegmentRoutingSegmentIter
         """
@@ -147532,13 +153700,5862 @@ class FlowIpv6SegmentRoutingSegmentIter(OpenApiIter):
         # type: () -> FlowIpv6SegmentRoutingSegment
         """Add method that creates and returns an instance of the FlowIpv6SegmentRoutingSegment class
 
-        TBD
+        One entry in the SRH Segment List (RFC 8754 Section 2.1). single 128-bit SRv6 SID address for full-SID encoding (locator function argument packed into one IPv6 address).
 
         Returns: FlowIpv6SegmentRoutingSegment
         """
         item = FlowIpv6SegmentRoutingSegment(parent=self._parent)
         self._add(item)
         return item
+
+
+class FlowIpv6SRHPadTlv(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "type": {"type": "PatternFlowIpv6SRHPadTlvType"},
+        "length": {"type": "PatternFlowIpv6SRHPadTlvLength"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowIpv6SRHPadTlv, self).__init__()
+        self._parent = parent
+
+    @property
+    def type(self):
+        # type: () -> PatternFlowIpv6SRHPadTlvType
+        """type getter
+
+        TLV type code (RFC 8754 Section 2.1). The canonical value is 4. Set to different value only for negative or conformance testing.TLV type code (RFC 8754 Section 2.1). The canonical value is 4. Set to different value only for negative or conformance testing.TLV type code (RFC 8754 Section 2.1). The canonical value is 4. Set to different value only for negative or conformance testing.
+
+        Returns: PatternFlowIpv6SRHPadTlvType
+        """
+        return self._get_property("type", PatternFlowIpv6SRHPadTlvType)
+
+    @property
+    def length(self):
+        # type: () -> PatternFlowIpv6SRHPadTlvLength
+        """length getter
+
+        Number of padding bytes following the Type and Length fields (RFC 8754 Section 2.1). When auto is assigned the implementation computes the value needed to align the TLV section to an 8-byte boundary.Number of padding bytes following the Type and Length fields (RFC 8754 Section 2.1). When auto is assigned the implementation computes the value needed to align the TLV section to an 8-byte boundary.Number of padding bytes following the Type and Length fields (RFC 8754 Section 2.1). When auto is assigned the implementation computes the value needed to align the TLV section to an 8-byte boundary.
+
+        Returns: PatternFlowIpv6SRHPadTlvLength
+        """
+        return self._get_property("length", PatternFlowIpv6SRHPadTlvLength)
+
+
+class PatternFlowIpv6SRHPadTlvType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "auto",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "auto": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "increment": {"type": "PatternFlowIpv6SRHPadTlvTypeCounter"},
+        "decrement": {"type": "PatternFlowIpv6SRHPadTlvTypeCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "auto",
+        "value": 4,
+        "values": [4],
+        "auto": 4,
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    AUTO = "auto"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=4, values=[4], auto=4):
+        super(PatternFlowIpv6SRHPadTlvType, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        self._set_property("auto", auto)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None, auto=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIpv6SRHPadTlvTypeCounter
+        """Factory property that returns an instance of the PatternFlowIpv6SRHPadTlvTypeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv6SRHPadTlvTypeCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowIpv6SRHPadTlvTypeCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIpv6SRHPadTlvTypeCounter
+        """Factory property that returns an instance of the PatternFlowIpv6SRHPadTlvTypeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv6SRHPadTlvTypeCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowIpv6SRHPadTlvTypeCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+    @property
+    def auto(self):
+        # type: () -> int
+        """auto getter
+
+        The OTG implementation can provide system generated. value for this property. If the OTG is unable to generate value. the default value must be used.
+
+        Returns: int
+        """
+        return self._get_property("auto")
+
+
+class PatternFlowIpv6SRHPadTlvTypeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 4,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=4, step=1, count=1):
+        super(PatternFlowIpv6SRHPadTlvTypeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIpv6SRHPadTlvLength(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "auto",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "auto": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "increment": {"type": "PatternFlowIpv6SRHPadTlvLengthCounter"},
+        "decrement": {"type": "PatternFlowIpv6SRHPadTlvLengthCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "auto",
+        "value": 0,
+        "values": [0],
+        "auto": 0,
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    AUTO = "auto"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0], auto=0):
+        super(PatternFlowIpv6SRHPadTlvLength, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        self._set_property("auto", auto)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None, auto=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIpv6SRHPadTlvLengthCounter
+        """Factory property that returns an instance of the PatternFlowIpv6SRHPadTlvLengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv6SRHPadTlvLengthCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowIpv6SRHPadTlvLengthCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIpv6SRHPadTlvLengthCounter
+        """Factory property that returns an instance of the PatternFlowIpv6SRHPadTlvLengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv6SRHPadTlvLengthCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowIpv6SRHPadTlvLengthCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+    @property
+    def auto(self):
+        # type: () -> int
+        """auto getter
+
+        The OTG implementation can provide system generated. value for this property. If the OTG is unable to generate value. the default value must be used.
+
+        Returns: int
+        """
+        return self._get_property("auto")
+
+
+class PatternFlowIpv6SRHPadTlvLengthCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv6SRHPadTlvLengthCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowIpv6SegmentRoutingUsid(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "segments_left": {"type": "PatternFlowIpv6SegmentRoutingUsidSegmentsLeft"},
+        "last_entry": {"type": "PatternFlowIpv6SegmentRoutingUsidLastEntry"},
+        "flags": {"type": "FlowIpv6SegmentRoutinguSidFlags"},
+        "tag": {"type": "PatternFlowIpv6SegmentRoutingUsidTag"},
+        "segment_list": {"type": "FlowIpv6SegmentRoutingUsidSegmentIter"},
+        "pad_tlv": {"type": "FlowIpv6SRHPadTlv"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowIpv6SegmentRoutingUsid, self).__init__()
+        self._parent = parent
+
+    @property
+    def segments_left(self):
+        # type: () -> PatternFlowIpv6SegmentRoutingUsidSegmentsLeft
+        """segments_left getter
+
+        Number of SRH segment list entries remaining to be visited after the current active compressed uSID container (RFC 8754 Section 2.1). The active compressed uSID container is segment[segments_left]; the value is decremented each time the active container is exhausted and the pointer advances to the next compressed uSID container. When auto is assigned the value is set to the top entry of the compressed uSID container list.Number of SRH segment list entries remaining to be visited after the current active compressed uSID container (RFC 8754 Section 2.1). The active compressed uSID container is segment[segments_left]; the value is decremented each time the active container is exhausted and the pointer advances to the next compressed uSID container. When auto is assigned the value is set to the top entry of the compressed uSID container list.Number of SRH segment list entries remaining to be visited after the current active compressed uSID container (RFC 8754 Section 2.1). The active compressed uSID container is segment[segments_left]; the value is decremented each time the active container is exhausted and the pointer advances to the next compressed uSID container. When auto is assigned the value is set to the top entry of the compressed uSID container list.Number of SRH segment list entries remaining to be visited after the current active compressed uSID container (RFC 8754 Section 2.1). The active compressed uSID container is segment[segments_left]; the value is decremented each time the active container is exhausted and the pointer advances to the next compressed uSID container. When auto is assigned the value is set to the top entry of the compressed uSID container list.
+
+        Returns: PatternFlowIpv6SegmentRoutingUsidSegmentsLeft
+        """
+        return self._get_property(
+            "segments_left", PatternFlowIpv6SegmentRoutingUsidSegmentsLeft
+        )
+
+    @property
+    def last_entry(self):
+        # type: () -> PatternFlowIpv6SegmentRoutingUsidLastEntry
+        """last_entry getter
+
+        Zero-based index of the last element in the uSID container list (RFC 8754 Section 2.1). When auto is assigned the value is set to one less than the number of containers specified.Zero-based index of the last element in the uSID container list (RFC 8754 Section 2.1). When auto is assigned the value is set to one less than the number of containers specified.Zero-based index of the last element in the uSID container list (RFC 8754 Section 2.1). When auto is assigned the value is set to one less than the number of containers specified.Zero-based index of the last element in the uSID container list (RFC 8754 Section 2.1). When auto is assigned the value is set to one less than the number of containers specified.
+
+        Returns: PatternFlowIpv6SegmentRoutingUsidLastEntry
+        """
+        return self._get_property(
+            "last_entry", PatternFlowIpv6SegmentRoutingUsidLastEntry
+        )
+
+    @property
+    def flags(self):
+        # type: () -> FlowIpv6SegmentRoutinguSidFlags
+        """flags getter
+
+        SRH Flags field (RFC 8754 Section 2.1). An 8-bit field; RFC 8754 marks all bits as reserved.SRH Flags field (RFC 8754 Section 2.1). An 8-bit field; RFC 8754 marks all bits as reserved.SRH Flags field (RFC 8754 Section 2.1). An 8-bit field; RFC 8754 marks all bits as reserved.SRH Flags field (RFC 8754 Section 2.1). An 8-bit field; RFC 8754 marks all bits as reserved.
+
+        Returns: FlowIpv6SegmentRoutinguSidFlags
+        """
+        return self._get_property("flags", FlowIpv6SegmentRoutinguSidFlags)
+
+    @property
+    def tag(self):
+        # type: () -> PatternFlowIpv6SegmentRoutingUsidTag
+        """tag getter
+
+        16-bit field used to tag packet as part of class or group (RFC 8754 Section 2.1). If not used it MUST be set to zero.16-bit field used to tag packet as part of class or group (RFC 8754 Section 2.1). If not used it MUST be set to zero.16-bit field used to tag packet as part of class or group (RFC 8754 Section 2.1). If not used it MUST be set to zero.16-bit field used to tag packet as part of class or group (RFC 8754 Section 2.1). If not used it MUST be set to zero.
+
+        Returns: PatternFlowIpv6SegmentRoutingUsidTag
+        """
+        return self._get_property("tag", PatternFlowIpv6SegmentRoutingUsidTag)
+
+    @property
+    def segment_list(self):
+        # type: () -> FlowIpv6SegmentRoutingUsidSegmentIter
+        """segment_list getter
+
+        List of pre-computed 128-bit compressed uSID container values (RFC 9800 Section 4), encoded in reverse path order: Segment[0] is the last container, Segment[n-1] is the first container to visit. If Reduced SRH is needed RFC 8754 Section 4.1.1), the first compressed uSID container is the one already in the ipv6.dst_usids and not included in this list.
+
+        Returns: FlowIpv6SegmentRoutingUsidSegmentIter
+        """
+        return self._get_property(
+            "segment_list",
+            FlowIpv6SegmentRoutingUsidSegmentIter,
+            self._parent,
+            self._choice,
+        )
+
+    @property
+    def pad_tlv(self):
+        # type: () -> FlowIpv6SRHPadTlv
+        """pad_tlv getter
+
+        SRH Padding TLV (type 4, RFC 8754 Section 2.1). Used to align the SRH TLV block to an 8-byte boundary. The padding bytes are set to zero and are skipped by transit nodes. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 8754 Section 2.1.SRH Padding TLV (type 4, RFC 8754 Section 2.1). Used to align the SRH TLV block to an 8-byte boundary. The padding bytes are set to zero and are skipped by transit nodes. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 8754 Section 2.1.SRH Padding TLV (type 4, RFC 8754 Section 2.1). Used to align the SRH TLV block to an 8-byte boundary. The padding bytes are set to zero and are skipped by transit nodes. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 8754 Section 2.1.SRH Padding TLV (type 4, RFC 8754 Section 2.1). Used to align the SRH TLV block to an 8-byte boundary. The padding bytes are set to zero and are skipped by transit nodes. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 8754 Section 2.1.When present, includes Padding TLV (type 4, RFC 8754 Section 2.1) in the SRH TLV section to align the TLV block to an 8-byte boundary. Omit to suppress.
+
+        Returns: FlowIpv6SRHPadTlv
+        """
+        return self._get_property("pad_tlv", FlowIpv6SRHPadTlv)
+
+
+class PatternFlowIpv6SegmentRoutingUsidSegmentsLeft(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "auto",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "auto": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "increment": {"type": "PatternFlowIpv6SegmentRoutingUsidSegmentsLeftCounter"},
+        "decrement": {"type": "PatternFlowIpv6SegmentRoutingUsidSegmentsLeftCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "auto",
+        "value": 0,
+        "values": [0],
+        "auto": 0,
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    AUTO = "auto"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0], auto=0):
+        super(PatternFlowIpv6SegmentRoutingUsidSegmentsLeft, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        self._set_property("auto", auto)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None, auto=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIpv6SegmentRoutingUsidSegmentsLeftCounter
+        """Factory property that returns an instance of the PatternFlowIpv6SegmentRoutingUsidSegmentsLeftCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv6SegmentRoutingUsidSegmentsLeftCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIpv6SegmentRoutingUsidSegmentsLeftCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIpv6SegmentRoutingUsidSegmentsLeftCounter
+        """Factory property that returns an instance of the PatternFlowIpv6SegmentRoutingUsidSegmentsLeftCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv6SegmentRoutingUsidSegmentsLeftCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIpv6SegmentRoutingUsidSegmentsLeftCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+    @property
+    def auto(self):
+        # type: () -> int
+        """auto getter
+
+        The OTG implementation can provide system generated. value for this property. If the OTG is unable to generate value. the default value must be used.
+
+        Returns: int
+        """
+        return self._get_property("auto")
+
+
+class PatternFlowIpv6SegmentRoutingUsidSegmentsLeftCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv6SegmentRoutingUsidSegmentsLeftCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIpv6SegmentRoutingUsidLastEntry(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "auto",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "auto": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "increment": {"type": "PatternFlowIpv6SegmentRoutingUsidLastEntryCounter"},
+        "decrement": {"type": "PatternFlowIpv6SegmentRoutingUsidLastEntryCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "auto",
+        "value": 0,
+        "values": [0],
+        "auto": 0,
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    AUTO = "auto"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0], auto=0):
+        super(PatternFlowIpv6SegmentRoutingUsidLastEntry, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        self._set_property("auto", auto)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None, auto=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIpv6SegmentRoutingUsidLastEntryCounter
+        """Factory property that returns an instance of the PatternFlowIpv6SegmentRoutingUsidLastEntryCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv6SegmentRoutingUsidLastEntryCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIpv6SegmentRoutingUsidLastEntryCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIpv6SegmentRoutingUsidLastEntryCounter
+        """Factory property that returns an instance of the PatternFlowIpv6SegmentRoutingUsidLastEntryCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv6SegmentRoutingUsidLastEntryCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIpv6SegmentRoutingUsidLastEntryCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+    @property
+    def auto(self):
+        # type: () -> int
+        """auto getter
+
+        The OTG implementation can provide system generated. value for this property. If the OTG is unable to generate value. the default value must be used.
+
+        Returns: int
+        """
+        return self._get_property("auto")
+
+
+class PatternFlowIpv6SegmentRoutingUsidLastEntryCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv6SegmentRoutingUsidLastEntryCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowIpv6SegmentRoutinguSidFlags(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "oam": {"type": "PatternFlowIpv6SegmentRoutinguSidFlagsOam"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowIpv6SegmentRoutinguSidFlags, self).__init__()
+        self._parent = parent
+
+    @property
+    def oam(self):
+        # type: () -> PatternFlowIpv6SegmentRoutinguSidFlagsOam
+        """oam getter
+
+        (RFC 9259, section 2) OAM flag or O-flag is set at bit-2. Indicates if the packet is an Operations, Administration, and Maintenance (OAM) packet.(RFC 9259, section 2) OAM flag or O-flag is set at bit-2. Indicates if the packet is an Operations, Administration, and Maintenance (OAM) packet.(RFC 9259, section 2) OAM flag or O-flag is set at bit-2. Indicates if the packet is an Operations, Administration, and Maintenance (OAM) packet.
+
+        Returns: PatternFlowIpv6SegmentRoutinguSidFlagsOam
+        """
+        return self._get_property("oam", PatternFlowIpv6SegmentRoutinguSidFlagsOam)
+
+
+class PatternFlowIpv6SegmentRoutinguSidFlagsOam(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 1,
+        },
+        "increment": {"type": "PatternFlowIpv6SegmentRoutinguSidFlagsOamCounter"},
+        "decrement": {"type": "PatternFlowIpv6SegmentRoutinguSidFlagsOamCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    NOT_OAM = 0  #
+    OAM = 1  #
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowIpv6SegmentRoutinguSidFlagsOam, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIpv6SegmentRoutinguSidFlagsOamCounter
+        """Factory property that returns an instance of the PatternFlowIpv6SegmentRoutinguSidFlagsOamCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv6SegmentRoutinguSidFlagsOamCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIpv6SegmentRoutinguSidFlagsOamCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIpv6SegmentRoutinguSidFlagsOamCounter
+        """Factory property that returns an instance of the PatternFlowIpv6SegmentRoutinguSidFlagsOamCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv6SegmentRoutinguSidFlagsOamCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIpv6SegmentRoutinguSidFlagsOamCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIpv6SegmentRoutinguSidFlagsOamCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 2,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    NOT_OAM = 0  #
+    OAM = 1  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv6SegmentRoutinguSidFlagsOamCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIpv6SegmentRoutingUsidTag(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 65535,
+        },
+        "increment": {"type": "PatternFlowIpv6SegmentRoutingUsidTagCounter"},
+        "decrement": {"type": "PatternFlowIpv6SegmentRoutingUsidTagCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowIpv6SegmentRoutingUsidTag, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIpv6SegmentRoutingUsidTagCounter
+        """Factory property that returns an instance of the PatternFlowIpv6SegmentRoutingUsidTagCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv6SegmentRoutingUsidTagCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowIpv6SegmentRoutingUsidTagCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIpv6SegmentRoutingUsidTagCounter
+        """Factory property that returns an instance of the PatternFlowIpv6SegmentRoutingUsidTagCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv6SegmentRoutingUsidTagCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowIpv6SegmentRoutingUsidTagCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIpv6SegmentRoutingUsidTagCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65536,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv6SegmentRoutingUsidTagCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowIpv6SegmentRoutingUsidSegment(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "locator": {"type": "PatternFlowIpv6SegmentRoutingUsidSegmentLocator"},
+        "locator_length": {
+            "type": "PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength"
+        },
+        "usids": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "hex",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, usids=None):
+        super(FlowIpv6SegmentRoutingUsidSegment, self).__init__()
+        self._parent = parent
+        self._set_property("usids", usids)
+
+    def set(self, usids=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def locator(self):
+        # type: () -> PatternFlowIpv6SegmentRoutingUsidSegmentLocator
+        """locator getter
+
+        The Locator Block (LB) IPv6 prefix shared by all uSIDs in this container (RFC 9800 Section 3). Defines the common high-order bits of every uSID assembled from this entry. For F3216, this is /32 prefix (e.g., fc00::). The prefix length is given by locator_length. Ignored when locator_length is (REPLACE-CSID flavor, RFC 9800 Section 5).The Locator Block (LB) IPv6 prefix shared by all uSIDs in this container (RFC 9800 Section 3). Defines the common high-order bits of every uSID assembled from this entry. For F3216, this is /32 prefix (e.g., fc00::). The prefix length is given by locator_length. Ignored when locator_length is (REPLACE-CSID flavor, RFC 9800 Section 5).The Locator Block (LB) IPv6 prefix shared by all uSIDs in this container (RFC 9800 Section 3). Defines the common high-order bits of every uSID assembled from this entry. For F3216, this is /32 prefix (e.g., fc00::). The prefix length is given by locator_length. Ignored when locator_length is (REPLACE-CSID flavor, RFC 9800 Section 5).
+
+        Returns: PatternFlowIpv6SegmentRoutingUsidSegmentLocator
+        """
+        return self._get_property(
+            "locator", PatternFlowIpv6SegmentRoutingUsidSegmentLocator
+        )
+
+    @property
+    def locator_length(self):
+        # type: () -> PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength
+        """locator_length getter
+
+        Length of the Locator Block in bits (RFC 9800 Section 3).. Valid range: 0-112.. For NEXT-CSID (locator_length 0): high-order locator_length bits of. locator form the LB; usids are packed after it in forward order.. For REPLACE-CSID first container (locator_length 0): same as NEXT-CSID. structure; use single usid Locator-Node+Function value (LNFL bits).. For REPLACE-CSID packed containers (locator_length 0): the locator. field is ignored; the 128-bit SRH entry is = floor(128/LNFL) slots. of LNFL bits each; exactly usids must be provided in wire order (MSB first);. see usids field description for examples (RFC 9800 Section 4.2).Length of the Locator Block in bits (RFC 9800 Section 3).. Valid range: 0-112.. For NEXT-CSID (locator_length 0): high-order locator_length bits of. locator form the LB; usids are packed after it in forward order.. For REPLACE-CSID first container (locator_length 0): same as NEXT-CSID. structure; use single usid Locator-Node+Function value (LNFL bits).. For REPLACE-CSID packed containers (locator_length 0): the locator. field is ignored; the 128-bit SRH entry is = floor(128/LNFL) slots. of LNFL bits each; exactly usids must be provided in wire order (MSB first);. see usids field description for examples (RFC 9800 Section 4.2).Length of the Locator Block in bits (RFC 9800 Section 3).. Valid range: 0-112.. For NEXT-CSID (locator_length 0): high-order locator_length bits of. locator form the LB; usids are packed after it in forward order.. For REPLACE-CSID first container (locator_length 0): same as NEXT-CSID. structure; use single usid Locator-Node+Function value (LNFL bits).. For REPLACE-CSID packed containers (locator_length 0): the locator. field is ignored; the 128-bit SRH entry is = floor(128/LNFL) slots. of LNFL bits each; exactly usids must be provided in wire order (MSB first);. see usids field description for examples (RFC 9800 Section 4.2).
+
+        Returns: PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength
+        """
+        return self._get_property(
+            "locator_length", PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength
+        )
+
+    @property
+    def usids(self):
+        # type: () -> List[str]
+        """usids getter
+
+        Ordered list of CSID hex strings for this container (RFC 9800 Section 3).. For NEXT-CSID (locator_length 0): CSIDs are packed in forward order after. the Locator Block. usids[0] immediately follows the LB, usids[1] follows, etc.. The value 0x0 (all zeros) is reserved as the End-of-Container marker.. Example F3216: ["0001","0002","0003"] with locator fc00::/32 -> fc00:0:1:2:3::. For REPLACE-CSID packed containers (locator_length 0): provide exactly. = floor(128/LNFL) CSIDs in wire order (left to right, MSB first).. Use "00000000" (32-bit) or "0000" (16-bit) for unused slots.. LNFL is inferred from hex string width (8 chars 32-bit, = 4;. chars 16-bit, = 8).. Per RFC 9800 Section 4.2, DA.Arg.Index starts at K-1 (LSB slot);. usids[K-1] is the first CSID the router processes, usids[0] is the last.. Example LNFL=32, K=4, fully used (4 CSIDs):. usids ["00050005","00040004","00030003","00020002"]. wire: [00050005][00040004][00030003][00020002] (MSB->LSB) -> 5:5:4:4:3:3:2:2. Router processes: 00020002 first, then 00030003, 00040004, 00050005.. Example LNFL=32, K=4, partially used (2 CSIDs; unused MSB slots set to zero):. usids ["00000000","00000000","00030004","00010002"]. wire: [00000000][00000000][00030004][00010002] (MSB->LSB) -> ::3:4:1:2. Router processes: 00010002 first, then 00030004.
+
+        Returns: List[str]
+        """
+        return self._get_property("usids")
+
+    @usids.setter
+    def usids(self, value):
+        """usids setter
+
+        Ordered list of CSID hex strings for this container (RFC 9800 Section 3).. For NEXT-CSID (locator_length 0): CSIDs are packed in forward order after. the Locator Block. usids[0] immediately follows the LB, usids[1] follows, etc.. The value 0x0 (all zeros) is reserved as the End-of-Container marker.. Example F3216: ["0001","0002","0003"] with locator fc00::/32 -> fc00:0:1:2:3::. For REPLACE-CSID packed containers (locator_length 0): provide exactly. = floor(128/LNFL) CSIDs in wire order (left to right, MSB first).. Use "00000000" (32-bit) or "0000" (16-bit) for unused slots.. LNFL is inferred from hex string width (8 chars 32-bit, = 4;. chars 16-bit, = 8).. Per RFC 9800 Section 4.2, DA.Arg.Index starts at K-1 (LSB slot);. usids[K-1] is the first CSID the router processes, usids[0] is the last.. Example LNFL=32, K=4, fully used (4 CSIDs):. usids ["00050005","00040004","00030003","00020002"]. wire: [00050005][00040004][00030003][00020002] (MSB->LSB) -> 5:5:4:4:3:3:2:2. Router processes: 00020002 first, then 00030003, 00040004, 00050005.. Example LNFL=32, K=4, partially used (2 CSIDs; unused MSB slots set to zero):. usids ["00000000","00000000","00030004","00010002"]. wire: [00000000][00000000][00030004][00010002] (MSB->LSB) -> ::3:4:1:2. Router processes: 00010002 first, then 00030004.
+
+        value: List[str]
+        """
+        self._set_property("usids", value)
+
+
+class PatternFlowIpv6SegmentRoutingUsidSegmentLocator(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "values": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "ipv6",
+        },
+        "increment": {"type": "PatternFlowIpv6SegmentRoutingUsidSegmentLocatorCounter"},
+        "decrement": {"type": "PatternFlowIpv6SegmentRoutingUsidSegmentLocatorCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": "::0",
+        "values": ["::0"],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value="::0", values=["::0"]):
+        super(PatternFlowIpv6SegmentRoutingUsidSegmentLocator, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIpv6SegmentRoutingUsidSegmentLocatorCounter
+        """Factory property that returns an instance of the PatternFlowIpv6SegmentRoutingUsidSegmentLocatorCounter class
+
+        ipv6 counter pattern
+
+        Returns: PatternFlowIpv6SegmentRoutingUsidSegmentLocatorCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIpv6SegmentRoutingUsidSegmentLocatorCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIpv6SegmentRoutingUsidSegmentLocatorCounter
+        """Factory property that returns an instance of the PatternFlowIpv6SegmentRoutingUsidSegmentLocatorCounter class
+
+        ipv6 counter pattern
+
+        Returns: PatternFlowIpv6SegmentRoutingUsidSegmentLocatorCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIpv6SegmentRoutingUsidSegmentLocatorCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[str]
+        """values getter
+
+        TBD
+
+        Returns: List[str]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[str]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIpv6SegmentRoutingUsidSegmentLocatorCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "step": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "::0",
+        "step": "::1",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start="::0", step="::1", count=1):
+        super(PatternFlowIpv6SegmentRoutingUsidSegmentLocatorCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "increment": {
+            "type": "PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLengthCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLengthCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 32,
+        "values": [32],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=32, values=[32]):
+        super(PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLengthCounter
+        """Factory property that returns an instance of the PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLengthCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLengthCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLengthCounter
+        """Factory property that returns an instance of the PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLengthCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLengthCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLengthCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 32,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=32, step=1, count=1):
+        super(
+            PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLengthCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowIpv6SegmentRoutingUsidSegmentIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowIpv6SegmentRoutingUsidSegmentIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[FlowIpv6SegmentRoutingUsidSegment]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> FlowIpv6SegmentRoutingUsidSegmentIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> FlowIpv6SegmentRoutingUsidSegment
+        return self._next()
+
+    def next(self):
+        # type: () -> FlowIpv6SegmentRoutingUsidSegment
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, FlowIpv6SegmentRoutingUsidSegment):
+            raise Exception(
+                "Item is not an instance of FlowIpv6SegmentRoutingUsidSegment"
+            )
+
+    def segment(self, usids=None):
+        # type: (List[str]) -> FlowIpv6SegmentRoutingUsidSegmentIter
+        """Factory method that creates an instance of the FlowIpv6SegmentRoutingUsidSegment class
+
+        One CSID container entry in the SRH segment list (RFC 9800, RFC 8754 Section 2.1).. Supports both NEXT-CSID (locator_length 0) and REPLACE-CSID packed format. (locator_length 0) as described in Flow.Ipv6SegmentRoutingUsid.. NEXT-CSID example (F3216: locator_length=32, 16-bit CSIDs):. locator fc00::/32, usids ["0001","0002","0003"] -> SRH entry fc00:0:1:2:3::. REPLACE-CSID packed examples (LNFL=32, K=4, locator_length=0):. Fully used (4 CSIDs):. usids ["00050005","00040004","00030003","00020002"]. wire: [00050005][00040004][00030003][00020002] -> 5:5:4:4:3:3:2:2. (usids[3]=00020002 at LSB is processed first by the router). Partially used (2 CSIDs; unused MSB slots set to zero explicitly):. usids ["00000000","00000000","00030004","00010002"]. wire: [00000000][00000000][00030004][00010002] -> ::3:4:1:2. (usids[3]=00010002 at LSB is processed first by the router)
+
+        Returns: FlowIpv6SegmentRoutingUsidSegmentIter
+        """
+        item = FlowIpv6SegmentRoutingUsidSegment(parent=self._parent, usids=usids)
+        self._add(item)
+        return self
+
+    def add(self, usids=None):
+        # type: (List[str]) -> FlowIpv6SegmentRoutingUsidSegment
+        """Add method that creates and returns an instance of the FlowIpv6SegmentRoutingUsidSegment class
+
+        One CSID container entry in the SRH segment list (RFC 9800, RFC 8754 Section 2.1).. Supports both NEXT-CSID (locator_length 0) and REPLACE-CSID packed format. (locator_length 0) as described in Flow.Ipv6SegmentRoutingUsid.. NEXT-CSID example (F3216: locator_length=32, 16-bit CSIDs):. locator fc00::/32, usids ["0001","0002","0003"] -> SRH entry fc00:0:1:2:3::. REPLACE-CSID packed examples (LNFL=32, K=4, locator_length=0):. Fully used (4 CSIDs):. usids ["00050005","00040004","00030003","00020002"]. wire: [00050005][00040004][00030003][00020002] -> 5:5:4:4:3:3:2:2. (usids[3]=00020002 at LSB is processed first by the router). Partially used (2 CSIDs; unused MSB slots set to zero explicitly):. usids ["00000000","00000000","00030004","00010002"]. wire: [00000000][00000000][00030004][00010002] -> ::3:4:1:2. (usids[3]=00010002 at LSB is processed first by the router)
+
+        Returns: FlowIpv6SegmentRoutingUsidSegment
+        """
+        item = FlowIpv6SegmentRoutingUsidSegment(parent=self._parent, usids=usids)
+        self._add(item)
+        return item
+
+
+class FlowCfm(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "md_level": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
+        "version": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 31,
+        },
+        "op_code": {"type": "FlowCfmSelectOpCode"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "md_level": 0,
+        "version": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, md_level=0, version=0):
+        super(FlowCfm, self).__init__()
+        self._parent = parent
+        self._set_property("md_level", md_level)
+        self._set_property("version", version)
+
+    def set(self, md_level=None, version=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def md_level(self):
+        # type: () -> int
+        """md_level getter
+
+        Maintenance Domain Level (0-7). Determines the CCM multicast destination MAC address: 01:80:c2:00:00:3X where is the level in hex (e.g. level = 01:80:c2:00:00:35, level = 01:80:c2:00:00:30). Defined in IEEE 802.1Q-2018 Table 21-3.
+
+        Returns: int
+        """
+        return self._get_property("md_level")
+
+    @md_level.setter
+    def md_level(self, value):
+        """md_level setter
+
+        Maintenance Domain Level (0-7). Determines the CCM multicast destination MAC address: 01:80:c2:00:00:3X where is the level in hex (e.g. level = 01:80:c2:00:00:35, level = 01:80:c2:00:00:30). Defined in IEEE 802.1Q-2018 Table 21-3.
+
+        value: int
+        """
+        self._set_property("md_level", value)
+
+    @property
+    def version(self):
+        # type: () -> int
+        """version getter
+
+        CFM Common Header version field (IEEE 802.1Q-2018 Table 21-6). Must be for all frames compliant with this standard.
+
+        Returns: int
+        """
+        return self._get_property("version")
+
+    @version.setter
+    def version(self, value):
+        """version setter
+
+        CFM Common Header version field (IEEE 802.1Q-2018 Table 21-6). Must be for all frames compliant with this standard.
+
+        value: int
+        """
+        self._set_property("version", value)
+
+    @property
+    def op_code(self):
+        # type: () -> FlowCfmSelectOpCode
+        """op_code getter
+
+        Select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7. Currently only Continuity Check Message (CCM), Loopback Message (LBM) and Loopback Reply (LBR) are supported.Select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7. Currently only Continuity Check Message (CCM), Loopback Message (LBM) and Loopback Reply (LBR) are supported.Select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7. Currently only Continuity Check Message (CCM), Loopback Message (LBM) and Loopback Reply (LBR) are supported.Select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7. Currently only Continuity Check Message (CCM), Loopback Message (LBM) and Loopback Reply (LBR) are supported.
+
+        Returns: FlowCfmSelectOpCode
+        """
+        return self._get_property("op_code", FlowCfmSelectOpCode)
+
+
+class FlowCfmSelectOpCode(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "ccm",
+                "lbm",
+                "lbr",
+            ],
+        },
+        "ccm": {"type": "FlowCfmCcm"},
+        "lbm": {"type": "FlowCfmLbm"},
+        "lbr": {"type": "FlowCfmLbr"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "ccm",
+    }  # type: Dict[str, Union(type)]
+
+    CCM = "ccm"  # type: str
+    LBM = "lbm"  # type: str
+    LBR = "lbr"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowCfmSelectOpCode, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def ccm(self):
+        # type: () -> FlowCfmCcm
+        """Factory property that returns an instance of the FlowCfmCcm class
+
+        CCM is multicast PDU used to detect continuity and configuration errors within Maintenance Association (MA). As defined in IEEE 802.1Q-2018 Section 12.14.6.
+
+        Returns: FlowCfmCcm
+        """
+        return self._get_property("ccm", FlowCfmCcm, self, "ccm")
+
+    @property
+    def lbm(self):
+        # type: () -> FlowCfmLbm
+        """Factory property that returns an instance of the FlowCfmLbm class
+
+        Loopback Message (LBM) is diagnostic frame used to verify connectivity between Maintenance End Points (MEPs) and Maintenance Intermediate Points (MIPs). LBM flag bits are reserved and set to zero.
+
+        Returns: FlowCfmLbm
+        """
+        return self._get_property("lbm", FlowCfmLbm, self, "lbm")
+
+    @property
+    def lbr(self):
+        # type: () -> FlowCfmLbr
+        """Factory property that returns an instance of the FlowCfmLbr class
+
+        Loopback Reply (LBR) messages are unicast frames sent by Maintenance Association End Point (MEP) or Intermediate Point (MIP) to source MEP in response to Loopback Message (LBM). LBR flag bits are reserved and set to zero.
+
+        Returns: FlowCfmLbr
+        """
+        return self._get_property("lbr", FlowCfmLbr, self, "lbr")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["ccm"], Literal["lbm"], Literal["lbr"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["ccm"], Literal["lbm"], Literal["lbr"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["ccm"], Literal["lbm"], Literal["lbr"]]
+        """
+        self._set_property("choice", value)
+
+
+class FlowCfmCcm(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "FlowCfmCcmFlags"},
+        "sequence_number": {"type": "PatternFlowCfmCcmSequenceNumber"},
+        "ma_endpoint_identifier": {"type": "PatternFlowCfmCcmMaEndpointIdentifier"},
+        "ethernet_oam_protocol": {"type": "FlowCfmOamProtocol"},
+        "tlvs": {"type": "FlowCfmTlvsIter"},
+        "append_end_tlv": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "append_end_tlv": True,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, append_end_tlv=True):
+        super(FlowCfmCcm, self).__init__()
+        self._parent = parent
+        self._set_property("append_end_tlv", append_end_tlv)
+
+    def set(self, append_end_tlv=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> FlowCfmCcmFlags
+        """flags getter
+
+        CCM flags byte has RDI and CCM Interval.CCM flags byte has RDI and CCM Interval.CCM flags byte has RDI and CCM Interval.CCM flags byte has RDI and CCM Interval.
+
+        Returns: FlowCfmCcmFlags
+        """
+        return self._get_property("flags", FlowCfmCcmFlags)
+
+    @property
+    def sequence_number(self):
+        # type: () -> PatternFlowCfmCcmSequenceNumber
+        """sequence_number getter
+
+        CCM unique sequence number.CCM unique sequence number.CCM unique sequence number.CCM unique sequence number.
+
+        Returns: PatternFlowCfmCcmSequenceNumber
+        """
+        return self._get_property("sequence_number", PatternFlowCfmCcmSequenceNumber)
+
+    @property
+    def ma_endpoint_identifier(self):
+        # type: () -> PatternFlowCfmCcmMaEndpointIdentifier
+        """ma_endpoint_identifier getter
+
+        Maintenance Association End Point Identifier (MEP ID). Unique within the MA. Range 1-8191 per IEEE 802.1Q-2018 Section 12.14.6.3.2.Maintenance Association End Point Identifier (MEP ID). Unique within the MA. Range 1-8191 per IEEE 802.1Q-2018 Section 12.14.6.3.2.Maintenance Association End Point Identifier (MEP ID). Unique within the MA. Range 1-8191 per IEEE 802.1Q-2018 Section 12.14.6.3.2.Maintenance Association End Point Identifier (MEP ID). Unique within the MA. Range 1-8191 per IEEE 802.1Q-2018 Section 12.14.6.3.2.
+
+        Returns: PatternFlowCfmCcmMaEndpointIdentifier
+        """
+        return self._get_property(
+            "ma_endpoint_identifier", PatternFlowCfmCcmMaEndpointIdentifier
+        )
+
+    @property
+    def ethernet_oam_protocol(self):
+        # type: () -> FlowCfmOamProtocol
+        """ethernet_oam_protocol getter
+
+        Ethernet OAM standard used to encode the 48-byte identifier field in the CCM PDU. Currently only the cfm choice is available; IEEE 802.1Q-2018 MAID encoding (MD Name Short MA Name) is used. Future choices may include ITU-T Y.1731 MEG ID encoding.Ethernet OAM standard used to encode the 48-byte identifier field in the CCM PDU. Currently only the cfm choice is available; IEEE 802.1Q-2018 MAID encoding (MD Name Short MA Name) is used. Future choices may include ITU-T Y.1731 MEG ID encoding.Ethernet OAM standard used to encode the 48-byte identifier field in the CCM PDU. Currently only the cfm choice is available; IEEE 802.1Q-2018 MAID encoding (MD Name Short MA Name) is used. Future choices may include ITU-T Y.1731 MEG ID encoding.Ethernet OAM standard used to encode the 48-byte identifier field in the CCM PDU. Currently only the cfm choice is available; IEEE 802.1Q-2018 MAID encoding (MD Name Short MA Name) is used. Future choices may include ITU-T Y.1731 MEG ID encoding.
+
+        Returns: FlowCfmOamProtocol
+        """
+        return self._get_property("ethernet_oam_protocol", FlowCfmOamProtocol)
+
+    @property
+    def tlvs(self):
+        # type: () -> FlowCfmTlvsIter
+        """tlvs getter
+
+        TBD
+
+        Returns: FlowCfmTlvsIter
+        """
+        return self._get_property("tlvs", FlowCfmTlvsIter, self._parent, self._choice)
+
+    @property
+    def append_end_tlv(self):
+        # type: () -> bool
+        """append_end_tlv getter
+
+        When true, the implementation appends an End TLV (Type 0, IEEE 802.1Q-2018 Table 21-17) after all TLVs in the tlvs list. Set to false only when testing DUT behaviour with deliberately missing End TLV.
+
+        Returns: bool
+        """
+        return self._get_property("append_end_tlv")
+
+    @append_end_tlv.setter
+    def append_end_tlv(self, value):
+        """append_end_tlv setter
+
+        When true, the implementation appends an End TLV (Type 0, IEEE 802.1Q-2018 Table 21-17) after all TLVs in the tlvs list. Set to false only when testing DUT behaviour with deliberately missing End TLV.
+
+        value: bool
+        """
+        self._set_property("append_end_tlv", value)
+
+
+class FlowCfmCcmFlags(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "rdi": {"type": bool},
+        "ccm_interval": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "rdi": False,
+        "ccm_interval": 4,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, rdi=False, ccm_interval=4):
+        super(FlowCfmCcmFlags, self).__init__()
+        self._parent = parent
+        self._set_property("rdi", rdi)
+        self._set_property("ccm_interval", ccm_interval)
+
+    def set(self, rdi=None, ccm_interval=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def rdi(self):
+        # type: () -> bool
+        """rdi getter
+
+        Remote Defect Indicator. When true the MEP is reporting local defect to its remote peers (IEEE 802.1Q-2018 Section 12.14.6.1.3).
+
+        Returns: bool
+        """
+        return self._get_property("rdi")
+
+    @rdi.setter
+    def rdi(self, value):
+        """rdi setter
+
+        Remote Defect Indicator. When true the MEP is reporting local defect to its remote peers (IEEE 802.1Q-2018 Section 12.14.6.1.3).
+
+        value: bool
+        """
+        self._set_property("rdi", value)
+
+    @property
+    def ccm_interval(self):
+        # type: () -> int
+        """ccm_interval getter
+
+        CCM transmission interval. Encoded as 3-bit integer in the flags byte as defined in IEEE 802.1Q-2018 Table 21-15. = invalid, = 3.33 ms, = 10 ms, = 100 ms, = s, = 10 s, = min, = 10 min.
+
+        Returns: int
+        """
+        return self._get_property("ccm_interval")
+
+    @ccm_interval.setter
+    def ccm_interval(self, value):
+        """ccm_interval setter
+
+        CCM transmission interval. Encoded as 3-bit integer in the flags byte as defined in IEEE 802.1Q-2018 Table 21-15. = invalid, = 3.33 ms, = 10 ms, = 100 ms, = s, = 10 s, = min, = 10 min.
+
+        value: int
+        """
+        self._set_property("ccm_interval", value)
+
+
+class PatternFlowCfmCcmSequenceNumber(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "increment": {"type": "PatternFlowCfmCcmSequenceNumberCounter"},
+        "decrement": {"type": "PatternFlowCfmCcmSequenceNumberCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowCfmCcmSequenceNumber, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowCfmCcmSequenceNumberCounter
+        """Factory property that returns an instance of the PatternFlowCfmCcmSequenceNumberCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowCfmCcmSequenceNumberCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowCfmCcmSequenceNumberCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowCfmCcmSequenceNumberCounter
+        """Factory property that returns an instance of the PatternFlowCfmCcmSequenceNumberCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowCfmCcmSequenceNumberCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowCfmCcmSequenceNumberCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowCfmCcmSequenceNumberCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowCfmCcmSequenceNumberCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowCfmCcmMaEndpointIdentifier(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 65535,
+        },
+        "increment": {"type": "PatternFlowCfmCcmMaEndpointIdentifierCounter"},
+        "decrement": {"type": "PatternFlowCfmCcmMaEndpointIdentifierCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 1,
+        "values": [1],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=1, values=[1]):
+        super(PatternFlowCfmCcmMaEndpointIdentifier, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowCfmCcmMaEndpointIdentifierCounter
+        """Factory property that returns an instance of the PatternFlowCfmCcmMaEndpointIdentifierCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowCfmCcmMaEndpointIdentifierCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowCfmCcmMaEndpointIdentifierCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowCfmCcmMaEndpointIdentifierCounter
+        """Factory property that returns an instance of the PatternFlowCfmCcmMaEndpointIdentifierCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowCfmCcmMaEndpointIdentifierCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowCfmCcmMaEndpointIdentifierCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowCfmCcmMaEndpointIdentifierCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65536,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 1,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=1, step=1, count=1):
+        super(PatternFlowCfmCcmMaEndpointIdentifierCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowCfmOamProtocol(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "cfm",
+            ],
+        },
+        "cfm": {"type": "FlowCfmMaidCfm"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "cfm",
+    }  # type: Dict[str, Union(type)]
+
+    CFM = "cfm"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowCfmOamProtocol, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def cfm(self):
+        # type: () -> FlowCfmMaidCfm
+        """Factory property that returns an instance of the FlowCfmMaidCfm class
+
+        IEEE 802.1Q-2018 MAID encoding: MD Name (optional) Short MA Name, zero-padded to fill 48 bytes in the CCM PDU. The choice selects the Short MA Name Format as defined in IEEE 802.1Q-2018 Table 21-20 and provides typed input for each format.
+
+        Returns: FlowCfmMaidCfm
+        """
+        return self._get_property("cfm", FlowCfmMaidCfm, self, "cfm")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["cfm"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["cfm"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["cfm"]]
+        """
+        self._set_property("choice", value)
+
+
+class FlowCfmMaidCfm(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "md_name": {"type": "FlowCfmMDNameFormat"},
+        "short_ma_name": {"type": "FlowCfmShortMANameFormat"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowCfmMaidCfm, self).__init__()
+        self._parent = parent
+
+    @property
+    def md_name(self):
+        # type: () -> FlowCfmMDNameFormat
+        """md_name getter
+
+        Maintenance domain name encoding. The choice selects the MD Name Format as defined in IEEE 802.1Q-2018 Table 21-19 and provides typed input for each format. Length is auto-computed from the value unless overridden.Maintenance domain name encoding. The choice selects the MD Name Format as defined in IEEE 802.1Q-2018 Table 21-19 and provides typed input for each format. Length is auto-computed from the value unless overridden.Maintenance domain name encoding. The choice selects the MD Name Format as defined in IEEE 802.1Q-2018 Table 21-19 and provides typed input for each format. Length is auto-computed from the value unless overridden.Maintenance domain name encoding. The choice selects the MD Name Format as defined in IEEE 802.1Q-2018 Table 21-19 and provides typed input for each format. Length is auto-computed from the value unless overridden.Maintenance domain name encoding. When present, the MD Name field is included in the MAID using the selected format (IEEE 802.1Q-2018 Table 21-19 Formats 2-4). When absent, Format (No MD Name) is encoded and the MAID begins directly with the Short MA Name.
+
+        Returns: FlowCfmMDNameFormat
+        """
+        return self._get_property("md_name", FlowCfmMDNameFormat)
+
+    @property
+    def short_ma_name(self):
+        # type: () -> FlowCfmShortMANameFormat
+        """short_ma_name getter
+
+        Short MA Name encoding (IEEE 802.1Q-2018 Table 21-20). Choose one of four formats and provide its typed value. Length is auto-computed from the value unless overridden.Short MA Name encoding (IEEE 802.1Q-2018 Table 21-20). Choose one of four formats and provide its typed value. Length is auto-computed from the value unless overridden.Short MA Name encoding (IEEE 802.1Q-2018 Table 21-20). Choose one of four formats and provide its typed value. Length is auto-computed from the value unless overridden.Short MA Name encoding (IEEE 802.1Q-2018 Table 21-20). Choose one of four formats and provide its typed value. Length is auto-computed from the value unless overridden.Short MA Name encoding. The Short MA Name field is mandatory in the MAID and identifies the Maintenance Association within its Maintenance Domain. The selected format determines the on-wire encoding per IEEE 802.1Q-2018 Table 21-20 (Formats 1-4).
+
+        Returns: FlowCfmShortMANameFormat
+        """
+        return self._get_property("short_ma_name", FlowCfmShortMANameFormat)
+
+
+class FlowCfmMDNameFormat(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "domain_name_str",
+                "mac_addr",
+                "char_str",
+            ],
+        },
+        "length": {"type": "FlowCfmLength"},
+        "domain_name_str": {"type": str},
+        "mac_addr": {"type": "FlowCfmMDNameMacAddr"},
+        "char_str": {"type": str},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "char_str",
+        "domain_name_str": "",
+        "char_str": "",
+    }  # type: Dict[str, Union(type)]
+
+    DOMAIN_NAME_STR = "domain_name_str"  # type: str
+    MAC_ADDR = "mac_addr"  # type: str
+    CHAR_STR = "char_str"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, domain_name_str="", char_str=""):
+        super(FlowCfmMDNameFormat, self).__init__()
+        self._parent = parent
+        self._set_property("domain_name_str", domain_name_str)
+        self._set_property("char_str", char_str)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, domain_name_str=None, char_str=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def mac_addr(self):
+        # type: () -> FlowCfmMDNameMacAddr
+        """Factory property that returns an instance of the FlowCfmMDNameMacAddr class
+
+        MD Name Format encoding as defined in IEEE 802.1Q-2018 Table 21-19. Consists of 6-octet MAC address followed by 2-octet unsigned integer in network byte order. Total wire length is always octets.
+
+        Returns: FlowCfmMDNameMacAddr
+        """
+        return self._get_property("mac_addr", FlowCfmMDNameMacAddr, self, "mac_addr")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["char_str"], Literal["domain_name_str"], Literal["mac_addr"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["char_str"], Literal["domain_name_str"], Literal["mac_addr"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["char_str"], Literal["domain_name_str"], Literal["mac_addr"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def length(self):
+        # type: () -> FlowCfmLength
+        """length getter
+
+        Length field with auto-compute or explicit-value choice. When auto, the implementation derives the value from the associated data field.Length field with auto-compute or explicit-value choice. When auto, the implementation derives the value from the associated data field.Length field with auto-compute or explicit-value choice. When auto, the implementation derives the value from the associated data field.Length of the MD Name value in octets. Auto-computed by default.
+
+        Returns: FlowCfmLength
+        """
+        return self._get_property("length", FlowCfmLength)
+
+    @property
+    def domain_name_str(self):
+        # type: () -> str
+        """domain_name_str getter
+
+        DNS-like domain name, e.g. "example.com" (RFC 1034 encoding). Maximum 43 octets (IEEE 802.1Q-2018 Table 21-19).
+
+        Returns: str
+        """
+        return self._get_property("domain_name_str")
+
+    @domain_name_str.setter
+    def domain_name_str(self, value):
+        """domain_name_str setter
+
+        DNS-like domain name, e.g. "example.com" (RFC 1034 encoding). Maximum 43 octets (IEEE 802.1Q-2018 Table 21-19).
+
+        value: str
+        """
+        self._set_property("domain_name_str", value, "domain_name_str")
+
+    @property
+    def char_str(self):
+        # type: () -> str
+        """char_str getter
+
+        Character string (ASCII), up to 43 octets (IEEE 802.1Q-2018 Table 21-19).
+
+        Returns: str
+        """
+        return self._get_property("char_str")
+
+    @char_str.setter
+    def char_str(self, value):
+        """char_str setter
+
+        Character string (ASCII), up to 43 octets (IEEE 802.1Q-2018 Table 21-19).
+
+        value: str
+        """
+        self._set_property("char_str", value, "char_str")
+
+
+class FlowCfmLength(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "auto",
+                "value",
+            ],
+        },
+        "auto": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "auto",
+        "auto": 1,
+        "value": 1,
+    }  # type: Dict[str, Union(type)]
+
+    AUTO = "auto"  # type: str
+    VALUE = "value"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, auto=1, value=1):
+        super(FlowCfmLength, self).__init__()
+        self._parent = parent
+        self._set_property("auto", auto)
+        self._set_property("value", value)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, auto=None, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auto"], Literal["value"]]
+        """choice getter
+
+        auto or configured value.
+
+        Returns: Union[Literal["auto"], Literal["value"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        auto or configured value.
+
+        value: Union[Literal["auto"], Literal["value"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def auto(self):
+        # type: () -> int
+        """auto getter
+
+        The OTG implementation will provide system generated value for this property. If the OTG implementation is unable to generate value the default value must be used.
+
+        Returns: int
+        """
+        return self._get_property("auto")
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+
+class FlowCfmMDNameMacAddr(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "mac": {
+            "type": str,
+            "format": "mac",
+        },
+        "id": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "mac": "00:00:00:00:00:00",
+        "id": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, mac="00:00:00:00:00:00", id=0):
+        super(FlowCfmMDNameMacAddr, self).__init__()
+        self._parent = parent
+        self._set_property("mac", mac)
+        self._set_property("id", id)
+
+    def set(self, mac=None, id=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def mac(self):
+        # type: () -> str
+        """mac getter
+
+        6-octet MAC address component, e.g. "00:11:22:33:44:55".
+
+        Returns: str
+        """
+        return self._get_property("mac")
+
+    @mac.setter
+    def mac(self, value):
+        """mac setter
+
+        6-octet MAC address component, e.g. "00:11:22:33:44:55".
+
+        value: str
+        """
+        self._set_property("mac", value)
+
+    @property
+    def id(self):
+        # type: () -> int
+        """id getter
+
+        Locally assigned 2-octet unsigned integer in network byte order that distinguishes multiple maintenance domains sharing the same MAC address (IEEE 802.1Q-2018 Table 21-19).
+
+        Returns: int
+        """
+        return self._get_property("id")
+
+    @id.setter
+    def id(self, value):
+        """id setter
+
+        Locally assigned 2-octet unsigned integer in network byte order that distinguishes multiple maintenance domains sharing the same MAC address (IEEE 802.1Q-2018 Table 21-19).
+
+        value: int
+        """
+        self._set_property("id", value)
+
+
+class FlowCfmShortMANameFormat(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "primary_vid",
+                "char_str",
+                "two_oct_int",
+                "rfc_2685_vpn_id",
+            ],
+        },
+        "length": {"type": "FlowCfmLength"},
+        "primary_vid": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 4094,
+        },
+        "char_str": {"type": str},
+        "two_oct_int": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "rfc_2685_vpn_id": {
+            "type": str,
+            "format": "hex",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "char_str",
+        "primary_vid": 1,
+        "char_str": "",
+        "two_oct_int": 0,
+        "rfc_2685_vpn_id": "00000000000000",
+    }  # type: Dict[str, Union(type)]
+
+    PRIMARY_VID = "primary_vid"  # type: str
+    CHAR_STR = "char_str"  # type: str
+    TWO_OCT_INT = "two_oct_int"  # type: str
+    RFC_2685_VPN_ID = "rfc_2685_vpn_id"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        choice=None,
+        primary_vid=1,
+        char_str="",
+        two_oct_int=0,
+        rfc_2685_vpn_id="00000000000000",
+    ):
+        super(FlowCfmShortMANameFormat, self).__init__()
+        self._parent = parent
+        self._set_property("primary_vid", primary_vid)
+        self._set_property("char_str", char_str)
+        self._set_property("two_oct_int", two_oct_int)
+        self._set_property("rfc_2685_vpn_id", rfc_2685_vpn_id)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(
+        self, primary_vid=None, char_str=None, two_oct_int=None, rfc_2685_vpn_id=None
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["char_str"], Literal["primary_vid"], Literal["rfc_2685_vpn_id"], Literal["two_oct_int"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["char_str"], Literal["primary_vid"], Literal["rfc_2685_vpn_id"], Literal["two_oct_int"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["char_str"], Literal["primary_vid"], Literal["rfc_2685_vpn_id"], Literal["two_oct_int"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def length(self):
+        # type: () -> FlowCfmLength
+        """length getter
+
+        Length field with auto-compute or explicit-value choice. When auto, the implementation derives the value from the associated data field.Length field with auto-compute or explicit-value choice. When auto, the implementation derives the value from the associated data field.Length field with auto-compute or explicit-value choice. When auto, the implementation derives the value from the associated data field.Length of the Short MA Name value in octets. Auto-computed by default.
+
+        Returns: FlowCfmLength
+        """
+        return self._get_property("length", FlowCfmLength)
+
+    @property
+    def primary_vid(self):
+        # type: () -> int
+        """primary_vid getter
+
+        Primary VLAN ID (1-4094). Encoded as 2-octet unsigned integer.
+
+        Returns: int
+        """
+        return self._get_property("primary_vid")
+
+    @primary_vid.setter
+    def primary_vid(self, value):
+        """primary_vid setter
+
+        Primary VLAN ID (1-4094). Encoded as 2-octet unsigned integer.
+
+        value: int
+        """
+        self._set_property("primary_vid", value, "primary_vid")
+
+    @property
+    def char_str(self):
+        # type: () -> str
+        """char_str getter
+
+        Character string (ASCII), up to 45 octets (RFC 2579 DisplayString).
+
+        Returns: str
+        """
+        return self._get_property("char_str")
+
+    @char_str.setter
+    def char_str(self, value):
+        """char_str setter
+
+        Character string (ASCII), up to 45 octets (RFC 2579 DisplayString).
+
+        value: str
+        """
+        self._set_property("char_str", value, "char_str")
+
+    @property
+    def two_oct_int(self):
+        # type: () -> int
+        """two_oct_int getter
+
+        2-octet unsigned integer, e.g. locally assigned VLAN tag.
+
+        Returns: int
+        """
+        return self._get_property("two_oct_int")
+
+    @two_oct_int.setter
+    def two_oct_int(self, value):
+        """two_oct_int setter
+
+        2-octet unsigned integer, e.g. locally assigned VLAN tag.
+
+        value: int
+        """
+        self._set_property("two_oct_int", value, "two_oct_int")
+
+    @property
+    def rfc_2685_vpn_id(self):
+        # type: () -> str
+        """rfc_2685_vpn_id getter
+
+        RFC 2685 VPN ID, exactly octets (3-octet OUI 4-octet index). Encode as 14 hex characters, e.g. "00000000000000".
+
+        Returns: str
+        """
+        return self._get_property("rfc_2685_vpn_id")
+
+    @rfc_2685_vpn_id.setter
+    def rfc_2685_vpn_id(self, value):
+        """rfc_2685_vpn_id setter
+
+        RFC 2685 VPN ID, exactly octets (3-octet OUI 4-octet index). Encode as 14 hex characters, e.g. "00000000000000".
+
+        value: str
+        """
+        self._set_property("rfc_2685_vpn_id", value, "rfc_2685_vpn_id")
+
+
+class FlowCfmTlvs(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "sender_id",
+                "port_status",
+                "interface_status",
+                "data",
+            ],
+        },
+        "length": {"type": "PatternFlowCfmTlvsLength"},
+        "sender_id": {"type": "FlowCfmSenderIdTlv"},
+        "port_status": {"type": "FlowCfmPortStatusTlv"},
+        "interface_status": {"type": "FlowCfmInterfaceStatusTlv"},
+        "data": {"type": "FlowCfmDataTlv"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "sender_id",
+    }  # type: Dict[str, Union(type)]
+
+    SENDER_ID = "sender_id"  # type: str
+    PORT_STATUS = "port_status"  # type: str
+    INTERFACE_STATUS = "interface_status"  # type: str
+    DATA = "data"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowCfmTlvs, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def sender_id(self):
+        # type: () -> FlowCfmSenderIdTlv
+        """Factory property that returns an instance of the FlowCfmSenderIdTlv class
+
+        Sender ID TLV (Type 1) carries the sender's chassis identity and optionally Management Address so that the receiving MEP can identify and reach back to the sender, as defined in IEEE 802.1Q-2018 Section 21.5.5, Table 21-16.
+
+        Returns: FlowCfmSenderIdTlv
+        """
+        return self._get_property("sender_id", FlowCfmSenderIdTlv, self, "sender_id")
+
+    @property
+    def port_status(self):
+        # type: () -> FlowCfmPortStatusTlv
+        """Factory property that returns an instance of the FlowCfmPortStatusTlv class
+
+        Port Status TLV (Type 2) indicates the ability of the Bridge Port to pass ordinary data traffic, as defined in IEEE 802.1Q-2018 Section 12.14.3.3.
+
+        Returns: FlowCfmPortStatusTlv
+        """
+        return self._get_property(
+            "port_status", FlowCfmPortStatusTlv, self, "port_status"
+        )
+
+    @property
+    def interface_status(self):
+        # type: () -> FlowCfmInterfaceStatusTlv
+        """Factory property that returns an instance of the FlowCfmInterfaceStatusTlv class
+
+        Interface Status TLV (Type 4) indicates the operational state of physical or logical interface between Provider Edge (PE) and Customer Edge (CE) devices. As defined in IEEE 802.1Q-2018 Section 12.14.3.4.
+
+        Returns: FlowCfmInterfaceStatusTlv
+        """
+        return self._get_property(
+            "interface_status", FlowCfmInterfaceStatusTlv, self, "interface_status"
+        )
+
+    @property
+    def data(self):
+        # type: () -> FlowCfmDataTlv
+        """Factory property that returns an instance of the FlowCfmDataTlv class
+
+        Data TLV (Type 3) used to carry arbitrary test data, typically for loopback testing. As defined in IEEE 802.1Q-2018 Section 12.14.3.2.
+
+        Returns: FlowCfmDataTlv
+        """
+        return self._get_property("data", FlowCfmDataTlv, self, "data")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["data"], Literal["interface_status"], Literal["port_status"], Literal["sender_id"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["data"], Literal["interface_status"], Literal["port_status"], Literal["sender_id"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["data"], Literal["interface_status"], Literal["port_status"], Literal["sender_id"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def length(self):
+        # type: () -> PatternFlowCfmTlvsLength
+        """length getter
+
+        Length of the TLV value field in octets (IEEE 802.1Q-2018 Table 21-16). When auto, derived from the selected TLV sub-object.Length of the TLV value field in octets (IEEE 802.1Q-2018 Table 21-16). When auto, derived from the selected TLV sub-object.Length of the TLV value field in octets (IEEE 802.1Q-2018 Table 21-16). When auto, derived from the selected TLV sub-object.
+
+        Returns: PatternFlowCfmTlvsLength
+        """
+        return self._get_property("length", PatternFlowCfmTlvsLength)
+
+
+class PatternFlowCfmTlvsLength(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "auto",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 65535,
+        },
+        "auto": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "increment": {"type": "PatternFlowCfmTlvsLengthCounter"},
+        "decrement": {"type": "PatternFlowCfmTlvsLengthCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "auto",
+        "value": 0,
+        "values": [0],
+        "auto": 0,
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    AUTO = "auto"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0], auto=0):
+        super(PatternFlowCfmTlvsLength, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        self._set_property("auto", auto)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None, auto=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowCfmTlvsLengthCounter
+        """Factory property that returns an instance of the PatternFlowCfmTlvsLengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowCfmTlvsLengthCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowCfmTlvsLengthCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowCfmTlvsLengthCounter
+        """Factory property that returns an instance of the PatternFlowCfmTlvsLengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowCfmTlvsLengthCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowCfmTlvsLengthCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+    @property
+    def auto(self):
+        # type: () -> int
+        """auto getter
+
+        The OTG implementation can provide system generated. value for this property. If the OTG is unable to generate value. the default value must be used.
+
+        Returns: int
+        """
+        return self._get_property("auto")
+
+
+class PatternFlowCfmTlvsLengthCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65536,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowCfmTlvsLengthCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowCfmSenderIdTlv(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "chassis_id": {"type": "FlowCfmSenderIdTlvChassisId"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowCfmSenderIdTlv, self).__init__()
+        self._parent = parent
+
+    @property
+    def chassis_id(self):
+        # type: () -> FlowCfmSenderIdTlvChassisId
+        """chassis_id getter
+
+        Sender ID TLV with Chassis IDSender ID TLV with Chassis IDSender ID TLV with Chassis IDSender ID TLV with Chassis IDChassis identifier of the sender. When absent, the Chassis ID Length field is set to in the Sender ID TLV (IEEE 802.1Q-2018 Section 21.5.5.1).
+
+        Returns: FlowCfmSenderIdTlvChassisId
+        """
+        return self._get_property("chassis_id", FlowCfmSenderIdTlvChassisId)
+
+
+class FlowCfmSenderIdTlvChassisId(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "chassis_component",
+                "interface_alias",
+                "port_component",
+                "mac_address",
+                "network_address",
+                "interface_name",
+                "locally_assigned",
+            ],
+        },
+        "length": {"type": "FlowCfmLength"},
+        "chassis_component": {"type": str},
+        "interface_alias": {"type": str},
+        "port_component": {"type": str},
+        "mac_address": {
+            "type": str,
+            "format": "mac",
+        },
+        "network_address": {"type": "FlowCfmNetwork"},
+        "interface_name": {"type": str},
+        "locally_assigned": {"type": str},
+        "management_address_domain": {"type": "FlowCfmSenderIdTlvMADomain"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "mac_address",
+        "chassis_component": "",
+        "interface_alias": "",
+        "port_component": "",
+        "mac_address": "00:00:00:00:00:00",
+        "interface_name": "",
+        "locally_assigned": "",
+    }  # type: Dict[str, Union(type)]
+
+    CHASSIS_COMPONENT = "chassis_component"  # type: str
+    INTERFACE_ALIAS = "interface_alias"  # type: str
+    PORT_COMPONENT = "port_component"  # type: str
+    MAC_ADDRESS = "mac_address"  # type: str
+    NETWORK_ADDRESS = "network_address"  # type: str
+    INTERFACE_NAME = "interface_name"  # type: str
+    LOCALLY_ASSIGNED = "locally_assigned"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        choice=None,
+        chassis_component="",
+        interface_alias="",
+        port_component="",
+        mac_address="00:00:00:00:00:00",
+        interface_name="",
+        locally_assigned="",
+    ):
+        super(FlowCfmSenderIdTlvChassisId, self).__init__()
+        self._parent = parent
+        self._set_property("chassis_component", chassis_component)
+        self._set_property("interface_alias", interface_alias)
+        self._set_property("port_component", port_component)
+        self._set_property("mac_address", mac_address)
+        self._set_property("interface_name", interface_name)
+        self._set_property("locally_assigned", locally_assigned)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(
+        self,
+        chassis_component=None,
+        interface_alias=None,
+        port_component=None,
+        mac_address=None,
+        interface_name=None,
+        locally_assigned=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def network_address(self):
+        # type: () -> FlowCfmNetwork
+        """Factory property that returns an instance of the FlowCfmNetwork class
+
+        Typed network address used as the Sender ID TLV Chassis ID Subtype (IEEE 802.1AB-2016 Table 8-3). On the wire, the choice value encodes the leading IANA address family octet (1 IPv4, = IPv6), followed by the corresponding IP address bytes.
+
+        Returns: FlowCfmNetwork
+        """
+        return self._get_property(
+            "network_address", FlowCfmNetwork, self, "network_address"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["chassis_component"], Literal["interface_alias"], Literal["interface_name"], Literal["locally_assigned"], Literal["mac_address"], Literal["network_address"], Literal["port_component"]]
+        """choice getter
+
+        Select the LLDP Chassis ID Subtype (IEEE 802.1AB-2016 Table 8-3).
+
+        Returns: Union[Literal["chassis_component"], Literal["interface_alias"], Literal["interface_name"], Literal["locally_assigned"], Literal["mac_address"], Literal["network_address"], Literal["port_component"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Select the LLDP Chassis ID Subtype (IEEE 802.1AB-2016 Table 8-3).
+
+        value: Union[Literal["chassis_component"], Literal["interface_alias"], Literal["interface_name"], Literal["locally_assigned"], Literal["mac_address"], Literal["network_address"], Literal["port_component"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def length(self):
+        # type: () -> FlowCfmLength
+        """length getter
+
+        Length field with auto-compute or explicit-value choice. When auto, the implementation derives the value from the associated data field.Length field with auto-compute or explicit-value choice. When auto, the implementation derives the value from the associated data field.Length field with auto-compute or explicit-value choice. When auto, the implementation derives the value from the associated data field.
+
+        Returns: FlowCfmLength
+        """
+        return self._get_property("length", FlowCfmLength)
+
+    @property
+    def chassis_component(self):
+        # type: () -> str
+        """chassis_component getter
+
+        Identifies the hardware component FRU/shelf.
+
+        Returns: str
+        """
+        return self._get_property("chassis_component")
+
+    @chassis_component.setter
+    def chassis_component(self, value):
+        """chassis_component setter
+
+        Identifies the hardware component FRU/shelf.
+
+        value: str
+        """
+        self._set_property("chassis_component", value, "chassis_component")
+
+    @property
+    def interface_alias(self):
+        # type: () -> str
+        """interface_alias getter
+
+        Identifies the interface by its manager-assigned name.
+
+        Returns: str
+        """
+        return self._get_property("interface_alias")
+
+    @interface_alias.setter
+    def interface_alias(self, value):
+        """interface_alias setter
+
+        Identifies the interface by its manager-assigned name.
+
+        value: str
+        """
+        self._set_property("interface_alias", value, "interface_alias")
+
+    @property
+    def port_component(self):
+        # type: () -> str
+        """port_component getter
+
+        Identifies port-class physical component of the chassis.
+
+        Returns: str
+        """
+        return self._get_property("port_component")
+
+    @port_component.setter
+    def port_component(self, value):
+        """port_component setter
+
+        Identifies port-class physical component of the chassis.
+
+        value: str
+        """
+        self._set_property("port_component", value, "port_component")
+
+    @property
+    def mac_address(self):
+        # type: () -> str
+        """mac_address getter
+
+        MAC address identifying the chassis.
+
+        Returns: str
+        """
+        return self._get_property("mac_address")
+
+    @mac_address.setter
+    def mac_address(self, value):
+        """mac_address setter
+
+        MAC address identifying the chassis.
+
+        value: str
+        """
+        self._set_property("mac_address", value, "mac_address")
+
+    @property
+    def interface_name(self):
+        # type: () -> str
+        """interface_name getter
+
+        Identifies the interface by system-assigned name.
+
+        Returns: str
+        """
+        return self._get_property("interface_name")
+
+    @interface_name.setter
+    def interface_name(self, value):
+        """interface_name setter
+
+        Identifies the interface by system-assigned name.
+
+        value: str
+        """
+        self._set_property("interface_name", value, "interface_name")
+
+    @property
+    def locally_assigned(self):
+        # type: () -> str
+        """locally_assigned getter
+
+        String assigned by the local administrator.
+
+        Returns: str
+        """
+        return self._get_property("locally_assigned")
+
+    @locally_assigned.setter
+    def locally_assigned(self, value):
+        """locally_assigned setter
+
+        String assigned by the local administrator.
+
+        value: str
+        """
+        self._set_property("locally_assigned", value, "locally_assigned")
+
+    @property
+    def management_address_domain(self):
+        # type: () -> FlowCfmSenderIdTlvMADomain
+        """management_address_domain getter
+
+        Sender ID TLV with Management Address DomainSender ID TLV with Management Address DomainSender ID TLV with Management Address DomainManagement Address Domain and address of the sender. When absent, the Management Address Domain Length field is set to in the Sender ID TLV (IEEE 802.1Q-2018 Section 21.5.5.1).
+
+        Returns: FlowCfmSenderIdTlvMADomain
+        """
+        return self._get_property(
+            "management_address_domain", FlowCfmSenderIdTlvMADomain
+        )
+
+
+class FlowCfmNetwork(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "ipv4",
+                "ipv6",
+            ],
+        },
+        "ipv4": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "ipv6": {
+            "type": str,
+            "format": "ipv6",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "ipv4",
+        "ipv4": "0.0.0.0",
+        "ipv6": "::0",
+    }  # type: Dict[str, Union(type)]
+
+    IPV4 = "ipv4"  # type: str
+    IPV6 = "ipv6"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, ipv4="0.0.0.0", ipv6="::0"):
+        super(FlowCfmNetwork, self).__init__()
+        self._parent = parent
+        self._set_property("ipv4", ipv4)
+        self._set_property("ipv6", ipv6)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, ipv4=None, ipv6=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["ipv4"], Literal["ipv6"]]
+        """choice getter
+
+        IANA address family, encodes the first octet of the network address.
+
+        Returns: Union[Literal["ipv4"], Literal["ipv6"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        IANA address family, encodes the first octet of the network address.
+
+        value: Union[Literal["ipv4"], Literal["ipv6"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def ipv4(self):
+        # type: () -> str
+        """ipv4 getter
+
+        Chassis ID IPv4 address
+
+        Returns: str
+        """
+        return self._get_property("ipv4")
+
+    @ipv4.setter
+    def ipv4(self, value):
+        """ipv4 setter
+
+        Chassis ID IPv4 address
+
+        value: str
+        """
+        self._set_property("ipv4", value, "ipv4")
+
+    @property
+    def ipv6(self):
+        # type: () -> str
+        """ipv6 getter
+
+        Chassis ID IPv6 address
+
+        Returns: str
+        """
+        return self._get_property("ipv6")
+
+    @ipv6.setter
+    def ipv6(self, value):
+        """ipv6 setter
+
+        Chassis ID IPv6 address
+
+        value: str
+        """
+        self._set_property("ipv6", value, "ipv6")
+
+
+class FlowCfmSenderIdTlvMADomain(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "FlowCfmLength"},
+        "domain": {
+            "type": str,
+            "format": "hex",
+        },
+        "management_address": {"type": "FlowCfmSenderIdTlvMgmtAddress"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "domain": "00",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, domain="00"):
+        super(FlowCfmSenderIdTlvMADomain, self).__init__()
+        self._parent = parent
+        self._set_property("domain", domain)
+
+    def set(self, domain=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def length(self):
+        # type: () -> FlowCfmLength
+        """length getter
+
+        Length field with auto-compute or explicit-value choice. When auto, the implementation derives the value from the associated data field.Length field with auto-compute or explicit-value choice. When auto, the implementation derives the value from the associated data field.Length field with auto-compute or explicit-value choice. When auto, the implementation derives the value from the associated data field.
+
+        Returns: FlowCfmLength
+        """
+        return self._get_property("length", FlowCfmLength)
+
+    @property
+    def domain(self):
+        # type: () -> str
+        """domain getter
+
+        The domain is full BER-encoded OID identifying the transport/protocol, CFM follows the SNMPv3 RFC 3411.
+
+        Returns: str
+        """
+        return self._get_property("domain")
+
+    @domain.setter
+    def domain(self, value):
+        """domain setter
+
+        The domain is full BER-encoded OID identifying the transport/protocol, CFM follows the SNMPv3 RFC 3411.
+
+        value: str
+        """
+        self._set_property("domain", value)
+
+    @property
+    def management_address(self):
+        # type: () -> FlowCfmSenderIdTlvMgmtAddress
+        """management_address getter
+
+        Sender ID TLV with Management AddressSender ID TLV with Management AddressSender ID TLV with Management AddressManagement Address of the sender. When absent, the Management Address Length field is set to in the Sender ID TLV (IEEE 802.1Q-2018 Section 21.5.5.1).
+
+        Returns: FlowCfmSenderIdTlvMgmtAddress
+        """
+        return self._get_property("management_address", FlowCfmSenderIdTlvMgmtAddress)
+
+
+class FlowCfmSenderIdTlvMgmtAddress(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "FlowCfmLength"},
+        "address": {
+            "type": str,
+            "format": "hex",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "address": "00",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, address="00"):
+        super(FlowCfmSenderIdTlvMgmtAddress, self).__init__()
+        self._parent = parent
+        self._set_property("address", address)
+
+    def set(self, address=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def length(self):
+        # type: () -> FlowCfmLength
+        """length getter
+
+        Length field with auto-compute or explicit-value choice. When auto, the implementation derives the value from the associated data field.Length field with auto-compute or explicit-value choice. When auto, the implementation derives the value from the associated data field.Length field with auto-compute or explicit-value choice. When auto, the implementation derives the value from the associated data field.
+
+        Returns: FlowCfmLength
+        """
+        return self._get_property("length", FlowCfmLength)
+
+    @property
+    def address(self):
+        # type: () -> str
+        """address getter
+
+        The address is in the format defined by the domain. This lets the receiver know exactly how to dial back into the sender's management stack.
+
+        Returns: str
+        """
+        return self._get_property("address")
+
+    @address.setter
+    def address(self, value):
+        """address setter
+
+        The address is in the format defined by the domain. This lets the receiver know exactly how to dial back into the sender's management stack.
+
+        value: str
+        """
+        self._set_property("address", value)
+
+
+class FlowCfmPortStatusTlv(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "status": {
+            "type": str,
+            "enum": [
+                "port_blocked",
+                "port_up",
+            ],
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "status": "port_up",
+    }  # type: Dict[str, Union(type)]
+
+    PORT_BLOCKED = "port_blocked"  # type: str
+    PORT_UP = "port_up"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, status="port_up"):
+        super(FlowCfmPortStatusTlv, self).__init__()
+        self._parent = parent
+        self._set_property("status", status)
+
+    def set(self, status=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def status(self):
+        # type: () -> Union[Literal["port_blocked"], Literal["port_up"]]
+        """status getter
+
+        Port status can be either port blocked or port up.
+
+        Returns: Union[Literal["port_blocked"], Literal["port_up"]]
+        """
+        return self._get_property("status")
+
+    @status.setter
+    def status(self, value):
+        """status setter
+
+        Port status can be either port blocked or port up.
+
+        value: Union[Literal["port_blocked"], Literal["port_up"]]
+        """
+        self._set_property("status", value)
+
+
+class FlowCfmInterfaceStatusTlv(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "status": {
+            "type": str,
+            "enum": [
+                "dormant",
+                "down",
+                "lower_layer_down",
+                "not_present",
+                "testing",
+                "unknown",
+                "up",
+            ],
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "status": "up",
+    }  # type: Dict[str, Union(type)]
+
+    DORMANT = "dormant"  # type: str
+    DOWN = "down"  # type: str
+    LOWER_LAYER_DOWN = "lower_layer_down"  # type: str
+    NOT_PRESENT = "not_present"  # type: str
+    TESTING = "testing"  # type: str
+    UNKNOWN = "unknown"  # type: str
+    UP = "up"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, status="up"):
+        super(FlowCfmInterfaceStatusTlv, self).__init__()
+        self._parent = parent
+        self._set_property("status", status)
+
+    def set(self, status=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def status(self):
+        # type: () -> Union[Literal["dormant"], Literal["down"], Literal["lower_layer_down"], Literal["not_present"], Literal["testing"], Literal["unknown"], Literal["up"]]
+        """status getter
+
+        Defined Interface status.
+
+        Returns: Union[Literal["dormant"], Literal["down"], Literal["lower_layer_down"], Literal["not_present"], Literal["testing"], Literal["unknown"], Literal["up"]]
+        """
+        return self._get_property("status")
+
+    @status.setter
+    def status(self, value):
+        """status setter
+
+        Defined Interface status.
+
+        value: Union[Literal["dormant"], Literal["down"], Literal["lower_layer_down"], Literal["not_present"], Literal["testing"], Literal["unknown"], Literal["up"]]
+        """
+        self._set_property("status", value)
+
+
+class FlowCfmDataTlv(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "data": {
+            "type": str,
+            "format": "hex",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "data": "00",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, data="00"):
+        super(FlowCfmDataTlv, self).__init__()
+        self._parent = parent
+        self._set_property("data", data)
+
+    def set(self, data=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def data(self):
+        # type: () -> str
+        """data getter
+
+        Arbitrary test data payload. The length field of the parent TLV entry should be set to auto to match the byte count of this value.
+
+        Returns: str
+        """
+        return self._get_property("data")
+
+    @data.setter
+    def data(self, value):
+        """data setter
+
+        Arbitrary test data payload. The length field of the parent TLV entry should be set to auto to match the byte count of this value.
+
+        value: str
+        """
+        self._set_property("data", value)
+
+
+class FlowCfmTlvsIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowCfmTlvsIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[FlowCfmDataTlv, FlowCfmInterfaceStatusTlv, FlowCfmPortStatusTlv, FlowCfmSenderIdTlv, FlowCfmTlvs]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> FlowCfmTlvsIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> FlowCfmTlvs
+        return self._next()
+
+    def next(self):
+        # type: () -> FlowCfmTlvs
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, FlowCfmTlvs):
+            raise Exception("Item is not an instance of FlowCfmTlvs")
+
+    def tlvs(self):
+        # type: () -> FlowCfmTlvsIter
+        """Factory method that creates an instance of the FlowCfmTlvs class
+
+        CFM TLV entry. The Type byte (IEEE 802.1Q-2018 Table 21-17) is set automatically from the choice: Sender ID=1, Port Status=2, Data=3, Interface Status=4. Length (2 octets) and Value are defined per TLV type.
+
+        Returns: FlowCfmTlvsIter
+        """
+        item = FlowCfmTlvs(parent=self._parent, choice=self._choice)
+        self._add(item)
+        return self
+
+    def add(self):
+        # type: () -> FlowCfmTlvs
+        """Add method that creates and returns an instance of the FlowCfmTlvs class
+
+        CFM TLV entry. The Type byte (IEEE 802.1Q-2018 Table 21-17) is set automatically from the choice: Sender ID=1, Port Status=2, Data=3, Interface Status=4. Length (2 octets) and Value are defined per TLV type.
+
+        Returns: FlowCfmTlvs
+        """
+        item = FlowCfmTlvs(parent=self._parent, choice=self._choice)
+        self._add(item)
+        return item
+
+
+class FlowCfmLbm(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "transaction_id": {"type": "PatternFlowCfmLbmTransactionId"},
+        "tlvs": {"type": "FlowCfmTlvsIter"},
+        "append_end_tlv": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "append_end_tlv": True,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, append_end_tlv=True):
+        super(FlowCfmLbm, self).__init__()
+        self._parent = parent
+        self._set_property("append_end_tlv", append_end_tlv)
+
+    def set(self, append_end_tlv=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def transaction_id(self):
+        # type: () -> PatternFlowCfmLbmTransactionId
+        """transaction_id getter
+
+        Transaction identifier copied verbatim into the corresponding LBR, allowing the sender to match the reply to this request (IEEE 802.1Q-2018 Figure 21-5).Transaction identifier copied verbatim into the corresponding LBR, allowing the sender to match the reply to this request (IEEE 802.1Q-2018 Figure 21-5).Transaction identifier copied verbatim into the corresponding LBR, allowing the sender to match the reply to this request (IEEE 802.1Q-2018 Figure 21-5).Transaction identifier copied verbatim into the corresponding LBR, allowing the sender to match the reply to this request (IEEE 802.1Q-2018 Figure 21-5).
+
+        Returns: PatternFlowCfmLbmTransactionId
+        """
+        return self._get_property("transaction_id", PatternFlowCfmLbmTransactionId)
+
+    @property
+    def tlvs(self):
+        # type: () -> FlowCfmTlvsIter
+        """tlvs getter
+
+        TBD
+
+        Returns: FlowCfmTlvsIter
+        """
+        return self._get_property("tlvs", FlowCfmTlvsIter, self._parent, self._choice)
+
+    @property
+    def append_end_tlv(self):
+        # type: () -> bool
+        """append_end_tlv getter
+
+        When true, the implementation appends an End TLV (Type 0, IEEE 802.1Q-2018 Table 21-17) after all TLVs in the tlvs list. Set to false only when testing DUT behaviour with deliberately missing End TLV.
+
+        Returns: bool
+        """
+        return self._get_property("append_end_tlv")
+
+    @append_end_tlv.setter
+    def append_end_tlv(self, value):
+        """append_end_tlv setter
+
+        When true, the implementation appends an End TLV (Type 0, IEEE 802.1Q-2018 Table 21-17) after all TLVs in the tlvs list. Set to false only when testing DUT behaviour with deliberately missing End TLV.
+
+        value: bool
+        """
+        self._set_property("append_end_tlv", value)
+
+
+class PatternFlowCfmLbmTransactionId(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "increment": {"type": "PatternFlowCfmLbmTransactionIdCounter"},
+        "decrement": {"type": "PatternFlowCfmLbmTransactionIdCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowCfmLbmTransactionId, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowCfmLbmTransactionIdCounter
+        """Factory property that returns an instance of the PatternFlowCfmLbmTransactionIdCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowCfmLbmTransactionIdCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowCfmLbmTransactionIdCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowCfmLbmTransactionIdCounter
+        """Factory property that returns an instance of the PatternFlowCfmLbmTransactionIdCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowCfmLbmTransactionIdCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowCfmLbmTransactionIdCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowCfmLbmTransactionIdCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowCfmLbmTransactionIdCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowCfmLbr(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "transaction_id": {"type": "PatternFlowCfmLbrTransactionId"},
+        "tlvs": {"type": "FlowCfmTlvsIter"},
+        "append_end_tlv": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "append_end_tlv": True,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, append_end_tlv=True):
+        super(FlowCfmLbr, self).__init__()
+        self._parent = parent
+        self._set_property("append_end_tlv", append_end_tlv)
+
+    def set(self, append_end_tlv=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def transaction_id(self):
+        # type: () -> PatternFlowCfmLbrTransactionId
+        """transaction_id getter
+
+        Transaction id or sequence number copied from the LBM to match the reply to the specific request.Transaction id or sequence number copied from the LBM to match the reply to the specific request.Transaction id or sequence number copied from the LBM to match the reply to the specific request.Transaction id or sequence number copied from the LBM to match the reply to the specific request.
+
+        Returns: PatternFlowCfmLbrTransactionId
+        """
+        return self._get_property("transaction_id", PatternFlowCfmLbrTransactionId)
+
+    @property
+    def tlvs(self):
+        # type: () -> FlowCfmTlvsIter
+        """tlvs getter
+
+        TBD
+
+        Returns: FlowCfmTlvsIter
+        """
+        return self._get_property("tlvs", FlowCfmTlvsIter, self._parent, self._choice)
+
+    @property
+    def append_end_tlv(self):
+        # type: () -> bool
+        """append_end_tlv getter
+
+        When true, the implementation appends an End TLV (Type 0, IEEE 802.1Q-2018 Table 21-17) after all TLVs in the tlvs list. Set to false only when testing DUT behaviour with deliberately missing End TLV.
+
+        Returns: bool
+        """
+        return self._get_property("append_end_tlv")
+
+    @append_end_tlv.setter
+    def append_end_tlv(self, value):
+        """append_end_tlv setter
+
+        When true, the implementation appends an End TLV (Type 0, IEEE 802.1Q-2018 Table 21-17) after all TLVs in the tlvs list. Set to false only when testing DUT behaviour with deliberately missing End TLV.
+
+        value: bool
+        """
+        self._set_property("append_end_tlv", value)
+
+
+class PatternFlowCfmLbrTransactionId(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "increment": {"type": "PatternFlowCfmLbrTransactionIdCounter"},
+        "decrement": {"type": "PatternFlowCfmLbrTransactionIdCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowCfmLbrTransactionId, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowCfmLbrTransactionIdCounter
+        """Factory property that returns an instance of the PatternFlowCfmLbrTransactionIdCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowCfmLbrTransactionIdCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowCfmLbrTransactionIdCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowCfmLbrTransactionIdCounter
+        """Factory property that returns an instance of the PatternFlowCfmLbrTransactionIdCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowCfmLbrTransactionIdCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowCfmLbrTransactionIdCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowCfmLbrTransactionIdCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowCfmLbrTransactionIdCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class FlowHeaderIter(OpenApiIter):
@@ -147552,7 +159569,7 @@ class FlowHeaderIter(OpenApiIter):
         self._choice = choice
 
     def __getitem__(self, key):
-        # type: (str) -> Union[FlowArp, FlowCustom, FlowEthernet, FlowEthernetPause, FlowGre, FlowGtpv1, FlowGtpv2, FlowHeader, FlowIcmp, FlowIcmpv6, FlowIgmpv1, FlowIpv4, FlowIpv6, FlowIpv6ExtHeader, FlowLacp, FlowMacsec, FlowMpls, FlowPfcPause, FlowPpp, FlowRsvp, FlowSnmpv2c, FlowTcp, FlowUdp, FlowVlan, FlowVxlan]
+        # type: (str) -> Union[FlowArp, FlowCfm, FlowCustom, FlowEthernet, FlowEthernetPause, FlowGre, FlowGtpv1, FlowGtpv2, FlowHeader, FlowIcmp, FlowIcmpv6, FlowIgmpv1, FlowIpv4, FlowIpv6, FlowIpv6ExtHeader, FlowLacp, FlowMacsec, FlowMpls, FlowPfcPause, FlowPpp, FlowRsvp, FlowSnmpv2c, FlowTcp, FlowUdp, FlowVlan, FlowVxlan]
         return self._getitem(key)
 
     def __iter__(self):
@@ -147928,6 +159945,20 @@ class FlowHeaderIter(OpenApiIter):
         item = FlowHeader()
         item.ipv6_extension_header
         item.choice = "ipv6_extension_header"
+        self._add(item)
+        return self
+
+    def cfm(self, md_level=0, version=0):
+        # type: (int,int) -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowCfm class
+
+        Defines the fields of Connectivity Fault Management (CFM) Packet Data Unit (PDU) as specified in IEEE 802.1Q-2018 Clause 21. CCM destination MAC is multicast address derived from the maintenance domain level (IEEE 802.1Q-2018 Table 21-3).
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.cfm
+        item.choice = "cfm"
         self._add(item)
         return self
 
@@ -150274,6 +162305,7 @@ class ConfigOptions(OpenApiObject):
         "port_options": {"type": "PortOptions"},
         "protocol_options": {"type": "ProtocolOptions"},
         "per_port_options": {"type": "PerPortOptionsIter"},
+        "flow_options": {"type": "FlowOptions"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -150321,6 +162353,17 @@ class ConfigOptions(OpenApiObject):
             "per_port_options", PerPortOptionsIter, self._parent, self._choice
         )
 
+    @property
+    def flow_options(self):
+        # type: () -> FlowOptions
+        """flow_options getter
+
+        Common flow options that apply to all configured Flow objects.Common flow options that apply to all configured Flow objects.Common flow options that apply to all configured Flow objects.
+
+        Returns: FlowOptions
+        """
+        return self._get_property("flow_options", FlowOptions)
+
 
 class PortOptions(OpenApiObject):
     __slots__ = "_parent"
@@ -150328,6 +162371,7 @@ class PortOptions(OpenApiObject):
     _TYPES = {
         "location_preemption": {"type": bool},
         "data_integrity": {"type": bool},
+        "frame_ordering_mode": {"type": "PortOptionsFrameOrderingMode"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -150391,6 +162435,75 @@ class PortOptions(OpenApiObject):
         value: bool
         """
         self._set_property("data_integrity", value)
+
+    @property
+    def frame_ordering_mode(self):
+        # type: () -> PortOptionsFrameOrderingMode
+        """frame_ordering_mode getter
+
+        Controls how an implementation arranges (interleaves) the frames of multiple flows that share source ports and destination ports.. flow transmits frames from its source port(s) to its destination port(s). When multiple flows transmit simultaneously towards common destination port, the transmit ordering determines how the frames of the different flows are interleaved on the wire from the source ports. This is independent of the per-flow payload sequence used for loss and latency measurement.Controls how an implementation arranges (interleaves) the frames of multiple flows that share source ports and destination ports.. flow transmits frames from its source port(s) to its destination port(s). When multiple flows transmit simultaneously towards common destination port, the transmit ordering determines how the frames of the different flows are interleaved on the wire from the source ports. This is independent of the per-flow payload sequence used for loss and latency measurement.Controls how an implementation arranges (interleaves) the frames of multiple flows that share source ports and destination ports.. flow transmits frames from its source port(s) to its destination port(s). When multiple flows transmit simultaneously towards common destination port, the transmit ordering determines how the frames of the different flows are interleaved on the wire from the source ports. This is independent of the per-flow payload sequence used for loss and latency measurement.
+
+        Returns: PortOptionsFrameOrderingMode
+        """
+        return self._get_property("frame_ordering_mode", PortOptionsFrameOrderingMode)
+
+
+class PortOptionsFrameOrderingMode(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "no_ordering",
+                "rfc2889",
+            ],
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "no_ordering",
+    }  # type: Dict[str, Union(type)]
+
+    NO_ORDERING = "no_ordering"  # type: str
+    RFC2889 = "rfc2889"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(PortOptionsFrameOrderingMode, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["no_ordering"], Literal["rfc2889"]]
+        """choice getter
+
+        The type of frame ordering mode.. - no_ordering: No specific ordering is applied across flows when frames are transmitted from the source ports. The implementation is free to interleave the frames of concurrent flows towards the destination ports in whatever manner is most efficient. This is the lowest-overhead setting and is appropriate when per-flow transmit sequence integrity is not being measured, for example pure throughput or line-rate saturation, loss-only or latency-only measurements, single flow from one source port to one destination port, and protocol emulation traffic whose ordering is governed by the protocol itself.. - rfc2889: Transmit ordering follows the methodology defined in RFC 2889, "Benchmarking Methodology for LAN Switching Devices". The interleaved frames of flow that share source ports and destination ports are arranged using round-robin sequencing before they are transmitted from the source ports. This prevents destination port from being overloaded by simultaneous flows arriving from multiple source ports and keeps per-flow sequencing valid under load. It is appropriate for RFC 2889 test types such as fully-meshed (many source ports to many destination ports) forwarding, congestion control head-of-line blocking (many source ports to one destination port), and maximum forwarding rate measurements.
+
+        Returns: Union[Literal["no_ordering"], Literal["rfc2889"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The type of frame ordering mode.. - no_ordering: No specific ordering is applied across flows when frames are transmitted from the source ports. The implementation is free to interleave the frames of concurrent flows towards the destination ports in whatever manner is most efficient. This is the lowest-overhead setting and is appropriate when per-flow transmit sequence integrity is not being measured, for example pure throughput or line-rate saturation, loss-only or latency-only measurements, single flow from one source port to one destination port, and protocol emulation traffic whose ordering is governed by the protocol itself.. - rfc2889: Transmit ordering follows the methodology defined in RFC 2889, "Benchmarking Methodology for LAN Switching Devices". The interleaved frames of flow that share source ports and destination ports are arranged using round-robin sequencing before they are transmitted from the source ports. This prevents destination port from being overloaded by simultaneous flows arriving from multiple source ports and keeps per-flow sequencing valid under load. It is appropriate for RFC 2889 test types such as fully-meshed (many source ports to many destination ports) forwarding, congestion control head-of-line blocking (many source ports to one destination port), and maximum forwarding rate measurements.
+
+        value: Union[Literal["no_ordering"], Literal["rfc2889"]]
+        """
+        self._set_property("choice", value)
 
 
 class ProtocolOptions(OpenApiObject):
@@ -150507,9 +162620,11 @@ class PortProtocol(OpenApiObject):
             "type": str,
             "enum": [
                 "rocev2",
+                "macsec",
             ],
         },
         "rocev2": {"type": "Rocev2PerPortSettings"},
+        "macsec": {"type": "MacsecPerPortSettings"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -150519,6 +162634,7 @@ class PortProtocol(OpenApiObject):
     }  # type: Dict[str, Union(type)]
 
     ROCEV2 = "rocev2"  # type: str
+    MACSEC = "macsec"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -150546,13 +162662,24 @@ class PortProtocol(OpenApiObject):
         return self._get_property("rocev2", Rocev2PerPortSettings, self, "rocev2")
 
     @property
+    def macsec(self):
+        # type: () -> MacsecPerPortSettings
+        """Factory property that returns an instance of the MacsecPerPortSettings class
+
+        MACsec hardware acceleration settings of test port. These settings are applicable to all MACsec devices configured on this port. These settings are not applicable to MACsec configured on LAG member port.
+
+        Returns: MacsecPerPortSettings
+        """
+        return self._get_property("macsec", MacsecPerPortSettings, self, "macsec")
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["rocev2"]]
+        # type: () -> Union[Literal["macsec"], Literal["rocev2"]]
         """choice getter
 
         list of protocols that have per port settings
 
-        Returns: Union[Literal["rocev2"]]
+        Returns: Union[Literal["macsec"], Literal["rocev2"]]
         """
         return self._get_property("choice")
 
@@ -150562,7 +162689,7 @@ class PortProtocol(OpenApiObject):
 
         list of protocols that have per port settings
 
-        value: Union[Literal["rocev2"]]
+        value: Union[Literal["macsec"], Literal["rocev2"]]
         """
         self._set_property("choice", value)
 
@@ -151691,6 +163818,543 @@ class Rocev2DCQCN(OpenApiObject):
         self._set_property("hyper_increment_rate", value)
 
 
+class MacsecPerPortSettings(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "hardware_acceleration": {"type": "MacsecHardwareAcceleration"},
+        "validate_frames": {"type": "MacsecValidateFrames"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(MacsecPerPortSettings, self).__init__()
+        self._parent = parent
+
+    @property
+    def hardware_acceleration(self):
+        # type: () -> MacsecHardwareAcceleration
+        """hardware_acceleration getter
+
+        Hardware acceleration configuration for offloading MACsec processing to hardware.Hardware acceleration configuration for offloading MACsec processing to hardware.Hardware acceleration configuration for offloading MACsec processing to hardware.Hardware acceleration configuration for offloading MACsec processing to hardware.
+
+        Returns: MacsecHardwareAcceleration
+        """
+        return self._get_property("hardware_acceleration", MacsecHardwareAcceleration)
+
+    @property
+    def validate_frames(self):
+        # type: () -> MacsecValidateFrames
+        """validate_frames getter
+
+        Controls validation of received frames.Controls validation of received frames.Controls validation of received frames.Controls validation of received frames.
+
+        Returns: MacsecValidateFrames
+        """
+        return self._get_property("validate_frames", MacsecValidateFrames)
+
+
+class MacsecHardwareAcceleration(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "none",
+                "inline_crypto",
+            ],
+        },
+        "inline_crypto": {"type": "MacsecHardwareAccelerationInlineCrypto"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "none",
+    }  # type: Dict[str, Union(type)]
+
+    NONE = "none"  # type: str
+    INLINE_CRYPTO = "inline_crypto"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(MacsecHardwareAcceleration, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def inline_crypto(self):
+        # type: () -> MacsecHardwareAccelerationInlineCrypto
+        """Factory property that returns an instance of the MacsecHardwareAccelerationInlineCrypto class
+
+        Inline cryto engine configuration. Encryption/ decryption are offloaded to hardware. Also dynamic fields e.g. packet number(PN) and integrity check value(ICV) are updated in MACsec header on transmit.
+
+        Returns: MacsecHardwareAccelerationInlineCrypto
+        """
+        return self._get_property(
+            "inline_crypto",
+            MacsecHardwareAccelerationInlineCrypto,
+            self,
+            "inline_crypto",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["inline_crypto"], Literal["none"]]
+        """choice getter
+
+        Hardware acceleration types.
+
+        Returns: Union[Literal["inline_crypto"], Literal["none"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Hardware acceleration types.
+
+        value: Union[Literal["inline_crypto"], Literal["none"]]
+        """
+        self._set_property("choice", value)
+
+
+class MacsecHardwareAccelerationInlineCrypto(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "rx_sectag_offset": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 12,
+        },
+        "rx_sc_identifying_field": {
+            "type": str,
+            "enum": [
+                "sci_port_id",
+                "sci_system_id",
+                "source_mac",
+            ],
+        },
+        "type_of_ca": {"type": "MacsecHardwareAccelerationInlineCryptoTypeOfCa"},
+        "max_ca_count": {
+            "type": str,
+            "enum": [
+                "eight",
+                "four",
+                "one",
+                "one_twenty_eight",
+                "sixteen",
+                "sixty_four",
+                "thirty_two",
+                "two",
+                "two_fifty_six",
+            ],
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "rx_sectag_offset": 12,
+        "rx_sc_identifying_field": "source_mac",
+        "max_ca_count": "two_fifty_six",
+    }  # type: Dict[str, Union(type)]
+
+    SCI_PORT_ID = "sci_port_id"  # type: str
+    SCI_SYSTEM_ID = "sci_system_id"  # type: str
+    SOURCE_MAC = "source_mac"  # type: str
+
+    EIGHT = "eight"  # type: str
+    FOUR = "four"  # type: str
+    ONE = "one"  # type: str
+    ONE_TWENTY_EIGHT = "one_twenty_eight"  # type: str
+    SIXTEEN = "sixteen"  # type: str
+    SIXTY_FOUR = "sixty_four"  # type: str
+    THIRTY_TWO = "thirty_two"  # type: str
+    TWO = "two"  # type: str
+    TWO_FIFTY_SIX = "two_fifty_six"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        rx_sectag_offset=12,
+        rx_sc_identifying_field="source_mac",
+        max_ca_count="two_fifty_six",
+    ):
+        super(MacsecHardwareAccelerationInlineCrypto, self).__init__()
+        self._parent = parent
+        self._set_property("rx_sectag_offset", rx_sectag_offset)
+        self._set_property("rx_sc_identifying_field", rx_sc_identifying_field)
+        self._set_property("max_ca_count", max_ca_count)
+
+    def set(
+        self, rx_sectag_offset=None, rx_sc_identifying_field=None, max_ca_count=None
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def rx_sectag_offset(self):
+        # type: () -> int
+        """rx_sectag_offset getter
+
+        Offset of Rx secTAG from the first byte in packet. It is set to 12 when the secTAG includes the 'ethernet type' field which has value "0x88E5".
+
+        Returns: int
+        """
+        return self._get_property("rx_sectag_offset")
+
+    @rx_sectag_offset.setter
+    def rx_sectag_offset(self, value):
+        """rx_sectag_offset setter
+
+        Offset of Rx secTAG from the first byte in packet. It is set to 12 when the secTAG includes the 'ethernet type' field which has value "0x88E5".
+
+        value: int
+        """
+        self._set_property("rx_sectag_offset", value)
+
+    @property
+    def rx_sc_identifying_field(self):
+        # type: () -> Union[Literal["sci_port_id"], Literal["sci_system_id"], Literal["source_mac"]]
+        """rx_sc_identifying_field getter
+
+        The field based on which secure channel(SC) will be identified by the receiving port. Supported fields are:- 1) source MAC identify SC based on source MAC field. 2) SCI system ID identify SC based on SCI system ID field. 3) SCI port ID identify based on SCI port ID field.
+
+        Returns: Union[Literal["sci_port_id"], Literal["sci_system_id"], Literal["source_mac"]]
+        """
+        return self._get_property("rx_sc_identifying_field")
+
+    @rx_sc_identifying_field.setter
+    def rx_sc_identifying_field(self, value):
+        """rx_sc_identifying_field setter
+
+        The field based on which secure channel(SC) will be identified by the receiving port. Supported fields are:- 1) source MAC identify SC based on source MAC field. 2) SCI system ID identify SC based on SCI system ID field. 3) SCI port ID identify based on SCI port ID field.
+
+        value: Union[Literal["sci_port_id"], Literal["sci_system_id"], Literal["source_mac"]]
+        """
+        self._set_property("rx_sc_identifying_field", value)
+
+    @property
+    def type_of_ca(self):
+        # type: () -> MacsecHardwareAccelerationInlineCryptoTypeOfCa
+        """type_of_ca getter
+
+        Type of connectivity association(CA).Type of connectivity association(CA).Type of connectivity association(CA).Type of connectivity association(CA).
+
+        Returns: MacsecHardwareAccelerationInlineCryptoTypeOfCa
+        """
+        return self._get_property(
+            "type_of_ca", MacsecHardwareAccelerationInlineCryptoTypeOfCa
+        )
+
+    @property
+    def max_ca_count(self):
+        # type: () -> Union[Literal["eight"], Literal["four"], Literal["one"], Literal["one_twenty_eight"], Literal["sixteen"], Literal["sixty_four"], Literal["thirty_two"], Literal["two"], Literal["two_fifty_six"]]
+        """max_ca_count getter
+
+        The number of CAs configured in MKA can be determined by the number of devices having different VLANs, and within the same VLAN, by the number of distinct CKNs (CAK Names). The maximum number of CAs permitted on the port. The value should be rounded to the power of to the ceiling of actual number of CAs. E.g. for CAs, maximum CA count should be set to 8. The maximum count supported per port is 256 for Pair-wise CA, each CA having one MACsec device. Product of maximum CA count and MACsec device count per CA can have maximum value of 256. E.g. for maximum CA count of 1, maximum 256 devices are permitted. For maximum CA count of 8, maximum 32 devices are permitted per CA. For maximum CA count of 256, maximum device is permitted per CA.
+
+        Returns: Union[Literal["eight"], Literal["four"], Literal["one"], Literal["one_twenty_eight"], Literal["sixteen"], Literal["sixty_four"], Literal["thirty_two"], Literal["two"], Literal["two_fifty_six"]]
+        """
+        return self._get_property("max_ca_count")
+
+    @max_ca_count.setter
+    def max_ca_count(self, value):
+        """max_ca_count setter
+
+        The number of CAs configured in MKA can be determined by the number of devices having different VLANs, and within the same VLAN, by the number of distinct CKNs (CAK Names). The maximum number of CAs permitted on the port. The value should be rounded to the power of to the ceiling of actual number of CAs. E.g. for CAs, maximum CA count should be set to 8. The maximum count supported per port is 256 for Pair-wise CA, each CA having one MACsec device. Product of maximum CA count and MACsec device count per CA can have maximum value of 256. E.g. for maximum CA count of 1, maximum 256 devices are permitted. For maximum CA count of 8, maximum 32 devices are permitted per CA. For maximum CA count of 256, maximum device is permitted per CA.
+
+        value: Union[Literal["eight"], Literal["four"], Literal["one"], Literal["one_twenty_eight"], Literal["sixteen"], Literal["sixty_four"], Literal["thirty_two"], Literal["two"], Literal["two_fifty_six"]]
+        """
+        self._set_property("max_ca_count", value)
+
+
+class MacsecHardwareAccelerationInlineCryptoTypeOfCa(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "pairwise_ca",
+                "group_ca",
+            ],
+        },
+        "group_ca": {"type": "MacsecHardwareAccelerationInlineCryptoTypeOfCaGroupCa"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "pairwise_ca",
+    }  # type: Dict[str, Union(type)]
+
+    PAIRWISE_CA = "pairwise_ca"  # type: str
+    GROUP_CA = "group_ca"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(MacsecHardwareAccelerationInlineCryptoTypeOfCa, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def group_ca(self):
+        # type: () -> MacsecHardwareAccelerationInlineCryptoTypeOfCaGroupCa
+        """Factory property that returns an instance of the MacsecHardwareAccelerationInlineCryptoTypeOfCaGroupCa class
+
+        Group onnectivity association(CA).
+
+        Returns: MacsecHardwareAccelerationInlineCryptoTypeOfCaGroupCa
+        """
+        return self._get_property(
+            "group_ca",
+            MacsecHardwareAccelerationInlineCryptoTypeOfCaGroupCa,
+            self,
+            "group_ca",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["group_ca"], Literal["pairwise_ca"]]
+        """choice getter
+
+        Type of connectivity association(CA).
+
+        Returns: Union[Literal["group_ca"], Literal["pairwise_ca"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Type of connectivity association(CA).
+
+        value: Union[Literal["group_ca"], Literal["pairwise_ca"]]
+        """
+        self._set_property("choice", value)
+
+
+class MacsecHardwareAccelerationInlineCryptoTypeOfCaGroupCa(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "single_dut_tx_sc",
+                "multiple_dut_tx_sc",
+            ],
+        },
+        "multiple_dut_tx_sc": {
+            "type": "MacsecHardwareAccelerationInlineCryptoTypeOfCaGroupCaMultipleDutTxSc"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "multiple_dut_tx_sc",
+    }  # type: Dict[str, Union(type)]
+
+    SINGLE_DUT_TX_SC = "single_dut_tx_sc"  # type: str
+    MULTIPLE_DUT_TX_SC = "multiple_dut_tx_sc"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(MacsecHardwareAccelerationInlineCryptoTypeOfCaGroupCa, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def multiple_dut_tx_sc(self):
+        # type: () -> MacsecHardwareAccelerationInlineCryptoTypeOfCaGroupCaMultipleDutTxSc
+        """Factory property that returns an instance of the MacsecHardwareAccelerationInlineCryptoTypeOfCaGroupCaMultipleDutTxSc class
+
+        Maximum possible DUT Tx secure channel(SC) count per group connectivity association(CA).
+
+        Returns: MacsecHardwareAccelerationInlineCryptoTypeOfCaGroupCaMultipleDutTxSc
+        """
+        return self._get_property(
+            "multiple_dut_tx_sc",
+            MacsecHardwareAccelerationInlineCryptoTypeOfCaGroupCaMultipleDutTxSc,
+            self,
+            "multiple_dut_tx_sc",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["multiple_dut_tx_sc"], Literal["single_dut_tx_sc"]]
+        """choice getter
+
+        DUT Tx secure channel(SC) count in group connectivity association(CA).
+
+        Returns: Union[Literal["multiple_dut_tx_sc"], Literal["single_dut_tx_sc"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        DUT Tx secure channel(SC) count in group connectivity association(CA).
+
+        value: Union[Literal["multiple_dut_tx_sc"], Literal["single_dut_tx_sc"]]
+        """
+        self._set_property("choice", value)
+
+
+class MacsecHardwareAccelerationInlineCryptoTypeOfCaGroupCaMultipleDutTxSc(
+    OpenApiObject
+):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "max_dut_tx_sc_per_ca": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "max_dut_tx_sc_per_ca": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, max_dut_tx_sc_per_ca=1):
+        super(
+            MacsecHardwareAccelerationInlineCryptoTypeOfCaGroupCaMultipleDutTxSc, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("max_dut_tx_sc_per_ca", max_dut_tx_sc_per_ca)
+
+    def set(self, max_dut_tx_sc_per_ca=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def max_dut_tx_sc_per_ca(self):
+        # type: () -> int
+        """max_dut_tx_sc_per_ca getter
+
+        When there are multiple DUTs connected to group CA, set the maximum possible number of DUT transmit SCs per CA. If max_ca_count is then the value should be <= (256/N). If any greater value is given, it should be set to (256/ N).
+
+        Returns: int
+        """
+        return self._get_property("max_dut_tx_sc_per_ca")
+
+    @max_dut_tx_sc_per_ca.setter
+    def max_dut_tx_sc_per_ca(self, value):
+        """max_dut_tx_sc_per_ca setter
+
+        When there are multiple DUTs connected to group CA, set the maximum possible number of DUT transmit SCs per CA. If max_ca_count is then the value should be <= (256/N). If any greater value is given, it should be set to (256/ N).
+
+        value: int
+        """
+        self._set_property("max_dut_tx_sc_per_ca", value)
+
+
+class MacsecValidateFrames(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "check",
+                "strict",
+            ],
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "check",
+    }  # type: Dict[str, Union(type)]
+
+    CHECK = "check"  # type: str
+    STRICT = "strict"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(MacsecValidateFrames, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["check"], Literal["strict"]]
+        """choice getter
+
+        Controls validation of received frames. check enable validation, do not discard invalid frames and increment in_pkts_invalid stats. strict enable validation and discard invalid frames and increment in_pkts_not_valid stats.
+
+        Returns: Union[Literal["check"], Literal["strict"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Controls validation of received frames. check enable validation, do not discard invalid frames and increment in_pkts_invalid stats. strict enable validation and discard invalid frames and increment in_pkts_not_valid stats.
+
+        value: Union[Literal["check"], Literal["strict"]]
+        """
+        self._set_property("choice", value)
+
+
 class PortProtocolIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
@@ -151702,7 +164366,7 @@ class PortProtocolIter(OpenApiIter):
         self._choice = choice
 
     def __getitem__(self, key):
-        # type: (str) -> Union[PortProtocol, Rocev2PerPortSettings]
+        # type: (str) -> Union[MacsecPerPortSettings, PortProtocol, Rocev2PerPortSettings]
         return self._getitem(key)
 
     def __iter__(self):
@@ -151756,6 +164420,20 @@ class PortProtocolIter(OpenApiIter):
         item = PortProtocol()
         item.rocev2
         item.choice = "rocev2"
+        self._add(item)
+        return self
+
+    def macsec(self):
+        # type: () -> PortProtocolIter
+        """Factory method that creates an instance of the MacsecPerPortSettings class
+
+        MACsec hardware acceleration settings of test port. These settings are applicable to all MACsec devices configured on this port. These settings are not applicable to MACsec configured on LAG member port.
+
+        Returns: PortProtocolIter
+        """
+        item = PortProtocol()
+        item.macsec
+        item.choice = "macsec"
         self._add(item)
         return self
 
@@ -151813,6 +164491,53 @@ class PerPortOptionsIter(OpenApiIter):
         item = PerPortOptions(parent=self._parent, port_name=port_name)
         self._add(item)
         return item
+
+
+class FlowOptions(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "packet_loss_duration": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "packet_loss_duration": False,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, packet_loss_duration=False):
+        super(FlowOptions, self).__init__()
+        self._parent = parent
+        self._set_property("packet_loss_duration", packet_loss_duration)
+
+    def set(self, packet_loss_duration=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def packet_loss_duration(self):
+        # type: () -> bool
+        """packet_loss_duration getter
+
+        Enable flow statistics to compute and return the Packet Loss Duration (in milliseconds). This metric represents the duration for which expected flow packets were not received, reported either per Rx port or aggregated across all Rx ports, depending on whether the flow metric is being fetched at per Rx port level or at an aggregate level. When set to true, this duration is reported in packet_loss field of the flow statistics. Applied across all flows.
+
+        Returns: bool
+        """
+        return self._get_property("packet_loss_duration")
+
+    @packet_loss_duration.setter
+    def packet_loss_duration(self, value):
+        """packet_loss_duration setter
+
+        Enable flow statistics to compute and return the Packet Loss Duration (in milliseconds). This metric represents the duration for which expected flow packets were not received, reported either per Rx port or aggregated across all Rx ports, depending on whether the flow metric is being fetched at per Rx port level or at an aggregate level. When set to true, this duration is reported in packet_loss field of the flow statistics. Applied across all flows.
+
+        value: bool
+        """
+        self._set_property("packet_loss_duration", value)
 
 
 class Lldp(OpenApiObject):
@@ -154480,9 +167205,11 @@ class ConfigUpdate(OpenApiObject):
             "type": str,
             "enum": [
                 "flows",
+                "protocols",
             ],
         },
         "flows": {"type": "FlowsUpdate"},
+        "protocols": {"type": "ProtocolsUpdate"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -154490,6 +167217,7 @@ class ConfigUpdate(OpenApiObject):
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
     FLOWS = "flows"  # type: str
+    PROTOCOLS = "protocols"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -154517,13 +167245,24 @@ class ConfigUpdate(OpenApiObject):
         return self._get_property("flows", FlowsUpdate, self, "flows")
 
     @property
+    def protocols(self):
+        # type: () -> ProtocolsUpdate
+        """Factory property that returns an instance of the ProtocolsUpdate class
+
+        A container of protocol properties to be updated that may or may not be. able to maintain the current protocol session always in the Up state.. If the session is up but true on-the-fly update is not supported for one of the attributes selected for update. (e.g. metric change on an emulated interface): warning should be returned indicating that the session will be. disabled and re-enabled, and the updated attribute(s) will be reflected once the session comes back up.. The attributes are permanently updated in the stored config. [i.e. the next get_config should return modified parameters]. If any of the protocol session(s) linked to the attributes are not in started state, an implementation can. a) return an Error rejecting the full update request if on the fly changes are supported only on. started protocol sessions, OR. b) return Warning indicating that some of the sessions were not in started state, update the configuration. and apply it on the next start of the protocol session.
+
+        Returns: ProtocolsUpdate
+        """
+        return self._get_property("protocols", ProtocolsUpdate, self, "protocols")
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["flows"]]
+        # type: () -> Union[Literal["flows"], Literal["protocols"]]
         """choice getter
 
-        TBD
+        Selects the type of resource to update.
 
-        Returns: Union[Literal["flows"]]
+        Returns: Union[Literal["flows"], Literal["protocols"]]
         """
         return self._get_property("choice")
 
@@ -154531,9 +167270,9 @@ class ConfigUpdate(OpenApiObject):
     def choice(self, value):
         """choice setter
 
-        TBD
+        Selects the type of resource to update.
 
-        value: Union[Literal["flows"]]
+        value: Union[Literal["flows"], Literal["protocols"]]
         """
         self._set_property("choice", value)
 
@@ -154600,11 +167339,671 @@ class FlowsUpdate(OpenApiObject):
         # type: () -> FlowIter
         """flows getter
 
-        The list of configured flows for which given property will be updated.
+        The list of configured flows for which the given property will be updated.
 
         Returns: FlowIter
         """
         return self._get_property("flows", FlowIter, self._parent, self._choice)
+
+
+class ProtocolsUpdate(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "isis": {"type": "UpdateProtocolConfigIsis"},
+        "ospfv2": {"type": "UpdateProtocolConfigOspfv2"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(ProtocolsUpdate, self).__init__()
+        self._parent = parent
+
+    @property
+    def isis(self):
+        # type: () -> UpdateProtocolConfigIsis
+        """isis getter
+
+        A container for IS-IS properties to be updated. Presence of this object indicates that one or more IS-IS properties require updating.A container for IS-IS properties to be updated. Presence of this object indicates that one or more IS-IS properties require updating.A container for IS-IS properties to be updated. Presence of this object indicates that one or more IS-IS properties require updating.A container for IS-IS properties to be updated. Presence of this object indicates that one or more IS-IS properties require updating.IS-IS protocol attribute updates to apply.
+
+        Returns: UpdateProtocolConfigIsis
+        """
+        return self._get_property("isis", UpdateProtocolConfigIsis)
+
+    @property
+    def ospfv2(self):
+        # type: () -> UpdateProtocolConfigOspfv2
+        """ospfv2 getter
+
+        A container for OSPFv2 properties to be updated. Presence of this object indicates that one or more OSPFv2 properties require updating.A container for OSPFv2 properties to be updated. Presence of this object indicates that one or more OSPFv2 properties require updating.A container for OSPFv2 properties to be updated. Presence of this object indicates that one or more OSPFv2 properties require updating.A container for OSPFv2 properties to be updated. Presence of this object indicates that one or more OSPFv2 properties require updating.OSPFv2 protocol attribute updates to apply.
+
+        Returns: UpdateProtocolConfigOspfv2
+        """
+        return self._get_property("ospfv2", UpdateProtocolConfigOspfv2)
+
+
+class UpdateProtocolConfigIsis(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "interfaces": {"type": "UpdateProtocolConfigIsisInterfaceUpdateGroupIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(UpdateProtocolConfigIsis, self).__init__()
+        self._parent = parent
+
+    @property
+    def interfaces(self):
+        # type: () -> UpdateProtocolConfigIsisInterfaceUpdateGroupIter
+        """interfaces getter
+
+        List of IS-IS interface update groups. One update group targets one or more IS-IS interfaces.. Use multiple update groups to handle asymmetric changes across different subsets of interfaces.. All interfaces listed in names in each update group receive every attribute update specified in the attributes list. . If the session is up but true on-the-fly update is not supported for an attribute (e.g. metric change on an emulated interface),. warning is returned indicating that the session will be disabled and re-enabled, and the updated attribute will be reflected once the session comes back up.. An error should be returned if any provided name is not found in the current configuration's list of IS-IS interface names.
+
+        Returns: UpdateProtocolConfigIsisInterfaceUpdateGroupIter
+        """
+        return self._get_property(
+            "interfaces",
+            UpdateProtocolConfigIsisInterfaceUpdateGroupIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class UpdateProtocolConfigIsisInterfaceUpdateGroup(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "names": {
+            "type": list,
+            "itemtype": str,
+        },
+        "attributes": {"type": "UpdateProtocolConfigIsisInterfaceAttributeIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, names=None):
+        super(UpdateProtocolConfigIsisInterfaceUpdateGroup, self).__init__()
+        self._parent = parent
+        self._set_property("names", names)
+
+    def set(self, names=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def names(self):
+        # type: () -> List[str]
+        """names getter
+
+        The names of the IS-IS interfaces to which all attribute updates in this group will be applied.. x-constraint:. /components/schemas/Isis.Interface/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("names")
+
+    @names.setter
+    def names(self, value):
+        """names setter
+
+        The names of the IS-IS interfaces to which all attribute updates in this group will be applied.. x-constraint:. /components/schemas/Isis.Interface/properties/name.
+
+        value: List[str]
+        """
+        self._set_property("names", value)
+
+    @property
+    def attributes(self):
+        # type: () -> UpdateProtocolConfigIsisInterfaceAttributeIter
+        """attributes getter
+
+        The list of interface attribute updates to apply. Each entry selects one attribute via the choice discriminator. Multiple attributes can be updated in single group without repeating the names list.
+
+        Returns: UpdateProtocolConfigIsisInterfaceAttributeIter
+        """
+        return self._get_property(
+            "attributes",
+            UpdateProtocolConfigIsisInterfaceAttributeIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class UpdateProtocolConfigIsisInterfaceAttribute(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "metric",
+            ],
+        },
+        "metric": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 16777215,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "metric": 10,
+    }  # type: Dict[str, Union(type)]
+
+    METRIC = "metric"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, metric=10):
+        super(UpdateProtocolConfigIsisInterfaceAttribute, self).__init__()
+        self._parent = parent
+        self._set_property("metric", metric)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, metric=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["metric"]]
+        """choice getter
+
+        The interface attribute to be updated.
+
+        Returns: Union[Literal["metric"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The interface attribute to be updated.
+
+        value: Union[Literal["metric"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def metric(self):
+        # type: () -> int
+        """metric getter
+
+        The metric value to be updated on the IS-IS interface.. The maximum value of 16777215 (2^24-1) applies only when wide metric is. enabled (RFC 5305). With narrow metrics the maximum is 63; values above. 63 will be rejected.. On simulated IS-IS interface (no real adjacency with the DUT), updating. the metric is true on-the-fly operation: the IS-IS session remains in the. Up state and the router immediately re-advertises its LSP with the new metric. value, which neighbors receive without any session interruption.. On an emulated IS-IS interface (real adjacency with the DUT), true. on-the-fly metric update may not be supported. In that case the implementation. should return warning, disable the session, re-enable it with the updated. metric, and reflect the new value in the LSP once the session comes back up.
+
+        Returns: int
+        """
+        return self._get_property("metric")
+
+    @metric.setter
+    def metric(self, value):
+        """metric setter
+
+        The metric value to be updated on the IS-IS interface.. The maximum value of 16777215 (2^24-1) applies only when wide metric is. enabled (RFC 5305). With narrow metrics the maximum is 63; values above. 63 will be rejected.. On simulated IS-IS interface (no real adjacency with the DUT), updating. the metric is true on-the-fly operation: the IS-IS session remains in the. Up state and the router immediately re-advertises its LSP with the new metric. value, which neighbors receive without any session interruption.. On an emulated IS-IS interface (real adjacency with the DUT), true. on-the-fly metric update may not be supported. In that case the implementation. should return warning, disable the session, re-enable it with the updated. metric, and reflect the new value in the LSP once the session comes back up.
+
+        value: int
+        """
+        self._set_property("metric", value, "metric")
+
+
+class UpdateProtocolConfigIsisInterfaceAttributeIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(UpdateProtocolConfigIsisInterfaceAttributeIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[UpdateProtocolConfigIsisInterfaceAttribute]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> UpdateProtocolConfigIsisInterfaceAttributeIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> UpdateProtocolConfigIsisInterfaceAttribute
+        return self._next()
+
+    def next(self):
+        # type: () -> UpdateProtocolConfigIsisInterfaceAttribute
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, UpdateProtocolConfigIsisInterfaceAttribute):
+            raise Exception(
+                "Item is not an instance of UpdateProtocolConfigIsisInterfaceAttribute"
+            )
+
+    def attribute(self, metric=10):
+        # type: (int) -> UpdateProtocolConfigIsisInterfaceAttributeIter
+        """Factory method that creates an instance of the UpdateProtocolConfigIsisInterfaceAttribute class
+
+        A single IS-IS interface attribute update. The choice field identifies which attribute is being changed.
+
+        Returns: UpdateProtocolConfigIsisInterfaceAttributeIter
+        """
+        item = UpdateProtocolConfigIsisInterfaceAttribute(
+            parent=self._parent, choice=self._choice, metric=metric
+        )
+        self._add(item)
+        return self
+
+    def add(self, metric=10):
+        # type: (int) -> UpdateProtocolConfigIsisInterfaceAttribute
+        """Add method that creates and returns an instance of the UpdateProtocolConfigIsisInterfaceAttribute class
+
+        A single IS-IS interface attribute update. The choice field identifies which attribute is being changed.
+
+        Returns: UpdateProtocolConfigIsisInterfaceAttribute
+        """
+        item = UpdateProtocolConfigIsisInterfaceAttribute(
+            parent=self._parent, choice=self._choice, metric=metric
+        )
+        self._add(item)
+        return item
+
+
+class UpdateProtocolConfigIsisInterfaceUpdateGroupIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(UpdateProtocolConfigIsisInterfaceUpdateGroupIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[UpdateProtocolConfigIsisInterfaceUpdateGroup]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> UpdateProtocolConfigIsisInterfaceUpdateGroupIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> UpdateProtocolConfigIsisInterfaceUpdateGroup
+        return self._next()
+
+    def next(self):
+        # type: () -> UpdateProtocolConfigIsisInterfaceUpdateGroup
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, UpdateProtocolConfigIsisInterfaceUpdateGroup):
+            raise Exception(
+                "Item is not an instance of UpdateProtocolConfigIsisInterfaceUpdateGroup"
+            )
+
+    def updategroup(self, names=None):
+        # type: (List[str]) -> UpdateProtocolConfigIsisInterfaceUpdateGroupIter
+        """Factory method that creates an instance of the UpdateProtocolConfigIsisInterfaceUpdateGroup class
+
+        An update group targeting one or more IS-IS interfaces. All interfaces listed in names receive every attribute update specified in the attributes list. Use multiple update groups to apply different updates to different subsets of interfaces (asymmetric updates).. If the session is up but true on-the-fly update is not supported for an attribute (e.g. metric change on an emulated interface): warning is returned indicating that the session will be disabled and re-enabled,. and the updated attribute will be reflected once the session comes back up. An error should be returned if any provided name is not found in the current configuration's list of IS-IS interface names.
+
+        Returns: UpdateProtocolConfigIsisInterfaceUpdateGroupIter
+        """
+        item = UpdateProtocolConfigIsisInterfaceUpdateGroup(
+            parent=self._parent, names=names
+        )
+        self._add(item)
+        return self
+
+    def add(self, names=None):
+        # type: (List[str]) -> UpdateProtocolConfigIsisInterfaceUpdateGroup
+        """Add method that creates and returns an instance of the UpdateProtocolConfigIsisInterfaceUpdateGroup class
+
+        An update group targeting one or more IS-IS interfaces. All interfaces listed in names receive every attribute update specified in the attributes list. Use multiple update groups to apply different updates to different subsets of interfaces (asymmetric updates).. If the session is up but true on-the-fly update is not supported for an attribute (e.g. metric change on an emulated interface): warning is returned indicating that the session will be disabled and re-enabled,. and the updated attribute will be reflected once the session comes back up. An error should be returned if any provided name is not found in the current configuration's list of IS-IS interface names.
+
+        Returns: UpdateProtocolConfigIsisInterfaceUpdateGroup
+        """
+        item = UpdateProtocolConfigIsisInterfaceUpdateGroup(
+            parent=self._parent, names=names
+        )
+        self._add(item)
+        return item
+
+
+class UpdateProtocolConfigOspfv2(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "interfaces": {"type": "UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(UpdateProtocolConfigOspfv2, self).__init__()
+        self._parent = parent
+
+    @property
+    def interfaces(self):
+        # type: () -> UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter
+        """interfaces getter
+
+        List of OSPFv2 interface update groups. One update group targets one or more OSPFv2 interfaces.. Use multiple update groups to handle asymmetric changes across different subsets of interfaces.. All interfaces listed in names in each update group receive every attribute update specified in the attributes list.. If the session is up but true on-the-fly update is not supported for an attribute (e.g. metric change on an emulated interface),. warning is returned indicating that the session will be disabled and re-enabled, and the updated attribute will be reflected. once the session comes back up.. An error should be returned if any provided name is not found in the current configuration's list of OSPFv2 interface names.
+
+        Returns: UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter
+        """
+        return self._get_property(
+            "interfaces",
+            UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class UpdateProtocolConfigOspfv2InterfaceUpdateGroup(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "names": {
+            "type": list,
+            "itemtype": str,
+        },
+        "attributes": {"type": "UpdateProtocolConfigOspfv2InterfaceAttributeIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, names=None):
+        super(UpdateProtocolConfigOspfv2InterfaceUpdateGroup, self).__init__()
+        self._parent = parent
+        self._set_property("names", names)
+
+    def set(self, names=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def names(self):
+        # type: () -> List[str]
+        """names getter
+
+        The names of the OSPFv2 interfaces to which all attribute updates in this group will be applied.. x-constraint:. /components/schemas/Ospfv2.Interface/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("names")
+
+    @names.setter
+    def names(self, value):
+        """names setter
+
+        The names of the OSPFv2 interfaces to which all attribute updates in this group will be applied.. x-constraint:. /components/schemas/Ospfv2.Interface/properties/name.
+
+        value: List[str]
+        """
+        self._set_property("names", value)
+
+    @property
+    def attributes(self):
+        # type: () -> UpdateProtocolConfigOspfv2InterfaceAttributeIter
+        """attributes getter
+
+        The list of interface attribute updates to apply. Each entry selects one attribute via the choice discriminator. Multiple attributes can be updated in single group without repeating the names list.
+
+        Returns: UpdateProtocolConfigOspfv2InterfaceAttributeIter
+        """
+        return self._get_property(
+            "attributes",
+            UpdateProtocolConfigOspfv2InterfaceAttributeIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class UpdateProtocolConfigOspfv2InterfaceAttribute(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "routing_metric",
+            ],
+        },
+        "routing_metric": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "routing_metric": 10,
+    }  # type: Dict[str, Union(type)]
+
+    ROUTING_METRIC = "routing_metric"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, routing_metric=10):
+        super(UpdateProtocolConfigOspfv2InterfaceAttribute, self).__init__()
+        self._parent = parent
+        self._set_property("routing_metric", routing_metric)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, routing_metric=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["routing_metric"]]
+        """choice getter
+
+        The interface attribute to be updated.
+
+        Returns: Union[Literal["routing_metric"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The interface attribute to be updated.
+
+        value: Union[Literal["routing_metric"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def routing_metric(self):
+        # type: () -> int
+        """routing_metric getter
+
+        The routing metric (interface output cost) to be updated on the OSPFv2. interface. It is advertised as the 16-bit TOS metric of the corresponding. link in the Router-LSA (RFC 2328 Appendix A.4.2); the interface output cost. has valid range of to 65535 (RFC 2328 Section C.3). This applies equally. to emulated and simulated OSPFv2 interfaces, since simulated router. originates its own Router-LSA carrying the same 16-bit link metric.. On simulated OSPFv2 interface (no real adjacency with the DUT; the interface. belongs to simulated router inside simulated topology), updating the metric. is true on-the-fly operation: the OSPFv2 session remains in the Up state and. the simulated router re-originates its Router-LSA (with an incremented LS. Sequence Number) carrying the new metric, which neighbors receive without any. session interruption.. On an emulated OSPFv2 interface (real adjacency with the DUT), true. on-the-fly metric update may not be supported. In that case the implementation. should return warning, disable the session, re-enable it with the updated. metric, and reflect the new value in the Router-LSA once the session comes. back up.
+
+        Returns: int
+        """
+        return self._get_property("routing_metric")
+
+    @routing_metric.setter
+    def routing_metric(self, value):
+        """routing_metric setter
+
+        The routing metric (interface output cost) to be updated on the OSPFv2. interface. It is advertised as the 16-bit TOS metric of the corresponding. link in the Router-LSA (RFC 2328 Appendix A.4.2); the interface output cost. has valid range of to 65535 (RFC 2328 Section C.3). This applies equally. to emulated and simulated OSPFv2 interfaces, since simulated router. originates its own Router-LSA carrying the same 16-bit link metric.. On simulated OSPFv2 interface (no real adjacency with the DUT; the interface. belongs to simulated router inside simulated topology), updating the metric. is true on-the-fly operation: the OSPFv2 session remains in the Up state and. the simulated router re-originates its Router-LSA (with an incremented LS. Sequence Number) carrying the new metric, which neighbors receive without any. session interruption.. On an emulated OSPFv2 interface (real adjacency with the DUT), true. on-the-fly metric update may not be supported. In that case the implementation. should return warning, disable the session, re-enable it with the updated. metric, and reflect the new value in the Router-LSA once the session comes. back up.
+
+        value: int
+        """
+        self._set_property("routing_metric", value, "routing_metric")
+
+
+class UpdateProtocolConfigOspfv2InterfaceAttributeIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(UpdateProtocolConfigOspfv2InterfaceAttributeIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[UpdateProtocolConfigOspfv2InterfaceAttribute]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> UpdateProtocolConfigOspfv2InterfaceAttributeIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> UpdateProtocolConfigOspfv2InterfaceAttribute
+        return self._next()
+
+    def next(self):
+        # type: () -> UpdateProtocolConfigOspfv2InterfaceAttribute
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, UpdateProtocolConfigOspfv2InterfaceAttribute):
+            raise Exception(
+                "Item is not an instance of UpdateProtocolConfigOspfv2InterfaceAttribute"
+            )
+
+    def attribute(self, routing_metric=10):
+        # type: (int) -> UpdateProtocolConfigOspfv2InterfaceAttributeIter
+        """Factory method that creates an instance of the UpdateProtocolConfigOspfv2InterfaceAttribute class
+
+        A single OSPFv2 interface attribute update. The choice field identifies which attribute is being changed.
+
+        Returns: UpdateProtocolConfigOspfv2InterfaceAttributeIter
+        """
+        item = UpdateProtocolConfigOspfv2InterfaceAttribute(
+            parent=self._parent, choice=self._choice, routing_metric=routing_metric
+        )
+        self._add(item)
+        return self
+
+    def add(self, routing_metric=10):
+        # type: (int) -> UpdateProtocolConfigOspfv2InterfaceAttribute
+        """Add method that creates and returns an instance of the UpdateProtocolConfigOspfv2InterfaceAttribute class
+
+        A single OSPFv2 interface attribute update. The choice field identifies which attribute is being changed.
+
+        Returns: UpdateProtocolConfigOspfv2InterfaceAttribute
+        """
+        item = UpdateProtocolConfigOspfv2InterfaceAttribute(
+            parent=self._parent, choice=self._choice, routing_metric=routing_metric
+        )
+        self._add(item)
+        return item
+
+
+class UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[UpdateProtocolConfigOspfv2InterfaceUpdateGroup]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> UpdateProtocolConfigOspfv2InterfaceUpdateGroup
+        return self._next()
+
+    def next(self):
+        # type: () -> UpdateProtocolConfigOspfv2InterfaceUpdateGroup
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, UpdateProtocolConfigOspfv2InterfaceUpdateGroup):
+            raise Exception(
+                "Item is not an instance of UpdateProtocolConfigOspfv2InterfaceUpdateGroup"
+            )
+
+    def updategroup(self, names=None):
+        # type: (List[str]) -> UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter
+        """Factory method that creates an instance of the UpdateProtocolConfigOspfv2InterfaceUpdateGroup class
+
+        An update group targeting one or more OSPFv2 interfaces. All interfaces listed in names receive every attribute update specified in the attributes list. Use multiple update groups to apply different updates to different subsets of interfaces (asymmetric updates).. If the session is up but true on-the-fly update is not supported for an attribute (e.g. metric change on an emulated interface): warning is returned indicating that the session will be disabled and re-enabled,. and the updated attribute will be reflected once the session comes back up. An error should be returned if any provided name is not found in the current configuration's list of OSPFv2 interface names.
+
+        Returns: UpdateProtocolConfigOspfv2InterfaceUpdateGroupIter
+        """
+        item = UpdateProtocolConfigOspfv2InterfaceUpdateGroup(
+            parent=self._parent, names=names
+        )
+        self._add(item)
+        return self
+
+    def add(self, names=None):
+        # type: (List[str]) -> UpdateProtocolConfigOspfv2InterfaceUpdateGroup
+        """Add method that creates and returns an instance of the UpdateProtocolConfigOspfv2InterfaceUpdateGroup class
+
+        An update group targeting one or more OSPFv2 interfaces. All interfaces listed in names receive every attribute update specified in the attributes list. Use multiple update groups to apply different updates to different subsets of interfaces (asymmetric updates).. If the session is up but true on-the-fly update is not supported for an attribute (e.g. metric change on an emulated interface): warning is returned indicating that the session will be disabled and re-enabled,. and the updated attribute will be reflected once the session comes back up. An error should be returned if any provided name is not found in the current configuration's list of OSPFv2 interface names.
+
+        Returns: UpdateProtocolConfigOspfv2InterfaceUpdateGroup
+        """
+        item = UpdateProtocolConfigOspfv2InterfaceUpdateGroup(
+            parent=self._parent, names=names
+        )
+        self._add(item)
+        return item
 
 
 class ConfigAppend(OpenApiObject):
@@ -155395,7 +168794,7 @@ class StateProtocol(OpenApiObject):
         # type: () -> StateProtocolIsis
         """Factory property that returns an instance of the StateProtocolIsis class
 
-        Sets state of configured ISIS routers.
+        Sets state of configured ISIS routers and Links.
 
         Returns: StateProtocolIsis
         """
@@ -155406,7 +168805,7 @@ class StateProtocol(OpenApiObject):
         # type: () -> StateProtocolOspfv2
         """Factory property that returns an instance of the StateProtocolOspfv2 class
 
-        Sets state of configured OSPFv2 routers.
+        Sets state of configured OSPFv2 routers and Links.
 
         Returns: StateProtocolOspfv2
         """
@@ -156002,9 +169401,11 @@ class StateProtocolIsis(OpenApiObject):
             "type": str,
             "enum": [
                 "routers",
+                "simulated_links",
             ],
         },
         "routers": {"type": "StateProtocolIsisRouters"},
+        "simulated_links": {"type": "StateProtocolIsisSimLinks"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("choice",)  # type: tuple(str)
@@ -156012,6 +169413,7 @@ class StateProtocolIsis(OpenApiObject):
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
     ROUTERS = "routers"  # type: str
+    SIMULATED_LINKS = "simulated_links"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -156039,13 +169441,26 @@ class StateProtocolIsis(OpenApiObject):
         return self._get_property("routers", StateProtocolIsisRouters, self, "routers")
 
     @property
+    def simulated_links(self):
+        # type: () -> StateProtocolIsisSimLinks
+        """Factory property that returns an instance of the StateProtocolIsisSimLinks class
+
+        Sets the state of configured one or more Simulated Links (Interfaces)
+
+        Returns: StateProtocolIsisSimLinks
+        """
+        return self._get_property(
+            "simulated_links", StateProtocolIsisSimLinks, self, "simulated_links"
+        )
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["routers"]]
+        # type: () -> Union[Literal["routers"], Literal["simulated_links"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["routers"]]
+        Returns: Union[Literal["routers"], Literal["simulated_links"]]
         """
         return self._get_property("choice")
 
@@ -156055,7 +169470,7 @@ class StateProtocolIsis(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["routers"]]
+        value: Union[Literal["routers"], Literal["simulated_links"]]
         """
         if value is None:
             raise TypeError("Cannot set required property choice as None")
@@ -156144,6 +169559,86 @@ class StateProtocolIsisRouters(OpenApiObject):
         self._set_property("state", value)
 
 
+class StateProtocolIsisSimLinks(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "names": {
+            "type": list,
+            "itemtype": str,
+        },
+        "state": {
+            "type": str,
+            "enum": [
+                "down",
+                "up",
+            ],
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    DOWN = "down"  # type: str
+    UP = "up"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, names=None, state=None):
+        super(StateProtocolIsisSimLinks, self).__init__()
+        self._parent = parent
+        self._set_property("names", names)
+        self._set_property("state", state)
+
+    def set(self, names=None, state=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def names(self):
+        # type: () -> List[str]
+        """names getter
+
+        The names of ISIS Simulated Links to control. If no names are specified then all ISIS Simulated Links in the configuration will be affected... x-constraint:. /components/schemas/Isis.Interface/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("names")
+
+    @names.setter
+    def names(self, value):
+        """names setter
+
+        The names of ISIS Simulated Links to control. If no names are specified then all ISIS Simulated Links in the configuration will be affected... x-constraint:. /components/schemas/Isis.Interface/properties/name.
+
+        value: List[str]
+        """
+        self._set_property("names", value)
+
+    @property
+    def state(self):
+        # type: () -> Union[Literal["down"], Literal["up"]]
+        """state getter
+
+        Sets the Control State of one or more Simulated Links to UP or DOWN. The state change is applied bidirectionally a link between IS-IS Routers and is affected. in both directions simultaneously.. Setting Control State to DOWN transitions the selected Simulated Links to disconnected state. Both the Simulated/Emulated Router hosting the link and the neighboring router at the far end will remove the link from the Extended IS Reachability TLV in their next LSP transmission (with an incremented Sequence Number).. Setting Control State to UP reconnects the selected Simulated Links. Both routers will re-advertise the neighbor relationship in their next LSP Update.. Example:. Suppose Emulated Router ER (680000000003) is connected to Simulated Routers: ST1('770000000001'), ST2('770000000002') and ST3('770000000003') in ring topology.. ER <--> ST1 <--> ST2(A) <--> ST3(B) <--> ER. Before the AB Link Down operation between ST2 ST3 the neighbors of ST2 ST3 will be seen as in ISIS Link State PDU (LSP) information in Get State. LSP-ID of ST2: 770000000002-00-00: IS-Reachability Neighbors ['770000000001', '770000000003']. LSP-ID of ST3: 770000000003-00-00: IS-Reachability Neighbors ['770000000002', '770000000001']. After the AB Link Down operation between ST2 ST3 the neighbors of ST2 ST3 will be seen as in ISIS Link State PDU (LSP) information in Get State. LSP-ID of ST2: 770000000002-00-00: IS-Reachability Neighbors ['770000000001']. LSP-ID of ST3: 770000000003-00-00: IS-Reachability Neighbors ['770000000001']
+
+        Returns: Union[Literal["down"], Literal["up"]]
+        """
+        return self._get_property("state")
+
+    @state.setter
+    def state(self, value):
+        """state setter
+
+        Sets the Control State of one or more Simulated Links to UP or DOWN. The state change is applied bidirectionally a link between IS-IS Routers and is affected. in both directions simultaneously.. Setting Control State to DOWN transitions the selected Simulated Links to disconnected state. Both the Simulated/Emulated Router hosting the link and the neighboring router at the far end will remove the link from the Extended IS Reachability TLV in their next LSP transmission (with an incremented Sequence Number).. Setting Control State to UP reconnects the selected Simulated Links. Both routers will re-advertise the neighbor relationship in their next LSP Update.. Example:. Suppose Emulated Router ER (680000000003) is connected to Simulated Routers: ST1('770000000001'), ST2('770000000002') and ST3('770000000003') in ring topology.. ER <--> ST1 <--> ST2(A) <--> ST3(B) <--> ER. Before the AB Link Down operation between ST2 ST3 the neighbors of ST2 ST3 will be seen as in ISIS Link State PDU (LSP) information in Get State. LSP-ID of ST2: 770000000002-00-00: IS-Reachability Neighbors ['770000000001', '770000000003']. LSP-ID of ST3: 770000000003-00-00: IS-Reachability Neighbors ['770000000002', '770000000001']. After the AB Link Down operation between ST2 ST3 the neighbors of ST2 ST3 will be seen as in ISIS Link State PDU (LSP) information in Get State. LSP-ID of ST2: 770000000002-00-00: IS-Reachability Neighbors ['770000000001']. LSP-ID of ST3: 770000000003-00-00: IS-Reachability Neighbors ['770000000001']
+
+        value: Union[Literal["down"], Literal["up"]]
+        """
+        self._set_property("state", value)
+
+
 class StateProtocolOspfv2(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -156152,9 +169647,11 @@ class StateProtocolOspfv2(OpenApiObject):
             "type": str,
             "enum": [
                 "routers",
+                "simulated_links",
             ],
         },
         "routers": {"type": "StateProtocolOspfv2Routers"},
+        "simulated_links": {"type": "StateProtocolOspfv2SimLinks"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("choice",)  # type: tuple(str)
@@ -156162,6 +169659,7 @@ class StateProtocolOspfv2(OpenApiObject):
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
     ROUTERS = "routers"  # type: str
+    SIMULATED_LINKS = "simulated_links"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -156191,13 +169689,26 @@ class StateProtocolOspfv2(OpenApiObject):
         )
 
     @property
+    def simulated_links(self):
+        # type: () -> StateProtocolOspfv2SimLinks
+        """Factory property that returns an instance of the StateProtocolOspfv2SimLinks class
+
+        Sets the state of one or more configured OSPFv2 Simulated Links (Interfaces).
+
+        Returns: StateProtocolOspfv2SimLinks
+        """
+        return self._get_property(
+            "simulated_links", StateProtocolOspfv2SimLinks, self, "simulated_links"
+        )
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["routers"]]
+        # type: () -> Union[Literal["routers"], Literal["simulated_links"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["routers"]]
+        Returns: Union[Literal["routers"], Literal["simulated_links"]]
         """
         return self._get_property("choice")
 
@@ -156207,7 +169718,7 @@ class StateProtocolOspfv2(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["routers"]]
+        value: Union[Literal["routers"], Literal["simulated_links"]]
         """
         if value is None:
             raise TypeError("Cannot set required property choice as None")
@@ -156293,6 +169804,86 @@ class StateProtocolOspfv2Routers(OpenApiObject):
         """
         if value is None:
             raise TypeError("Cannot set required property state as None")
+        self._set_property("state", value)
+
+
+class StateProtocolOspfv2SimLinks(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "names": {
+            "type": list,
+            "itemtype": str,
+        },
+        "state": {
+            "type": str,
+            "enum": [
+                "down",
+                "up",
+            ],
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    DOWN = "down"  # type: str
+    UP = "up"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, names=None, state=None):
+        super(StateProtocolOspfv2SimLinks, self).__init__()
+        self._parent = parent
+        self._set_property("names", names)
+        self._set_property("state", state)
+
+    def set(self, names=None, state=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def names(self):
+        # type: () -> List[str]
+        """names getter
+
+        The names of OSPFv2 Simulated Links to control. If no names are specified then all OSPFv2 Simulated Links in the configuration will be affected.. x-constraint:. /components/schemas/Ospfv2.Interface/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("names")
+
+    @names.setter
+    def names(self, value):
+        """names setter
+
+        The names of OSPFv2 Simulated Links to control. If no names are specified then all OSPFv2 Simulated Links in the configuration will be affected.. x-constraint:. /components/schemas/Ospfv2.Interface/properties/name.
+
+        value: List[str]
+        """
+        self._set_property("names", value)
+
+    @property
+    def state(self):
+        # type: () -> Union[Literal["down"], Literal["up"]]
+        """state getter
+
+        Sets the Control State of one or more Simulated Links to UP or DOWN.. The state change is applied bidirectionally a link between OSPFv2 Routers and is affected. in both directions simultaneously.. Setting Control State to DOWN transitions the selected Simulated Links to disconnected state.. Both the Simulated/Emulated Router hosting the link and the neighboring router at the far end. will remove the link from their Router-LSA (Type LSA, RFC 2328 Section 12.4.1) in their next. LSA re-origination (with an incremented LS Sequence Number), and flood the updated Router-LSA so. all routers in the area recompute the SPF tree.. Setting Control State to UP reconnects the selected Simulated Links.. Both routers will re-advertise the adjacency as link in their next Router-LSA update.. Example:. Suppose Emulated Router ER is connected to Simulated Routers:. ST1, ST2 and ST3 in ring topology.. ER <--> ST1 <--> ST2(A) <--> ST3(B) <--> ER. Before the AB Link Down operation between ST2 ST3 the neighbors of ST2 ST3 will be seen. as link entries in their Router-LSA (Type LSA) information in Get State:. Router-LSA of ST2: links to ST1 and ST3. Router-LSA of ST3: links to ST2 and ER. After the AB Link Down operation between ST2 ST3 the neighbors of ST2 ST3 will be seen. as link entries in their Router-LSA (Type LSA) information in Get State:. Router-LSA of ST2: links to ST1. Router-LSA of ST3: links to ER
+
+        Returns: Union[Literal["down"], Literal["up"]]
+        """
+        return self._get_property("state")
+
+    @state.setter
+    def state(self, value):
+        """state setter
+
+        Sets the Control State of one or more Simulated Links to UP or DOWN.. The state change is applied bidirectionally a link between OSPFv2 Routers and is affected. in both directions simultaneously.. Setting Control State to DOWN transitions the selected Simulated Links to disconnected state.. Both the Simulated/Emulated Router hosting the link and the neighboring router at the far end. will remove the link from their Router-LSA (Type LSA, RFC 2328 Section 12.4.1) in their next. LSA re-origination (with an incremented LS Sequence Number), and flood the updated Router-LSA so. all routers in the area recompute the SPF tree.. Setting Control State to UP reconnects the selected Simulated Links.. Both routers will re-advertise the adjacency as link in their next Router-LSA update.. Example:. Suppose Emulated Router ER is connected to Simulated Routers:. ST1, ST2 and ST3 in ring topology.. ER <--> ST1 <--> ST2(A) <--> ST3(B) <--> ER. Before the AB Link Down operation between ST2 ST3 the neighbors of ST2 ST3 will be seen. as link entries in their Router-LSA (Type LSA) information in Get State:. Router-LSA of ST2: links to ST1 and ST3. Router-LSA of ST3: links to ST2 and ER. After the AB Link Down operation between ST2 ST3 the neighbors of ST2 ST3 will be seen. as link entries in their Router-LSA (Type LSA) information in Get State:. Router-LSA of ST2: links to ST1. Router-LSA of ST3: links to ER
+
+        value: Union[Literal["down"], Literal["up"]]
+        """
         self._set_property("state", value)
 
 
@@ -157522,12 +171113,18 @@ class ActionProtocolBgpNotification(OpenApiObject):
         "hold_timer_expired": {"type": "DeviceBgpHoldTimerExpired"},
         "finite_state_machine_error": {"type": "DeviceBgpFiniteStateMachineError"},
         "custom": {"type": "DeviceBgpCustomError"},
+        "fin_delay": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 10000,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
 
     _DEFAULTS = {
         "choice": "cease",
+        "fin_delay": 0,
     }  # type: Dict[str, Union(type)]
 
     CEASE = "cease"  # type: str
@@ -157540,10 +171137,11 @@ class ActionProtocolBgpNotification(OpenApiObject):
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, choice=None, names=None):
+    def __init__(self, parent=None, choice=None, names=None, fin_delay=0):
         super(ActionProtocolBgpNotification, self).__init__()
         self._parent = parent
         self._set_property("names", names)
+        self._set_property("fin_delay", fin_delay)
         if (
             "choice" in self._DEFAULTS
             and choice is None
@@ -157553,7 +171151,7 @@ class ActionProtocolBgpNotification(OpenApiObject):
         else:
             self._set_property("choice", choice)
 
-    def set(self, names=None):
+    def set(self, names=None, fin_delay=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -157695,6 +171293,27 @@ class ActionProtocolBgpNotification(OpenApiObject):
         value: Union[Literal["cease"], Literal["custom"], Literal["finite_state_machine_error"], Literal["hold_timer_expired"], Literal["message_header_error"], Literal["open_message_error"], Literal["update_message_error"]]
         """
         self._set_property("choice", value)
+
+    @property
+    def fin_delay(self):
+        # type: () -> int
+        """fin_delay getter
+
+        Delay (in milliseconds) between generation of the Notification and transmission of FIN to close the TCP socket by the implementation. This is useful to ensure that the remote end has received and processed. the Notification before closing the BGP session.
+
+        Returns: int
+        """
+        return self._get_property("fin_delay")
+
+    @fin_delay.setter
+    def fin_delay(self, value):
+        """fin_delay setter
+
+        Delay (in milliseconds) between generation of the Notification and transmission of FIN to close the TCP socket by the implementation. This is useful to ensure that the remote end has received and processed. the Notification before closing the BGP session.
+
+        value: int
+        """
+        self._set_property("fin_delay", value)
 
 
 class DeviceBgpCeaseError(OpenApiObject):
@@ -158379,9 +171998,11 @@ class ActionProtocolIsis(OpenApiObject):
             "type": str,
             "enum": [
                 "initiate_graceful_restart",
+                "update_overload_bit",
             ],
         },
         "initiate_graceful_restart": {"type": "ActionProtocolIsisInitiateRestart"},
+        "update_overload_bit": {"type": "ActionProtocolIsisOverloadBit"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("choice",)  # type: tuple(str)
@@ -158389,6 +172010,7 @@ class ActionProtocolIsis(OpenApiObject):
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
     INITIATE_GRACEFUL_RESTART = "initiate_graceful_restart"  # type: str
+    UPDATE_OVERLOAD_BIT = "update_overload_bit"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -158421,13 +172043,29 @@ class ActionProtocolIsis(OpenApiObject):
         )
 
     @property
+    def update_overload_bit(self):
+        # type: () -> ActionProtocolIsisOverloadBit
+        """Factory property that returns an instance of the ActionProtocolIsisOverloadBit class
+
+        Sets or clears the LSP Database Overload (OL) bit (Bit of the. P/ATT/LSPDBOL/IS-Type octet, ISO/IEC 10589:2002 Section 9.8) in. LSP Number zero of the selected routers without restarting the IS-IS. session (Section 7.2.5).. When set, other routers exclude this router from transit IS SPF. calculations; End System reachability through it is preserved. (Section 7.2.8.1, RFC 3787 Section 4).. The router re-originates LSP Number zero with an incremented sequence. number; IS-IS floods it domain-wide so all routers recompute SPF.. Typical uses: planned maintenance; simulating an overloaded router.
+
+        Returns: ActionProtocolIsisOverloadBit
+        """
+        return self._get_property(
+            "update_overload_bit",
+            ActionProtocolIsisOverloadBit,
+            self,
+            "update_overload_bit",
+        )
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["initiate_graceful_restart"]]
+        # type: () -> Union[Literal["initiate_graceful_restart"], Literal["update_overload_bit"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["initiate_graceful_restart"]]
+        Returns: Union[Literal["initiate_graceful_restart"], Literal["update_overload_bit"]]
         """
         return self._get_property("choice")
 
@@ -158437,7 +172075,7 @@ class ActionProtocolIsis(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["initiate_graceful_restart"]]
+        value: Union[Literal["initiate_graceful_restart"], Literal["update_overload_bit"]]
         """
         if value is None:
             raise TypeError("Cannot set required property choice as None")
@@ -158721,6 +172359,95 @@ class ActionProtocolIsisPlannedRestart(OpenApiObject):
         value: int
         """
         self._set_property("restart_after", value)
+
+
+class ActionProtocolIsisOverloadBit(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "router_names": {
+            "type": list,
+            "itemtype": str,
+        },
+        "choice": {
+            "type": str,
+            "enum": [
+                "set",
+                "unset",
+            ],
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "set",
+    }  # type: Dict[str, Union(type)]
+
+    SET = "set"  # type: str
+    UNSET = "unset"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, router_names=None):
+        super(ActionProtocolIsisOverloadBit, self).__init__()
+        self._parent = parent
+        self._set_property("router_names", router_names)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, router_names=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def router_names(self):
+        # type: () -> List[str]
+        """router_names getter
+
+        The names of IS-IS routers on which to apply the overload bit state. If no names are specified then the action is applied to all configured IS-IS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("router_names")
+
+    @router_names.setter
+    def router_names(self, value):
+        """router_names setter
+
+        The names of IS-IS routers on which to apply the overload bit state. If no names are specified then the action is applied to all configured IS-IS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+
+        value: List[str]
+        """
+        self._set_property("router_names", value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["set"], Literal["unset"]]
+        """choice getter
+
+        set: The router sets the OL bit in its LSP Number zero. Other routers. exclude this router from transit SPF path calculations for Intermediate. System neighbours. End System reachability through this router is. preserved.. unset: The router clears the OL bit from its LSP Number zero. Normal. transit path calculations resume for all routers.
+
+        Returns: Union[Literal["set"], Literal["unset"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        set: The router sets the OL bit in its LSP Number zero. Other routers. exclude this router from transit SPF path calculations for Intermediate. System neighbours. End System reachability through this router is. preserved.. unset: The router clears the OL bit from its LSP Number zero. Normal. transit path calculations resume for all routers.
+
+        value: Union[Literal["set"], Literal["unset"]]
+        """
+        self._set_property("choice", value)
 
 
 class ActionPort(OpenApiObject):
@@ -159710,7 +173437,7 @@ class MetricsRequest(OpenApiObject):
         # type: () -> FlowMetricsRequest
         """Factory property that returns an instance of the FlowMetricsRequest class
 
-        The container for flow metric request.
+        The container for flow metric request.. For bidirectional flows, metrics are reported for each generated sub-flow separately. Both sub-flows share the same flow name but are differentiated by their port_tx and port_rx values, which are reversed for the reverse sub-flow. Consequently, flow metrics for bidirectional flow are exposed as two separate metric entries, one for each traffic direction.
 
         Returns: FlowMetricsRequest
         """
@@ -160015,6 +173742,7 @@ class PortMetricsRequest(OpenApiObject):
                 "last_change",
                 "link",
                 "location",
+                "speed",
                 "transmit",
             ],
             "itemtype": str,
@@ -160037,6 +173765,7 @@ class PortMetricsRequest(OpenApiObject):
     LAST_CHANGE = "last_change"  # type: str
     LINK = "link"  # type: str
     LOCATION = "location"  # type: str
+    SPEED = "speed"  # type: str
     TRANSMIT = "transmit"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
@@ -160075,12 +173804,12 @@ class PortMetricsRequest(OpenApiObject):
 
     @property
     def column_names(self):
-        # type: () -> List[Union[Literal["bytes_rx"], Literal["bytes_rx_rate"], Literal["bytes_tx"], Literal["bytes_tx_rate"], Literal["capture"], Literal["frames_rx"], Literal["frames_rx_rate"], Literal["frames_tx"], Literal["frames_tx_rate"], Literal["last_change"], Literal["link"], Literal["location"], Literal["transmit"]]]
+        # type: () -> List[Union[Literal["bytes_rx"], Literal["bytes_rx_rate"], Literal["bytes_tx"], Literal["bytes_tx_rate"], Literal["capture"], Literal["frames_rx"], Literal["frames_rx_rate"], Literal["frames_tx"], Literal["frames_tx_rate"], Literal["last_change"], Literal["link"], Literal["location"], Literal["speed"], Literal["transmit"]]]
         """column_names getter
 
         The list of column names that the returned result set will contain. If the list is empty then all columns will be returned. The name of the port cannot be excluded.
 
-        Returns: List[Union[Literal["bytes_rx"], Literal["bytes_rx_rate"], Literal["bytes_tx"], Literal["bytes_tx_rate"], Literal["capture"], Literal["frames_rx"], Literal["frames_rx_rate"], Literal["frames_tx"], Literal["frames_tx_rate"], Literal["last_change"], Literal["link"], Literal["location"], Literal["transmit"]]]
+        Returns: List[Union[Literal["bytes_rx"], Literal["bytes_rx_rate"], Literal["bytes_tx"], Literal["bytes_tx_rate"], Literal["capture"], Literal["frames_rx"], Literal["frames_rx_rate"], Literal["frames_tx"], Literal["frames_tx_rate"], Literal["last_change"], Literal["link"], Literal["location"], Literal["speed"], Literal["transmit"]]]
         """
         return self._get_property("column_names")
 
@@ -160090,7 +173819,7 @@ class PortMetricsRequest(OpenApiObject):
 
         The list of column names that the returned result set will contain. If the list is empty then all columns will be returned. The name of the port cannot be excluded.
 
-        value: List[Union[Literal["bytes_rx"], Literal["bytes_rx_rate"], Literal["bytes_tx"], Literal["bytes_tx_rate"], Literal["capture"], Literal["frames_rx"], Literal["frames_rx_rate"], Literal["frames_tx"], Literal["frames_tx_rate"], Literal["last_change"], Literal["link"], Literal["location"], Literal["transmit"]]]
+        value: List[Union[Literal["bytes_rx"], Literal["bytes_rx_rate"], Literal["bytes_tx"], Literal["bytes_tx_rate"], Literal["capture"], Literal["frames_rx"], Literal["frames_rx_rate"], Literal["frames_tx"], Literal["frames_tx_rate"], Literal["last_change"], Literal["link"], Literal["location"], Literal["speed"], Literal["transmit"]]]
         """
         self._set_property("column_names", value)
 
@@ -161965,7 +175694,7 @@ class MacsecMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """secure_entity_names getter
 
-        The names of secure entities(secYs) to return results for. An empty list will return results for all secYs.. x-constraint:. /components/schemas/Macsec/properties/name.
+        The names of secure entities(secYs) to return results for. An empty list will return results for all secYs.. x-constraint:. /components/schemas/SecureEntity/properties/name.
 
         Returns: List[str]
         """
@@ -161975,7 +175704,7 @@ class MacsecMetricsRequest(OpenApiObject):
     def secure_entity_names(self, value):
         """secure_entity_names setter
 
-        The names of secure entities(secYs) to return results for. An empty list will return results for all secYs.. x-constraint:. /components/schemas/Macsec/properties/name.
+        The names of secure entities(secYs) to return results for. An empty list will return results for all secYs.. x-constraint:. /components/schemas/SecureEntity/properties/name.
 
         value: List[str]
         """
@@ -163531,6 +177260,10 @@ class PortMetric(OpenApiObject):
             "format": "uint64",
         },
         "data_integrity": {"type": "MetricDataIntegrity"},
+        "speed": {
+            "type": int,
+            "format": "uint64",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -163565,6 +177298,7 @@ class PortMetric(OpenApiObject):
         bytes_rx_rate=None,
         transmit=None,
         last_change=None,
+        speed=None,
     ):
         super(PortMetric, self).__init__()
         self._parent = parent
@@ -163582,6 +177316,7 @@ class PortMetric(OpenApiObject):
         self._set_property("bytes_rx_rate", bytes_rx_rate)
         self._set_property("transmit", transmit)
         self._set_property("last_change", last_change)
+        self._set_property("speed", speed)
 
     def set(
         self,
@@ -163599,6 +177334,7 @@ class PortMetric(OpenApiObject):
         bytes_rx_rate=None,
         transmit=None,
         last_change=None,
+        speed=None,
     ):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
@@ -163909,6 +177645,27 @@ class PortMetric(OpenApiObject):
         """
         return self._get_property("data_integrity", MetricDataIntegrity)
 
+    @property
+    def speed(self):
+        # type: () -> int
+        """speed getter
+
+        The speed in KBps the frames are transmitted. The calculated speed for negotiated line speed of (i) 100 Gbps is 100 1000 1000 8 12500000 KBps, (ii) 1.6 Tbps (high performance devices) is 1.6 1000 1000 1000 8 200000000 KBps, (iii) 10 Mbps (legacy devices) is 10 1000 8 1250 KBps
+
+        Returns: int
+        """
+        return self._get_property("speed")
+
+    @speed.setter
+    def speed(self, value):
+        """speed setter
+
+        The speed in KBps the frames are transmitted. The calculated speed for negotiated line speed of (i) 100 Gbps is 100 1000 1000 8 12500000 KBps, (ii) 1.6 Tbps (high performance devices) is 1.6 1000 1000 1000 8 200000000 KBps, (iii) 10 Mbps (legacy devices) is 10 1000 8 1250 KBps
+
+        value: int
+        """
+        self._set_property("speed", value)
+
 
 class MetricDataIntegrity(OpenApiObject):
     __slots__ = "_parent"
@@ -164030,8 +177787,9 @@ class PortMetricIter(OpenApiIter):
         bytes_rx_rate=None,
         transmit=None,
         last_change=None,
+        speed=None,
     ):
-        # type: (str,str,Union[Literal["down"], Literal["up"]],Union[Literal["started"], Literal["stopped"]],int,int,int,int,float,float,float,float,Union[Literal["started"], Literal["stopped"]],int) -> PortMetricIter
+        # type: (str,str,Union[Literal["down"], Literal["up"]],Union[Literal["started"], Literal["stopped"]],int,int,int,int,float,float,float,float,Union[Literal["started"], Literal["stopped"]],int,int) -> PortMetricIter
         """Factory method that creates an instance of the PortMetric class
 
         TBD
@@ -164054,6 +177812,7 @@ class PortMetricIter(OpenApiIter):
             bytes_rx_rate=bytes_rx_rate,
             transmit=transmit,
             last_change=last_change,
+            speed=speed,
         )
         self._add(item)
         return self
@@ -164074,8 +177833,9 @@ class PortMetricIter(OpenApiIter):
         bytes_rx_rate=None,
         transmit=None,
         last_change=None,
+        speed=None,
     ):
-        # type: (str,str,Union[Literal["down"], Literal["up"]],Union[Literal["started"], Literal["stopped"]],int,int,int,int,float,float,float,float,Union[Literal["started"], Literal["stopped"]],int) -> PortMetric
+        # type: (str,str,Union[Literal["down"], Literal["up"]],Union[Literal["started"], Literal["stopped"]],int,int,int,int,float,float,float,float,Union[Literal["started"], Literal["stopped"]],int,int) -> PortMetric
         """Add method that creates and returns an instance of the PortMetric class
 
         TBD
@@ -164098,6 +177858,7 @@ class PortMetricIter(OpenApiIter):
             bytes_rx_rate=bytes_rx_rate,
             transmit=transmit,
             last_change=last_change,
+            speed=speed,
         )
         self._add(item)
         return item
@@ -164150,6 +177911,7 @@ class FlowMetric(OpenApiObject):
         "rx_rate_kbps": {"type": float},
         "tx_rate_mbps": {"type": float},
         "rx_rate_mbps": {"type": float},
+        "packet_loss_duration": {"type": "FlowPacketLossDuration"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -164715,6 +178477,17 @@ class FlowMetric(OpenApiObject):
         """
         self._set_property("rx_rate_mbps", value)
 
+    @property
+    def packet_loss_duration(self):
+        # type: () -> FlowPacketLossDuration
+        """packet_loss_duration getter
+
+        The container for packet loss duration metrics. The container will be empty if. options.flow_options.packet_loss_duration has not been enabled during set_config.The container for packet loss duration metrics. The container will be empty if. options.flow_options.packet_loss_duration has not been enabled during set_config.The container for packet loss duration metrics. The container will be empty if. options.flow_options.packet_loss_duration has not been enabled during set_config.
+
+        Returns: FlowPacketLossDuration
+        """
+        return self._get_property("packet_loss_duration", FlowPacketLossDuration)
+
 
 class MetricTimestamp(OpenApiObject):
     __slots__ = "_parent"
@@ -164926,6 +178699,7 @@ class FlowTaggedMetric(OpenApiObject):
         "rx_rate_kbps": {"type": float},
         "tx_rate_mbps": {"type": float},
         "rx_rate_mbps": {"type": float},
+        "packet_loss_duration": {"type": "FlowPacketLossDuration"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -165389,6 +179163,17 @@ class FlowTaggedMetric(OpenApiObject):
         """
         self._set_property("rx_rate_mbps", value)
 
+    @property
+    def packet_loss_duration(self):
+        # type: () -> FlowPacketLossDuration
+        """packet_loss_duration getter
+
+        The container for packet loss duration metrics. The container will be empty if. options.flow_options.packet_loss_duration has not been enabled during set_config.The container for packet loss duration metrics. The container will be empty if. options.flow_options.packet_loss_duration has not been enabled during set_config.The container for packet loss duration metrics. The container will be empty if. options.flow_options.packet_loss_duration has not been enabled during set_config.
+
+        Returns: FlowPacketLossDuration
+        """
+        return self._get_property("packet_loss_duration", FlowPacketLossDuration)
+
 
 class FlowMetricTag(OpenApiObject):
     __slots__ = "_parent"
@@ -165612,6 +179397,54 @@ class FlowMetricTagIter(OpenApiIter):
         item = FlowMetricTag(parent=self._parent, name=name)
         self._add(item)
         return item
+
+
+class FlowPacketLossDuration(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": float,
+            "format": "float",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value=None):
+        super(FlowPacketLossDuration, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> float
+        """value getter
+
+        Estimated packet loss duration in milliseconds, calculated based on the number. of lost packets and Rx Rate.
+
+        Returns: float
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        Estimated packet loss duration in milliseconds, calculated based on the number. of lost packets and Rx Rate.
+
+        value: float
+        """
+        self._set_property("value", value)
 
 
 class FlowTaggedMetricIter(OpenApiIter):
@@ -174458,7 +188291,7 @@ class MacsecMetric(OpenApiObject):
         # type: () -> int
         """in_pkts_bad getter
 
-        The total number of received bad packets that failed atleast one validation check.
+        The total number of received bad packets that failed atleast one validation check. Either ICV could not be verified or the packet is late.
 
         Returns: int
         """
@@ -174468,7 +188301,7 @@ class MacsecMetric(OpenApiObject):
     def in_pkts_bad(self, value):
         """in_pkts_bad setter
 
-        The total number of received bad packets that failed atleast one validation check.
+        The total number of received bad packets that failed atleast one validation check. Either ICV could not be verified or the packet is late.
 
         value: int
         """
@@ -174521,7 +188354,7 @@ class MacsecMetric(OpenApiObject):
         # type: () -> int
         """in_pkts_no_sci getter
 
-        InPktsNoSCI,the number of packets discarded due to unknown SCI.
+        InPktsNoSCI,the number of packets discarded due to unknown SCI. MACsec validate frames mode is strict.
 
         Returns: int
         """
@@ -174531,7 +188364,7 @@ class MacsecMetric(OpenApiObject):
     def in_pkts_no_sci(self, value):
         """in_pkts_no_sci setter
 
-        InPktsNoSCI,the number of packets discarded due to unknown SCI.
+        InPktsNoSCI,the number of packets discarded due to unknown SCI. MACsec validate frames mode is strict.
 
         value: int
         """
@@ -174542,7 +188375,7 @@ class MacsecMetric(OpenApiObject):
         # type: () -> int
         """in_pkts_not_using_sa getter
 
-        InPktsNotUsingSA, the number of packets discarded due to unused SA.
+        InPktsNotUsingSA, the number of packets discarded due to unused SA. MACsec validate frames mode is strict.
 
         Returns: int
         """
@@ -174552,7 +188385,7 @@ class MacsecMetric(OpenApiObject):
     def in_pkts_not_using_sa(self, value):
         """in_pkts_not_using_sa setter
 
-        InPktsNotUsingSA, the number of packets discarded due to unused SA.
+        InPktsNotUsingSA, the number of packets discarded due to unused SA. MACsec validate frames mode is strict.
 
         value: int
         """
@@ -174563,7 +188396,7 @@ class MacsecMetric(OpenApiObject):
         # type: () -> int
         """in_pkts_not_valid getter
 
-        InPktsNotValid, the number of packets discarded due to invalid ICV.
+        InPktsNotValid, the number of packets discarded due to invalid ICV. MACsec validate frames mode is strict or confidentiality in enabled.
 
         Returns: int
         """
@@ -174573,7 +188406,7 @@ class MacsecMetric(OpenApiObject):
     def in_pkts_not_valid(self, value):
         """in_pkts_not_valid setter
 
-        InPktsNotValid, the number of packets discarded due to invalid ICV.
+        InPktsNotValid, the number of packets discarded due to invalid ICV. MACsec validate frames mode is strict or confidentiality in enabled.
 
         value: int
         """
@@ -174584,7 +188417,7 @@ class MacsecMetric(OpenApiObject):
         # type: () -> int
         """in_pkts_unknown_sci getter
 
-        InPktsUnknownSCI, the number of packets received with unknown SCI.
+        InPktsUnknownSCI, the number of packets received with unknown SCI. MACsec validate frames mode is not strict.
 
         Returns: int
         """
@@ -174594,7 +188427,7 @@ class MacsecMetric(OpenApiObject):
     def in_pkts_unknown_sci(self, value):
         """in_pkts_unknown_sci setter
 
-        InPktsUnknownSCI, the number of packets received with unknown SCI.
+        InPktsUnknownSCI, the number of packets received with unknown SCI. MACsec validate frames mode is not strict.
 
         value: int
         """
@@ -174605,7 +188438,7 @@ class MacsecMetric(OpenApiObject):
         # type: () -> int
         """in_pkts_unused_sa getter
 
-        InPktsUnusedSA, the number of packets received with unused SA.
+        InPktsUnusedSA, the number of packets received with unused SA. MACsec validate frames mode is not strict.
 
         Returns: int
         """
@@ -174615,7 +188448,7 @@ class MacsecMetric(OpenApiObject):
     def in_pkts_unused_sa(self, value):
         """in_pkts_unused_sa setter
 
-        InPktsUnusedSA, the number of packets received with unused SA.
+        InPktsUnusedSA, the number of packets received with unused SA. MACsec validate frames mode is not strict.
 
         value: int
         """
@@ -174626,7 +188459,7 @@ class MacsecMetric(OpenApiObject):
         # type: () -> int
         """in_pkts_invalid getter
 
-        InPktsInvalid, the number of packets received with invalid ICV.
+        InPktsInvalid, the number of packets received with invalid ICV. MACsec validate frames mode is check.
 
         Returns: int
         """
@@ -174636,7 +188469,7 @@ class MacsecMetric(OpenApiObject):
     def in_pkts_invalid(self, value):
         """in_pkts_invalid setter
 
-        InPktsInvalid, the number of packets received with invalid ICV.
+        InPktsInvalid, the number of packets received with invalid ICV. MACsec validate frames mode is check.
 
         value: int
         """
@@ -175107,7 +188940,7 @@ class MkaMetric(OpenApiObject):
         # type: () -> int
         """live_peer_count getter
 
-        Number of MKA live peers.
+        Number of MKA live peers. live peer is network device (peer) that has actively exchanged and confirmed recent key agreement messages (MKPDUs) with another device.
 
         Returns: int
         """
@@ -175117,7 +188950,7 @@ class MkaMetric(OpenApiObject):
     def live_peer_count(self, value):
         """live_peer_count setter
 
-        Number of MKA live peers.
+        Number of MKA live peers. live peer is network device (peer) that has actively exchanged and confirmed recent key agreement messages (MKPDUs) with another device.
 
         value: int
         """
@@ -175128,7 +188961,7 @@ class MkaMetric(OpenApiObject):
         # type: () -> int
         """potential_peer_count getter
 
-        Number of MKA potential peers.
+        Number of MKA potential peers. potential peer is candidate neighbor sending MKA messages but not yet fully authenticated.
 
         Returns: int
         """
@@ -175138,7 +188971,7 @@ class MkaMetric(OpenApiObject):
     def potential_peer_count(self, value):
         """potential_peer_count setter
 
-        Number of MKA potential peers.
+        Number of MKA potential peers. potential peer is candidate neighbor sending MKA messages but not yet fully authenticated.
 
         value: int
         """
@@ -175149,7 +188982,7 @@ class MkaMetric(OpenApiObject):
         # type: () -> int
         """latest_key_tx_peer_count getter
 
-        Number of MKA latest key Tx peers.
+        Number of live peers ready to transmit with latest distributed key.
 
         Returns: int
         """
@@ -175159,7 +188992,7 @@ class MkaMetric(OpenApiObject):
     def latest_key_tx_peer_count(self, value):
         """latest_key_tx_peer_count setter
 
-        Number of MKA latest key Tx peers.
+        Number of live peers ready to transmit with latest distributed key.
 
         value: int
         """
@@ -175170,7 +189003,7 @@ class MkaMetric(OpenApiObject):
         # type: () -> int
         """latest_key_rx_peer_count getter
 
-        Number of MKA latest key Rx peers.
+        Number of live peers ready to receive with latest distributed key.
 
         Returns: int
         """
@@ -175180,7 +189013,7 @@ class MkaMetric(OpenApiObject):
     def latest_key_rx_peer_count(self, value):
         """latest_key_rx_peer_count setter
 
-        Number of MKA latest key Rx peers.
+        Number of live peers ready to receive with latest distributed key.
 
         value: int
         """
@@ -180656,7 +194489,9 @@ class BgpPrefixStateRequest(OpenApiObject):
         "prefix_filters": {
             "type": list,
             "enum": [
+                "ipv4_mpls_unicast",
                 "ipv4_unicast",
+                "ipv6_mpls_unicast",
                 "ipv6_unicast",
             ],
             "itemtype": str,
@@ -180669,7 +194504,9 @@ class BgpPrefixStateRequest(OpenApiObject):
 
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
+    IPV4_MPLS_UNICAST = "ipv4_mpls_unicast"  # type: str
     IPV4_UNICAST = "ipv4_unicast"  # type: str
+    IPV6_MPLS_UNICAST = "ipv6_mpls_unicast"  # type: str
     IPV6_UNICAST = "ipv6_unicast"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
@@ -180708,12 +194545,12 @@ class BgpPrefixStateRequest(OpenApiObject):
 
     @property
     def prefix_filters(self):
-        # type: () -> List[Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]]
+        # type: () -> List[Union[Literal["ipv4_mpls_unicast"], Literal["ipv4_unicast"], Literal["ipv6_mpls_unicast"], Literal["ipv6_unicast"]]]
         """prefix_filters getter
 
         Specify which prefixes to return. If the list is empty or missing then all prefixes will be returned.
 
-        Returns: List[Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]]
+        Returns: List[Union[Literal["ipv4_mpls_unicast"], Literal["ipv4_unicast"], Literal["ipv6_mpls_unicast"], Literal["ipv6_unicast"]]]
         """
         return self._get_property("prefix_filters")
 
@@ -180723,7 +194560,7 @@ class BgpPrefixStateRequest(OpenApiObject):
 
         Specify which prefixes to return. If the list is empty or missing then all prefixes will be returned.
 
-        value: List[Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]]
+        value: List[Union[Literal["ipv4_mpls_unicast"], Literal["ipv4_unicast"], Literal["ipv6_mpls_unicast"], Literal["ipv6_unicast"]]]
         """
         self._set_property("prefix_filters", value)
 
@@ -182353,6 +196190,8 @@ class BgpPrefixesState(OpenApiObject):
         "bgp_peer_name": {"type": str},
         "ipv4_unicast_prefixes": {"type": "BgpPrefixIpv4UnicastStateIter"},
         "ipv6_unicast_prefixes": {"type": "BgpPrefixIpv6UnicastStateIter"},
+        "ipv4_mpls_unicast_prefixes": {"type": "BgpPrefixIpv4MplsUnicastStateIter"},
+        "ipv6_mpls_unicast_prefixes": {"type": "BgpPrefixIpv6MplsUnicastStateIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -182420,6 +196259,38 @@ class BgpPrefixesState(OpenApiObject):
         return self._get_property(
             "ipv6_unicast_prefixes",
             BgpPrefixIpv6UnicastStateIter,
+            self._parent,
+            self._choice,
+        )
+
+    @property
+    def ipv4_mpls_unicast_prefixes(self):
+        # type: () -> BgpPrefixIpv4MplsUnicastStateIter
+        """ipv4_mpls_unicast_prefixes getter
+
+        TBD
+
+        Returns: BgpPrefixIpv4MplsUnicastStateIter
+        """
+        return self._get_property(
+            "ipv4_mpls_unicast_prefixes",
+            BgpPrefixIpv4MplsUnicastStateIter,
+            self._parent,
+            self._choice,
+        )
+
+    @property
+    def ipv6_mpls_unicast_prefixes(self):
+        # type: () -> BgpPrefixIpv6MplsUnicastStateIter
+        """ipv6_mpls_unicast_prefixes getter
+
+        TBD
+
+        Returns: BgpPrefixIpv6MplsUnicastStateIter
+        """
+        return self._get_property(
+            "ipv6_mpls_unicast_prefixes",
+            BgpPrefixIpv6MplsUnicastStateIter,
             self._parent,
             self._choice,
         )
@@ -185064,6 +198935,862 @@ class BgpPrefixIpv6UnicastStateIter(OpenApiIter):
         return item
 
 
+class BgpPrefixIpv4MplsUnicastState(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "ipv4_address": {"type": str},
+        "prefix_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 32,
+        },
+        "origin": {
+            "type": str,
+            "enum": [
+                "igp",
+                "egp",
+                "incomplete",
+            ],
+        },
+        "path_id": {
+            "type": int,
+            "format": "uint32",
+        },
+        "ipv4_next_hop": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "ipv6_next_hop": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "labels": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "communities": {"type": "ResultBgpCommunityIter"},
+        "extended_communities": {"type": "ResultExtendedCommunityIter"},
+        "as_path": {"type": "ResultBgpAsPath"},
+        "local_preference": {
+            "type": int,
+            "format": "uint32",
+        },
+        "multi_exit_discriminator": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    IGP = "igp"  # type: str
+    EGP = "egp"  # type: str
+    INCOMPLETE = "incomplete"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        ipv4_address=None,
+        prefix_length=None,
+        origin=None,
+        path_id=None,
+        ipv4_next_hop=None,
+        ipv6_next_hop=None,
+        labels=None,
+        local_preference=None,
+        multi_exit_discriminator=None,
+    ):
+        super(BgpPrefixIpv4MplsUnicastState, self).__init__()
+        self._parent = parent
+        self._set_property("ipv4_address", ipv4_address)
+        self._set_property("prefix_length", prefix_length)
+        self._set_property("origin", origin)
+        self._set_property("path_id", path_id)
+        self._set_property("ipv4_next_hop", ipv4_next_hop)
+        self._set_property("ipv6_next_hop", ipv6_next_hop)
+        self._set_property("labels", labels)
+        self._set_property("local_preference", local_preference)
+        self._set_property("multi_exit_discriminator", multi_exit_discriminator)
+
+    def set(
+        self,
+        ipv4_address=None,
+        prefix_length=None,
+        origin=None,
+        path_id=None,
+        ipv4_next_hop=None,
+        ipv6_next_hop=None,
+        labels=None,
+        local_preference=None,
+        multi_exit_discriminator=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def ipv4_address(self):
+        # type: () -> str
+        """ipv4_address getter
+
+        An IPv4 unicast address
+
+        Returns: str
+        """
+        return self._get_property("ipv4_address")
+
+    @ipv4_address.setter
+    def ipv4_address(self, value):
+        """ipv4_address setter
+
+        An IPv4 unicast address
+
+        value: str
+        """
+        self._set_property("ipv4_address", value)
+
+    @property
+    def prefix_length(self):
+        # type: () -> int
+        """prefix_length getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("prefix_length")
+
+    @prefix_length.setter
+    def prefix_length(self, value):
+        """prefix_length setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("prefix_length", value)
+
+    @property
+    def origin(self):
+        # type: () -> Union[Literal["egp"], Literal["igp"], Literal["incomplete"]]
+        """origin getter
+
+        The origin of the prefix.
+
+        Returns: Union[Literal["egp"], Literal["igp"], Literal["incomplete"]]
+        """
+        return self._get_property("origin")
+
+    @origin.setter
+    def origin(self, value):
+        """origin setter
+
+        The origin of the prefix.
+
+        value: Union[Literal["egp"], Literal["igp"], Literal["incomplete"]]
+        """
+        self._set_property("origin", value)
+
+    @property
+    def path_id(self):
+        # type: () -> int
+        """path_id getter
+
+        The path id.
+
+        Returns: int
+        """
+        return self._get_property("path_id")
+
+    @path_id.setter
+    def path_id(self, value):
+        """path_id setter
+
+        The path id.
+
+        value: int
+        """
+        self._set_property("path_id", value)
+
+    @property
+    def ipv4_next_hop(self):
+        # type: () -> str
+        """ipv4_next_hop getter
+
+        The IPv4 address of the egress interface.
+
+        Returns: str
+        """
+        return self._get_property("ipv4_next_hop")
+
+    @ipv4_next_hop.setter
+    def ipv4_next_hop(self, value):
+        """ipv4_next_hop setter
+
+        The IPv4 address of the egress interface.
+
+        value: str
+        """
+        self._set_property("ipv4_next_hop", value)
+
+    @property
+    def ipv6_next_hop(self):
+        # type: () -> str
+        """ipv6_next_hop getter
+
+        The IPv6 address of the egress interface.
+
+        Returns: str
+        """
+        return self._get_property("ipv6_next_hop")
+
+    @ipv6_next_hop.setter
+    def ipv6_next_hop(self, value):
+        """ipv6_next_hop setter
+
+        The IPv6 address of the egress interface.
+
+        value: str
+        """
+        self._set_property("ipv6_next_hop", value)
+
+    @property
+    def labels(self):
+        # type: () -> List[int]
+        """labels getter
+
+        One or more MPLS Label 24 bit values bound to this address prefix.
+
+        Returns: List[int]
+        """
+        return self._get_property("labels")
+
+    @labels.setter
+    def labels(self, value):
+        """labels setter
+
+        One or more MPLS Label 24 bit values bound to this address prefix.
+
+        value: List[int]
+        """
+        self._set_property("labels", value)
+
+    @property
+    def communities(self):
+        # type: () -> ResultBgpCommunityIter
+        """communities getter
+
+        Optional community attributes.
+
+        Returns: ResultBgpCommunityIter
+        """
+        return self._get_property(
+            "communities", ResultBgpCommunityIter, self._parent, self._choice
+        )
+
+    @property
+    def extended_communities(self):
+        # type: () -> ResultExtendedCommunityIter
+        """extended_communities getter
+
+        Optional received Extended Community attributes. Each received Extended Community attribute is available for retrieval in two forms. Support of the 'raw' format in which all bytes (16 hex characters) is always present and available for use. In addition, if supported by the implementation, the Extended Community attribute may also be retrieved in the 'structured' format which is an optional field.
+
+        Returns: ResultExtendedCommunityIter
+        """
+        return self._get_property(
+            "extended_communities",
+            ResultExtendedCommunityIter,
+            self._parent,
+            self._choice,
+        )
+
+    @property
+    def as_path(self):
+        # type: () -> ResultBgpAsPath
+        """as_path getter
+
+        This attribute identifies the autonomous systems through which routing information carried in this UPDATE message has passed.This attribute identifies the autonomous systems through which routing information carried in this UPDATE message has passed.This attribute identifies the autonomous systems through which routing information carried in this UPDATE message has passed.
+
+        Returns: ResultBgpAsPath
+        """
+        return self._get_property("as_path", ResultBgpAsPath)
+
+    @property
+    def local_preference(self):
+        # type: () -> int
+        """local_preference getter
+
+        The local preference is well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+
+        Returns: int
+        """
+        return self._get_property("local_preference")
+
+    @local_preference.setter
+    def local_preference(self, value):
+        """local_preference setter
+
+        The local preference is well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+
+        value: int
+        """
+        self._set_property("local_preference", value)
+
+    @property
+    def multi_exit_discriminator(self):
+        # type: () -> int
+        """multi_exit_discriminator getter
+
+        The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+
+        Returns: int
+        """
+        return self._get_property("multi_exit_discriminator")
+
+    @multi_exit_discriminator.setter
+    def multi_exit_discriminator(self, value):
+        """multi_exit_discriminator setter
+
+        The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+
+        value: int
+        """
+        self._set_property("multi_exit_discriminator", value)
+
+
+class BgpPrefixIpv4MplsUnicastStateIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpPrefixIpv4MplsUnicastStateIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpPrefixIpv4MplsUnicastState]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpPrefixIpv4MplsUnicastStateIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpPrefixIpv4MplsUnicastState
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpPrefixIpv4MplsUnicastState
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpPrefixIpv4MplsUnicastState):
+            raise Exception("Item is not an instance of BgpPrefixIpv4MplsUnicastState")
+
+    def state(
+        self,
+        ipv4_address=None,
+        prefix_length=None,
+        origin=None,
+        path_id=None,
+        ipv4_next_hop=None,
+        ipv6_next_hop=None,
+        labels=None,
+        local_preference=None,
+        multi_exit_discriminator=None,
+    ):
+        # type: (str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,List[int],int,int) -> BgpPrefixIpv4MplsUnicastStateIter
+        """Factory method that creates an instance of the BgpPrefixIpv4MplsUnicastState class
+
+        IPv4 MPLS unicast prefix.
+
+        Returns: BgpPrefixIpv4MplsUnicastStateIter
+        """
+        item = BgpPrefixIpv4MplsUnicastState(
+            parent=self._parent,
+            ipv4_address=ipv4_address,
+            prefix_length=prefix_length,
+            origin=origin,
+            path_id=path_id,
+            ipv4_next_hop=ipv4_next_hop,
+            ipv6_next_hop=ipv6_next_hop,
+            labels=labels,
+            local_preference=local_preference,
+            multi_exit_discriminator=multi_exit_discriminator,
+        )
+        self._add(item)
+        return self
+
+    def add(
+        self,
+        ipv4_address=None,
+        prefix_length=None,
+        origin=None,
+        path_id=None,
+        ipv4_next_hop=None,
+        ipv6_next_hop=None,
+        labels=None,
+        local_preference=None,
+        multi_exit_discriminator=None,
+    ):
+        # type: (str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,List[int],int,int) -> BgpPrefixIpv4MplsUnicastState
+        """Add method that creates and returns an instance of the BgpPrefixIpv4MplsUnicastState class
+
+        IPv4 MPLS unicast prefix.
+
+        Returns: BgpPrefixIpv4MplsUnicastState
+        """
+        item = BgpPrefixIpv4MplsUnicastState(
+            parent=self._parent,
+            ipv4_address=ipv4_address,
+            prefix_length=prefix_length,
+            origin=origin,
+            path_id=path_id,
+            ipv4_next_hop=ipv4_next_hop,
+            ipv6_next_hop=ipv6_next_hop,
+            labels=labels,
+            local_preference=local_preference,
+            multi_exit_discriminator=multi_exit_discriminator,
+        )
+        self._add(item)
+        return item
+
+
+class BgpPrefixIpv6MplsUnicastState(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "ipv6_address": {"type": str},
+        "prefix_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 128,
+        },
+        "origin": {
+            "type": str,
+            "enum": [
+                "igp",
+                "egp",
+                "incomplete",
+            ],
+        },
+        "path_id": {
+            "type": int,
+            "format": "uint32",
+        },
+        "ipv4_next_hop": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "ipv6_next_hop": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "labels": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "communities": {"type": "ResultBgpCommunityIter"},
+        "extended_communities": {"type": "ResultExtendedCommunityIter"},
+        "as_path": {"type": "ResultBgpAsPath"},
+        "local_preference": {
+            "type": int,
+            "format": "uint32",
+        },
+        "multi_exit_discriminator": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    IGP = "igp"  # type: str
+    EGP = "egp"  # type: str
+    INCOMPLETE = "incomplete"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        ipv6_address=None,
+        prefix_length=None,
+        origin=None,
+        path_id=None,
+        ipv4_next_hop=None,
+        ipv6_next_hop=None,
+        labels=None,
+        local_preference=None,
+        multi_exit_discriminator=None,
+    ):
+        super(BgpPrefixIpv6MplsUnicastState, self).__init__()
+        self._parent = parent
+        self._set_property("ipv6_address", ipv6_address)
+        self._set_property("prefix_length", prefix_length)
+        self._set_property("origin", origin)
+        self._set_property("path_id", path_id)
+        self._set_property("ipv4_next_hop", ipv4_next_hop)
+        self._set_property("ipv6_next_hop", ipv6_next_hop)
+        self._set_property("labels", labels)
+        self._set_property("local_preference", local_preference)
+        self._set_property("multi_exit_discriminator", multi_exit_discriminator)
+
+    def set(
+        self,
+        ipv6_address=None,
+        prefix_length=None,
+        origin=None,
+        path_id=None,
+        ipv4_next_hop=None,
+        ipv6_next_hop=None,
+        labels=None,
+        local_preference=None,
+        multi_exit_discriminator=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def ipv6_address(self):
+        # type: () -> str
+        """ipv6_address getter
+
+        An IPv6 unicast address
+
+        Returns: str
+        """
+        return self._get_property("ipv6_address")
+
+    @ipv6_address.setter
+    def ipv6_address(self, value):
+        """ipv6_address setter
+
+        An IPv6 unicast address
+
+        value: str
+        """
+        self._set_property("ipv6_address", value)
+
+    @property
+    def prefix_length(self):
+        # type: () -> int
+        """prefix_length getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("prefix_length")
+
+    @prefix_length.setter
+    def prefix_length(self, value):
+        """prefix_length setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("prefix_length", value)
+
+    @property
+    def origin(self):
+        # type: () -> Union[Literal["egp"], Literal["igp"], Literal["incomplete"]]
+        """origin getter
+
+        The origin of the prefix.
+
+        Returns: Union[Literal["egp"], Literal["igp"], Literal["incomplete"]]
+        """
+        return self._get_property("origin")
+
+    @origin.setter
+    def origin(self, value):
+        """origin setter
+
+        The origin of the prefix.
+
+        value: Union[Literal["egp"], Literal["igp"], Literal["incomplete"]]
+        """
+        self._set_property("origin", value)
+
+    @property
+    def path_id(self):
+        # type: () -> int
+        """path_id getter
+
+        The path id.
+
+        Returns: int
+        """
+        return self._get_property("path_id")
+
+    @path_id.setter
+    def path_id(self, value):
+        """path_id setter
+
+        The path id.
+
+        value: int
+        """
+        self._set_property("path_id", value)
+
+    @property
+    def ipv4_next_hop(self):
+        # type: () -> str
+        """ipv4_next_hop getter
+
+        The IPv4 address of the egress interface.
+
+        Returns: str
+        """
+        return self._get_property("ipv4_next_hop")
+
+    @ipv4_next_hop.setter
+    def ipv4_next_hop(self, value):
+        """ipv4_next_hop setter
+
+        The IPv4 address of the egress interface.
+
+        value: str
+        """
+        self._set_property("ipv4_next_hop", value)
+
+    @property
+    def ipv6_next_hop(self):
+        # type: () -> str
+        """ipv6_next_hop getter
+
+        The IPv6 address of the egress interface.
+
+        Returns: str
+        """
+        return self._get_property("ipv6_next_hop")
+
+    @ipv6_next_hop.setter
+    def ipv6_next_hop(self, value):
+        """ipv6_next_hop setter
+
+        The IPv6 address of the egress interface.
+
+        value: str
+        """
+        self._set_property("ipv6_next_hop", value)
+
+    @property
+    def labels(self):
+        # type: () -> List[int]
+        """labels getter
+
+        One or more MPLS Label 24 bit values bound to this address prefix.
+
+        Returns: List[int]
+        """
+        return self._get_property("labels")
+
+    @labels.setter
+    def labels(self, value):
+        """labels setter
+
+        One or more MPLS Label 24 bit values bound to this address prefix.
+
+        value: List[int]
+        """
+        self._set_property("labels", value)
+
+    @property
+    def communities(self):
+        # type: () -> ResultBgpCommunityIter
+        """communities getter
+
+        Optional community attributes.
+
+        Returns: ResultBgpCommunityIter
+        """
+        return self._get_property(
+            "communities", ResultBgpCommunityIter, self._parent, self._choice
+        )
+
+    @property
+    def extended_communities(self):
+        # type: () -> ResultExtendedCommunityIter
+        """extended_communities getter
+
+        Optional received Extended Community attributes. Each received Extended Community attribute is available for retrieval in two forms. Support of the 'raw' format in which all bytes (16 hex characters) is always present and available for use. In addition, if supported by the implementation, the Extended Community attribute may also be retrieved in the 'structured' format which is an optional field.
+
+        Returns: ResultExtendedCommunityIter
+        """
+        return self._get_property(
+            "extended_communities",
+            ResultExtendedCommunityIter,
+            self._parent,
+            self._choice,
+        )
+
+    @property
+    def as_path(self):
+        # type: () -> ResultBgpAsPath
+        """as_path getter
+
+        This attribute identifies the autonomous systems through which routing information carried in this UPDATE message has passed.This attribute identifies the autonomous systems through which routing information carried in this UPDATE message has passed.This attribute identifies the autonomous systems through which routing information carried in this UPDATE message has passed.
+
+        Returns: ResultBgpAsPath
+        """
+        return self._get_property("as_path", ResultBgpAsPath)
+
+    @property
+    def local_preference(self):
+        # type: () -> int
+        """local_preference getter
+
+        The local preference is well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+
+        Returns: int
+        """
+        return self._get_property("local_preference")
+
+    @local_preference.setter
+    def local_preference(self, value):
+        """local_preference setter
+
+        The local preference is well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+
+        value: int
+        """
+        self._set_property("local_preference", value)
+
+    @property
+    def multi_exit_discriminator(self):
+        # type: () -> int
+        """multi_exit_discriminator getter
+
+        The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+
+        Returns: int
+        """
+        return self._get_property("multi_exit_discriminator")
+
+    @multi_exit_discriminator.setter
+    def multi_exit_discriminator(self, value):
+        """multi_exit_discriminator setter
+
+        The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+
+        value: int
+        """
+        self._set_property("multi_exit_discriminator", value)
+
+
+class BgpPrefixIpv6MplsUnicastStateIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpPrefixIpv6MplsUnicastStateIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpPrefixIpv6MplsUnicastState]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpPrefixIpv6MplsUnicastStateIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpPrefixIpv6MplsUnicastState
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpPrefixIpv6MplsUnicastState
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpPrefixIpv6MplsUnicastState):
+            raise Exception("Item is not an instance of BgpPrefixIpv6MplsUnicastState")
+
+    def state(
+        self,
+        ipv6_address=None,
+        prefix_length=None,
+        origin=None,
+        path_id=None,
+        ipv4_next_hop=None,
+        ipv6_next_hop=None,
+        labels=None,
+        local_preference=None,
+        multi_exit_discriminator=None,
+    ):
+        # type: (str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,List[int],int,int) -> BgpPrefixIpv6MplsUnicastStateIter
+        """Factory method that creates an instance of the BgpPrefixIpv6MplsUnicastState class
+
+        IPv6 MPLS unicast prefix.
+
+        Returns: BgpPrefixIpv6MplsUnicastStateIter
+        """
+        item = BgpPrefixIpv6MplsUnicastState(
+            parent=self._parent,
+            ipv6_address=ipv6_address,
+            prefix_length=prefix_length,
+            origin=origin,
+            path_id=path_id,
+            ipv4_next_hop=ipv4_next_hop,
+            ipv6_next_hop=ipv6_next_hop,
+            labels=labels,
+            local_preference=local_preference,
+            multi_exit_discriminator=multi_exit_discriminator,
+        )
+        self._add(item)
+        return self
+
+    def add(
+        self,
+        ipv6_address=None,
+        prefix_length=None,
+        origin=None,
+        path_id=None,
+        ipv4_next_hop=None,
+        ipv6_next_hop=None,
+        labels=None,
+        local_preference=None,
+        multi_exit_discriminator=None,
+    ):
+        # type: (str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,List[int],int,int) -> BgpPrefixIpv6MplsUnicastState
+        """Add method that creates and returns an instance of the BgpPrefixIpv6MplsUnicastState class
+
+        IPv6 MPLS unicast prefix.
+
+        Returns: BgpPrefixIpv6MplsUnicastState
+        """
+        item = BgpPrefixIpv6MplsUnicastState(
+            parent=self._parent,
+            ipv6_address=ipv6_address,
+            prefix_length=prefix_length,
+            origin=origin,
+            path_id=path_id,
+            ipv4_next_hop=ipv4_next_hop,
+            ipv6_next_hop=ipv6_next_hop,
+            labels=labels,
+            local_preference=local_preference,
+            multi_exit_discriminator=multi_exit_discriminator,
+        )
+        self._add(item)
+        return item
+
+
 class BgpPrefixesStateIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
@@ -186107,7 +200834,7 @@ class IsisLspExtendedNeighbor(OpenApiObject):
         # type: () -> IsisLspAdjacencySidIter
         """adjacency_sids getter
 
-        List of segment routing adjacency SIDs.
+        List of SR-MPLS Adjacency SID sub-TLVs (sub-TLV types 31/32,. RFC 8667) learned from this neighbor.
 
         Returns: IsisLspAdjacencySidIter
         """
@@ -192464,7 +207191,7 @@ class Ospfv2LsaState(OpenApiObject):
         # type: () -> Ospfv2OpaqueLsaIter
         """opaque_lsas getter
 
-        One or more OSPFv2 Link-Scope Opaque-LSA Type 9.
+        One or more OSPFv2 Opaque LSAs Type 9, Type 10, or Type 11.
 
         Returns: Ospfv2OpaqueLsaIter
         """
@@ -193779,6 +208506,14 @@ class Ospfv2OpaqueLsa(OpenApiObject):
                 "domain",
             ],
         },
+        "tlv_information": {"type": "Ospfv2OpaqueLsaTlvInformation"},
+        "id": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 16777215,
+        },
+        "unknown_tlvs": {"type": "Ospfv2OpaqueLsaTlvIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -193791,12 +208526,13 @@ class Ospfv2OpaqueLsa(OpenApiObject):
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, type=None):
+    def __init__(self, parent=None, type=None, id=None):
         super(Ospfv2OpaqueLsa, self).__init__()
         self._parent = parent
         self._set_property("type", type)
+        self._set_property("id", id)
 
-    def set(self, type=None):
+    def set(self, type=None, id=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -193817,7 +208553,7 @@ class Ospfv2OpaqueLsa(OpenApiObject):
         # type: () -> Union[Literal["area"], Literal["domain"], Literal["local"]]
         """type getter
 
-        The type of Opaque TE LSAs. The LSA type.
+        The flooding scope of the Opaque LSA, determined by the LSA's LS Type. (RFC 5250 Section 4): local (Type 9, not flooded beyond the local link),. area (Type 10, flooded throughout the area) or domain (Type 11, flooded. throughout the Autonomous System, excluding stub areas).
 
         Returns: Union[Literal["area"], Literal["domain"], Literal["local"]]
         """
@@ -193827,11 +208563,2732 @@ class Ospfv2OpaqueLsa(OpenApiObject):
     def type(self, value):
         """type setter
 
-        The type of Opaque TE LSAs. The LSA type.
+        The flooding scope of the Opaque LSA, determined by the LSA's LS Type. (RFC 5250 Section 4): local (Type 9, not flooded beyond the local link),. area (Type 10, flooded throughout the area) or domain (Type 11, flooded. throughout the Autonomous System, excluding stub areas).
 
         value: Union[Literal["area"], Literal["domain"], Literal["local"]]
         """
         self._set_property("type", value)
+
+    @property
+    def tlv_information(self):
+        # type: () -> Ospfv2OpaqueLsaTlvInformation
+        """tlv_information getter
+
+        The decoded body of an OSPFv2 Opaque LSA, selected by Opaque Type. (RFC 5250 Section 3).. choice names the Opaque Type of the LSA, so reading choice is enough to know what. to read next. There are two cases:. 1. The Opaque Type is decoded by this model: choice is also the name of the field. carrying the decoded payload (traffic_engineering, router_information,. extended_prefixes, extended_link).. 2. The Opaque Type is not decoded by this model: choice is unknown, the numeric. Opaque Type is reported in unknown.opaque_type, and the TLVs of the LSA are. reported raw in the parent LSA's unknown_tlvs. This is the single escape hatch for. every Opaque Type this model does not decode, whichever the reason assigned by. IANA but not decoded here (grace-LSA Opaque Type 3, L1VPN Opaque Type 5,. Inter-AS-TE-v2 Opaque Type and the rest), not assigned by IANA, reserved for. private use, or assigned by IANA after this version of the model.. The choice values are not copy of the IANA registry and are not kept in step with. it; the registry is the authoritative list of assigned Opaque Types:. https://www.iana.org/assignments/ospf-opaque-types/ospf-opaque-types.xhtml. unknown_tlvs is not limited to case 2: TLV of decoded Opaque Type that this. model does not itself decode is reported there too, which is why it stays on the. parent LSA rather than inside this object.The decoded body of an OSPFv2 Opaque LSA, selected by Opaque Type. (RFC 5250 Section 3).. choice names the Opaque Type of the LSA, so reading choice is enough to know what. to read next. There are two cases:. 1. The Opaque Type is decoded by this model: choice is also the name of the field. carrying the decoded payload (traffic_engineering, router_information,. extended_prefixes, extended_link).. 2. The Opaque Type is not decoded by this model: choice is unknown, the numeric. Opaque Type is reported in unknown.opaque_type, and the TLVs of the LSA are. reported raw in the parent LSA's unknown_tlvs. This is the single escape hatch for. every Opaque Type this model does not decode, whichever the reason assigned by. IANA but not decoded here (grace-LSA Opaque Type 3, L1VPN Opaque Type 5,. Inter-AS-TE-v2 Opaque Type and the rest), not assigned by IANA, reserved for. private use, or assigned by IANA after this version of the model.. The choice values are not copy of the IANA registry and are not kept in step with. it; the registry is the authoritative list of assigned Opaque Types:. https://www.iana.org/assignments/ospf-opaque-types/ospf-opaque-types.xhtml. unknown_tlvs is not limited to case 2: TLV of decoded Opaque Type that this. model does not itself decode is reported there too, which is why it stays on the. parent LSA rather than inside this object.The decoded body of an OSPFv2 Opaque LSA, selected by Opaque Type. (RFC 5250 Section 3).. choice names the Opaque Type of the LSA, so reading choice is enough to know what. to read next. There are two cases:. 1. The Opaque Type is decoded by this model: choice is also the name of the field. carrying the decoded payload (traffic_engineering, router_information,. extended_prefixes, extended_link).. 2. The Opaque Type is not decoded by this model: choice is unknown, the numeric. Opaque Type is reported in unknown.opaque_type, and the TLVs of the LSA are. reported raw in the parent LSA's unknown_tlvs. This is the single escape hatch for. every Opaque Type this model does not decode, whichever the reason assigned by. IANA but not decoded here (grace-LSA Opaque Type 3, L1VPN Opaque Type 5,. Inter-AS-TE-v2 Opaque Type and the rest), not assigned by IANA, reserved for. private use, or assigned by IANA after this version of the model.. The choice values are not copy of the IANA registry and are not kept in step with. it; the registry is the authoritative list of assigned Opaque Types:. https://www.iana.org/assignments/ospf-opaque-types/ospf-opaque-types.xhtml. unknown_tlvs is not limited to case 2: TLV of decoded Opaque Type that this. model does not itself decode is reported there too, which is why it stays on the. parent LSA rather than inside this object.The type of information carried in the body of the Opaque LSA, decoded from the. Opaque Type in the most significant octet of the LSA's Link State ID. (RFC 5250 Section 3), together with the decoded contents of that Opaque Type.
+
+        Returns: Ospfv2OpaqueLsaTlvInformation
+        """
+        return self._get_property("tlv_information", Ospfv2OpaqueLsaTlvInformation)
+
+    @property
+    def id(self):
+        # type: () -> int
+        """id getter
+
+        The Opaque ID, decoded from the least significant three octets of the LSA's Link State ID (RFC 5250 Section 3). Used to further distinguish LSAs of the same Opaque Type originated by the same router.
+
+        Returns: int
+        """
+        return self._get_property("id")
+
+    @id.setter
+    def id(self, value):
+        """id setter
+
+        The Opaque ID, decoded from the least significant three octets of the LSA's Link State ID (RFC 5250 Section 3). Used to further distinguish LSAs of the same Opaque Type originated by the same router.
+
+        value: int
+        """
+        self._set_property("id", value)
+
+    @property
+    def unknown_tlvs(self):
+        # type: () -> Ospfv2OpaqueLsaTlvIter
+        """unknown_tlvs getter
+
+        Top-level TLVs carried in the body of the Opaque LSA that are not decoded into. tlv_information, returned raw in the generic type/length/value TLV format used by. all OSPFv2 Opaque LSAs (RFC 7770 Section 2, RFC 8665, RFC 9492).
+
+        Returns: Ospfv2OpaqueLsaTlvIter
+        """
+        return self._get_property(
+            "unknown_tlvs", Ospfv2OpaqueLsaTlvIter, self._parent, self._choice
+        )
+
+
+class Ospfv2OpaqueLsaTlvInformation(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "traffic_engineering",
+                "router_information",
+                "extended_prefixes",
+                "extended_link",
+                "unknown",
+            ],
+        },
+        "traffic_engineering": {"type": "Ospfv2OpaqueLsaTrafficEngineering"},
+        "router_information": {"type": "Ospfv2OpaqueLsaRouterInformation"},
+        "extended_prefixes": {"type": "Ospfv2OpaqueLsaExtendedPrefixIter"},
+        "extended_link": {"type": "Ospfv2OpaqueLsaExtendedLink"},
+        "unknown": {"type": "Ospfv2OpaqueLsaUnknownOpaqueType"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    TRAFFIC_ENGINEERING = "traffic_engineering"  # type: str
+    ROUTER_INFORMATION = "router_information"  # type: str
+    EXTENDED_PREFIXES = "extended_prefixes"  # type: str
+    EXTENDED_LINK = "extended_link"  # type: str
+    UNKNOWN = "unknown"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2OpaqueLsaTlvInformation, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def traffic_engineering(self):
+        # type: () -> Ospfv2OpaqueLsaTrafficEngineering
+        """Factory property that returns an instance of the Ospfv2OpaqueLsaTrafficEngineering class
+
+        The decoded Traffic Engineering Opaque LSA contents, Opaque Type 1. (RFC 3630 Section 2.4). TE LSA contains one top-level TLV (RFC 3630 Section 2.4):. either the Router Address TLV, reported as router_address, or the Link TLV,. reported as link_id plus link_attributes. Only one Link TLV is carried in each LSA. and each of its sub-TLVs occurs at most once (RFC 3630 Section 2.4.2), so both are. single-valued here.
+
+        Returns: Ospfv2OpaqueLsaTrafficEngineering
+        """
+        return self._get_property(
+            "traffic_engineering",
+            Ospfv2OpaqueLsaTrafficEngineering,
+            self,
+            "traffic_engineering",
+        )
+
+    @property
+    def router_information(self):
+        # type: () -> Ospfv2OpaqueLsaRouterInformation
+        """Factory property that returns an instance of the Ospfv2OpaqueLsaRouterInformation class
+
+        The decoded contents of one Router Information (RI) Opaque LSA instance, Opaque. Type (RFC 7770 Section 2).. Everything reported here describes the router named by the parent LSA's. header.advertising_router_id, but not necessarily all of it: router may originate. more than one RI LSA instance, for example when its capabilities do not fit in one. LSA, and each instance is separate Opaque LSA carrying its own Opaque ID. (RFC 7770 Section 2.1). This object therefore reports what one instance carried,. not the complete Router Information of the router.
+
+        Returns: Ospfv2OpaqueLsaRouterInformation
+        """
+        return self._get_property(
+            "router_information",
+            Ospfv2OpaqueLsaRouterInformation,
+            self,
+            "router_information",
+        )
+
+    @property
+    def extended_link(self):
+        # type: () -> Ospfv2OpaqueLsaExtendedLink
+        """Factory property that returns an instance of the Ospfv2OpaqueLsaExtendedLink class
+
+        A decoded OSPFv2 Extended Link TLV of an Extended Link Opaque LSA, TLV type 1. (RFC 7684 Section 3.1).. The TLV repeats the Link Type, Link ID and Link Data of the Router-LSA link it extends,. so correlate it to that link by matching link_id, and link_data when the same link_id. is advertised more than once, against router_lsas[].links[] of the Router-LSA whose. header.advertising_router_id equals that of this Opaque LSA.
+
+        Returns: Ospfv2OpaqueLsaExtendedLink
+        """
+        return self._get_property(
+            "extended_link", Ospfv2OpaqueLsaExtendedLink, self, "extended_link"
+        )
+
+    @property
+    def unknown(self):
+        # type: () -> Ospfv2OpaqueLsaUnknownOpaqueType
+        """Factory property that returns an instance of the Ospfv2OpaqueLsaUnknownOpaqueType class
+
+        The Opaque Type of an OSPFv2 Opaque LSA that this model does not decode. (RFC 5250 Section 3).. Reported as the numeric wire value, so an Opaque Type this model does not decode. is still fully identifiable, whichever the reason assigned by IANA but not. decoded here, not assigned by IANA, reserved for private use, or assigned by IANA. after this version of the model.
+
+        Returns: Ospfv2OpaqueLsaUnknownOpaqueType
+        """
+        return self._get_property(
+            "unknown", Ospfv2OpaqueLsaUnknownOpaqueType, self, "unknown"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["extended_link"], Literal["extended_prefixes"], Literal["router_information"], Literal["traffic_engineering"], Literal["unknown"]]
+        """choice getter
+
+        The Opaque Type carried in the most significant octet of the LSA's Link State ID (RFC 5250 Section 3), when this model decodes that Opaque Type; unknown otherwise.
+
+        Returns: Union[Literal["extended_link"], Literal["extended_prefixes"], Literal["router_information"], Literal["traffic_engineering"], Literal["unknown"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The Opaque Type carried in the most significant octet of the LSA's Link State ID (RFC 5250 Section 3), when this model decodes that Opaque Type; unknown otherwise.
+
+        value: Union[Literal["extended_link"], Literal["extended_prefixes"], Literal["router_information"], Literal["traffic_engineering"], Literal["unknown"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def extended_prefixes(self):
+        # type: () -> Ospfv2OpaqueLsaExtendedPrefixIter
+        """extended_prefixes getter
+
+        The decoded OSPFv2 Extended Prefix TLVs of an Extended Prefix Opaque LSA.. One Extended Prefix Opaque LSA can carry more than one Extended Prefix TLV, each. describing different prefix (RFC 7684 Section 2.1).
+
+        Returns: Ospfv2OpaqueLsaExtendedPrefixIter
+        """
+        return self._get_property(
+            "extended_prefixes",
+            Ospfv2OpaqueLsaExtendedPrefixIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class Ospfv2OpaqueLsaTrafficEngineering(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "router_address": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "link_id": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "link_attributes": {"type": "Ospfv2LsaLinkTrafficEngineering"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, router_address=None, link_id=None):
+        super(Ospfv2OpaqueLsaTrafficEngineering, self).__init__()
+        self._parent = parent
+        self._set_property("router_address", router_address)
+        self._set_property("link_id", link_id)
+
+    def set(self, router_address=None, link_id=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def router_address(self):
+        # type: () -> str
+        """router_address getter
+
+        The stable IPv4 address of the advertising router, decoded from the Router Address. TLV, TLV type (RFC 3630 Section 2.4.1). Present instead of link_id and. link_attributes when the LSA carries Router Address TLV.
+
+        Returns: str
+        """
+        return self._get_property("router_address")
+
+    @router_address.setter
+    def router_address(self, value):
+        """router_address setter
+
+        The stable IPv4 address of the advertising router, decoded from the Router Address. TLV, TLV type (RFC 3630 Section 2.4.1). Present instead of link_id and. link_attributes when the LSA carries Router Address TLV.
+
+        value: str
+        """
+        self._set_property("router_address", value)
+
+    @property
+    def link_id(self):
+        # type: () -> str
+        """link_id getter
+
+        The identifier of the link the Link TLV describes, decoded from its Link ID. sub-TLV, sub-type (RFC 3630 Section 2.5.2): the Router ID of the neighbor for a. point-to-point link, or the interface address of the Designated Router for a. multi-access link. Correlate the link attributes to the link they describe by. matching router_lsas[].links[].id of the Router-LSA whose. header.advertising_router_id equals that of this Opaque LSA.
+
+        Returns: str
+        """
+        return self._get_property("link_id")
+
+    @link_id.setter
+    def link_id(self, value):
+        """link_id setter
+
+        The identifier of the link the Link TLV describes, decoded from its Link ID. sub-TLV, sub-type (RFC 3630 Section 2.5.2): the Router ID of the neighbor for a. point-to-point link, or the interface address of the Designated Router for a. multi-access link. Correlate the link attributes to the link they describe by. matching router_lsas[].links[].id of the Router-LSA whose. header.advertising_router_id equals that of this Opaque LSA.
+
+        value: str
+        """
+        self._set_property("link_id", value)
+
+    @property
+    def link_attributes(self):
+        # type: () -> Ospfv2LsaLinkTrafficEngineering
+        """link_attributes getter
+
+        Traffic engineering attributes of link, sourced from the sub-TLVs of the Link TLV. of the Traffic Engineering Opaque LSA (RFC 3630 Section 2.5, RFC 7308,. RFC 4203 Section 1.3).Traffic engineering attributes of link, sourced from the sub-TLVs of the Link TLV. of the Traffic Engineering Opaque LSA (RFC 3630 Section 2.5, RFC 7308,. RFC 4203 Section 1.3).Traffic engineering attributes of link, sourced from the sub-TLVs of the Link TLV. of the Traffic Engineering Opaque LSA (RFC 3630 Section 2.5, RFC 7308,. RFC 4203 Section 1.3).Traffic engineering attributes of link, sourced from the sub-TLVs of the Link TLV. of the Traffic Engineering Opaque LSA (RFC 3630 Section 2.5, RFC 7308,. RFC 4203 Section 1.3).The traffic engineering attributes of the link, decoded from the sub-TLVs of the. Link TLV, TLV type (RFC 3630 Section 2.5).
+
+        Returns: Ospfv2LsaLinkTrafficEngineering
+        """
+        return self._get_property("link_attributes", Ospfv2LsaLinkTrafficEngineering)
+
+
+class Ospfv2LsaLinkTrafficEngineering(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "link_type": {
+            "type": str,
+            "enum": [
+                "point_to_point",
+                "multi_access",
+            ],
+        },
+        "local_interface_ip_addresses": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "ipv4",
+        },
+        "remote_interface_ip_addresses": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "ipv4",
+        },
+        "te_metric": {
+            "type": int,
+            "format": "uint32",
+        },
+        "maximum_bandwidth": {
+            "type": float,
+            "format": "float",
+        },
+        "maximum_reservable_bandwidth": {
+            "type": float,
+            "format": "float",
+        },
+        "unreserved_bandwidths": {
+            "type": list,
+            "itemtype": float,
+            "itemformat": "float",
+        },
+        "administrative_group": {
+            "type": int,
+            "format": "uint32",
+        },
+        "extended_administrative_group": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "srlg": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    POINT_TO_POINT = "point_to_point"  # type: str
+    MULTI_ACCESS = "multi_access"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        link_type=None,
+        local_interface_ip_addresses=None,
+        remote_interface_ip_addresses=None,
+        te_metric=None,
+        maximum_bandwidth=None,
+        maximum_reservable_bandwidth=None,
+        unreserved_bandwidths=None,
+        administrative_group=None,
+        extended_administrative_group=None,
+        srlg=None,
+    ):
+        super(Ospfv2LsaLinkTrafficEngineering, self).__init__()
+        self._parent = parent
+        self._set_property("link_type", link_type)
+        self._set_property("local_interface_ip_addresses", local_interface_ip_addresses)
+        self._set_property(
+            "remote_interface_ip_addresses", remote_interface_ip_addresses
+        )
+        self._set_property("te_metric", te_metric)
+        self._set_property("maximum_bandwidth", maximum_bandwidth)
+        self._set_property("maximum_reservable_bandwidth", maximum_reservable_bandwidth)
+        self._set_property("unreserved_bandwidths", unreserved_bandwidths)
+        self._set_property("administrative_group", administrative_group)
+        self._set_property(
+            "extended_administrative_group", extended_administrative_group
+        )
+        self._set_property("srlg", srlg)
+
+    def set(
+        self,
+        link_type=None,
+        local_interface_ip_addresses=None,
+        remote_interface_ip_addresses=None,
+        te_metric=None,
+        maximum_bandwidth=None,
+        maximum_reservable_bandwidth=None,
+        unreserved_bandwidths=None,
+        administrative_group=None,
+        extended_administrative_group=None,
+        srlg=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def link_type(self):
+        # type: () -> Union[Literal["multi_access"], Literal["point_to_point"]]
+        """link_type getter
+
+        The Link Type sub-TLV, sub-type (RFC 3630 Section 2.5.1).
+
+        Returns: Union[Literal["multi_access"], Literal["point_to_point"]]
+        """
+        return self._get_property("link_type")
+
+    @link_type.setter
+    def link_type(self, value):
+        """link_type setter
+
+        The Link Type sub-TLV, sub-type (RFC 3630 Section 2.5.1).
+
+        value: Union[Literal["multi_access"], Literal["point_to_point"]]
+        """
+        self._set_property("link_type", value)
+
+    @property
+    def local_interface_ip_addresses(self):
+        # type: () -> List[str]
+        """local_interface_ip_addresses getter
+
+        The Local Interface IP Address sub-TLV, sub-type (RFC 3630 Section 2.5.3).
+
+        Returns: List[str]
+        """
+        return self._get_property("local_interface_ip_addresses")
+
+    @local_interface_ip_addresses.setter
+    def local_interface_ip_addresses(self, value):
+        """local_interface_ip_addresses setter
+
+        The Local Interface IP Address sub-TLV, sub-type (RFC 3630 Section 2.5.3).
+
+        value: List[str]
+        """
+        self._set_property("local_interface_ip_addresses", value)
+
+    @property
+    def remote_interface_ip_addresses(self):
+        # type: () -> List[str]
+        """remote_interface_ip_addresses getter
+
+        The Remote Interface IP Address sub-TLV, sub-type (RFC 3630 Section 2.5.4).
+
+        Returns: List[str]
+        """
+        return self._get_property("remote_interface_ip_addresses")
+
+    @remote_interface_ip_addresses.setter
+    def remote_interface_ip_addresses(self, value):
+        """remote_interface_ip_addresses setter
+
+        The Remote Interface IP Address sub-TLV, sub-type (RFC 3630 Section 2.5.4).
+
+        value: List[str]
+        """
+        self._set_property("remote_interface_ip_addresses", value)
+
+    @property
+    def te_metric(self):
+        # type: () -> int
+        """te_metric getter
+
+        The Traffic Engineering Metric sub-TLV, sub-type (RFC 3630 Section 2.5.5).
+
+        Returns: int
+        """
+        return self._get_property("te_metric")
+
+    @te_metric.setter
+    def te_metric(self, value):
+        """te_metric setter
+
+        The Traffic Engineering Metric sub-TLV, sub-type (RFC 3630 Section 2.5.5).
+
+        value: int
+        """
+        self._set_property("te_metric", value)
+
+    @property
+    def maximum_bandwidth(self):
+        # type: () -> float
+        """maximum_bandwidth getter
+
+        The Maximum Bandwidth sub-TLV, sub-type 6, in bytes per second. (RFC 3630 Section 2.5.6).
+
+        Returns: float
+        """
+        return self._get_property("maximum_bandwidth")
+
+    @maximum_bandwidth.setter
+    def maximum_bandwidth(self, value):
+        """maximum_bandwidth setter
+
+        The Maximum Bandwidth sub-TLV, sub-type 6, in bytes per second. (RFC 3630 Section 2.5.6).
+
+        value: float
+        """
+        self._set_property("maximum_bandwidth", value)
+
+    @property
+    def maximum_reservable_bandwidth(self):
+        # type: () -> float
+        """maximum_reservable_bandwidth getter
+
+        The Maximum Reservable Bandwidth sub-TLV, sub-type 7, in bytes per second. (RFC 3630 Section 2.5.7).
+
+        Returns: float
+        """
+        return self._get_property("maximum_reservable_bandwidth")
+
+    @maximum_reservable_bandwidth.setter
+    def maximum_reservable_bandwidth(self, value):
+        """maximum_reservable_bandwidth setter
+
+        The Maximum Reservable Bandwidth sub-TLV, sub-type 7, in bytes per second. (RFC 3630 Section 2.5.7).
+
+        value: float
+        """
+        self._set_property("maximum_reservable_bandwidth", value)
+
+    @property
+    def unreserved_bandwidths(self):
+        # type: () -> List[float]
+        """unreserved_bandwidths getter
+
+        The Unreserved Bandwidth sub-TLV, sub-type 8: bandwidth reservable at each of the. eight priority levels 0-7, in bytes per second (RFC 3630 Section 2.5.8).
+
+        Returns: List[float]
+        """
+        return self._get_property("unreserved_bandwidths")
+
+    @unreserved_bandwidths.setter
+    def unreserved_bandwidths(self, value):
+        """unreserved_bandwidths setter
+
+        The Unreserved Bandwidth sub-TLV, sub-type 8: bandwidth reservable at each of the. eight priority levels 0-7, in bytes per second (RFC 3630 Section 2.5.8).
+
+        value: List[float]
+        """
+        self._set_property("unreserved_bandwidths", value)
+
+    @property
+    def administrative_group(self):
+        # type: () -> int
+        """administrative_group getter
+
+        The Administrative Group sub-TLV, sub-type (RFC 3630 Section 2.5.9).
+
+        Returns: int
+        """
+        return self._get_property("administrative_group")
+
+    @administrative_group.setter
+    def administrative_group(self, value):
+        """administrative_group setter
+
+        The Administrative Group sub-TLV, sub-type (RFC 3630 Section 2.5.9).
+
+        value: int
+        """
+        self._set_property("administrative_group", value)
+
+    @property
+    def extended_administrative_group(self):
+        # type: () -> List[int]
+        """extended_administrative_group getter
+
+        The Extended Administrative Group sub-TLV, sub-type 26 (RFC 7308), one or more. additional 32-bit words beyond administrative_group.
+
+        Returns: List[int]
+        """
+        return self._get_property("extended_administrative_group")
+
+    @extended_administrative_group.setter
+    def extended_administrative_group(self, value):
+        """extended_administrative_group setter
+
+        The Extended Administrative Group sub-TLV, sub-type 26 (RFC 7308), one or more. additional 32-bit words beyond administrative_group.
+
+        value: List[int]
+        """
+        self._set_property("extended_administrative_group", value)
+
+    @property
+    def srlg(self):
+        # type: () -> List[int]
+        """srlg getter
+
+        The Shared Risk Link Group (SRLG) sub-TLV, sub-type 16 (RFC 4203 Section 1.3).
+
+        Returns: List[int]
+        """
+        return self._get_property("srlg")
+
+    @srlg.setter
+    def srlg(self, value):
+        """srlg setter
+
+        The Shared Risk Link Group (SRLG) sub-TLV, sub-type 16 (RFC 4203 Section 1.3).
+
+        value: List[int]
+        """
+        self._set_property("srlg", value)
+
+
+class Ospfv2OpaqueLsaRouterInformation(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "sr_capability": {"type": "Ospfv2LsaSrCapability"},
+        "ri_capabilities": {"type": "Ospfv2LsaRiCapabilities"},
+        "node_msd": {"type": "Ospfv2LsaMsdIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(Ospfv2OpaqueLsaRouterInformation, self).__init__()
+        self._parent = parent
+
+    @property
+    def sr_capability(self):
+        # type: () -> Ospfv2LsaSrCapability
+        """sr_capability getter
+
+        The Segment Routing capability learned from the Router Information (RI) Opaque LSA:. the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV.. Reference: https://datatracker.ietf.org/doc/html/rfc8665.The Segment Routing capability learned from the Router Information (RI) Opaque LSA:. the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV.. Reference: https://datatracker.ietf.org/doc/html/rfc8665.The Segment Routing capability learned from the Router Information (RI) Opaque LSA:. the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV.. Reference: https://datatracker.ietf.org/doc/html/rfc8665.The Segment Routing capability learned from the Router Information (RI) Opaque LSA:. the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV.. Reference: https://datatracker.ietf.org/doc/html/rfc8665.The Segment Routing capability of the advertising router, decoded from the. SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV. (RFC 8665 Sections 3.1, 3.2, 3.3).
+
+        Returns: Ospfv2LsaSrCapability
+        """
+        return self._get_property("sr_capability", Ospfv2LsaSrCapability)
+
+    @property
+    def ri_capabilities(self):
+        # type: () -> Ospfv2LsaRiCapabilities
+        """ri_capabilities getter
+
+        The Router Informational Capabilities (TLV type 1) and Router Functional Capabilities. (TLV type 2) learned from the Router Information (RI) Opaque LSA (RFC 7770 Sections 2.5,. 2.6).The Router Informational Capabilities (TLV type 1) and Router Functional Capabilities. (TLV type 2) learned from the Router Information (RI) Opaque LSA (RFC 7770 Sections 2.5,. 2.6).The Router Informational Capabilities (TLV type 1) and Router Functional Capabilities. (TLV type 2) learned from the Router Information (RI) Opaque LSA (RFC 7770 Sections 2.5,. 2.6).The Router Informational Capabilities (TLV type 1) and Router Functional Capabilities. (TLV type 2) learned from the Router Information (RI) Opaque LSA (RFC 7770 Sections 2.5,. 2.6).The Router Informational and Functional Capabilities of the advertising router,. decoded from the Router Informational Capabilities TLV and the Router Functional. Capabilities TLV (RFC 7770 Sections 2.5, 2.6).
+
+        Returns: Ospfv2LsaRiCapabilities
+        """
+        return self._get_property("ri_capabilities", Ospfv2LsaRiCapabilities)
+
+    @property
+    def node_msd(self):
+        # type: () -> Ospfv2LsaMsdIter
+        """node_msd getter
+
+        One or more Maximum SID Depth (MSD) values of the advertising router, decoded from. the Node MSD TLV (RFC 8476 Section 2).
+
+        Returns: Ospfv2LsaMsdIter
+        """
+        return self._get_property(
+            "node_msd", Ospfv2LsaMsdIter, self._parent, self._choice
+        )
+
+
+class Ospfv2LsaSrCapability(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "algorithms": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "srgb_ranges": {"type": "Ospfv2LsaSrgbIter"},
+        "srlb_ranges": {"type": "Ospfv2LsaSrlbIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, algorithms=None):
+        super(Ospfv2LsaSrCapability, self).__init__()
+        self._parent = parent
+        self._set_property("algorithms", algorithms)
+
+    def set(self, algorithms=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def algorithms(self):
+        # type: () -> List[int]
+        """algorithms getter
+
+        The Segment Routing algorithms advertised in the SR-Algorithm TLV (0 SPF, = Strict SPF).
+
+        Returns: List[int]
+        """
+        return self._get_property("algorithms")
+
+    @algorithms.setter
+    def algorithms(self, value):
+        """algorithms setter
+
+        The Segment Routing algorithms advertised in the SR-Algorithm TLV (0 SPF, = Strict SPF).
+
+        value: List[int]
+        """
+        self._set_property("algorithms", value)
+
+    @property
+    def srgb_ranges(self):
+        # type: () -> Ospfv2LsaSrgbIter
+        """srgb_ranges getter
+
+        The learned Segment Routing Global Block (SRGB) ranges from the SID/Label Range TLV.
+
+        Returns: Ospfv2LsaSrgbIter
+        """
+        return self._get_property(
+            "srgb_ranges", Ospfv2LsaSrgbIter, self._parent, self._choice
+        )
+
+    @property
+    def srlb_ranges(self):
+        # type: () -> Ospfv2LsaSrlbIter
+        """srlb_ranges getter
+
+        The learned SR Local Block (SRLB) ranges from the SR Local Block TLV.
+
+        Returns: Ospfv2LsaSrlbIter
+        """
+        return self._get_property(
+            "srlb_ranges", Ospfv2LsaSrlbIter, self._parent, self._choice
+        )
+
+
+class Ospfv2LsaSrgb(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "starting_sid": {
+            "type": int,
+            "format": "uint32",
+        },
+        "range": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, starting_sid=None, range=None):
+        super(Ospfv2LsaSrgb, self).__init__()
+        self._parent = parent
+        self._set_property("starting_sid", starting_sid)
+        self._set_property("range", range)
+
+    def set(self, starting_sid=None, range=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def starting_sid(self):
+        # type: () -> int
+        """starting_sid getter
+
+        The first value (base SID/label) of the SRGB range.
+
+        Returns: int
+        """
+        return self._get_property("starting_sid")
+
+    @starting_sid.setter
+    def starting_sid(self, value):
+        """starting_sid setter
+
+        The first value (base SID/label) of the SRGB range.
+
+        value: int
+        """
+        self._set_property("starting_sid", value)
+
+    @property
+    def range(self):
+        # type: () -> int
+        """range getter
+
+        The number of SIDs in this SRGB range.
+
+        Returns: int
+        """
+        return self._get_property("range")
+
+    @range.setter
+    def range(self, value):
+        """range setter
+
+        The number of SIDs in this SRGB range.
+
+        value: int
+        """
+        self._set_property("range", value)
+
+
+class Ospfv2LsaSrgbIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2LsaSrgbIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2LsaSrgb]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2LsaSrgbIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2LsaSrgb
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2LsaSrgb
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2LsaSrgb):
+            raise Exception("Item is not an instance of Ospfv2LsaSrgb")
+
+    def srgb(self, starting_sid=None, range=None):
+        # type: (int,int) -> Ospfv2LsaSrgbIter
+        """Factory method that creates an instance of the Ospfv2LsaSrgb class
+
+        A learned Segment Routing Global Block (SRGB) range.
+
+        Returns: Ospfv2LsaSrgbIter
+        """
+        item = Ospfv2LsaSrgb(
+            parent=self._parent, starting_sid=starting_sid, range=range
+        )
+        self._add(item)
+        return self
+
+    def add(self, starting_sid=None, range=None):
+        # type: (int,int) -> Ospfv2LsaSrgb
+        """Add method that creates and returns an instance of the Ospfv2LsaSrgb class
+
+        A learned Segment Routing Global Block (SRGB) range.
+
+        Returns: Ospfv2LsaSrgb
+        """
+        item = Ospfv2LsaSrgb(
+            parent=self._parent, starting_sid=starting_sid, range=range
+        )
+        self._add(item)
+        return item
+
+
+class Ospfv2LsaSrlb(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "starting_sid": {
+            "type": int,
+            "format": "uint32",
+        },
+        "range": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, starting_sid=None, range=None):
+        super(Ospfv2LsaSrlb, self).__init__()
+        self._parent = parent
+        self._set_property("starting_sid", starting_sid)
+        self._set_property("range", range)
+
+    def set(self, starting_sid=None, range=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def starting_sid(self):
+        # type: () -> int
+        """starting_sid getter
+
+        The first value (base SID/label) of the SRLB range.
+
+        Returns: int
+        """
+        return self._get_property("starting_sid")
+
+    @starting_sid.setter
+    def starting_sid(self, value):
+        """starting_sid setter
+
+        The first value (base SID/label) of the SRLB range.
+
+        value: int
+        """
+        self._set_property("starting_sid", value)
+
+    @property
+    def range(self):
+        # type: () -> int
+        """range getter
+
+        The number of SIDs in this SRLB range.
+
+        Returns: int
+        """
+        return self._get_property("range")
+
+    @range.setter
+    def range(self, value):
+        """range setter
+
+        The number of SIDs in this SRLB range.
+
+        value: int
+        """
+        self._set_property("range", value)
+
+
+class Ospfv2LsaSrlbIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2LsaSrlbIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2LsaSrlb]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2LsaSrlbIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2LsaSrlb
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2LsaSrlb
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2LsaSrlb):
+            raise Exception("Item is not an instance of Ospfv2LsaSrlb")
+
+    def srlb(self, starting_sid=None, range=None):
+        # type: (int,int) -> Ospfv2LsaSrlbIter
+        """Factory method that creates an instance of the Ospfv2LsaSrlb class
+
+        A learned SR Local Block (SRLB) range.
+
+        Returns: Ospfv2LsaSrlbIter
+        """
+        item = Ospfv2LsaSrlb(
+            parent=self._parent, starting_sid=starting_sid, range=range
+        )
+        self._add(item)
+        return self
+
+    def add(self, starting_sid=None, range=None):
+        # type: (int,int) -> Ospfv2LsaSrlb
+        """Add method that creates and returns an instance of the Ospfv2LsaSrlb class
+
+        A learned SR Local Block (SRLB) range.
+
+        Returns: Ospfv2LsaSrlb
+        """
+        item = Ospfv2LsaSrlb(
+            parent=self._parent, starting_sid=starting_sid, range=range
+        )
+        self._add(item)
+        return item
+
+
+class Ospfv2LsaRiCapabilities(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "graceful_restart": {"type": bool},
+        "graceful_restart_helper": {"type": bool},
+        "stub_router_support": {"type": bool},
+        "traffic_engineering_support": {"type": bool},
+        "point_to_point_over_lan": {"type": bool},
+        "experimental_te": {"type": bool},
+        "functional_capabilities": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        graceful_restart=None,
+        graceful_restart_helper=None,
+        stub_router_support=None,
+        traffic_engineering_support=None,
+        point_to_point_over_lan=None,
+        experimental_te=None,
+        functional_capabilities=None,
+    ):
+        super(Ospfv2LsaRiCapabilities, self).__init__()
+        self._parent = parent
+        self._set_property("graceful_restart", graceful_restart)
+        self._set_property("graceful_restart_helper", graceful_restart_helper)
+        self._set_property("stub_router_support", stub_router_support)
+        self._set_property("traffic_engineering_support", traffic_engineering_support)
+        self._set_property("point_to_point_over_lan", point_to_point_over_lan)
+        self._set_property("experimental_te", experimental_te)
+        self._set_property("functional_capabilities", functional_capabilities)
+
+    def set(
+        self,
+        graceful_restart=None,
+        graceful_restart_helper=None,
+        stub_router_support=None,
+        traffic_engineering_support=None,
+        point_to_point_over_lan=None,
+        experimental_te=None,
+        functional_capabilities=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def graceful_restart(self):
+        # type: () -> bool
+        """graceful_restart getter
+
+        Informational Capabilities bit 0: the router is Graceful Restart capable (RFC 7770 Section 2.5).
+
+        Returns: bool
+        """
+        return self._get_property("graceful_restart")
+
+    @graceful_restart.setter
+    def graceful_restart(self, value):
+        """graceful_restart setter
+
+        Informational Capabilities bit 0: the router is Graceful Restart capable (RFC 7770 Section 2.5).
+
+        value: bool
+        """
+        self._set_property("graceful_restart", value)
+
+    @property
+    def graceful_restart_helper(self):
+        # type: () -> bool
+        """graceful_restart_helper getter
+
+        Informational Capabilities bit 1: the router is Graceful Restart Helper capable (RFC 7770 Section 2.5).
+
+        Returns: bool
+        """
+        return self._get_property("graceful_restart_helper")
+
+    @graceful_restart_helper.setter
+    def graceful_restart_helper(self, value):
+        """graceful_restart_helper setter
+
+        Informational Capabilities bit 1: the router is Graceful Restart Helper capable (RFC 7770 Section 2.5).
+
+        value: bool
+        """
+        self._set_property("graceful_restart_helper", value)
+
+    @property
+    def stub_router_support(self):
+        # type: () -> bool
+        """stub_router_support getter
+
+        Informational Capabilities bit 2: the router supports OSPF Stub Router functionality (RFC 7770 Section 2.5).
+
+        Returns: bool
+        """
+        return self._get_property("stub_router_support")
+
+    @stub_router_support.setter
+    def stub_router_support(self, value):
+        """stub_router_support setter
+
+        Informational Capabilities bit 2: the router supports OSPF Stub Router functionality (RFC 7770 Section 2.5).
+
+        value: bool
+        """
+        self._set_property("stub_router_support", value)
+
+    @property
+    def traffic_engineering_support(self):
+        # type: () -> bool
+        """traffic_engineering_support getter
+
+        Informational Capabilities bit 3: the router supports OSPF Traffic Engineering (RFC 7770 Section 2.5).
+
+        Returns: bool
+        """
+        return self._get_property("traffic_engineering_support")
+
+    @traffic_engineering_support.setter
+    def traffic_engineering_support(self, value):
+        """traffic_engineering_support setter
+
+        Informational Capabilities bit 3: the router supports OSPF Traffic Engineering (RFC 7770 Section 2.5).
+
+        value: bool
+        """
+        self._set_property("traffic_engineering_support", value)
+
+    @property
+    def point_to_point_over_lan(self):
+        # type: () -> bool
+        """point_to_point_over_lan getter
+
+        Informational Capabilities bit 4: the router supports point-to-point operation over LAN (RFC 7770 Section 2.5).
+
+        Returns: bool
+        """
+        return self._get_property("point_to_point_over_lan")
+
+    @point_to_point_over_lan.setter
+    def point_to_point_over_lan(self, value):
+        """point_to_point_over_lan setter
+
+        Informational Capabilities bit 4: the router supports point-to-point operation over LAN (RFC 7770 Section 2.5).
+
+        value: bool
+        """
+        self._set_property("point_to_point_over_lan", value)
+
+    @property
+    def experimental_te(self):
+        # type: () -> bool
+        """experimental_te getter
+
+        Informational Capabilities bit 5: the router supports Experimental Traffic Engineering (RFC 7770 Section 2.5).
+
+        Returns: bool
+        """
+        return self._get_property("experimental_te")
+
+    @experimental_te.setter
+    def experimental_te(self, value):
+        """experimental_te setter
+
+        Informational Capabilities bit 5: the router supports Experimental Traffic Engineering (RFC 7770 Section 2.5).
+
+        value: bool
+        """
+        self._set_property("experimental_te", value)
+
+    @property
+    def functional_capabilities(self):
+        # type: () -> int
+        """functional_capabilities getter
+
+        The raw 32-bit Router Functional Capabilities bitmask (RFC 7770 Section 2.6). No. capability bits are assigned in this registry as of RFC 7770; returned raw since there. are no named bits to decode.
+
+        Returns: int
+        """
+        return self._get_property("functional_capabilities")
+
+    @functional_capabilities.setter
+    def functional_capabilities(self, value):
+        """functional_capabilities setter
+
+        The raw 32-bit Router Functional Capabilities bitmask (RFC 7770 Section 2.6). No. capability bits are assigned in this registry as of RFC 7770; returned raw since there. are no named bits to decode.
+
+        value: int
+        """
+        self._set_property("functional_capabilities", value)
+
+
+class Ospfv2LsaMsd(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "msd_type": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "msd_value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, msd_type=None, msd_value=None):
+        super(Ospfv2LsaMsd, self).__init__()
+        self._parent = parent
+        self._set_property("msd_type", msd_type)
+        self._set_property("msd_value", msd_value)
+
+    def set(self, msd_type=None, msd_value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def msd_type(self):
+        # type: () -> int
+        """msd_type getter
+
+        The MSD-Type, identifying the kind of Maximum SID Depth being advertised (IGP MSD-Types registry, RFC 8491).
+
+        Returns: int
+        """
+        return self._get_property("msd_type")
+
+    @msd_type.setter
+    def msd_type(self, value):
+        """msd_type setter
+
+        The MSD-Type, identifying the kind of Maximum SID Depth being advertised (IGP MSD-Types registry, RFC 8491).
+
+        value: int
+        """
+        self._set_property("msd_type", value)
+
+    @property
+    def msd_value(self):
+        # type: () -> int
+        """msd_value getter
+
+        The MSD-Value: the maximum number of SIDs the router or link supports in the SID. stack. value of indicates no capability to impose any stack depth.
+
+        Returns: int
+        """
+        return self._get_property("msd_value")
+
+    @msd_value.setter
+    def msd_value(self, value):
+        """msd_value setter
+
+        The MSD-Value: the maximum number of SIDs the router or link supports in the SID. stack. value of indicates no capability to impose any stack depth.
+
+        value: int
+        """
+        self._set_property("msd_value", value)
+
+
+class Ospfv2LsaMsdIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2LsaMsdIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2LsaMsd]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2LsaMsdIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2LsaMsd
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2LsaMsd
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2LsaMsd):
+            raise Exception("Item is not an instance of Ospfv2LsaMsd")
+
+    def msd(self, msd_type=None, msd_value=None):
+        # type: (int,int) -> Ospfv2LsaMsdIter
+        """Factory method that creates an instance of the Ospfv2LsaMsd class
+
+        A single (MSD-Type, MSD-Value) pair from Node MSD or Link MSD TLV/sub-TLV (RFC 8476 Sections 2, 3).
+
+        Returns: Ospfv2LsaMsdIter
+        """
+        item = Ospfv2LsaMsd(parent=self._parent, msd_type=msd_type, msd_value=msd_value)
+        self._add(item)
+        return self
+
+    def add(self, msd_type=None, msd_value=None):
+        # type: (int,int) -> Ospfv2LsaMsd
+        """Add method that creates and returns an instance of the Ospfv2LsaMsd class
+
+        A single (MSD-Type, MSD-Value) pair from Node MSD or Link MSD TLV/sub-TLV (RFC 8476 Sections 2, 3).
+
+        Returns: Ospfv2LsaMsd
+        """
+        item = Ospfv2LsaMsd(parent=self._parent, msd_type=msd_type, msd_value=msd_value)
+        self._add(item)
+        return item
+
+
+class Ospfv2OpaqueLsaExtendedPrefix(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "prefix": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "prefix_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 32,
+        },
+        "prefix_sids": {"type": "Ospfv2LsaPrefixSidIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, prefix=None, prefix_length=None):
+        super(Ospfv2OpaqueLsaExtendedPrefix, self).__init__()
+        self._parent = parent
+        self._set_property("prefix", prefix)
+        self._set_property("prefix_length", prefix_length)
+
+    def set(self, prefix=None, prefix_length=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def prefix(self):
+        # type: () -> str
+        """prefix getter
+
+        The IPv4 address prefix the TLV applies to, decoded from the Address Prefix field. (RFC 7684 Section 2.1).
+
+        Returns: str
+        """
+        return self._get_property("prefix")
+
+    @prefix.setter
+    def prefix(self, value):
+        """prefix setter
+
+        The IPv4 address prefix the TLV applies to, decoded from the Address Prefix field. (RFC 7684 Section 2.1).
+
+        value: str
+        """
+        self._set_property("prefix", value)
+
+    @property
+    def prefix_length(self):
+        # type: () -> int
+        """prefix_length getter
+
+        The length in bits of prefix, decoded from the Prefix Length field. (RFC 7684 Section 2.1).
+
+        Returns: int
+        """
+        return self._get_property("prefix_length")
+
+    @prefix_length.setter
+    def prefix_length(self, value):
+        """prefix_length setter
+
+        The length in bits of prefix, decoded from the Prefix Length field. (RFC 7684 Section 2.1).
+
+        value: int
+        """
+        self._set_property("prefix_length", value)
+
+    @property
+    def prefix_sids(self):
+        # type: () -> Ospfv2LsaPrefixSidIter
+        """prefix_sids getter
+
+        The Prefix-SIDs advertised for this prefix, decoded from the Prefix-SID. sub-TLV, sub-type (RFC 8665 Section 5). The Prefix-SID sub-TLV may appear. more than once in the parent TLV, one per Segment Routing algorithm, so this. is list; each entry names its algorithm.
+
+        Returns: Ospfv2LsaPrefixSidIter
+        """
+        return self._get_property(
+            "prefix_sids", Ospfv2LsaPrefixSidIter, self._parent, self._choice
+        )
+
+
+class Ospfv2LsaPrefixSid(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "sid": {
+            "type": int,
+            "format": "uint32",
+        },
+        "flags": {"type": "Ospfv2LsaPrefixSidFlags"},
+        "algorithm": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "mt_id": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 127,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, sid=None, algorithm=None, mt_id=None):
+        super(Ospfv2LsaPrefixSid, self).__init__()
+        self._parent = parent
+        self._set_property("sid", sid)
+        self._set_property("algorithm", algorithm)
+        self._set_property("mt_id", mt_id)
+
+    def set(self, sid=None, algorithm=None, mt_id=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def sid(self):
+        # type: () -> int
+        """sid getter
+
+        The SID/Label value or index associated with the IGP Prefix segment attached to the prefix. flags.v_flag tells which of the two it is.
+
+        Returns: int
+        """
+        return self._get_property("sid")
+
+    @sid.setter
+    def sid(self, value):
+        """sid setter
+
+        The SID/Label value or index associated with the IGP Prefix segment attached to the prefix. flags.v_flag tells which of the two it is.
+
+        value: int
+        """
+        self._set_property("sid", value)
+
+    @property
+    def flags(self):
+        # type: () -> Ospfv2LsaPrefixSidFlags
+        """flags getter
+
+        One-octet flags of the OSPFv2 Prefix-SID sub-TLV (RFC 8665).One-octet flags of the OSPFv2 Prefix-SID sub-TLV (RFC 8665).One-octet flags of the OSPFv2 Prefix-SID sub-TLV (RFC 8665).Flags associated with the Prefix-SID.
+
+        Returns: Ospfv2LsaPrefixSidFlags
+        """
+        return self._get_property("flags", Ospfv2LsaPrefixSidFlags)
+
+    @property
+    def algorithm(self):
+        # type: () -> int
+        """algorithm getter
+
+        The Segment Routing algorithm the Prefix-SID is associated with, decoded from the Algorithm field (RFC 8665 Section 5).
+
+        Returns: int
+        """
+        return self._get_property("algorithm")
+
+    @algorithm.setter
+    def algorithm(self, value):
+        """algorithm setter
+
+        The Segment Routing algorithm the Prefix-SID is associated with, decoded from the Algorithm field (RFC 8665 Section 5).
+
+        value: int
+        """
+        self._set_property("algorithm", value)
+
+    @property
+    def mt_id(self):
+        # type: () -> int
+        """mt_id getter
+
+        The Multi-Topology ID the Prefix-SID applies to, decoded from the MT-ID field. (RFC 8665 Section 5, RFC 4915). Together with prefix and algorithm it. identifies the Prefix-SID: RFC 8665 Section requires all Prefix-SIDs. advertised for the same prefix, topology and algorithm to be ignored, so the. entries of prefix_sids are distinguished by this field and algorithm.. The MT-ID field is one octet wide on the wire, but RFC 4915 Section 3.7. defines only 0-127 as valid MT-ID values 128-255 are invalid and SHOULD be. ignored on receipt, so value in that range is never reported here. The. maximum matches the range statement on the equivalent mt-id leaf of the IETF. OSPF Segment Routing YANG model.
+
+        Returns: int
+        """
+        return self._get_property("mt_id")
+
+    @mt_id.setter
+    def mt_id(self, value):
+        """mt_id setter
+
+        The Multi-Topology ID the Prefix-SID applies to, decoded from the MT-ID field. (RFC 8665 Section 5, RFC 4915). Together with prefix and algorithm it. identifies the Prefix-SID: RFC 8665 Section requires all Prefix-SIDs. advertised for the same prefix, topology and algorithm to be ignored, so the. entries of prefix_sids are distinguished by this field and algorithm.. The MT-ID field is one octet wide on the wire, but RFC 4915 Section 3.7. defines only 0-127 as valid MT-ID values 128-255 are invalid and SHOULD be. ignored on receipt, so value in that range is never reported here. The. maximum matches the range statement on the equivalent mt-id leaf of the IETF. OSPF Segment Routing YANG model.
+
+        value: int
+        """
+        self._set_property("mt_id", value)
+
+
+class Ospfv2LsaPrefixSidFlags(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "np_flag": {"type": bool},
+        "m_flag": {"type": bool},
+        "e_flag": {"type": bool},
+        "v_flag": {"type": bool},
+        "l_flag": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        np_flag=None,
+        m_flag=None,
+        e_flag=None,
+        v_flag=None,
+        l_flag=None,
+    ):
+        super(Ospfv2LsaPrefixSidFlags, self).__init__()
+        self._parent = parent
+        self._set_property("np_flag", np_flag)
+        self._set_property("m_flag", m_flag)
+        self._set_property("e_flag", e_flag)
+        self._set_property("v_flag", v_flag)
+        self._set_property("l_flag", l_flag)
+
+    def set(self, np_flag=None, m_flag=None, e_flag=None, v_flag=None, l_flag=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def np_flag(self):
+        # type: () -> bool
+        """np_flag getter
+
+        NP-Flag (No-PHP): if set, the penultimate hop MUST NOT pop the Prefix-SID before delivering the packet to the advertising node.
+
+        Returns: bool
+        """
+        return self._get_property("np_flag")
+
+    @np_flag.setter
+    def np_flag(self, value):
+        """np_flag setter
+
+        NP-Flag (No-PHP): if set, the penultimate hop MUST NOT pop the Prefix-SID before delivering the packet to the advertising node.
+
+        value: bool
+        """
+        self._set_property("np_flag", value)
+
+    @property
+    def m_flag(self):
+        # type: () -> bool
+        """m_flag getter
+
+        M-Flag (Mapping Server): if set, the SID was advertised by an SR Mapping Server.
+
+        Returns: bool
+        """
+        return self._get_property("m_flag")
+
+    @m_flag.setter
+    def m_flag(self, value):
+        """m_flag setter
+
+        M-Flag (Mapping Server): if set, the SID was advertised by an SR Mapping Server.
+
+        value: bool
+        """
+        self._set_property("m_flag", value)
+
+    @property
+    def e_flag(self):
+        # type: () -> bool
+        """e_flag getter
+
+        E-Flag (Explicit-Null): if set, the upstream neighbor MUST replace the Prefix-SID with the Explicit-NULL label before forwarding.
+
+        Returns: bool
+        """
+        return self._get_property("e_flag")
+
+    @e_flag.setter
+    def e_flag(self, value):
+        """e_flag setter
+
+        E-Flag (Explicit-Null): if set, the upstream neighbor MUST replace the Prefix-SID with the Explicit-NULL label before forwarding.
+
+        value: bool
+        """
+        self._set_property("e_flag", value)
+
+    @property
+    def v_flag(self):
+        # type: () -> bool
+        """v_flag getter
+
+        V-Flag (Value): if set, the Prefix-SID carries an absolute value (label); if clear, an index.
+
+        Returns: bool
+        """
+        return self._get_property("v_flag")
+
+    @v_flag.setter
+    def v_flag(self, value):
+        """v_flag setter
+
+        V-Flag (Value): if set, the Prefix-SID carries an absolute value (label); if clear, an index.
+
+        value: bool
+        """
+        self._set_property("v_flag", value)
+
+    @property
+    def l_flag(self):
+        # type: () -> bool
+        """l_flag getter
+
+        L-Flag (Local): if set, the value/index carried by the Prefix-SID has local significance.
+
+        Returns: bool
+        """
+        return self._get_property("l_flag")
+
+    @l_flag.setter
+    def l_flag(self, value):
+        """l_flag setter
+
+        L-Flag (Local): if set, the value/index carried by the Prefix-SID has local significance.
+
+        value: bool
+        """
+        self._set_property("l_flag", value)
+
+
+class Ospfv2LsaPrefixSidIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2LsaPrefixSidIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2LsaPrefixSid]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2LsaPrefixSidIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2LsaPrefixSid
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2LsaPrefixSid
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2LsaPrefixSid):
+            raise Exception("Item is not an instance of Ospfv2LsaPrefixSid")
+
+    def prefixsid(self, sid=None, algorithm=None, mt_id=None):
+        # type: (int,int,int) -> Ospfv2LsaPrefixSidIter
+        """Factory method that creates an instance of the Ospfv2LsaPrefixSid class
+
+        The learned OSPFv2 Prefix-SID and its attributes, decoded from one Prefix-SID sub-TLV. of the Extended Prefix Opaque LSA (RFC 8665 Section 5). One object per Prefix-SID. sub-TLV instance.
+
+        Returns: Ospfv2LsaPrefixSidIter
+        """
+        item = Ospfv2LsaPrefixSid(
+            parent=self._parent, sid=sid, algorithm=algorithm, mt_id=mt_id
+        )
+        self._add(item)
+        return self
+
+    def add(self, sid=None, algorithm=None, mt_id=None):
+        # type: (int,int,int) -> Ospfv2LsaPrefixSid
+        """Add method that creates and returns an instance of the Ospfv2LsaPrefixSid class
+
+        The learned OSPFv2 Prefix-SID and its attributes, decoded from one Prefix-SID sub-TLV. of the Extended Prefix Opaque LSA (RFC 8665 Section 5). One object per Prefix-SID. sub-TLV instance.
+
+        Returns: Ospfv2LsaPrefixSid
+        """
+        item = Ospfv2LsaPrefixSid(
+            parent=self._parent, sid=sid, algorithm=algorithm, mt_id=mt_id
+        )
+        self._add(item)
+        return item
+
+
+class Ospfv2OpaqueLsaExtendedPrefixIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2OpaqueLsaExtendedPrefixIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2OpaqueLsaExtendedPrefix]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2OpaqueLsaExtendedPrefixIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2OpaqueLsaExtendedPrefix
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2OpaqueLsaExtendedPrefix
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2OpaqueLsaExtendedPrefix):
+            raise Exception("Item is not an instance of Ospfv2OpaqueLsaExtendedPrefix")
+
+    def extendedprefix(self, prefix=None, prefix_length=None):
+        # type: (str,int) -> Ospfv2OpaqueLsaExtendedPrefixIter
+        """Factory method that creates an instance of the Ospfv2OpaqueLsaExtendedPrefix class
+
+        A decoded OSPFv2 Extended Prefix TLV of an Extended Prefix Opaque LSA, TLV type 1. (RFC 7684 Section 2.1).. The TLV names the prefix it applies to in its own body, so no reference to another LSA. is needed to identify it. Correlate it to the LSA that advertises that prefix by. matching prefix against router_lsas[].links[].id of stub link for an intra-area. prefix, or against header.lsa_id of network_summary_lsas[] for an inter-area prefix,. external_as_lsas[] for an AS-external prefix or nssa_lsas[] for an NSSA-external. prefix. RFC 2328 Sections 12.4.3 and 12.4.4 define the Link State ID of Summary-LSA. and of an AS-External-LSA as the prefix itself, and RFC 3101 gives the NSSA-LSA the. same format, so that correlation is direct value match rather than new lookup.
+
+        Returns: Ospfv2OpaqueLsaExtendedPrefixIter
+        """
+        item = Ospfv2OpaqueLsaExtendedPrefix(
+            parent=self._parent, prefix=prefix, prefix_length=prefix_length
+        )
+        self._add(item)
+        return self
+
+    def add(self, prefix=None, prefix_length=None):
+        # type: (str,int) -> Ospfv2OpaqueLsaExtendedPrefix
+        """Add method that creates and returns an instance of the Ospfv2OpaqueLsaExtendedPrefix class
+
+        A decoded OSPFv2 Extended Prefix TLV of an Extended Prefix Opaque LSA, TLV type 1. (RFC 7684 Section 2.1).. The TLV names the prefix it applies to in its own body, so no reference to another LSA. is needed to identify it. Correlate it to the LSA that advertises that prefix by. matching prefix against router_lsas[].links[].id of stub link for an intra-area. prefix, or against header.lsa_id of network_summary_lsas[] for an inter-area prefix,. external_as_lsas[] for an AS-external prefix or nssa_lsas[] for an NSSA-external. prefix. RFC 2328 Sections 12.4.3 and 12.4.4 define the Link State ID of Summary-LSA. and of an AS-External-LSA as the prefix itself, and RFC 3101 gives the NSSA-LSA the. same format, so that correlation is direct value match rather than new lookup.
+
+        Returns: Ospfv2OpaqueLsaExtendedPrefix
+        """
+        item = Ospfv2OpaqueLsaExtendedPrefix(
+            parent=self._parent, prefix=prefix, prefix_length=prefix_length
+        )
+        self._add(item)
+        return item
+
+
+class Ospfv2OpaqueLsaExtendedLink(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "link_type": {
+            "type": str,
+            "enum": [
+                "point_to_point",
+                "stub",
+                "transit",
+                "virtual",
+            ],
+        },
+        "link_id": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "link_data": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "adjacency_sids": {"type": "Ospfv2LsaAdjacencySidIter"},
+        "link_attributes": {"type": "Ospfv2LsaExtendedLinkAttributes"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    POINT_TO_POINT = "point_to_point"  # type: str
+    STUB = "stub"  # type: str
+    TRANSIT = "transit"  # type: str
+    VIRTUAL = "virtual"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, link_type=None, link_id=None, link_data=None):
+        super(Ospfv2OpaqueLsaExtendedLink, self).__init__()
+        self._parent = parent
+        self._set_property("link_type", link_type)
+        self._set_property("link_id", link_id)
+        self._set_property("link_data", link_data)
+
+    def set(self, link_type=None, link_id=None, link_data=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def link_type(self):
+        # type: () -> Union[Literal["point_to_point"], Literal["stub"], Literal["transit"], Literal["virtual"]]
+        """link_type getter
+
+        The type of the link the TLV extends, decoded from the Link Type field. (RFC 7684 Section 3.1). Carries the same value as the Type field of the. corresponding Router-LSA link (RFC 2328 Section A.4.2).
+
+        Returns: Union[Literal["point_to_point"], Literal["stub"], Literal["transit"], Literal["virtual"]]
+        """
+        return self._get_property("link_type")
+
+    @link_type.setter
+    def link_type(self, value):
+        """link_type setter
+
+        The type of the link the TLV extends, decoded from the Link Type field. (RFC 7684 Section 3.1). Carries the same value as the Type field of the. corresponding Router-LSA link (RFC 2328 Section A.4.2).
+
+        value: Union[Literal["point_to_point"], Literal["stub"], Literal["transit"], Literal["virtual"]]
+        """
+        self._set_property("link_type", value)
+
+    @property
+    def link_id(self):
+        # type: () -> str
+        """link_id getter
+
+        The identifier of the link the TLV extends, decoded from the Link ID field. (RFC 7684 Section 3.1).
+
+        Returns: str
+        """
+        return self._get_property("link_id")
+
+    @link_id.setter
+    def link_id(self, value):
+        """link_id setter
+
+        The identifier of the link the TLV extends, decoded from the Link ID field. (RFC 7684 Section 3.1).
+
+        value: str
+        """
+        self._set_property("link_id", value)
+
+    @property
+    def link_data(self):
+        # type: () -> str
+        """link_data getter
+
+        The data of the link the TLV extends, decoded from the Link Data field. (RFC 7684 Section 3.1). Distinguishes two links that share link_id, such as. parallel point-to-point links to the same neighbor.
+
+        Returns: str
+        """
+        return self._get_property("link_data")
+
+    @link_data.setter
+    def link_data(self, value):
+        """link_data setter
+
+        The data of the link the TLV extends, decoded from the Link Data field. (RFC 7684 Section 3.1). Distinguishes two links that share link_id, such as. parallel point-to-point links to the same neighbor.
+
+        value: str
+        """
+        self._set_property("link_data", value)
+
+    @property
+    def adjacency_sids(self):
+        # type: () -> Ospfv2LsaAdjacencySidIter
+        """adjacency_sids getter
+
+        The Adjacency-SIDs advertised for this link, decoded from the Adj-SID sub-TLV,. sub-type 2, and the LAN Adj-SID sub-TLV, sub-type (RFC 8665 Sections 6.1,. 6.2). One entry per sub-TLV instance, in the order the sub-TLVs appear in the. Extended Link TLV, with entry.type naming which of the two sub-TLVs each entry. was decoded from; the two forms may be mixed in this list. Both sub-TLVs may. appear multiple times in one Extended Link TLV a router may allocate more. than one Adj-SID to an adjacency, and LAN Adj-SID is advertised per neighbor. on multi-access link so this is list.
+
+        Returns: Ospfv2LsaAdjacencySidIter
+        """
+        return self._get_property(
+            "adjacency_sids", Ospfv2LsaAdjacencySidIter, self._parent, self._choice
+        )
+
+    @property
+    def link_attributes(self):
+        # type: () -> Ospfv2LsaExtendedLinkAttributes
+        """link_attributes getter
+
+        Traffic engineering attributes of link, sourced from the sub-TLVs of the OSPFv2. Extended Link TLV: the application-specific ASLA sub-TLV (RFC 9492 Section 6), the. direct (non-application-specific) Maximum Bandwidth sub-TLV (RFC 9492 Section 7,. sub-type 23), and the Link MSD sub-TLV (RFC 8476 Section 3, sub-type 6).. link_type, local/remote interface addresses, maximum_reservable_bandwidth and. unreserved_bandwidths are not included: RFC 9492 defines no OSPFv2 encoding,. application-specific or direct, for any of them on this TLV.Traffic engineering attributes of link, sourced from the sub-TLVs of the OSPFv2. Extended Link TLV: the application-specific ASLA sub-TLV (RFC 9492 Section 6), the. direct (non-application-specific) Maximum Bandwidth sub-TLV (RFC 9492 Section 7,. sub-type 23), and the Link MSD sub-TLV (RFC 8476 Section 3, sub-type 6).. link_type, local/remote interface addresses, maximum_reservable_bandwidth and. unreserved_bandwidths are not included: RFC 9492 defines no OSPFv2 encoding,. application-specific or direct, for any of them on this TLV.Traffic engineering attributes of link, sourced from the sub-TLVs of the OSPFv2. Extended Link TLV: the application-specific ASLA sub-TLV (RFC 9492 Section 6), the. direct (non-application-specific) Maximum Bandwidth sub-TLV (RFC 9492 Section 7,. sub-type 23), and the Link MSD sub-TLV (RFC 8476 Section 3, sub-type 6).. link_type, local/remote interface addresses, maximum_reservable_bandwidth and. unreserved_bandwidths are not included: RFC 9492 defines no OSPFv2 encoding,. application-specific or direct, for any of them on this TLV.Traffic engineering attributes of link, sourced from the sub-TLVs of the OSPFv2. Extended Link TLV: the application-specific ASLA sub-TLV (RFC 9492 Section 6), the. direct (non-application-specific) Maximum Bandwidth sub-TLV (RFC 9492 Section 7,. sub-type 23), and the Link MSD sub-TLV (RFC 8476 Section 3, sub-type 6).. link_type, local/remote interface addresses, maximum_reservable_bandwidth and. unreserved_bandwidths are not included: RFC 9492 defines no OSPFv2 encoding,. application-specific or direct, for any of them on this TLV.Traffic engineering link attributes associated with this Extended Link. This. object represents the supported link-attribute set and does not expose the. underlying OSPF sub-TLV structure: it is semantic grouping of the attribute. values advertised for the link, not decode of one sub-TLV instance. The. values are sourced from the ASLA sub-TLV (RFC 9492 Section 6), the direct. Maximum Bandwidth sub-TLV (RFC 9492 Section 7) and the Link MSD sub-TLV. (RFC 8476 Section 3) of the Extended Link TLV, and RFC 9492 allows an. attribute to be advertised more than once, per application, so which instance. value came from is not recoverable from this object.
+
+        Returns: Ospfv2LsaExtendedLinkAttributes
+        """
+        return self._get_property("link_attributes", Ospfv2LsaExtendedLinkAttributes)
+
+
+class Ospfv2LsaAdjacencySid(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "type": {
+            "type": str,
+            "enum": [
+                "adj_sid",
+                "lan_adj_sid",
+            ],
+        },
+        "sid": {
+            "type": int,
+            "format": "uint32",
+        },
+        "flags": {"type": "Ospfv2LsaAdjSidFlags"},
+        "weight": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "neighbor_id": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "mt_id": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 127,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    ADJ_SID = "adj_sid"  # type: str
+    LAN_ADJ_SID = "lan_adj_sid"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        type=None,
+        sid=None,
+        weight=None,
+        neighbor_id=None,
+        mt_id=None,
+    ):
+        super(Ospfv2LsaAdjacencySid, self).__init__()
+        self._parent = parent
+        self._set_property("type", type)
+        self._set_property("sid", sid)
+        self._set_property("weight", weight)
+        self._set_property("neighbor_id", neighbor_id)
+        self._set_property("mt_id", mt_id)
+
+    def set(self, type=None, sid=None, weight=None, neighbor_id=None, mt_id=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def type(self):
+        # type: () -> Union[Literal["adj_sid"], Literal["lan_adj_sid"]]
+        """type getter
+
+        The sub-TLV this object was decoded from: adj_sid for the Adj-SID sub-TLV,. Extended Link sub-TLV type (RFC 8665 Section 6.1), or lan_adj_sid for the LAN. Adj-SID sub-TLV, type (RFC 8665 Section 6.2). It is not property of the SID. itself, it names the wire encoding this object came from, and it is what tells. you whether to expect neighbor_id.
+
+        Returns: Union[Literal["adj_sid"], Literal["lan_adj_sid"]]
+        """
+        return self._get_property("type")
+
+    @type.setter
+    def type(self, value):
+        """type setter
+
+        The sub-TLV this object was decoded from: adj_sid for the Adj-SID sub-TLV,. Extended Link sub-TLV type (RFC 8665 Section 6.1), or lan_adj_sid for the LAN. Adj-SID sub-TLV, type (RFC 8665 Section 6.2). It is not property of the SID. itself, it names the wire encoding this object came from, and it is what tells. you whether to expect neighbor_id.
+
+        value: Union[Literal["adj_sid"], Literal["lan_adj_sid"]]
+        """
+        self._set_property("type", value)
+
+    @property
+    def sid(self):
+        # type: () -> int
+        """sid getter
+
+        The SID/Label value or index associated with the adjacency. flags.v_flag tells which of the two it is.
+
+        Returns: int
+        """
+        return self._get_property("sid")
+
+    @sid.setter
+    def sid(self, value):
+        """sid setter
+
+        The SID/Label value or index associated with the adjacency. flags.v_flag tells which of the two it is.
+
+        value: int
+        """
+        self._set_property("sid", value)
+
+    @property
+    def flags(self):
+        # type: () -> Ospfv2LsaAdjSidFlags
+        """flags getter
+
+        The one-octet Flags field of the sub-TLV this Adjacency-SID was decoded from. The. Adj-SID sub-TLV and the LAN Adj-SID sub-TLV define the same flags in the same bit. positions (RFC 8665 Sections 6.1, 6.2), so one object covers both.The one-octet Flags field of the sub-TLV this Adjacency-SID was decoded from. The. Adj-SID sub-TLV and the LAN Adj-SID sub-TLV define the same flags in the same bit. positions (RFC 8665 Sections 6.1, 6.2), so one object covers both.The one-octet Flags field of the sub-TLV this Adjacency-SID was decoded from. The. Adj-SID sub-TLV and the LAN Adj-SID sub-TLV define the same flags in the same bit. positions (RFC 8665 Sections 6.1, 6.2), so one object covers both.Flags associated with the Adjacency-SID.
+
+        Returns: Ospfv2LsaAdjSidFlags
+        """
+        return self._get_property("flags", Ospfv2LsaAdjSidFlags)
+
+    @property
+    def weight(self):
+        # type: () -> int
+        """weight getter
+
+        The weight of the Adjacency-SID for the purpose of load balancing, decoded from the Weight field (RFC 8665 Sections 6.1, 6.2).
+
+        Returns: int
+        """
+        return self._get_property("weight")
+
+    @weight.setter
+    def weight(self, value):
+        """weight setter
+
+        The weight of the Adjacency-SID for the purpose of load balancing, decoded from the Weight field (RFC 8665 Sections 6.1, 6.2).
+
+        value: int
+        """
+        self._set_property("weight", value)
+
+    @property
+    def neighbor_id(self):
+        # type: () -> str
+        """neighbor_id getter
+
+        The Router ID of the neighbor the LAN Adjacency-SID is advertised for, decoded. from the Neighbor ID field of the LAN Adj-SID sub-TLV (RFC 8665 Section 6.2).. Present only when type is lan_adj_sid, and the field that tells one LAN. Adjacency-SID from another on the same multi-access link. The Adj-SID sub-TLV,. sub-type 2, has no Neighbor ID field, so it is absent when type is adj_sid:. the adjacency is then identified by the link the parent Extended Link TLV. describes.
+
+        Returns: str
+        """
+        return self._get_property("neighbor_id")
+
+    @neighbor_id.setter
+    def neighbor_id(self, value):
+        """neighbor_id setter
+
+        The Router ID of the neighbor the LAN Adjacency-SID is advertised for, decoded. from the Neighbor ID field of the LAN Adj-SID sub-TLV (RFC 8665 Section 6.2).. Present only when type is lan_adj_sid, and the field that tells one LAN. Adjacency-SID from another on the same multi-access link. The Adj-SID sub-TLV,. sub-type 2, has no Neighbor ID field, so it is absent when type is adj_sid:. the adjacency is then identified by the link the parent Extended Link TLV. describes.
+
+        value: str
+        """
+        self._set_property("neighbor_id", value)
+
+    @property
+    def mt_id(self):
+        # type: () -> int
+        """mt_id getter
+
+        The Multi-Topology ID the Adjacency-SID applies to, decoded from the MT-ID. field of either sub-TLV (RFC 8665 Sections 6.1, 6.2, RFC 4915).. The MT-ID field is one octet wide on the wire, but RFC 4915 Section 3.7. defines only 0-127 as valid MT-ID values 128-255 are invalid and SHOULD be. ignored on receipt, so value in that range is never reported here. The. maximum matches the range statement on the equivalent mt-id leaf of the IETF. OSPF Segment Routing YANG model.
+
+        Returns: int
+        """
+        return self._get_property("mt_id")
+
+    @mt_id.setter
+    def mt_id(self, value):
+        """mt_id setter
+
+        The Multi-Topology ID the Adjacency-SID applies to, decoded from the MT-ID. field of either sub-TLV (RFC 8665 Sections 6.1, 6.2, RFC 4915).. The MT-ID field is one octet wide on the wire, but RFC 4915 Section 3.7. defines only 0-127 as valid MT-ID values 128-255 are invalid and SHOULD be. ignored on receipt, so value in that range is never reported here. The. maximum matches the range statement on the equivalent mt-id leaf of the IETF. OSPF Segment Routing YANG model.
+
+        value: int
+        """
+        self._set_property("mt_id", value)
+
+
+class Ospfv2LsaAdjSidFlags(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "b_flag": {"type": bool},
+        "g_flag": {"type": bool},
+        "p_flag": {"type": bool},
+        "v_flag": {"type": bool},
+        "l_flag": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        b_flag=None,
+        g_flag=None,
+        p_flag=None,
+        v_flag=None,
+        l_flag=None,
+    ):
+        super(Ospfv2LsaAdjSidFlags, self).__init__()
+        self._parent = parent
+        self._set_property("b_flag", b_flag)
+        self._set_property("g_flag", g_flag)
+        self._set_property("p_flag", p_flag)
+        self._set_property("v_flag", v_flag)
+        self._set_property("l_flag", l_flag)
+
+    def set(self, b_flag=None, g_flag=None, p_flag=None, v_flag=None, l_flag=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def b_flag(self):
+        # type: () -> bool
+        """b_flag getter
+
+        B-Flag (Backup): the Adjacency-SID is eligible for protection.
+
+        Returns: bool
+        """
+        return self._get_property("b_flag")
+
+    @b_flag.setter
+    def b_flag(self, value):
+        """b_flag setter
+
+        B-Flag (Backup): the Adjacency-SID is eligible for protection.
+
+        value: bool
+        """
+        self._set_property("b_flag", value)
+
+    @property
+    def g_flag(self):
+        # type: () -> bool
+        """g_flag getter
+
+        G-Flag (Group): the Adjacency-SID refers to group of adjacencies.
+
+        Returns: bool
+        """
+        return self._get_property("g_flag")
+
+    @g_flag.setter
+    def g_flag(self, value):
+        """g_flag setter
+
+        G-Flag (Group): the Adjacency-SID refers to group of adjacencies.
+
+        value: bool
+        """
+        self._set_property("g_flag", value)
+
+    @property
+    def p_flag(self):
+        # type: () -> bool
+        """p_flag getter
+
+        P-Flag (Persistent): the Adjacency-SID is persistently allocated.
+
+        Returns: bool
+        """
+        return self._get_property("p_flag")
+
+    @p_flag.setter
+    def p_flag(self, value):
+        """p_flag setter
+
+        P-Flag (Persistent): the Adjacency-SID is persistently allocated.
+
+        value: bool
+        """
+        self._set_property("p_flag", value)
+
+    @property
+    def v_flag(self):
+        # type: () -> bool
+        """v_flag getter
+
+        V-Flag (Value): if set, the Adj-SID carries an absolute value (label); if clear, an index.
+
+        Returns: bool
+        """
+        return self._get_property("v_flag")
+
+    @v_flag.setter
+    def v_flag(self, value):
+        """v_flag setter
+
+        V-Flag (Value): if set, the Adj-SID carries an absolute value (label); if clear, an index.
+
+        value: bool
+        """
+        self._set_property("v_flag", value)
+
+    @property
+    def l_flag(self):
+        # type: () -> bool
+        """l_flag getter
+
+        L-Flag (Local): if set, the value/index carried by the Adj-SID has local significance.
+
+        Returns: bool
+        """
+        return self._get_property("l_flag")
+
+    @l_flag.setter
+    def l_flag(self, value):
+        """l_flag setter
+
+        L-Flag (Local): if set, the value/index carried by the Adj-SID has local significance.
+
+        value: bool
+        """
+        self._set_property("l_flag", value)
+
+
+class Ospfv2LsaAdjacencySidIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2LsaAdjacencySidIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2LsaAdjacencySid]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2LsaAdjacencySidIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2LsaAdjacencySid
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2LsaAdjacencySid
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2LsaAdjacencySid):
+            raise Exception("Item is not an instance of Ospfv2LsaAdjacencySid")
+
+    def adjacencysid(
+        self, type=None, sid=None, weight=None, neighbor_id=None, mt_id=None
+    ):
+        # type: (Union[Literal["adj_sid"], Literal["lan_adj_sid"]],int,int,str,int) -> Ospfv2LsaAdjacencySidIter
+        """Factory method that creates an instance of the Ospfv2LsaAdjacencySid class
+
+        A learned OSPFv2 Adjacency-SID and its attributes.. One object of this type represents exactly one sub-TLV instance on the wire, and. that sub-TLV is either an Adj-SID sub-TLV, sub-type (RFC 8665 Section 6.1), or a. LAN Adj-SID sub-TLV, sub-type (RFC 8665 Section 6.2). The two are deliberately. modelled by one object because they carry the same information about the same kind. of thing a SID for an adjacency over the link the parent Extended Link TLV. describes and differ only in that the LAN form names the neighbor the SID is for.. type says which of the two sub-TLVs this object was decoded from, and is the field. to read before interpreting the rest: neighbor_id is present only for. type lan_adj_sid, because only the LAN Adj-SID sub-TLV carries Neighbor ID. field. Every other field of this object is decoded from field that both sub-TLVs. carry.. This object is never an aggregate of several sub-TLVs: link that advertises more. than one Adj-SID, or one LAN Adj-SID per neighbor, is reported as that many entries. of Ospfv2.OpaqueLsa.ExtendedLink/adjacency_sids, each with its own type. Both. sub-TLVs may appear multiple times in one Extended Link TLV (RFC 8665. Sections 6.1, 6.2), and the two forms may be mixed in the same list.
+
+        Returns: Ospfv2LsaAdjacencySidIter
+        """
+        item = Ospfv2LsaAdjacencySid(
+            parent=self._parent,
+            type=type,
+            sid=sid,
+            weight=weight,
+            neighbor_id=neighbor_id,
+            mt_id=mt_id,
+        )
+        self._add(item)
+        return self
+
+    def add(self, type=None, sid=None, weight=None, neighbor_id=None, mt_id=None):
+        # type: (Union[Literal["adj_sid"], Literal["lan_adj_sid"]],int,int,str,int) -> Ospfv2LsaAdjacencySid
+        """Add method that creates and returns an instance of the Ospfv2LsaAdjacencySid class
+
+        A learned OSPFv2 Adjacency-SID and its attributes.. One object of this type represents exactly one sub-TLV instance on the wire, and. that sub-TLV is either an Adj-SID sub-TLV, sub-type (RFC 8665 Section 6.1), or a. LAN Adj-SID sub-TLV, sub-type (RFC 8665 Section 6.2). The two are deliberately. modelled by one object because they carry the same information about the same kind. of thing a SID for an adjacency over the link the parent Extended Link TLV. describes and differ only in that the LAN form names the neighbor the SID is for.. type says which of the two sub-TLVs this object was decoded from, and is the field. to read before interpreting the rest: neighbor_id is present only for. type lan_adj_sid, because only the LAN Adj-SID sub-TLV carries Neighbor ID. field. Every other field of this object is decoded from field that both sub-TLVs. carry.. This object is never an aggregate of several sub-TLVs: link that advertises more. than one Adj-SID, or one LAN Adj-SID per neighbor, is reported as that many entries. of Ospfv2.OpaqueLsa.ExtendedLink/adjacency_sids, each with its own type. Both. sub-TLVs may appear multiple times in one Extended Link TLV (RFC 8665. Sections 6.1, 6.2), and the two forms may be mixed in the same list.
+
+        Returns: Ospfv2LsaAdjacencySid
+        """
+        item = Ospfv2LsaAdjacencySid(
+            parent=self._parent,
+            type=type,
+            sid=sid,
+            weight=weight,
+            neighbor_id=neighbor_id,
+            mt_id=mt_id,
+        )
+        self._add(item)
+        return item
+
+
+class Ospfv2LsaExtendedLinkAttributes(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "te_metric": {
+            "type": int,
+            "format": "uint32",
+        },
+        "maximum_bandwidth": {
+            "type": float,
+            "format": "float",
+        },
+        "administrative_group": {
+            "type": int,
+            "format": "uint32",
+        },
+        "extended_administrative_group": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "srlg": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "link_msd": {"type": "Ospfv2LsaMsdIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        te_metric=None,
+        maximum_bandwidth=None,
+        administrative_group=None,
+        extended_administrative_group=None,
+        srlg=None,
+    ):
+        super(Ospfv2LsaExtendedLinkAttributes, self).__init__()
+        self._parent = parent
+        self._set_property("te_metric", te_metric)
+        self._set_property("maximum_bandwidth", maximum_bandwidth)
+        self._set_property("administrative_group", administrative_group)
+        self._set_property(
+            "extended_administrative_group", extended_administrative_group
+        )
+        self._set_property("srlg", srlg)
+
+    def set(
+        self,
+        te_metric=None,
+        maximum_bandwidth=None,
+        administrative_group=None,
+        extended_administrative_group=None,
+        srlg=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def te_metric(self):
+        # type: () -> int
+        """te_metric getter
+
+        The TE Metric ASLA sub-TLV, type 22 (RFC 9492 Section 6).
+
+        Returns: int
+        """
+        return self._get_property("te_metric")
+
+    @te_metric.setter
+    def te_metric(self, value):
+        """te_metric setter
+
+        The TE Metric ASLA sub-TLV, type 22 (RFC 9492 Section 6).
+
+        value: int
+        """
+        self._set_property("te_metric", value)
+
+    @property
+    def maximum_bandwidth(self):
+        # type: () -> float
+        """maximum_bandwidth getter
+
+        The Maximum Bandwidth sub-TLV, sub-type 23 (RFC 9492 Section 7), in bytes per. second. Maximum Bandwidth is an application-independent attribute and MUST NOT. be advertised inside the ASLA sub-TLV; this direct sub-TLV, using the same format. as RFC 3630, is how it is advertised on this LSA instead.
+
+        Returns: float
+        """
+        return self._get_property("maximum_bandwidth")
+
+    @maximum_bandwidth.setter
+    def maximum_bandwidth(self, value):
+        """maximum_bandwidth setter
+
+        The Maximum Bandwidth sub-TLV, sub-type 23 (RFC 9492 Section 7), in bytes per. second. Maximum Bandwidth is an application-independent attribute and MUST NOT. be advertised inside the ASLA sub-TLV; this direct sub-TLV, using the same format. as RFC 3630, is how it is advertised on this LSA instead.
+
+        value: float
+        """
+        self._set_property("maximum_bandwidth", value)
+
+    @property
+    def administrative_group(self):
+        # type: () -> int
+        """administrative_group getter
+
+        The Administrative Group ASLA sub-TLV, type 19 (RFC 9492 Section 6.2).
+
+        Returns: int
+        """
+        return self._get_property("administrative_group")
+
+    @administrative_group.setter
+    def administrative_group(self, value):
+        """administrative_group setter
+
+        The Administrative Group ASLA sub-TLV, type 19 (RFC 9492 Section 6.2).
+
+        value: int
+        """
+        self._set_property("administrative_group", value)
+
+    @property
+    def extended_administrative_group(self):
+        # type: () -> List[int]
+        """extended_administrative_group getter
+
+        The Extended Administrative Group ASLA sub-TLV, type 20 (RFC 9492 Section 6.3).
+
+        Returns: List[int]
+        """
+        return self._get_property("extended_administrative_group")
+
+    @extended_administrative_group.setter
+    def extended_administrative_group(self, value):
+        """extended_administrative_group setter
+
+        The Extended Administrative Group ASLA sub-TLV, type 20 (RFC 9492 Section 6.3).
+
+        value: List[int]
+        """
+        self._set_property("extended_administrative_group", value)
+
+    @property
+    def srlg(self):
+        # type: () -> List[int]
+        """srlg getter
+
+        The Shared Risk Link Group (SRLG) ASLA sub-TLV, type 11 (RFC 9492 Section 6.1).
+
+        Returns: List[int]
+        """
+        return self._get_property("srlg")
+
+    @srlg.setter
+    def srlg(self, value):
+        """srlg setter
+
+        The Shared Risk Link Group (SRLG) ASLA sub-TLV, type 11 (RFC 9492 Section 6.1).
+
+        value: List[int]
+        """
+        self._set_property("srlg", value)
+
+    @property
+    def link_msd(self):
+        # type: () -> Ospfv2LsaMsdIter
+        """link_msd getter
+
+        The Link MSD sub-TLV, sub-type (RFC 8476 Section 3).
+
+        Returns: Ospfv2LsaMsdIter
+        """
+        return self._get_property(
+            "link_msd", Ospfv2LsaMsdIter, self._parent, self._choice
+        )
+
+
+class Ospfv2OpaqueLsaUnknownOpaqueType(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "opaque_type": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, opaque_type=None):
+        super(Ospfv2OpaqueLsaUnknownOpaqueType, self).__init__()
+        self._parent = parent
+        self._set_property("opaque_type", opaque_type)
+
+    def set(self, opaque_type=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def opaque_type(self):
+        # type: () -> int
+        """opaque_type getter
+
+        The Opaque Type carried in the most significant octet of the LSA's Link State. ID, as the numeric value on the wire (RFC 5250 Section 3). The authoritative. list of assigned Opaque Types is the IANA registry:. https://www.iana.org/assignments/ospf-opaque-types/ospf-opaque-types.xhtml
+
+        Returns: int
+        """
+        return self._get_property("opaque_type")
+
+    @opaque_type.setter
+    def opaque_type(self, value):
+        """opaque_type setter
+
+        The Opaque Type carried in the most significant octet of the LSA's Link State. ID, as the numeric value on the wire (RFC 5250 Section 3). The authoritative. list of assigned Opaque Types is the IANA registry:. https://www.iana.org/assignments/ospf-opaque-types/ospf-opaque-types.xhtml
+
+        value: int
+        """
+        self._set_property("opaque_type", value)
+
+
+class Ospfv2OpaqueLsaTlv(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "type": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "value": {
+            "type": str,
+            "format": "hex",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, type=None, length=None, value=None):
+        super(Ospfv2OpaqueLsaTlv, self).__init__()
+        self._parent = parent
+        self._set_property("type", type)
+        self._set_property("length", length)
+        self._set_property("value", value)
+
+    def set(self, type=None, length=None, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def type(self):
+        # type: () -> int
+        """type getter
+
+        The TLV Type field, as the numeric value carried on the wire. Its meaning is. scoped by the parent LSA's tlv_information.choice; the authoritative list of. assigned TLV types is the IANA OSPFv2 parameters registry:. https://www.iana.org/assignments/ospfv2-parameters/ospfv2-parameters.xhtml
+
+        Returns: int
+        """
+        return self._get_property("type")
+
+    @type.setter
+    def type(self, value):
+        """type setter
+
+        The TLV Type field, as the numeric value carried on the wire. Its meaning is. scoped by the parent LSA's tlv_information.choice; the authoritative list of. assigned TLV types is the IANA OSPFv2 parameters registry:. https://www.iana.org/assignments/ospfv2-parameters/ospfv2-parameters.xhtml
+
+        value: int
+        """
+        self._set_property("type", value)
+
+    @property
+    def length(self):
+        # type: () -> int
+        """length getter
+
+        The TLV Length field, in octets, of the value field.
+
+        Returns: int
+        """
+        return self._get_property("length")
+
+    @length.setter
+    def length(self, value):
+        """length setter
+
+        The TLV Length field, in octets, of the value field.
+
+        value: int
+        """
+        self._set_property("length", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        The raw byte contents of the TLV Value field, as hex characters. Two hex characters per octet, so the string is twice length characters long.
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        The raw byte contents of the TLV Value field, as hex characters. Two hex characters per octet, so the string is twice length characters long.
+
+        value: str
+        """
+        self._set_property("value", value)
+
+
+class Ospfv2OpaqueLsaTlvIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2OpaqueLsaTlvIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2OpaqueLsaTlv]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2OpaqueLsaTlvIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2OpaqueLsaTlv
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2OpaqueLsaTlv
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2OpaqueLsaTlv):
+            raise Exception("Item is not an instance of Ospfv2OpaqueLsaTlv")
+
+    def tlv(self, type=None, length=None, value=None):
+        # type: (int,int,str) -> Ospfv2OpaqueLsaTlvIter
+        """Factory method that creates an instance of the Ospfv2OpaqueLsaTlv class
+
+        A top-level TLV carried in the body of an OSPFv2 Opaque LSA that is not decoded. into structured field elsewhere in the model, reported in the generic wire format. every OSPFv2 Opaque LSA TLV shares: 2-octet Type, 2-octet Length and the Value. octets (RFC 7770 Section 2.3).. type is the numeric wire value, so TLV type this model has never heard of is. still fully representable and its content is never lost. The Value is reported as. one opaque blob, including for TLV whose Value is itself sub-TLV sequence:. nothing in the TLV header says the Value is sub-TLV sequence, and TLV reported. here is by definition one this model does not decode.
+
+        Returns: Ospfv2OpaqueLsaTlvIter
+        """
+        item = Ospfv2OpaqueLsaTlv(
+            parent=self._parent, type=type, length=length, value=value
+        )
+        self._add(item)
+        return self
+
+    def add(self, type=None, length=None, value=None):
+        # type: (int,int,str) -> Ospfv2OpaqueLsaTlv
+        """Add method that creates and returns an instance of the Ospfv2OpaqueLsaTlv class
+
+        A top-level TLV carried in the body of an OSPFv2 Opaque LSA that is not decoded. into structured field elsewhere in the model, reported in the generic wire format. every OSPFv2 Opaque LSA TLV shares: 2-octet Type, 2-octet Length and the Value. octets (RFC 7770 Section 2.3).. type is the numeric wire value, so TLV type this model has never heard of is. still fully representable and its content is never lost. The Value is reported as. one opaque blob, including for TLV whose Value is itself sub-TLV sequence:. nothing in the TLV header says the Value is sub-TLV sequence, and TLV reported. here is by definition one this model does not decode.
+
+        Returns: Ospfv2OpaqueLsaTlv
+        """
+        item = Ospfv2OpaqueLsaTlv(
+            parent=self._parent, type=type, length=length, value=value
+        )
+        self._add(item)
+        return item
 
 
 class Ospfv2OpaqueLsaIter(OpenApiIter):
@@ -193864,27 +211321,27 @@ class Ospfv2OpaqueLsaIter(OpenApiIter):
         if not isinstance(item, Ospfv2OpaqueLsa):
             raise Exception("Item is not an instance of Ospfv2OpaqueLsa")
 
-    def opaquelsa(self, type=None):
-        # type: (Union[Literal["area"], Literal["domain"], Literal["local"]]) -> Ospfv2OpaqueLsaIter
+    def opaquelsa(self, type=None, id=None):
+        # type: (Union[Literal["area"], Literal["domain"], Literal["local"]],int) -> Ospfv2OpaqueLsaIter
         """Factory method that creates an instance of the Ospfv2OpaqueLsa class
 
-        Contents of OSPFv2 Opaque LSA Type 7.
+        Contents of OSPFv2 Opaque LSA Type 9/10/11 (RFC 5250).. The Link State ID of an Opaque LSA is not plain IPv4 address; it is split into. an Opaque Type (most significant octet) and an Opaque ID (remaining three octets),. decoded here as tlv_information.choice and id (RFC 5250 Section 3). header.lsa_id. carries the raw, undecoded Link State ID value.. The Segment Routing and Traffic Engineering information carried by an Opaque LSA is. reported on this object, in the LSA it was actually advertised in, rather than on the. Router-LSA, Summary-LSA, AS-External-LSA or NSSA-LSA that describes the router, link. or prefix it applies to. The decoded contents are reported under tlv_information,. whose choice names the Opaque Type and selects the contents of that Opaque Type. directly; every top-level TLV of the LSA that the model does not decode is reported. raw in unknown_tlvs. Each decoded object documents how to correlate it back to the. LSA that advertises the router, link or prefix it describes.
 
         Returns: Ospfv2OpaqueLsaIter
         """
-        item = Ospfv2OpaqueLsa(parent=self._parent, type=type)
+        item = Ospfv2OpaqueLsa(parent=self._parent, type=type, id=id)
         self._add(item)
         return self
 
-    def add(self, type=None):
-        # type: (Union[Literal["area"], Literal["domain"], Literal["local"]]) -> Ospfv2OpaqueLsa
+    def add(self, type=None, id=None):
+        # type: (Union[Literal["area"], Literal["domain"], Literal["local"]],int) -> Ospfv2OpaqueLsa
         """Add method that creates and returns an instance of the Ospfv2OpaqueLsa class
 
-        Contents of OSPFv2 Opaque LSA Type 7.
+        Contents of OSPFv2 Opaque LSA Type 9/10/11 (RFC 5250).. The Link State ID of an Opaque LSA is not plain IPv4 address; it is split into. an Opaque Type (most significant octet) and an Opaque ID (remaining three octets),. decoded here as tlv_information.choice and id (RFC 5250 Section 3). header.lsa_id. carries the raw, undecoded Link State ID value.. The Segment Routing and Traffic Engineering information carried by an Opaque LSA is. reported on this object, in the LSA it was actually advertised in, rather than on the. Router-LSA, Summary-LSA, AS-External-LSA or NSSA-LSA that describes the router, link. or prefix it applies to. The decoded contents are reported under tlv_information,. whose choice names the Opaque Type and selects the contents of that Opaque Type. directly; every top-level TLV of the LSA that the model does not decode is reported. raw in unknown_tlvs. Each decoded object documents how to correlate it back to the. LSA that advertises the router, link or prefix it describes.
 
         Returns: Ospfv2OpaqueLsa
         """
-        item = Ospfv2OpaqueLsa(parent=self._parent, type=type)
+        item = Ospfv2OpaqueLsa(parent=self._parent, type=type, id=id)
         self._add(item)
         return item
 
@@ -199501,8 +216958,8 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "1.46.0"
-        self._version_meta.sdk_version = "1.46.0"
+        self._version_meta.api_spec_version = "1.62.0"
+        self._version_meta.sdk_version = "1.62.0"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False

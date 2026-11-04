@@ -251,6 +251,7 @@ func (obj *flowMetricsRequest) setNil() {
 }
 
 // FlowMetricsRequest is the container for a flow metric request.
+// For bidirectional flows, metrics are reported for each generated sub-flow separately. Both sub-flows share the same flow name but are differentiated by their port_tx and port_rx values, which are reversed for the reverse sub-flow. Consequently, flow metrics for a bidirectional flow are exposed as two separate metric entries, one for each traffic direction.
 type FlowMetricsRequest interface {
 	Validation
 	// msg marshals FlowMetricsRequest to protobuf object *otg.FlowMetricsRequest

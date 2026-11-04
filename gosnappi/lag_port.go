@@ -18,6 +18,7 @@ type lagPort struct {
 	unMarshaller   unMarshalLagPort
 	lacpHolder     LagPortLacp
 	ethernetHolder DeviceEthernetBase
+	macsecHolder   LagPortMacsec
 }
 
 func NewLagPort() LagPort {
@@ -247,6 +248,7 @@ func (obj *lagPort) Clone() (LagPort, error) {
 func (obj *lagPort) setNil() {
 	obj.lacpHolder = nil
 	obj.ethernetHolder = nil
+	obj.macsecHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -292,6 +294,14 @@ type LagPort interface {
 	// SetEthernet assigns DeviceEthernetBase provided by user to LagPort.
 	// DeviceEthernetBase is base Ethernet interface.
 	SetEthernet(value DeviceEthernetBase) LagPort
+	// Macsec returns LagPortMacsec, set in LagPort.
+	// LagPortMacsec is configuration of MACsec per LAG member port. This MACsec configuration per LAG member port and MACsec configuration in any Ethernet device a) on this port or b) on this LAG are mutually exclusive.
+	Macsec() LagPortMacsec
+	// SetMacsec assigns LagPortMacsec provided by user to LagPort.
+	// LagPortMacsec is configuration of MACsec per LAG member port. This MACsec configuration per LAG member port and MACsec configuration in any Ethernet device a) on this port or b) on this LAG are mutually exclusive.
+	SetMacsec(value LagPortMacsec) LagPort
+	// HasMacsec checks if Macsec has been set in LagPort
+	HasMacsec() bool
 	setNil()
 }
 
@@ -369,6 +379,34 @@ func (obj *lagPort) SetEthernet(value DeviceEthernetBase) LagPort {
 	return obj
 }
 
+// description is TBD
+// Macsec returns a LagPortMacsec
+func (obj *lagPort) Macsec() LagPortMacsec {
+	if obj.obj.Macsec == nil {
+		obj.obj.Macsec = NewLagPortMacsec().msg()
+	}
+	if obj.macsecHolder == nil {
+		obj.macsecHolder = &lagPortMacsec{obj: obj.obj.Macsec}
+	}
+	return obj.macsecHolder
+}
+
+// description is TBD
+// Macsec returns a LagPortMacsec
+func (obj *lagPort) HasMacsec() bool {
+	return obj.obj.Macsec != nil
+}
+
+// description is TBD
+// SetMacsec sets the LagPortMacsec value in the LagPort object
+func (obj *lagPort) SetMacsec(value LagPortMacsec) LagPort {
+
+	obj.macsecHolder = nil
+	obj.obj.Macsec = value.msg()
+
+	return obj
+}
+
 func (obj *lagPort) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -392,6 +430,11 @@ func (obj *lagPort) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Ethernet != nil {
 
 		obj.Ethernet().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Macsec != nil {
+
+		obj.Macsec().validateObj(vObj, set_default)
 	}
 
 }

@@ -13,10 +13,11 @@ import (
 // ***** FlowIpv6Routing *****
 type flowIpv6Routing struct {
 	validation
-	obj                  *otg.FlowIpv6Routing
-	marshaller           marshalFlowIpv6Routing
-	unMarshaller         unMarshalFlowIpv6Routing
-	segmentRoutingHolder FlowIpv6SegmentRouting
+	obj                      *otg.FlowIpv6Routing
+	marshaller               marshalFlowIpv6Routing
+	unMarshaller             unMarshalFlowIpv6Routing
+	segmentRoutingHolder     FlowIpv6SegmentRouting
+	segmentRoutingUsidHolder FlowIpv6SegmentRoutingUsid
 }
 
 func NewFlowIpv6Routing() FlowIpv6Routing {
@@ -245,6 +246,7 @@ func (obj *flowIpv6Routing) Clone() (FlowIpv6Routing, error) {
 
 func (obj *flowIpv6Routing) setNil() {
 	obj.segmentRoutingHolder = nil
+	obj.segmentRoutingUsidHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -279,13 +281,85 @@ type FlowIpv6Routing interface {
 	// HasChoice checks if Choice has been set in FlowIpv6Routing
 	HasChoice() bool
 	// SegmentRouting returns FlowIpv6SegmentRouting, set in FlowIpv6Routing.
-	// FlowIpv6SegmentRouting is defines the structure of the IPv6 Segment Routing Header (SRH) with Routing Type 4. This header is an IPv6 Routing header used to specify a source-routed path for a packet, guiding it through a sequence of Segment IDs (SIDs), which are typically IPv6 addresses.
+	// FlowIpv6SegmentRouting is iPv6 Segment Routing Header (SRH, Routing Type 4, RFC 8754 Section 2) carrying full 128-bit SRv6 SIDs. Each segment list entry is a complete SID (locator + function + argument) as a 128-bit IPv6 address. Segment list encoded in reverse path order: Segment[0] is the last hop, Segment[n-1] is the first hop.
 	SegmentRouting() FlowIpv6SegmentRouting
 	// SetSegmentRouting assigns FlowIpv6SegmentRouting provided by user to FlowIpv6Routing.
-	// FlowIpv6SegmentRouting is defines the structure of the IPv6 Segment Routing Header (SRH) with Routing Type 4. This header is an IPv6 Routing header used to specify a source-routed path for a packet, guiding it through a sequence of Segment IDs (SIDs), which are typically IPv6 addresses.
+	// FlowIpv6SegmentRouting is iPv6 Segment Routing Header (SRH, Routing Type 4, RFC 8754 Section 2) carrying full 128-bit SRv6 SIDs. Each segment list entry is a complete SID (locator + function + argument) as a 128-bit IPv6 address. Segment list encoded in reverse path order: Segment[0] is the last hop, Segment[n-1] is the first hop.
 	SetSegmentRouting(value FlowIpv6SegmentRouting) FlowIpv6Routing
 	// HasSegmentRouting checks if SegmentRouting has been set in FlowIpv6Routing
 	HasSegmentRouting() bool
+	// SegmentRoutingUsid returns FlowIpv6SegmentRoutingUsid, set in FlowIpv6Routing.
+	// FlowIpv6SegmentRoutingUsid is sRH (Routing Type 4, RFC 8754 Section 2) whose segment_list entries each
+	// represent one 128-bit CSID container (RFC 9800 Section 4). Supports two flavors:
+	//
+	// NEXT-CSID (locator_length > 0, RFC 9800 Section 4.1):
+	// Each SRH entry is a fully formed SRv6 SID: LB (locator_length bits) || CSID-1 || ... || EoC (zeros).
+	// F3216 (LB=32, CSID=16): locator fc00::/32, CSIDs [0x0001, 0x0002] -> fc00:0:1:2::
+	// Processing: the router reads its own CSID from the DA function field, then
+	// left-shifts the DA by one CSID width so the next CSID moves into the active
+	// function position. When the shifted suffix is all-zero (End-of-Container), the
+	// container is exhausted: segments_left is decremented and the next SRH entry
+	// is loaded as the new DA.
+	//
+	// REPLACE-CSID (RFC 9800 Section 4.2):
+	// First entry (locator_length > 0): fully formed SRv6 SID, same structure as NEXT-CSID.
+	// Subsequent entries (locator_length = 0): K = floor(128 / LNFL) CSID slots packed
+	// into a 128-bit SRH entry. Provide exactly K CSIDs in wire order (left to right,
+	// MSB first). Use "00000000" (32-bit) or "0000" (16-bit) for unused slots.
+	// CSID width is inferred from hex string length (8 chars = 32-bit, 4 chars = 16-bit).
+	//
+	// Example LNFL=32, K=4, fully packed (4 CSIDs):
+	// usids ["00050005","00040004","00030003","00020002"]
+	// wire: [00050005][00040004][00030003][00020002] (MSB->LSB) -> 5:5:4:4:3:3:2:2
+	// DA.Arg.Index starts at K-1=3; usids[3]=00020002 is processed first.
+	//
+	// Example LNFL=32, K=4, partially used (2 CSIDs, unused MSB slots set to zero):
+	// usids ["00000000","00000000","00030004","00010002"]
+	// wire: [00000000][00000000][00030004][00010002] (MSB->LSB) -> ::3:4:1:2
+	// usids[3]=00010002 is at LSB and processed first by the router.
+	//
+	// Segment list is in reverse path order (RFC 8754 Section 2.1): segment[n-1] is the
+	// first active container.
+	//
+	// For single-container NEXT-CSID paths with no SRH, use ipv6.dst_usids instead.
+	SegmentRoutingUsid() FlowIpv6SegmentRoutingUsid
+	// SetSegmentRoutingUsid assigns FlowIpv6SegmentRoutingUsid provided by user to FlowIpv6Routing.
+	// FlowIpv6SegmentRoutingUsid is sRH (Routing Type 4, RFC 8754 Section 2) whose segment_list entries each
+	// represent one 128-bit CSID container (RFC 9800 Section 4). Supports two flavors:
+	//
+	// NEXT-CSID (locator_length > 0, RFC 9800 Section 4.1):
+	// Each SRH entry is a fully formed SRv6 SID: LB (locator_length bits) || CSID-1 || ... || EoC (zeros).
+	// F3216 (LB=32, CSID=16): locator fc00::/32, CSIDs [0x0001, 0x0002] -> fc00:0:1:2::
+	// Processing: the router reads its own CSID from the DA function field, then
+	// left-shifts the DA by one CSID width so the next CSID moves into the active
+	// function position. When the shifted suffix is all-zero (End-of-Container), the
+	// container is exhausted: segments_left is decremented and the next SRH entry
+	// is loaded as the new DA.
+	//
+	// REPLACE-CSID (RFC 9800 Section 4.2):
+	// First entry (locator_length > 0): fully formed SRv6 SID, same structure as NEXT-CSID.
+	// Subsequent entries (locator_length = 0): K = floor(128 / LNFL) CSID slots packed
+	// into a 128-bit SRH entry. Provide exactly K CSIDs in wire order (left to right,
+	// MSB first). Use "00000000" (32-bit) or "0000" (16-bit) for unused slots.
+	// CSID width is inferred from hex string length (8 chars = 32-bit, 4 chars = 16-bit).
+	//
+	// Example LNFL=32, K=4, fully packed (4 CSIDs):
+	// usids ["00050005","00040004","00030003","00020002"]
+	// wire: [00050005][00040004][00030003][00020002] (MSB->LSB) -> 5:5:4:4:3:3:2:2
+	// DA.Arg.Index starts at K-1=3; usids[3]=00020002 is processed first.
+	//
+	// Example LNFL=32, K=4, partially used (2 CSIDs, unused MSB slots set to zero):
+	// usids ["00000000","00000000","00030004","00010002"]
+	// wire: [00000000][00000000][00030004][00010002] (MSB->LSB) -> ::3:4:1:2
+	// usids[3]=00010002 is at LSB and processed first by the router.
+	//
+	// Segment list is in reverse path order (RFC 8754 Section 2.1): segment[n-1] is the
+	// first active container.
+	//
+	// For single-container NEXT-CSID paths with no SRH, use ipv6.dst_usids instead.
+	SetSegmentRoutingUsid(value FlowIpv6SegmentRoutingUsid) FlowIpv6Routing
+	// HasSegmentRoutingUsid checks if SegmentRoutingUsid has been set in FlowIpv6Routing
+	HasSegmentRoutingUsid() bool
 	setNil()
 }
 
@@ -293,9 +367,11 @@ type FlowIpv6RoutingChoiceEnum string
 
 // Enum of Choice on FlowIpv6Routing
 var FlowIpv6RoutingChoice = struct {
-	SEGMENT_ROUTING FlowIpv6RoutingChoiceEnum
+	SEGMENT_ROUTING      FlowIpv6RoutingChoiceEnum
+	SEGMENT_ROUTING_USID FlowIpv6RoutingChoiceEnum
 }{
-	SEGMENT_ROUTING: FlowIpv6RoutingChoiceEnum("segment_routing"),
+	SEGMENT_ROUTING:      FlowIpv6RoutingChoiceEnum("segment_routing"),
+	SEGMENT_ROUTING_USID: FlowIpv6RoutingChoiceEnum("segment_routing_usid"),
 }
 
 func (obj *flowIpv6Routing) Choice() FlowIpv6RoutingChoiceEnum {
@@ -317,11 +393,17 @@ func (obj *flowIpv6Routing) setChoice(value FlowIpv6RoutingChoiceEnum) FlowIpv6R
 	}
 	enumValue := otg.FlowIpv6Routing_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.SegmentRoutingUsid = nil
+	obj.segmentRoutingUsidHolder = nil
 	obj.obj.SegmentRouting = nil
 	obj.segmentRoutingHolder = nil
 
 	if value == FlowIpv6RoutingChoice.SEGMENT_ROUTING {
 		obj.obj.SegmentRouting = NewFlowIpv6SegmentRouting().msg()
+	}
+
+	if value == FlowIpv6RoutingChoice.SEGMENT_ROUTING_USID {
+		obj.obj.SegmentRoutingUsid = NewFlowIpv6SegmentRoutingUsid().msg()
 	}
 
 	return obj
@@ -355,6 +437,34 @@ func (obj *flowIpv6Routing) SetSegmentRouting(value FlowIpv6SegmentRouting) Flow
 	return obj
 }
 
+// description is TBD
+// SegmentRoutingUsid returns a FlowIpv6SegmentRoutingUsid
+func (obj *flowIpv6Routing) SegmentRoutingUsid() FlowIpv6SegmentRoutingUsid {
+	if obj.obj.SegmentRoutingUsid == nil {
+		obj.setChoice(FlowIpv6RoutingChoice.SEGMENT_ROUTING_USID)
+	}
+	if obj.segmentRoutingUsidHolder == nil {
+		obj.segmentRoutingUsidHolder = &flowIpv6SegmentRoutingUsid{obj: obj.obj.SegmentRoutingUsid}
+	}
+	return obj.segmentRoutingUsidHolder
+}
+
+// description is TBD
+// SegmentRoutingUsid returns a FlowIpv6SegmentRoutingUsid
+func (obj *flowIpv6Routing) HasSegmentRoutingUsid() bool {
+	return obj.obj.SegmentRoutingUsid != nil
+}
+
+// description is TBD
+// SetSegmentRoutingUsid sets the FlowIpv6SegmentRoutingUsid value in the FlowIpv6Routing object
+func (obj *flowIpv6Routing) SetSegmentRoutingUsid(value FlowIpv6SegmentRoutingUsid) FlowIpv6Routing {
+	obj.setChoice(FlowIpv6RoutingChoice.SEGMENT_ROUTING_USID)
+	obj.segmentRoutingUsidHolder = nil
+	obj.obj.SegmentRoutingUsid = value.msg()
+
+	return obj
+}
+
 func (obj *flowIpv6Routing) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -363,6 +473,11 @@ func (obj *flowIpv6Routing) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.SegmentRouting != nil {
 
 		obj.SegmentRouting().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.SegmentRoutingUsid != nil {
+
+		obj.SegmentRoutingUsid().validateObj(vObj, set_default)
 	}
 
 }
@@ -374,6 +489,11 @@ func (obj *flowIpv6Routing) setDefault() {
 	if obj.obj.SegmentRouting != nil {
 		choices_set += 1
 		choice = FlowIpv6RoutingChoice.SEGMENT_ROUTING
+	}
+
+	if obj.obj.SegmentRoutingUsid != nil {
+		choices_set += 1
+		choice = FlowIpv6RoutingChoice.SEGMENT_ROUTING_USID
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

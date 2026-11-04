@@ -454,7 +454,7 @@ func (obj *mkaMetric) SetMkpduRx(value uint64) MkaMetric {
 	return obj
 }
 
-// Number of MKA live peers.
+// Number of MKA live peers. A live peer is a network device (peer) that has actively exchanged and confirmed recent key agreement messages (MKPDUs) with another device.
 // LivePeerCount returns a uint64
 func (obj *mkaMetric) LivePeerCount() uint64 {
 
@@ -462,13 +462,13 @@ func (obj *mkaMetric) LivePeerCount() uint64 {
 
 }
 
-// Number of MKA live peers.
+// Number of MKA live peers. A live peer is a network device (peer) that has actively exchanged and confirmed recent key agreement messages (MKPDUs) with another device.
 // LivePeerCount returns a uint64
 func (obj *mkaMetric) HasLivePeerCount() bool {
 	return obj.obj.LivePeerCount != nil
 }
 
-// Number of MKA live peers.
+// Number of MKA live peers. A live peer is a network device (peer) that has actively exchanged and confirmed recent key agreement messages (MKPDUs) with another device.
 // SetLivePeerCount sets the uint64 value in the MkaMetric object
 func (obj *mkaMetric) SetLivePeerCount(value uint64) MkaMetric {
 
@@ -476,7 +476,7 @@ func (obj *mkaMetric) SetLivePeerCount(value uint64) MkaMetric {
 	return obj
 }
 
-// Number of MKA potential peers.
+// Number of MKA potential peers. A potential peer is a candidate neighbor sending MKA messages but not yet fully authenticated.
 // PotentialPeerCount returns a uint64
 func (obj *mkaMetric) PotentialPeerCount() uint64 {
 
@@ -484,13 +484,13 @@ func (obj *mkaMetric) PotentialPeerCount() uint64 {
 
 }
 
-// Number of MKA potential peers.
+// Number of MKA potential peers. A potential peer is a candidate neighbor sending MKA messages but not yet fully authenticated.
 // PotentialPeerCount returns a uint64
 func (obj *mkaMetric) HasPotentialPeerCount() bool {
 	return obj.obj.PotentialPeerCount != nil
 }
 
-// Number of MKA potential peers.
+// Number of MKA potential peers. A potential peer is a candidate neighbor sending MKA messages but not yet fully authenticated.
 // SetPotentialPeerCount sets the uint64 value in the MkaMetric object
 func (obj *mkaMetric) SetPotentialPeerCount(value uint64) MkaMetric {
 
@@ -498,7 +498,7 @@ func (obj *mkaMetric) SetPotentialPeerCount(value uint64) MkaMetric {
 	return obj
 }
 
-// Number of MKA latest key Tx peers.
+// Number of live peers ready to transmit with latest distributed key.
 // LatestKeyTxPeerCount returns a uint64
 func (obj *mkaMetric) LatestKeyTxPeerCount() uint64 {
 
@@ -506,13 +506,13 @@ func (obj *mkaMetric) LatestKeyTxPeerCount() uint64 {
 
 }
 
-// Number of MKA latest key Tx peers.
+// Number of live peers ready to transmit with latest distributed key.
 // LatestKeyTxPeerCount returns a uint64
 func (obj *mkaMetric) HasLatestKeyTxPeerCount() bool {
 	return obj.obj.LatestKeyTxPeerCount != nil
 }
 
-// Number of MKA latest key Tx peers.
+// Number of live peers ready to transmit with latest distributed key.
 // SetLatestKeyTxPeerCount sets the uint64 value in the MkaMetric object
 func (obj *mkaMetric) SetLatestKeyTxPeerCount(value uint64) MkaMetric {
 
@@ -520,7 +520,7 @@ func (obj *mkaMetric) SetLatestKeyTxPeerCount(value uint64) MkaMetric {
 	return obj
 }
 
-// Number of MKA latest key Rx peers.
+// Number of live peers ready to receive with latest distributed key.
 // LatestKeyRxPeerCount returns a uint64
 func (obj *mkaMetric) LatestKeyRxPeerCount() uint64 {
 
@@ -528,13 +528,13 @@ func (obj *mkaMetric) LatestKeyRxPeerCount() uint64 {
 
 }
 
-// Number of MKA latest key Rx peers.
+// Number of live peers ready to receive with latest distributed key.
 // LatestKeyRxPeerCount returns a uint64
 func (obj *mkaMetric) HasLatestKeyRxPeerCount() bool {
 	return obj.obj.LatestKeyRxPeerCount != nil
 }
 
-// Number of MKA latest key Rx peers.
+// Number of live peers ready to receive with latest distributed key.
 // SetLatestKeyRxPeerCount sets the uint64 value in the MkaMetric object
 func (obj *mkaMetric) SetLatestKeyRxPeerCount(value uint64) MkaMetric {
 

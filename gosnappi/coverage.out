@@ -1,0 +1,2761 @@
+!!!!!!!!	Try to start gosnappi HTTP server	!!!!!!!!!!!!!
+2023/04/29 16:33:58 MockServer: started and listening on address 127.0.0.1:50001
+2023/04/29 16:33:58 MockServer: Server subscribed with gRPC Protocol Service
+Generated Http Server serving incoming HTTP requests on 127.0.0.1:50071.
+=== RUN   TestCheckClientServerVersionCompatibility
+=== RUN   TestCheckClientServerVersionCompatibility/patch-low-high
+=== RUN   TestCheckClientServerVersionCompatibility/patch-high-low
+=== RUN   TestCheckClientServerVersionCompatibility/minor-low-high
+=== RUN   TestCheckClientServerVersionCompatibility/minor-high-low
+=== RUN   TestCheckClientServerVersionCompatibility/major-low-high
+=== RUN   TestCheckClientServerVersionCompatibility/major-high-low
+=== RUN   TestCheckClientServerVersionCompatibility/invalid-valid
+=== RUN   TestCheckClientServerVersionCompatibility/valid-invalid
+=== RUN   TestCheckClientServerVersionCompatibility/invalid-invalid
+--- PASS: TestCheckClientServerVersionCompatibility (0.00s)
+    --- PASS: TestCheckClientServerVersionCompatibility/patch-low-high (0.00s)
+    --- PASS: TestCheckClientServerVersionCompatibility/patch-high-low (0.00s)
+    --- PASS: TestCheckClientServerVersionCompatibility/minor-low-high (0.00s)
+    --- PASS: TestCheckClientServerVersionCompatibility/minor-high-low (0.00s)
+    --- PASS: TestCheckClientServerVersionCompatibility/major-low-high (0.00s)
+    --- PASS: TestCheckClientServerVersionCompatibility/major-high-low (0.00s)
+    --- PASS: TestCheckClientServerVersionCompatibility/invalid-valid (0.00s)
+    --- PASS: TestCheckClientServerVersionCompatibility/valid-invalid (0.00s)
+    --- PASS: TestCheckClientServerVersionCompatibility/invalid-invalid (0.00s)
+=== RUN   TestConfigIncorrectFormat
+--- PASS: TestConfigIncorrectFormat (0.01s)
+=== RUN   TestPortIncorrectFormat
+--- PASS: TestPortIncorrectFormat (0.00s)
+=== RUN   TestLagIncorrectFormat
+--- PASS: TestLagIncorrectFormat (0.00s)
+=== RUN   TestLayer1IncorrectFormat
+--- PASS: TestLayer1IncorrectFormat (0.00s)
+=== RUN   TestCaptureIncorrectFormat
+--- PASS: TestCaptureIncorrectFormat (0.00s)
+=== RUN   TestDeviceIncorrectFormat
+--- PASS: TestDeviceIncorrectFormat (0.00s)
+=== RUN   TestFlowIncorrectFormat
+--- PASS: TestFlowIncorrectFormat (0.00s)
+=== RUN   TestEventIncorrectFormat
+--- PASS: TestEventIncorrectFormat (0.00s)
+=== RUN   TestConfigOptionsIncorrectFormat
+--- PASS: TestConfigOptionsIncorrectFormat (0.00s)
+=== RUN   TestTransmitStateIncorrectFormat
+--- PASS: TestTransmitStateIncorrectFormat (0.00s)
+=== RUN   TestLinkStateIncorrectFormat
+--- PASS: TestLinkStateIncorrectFormat (0.00s)
+=== RUN   TestCaptureStateIncorrectFormat
+--- PASS: TestCaptureStateIncorrectFormat (0.00s)
+=== RUN   TestFlowsUpdateIncorrectFormat
+--- PASS: TestFlowsUpdateIncorrectFormat (0.00s)
+=== RUN   TestRouteStateIncorrectFormat
+--- PASS: TestRouteStateIncorrectFormat (0.00s)
+=== RUN   TestPingRequestIncorrectFormat
+--- PASS: TestPingRequestIncorrectFormat (0.00s)
+=== RUN   TestPingIncorrectFormat
+--- PASS: TestPingIncorrectFormat (0.00s)
+=== RUN   TestProtocolStateIncorrectFormat
+--- PASS: TestProtocolStateIncorrectFormat (0.00s)
+=== RUN   TestMetricsRequestIncorrectFormat
+--- PASS: TestMetricsRequestIncorrectFormat (0.00s)
+=== RUN   TestPortMetricsRequestIncorrectFormat
+--- PASS: TestPortMetricsRequestIncorrectFormat (0.00s)
+=== RUN   TestFlowMetricsRequestIncorrectFormat
+--- PASS: TestFlowMetricsRequestIncorrectFormat (0.00s)
+=== RUN   TestBgpv4MetricsRequestIncorrectFormat
+--- PASS: TestBgpv4MetricsRequestIncorrectFormat (0.00s)
+=== RUN   TestBgpv6MetricsRequestIncorrectFormat
+--- PASS: TestBgpv6MetricsRequestIncorrectFormat (0.00s)
+=== RUN   TestIsisMetricsRequestIncorrectFormat
+--- PASS: TestIsisMetricsRequestIncorrectFormat (0.00s)
+=== RUN   TestStatesRequestIncorrectFormat
+--- PASS: TestStatesRequestIncorrectFormat (0.00s)
+=== RUN   TestNeighborsv4StatesRequestIncorrectFormat
+--- PASS: TestNeighborsv4StatesRequestIncorrectFormat (0.00s)
+=== RUN   TestNeighborsv6StatesRequestIncorrectFormat
+--- PASS: TestNeighborsv6StatesRequestIncorrectFormat (0.00s)
+=== RUN   TestCaptureRequestIncorrectFormat
+--- PASS: TestCaptureRequestIncorrectFormat (0.00s)
+=== RUN   TestSetConfigResponseIncorrectFormat
+--- PASS: TestSetConfigResponseIncorrectFormat (0.00s)
+=== RUN   TestResponseWarningIncorrectFormat
+--- PASS: TestResponseWarningIncorrectFormat (0.00s)
+=== RUN   TestResponseErrorIncorrectFormat
+--- PASS: TestResponseErrorIncorrectFormat (0.00s)
+=== RUN   TestGetConfigResponseIncorrectFormat
+--- PASS: TestGetConfigResponseIncorrectFormat (0.00s)
+=== RUN   TestSetTransmitStateResponseIncorrectFormat
+--- PASS: TestSetTransmitStateResponseIncorrectFormat (0.00s)
+=== RUN   TestSetLinkStateResponseIncorrectFormat
+--- PASS: TestSetLinkStateResponseIncorrectFormat (0.00s)
+=== RUN   TestSetCaptureStateResponseIncorrectFormat
+--- PASS: TestSetCaptureStateResponseIncorrectFormat (0.00s)
+=== RUN   TestUpdateFlowsResponseIncorrectFormat
+--- PASS: TestUpdateFlowsResponseIncorrectFormat (0.00s)
+=== RUN   TestSetRouteStateResponseIncorrectFormat
+--- PASS: TestSetRouteStateResponseIncorrectFormat (0.00s)
+=== RUN   TestSendPingResponseIncorrectFormat
+--- PASS: TestSendPingResponseIncorrectFormat (0.00s)
+=== RUN   TestPingResponseIncorrectFormat
+--- PASS: TestPingResponseIncorrectFormat (0.00s)
+=== RUN   TestSetProtocolStateResponseIncorrectFormat
+--- PASS: TestSetProtocolStateResponseIncorrectFormat (0.00s)
+=== RUN   TestGetMetricsResponseIncorrectFormat
+--- PASS: TestGetMetricsResponseIncorrectFormat (0.00s)
+=== RUN   TestMetricsResponseIncorrectFormat
+--- PASS: TestMetricsResponseIncorrectFormat (0.00s)
+=== RUN   TestGetStatesResponseIncorrectFormat
+--- PASS: TestGetStatesResponseIncorrectFormat (0.00s)
+=== RUN   TestStatesResponseIncorrectFormat
+--- PASS: TestStatesResponseIncorrectFormat (0.00s)
+=== RUN   TestGetCaptureResponseIncorrectFormat
+--- PASS: TestGetCaptureResponseIncorrectFormat (0.00s)
+=== RUN   TestLagPortIncorrectFormat
+--- PASS: TestLagPortIncorrectFormat (0.00s)
+=== RUN   TestLayer1AutoNegotiationIncorrectFormat
+--- PASS: TestLayer1AutoNegotiationIncorrectFormat (0.00s)
+=== RUN   TestLayer1FlowControlIncorrectFormat
+--- PASS: TestLayer1FlowControlIncorrectFormat (0.00s)
+=== RUN   TestCaptureFilterIncorrectFormat
+--- PASS: TestCaptureFilterIncorrectFormat (0.00s)
+=== RUN   TestDeviceEthernetIncorrectFormat
+--- PASS: TestDeviceEthernetIncorrectFormat (0.00s)
+=== RUN   TestDeviceIpv4LoopbackIncorrectFormat
+--- PASS: TestDeviceIpv4LoopbackIncorrectFormat (0.00s)
+=== RUN   TestDeviceIpv6LoopbackIncorrectFormat
+--- PASS: TestDeviceIpv6LoopbackIncorrectFormat (0.00s)
+=== RUN   TestDeviceIsisRouterIncorrectFormat
+--- PASS: TestDeviceIsisRouterIncorrectFormat (0.00s)
+=== RUN   TestDeviceBgpRouterIncorrectFormat
+--- PASS: TestDeviceBgpRouterIncorrectFormat (0.00s)
+=== RUN   TestFlowTxRxIncorrectFormat
+--- PASS: TestFlowTxRxIncorrectFormat (0.00s)
+=== RUN   TestFlowHeaderIncorrectFormat
+--- PASS: TestFlowHeaderIncorrectFormat (0.00s)
+=== RUN   TestFlowSizeIncorrectFormat
+--- PASS: TestFlowSizeIncorrectFormat (0.00s)
+=== RUN   TestFlowRateIncorrectFormat
+--- PASS: TestFlowRateIncorrectFormat (0.00s)
+=== RUN   TestFlowDurationIncorrectFormat
+--- PASS: TestFlowDurationIncorrectFormat (0.00s)
+=== RUN   TestFlowMetricsIncorrectFormat
+--- PASS: TestFlowMetricsIncorrectFormat (0.00s)
+=== RUN   TestEventLinkIncorrectFormat
+--- PASS: TestEventLinkIncorrectFormat (0.00s)
+=== RUN   TestEventRxRateThresholdIncorrectFormat
+--- PASS: TestEventRxRateThresholdIncorrectFormat (0.00s)
+=== RUN   TestEventRouteAdvertiseWithdrawIncorrectFormat
+--- PASS: TestEventRouteAdvertiseWithdrawIncorrectFormat (0.00s)
+=== RUN   TestPortOptionsIncorrectFormat
+--- PASS: TestPortOptionsIncorrectFormat (0.00s)
+=== RUN   TestPingIpv4IncorrectFormat
+--- PASS: TestPingIpv4IncorrectFormat (0.00s)
+=== RUN   TestPingIpv6IncorrectFormat
+--- PASS: TestPingIpv6IncorrectFormat (0.00s)
+=== RUN   TestFlowMetricGroupRequestIncorrectFormat
+--- PASS: TestFlowMetricGroupRequestIncorrectFormat (0.00s)
+=== RUN   TestResponseIncorrectFormat
+--- PASS: TestResponseIncorrectFormat (0.00s)
+=== RUN   TestPortMetricIncorrectFormat
+--- PASS: TestPortMetricIncorrectFormat (0.00s)
+=== RUN   TestFlowMetricIncorrectFormat
+--- PASS: TestFlowMetricIncorrectFormat (0.00s)
+=== RUN   TestBgpv4MetricIncorrectFormat
+--- PASS: TestBgpv4MetricIncorrectFormat (0.00s)
+=== RUN   TestBgpv6MetricIncorrectFormat
+--- PASS: TestBgpv6MetricIncorrectFormat (0.00s)
+=== RUN   TestIsisMetricIncorrectFormat
+--- PASS: TestIsisMetricIncorrectFormat (0.00s)
+=== RUN   TestNeighborsv4StateIncorrectFormat
+--- PASS: TestNeighborsv4StateIncorrectFormat (0.00s)
+=== RUN   TestNeighborsv6StateIncorrectFormat
+--- PASS: TestNeighborsv6StateIncorrectFormat (0.00s)
+=== RUN   TestLagProtocolIncorrectFormat
+--- PASS: TestLagProtocolIncorrectFormat (0.00s)
+=== RUN   TestDeviceEthernetBaseIncorrectFormat
+--- PASS: TestDeviceEthernetBaseIncorrectFormat (0.00s)
+=== RUN   TestLayer1Ieee8021QbbIncorrectFormat
+--- PASS: TestLayer1Ieee8021QbbIncorrectFormat (0.00s)
+=== RUN   TestLayer1Ieee8023XIncorrectFormat
+--- PASS: TestLayer1Ieee8023XIncorrectFormat (0.00s)
+=== RUN   TestCaptureCustomIncorrectFormat
+--- PASS: TestCaptureCustomIncorrectFormat (0.00s)
+=== RUN   TestCaptureEthernetIncorrectFormat
+--- PASS: TestCaptureEthernetIncorrectFormat (0.00s)
+=== RUN   TestCaptureVlanIncorrectFormat
+--- PASS: TestCaptureVlanIncorrectFormat (0.00s)
+=== RUN   TestCaptureIpv4IncorrectFormat
+--- PASS: TestCaptureIpv4IncorrectFormat (0.00s)
+=== RUN   TestCaptureIpv6IncorrectFormat
+--- PASS: TestCaptureIpv6IncorrectFormat (0.00s)
+=== RUN   TestDeviceIpv4IncorrectFormat
+--- PASS: TestDeviceIpv4IncorrectFormat (0.00s)
+=== RUN   TestDeviceIpv6IncorrectFormat
+--- PASS: TestDeviceIpv6IncorrectFormat (0.00s)
+=== RUN   TestDeviceVlanIncorrectFormat
+--- PASS: TestDeviceVlanIncorrectFormat (0.00s)
+=== RUN   TestDeviceIsisMultiInstanceIncorrectFormat
+--- PASS: TestDeviceIsisMultiInstanceIncorrectFormat (0.00s)
+=== RUN   TestIsisInterfaceIncorrectFormat
+--- PASS: TestIsisInterfaceIncorrectFormat (0.00s)
+=== RUN   TestIsisBasicIncorrectFormat
+--- PASS: TestIsisBasicIncorrectFormat (0.00s)
+=== RUN   TestIsisAdvancedIncorrectFormat
+--- PASS: TestIsisAdvancedIncorrectFormat (0.00s)
+=== RUN   TestIsisAuthenticationIncorrectFormat
+--- PASS: TestIsisAuthenticationIncorrectFormat (0.00s)
+=== RUN   TestIsisV4RouteRangeIncorrectFormat
+--- PASS: TestIsisV4RouteRangeIncorrectFormat (0.00s)
+=== RUN   TestIsisV6RouteRangeIncorrectFormat
+--- PASS: TestIsisV6RouteRangeIncorrectFormat (0.00s)
+=== RUN   TestBgpV4InterfaceIncorrectFormat
+--- PASS: TestBgpV4InterfaceIncorrectFormat (0.00s)
+=== RUN   TestBgpV6InterfaceIncorrectFormat
+--- PASS: TestBgpV6InterfaceIncorrectFormat (0.00s)
+=== RUN   TestFlowPortIncorrectFormat
+--- PASS: TestFlowPortIncorrectFormat (0.00s)
+=== RUN   TestFlowRouterIncorrectFormat
+--- PASS: TestFlowRouterIncorrectFormat (0.00s)
+=== RUN   TestFlowCustomIncorrectFormat
+--- PASS: TestFlowCustomIncorrectFormat (0.00s)
+=== RUN   TestFlowEthernetIncorrectFormat
+--- PASS: TestFlowEthernetIncorrectFormat (0.00s)
+=== RUN   TestFlowVlanIncorrectFormat
+--- PASS: TestFlowVlanIncorrectFormat (0.00s)
+=== RUN   TestFlowVxlanIncorrectFormat
+--- PASS: TestFlowVxlanIncorrectFormat (0.00s)
+=== RUN   TestFlowIpv4IncorrectFormat
+--- PASS: TestFlowIpv4IncorrectFormat (0.00s)
+=== RUN   TestFlowIpv6IncorrectFormat
+--- PASS: TestFlowIpv6IncorrectFormat (0.00s)
+=== RUN   TestFlowPfcPauseIncorrectFormat
+--- PASS: TestFlowPfcPauseIncorrectFormat (0.00s)
+=== RUN   TestFlowEthernetPauseIncorrectFormat
+--- PASS: TestFlowEthernetPauseIncorrectFormat (0.00s)
+=== RUN   TestFlowTcpIncorrectFormat
+--- PASS: TestFlowTcpIncorrectFormat (0.00s)
+=== RUN   TestFlowUdpIncorrectFormat
+--- PASS: TestFlowUdpIncorrectFormat (0.00s)
+=== RUN   TestFlowGreIncorrectFormat
+--- PASS: TestFlowGreIncorrectFormat (0.00s)
+=== RUN   TestFlowGtpv1IncorrectFormat
+--- PASS: TestFlowGtpv1IncorrectFormat (0.00s)
+=== RUN   TestFlowGtpv2IncorrectFormat
+--- PASS: TestFlowGtpv2IncorrectFormat (0.00s)
+=== RUN   TestFlowArpIncorrectFormat
+--- PASS: TestFlowArpIncorrectFormat (0.00s)
+=== RUN   TestFlowIcmpIncorrectFormat
+--- PASS: TestFlowIcmpIncorrectFormat (0.00s)
+=== RUN   TestFlowIcmpv6IncorrectFormat
+--- PASS: TestFlowIcmpv6IncorrectFormat (0.00s)
+=== RUN   TestFlowPppIncorrectFormat
+--- PASS: TestFlowPppIncorrectFormat (0.00s)
+=== RUN   TestFlowIgmpv1IncorrectFormat
+--- PASS: TestFlowIgmpv1IncorrectFormat (0.00s)
+=== RUN   TestFlowSizeIncrementIncorrectFormat
+--- PASS: TestFlowSizeIncrementIncorrectFormat (0.00s)
+=== RUN   TestFlowSizeRandomIncorrectFormat
+--- PASS: TestFlowSizeRandomIncorrectFormat (0.00s)
+=== RUN   TestFlowFixedPacketsIncorrectFormat
+--- PASS: TestFlowFixedPacketsIncorrectFormat (0.00s)
+=== RUN   TestFlowFixedSecondsIncorrectFormat
+--- PASS: TestFlowFixedSecondsIncorrectFormat (0.00s)
+=== RUN   TestFlowBurstIncorrectFormat
+--- PASS: TestFlowBurstIncorrectFormat (0.00s)
+=== RUN   TestFlowContinuousIncorrectFormat
+--- PASS: TestFlowContinuousIncorrectFormat (0.00s)
+=== RUN   TestFlowLatencyMetricsIncorrectFormat
+--- PASS: TestFlowLatencyMetricsIncorrectFormat (0.00s)
+=== RUN   TestFlowMetricGroupIncorrectFormat
+--- PASS: TestFlowMetricGroupIncorrectFormat (0.00s)
+=== RUN   TestMetricTimestampIncorrectFormat
+--- PASS: TestMetricTimestampIncorrectFormat (0.00s)
+=== RUN   TestMetricLatencyIncorrectFormat
+--- PASS: TestMetricLatencyIncorrectFormat (0.00s)
+=== RUN   TestLagLacpIncorrectFormat
+--- PASS: TestLagLacpIncorrectFormat (0.00s)
+=== RUN   TestLagStaticIncorrectFormat
+--- PASS: TestLagStaticIncorrectFormat (0.00s)
+=== RUN   TestCaptureFieldIncorrectFormat
+--- PASS: TestCaptureFieldIncorrectFormat (0.00s)
+=== RUN   TestIsisInterfaceLevelIncorrectFormat
+--- PASS: TestIsisInterfaceLevelIncorrectFormat (0.00s)
+=== RUN   TestIsisMTIncorrectFormat
+--- PASS: TestIsisMTIncorrectFormat (0.00s)
+=== RUN   TestLinkStateTEIncorrectFormat
+--- PASS: TestLinkStateTEIncorrectFormat (0.00s)
+=== RUN   TestIsisInterfaceAuthenticationIncorrectFormat
+--- PASS: TestIsisInterfaceAuthenticationIncorrectFormat (0.00s)
+=== RUN   TestIsisInterfaceAdvancedIncorrectFormat
+--- PASS: TestIsisInterfaceAdvancedIncorrectFormat (0.00s)
+=== RUN   TestIsisInterfaceLinkProtectionIncorrectFormat
+--- PASS: TestIsisInterfaceLinkProtectionIncorrectFormat (0.00s)
+=== RUN   TestIsisAuthenticationBaseIncorrectFormat
+--- PASS: TestIsisAuthenticationBaseIncorrectFormat (0.00s)
+=== RUN   TestV4RouteAddressIncorrectFormat
+--- PASS: TestV4RouteAddressIncorrectFormat (0.00s)
+=== RUN   TestV6RouteAddressIncorrectFormat
+--- PASS: TestV6RouteAddressIncorrectFormat (0.00s)
+=== RUN   TestBgpV4PeerIncorrectFormat
+--- PASS: TestBgpV4PeerIncorrectFormat (0.00s)
+=== RUN   TestBgpV6PeerIncorrectFormat
+--- PASS: TestBgpV6PeerIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowEthernetDstIncorrectFormat
+--- PASS: TestPatternFlowEthernetDstIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowEthernetSrcIncorrectFormat
+--- PASS: TestPatternFlowEthernetSrcIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowEthernetEtherTypeIncorrectFormat
+--- PASS: TestPatternFlowEthernetEtherTypeIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowEthernetPfcQueueIncorrectFormat
+--- PASS: TestPatternFlowEthernetPfcQueueIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowVlanPriorityIncorrectFormat
+--- PASS: TestPatternFlowVlanPriorityIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowVlanCfiIncorrectFormat
+--- PASS: TestPatternFlowVlanCfiIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowVlanIdIncorrectFormat
+--- PASS: TestPatternFlowVlanIdIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowVlanTpidIncorrectFormat
+--- PASS: TestPatternFlowVlanTpidIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowVxlanFlagsIncorrectFormat
+--- PASS: TestPatternFlowVxlanFlagsIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowVxlanReserved0IncorrectFormat
+--- PASS: TestPatternFlowVxlanReserved0IncorrectFormat (0.00s)
+=== RUN   TestPatternFlowVxlanVniIncorrectFormat
+--- PASS: TestPatternFlowVxlanVniIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowVxlanReserved1IncorrectFormat
+--- PASS: TestPatternFlowVxlanReserved1IncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4VersionIncorrectFormat
+--- PASS: TestPatternFlowIpv4VersionIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4HeaderLengthIncorrectFormat
+--- PASS: TestPatternFlowIpv4HeaderLengthIncorrectFormat (0.00s)
+=== RUN   TestFlowIpv4PriorityIncorrectFormat
+--- PASS: TestFlowIpv4PriorityIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4TotalLengthIncorrectFormat
+--- PASS: TestPatternFlowIpv4TotalLengthIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4IdentificationIncorrectFormat
+--- PASS: TestPatternFlowIpv4IdentificationIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4ReservedIncorrectFormat
+--- PASS: TestPatternFlowIpv4ReservedIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4DontFragmentIncorrectFormat
+--- PASS: TestPatternFlowIpv4DontFragmentIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4MoreFragmentsIncorrectFormat
+--- PASS: TestPatternFlowIpv4MoreFragmentsIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4FragmentOffsetIncorrectFormat
+--- PASS: TestPatternFlowIpv4FragmentOffsetIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4TimeToLiveIncorrectFormat
+--- PASS: TestPatternFlowIpv4TimeToLiveIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4ProtocolIncorrectFormat
+--- PASS: TestPatternFlowIpv4ProtocolIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4HeaderChecksumIncorrectFormat
+--- PASS: TestPatternFlowIpv4HeaderChecksumIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4SrcIncorrectFormat
+--- PASS: TestPatternFlowIpv4SrcIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4DstIncorrectFormat
+--- PASS: TestPatternFlowIpv4DstIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv6VersionIncorrectFormat
+--- PASS: TestPatternFlowIpv6VersionIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv6TrafficClassIncorrectFormat
+--- PASS: TestPatternFlowIpv6TrafficClassIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv6FlowLabelIncorrectFormat
+--- PASS: TestPatternFlowIpv6FlowLabelIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv6PayloadLengthIncorrectFormat
+--- PASS: TestPatternFlowIpv6PayloadLengthIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv6NextHeaderIncorrectFormat
+--- PASS: TestPatternFlowIpv6NextHeaderIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv6HopLimitIncorrectFormat
+--- PASS: TestPatternFlowIpv6HopLimitIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv6SrcIncorrectFormat
+--- PASS: TestPatternFlowIpv6SrcIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv6DstIncorrectFormat
+--- PASS: TestPatternFlowIpv6DstIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPauseDstIncorrectFormat
+--- PASS: TestPatternFlowPfcPauseDstIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPauseSrcIncorrectFormat
+--- PASS: TestPatternFlowPfcPauseSrcIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPauseEtherTypeIncorrectFormat
+--- PASS: TestPatternFlowPfcPauseEtherTypeIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPauseControlOpCodeIncorrectFormat
+--- PASS: TestPatternFlowPfcPauseControlOpCodeIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPauseClassEnableVectorIncorrectFormat
+--- PASS: TestPatternFlowPfcPauseClassEnableVectorIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass0IncorrectFormat
+--- PASS: TestPatternFlowPfcPausePauseClass0IncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass1IncorrectFormat
+--- PASS: TestPatternFlowPfcPausePauseClass1IncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass2IncorrectFormat
+--- PASS: TestPatternFlowPfcPausePauseClass2IncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass3IncorrectFormat
+--- PASS: TestPatternFlowPfcPausePauseClass3IncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass4IncorrectFormat
+--- PASS: TestPatternFlowPfcPausePauseClass4IncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass5IncorrectFormat
+--- PASS: TestPatternFlowPfcPausePauseClass5IncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass6IncorrectFormat
+--- PASS: TestPatternFlowPfcPausePauseClass6IncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass7IncorrectFormat
+--- PASS: TestPatternFlowPfcPausePauseClass7IncorrectFormat (0.00s)
+=== RUN   TestPatternFlowEthernetPauseDstIncorrectFormat
+--- PASS: TestPatternFlowEthernetPauseDstIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowEthernetPauseSrcIncorrectFormat
+--- PASS: TestPatternFlowEthernetPauseSrcIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowEthernetPauseEtherTypeIncorrectFormat
+--- PASS: TestPatternFlowEthernetPauseEtherTypeIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowEthernetPauseControlOpCodeIncorrectFormat
+--- PASS: TestPatternFlowEthernetPauseControlOpCodeIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowEthernetPauseTimeIncorrectFormat
+--- PASS: TestPatternFlowEthernetPauseTimeIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpSrcPortIncorrectFormat
+--- PASS: TestPatternFlowTcpSrcPortIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpDstPortIncorrectFormat
+--- PASS: TestPatternFlowTcpDstPortIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpSeqNumIncorrectFormat
+--- PASS: TestPatternFlowTcpSeqNumIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpAckNumIncorrectFormat
+--- PASS: TestPatternFlowTcpAckNumIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpDataOffsetIncorrectFormat
+--- PASS: TestPatternFlowTcpDataOffsetIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpEcnNsIncorrectFormat
+--- PASS: TestPatternFlowTcpEcnNsIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpEcnCwrIncorrectFormat
+--- PASS: TestPatternFlowTcpEcnCwrIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpEcnEchoIncorrectFormat
+--- PASS: TestPatternFlowTcpEcnEchoIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpCtlUrgIncorrectFormat
+--- PASS: TestPatternFlowTcpCtlUrgIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpCtlAckIncorrectFormat
+--- PASS: TestPatternFlowTcpCtlAckIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpCtlPshIncorrectFormat
+--- PASS: TestPatternFlowTcpCtlPshIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpCtlRstIncorrectFormat
+--- PASS: TestPatternFlowTcpCtlRstIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpCtlSynIncorrectFormat
+--- PASS: TestPatternFlowTcpCtlSynIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpCtlFinIncorrectFormat
+--- PASS: TestPatternFlowTcpCtlFinIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpWindowIncorrectFormat
+--- PASS: TestPatternFlowTcpWindowIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowUdpSrcPortIncorrectFormat
+--- PASS: TestPatternFlowUdpSrcPortIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowUdpDstPortIncorrectFormat
+--- PASS: TestPatternFlowUdpDstPortIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowUdpLengthIncorrectFormat
+--- PASS: TestPatternFlowUdpLengthIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowUdpChecksumIncorrectFormat
+--- PASS: TestPatternFlowUdpChecksumIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGreChecksumPresentIncorrectFormat
+--- PASS: TestPatternFlowGreChecksumPresentIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGreReserved0IncorrectFormat
+--- PASS: TestPatternFlowGreReserved0IncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGreVersionIncorrectFormat
+--- PASS: TestPatternFlowGreVersionIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGreProtocolIncorrectFormat
+--- PASS: TestPatternFlowGreProtocolIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGreChecksumIncorrectFormat
+--- PASS: TestPatternFlowGreChecksumIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGreReserved1IncorrectFormat
+--- PASS: TestPatternFlowGreReserved1IncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv1VersionIncorrectFormat
+--- PASS: TestPatternFlowGtpv1VersionIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv1ProtocolTypeIncorrectFormat
+--- PASS: TestPatternFlowGtpv1ProtocolTypeIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv1ReservedIncorrectFormat
+--- PASS: TestPatternFlowGtpv1ReservedIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv1EFlagIncorrectFormat
+--- PASS: TestPatternFlowGtpv1EFlagIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv1SFlagIncorrectFormat
+--- PASS: TestPatternFlowGtpv1SFlagIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv1PnFlagIncorrectFormat
+--- PASS: TestPatternFlowGtpv1PnFlagIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv1MessageTypeIncorrectFormat
+--- PASS: TestPatternFlowGtpv1MessageTypeIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv1MessageLengthIncorrectFormat
+--- PASS: TestPatternFlowGtpv1MessageLengthIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv1TeidIncorrectFormat
+--- PASS: TestPatternFlowGtpv1TeidIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv1SquenceNumberIncorrectFormat
+--- PASS: TestPatternFlowGtpv1SquenceNumberIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv1NPduNumberIncorrectFormat
+--- PASS: TestPatternFlowGtpv1NPduNumberIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv1NextExtensionHeaderTypeIncorrectFormat
+--- PASS: TestPatternFlowGtpv1NextExtensionHeaderTypeIncorrectFormat (0.00s)
+=== RUN   TestFlowGtpExtensionIncorrectFormat
+--- PASS: TestFlowGtpExtensionIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv2VersionIncorrectFormat
+--- PASS: TestPatternFlowGtpv2VersionIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv2PiggybackingFlagIncorrectFormat
+--- PASS: TestPatternFlowGtpv2PiggybackingFlagIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv2TeidFlagIncorrectFormat
+--- PASS: TestPatternFlowGtpv2TeidFlagIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv2Spare1IncorrectFormat
+--- PASS: TestPatternFlowGtpv2Spare1IncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv2MessageTypeIncorrectFormat
+--- PASS: TestPatternFlowGtpv2MessageTypeIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv2MessageLengthIncorrectFormat
+--- PASS: TestPatternFlowGtpv2MessageLengthIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv2TeidIncorrectFormat
+--- PASS: TestPatternFlowGtpv2TeidIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv2SequenceNumberIncorrectFormat
+--- PASS: TestPatternFlowGtpv2SequenceNumberIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv2Spare2IncorrectFormat
+--- PASS: TestPatternFlowGtpv2Spare2IncorrectFormat (0.00s)
+=== RUN   TestPatternFlowArpHardwareTypeIncorrectFormat
+--- PASS: TestPatternFlowArpHardwareTypeIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowArpProtocolTypeIncorrectFormat
+--- PASS: TestPatternFlowArpProtocolTypeIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowArpHardwareLengthIncorrectFormat
+--- PASS: TestPatternFlowArpHardwareLengthIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowArpProtocolLengthIncorrectFormat
+--- PASS: TestPatternFlowArpProtocolLengthIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowArpOperationIncorrectFormat
+--- PASS: TestPatternFlowArpOperationIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowArpSenderHardwareAddrIncorrectFormat
+--- PASS: TestPatternFlowArpSenderHardwareAddrIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowArpSenderProtocolAddrIncorrectFormat
+--- PASS: TestPatternFlowArpSenderProtocolAddrIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowArpTargetHardwareAddrIncorrectFormat
+--- PASS: TestPatternFlowArpTargetHardwareAddrIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowArpTargetProtocolAddrIncorrectFormat
+--- PASS: TestPatternFlowArpTargetProtocolAddrIncorrectFormat (0.00s)
+=== RUN   TestFlowIcmpEchoIncorrectFormat
+--- PASS: TestFlowIcmpEchoIncorrectFormat (0.00s)
+=== RUN   TestFlowIcmpv6EchoIncorrectFormat
+--- PASS: TestFlowIcmpv6EchoIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPppAddressIncorrectFormat
+--- PASS: TestPatternFlowPppAddressIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPppControlIncorrectFormat
+--- PASS: TestPatternFlowPppControlIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPppProtocolTypeIncorrectFormat
+--- PASS: TestPatternFlowPppProtocolTypeIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIgmpv1VersionIncorrectFormat
+--- PASS: TestPatternFlowIgmpv1VersionIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIgmpv1TypeIncorrectFormat
+--- PASS: TestPatternFlowIgmpv1TypeIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIgmpv1UnusedIncorrectFormat
+--- PASS: TestPatternFlowIgmpv1UnusedIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIgmpv1ChecksumIncorrectFormat
+--- PASS: TestPatternFlowIgmpv1ChecksumIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIgmpv1GroupAddressIncorrectFormat
+--- PASS: TestPatternFlowIgmpv1GroupAddressIncorrectFormat (0.00s)
+=== RUN   TestFlowDelayIncorrectFormat
+--- PASS: TestFlowDelayIncorrectFormat (0.00s)
+=== RUN   TestFlowDurationInterBurstGapIncorrectFormat
+--- PASS: TestFlowDurationInterBurstGapIncorrectFormat (0.00s)
+=== RUN   TestLinkStatepriorityBandwidthsIncorrectFormat
+--- PASS: TestLinkStatepriorityBandwidthsIncorrectFormat (0.00s)
+=== RUN   TestBgpAdvancedIncorrectFormat
+--- PASS: TestBgpAdvancedIncorrectFormat (0.00s)
+=== RUN   TestBgpCapabilityIncorrectFormat
+--- PASS: TestBgpCapabilityIncorrectFormat (0.00s)
+=== RUN   TestBgpV4RouteRangeIncorrectFormat
+--- PASS: TestBgpV4RouteRangeIncorrectFormat (0.00s)
+=== RUN   TestBgpV6RouteRangeIncorrectFormat
+--- PASS: TestBgpV6RouteRangeIncorrectFormat (0.00s)
+=== RUN   TestBgpSrteV4PolicyIncorrectFormat
+--- PASS: TestBgpSrteV4PolicyIncorrectFormat (0.00s)
+=== RUN   TestBgpSrteV6PolicyIncorrectFormat
+--- PASS: TestBgpSrteV6PolicyIncorrectFormat (0.00s)
+=== RUN   TestBgpV6SegmentRoutingIncorrectFormat
+--- PASS: TestBgpV6SegmentRoutingIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowEthernetDstCounterIncorrectFormat
+--- PASS: TestPatternFlowEthernetDstCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowEthernetSrcCounterIncorrectFormat
+--- PASS: TestPatternFlowEthernetSrcCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowEthernetEtherTypeCounterIncorrectFormat
+--- PASS: TestPatternFlowEthernetEtherTypeCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowEthernetPfcQueueCounterIncorrectFormat
+--- PASS: TestPatternFlowEthernetPfcQueueCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowVlanPriorityCounterIncorrectFormat
+--- PASS: TestPatternFlowVlanPriorityCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowVlanCfiCounterIncorrectFormat
+--- PASS: TestPatternFlowVlanCfiCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowVlanIdCounterIncorrectFormat
+--- PASS: TestPatternFlowVlanIdCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowVlanTpidCounterIncorrectFormat
+--- PASS: TestPatternFlowVlanTpidCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowVxlanFlagsCounterIncorrectFormat
+--- PASS: TestPatternFlowVxlanFlagsCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowVxlanReserved0CounterIncorrectFormat
+--- PASS: TestPatternFlowVxlanReserved0CounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowVxlanVniCounterIncorrectFormat
+--- PASS: TestPatternFlowVxlanVniCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowVxlanReserved1CounterIncorrectFormat
+--- PASS: TestPatternFlowVxlanReserved1CounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4VersionCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv4VersionCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4HeaderLengthCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv4HeaderLengthCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4PriorityRawIncorrectFormat
+--- PASS: TestPatternFlowIpv4PriorityRawIncorrectFormat (0.00s)
+=== RUN   TestFlowIpv4TosIncorrectFormat
+--- PASS: TestFlowIpv4TosIncorrectFormat (0.00s)
+=== RUN   TestFlowIpv4DscpIncorrectFormat
+--- PASS: TestFlowIpv4DscpIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4TotalLengthCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv4TotalLengthCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4IdentificationCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv4IdentificationCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4ReservedCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv4ReservedCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4DontFragmentCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv4DontFragmentCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4MoreFragmentsCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv4MoreFragmentsCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4FragmentOffsetCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv4FragmentOffsetCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4TimeToLiveCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv4TimeToLiveCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4ProtocolCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv4ProtocolCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4SrcCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv4SrcCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4DstCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv4DstCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv6VersionCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv6VersionCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv6TrafficClassCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv6TrafficClassCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv6FlowLabelCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv6FlowLabelCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv6PayloadLengthCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv6PayloadLengthCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv6NextHeaderCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv6NextHeaderCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv6HopLimitCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv6HopLimitCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv6SrcCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv6SrcCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv6DstCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv6DstCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPauseDstCounterIncorrectFormat
+--- PASS: TestPatternFlowPfcPauseDstCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPauseSrcCounterIncorrectFormat
+--- PASS: TestPatternFlowPfcPauseSrcCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPauseEtherTypeCounterIncorrectFormat
+--- PASS: TestPatternFlowPfcPauseEtherTypeCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPauseControlOpCodeCounterIncorrectFormat
+--- PASS: TestPatternFlowPfcPauseControlOpCodeCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPauseClassEnableVectorCounterIncorrectFormat
+--- PASS: TestPatternFlowPfcPauseClassEnableVectorCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass0CounterIncorrectFormat
+--- PASS: TestPatternFlowPfcPausePauseClass0CounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass1CounterIncorrectFormat
+--- PASS: TestPatternFlowPfcPausePauseClass1CounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass2CounterIncorrectFormat
+--- PASS: TestPatternFlowPfcPausePauseClass2CounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass3CounterIncorrectFormat
+--- PASS: TestPatternFlowPfcPausePauseClass3CounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass4CounterIncorrectFormat
+--- PASS: TestPatternFlowPfcPausePauseClass4CounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass5CounterIncorrectFormat
+--- PASS: TestPatternFlowPfcPausePauseClass5CounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass6CounterIncorrectFormat
+--- PASS: TestPatternFlowPfcPausePauseClass6CounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass7CounterIncorrectFormat
+--- PASS: TestPatternFlowPfcPausePauseClass7CounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowEthernetPauseDstCounterIncorrectFormat
+--- PASS: TestPatternFlowEthernetPauseDstCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowEthernetPauseSrcCounterIncorrectFormat
+--- PASS: TestPatternFlowEthernetPauseSrcCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowEthernetPauseEtherTypeCounterIncorrectFormat
+--- PASS: TestPatternFlowEthernetPauseEtherTypeCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowEthernetPauseControlOpCodeCounterIncorrectFormat
+--- PASS: TestPatternFlowEthernetPauseControlOpCodeCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowEthernetPauseTimeCounterIncorrectFormat
+--- PASS: TestPatternFlowEthernetPauseTimeCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpSrcPortCounterIncorrectFormat
+--- PASS: TestPatternFlowTcpSrcPortCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpDstPortCounterIncorrectFormat
+--- PASS: TestPatternFlowTcpDstPortCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpSeqNumCounterIncorrectFormat
+--- PASS: TestPatternFlowTcpSeqNumCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpAckNumCounterIncorrectFormat
+--- PASS: TestPatternFlowTcpAckNumCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpDataOffsetCounterIncorrectFormat
+--- PASS: TestPatternFlowTcpDataOffsetCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpEcnNsCounterIncorrectFormat
+--- PASS: TestPatternFlowTcpEcnNsCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpEcnCwrCounterIncorrectFormat
+--- PASS: TestPatternFlowTcpEcnCwrCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpEcnEchoCounterIncorrectFormat
+--- PASS: TestPatternFlowTcpEcnEchoCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpCtlUrgCounterIncorrectFormat
+--- PASS: TestPatternFlowTcpCtlUrgCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpCtlAckCounterIncorrectFormat
+--- PASS: TestPatternFlowTcpCtlAckCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpCtlPshCounterIncorrectFormat
+--- PASS: TestPatternFlowTcpCtlPshCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpCtlRstCounterIncorrectFormat
+--- PASS: TestPatternFlowTcpCtlRstCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpCtlSynCounterIncorrectFormat
+--- PASS: TestPatternFlowTcpCtlSynCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpCtlFinCounterIncorrectFormat
+--- PASS: TestPatternFlowTcpCtlFinCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowTcpWindowCounterIncorrectFormat
+--- PASS: TestPatternFlowTcpWindowCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowUdpSrcPortCounterIncorrectFormat
+--- PASS: TestPatternFlowUdpSrcPortCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowUdpDstPortCounterIncorrectFormat
+--- PASS: TestPatternFlowUdpDstPortCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowUdpLengthCounterIncorrectFormat
+--- PASS: TestPatternFlowUdpLengthCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGreChecksumPresentCounterIncorrectFormat
+--- PASS: TestPatternFlowGreChecksumPresentCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGreReserved0CounterIncorrectFormat
+--- PASS: TestPatternFlowGreReserved0CounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGreVersionCounterIncorrectFormat
+--- PASS: TestPatternFlowGreVersionCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGreProtocolCounterIncorrectFormat
+--- PASS: TestPatternFlowGreProtocolCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGreReserved1CounterIncorrectFormat
+--- PASS: TestPatternFlowGreReserved1CounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv1VersionCounterIncorrectFormat
+--- PASS: TestPatternFlowGtpv1VersionCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv1ProtocolTypeCounterIncorrectFormat
+--- PASS: TestPatternFlowGtpv1ProtocolTypeCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv1ReservedCounterIncorrectFormat
+--- PASS: TestPatternFlowGtpv1ReservedCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv1EFlagCounterIncorrectFormat
+--- PASS: TestPatternFlowGtpv1EFlagCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv1SFlagCounterIncorrectFormat
+--- PASS: TestPatternFlowGtpv1SFlagCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv1PnFlagCounterIncorrectFormat
+--- PASS: TestPatternFlowGtpv1PnFlagCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv1MessageTypeCounterIncorrectFormat
+--- PASS: TestPatternFlowGtpv1MessageTypeCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv1MessageLengthCounterIncorrectFormat
+--- PASS: TestPatternFlowGtpv1MessageLengthCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv1TeidCounterIncorrectFormat
+--- PASS: TestPatternFlowGtpv1TeidCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv1SquenceNumberCounterIncorrectFormat
+--- PASS: TestPatternFlowGtpv1SquenceNumberCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv1NPduNumberCounterIncorrectFormat
+--- PASS: TestPatternFlowGtpv1NPduNumberCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv1NextExtensionHeaderTypeCounterIncorrectFormat
+--- PASS: TestPatternFlowGtpv1NextExtensionHeaderTypeCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpExtensionExtensionLengthIncorrectFormat
+--- PASS: TestPatternFlowGtpExtensionExtensionLengthIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpExtensionContentsIncorrectFormat
+--- PASS: TestPatternFlowGtpExtensionContentsIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpExtensionNextExtensionHeaderIncorrectFormat
+--- PASS: TestPatternFlowGtpExtensionNextExtensionHeaderIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv2VersionCounterIncorrectFormat
+--- PASS: TestPatternFlowGtpv2VersionCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv2PiggybackingFlagCounterIncorrectFormat
+--- PASS: TestPatternFlowGtpv2PiggybackingFlagCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv2TeidFlagCounterIncorrectFormat
+--- PASS: TestPatternFlowGtpv2TeidFlagCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv2Spare1CounterIncorrectFormat
+--- PASS: TestPatternFlowGtpv2Spare1CounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv2MessageTypeCounterIncorrectFormat
+--- PASS: TestPatternFlowGtpv2MessageTypeCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv2MessageLengthCounterIncorrectFormat
+--- PASS: TestPatternFlowGtpv2MessageLengthCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv2TeidCounterIncorrectFormat
+--- PASS: TestPatternFlowGtpv2TeidCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv2SequenceNumberCounterIncorrectFormat
+--- PASS: TestPatternFlowGtpv2SequenceNumberCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpv2Spare2CounterIncorrectFormat
+--- PASS: TestPatternFlowGtpv2Spare2CounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowArpHardwareTypeCounterIncorrectFormat
+--- PASS: TestPatternFlowArpHardwareTypeCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowArpProtocolTypeCounterIncorrectFormat
+--- PASS: TestPatternFlowArpProtocolTypeCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowArpHardwareLengthCounterIncorrectFormat
+--- PASS: TestPatternFlowArpHardwareLengthCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowArpProtocolLengthCounterIncorrectFormat
+--- PASS: TestPatternFlowArpProtocolLengthCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowArpOperationCounterIncorrectFormat
+--- PASS: TestPatternFlowArpOperationCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowArpSenderHardwareAddrCounterIncorrectFormat
+--- PASS: TestPatternFlowArpSenderHardwareAddrCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowArpSenderProtocolAddrCounterIncorrectFormat
+--- PASS: TestPatternFlowArpSenderProtocolAddrCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowArpTargetHardwareAddrCounterIncorrectFormat
+--- PASS: TestPatternFlowArpTargetHardwareAddrCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowArpTargetProtocolAddrCounterIncorrectFormat
+--- PASS: TestPatternFlowArpTargetProtocolAddrCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIcmpEchoTypeIncorrectFormat
+--- PASS: TestPatternFlowIcmpEchoTypeIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIcmpEchoCodeIncorrectFormat
+--- PASS: TestPatternFlowIcmpEchoCodeIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIcmpEchoChecksumIncorrectFormat
+--- PASS: TestPatternFlowIcmpEchoChecksumIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIcmpEchoIdentifierIncorrectFormat
+--- PASS: TestPatternFlowIcmpEchoIdentifierIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIcmpEchoSequenceNumberIncorrectFormat
+--- PASS: TestPatternFlowIcmpEchoSequenceNumberIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIcmpv6EchoTypeIncorrectFormat
+--- PASS: TestPatternFlowIcmpv6EchoTypeIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIcmpv6EchoCodeIncorrectFormat
+--- PASS: TestPatternFlowIcmpv6EchoCodeIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIcmpv6EchoIdentifierIncorrectFormat
+--- PASS: TestPatternFlowIcmpv6EchoIdentifierIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIcmpv6EchoSequenceNumberIncorrectFormat
+--- PASS: TestPatternFlowIcmpv6EchoSequenceNumberIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIcmpv6EchoChecksumIncorrectFormat
+--- PASS: TestPatternFlowIcmpv6EchoChecksumIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPppAddressCounterIncorrectFormat
+--- PASS: TestPatternFlowPppAddressCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPppControlCounterIncorrectFormat
+--- PASS: TestPatternFlowPppControlCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowPppProtocolTypeCounterIncorrectFormat
+--- PASS: TestPatternFlowPppProtocolTypeCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIgmpv1VersionCounterIncorrectFormat
+--- PASS: TestPatternFlowIgmpv1VersionCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIgmpv1TypeCounterIncorrectFormat
+--- PASS: TestPatternFlowIgmpv1TypeCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIgmpv1UnusedCounterIncorrectFormat
+--- PASS: TestPatternFlowIgmpv1UnusedCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIgmpv1GroupAddressCounterIncorrectFormat
+--- PASS: TestPatternFlowIgmpv1GroupAddressCounterIncorrectFormat (0.00s)
+=== RUN   TestBgpRouteAdvancedIncorrectFormat
+--- PASS: TestBgpRouteAdvancedIncorrectFormat (0.00s)
+=== RUN   TestBgpCommunityIncorrectFormat
+--- PASS: TestBgpCommunityIncorrectFormat (0.00s)
+=== RUN   TestBgpAsPathIncorrectFormat
+--- PASS: TestBgpAsPathIncorrectFormat (0.00s)
+=== RUN   TestBgpAddPathIncorrectFormat
+--- PASS: TestBgpAddPathIncorrectFormat (0.00s)
+=== RUN   TestBgpExtCommunityIncorrectFormat
+--- PASS: TestBgpExtCommunityIncorrectFormat (0.00s)
+=== RUN   TestBgpSrteV4TunnelTlvIncorrectFormat
+--- PASS: TestBgpSrteV4TunnelTlvIncorrectFormat (0.00s)
+=== RUN   TestBgpSrteV6TunnelTlvIncorrectFormat
+--- PASS: TestBgpSrteV6TunnelTlvIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4PriorityRawCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv4PriorityRawCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4TosPrecedenceIncorrectFormat
+--- PASS: TestPatternFlowIpv4TosPrecedenceIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4TosDelayIncorrectFormat
+--- PASS: TestPatternFlowIpv4TosDelayIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4TosThroughputIncorrectFormat
+--- PASS: TestPatternFlowIpv4TosThroughputIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4TosReliabilityIncorrectFormat
+--- PASS: TestPatternFlowIpv4TosReliabilityIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4TosMonetaryIncorrectFormat
+--- PASS: TestPatternFlowIpv4TosMonetaryIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4TosUnusedIncorrectFormat
+--- PASS: TestPatternFlowIpv4TosUnusedIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4DscpPhbIncorrectFormat
+--- PASS: TestPatternFlowIpv4DscpPhbIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4DscpEcnIncorrectFormat
+--- PASS: TestPatternFlowIpv4DscpEcnIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpExtensionExtensionLengthCounterIncorrectFormat
+--- PASS: TestPatternFlowGtpExtensionExtensionLengthCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpExtensionContentsCounterIncorrectFormat
+--- PASS: TestPatternFlowGtpExtensionContentsCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowGtpExtensionNextExtensionHeaderCounterIncorrectFormat
+--- PASS: TestPatternFlowGtpExtensionNextExtensionHeaderCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIcmpEchoTypeCounterIncorrectFormat
+--- PASS: TestPatternFlowIcmpEchoTypeCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIcmpEchoCodeCounterIncorrectFormat
+--- PASS: TestPatternFlowIcmpEchoCodeCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIcmpEchoIdentifierCounterIncorrectFormat
+--- PASS: TestPatternFlowIcmpEchoIdentifierCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIcmpEchoSequenceNumberCounterIncorrectFormat
+--- PASS: TestPatternFlowIcmpEchoSequenceNumberCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIcmpv6EchoTypeCounterIncorrectFormat
+--- PASS: TestPatternFlowIcmpv6EchoTypeCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIcmpv6EchoCodeCounterIncorrectFormat
+--- PASS: TestPatternFlowIcmpv6EchoCodeCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIcmpv6EchoIdentifierCounterIncorrectFormat
+--- PASS: TestPatternFlowIcmpv6EchoIdentifierCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIcmpv6EchoSequenceNumberCounterIncorrectFormat
+--- PASS: TestPatternFlowIcmpv6EchoSequenceNumberCounterIncorrectFormat (0.00s)
+=== RUN   TestBgpAsPathSegmentIncorrectFormat
+--- PASS: TestBgpAsPathSegmentIncorrectFormat (0.00s)
+=== RUN   TestBgpSrteRemoteEndpointSubTlvIncorrectFormat
+--- PASS: TestBgpSrteRemoteEndpointSubTlvIncorrectFormat (0.00s)
+=== RUN   TestBgpSrteColorSubTlvIncorrectFormat
+--- PASS: TestBgpSrteColorSubTlvIncorrectFormat (0.00s)
+=== RUN   TestBgpSrteBindingSubTlvIncorrectFormat
+--- PASS: TestBgpSrteBindingSubTlvIncorrectFormat (0.00s)
+=== RUN   TestBgpSrtePreferenceSubTlvIncorrectFormat
+--- PASS: TestBgpSrtePreferenceSubTlvIncorrectFormat (0.00s)
+=== RUN   TestBgpSrtePolicyPrioritySubTlvIncorrectFormat
+--- PASS: TestBgpSrtePolicyPrioritySubTlvIncorrectFormat (0.00s)
+=== RUN   TestBgpSrtePolicyNameSubTlvIncorrectFormat
+--- PASS: TestBgpSrtePolicyNameSubTlvIncorrectFormat (0.00s)
+=== RUN   TestBgpSrteExplicitNullLabelPolicySubTlvIncorrectFormat
+--- PASS: TestBgpSrteExplicitNullLabelPolicySubTlvIncorrectFormat (0.00s)
+=== RUN   TestBgpSrteSegmentListIncorrectFormat
+--- PASS: TestBgpSrteSegmentListIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4TosPrecedenceCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv4TosPrecedenceCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4TosDelayCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv4TosDelayCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4TosThroughputCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv4TosThroughputCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4TosReliabilityCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv4TosReliabilityCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4TosMonetaryCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv4TosMonetaryCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4TosUnusedCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv4TosUnusedCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4DscpPhbCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv4DscpPhbCounterIncorrectFormat (0.00s)
+=== RUN   TestPatternFlowIpv4DscpEcnCounterIncorrectFormat
+--- PASS: TestPatternFlowIpv4DscpEcnCounterIncorrectFormat (0.00s)
+=== RUN   TestBgpSrteSegmentIncorrectFormat
+--- PASS: TestBgpSrteSegmentIncorrectFormat (0.00s)
+=== RUN   TestBgpSrteSegmentATypeSubTlvIncorrectFormat
+--- PASS: TestBgpSrteSegmentATypeSubTlvIncorrectFormat (0.00s)
+=== RUN   TestBgpSrteSegmentBTypeSubTlvIncorrectFormat
+--- PASS: TestBgpSrteSegmentBTypeSubTlvIncorrectFormat (0.00s)
+=== RUN   TestBgpSrteSegmentCTypeSubTlvIncorrectFormat
+--- PASS: TestBgpSrteSegmentCTypeSubTlvIncorrectFormat (0.00s)
+=== RUN   TestBgpSrteSegmentDTypeSubTlvIncorrectFormat
+--- PASS: TestBgpSrteSegmentDTypeSubTlvIncorrectFormat (0.00s)
+=== RUN   TestBgpSrteSegmentETypeSubTlvIncorrectFormat
+--- PASS: TestBgpSrteSegmentETypeSubTlvIncorrectFormat (0.00s)
+=== RUN   TestBgpSrteSegmentFTypeSubTlvIncorrectFormat
+--- PASS: TestBgpSrteSegmentFTypeSubTlvIncorrectFormat (0.00s)
+=== RUN   TestBgpSrteSegmentGTypeSubTlvIncorrectFormat
+--- PASS: TestBgpSrteSegmentGTypeSubTlvIncorrectFormat (0.00s)
+=== RUN   TestBgpSrteSegmentHTypeSubTlvIncorrectFormat
+--- PASS: TestBgpSrteSegmentHTypeSubTlvIncorrectFormat (0.00s)
+=== RUN   TestBgpSrteSegmentITypeSubTlvIncorrectFormat
+--- PASS: TestBgpSrteSegmentITypeSubTlvIncorrectFormat (0.00s)
+=== RUN   TestBgpSrteSegmentJTypeSubTlvIncorrectFormat
+--- PASS: TestBgpSrteSegmentJTypeSubTlvIncorrectFormat (0.00s)
+=== RUN   TestBgpSrteSegmentKTypeSubTlvIncorrectFormat
+--- PASS: TestBgpSrteSegmentKTypeSubTlvIncorrectFormat (0.00s)
+=== RUN   TestBgpSrteSRv6SIDEndpointBehaviorAndStructureIncorrectFormat
+--- PASS: TestBgpSrteSRv6SIDEndpointBehaviorAndStructureIncorrectFormat (0.00s)
+=== RUN   TestBgpSrteSrMplsSidIncorrectFormat
+--- PASS: TestBgpSrteSrMplsSidIncorrectFormat (0.00s)
+=== RUN   TestConfigIncorrectKey
+--- PASS: TestConfigIncorrectKey (0.00s)
+=== RUN   TestPortIncorrectKey
+--- PASS: TestPortIncorrectKey (0.00s)
+=== RUN   TestLagIncorrectKey
+--- PASS: TestLagIncorrectKey (0.00s)
+=== RUN   TestLayer1IncorrectKey
+--- PASS: TestLayer1IncorrectKey (0.00s)
+=== RUN   TestCaptureIncorrectKey
+--- PASS: TestCaptureIncorrectKey (0.00s)
+=== RUN   TestDeviceIncorrectKey
+--- PASS: TestDeviceIncorrectKey (0.00s)
+=== RUN   TestFlowIncorrectKey
+--- PASS: TestFlowIncorrectKey (0.00s)
+=== RUN   TestEventIncorrectKey
+--- PASS: TestEventIncorrectKey (0.00s)
+=== RUN   TestConfigOptionsIncorrectKey
+--- PASS: TestConfigOptionsIncorrectKey (0.00s)
+=== RUN   TestTransmitStateIncorrectKey
+--- PASS: TestTransmitStateIncorrectKey (0.00s)
+=== RUN   TestLinkStateIncorrectKey
+--- PASS: TestLinkStateIncorrectKey (0.00s)
+=== RUN   TestCaptureStateIncorrectKey
+--- PASS: TestCaptureStateIncorrectKey (0.00s)
+=== RUN   TestFlowsUpdateIncorrectKey
+--- PASS: TestFlowsUpdateIncorrectKey (0.00s)
+=== RUN   TestRouteStateIncorrectKey
+--- PASS: TestRouteStateIncorrectKey (0.00s)
+=== RUN   TestPingRequestIncorrectKey
+--- PASS: TestPingRequestIncorrectKey (0.00s)
+=== RUN   TestPingIncorrectKey
+--- PASS: TestPingIncorrectKey (0.00s)
+=== RUN   TestProtocolStateIncorrectKey
+--- PASS: TestProtocolStateIncorrectKey (0.00s)
+=== RUN   TestMetricsRequestIncorrectKey
+--- PASS: TestMetricsRequestIncorrectKey (0.00s)
+=== RUN   TestPortMetricsRequestIncorrectKey
+--- PASS: TestPortMetricsRequestIncorrectKey (0.00s)
+=== RUN   TestFlowMetricsRequestIncorrectKey
+--- PASS: TestFlowMetricsRequestIncorrectKey (0.00s)
+=== RUN   TestBgpv4MetricsRequestIncorrectKey
+--- PASS: TestBgpv4MetricsRequestIncorrectKey (0.00s)
+=== RUN   TestBgpv6MetricsRequestIncorrectKey
+--- PASS: TestBgpv6MetricsRequestIncorrectKey (0.00s)
+=== RUN   TestIsisMetricsRequestIncorrectKey
+--- PASS: TestIsisMetricsRequestIncorrectKey (0.00s)
+=== RUN   TestStatesRequestIncorrectKey
+--- PASS: TestStatesRequestIncorrectKey (0.00s)
+=== RUN   TestNeighborsv4StatesRequestIncorrectKey
+--- PASS: TestNeighborsv4StatesRequestIncorrectKey (0.00s)
+=== RUN   TestNeighborsv6StatesRequestIncorrectKey
+--- PASS: TestNeighborsv6StatesRequestIncorrectKey (0.00s)
+=== RUN   TestCaptureRequestIncorrectKey
+--- PASS: TestCaptureRequestIncorrectKey (0.00s)
+=== RUN   TestSetConfigResponseIncorrectKey
+--- PASS: TestSetConfigResponseIncorrectKey (0.00s)
+=== RUN   TestResponseWarningIncorrectKey
+--- PASS: TestResponseWarningIncorrectKey (0.00s)
+=== RUN   TestResponseErrorIncorrectKey
+--- PASS: TestResponseErrorIncorrectKey (0.00s)
+=== RUN   TestGetConfigResponseIncorrectKey
+--- PASS: TestGetConfigResponseIncorrectKey (0.00s)
+=== RUN   TestSetTransmitStateResponseIncorrectKey
+--- PASS: TestSetTransmitStateResponseIncorrectKey (0.00s)
+=== RUN   TestSetLinkStateResponseIncorrectKey
+--- PASS: TestSetLinkStateResponseIncorrectKey (0.00s)
+=== RUN   TestSetCaptureStateResponseIncorrectKey
+--- PASS: TestSetCaptureStateResponseIncorrectKey (0.00s)
+=== RUN   TestUpdateFlowsResponseIncorrectKey
+--- PASS: TestUpdateFlowsResponseIncorrectKey (0.00s)
+=== RUN   TestSetRouteStateResponseIncorrectKey
+--- PASS: TestSetRouteStateResponseIncorrectKey (0.00s)
+=== RUN   TestSendPingResponseIncorrectKey
+--- PASS: TestSendPingResponseIncorrectKey (0.00s)
+=== RUN   TestPingResponseIncorrectKey
+--- PASS: TestPingResponseIncorrectKey (0.00s)
+=== RUN   TestSetProtocolStateResponseIncorrectKey
+--- PASS: TestSetProtocolStateResponseIncorrectKey (0.00s)
+=== RUN   TestGetMetricsResponseIncorrectKey
+--- PASS: TestGetMetricsResponseIncorrectKey (0.00s)
+=== RUN   TestMetricsResponseIncorrectKey
+--- PASS: TestMetricsResponseIncorrectKey (0.00s)
+=== RUN   TestGetStatesResponseIncorrectKey
+--- PASS: TestGetStatesResponseIncorrectKey (0.00s)
+=== RUN   TestStatesResponseIncorrectKey
+--- PASS: TestStatesResponseIncorrectKey (0.00s)
+=== RUN   TestGetCaptureResponseIncorrectKey
+--- PASS: TestGetCaptureResponseIncorrectKey (0.00s)
+=== RUN   TestLagPortIncorrectKey
+--- PASS: TestLagPortIncorrectKey (0.00s)
+=== RUN   TestLayer1AutoNegotiationIncorrectKey
+--- PASS: TestLayer1AutoNegotiationIncorrectKey (0.00s)
+=== RUN   TestLayer1FlowControlIncorrectKey
+--- PASS: TestLayer1FlowControlIncorrectKey (0.00s)
+=== RUN   TestCaptureFilterIncorrectKey
+--- PASS: TestCaptureFilterIncorrectKey (0.00s)
+=== RUN   TestDeviceEthernetIncorrectKey
+--- PASS: TestDeviceEthernetIncorrectKey (0.00s)
+=== RUN   TestDeviceIpv4LoopbackIncorrectKey
+--- PASS: TestDeviceIpv4LoopbackIncorrectKey (0.00s)
+=== RUN   TestDeviceIpv6LoopbackIncorrectKey
+--- PASS: TestDeviceIpv6LoopbackIncorrectKey (0.00s)
+=== RUN   TestDeviceIsisRouterIncorrectKey
+--- PASS: TestDeviceIsisRouterIncorrectKey (0.00s)
+=== RUN   TestDeviceBgpRouterIncorrectKey
+--- PASS: TestDeviceBgpRouterIncorrectKey (0.00s)
+=== RUN   TestFlowTxRxIncorrectKey
+--- PASS: TestFlowTxRxIncorrectKey (0.00s)
+=== RUN   TestFlowHeaderIncorrectKey
+--- PASS: TestFlowHeaderIncorrectKey (0.00s)
+=== RUN   TestFlowSizeIncorrectKey
+--- PASS: TestFlowSizeIncorrectKey (0.00s)
+=== RUN   TestFlowRateIncorrectKey
+--- PASS: TestFlowRateIncorrectKey (0.00s)
+=== RUN   TestFlowDurationIncorrectKey
+--- PASS: TestFlowDurationIncorrectKey (0.00s)
+=== RUN   TestFlowMetricsIncorrectKey
+--- PASS: TestFlowMetricsIncorrectKey (0.00s)
+=== RUN   TestEventLinkIncorrectKey
+--- PASS: TestEventLinkIncorrectKey (0.00s)
+=== RUN   TestEventRxRateThresholdIncorrectKey
+--- PASS: TestEventRxRateThresholdIncorrectKey (0.00s)
+=== RUN   TestEventRouteAdvertiseWithdrawIncorrectKey
+--- PASS: TestEventRouteAdvertiseWithdrawIncorrectKey (0.00s)
+=== RUN   TestPortOptionsIncorrectKey
+--- PASS: TestPortOptionsIncorrectKey (0.00s)
+=== RUN   TestPingIpv4IncorrectKey
+--- PASS: TestPingIpv4IncorrectKey (0.00s)
+=== RUN   TestPingIpv6IncorrectKey
+--- PASS: TestPingIpv6IncorrectKey (0.00s)
+=== RUN   TestFlowMetricGroupRequestIncorrectKey
+--- PASS: TestFlowMetricGroupRequestIncorrectKey (0.00s)
+=== RUN   TestResponseIncorrectKey
+--- PASS: TestResponseIncorrectKey (0.00s)
+=== RUN   TestPortMetricIncorrectKey
+--- PASS: TestPortMetricIncorrectKey (0.00s)
+=== RUN   TestFlowMetricIncorrectKey
+--- PASS: TestFlowMetricIncorrectKey (0.00s)
+=== RUN   TestBgpv4MetricIncorrectKey
+--- PASS: TestBgpv4MetricIncorrectKey (0.00s)
+=== RUN   TestBgpv6MetricIncorrectKey
+--- PASS: TestBgpv6MetricIncorrectKey (0.00s)
+=== RUN   TestIsisMetricIncorrectKey
+--- PASS: TestIsisMetricIncorrectKey (0.00s)
+=== RUN   TestNeighborsv4StateIncorrectKey
+--- PASS: TestNeighborsv4StateIncorrectKey (0.00s)
+=== RUN   TestNeighborsv6StateIncorrectKey
+--- PASS: TestNeighborsv6StateIncorrectKey (0.00s)
+=== RUN   TestLagProtocolIncorrectKey
+--- PASS: TestLagProtocolIncorrectKey (0.00s)
+=== RUN   TestDeviceEthernetBaseIncorrectKey
+--- PASS: TestDeviceEthernetBaseIncorrectKey (0.00s)
+=== RUN   TestLayer1Ieee8021QbbIncorrectKey
+--- PASS: TestLayer1Ieee8021QbbIncorrectKey (0.00s)
+=== RUN   TestLayer1Ieee8023XIncorrectKey
+--- PASS: TestLayer1Ieee8023XIncorrectKey (0.00s)
+=== RUN   TestCaptureCustomIncorrectKey
+--- PASS: TestCaptureCustomIncorrectKey (0.00s)
+=== RUN   TestCaptureEthernetIncorrectKey
+--- PASS: TestCaptureEthernetIncorrectKey (0.00s)
+=== RUN   TestCaptureVlanIncorrectKey
+--- PASS: TestCaptureVlanIncorrectKey (0.00s)
+=== RUN   TestCaptureIpv4IncorrectKey
+--- PASS: TestCaptureIpv4IncorrectKey (0.00s)
+=== RUN   TestCaptureIpv6IncorrectKey
+--- PASS: TestCaptureIpv6IncorrectKey (0.00s)
+=== RUN   TestDeviceIpv4IncorrectKey
+--- PASS: TestDeviceIpv4IncorrectKey (0.00s)
+=== RUN   TestDeviceIpv6IncorrectKey
+--- PASS: TestDeviceIpv6IncorrectKey (0.00s)
+=== RUN   TestDeviceVlanIncorrectKey
+--- PASS: TestDeviceVlanIncorrectKey (0.00s)
+=== RUN   TestDeviceIsisMultiInstanceIncorrectKey
+--- PASS: TestDeviceIsisMultiInstanceIncorrectKey (0.00s)
+=== RUN   TestIsisInterfaceIncorrectKey
+--- PASS: TestIsisInterfaceIncorrectKey (0.00s)
+=== RUN   TestIsisBasicIncorrectKey
+--- PASS: TestIsisBasicIncorrectKey (0.00s)
+=== RUN   TestIsisAdvancedIncorrectKey
+--- PASS: TestIsisAdvancedIncorrectKey (0.00s)
+=== RUN   TestIsisAuthenticationIncorrectKey
+--- PASS: TestIsisAuthenticationIncorrectKey (0.00s)
+=== RUN   TestIsisV4RouteRangeIncorrectKey
+--- PASS: TestIsisV4RouteRangeIncorrectKey (0.00s)
+=== RUN   TestIsisV6RouteRangeIncorrectKey
+--- PASS: TestIsisV6RouteRangeIncorrectKey (0.00s)
+=== RUN   TestBgpV4InterfaceIncorrectKey
+--- PASS: TestBgpV4InterfaceIncorrectKey (0.00s)
+=== RUN   TestBgpV6InterfaceIncorrectKey
+--- PASS: TestBgpV6InterfaceIncorrectKey (0.00s)
+=== RUN   TestFlowPortIncorrectKey
+--- PASS: TestFlowPortIncorrectKey (0.00s)
+=== RUN   TestFlowRouterIncorrectKey
+--- PASS: TestFlowRouterIncorrectKey (0.00s)
+=== RUN   TestFlowCustomIncorrectKey
+--- PASS: TestFlowCustomIncorrectKey (0.00s)
+=== RUN   TestFlowEthernetIncorrectKey
+--- PASS: TestFlowEthernetIncorrectKey (0.00s)
+=== RUN   TestFlowVlanIncorrectKey
+--- PASS: TestFlowVlanIncorrectKey (0.00s)
+=== RUN   TestFlowVxlanIncorrectKey
+--- PASS: TestFlowVxlanIncorrectKey (0.00s)
+=== RUN   TestFlowIpv4IncorrectKey
+--- PASS: TestFlowIpv4IncorrectKey (0.00s)
+=== RUN   TestFlowIpv6IncorrectKey
+--- PASS: TestFlowIpv6IncorrectKey (0.00s)
+=== RUN   TestFlowPfcPauseIncorrectKey
+--- PASS: TestFlowPfcPauseIncorrectKey (0.00s)
+=== RUN   TestFlowEthernetPauseIncorrectKey
+--- PASS: TestFlowEthernetPauseIncorrectKey (0.00s)
+=== RUN   TestFlowTcpIncorrectKey
+--- PASS: TestFlowTcpIncorrectKey (0.00s)
+=== RUN   TestFlowUdpIncorrectKey
+--- PASS: TestFlowUdpIncorrectKey (0.00s)
+=== RUN   TestFlowGreIncorrectKey
+--- PASS: TestFlowGreIncorrectKey (0.00s)
+=== RUN   TestFlowGtpv1IncorrectKey
+--- PASS: TestFlowGtpv1IncorrectKey (0.00s)
+=== RUN   TestFlowGtpv2IncorrectKey
+--- PASS: TestFlowGtpv2IncorrectKey (0.00s)
+=== RUN   TestFlowArpIncorrectKey
+--- PASS: TestFlowArpIncorrectKey (0.00s)
+=== RUN   TestFlowIcmpIncorrectKey
+--- PASS: TestFlowIcmpIncorrectKey (0.00s)
+=== RUN   TestFlowIcmpv6IncorrectKey
+--- PASS: TestFlowIcmpv6IncorrectKey (0.00s)
+=== RUN   TestFlowPppIncorrectKey
+--- PASS: TestFlowPppIncorrectKey (0.00s)
+=== RUN   TestFlowIgmpv1IncorrectKey
+--- PASS: TestFlowIgmpv1IncorrectKey (0.00s)
+=== RUN   TestFlowSizeIncrementIncorrectKey
+--- PASS: TestFlowSizeIncrementIncorrectKey (0.00s)
+=== RUN   TestFlowSizeRandomIncorrectKey
+--- PASS: TestFlowSizeRandomIncorrectKey (0.00s)
+=== RUN   TestFlowFixedPacketsIncorrectKey
+--- PASS: TestFlowFixedPacketsIncorrectKey (0.00s)
+=== RUN   TestFlowFixedSecondsIncorrectKey
+--- PASS: TestFlowFixedSecondsIncorrectKey (0.00s)
+=== RUN   TestFlowBurstIncorrectKey
+--- PASS: TestFlowBurstIncorrectKey (0.00s)
+=== RUN   TestFlowContinuousIncorrectKey
+--- PASS: TestFlowContinuousIncorrectKey (0.00s)
+=== RUN   TestFlowLatencyMetricsIncorrectKey
+--- PASS: TestFlowLatencyMetricsIncorrectKey (0.00s)
+=== RUN   TestFlowMetricGroupIncorrectKey
+--- PASS: TestFlowMetricGroupIncorrectKey (0.00s)
+=== RUN   TestMetricTimestampIncorrectKey
+--- PASS: TestMetricTimestampIncorrectKey (0.00s)
+=== RUN   TestMetricLatencyIncorrectKey
+--- PASS: TestMetricLatencyIncorrectKey (0.00s)
+=== RUN   TestLagLacpIncorrectKey
+--- PASS: TestLagLacpIncorrectKey (0.00s)
+=== RUN   TestLagStaticIncorrectKey
+--- PASS: TestLagStaticIncorrectKey (0.00s)
+=== RUN   TestCaptureFieldIncorrectKey
+--- PASS: TestCaptureFieldIncorrectKey (0.00s)
+=== RUN   TestIsisInterfaceLevelIncorrectKey
+--- PASS: TestIsisInterfaceLevelIncorrectKey (0.00s)
+=== RUN   TestIsisMTIncorrectKey
+--- PASS: TestIsisMTIncorrectKey (0.00s)
+=== RUN   TestLinkStateTEIncorrectKey
+--- PASS: TestLinkStateTEIncorrectKey (0.00s)
+=== RUN   TestIsisInterfaceAuthenticationIncorrectKey
+--- PASS: TestIsisInterfaceAuthenticationIncorrectKey (0.00s)
+=== RUN   TestIsisInterfaceAdvancedIncorrectKey
+--- PASS: TestIsisInterfaceAdvancedIncorrectKey (0.00s)
+=== RUN   TestIsisInterfaceLinkProtectionIncorrectKey
+--- PASS: TestIsisInterfaceLinkProtectionIncorrectKey (0.00s)
+=== RUN   TestIsisAuthenticationBaseIncorrectKey
+--- PASS: TestIsisAuthenticationBaseIncorrectKey (0.00s)
+=== RUN   TestV4RouteAddressIncorrectKey
+--- PASS: TestV4RouteAddressIncorrectKey (0.00s)
+=== RUN   TestV6RouteAddressIncorrectKey
+--- PASS: TestV6RouteAddressIncorrectKey (0.00s)
+=== RUN   TestBgpV4PeerIncorrectKey
+--- PASS: TestBgpV4PeerIncorrectKey (0.00s)
+=== RUN   TestBgpV6PeerIncorrectKey
+--- PASS: TestBgpV6PeerIncorrectKey (0.00s)
+=== RUN   TestPatternFlowEthernetDstIncorrectKey
+--- PASS: TestPatternFlowEthernetDstIncorrectKey (0.00s)
+=== RUN   TestPatternFlowEthernetSrcIncorrectKey
+--- PASS: TestPatternFlowEthernetSrcIncorrectKey (0.00s)
+=== RUN   TestPatternFlowEthernetEtherTypeIncorrectKey
+--- PASS: TestPatternFlowEthernetEtherTypeIncorrectKey (0.00s)
+=== RUN   TestPatternFlowEthernetPfcQueueIncorrectKey
+--- PASS: TestPatternFlowEthernetPfcQueueIncorrectKey (0.00s)
+=== RUN   TestPatternFlowVlanPriorityIncorrectKey
+--- PASS: TestPatternFlowVlanPriorityIncorrectKey (0.00s)
+=== RUN   TestPatternFlowVlanCfiIncorrectKey
+--- PASS: TestPatternFlowVlanCfiIncorrectKey (0.00s)
+=== RUN   TestPatternFlowVlanIdIncorrectKey
+--- PASS: TestPatternFlowVlanIdIncorrectKey (0.00s)
+=== RUN   TestPatternFlowVlanTpidIncorrectKey
+--- PASS: TestPatternFlowVlanTpidIncorrectKey (0.00s)
+=== RUN   TestPatternFlowVxlanFlagsIncorrectKey
+--- PASS: TestPatternFlowVxlanFlagsIncorrectKey (0.00s)
+=== RUN   TestPatternFlowVxlanReserved0IncorrectKey
+--- PASS: TestPatternFlowVxlanReserved0IncorrectKey (0.00s)
+=== RUN   TestPatternFlowVxlanVniIncorrectKey
+--- PASS: TestPatternFlowVxlanVniIncorrectKey (0.00s)
+=== RUN   TestPatternFlowVxlanReserved1IncorrectKey
+--- PASS: TestPatternFlowVxlanReserved1IncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4VersionIncorrectKey
+--- PASS: TestPatternFlowIpv4VersionIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4HeaderLengthIncorrectKey
+--- PASS: TestPatternFlowIpv4HeaderLengthIncorrectKey (0.00s)
+=== RUN   TestFlowIpv4PriorityIncorrectKey
+--- PASS: TestFlowIpv4PriorityIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4TotalLengthIncorrectKey
+--- PASS: TestPatternFlowIpv4TotalLengthIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4IdentificationIncorrectKey
+--- PASS: TestPatternFlowIpv4IdentificationIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4ReservedIncorrectKey
+--- PASS: TestPatternFlowIpv4ReservedIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4DontFragmentIncorrectKey
+--- PASS: TestPatternFlowIpv4DontFragmentIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4MoreFragmentsIncorrectKey
+--- PASS: TestPatternFlowIpv4MoreFragmentsIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4FragmentOffsetIncorrectKey
+--- PASS: TestPatternFlowIpv4FragmentOffsetIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4TimeToLiveIncorrectKey
+--- PASS: TestPatternFlowIpv4TimeToLiveIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4ProtocolIncorrectKey
+--- PASS: TestPatternFlowIpv4ProtocolIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4HeaderChecksumIncorrectKey
+--- PASS: TestPatternFlowIpv4HeaderChecksumIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4SrcIncorrectKey
+--- PASS: TestPatternFlowIpv4SrcIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4DstIncorrectKey
+--- PASS: TestPatternFlowIpv4DstIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv6VersionIncorrectKey
+--- PASS: TestPatternFlowIpv6VersionIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv6TrafficClassIncorrectKey
+--- PASS: TestPatternFlowIpv6TrafficClassIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv6FlowLabelIncorrectKey
+--- PASS: TestPatternFlowIpv6FlowLabelIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv6PayloadLengthIncorrectKey
+--- PASS: TestPatternFlowIpv6PayloadLengthIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv6NextHeaderIncorrectKey
+--- PASS: TestPatternFlowIpv6NextHeaderIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv6HopLimitIncorrectKey
+--- PASS: TestPatternFlowIpv6HopLimitIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv6SrcIncorrectKey
+--- PASS: TestPatternFlowIpv6SrcIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv6DstIncorrectKey
+--- PASS: TestPatternFlowIpv6DstIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPauseDstIncorrectKey
+--- PASS: TestPatternFlowPfcPauseDstIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPauseSrcIncorrectKey
+--- PASS: TestPatternFlowPfcPauseSrcIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPauseEtherTypeIncorrectKey
+--- PASS: TestPatternFlowPfcPauseEtherTypeIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPauseControlOpCodeIncorrectKey
+--- PASS: TestPatternFlowPfcPauseControlOpCodeIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPauseClassEnableVectorIncorrectKey
+--- PASS: TestPatternFlowPfcPauseClassEnableVectorIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass0IncorrectKey
+--- PASS: TestPatternFlowPfcPausePauseClass0IncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass1IncorrectKey
+--- PASS: TestPatternFlowPfcPausePauseClass1IncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass2IncorrectKey
+--- PASS: TestPatternFlowPfcPausePauseClass2IncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass3IncorrectKey
+--- PASS: TestPatternFlowPfcPausePauseClass3IncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass4IncorrectKey
+--- PASS: TestPatternFlowPfcPausePauseClass4IncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass5IncorrectKey
+--- PASS: TestPatternFlowPfcPausePauseClass5IncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass6IncorrectKey
+--- PASS: TestPatternFlowPfcPausePauseClass6IncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass7IncorrectKey
+--- PASS: TestPatternFlowPfcPausePauseClass7IncorrectKey (0.00s)
+=== RUN   TestPatternFlowEthernetPauseDstIncorrectKey
+--- PASS: TestPatternFlowEthernetPauseDstIncorrectKey (0.00s)
+=== RUN   TestPatternFlowEthernetPauseSrcIncorrectKey
+--- PASS: TestPatternFlowEthernetPauseSrcIncorrectKey (0.00s)
+=== RUN   TestPatternFlowEthernetPauseEtherTypeIncorrectKey
+--- PASS: TestPatternFlowEthernetPauseEtherTypeIncorrectKey (0.00s)
+=== RUN   TestPatternFlowEthernetPauseControlOpCodeIncorrectKey
+--- PASS: TestPatternFlowEthernetPauseControlOpCodeIncorrectKey (0.00s)
+=== RUN   TestPatternFlowEthernetPauseTimeIncorrectKey
+--- PASS: TestPatternFlowEthernetPauseTimeIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpSrcPortIncorrectKey
+--- PASS: TestPatternFlowTcpSrcPortIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpDstPortIncorrectKey
+--- PASS: TestPatternFlowTcpDstPortIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpSeqNumIncorrectKey
+--- PASS: TestPatternFlowTcpSeqNumIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpAckNumIncorrectKey
+--- PASS: TestPatternFlowTcpAckNumIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpDataOffsetIncorrectKey
+--- PASS: TestPatternFlowTcpDataOffsetIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpEcnNsIncorrectKey
+--- PASS: TestPatternFlowTcpEcnNsIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpEcnCwrIncorrectKey
+--- PASS: TestPatternFlowTcpEcnCwrIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpEcnEchoIncorrectKey
+--- PASS: TestPatternFlowTcpEcnEchoIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpCtlUrgIncorrectKey
+--- PASS: TestPatternFlowTcpCtlUrgIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpCtlAckIncorrectKey
+--- PASS: TestPatternFlowTcpCtlAckIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpCtlPshIncorrectKey
+--- PASS: TestPatternFlowTcpCtlPshIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpCtlRstIncorrectKey
+--- PASS: TestPatternFlowTcpCtlRstIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpCtlSynIncorrectKey
+--- PASS: TestPatternFlowTcpCtlSynIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpCtlFinIncorrectKey
+--- PASS: TestPatternFlowTcpCtlFinIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpWindowIncorrectKey
+--- PASS: TestPatternFlowTcpWindowIncorrectKey (0.00s)
+=== RUN   TestPatternFlowUdpSrcPortIncorrectKey
+--- PASS: TestPatternFlowUdpSrcPortIncorrectKey (0.00s)
+=== RUN   TestPatternFlowUdpDstPortIncorrectKey
+--- PASS: TestPatternFlowUdpDstPortIncorrectKey (0.00s)
+=== RUN   TestPatternFlowUdpLengthIncorrectKey
+--- PASS: TestPatternFlowUdpLengthIncorrectKey (0.00s)
+=== RUN   TestPatternFlowUdpChecksumIncorrectKey
+--- PASS: TestPatternFlowUdpChecksumIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGreChecksumPresentIncorrectKey
+--- PASS: TestPatternFlowGreChecksumPresentIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGreReserved0IncorrectKey
+--- PASS: TestPatternFlowGreReserved0IncorrectKey (0.00s)
+=== RUN   TestPatternFlowGreVersionIncorrectKey
+--- PASS: TestPatternFlowGreVersionIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGreProtocolIncorrectKey
+--- PASS: TestPatternFlowGreProtocolIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGreChecksumIncorrectKey
+--- PASS: TestPatternFlowGreChecksumIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGreReserved1IncorrectKey
+--- PASS: TestPatternFlowGreReserved1IncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv1VersionIncorrectKey
+--- PASS: TestPatternFlowGtpv1VersionIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv1ProtocolTypeIncorrectKey
+--- PASS: TestPatternFlowGtpv1ProtocolTypeIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv1ReservedIncorrectKey
+--- PASS: TestPatternFlowGtpv1ReservedIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv1EFlagIncorrectKey
+--- PASS: TestPatternFlowGtpv1EFlagIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv1SFlagIncorrectKey
+--- PASS: TestPatternFlowGtpv1SFlagIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv1PnFlagIncorrectKey
+--- PASS: TestPatternFlowGtpv1PnFlagIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv1MessageTypeIncorrectKey
+--- PASS: TestPatternFlowGtpv1MessageTypeIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv1MessageLengthIncorrectKey
+--- PASS: TestPatternFlowGtpv1MessageLengthIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv1TeidIncorrectKey
+--- PASS: TestPatternFlowGtpv1TeidIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv1SquenceNumberIncorrectKey
+--- PASS: TestPatternFlowGtpv1SquenceNumberIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv1NPduNumberIncorrectKey
+--- PASS: TestPatternFlowGtpv1NPduNumberIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv1NextExtensionHeaderTypeIncorrectKey
+--- PASS: TestPatternFlowGtpv1NextExtensionHeaderTypeIncorrectKey (0.00s)
+=== RUN   TestFlowGtpExtensionIncorrectKey
+--- PASS: TestFlowGtpExtensionIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv2VersionIncorrectKey
+--- PASS: TestPatternFlowGtpv2VersionIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv2PiggybackingFlagIncorrectKey
+--- PASS: TestPatternFlowGtpv2PiggybackingFlagIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv2TeidFlagIncorrectKey
+--- PASS: TestPatternFlowGtpv2TeidFlagIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv2Spare1IncorrectKey
+--- PASS: TestPatternFlowGtpv2Spare1IncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv2MessageTypeIncorrectKey
+--- PASS: TestPatternFlowGtpv2MessageTypeIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv2MessageLengthIncorrectKey
+--- PASS: TestPatternFlowGtpv2MessageLengthIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv2TeidIncorrectKey
+--- PASS: TestPatternFlowGtpv2TeidIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv2SequenceNumberIncorrectKey
+--- PASS: TestPatternFlowGtpv2SequenceNumberIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv2Spare2IncorrectKey
+--- PASS: TestPatternFlowGtpv2Spare2IncorrectKey (0.00s)
+=== RUN   TestPatternFlowArpHardwareTypeIncorrectKey
+--- PASS: TestPatternFlowArpHardwareTypeIncorrectKey (0.00s)
+=== RUN   TestPatternFlowArpProtocolTypeIncorrectKey
+--- PASS: TestPatternFlowArpProtocolTypeIncorrectKey (0.00s)
+=== RUN   TestPatternFlowArpHardwareLengthIncorrectKey
+--- PASS: TestPatternFlowArpHardwareLengthIncorrectKey (0.00s)
+=== RUN   TestPatternFlowArpProtocolLengthIncorrectKey
+--- PASS: TestPatternFlowArpProtocolLengthIncorrectKey (0.00s)
+=== RUN   TestPatternFlowArpOperationIncorrectKey
+--- PASS: TestPatternFlowArpOperationIncorrectKey (0.00s)
+=== RUN   TestPatternFlowArpSenderHardwareAddrIncorrectKey
+--- PASS: TestPatternFlowArpSenderHardwareAddrIncorrectKey (0.00s)
+=== RUN   TestPatternFlowArpSenderProtocolAddrIncorrectKey
+--- PASS: TestPatternFlowArpSenderProtocolAddrIncorrectKey (0.00s)
+=== RUN   TestPatternFlowArpTargetHardwareAddrIncorrectKey
+--- PASS: TestPatternFlowArpTargetHardwareAddrIncorrectKey (0.00s)
+=== RUN   TestPatternFlowArpTargetProtocolAddrIncorrectKey
+--- PASS: TestPatternFlowArpTargetProtocolAddrIncorrectKey (0.00s)
+=== RUN   TestFlowIcmpEchoIncorrectKey
+--- PASS: TestFlowIcmpEchoIncorrectKey (0.00s)
+=== RUN   TestFlowIcmpv6EchoIncorrectKey
+--- PASS: TestFlowIcmpv6EchoIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPppAddressIncorrectKey
+--- PASS: TestPatternFlowPppAddressIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPppControlIncorrectKey
+--- PASS: TestPatternFlowPppControlIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPppProtocolTypeIncorrectKey
+--- PASS: TestPatternFlowPppProtocolTypeIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIgmpv1VersionIncorrectKey
+--- PASS: TestPatternFlowIgmpv1VersionIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIgmpv1TypeIncorrectKey
+--- PASS: TestPatternFlowIgmpv1TypeIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIgmpv1UnusedIncorrectKey
+--- PASS: TestPatternFlowIgmpv1UnusedIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIgmpv1ChecksumIncorrectKey
+--- PASS: TestPatternFlowIgmpv1ChecksumIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIgmpv1GroupAddressIncorrectKey
+--- PASS: TestPatternFlowIgmpv1GroupAddressIncorrectKey (0.00s)
+=== RUN   TestFlowDelayIncorrectKey
+--- PASS: TestFlowDelayIncorrectKey (0.00s)
+=== RUN   TestFlowDurationInterBurstGapIncorrectKey
+--- PASS: TestFlowDurationInterBurstGapIncorrectKey (0.00s)
+=== RUN   TestLinkStatepriorityBandwidthsIncorrectKey
+--- PASS: TestLinkStatepriorityBandwidthsIncorrectKey (0.00s)
+=== RUN   TestBgpAdvancedIncorrectKey
+--- PASS: TestBgpAdvancedIncorrectKey (0.00s)
+=== RUN   TestBgpCapabilityIncorrectKey
+--- PASS: TestBgpCapabilityIncorrectKey (0.00s)
+=== RUN   TestBgpV4RouteRangeIncorrectKey
+--- PASS: TestBgpV4RouteRangeIncorrectKey (0.00s)
+=== RUN   TestBgpV6RouteRangeIncorrectKey
+--- PASS: TestBgpV6RouteRangeIncorrectKey (0.00s)
+=== RUN   TestBgpSrteV4PolicyIncorrectKey
+--- PASS: TestBgpSrteV4PolicyIncorrectKey (0.00s)
+=== RUN   TestBgpSrteV6PolicyIncorrectKey
+--- PASS: TestBgpSrteV6PolicyIncorrectKey (0.00s)
+=== RUN   TestBgpV6SegmentRoutingIncorrectKey
+--- PASS: TestBgpV6SegmentRoutingIncorrectKey (0.00s)
+=== RUN   TestPatternFlowEthernetDstCounterIncorrectKey
+--- PASS: TestPatternFlowEthernetDstCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowEthernetSrcCounterIncorrectKey
+--- PASS: TestPatternFlowEthernetSrcCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowEthernetEtherTypeCounterIncorrectKey
+--- PASS: TestPatternFlowEthernetEtherTypeCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowEthernetPfcQueueCounterIncorrectKey
+--- PASS: TestPatternFlowEthernetPfcQueueCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowVlanPriorityCounterIncorrectKey
+--- PASS: TestPatternFlowVlanPriorityCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowVlanCfiCounterIncorrectKey
+--- PASS: TestPatternFlowVlanCfiCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowVlanIdCounterIncorrectKey
+--- PASS: TestPatternFlowVlanIdCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowVlanTpidCounterIncorrectKey
+--- PASS: TestPatternFlowVlanTpidCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowVxlanFlagsCounterIncorrectKey
+--- PASS: TestPatternFlowVxlanFlagsCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowVxlanReserved0CounterIncorrectKey
+--- PASS: TestPatternFlowVxlanReserved0CounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowVxlanVniCounterIncorrectKey
+--- PASS: TestPatternFlowVxlanVniCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowVxlanReserved1CounterIncorrectKey
+--- PASS: TestPatternFlowVxlanReserved1CounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4VersionCounterIncorrectKey
+--- PASS: TestPatternFlowIpv4VersionCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4HeaderLengthCounterIncorrectKey
+--- PASS: TestPatternFlowIpv4HeaderLengthCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4PriorityRawIncorrectKey
+--- PASS: TestPatternFlowIpv4PriorityRawIncorrectKey (0.00s)
+=== RUN   TestFlowIpv4TosIncorrectKey
+--- PASS: TestFlowIpv4TosIncorrectKey (0.00s)
+=== RUN   TestFlowIpv4DscpIncorrectKey
+--- PASS: TestFlowIpv4DscpIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4TotalLengthCounterIncorrectKey
+--- PASS: TestPatternFlowIpv4TotalLengthCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4IdentificationCounterIncorrectKey
+--- PASS: TestPatternFlowIpv4IdentificationCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4ReservedCounterIncorrectKey
+--- PASS: TestPatternFlowIpv4ReservedCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4DontFragmentCounterIncorrectKey
+--- PASS: TestPatternFlowIpv4DontFragmentCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4MoreFragmentsCounterIncorrectKey
+--- PASS: TestPatternFlowIpv4MoreFragmentsCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4FragmentOffsetCounterIncorrectKey
+--- PASS: TestPatternFlowIpv4FragmentOffsetCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4TimeToLiveCounterIncorrectKey
+--- PASS: TestPatternFlowIpv4TimeToLiveCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4ProtocolCounterIncorrectKey
+--- PASS: TestPatternFlowIpv4ProtocolCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4SrcCounterIncorrectKey
+--- PASS: TestPatternFlowIpv4SrcCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4DstCounterIncorrectKey
+--- PASS: TestPatternFlowIpv4DstCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv6VersionCounterIncorrectKey
+--- PASS: TestPatternFlowIpv6VersionCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv6TrafficClassCounterIncorrectKey
+--- PASS: TestPatternFlowIpv6TrafficClassCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv6FlowLabelCounterIncorrectKey
+--- PASS: TestPatternFlowIpv6FlowLabelCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv6PayloadLengthCounterIncorrectKey
+--- PASS: TestPatternFlowIpv6PayloadLengthCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv6NextHeaderCounterIncorrectKey
+--- PASS: TestPatternFlowIpv6NextHeaderCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv6HopLimitCounterIncorrectKey
+--- PASS: TestPatternFlowIpv6HopLimitCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv6SrcCounterIncorrectKey
+--- PASS: TestPatternFlowIpv6SrcCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv6DstCounterIncorrectKey
+--- PASS: TestPatternFlowIpv6DstCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPauseDstCounterIncorrectKey
+--- PASS: TestPatternFlowPfcPauseDstCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPauseSrcCounterIncorrectKey
+--- PASS: TestPatternFlowPfcPauseSrcCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPauseEtherTypeCounterIncorrectKey
+--- PASS: TestPatternFlowPfcPauseEtherTypeCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPauseControlOpCodeCounterIncorrectKey
+--- PASS: TestPatternFlowPfcPauseControlOpCodeCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPauseClassEnableVectorCounterIncorrectKey
+--- PASS: TestPatternFlowPfcPauseClassEnableVectorCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass0CounterIncorrectKey
+--- PASS: TestPatternFlowPfcPausePauseClass0CounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass1CounterIncorrectKey
+--- PASS: TestPatternFlowPfcPausePauseClass1CounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass2CounterIncorrectKey
+--- PASS: TestPatternFlowPfcPausePauseClass2CounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass3CounterIncorrectKey
+--- PASS: TestPatternFlowPfcPausePauseClass3CounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass4CounterIncorrectKey
+--- PASS: TestPatternFlowPfcPausePauseClass4CounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass5CounterIncorrectKey
+--- PASS: TestPatternFlowPfcPausePauseClass5CounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass6CounterIncorrectKey
+--- PASS: TestPatternFlowPfcPausePauseClass6CounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPfcPausePauseClass7CounterIncorrectKey
+--- PASS: TestPatternFlowPfcPausePauseClass7CounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowEthernetPauseDstCounterIncorrectKey
+--- PASS: TestPatternFlowEthernetPauseDstCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowEthernetPauseSrcCounterIncorrectKey
+--- PASS: TestPatternFlowEthernetPauseSrcCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowEthernetPauseEtherTypeCounterIncorrectKey
+--- PASS: TestPatternFlowEthernetPauseEtherTypeCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowEthernetPauseControlOpCodeCounterIncorrectKey
+--- PASS: TestPatternFlowEthernetPauseControlOpCodeCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowEthernetPauseTimeCounterIncorrectKey
+--- PASS: TestPatternFlowEthernetPauseTimeCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpSrcPortCounterIncorrectKey
+--- PASS: TestPatternFlowTcpSrcPortCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpDstPortCounterIncorrectKey
+--- PASS: TestPatternFlowTcpDstPortCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpSeqNumCounterIncorrectKey
+--- PASS: TestPatternFlowTcpSeqNumCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpAckNumCounterIncorrectKey
+--- PASS: TestPatternFlowTcpAckNumCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpDataOffsetCounterIncorrectKey
+--- PASS: TestPatternFlowTcpDataOffsetCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpEcnNsCounterIncorrectKey
+--- PASS: TestPatternFlowTcpEcnNsCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpEcnCwrCounterIncorrectKey
+--- PASS: TestPatternFlowTcpEcnCwrCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpEcnEchoCounterIncorrectKey
+--- PASS: TestPatternFlowTcpEcnEchoCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpCtlUrgCounterIncorrectKey
+--- PASS: TestPatternFlowTcpCtlUrgCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpCtlAckCounterIncorrectKey
+--- PASS: TestPatternFlowTcpCtlAckCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpCtlPshCounterIncorrectKey
+--- PASS: TestPatternFlowTcpCtlPshCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpCtlRstCounterIncorrectKey
+--- PASS: TestPatternFlowTcpCtlRstCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpCtlSynCounterIncorrectKey
+--- PASS: TestPatternFlowTcpCtlSynCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpCtlFinCounterIncorrectKey
+--- PASS: TestPatternFlowTcpCtlFinCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowTcpWindowCounterIncorrectKey
+--- PASS: TestPatternFlowTcpWindowCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowUdpSrcPortCounterIncorrectKey
+--- PASS: TestPatternFlowUdpSrcPortCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowUdpDstPortCounterIncorrectKey
+--- PASS: TestPatternFlowUdpDstPortCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowUdpLengthCounterIncorrectKey
+--- PASS: TestPatternFlowUdpLengthCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGreChecksumPresentCounterIncorrectKey
+--- PASS: TestPatternFlowGreChecksumPresentCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGreReserved0CounterIncorrectKey
+--- PASS: TestPatternFlowGreReserved0CounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGreVersionCounterIncorrectKey
+--- PASS: TestPatternFlowGreVersionCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGreProtocolCounterIncorrectKey
+--- PASS: TestPatternFlowGreProtocolCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGreReserved1CounterIncorrectKey
+--- PASS: TestPatternFlowGreReserved1CounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv1VersionCounterIncorrectKey
+--- PASS: TestPatternFlowGtpv1VersionCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv1ProtocolTypeCounterIncorrectKey
+--- PASS: TestPatternFlowGtpv1ProtocolTypeCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv1ReservedCounterIncorrectKey
+--- PASS: TestPatternFlowGtpv1ReservedCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv1EFlagCounterIncorrectKey
+--- PASS: TestPatternFlowGtpv1EFlagCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv1SFlagCounterIncorrectKey
+--- PASS: TestPatternFlowGtpv1SFlagCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv1PnFlagCounterIncorrectKey
+--- PASS: TestPatternFlowGtpv1PnFlagCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv1MessageTypeCounterIncorrectKey
+--- PASS: TestPatternFlowGtpv1MessageTypeCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv1MessageLengthCounterIncorrectKey
+--- PASS: TestPatternFlowGtpv1MessageLengthCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv1TeidCounterIncorrectKey
+--- PASS: TestPatternFlowGtpv1TeidCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv1SquenceNumberCounterIncorrectKey
+--- PASS: TestPatternFlowGtpv1SquenceNumberCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv1NPduNumberCounterIncorrectKey
+--- PASS: TestPatternFlowGtpv1NPduNumberCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv1NextExtensionHeaderTypeCounterIncorrectKey
+--- PASS: TestPatternFlowGtpv1NextExtensionHeaderTypeCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpExtensionExtensionLengthIncorrectKey
+--- PASS: TestPatternFlowGtpExtensionExtensionLengthIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpExtensionContentsIncorrectKey
+--- PASS: TestPatternFlowGtpExtensionContentsIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpExtensionNextExtensionHeaderIncorrectKey
+--- PASS: TestPatternFlowGtpExtensionNextExtensionHeaderIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv2VersionCounterIncorrectKey
+--- PASS: TestPatternFlowGtpv2VersionCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv2PiggybackingFlagCounterIncorrectKey
+--- PASS: TestPatternFlowGtpv2PiggybackingFlagCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv2TeidFlagCounterIncorrectKey
+--- PASS: TestPatternFlowGtpv2TeidFlagCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv2Spare1CounterIncorrectKey
+--- PASS: TestPatternFlowGtpv2Spare1CounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv2MessageTypeCounterIncorrectKey
+--- PASS: TestPatternFlowGtpv2MessageTypeCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv2MessageLengthCounterIncorrectKey
+--- PASS: TestPatternFlowGtpv2MessageLengthCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv2TeidCounterIncorrectKey
+--- PASS: TestPatternFlowGtpv2TeidCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv2SequenceNumberCounterIncorrectKey
+--- PASS: TestPatternFlowGtpv2SequenceNumberCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpv2Spare2CounterIncorrectKey
+--- PASS: TestPatternFlowGtpv2Spare2CounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowArpHardwareTypeCounterIncorrectKey
+--- PASS: TestPatternFlowArpHardwareTypeCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowArpProtocolTypeCounterIncorrectKey
+--- PASS: TestPatternFlowArpProtocolTypeCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowArpHardwareLengthCounterIncorrectKey
+--- PASS: TestPatternFlowArpHardwareLengthCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowArpProtocolLengthCounterIncorrectKey
+--- PASS: TestPatternFlowArpProtocolLengthCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowArpOperationCounterIncorrectKey
+--- PASS: TestPatternFlowArpOperationCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowArpSenderHardwareAddrCounterIncorrectKey
+--- PASS: TestPatternFlowArpSenderHardwareAddrCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowArpSenderProtocolAddrCounterIncorrectKey
+--- PASS: TestPatternFlowArpSenderProtocolAddrCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowArpTargetHardwareAddrCounterIncorrectKey
+--- PASS: TestPatternFlowArpTargetHardwareAddrCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowArpTargetProtocolAddrCounterIncorrectKey
+--- PASS: TestPatternFlowArpTargetProtocolAddrCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIcmpEchoTypeIncorrectKey
+--- PASS: TestPatternFlowIcmpEchoTypeIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIcmpEchoCodeIncorrectKey
+--- PASS: TestPatternFlowIcmpEchoCodeIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIcmpEchoChecksumIncorrectKey
+--- PASS: TestPatternFlowIcmpEchoChecksumIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIcmpEchoIdentifierIncorrectKey
+--- PASS: TestPatternFlowIcmpEchoIdentifierIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIcmpEchoSequenceNumberIncorrectKey
+--- PASS: TestPatternFlowIcmpEchoSequenceNumberIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIcmpv6EchoTypeIncorrectKey
+--- PASS: TestPatternFlowIcmpv6EchoTypeIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIcmpv6EchoCodeIncorrectKey
+--- PASS: TestPatternFlowIcmpv6EchoCodeIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIcmpv6EchoIdentifierIncorrectKey
+--- PASS: TestPatternFlowIcmpv6EchoIdentifierIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIcmpv6EchoSequenceNumberIncorrectKey
+--- PASS: TestPatternFlowIcmpv6EchoSequenceNumberIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIcmpv6EchoChecksumIncorrectKey
+--- PASS: TestPatternFlowIcmpv6EchoChecksumIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPppAddressCounterIncorrectKey
+--- PASS: TestPatternFlowPppAddressCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPppControlCounterIncorrectKey
+--- PASS: TestPatternFlowPppControlCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowPppProtocolTypeCounterIncorrectKey
+--- PASS: TestPatternFlowPppProtocolTypeCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIgmpv1VersionCounterIncorrectKey
+--- PASS: TestPatternFlowIgmpv1VersionCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIgmpv1TypeCounterIncorrectKey
+--- PASS: TestPatternFlowIgmpv1TypeCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIgmpv1UnusedCounterIncorrectKey
+--- PASS: TestPatternFlowIgmpv1UnusedCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIgmpv1GroupAddressCounterIncorrectKey
+--- PASS: TestPatternFlowIgmpv1GroupAddressCounterIncorrectKey (0.00s)
+=== RUN   TestBgpRouteAdvancedIncorrectKey
+--- PASS: TestBgpRouteAdvancedIncorrectKey (0.00s)
+=== RUN   TestBgpCommunityIncorrectKey
+--- PASS: TestBgpCommunityIncorrectKey (0.00s)
+=== RUN   TestBgpAsPathIncorrectKey
+--- PASS: TestBgpAsPathIncorrectKey (0.00s)
+=== RUN   TestBgpAddPathIncorrectKey
+--- PASS: TestBgpAddPathIncorrectKey (0.00s)
+=== RUN   TestBgpExtCommunityIncorrectKey
+--- PASS: TestBgpExtCommunityIncorrectKey (0.00s)
+=== RUN   TestBgpSrteV4TunnelTlvIncorrectKey
+--- PASS: TestBgpSrteV4TunnelTlvIncorrectKey (0.00s)
+=== RUN   TestBgpSrteV6TunnelTlvIncorrectKey
+--- PASS: TestBgpSrteV6TunnelTlvIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4PriorityRawCounterIncorrectKey
+--- PASS: TestPatternFlowIpv4PriorityRawCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4TosPrecedenceIncorrectKey
+--- PASS: TestPatternFlowIpv4TosPrecedenceIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4TosDelayIncorrectKey
+--- PASS: TestPatternFlowIpv4TosDelayIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4TosThroughputIncorrectKey
+--- PASS: TestPatternFlowIpv4TosThroughputIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4TosReliabilityIncorrectKey
+--- PASS: TestPatternFlowIpv4TosReliabilityIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4TosMonetaryIncorrectKey
+--- PASS: TestPatternFlowIpv4TosMonetaryIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4TosUnusedIncorrectKey
+--- PASS: TestPatternFlowIpv4TosUnusedIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4DscpPhbIncorrectKey
+--- PASS: TestPatternFlowIpv4DscpPhbIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4DscpEcnIncorrectKey
+--- PASS: TestPatternFlowIpv4DscpEcnIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpExtensionExtensionLengthCounterIncorrectKey
+--- PASS: TestPatternFlowGtpExtensionExtensionLengthCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpExtensionContentsCounterIncorrectKey
+--- PASS: TestPatternFlowGtpExtensionContentsCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowGtpExtensionNextExtensionHeaderCounterIncorrectKey
+--- PASS: TestPatternFlowGtpExtensionNextExtensionHeaderCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIcmpEchoTypeCounterIncorrectKey
+--- PASS: TestPatternFlowIcmpEchoTypeCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIcmpEchoCodeCounterIncorrectKey
+--- PASS: TestPatternFlowIcmpEchoCodeCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIcmpEchoIdentifierCounterIncorrectKey
+--- PASS: TestPatternFlowIcmpEchoIdentifierCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIcmpEchoSequenceNumberCounterIncorrectKey
+--- PASS: TestPatternFlowIcmpEchoSequenceNumberCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIcmpv6EchoTypeCounterIncorrectKey
+--- PASS: TestPatternFlowIcmpv6EchoTypeCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIcmpv6EchoCodeCounterIncorrectKey
+--- PASS: TestPatternFlowIcmpv6EchoCodeCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIcmpv6EchoIdentifierCounterIncorrectKey
+--- PASS: TestPatternFlowIcmpv6EchoIdentifierCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIcmpv6EchoSequenceNumberCounterIncorrectKey
+--- PASS: TestPatternFlowIcmpv6EchoSequenceNumberCounterIncorrectKey (0.00s)
+=== RUN   TestBgpAsPathSegmentIncorrectKey
+--- PASS: TestBgpAsPathSegmentIncorrectKey (0.00s)
+=== RUN   TestBgpSrteRemoteEndpointSubTlvIncorrectKey
+--- PASS: TestBgpSrteRemoteEndpointSubTlvIncorrectKey (0.00s)
+=== RUN   TestBgpSrteColorSubTlvIncorrectKey
+--- PASS: TestBgpSrteColorSubTlvIncorrectKey (0.00s)
+=== RUN   TestBgpSrteBindingSubTlvIncorrectKey
+--- PASS: TestBgpSrteBindingSubTlvIncorrectKey (0.00s)
+=== RUN   TestBgpSrtePreferenceSubTlvIncorrectKey
+--- PASS: TestBgpSrtePreferenceSubTlvIncorrectKey (0.00s)
+=== RUN   TestBgpSrtePolicyPrioritySubTlvIncorrectKey
+--- PASS: TestBgpSrtePolicyPrioritySubTlvIncorrectKey (0.00s)
+=== RUN   TestBgpSrtePolicyNameSubTlvIncorrectKey
+--- PASS: TestBgpSrtePolicyNameSubTlvIncorrectKey (0.00s)
+=== RUN   TestBgpSrteExplicitNullLabelPolicySubTlvIncorrectKey
+--- PASS: TestBgpSrteExplicitNullLabelPolicySubTlvIncorrectKey (0.00s)
+=== RUN   TestBgpSrteSegmentListIncorrectKey
+--- PASS: TestBgpSrteSegmentListIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4TosPrecedenceCounterIncorrectKey
+--- PASS: TestPatternFlowIpv4TosPrecedenceCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4TosDelayCounterIncorrectKey
+--- PASS: TestPatternFlowIpv4TosDelayCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4TosThroughputCounterIncorrectKey
+--- PASS: TestPatternFlowIpv4TosThroughputCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4TosReliabilityCounterIncorrectKey
+--- PASS: TestPatternFlowIpv4TosReliabilityCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4TosMonetaryCounterIncorrectKey
+--- PASS: TestPatternFlowIpv4TosMonetaryCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4TosUnusedCounterIncorrectKey
+--- PASS: TestPatternFlowIpv4TosUnusedCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4DscpPhbCounterIncorrectKey
+--- PASS: TestPatternFlowIpv4DscpPhbCounterIncorrectKey (0.00s)
+=== RUN   TestPatternFlowIpv4DscpEcnCounterIncorrectKey
+--- PASS: TestPatternFlowIpv4DscpEcnCounterIncorrectKey (0.00s)
+=== RUN   TestBgpSrteSegmentIncorrectKey
+--- PASS: TestBgpSrteSegmentIncorrectKey (0.00s)
+=== RUN   TestBgpSrteSegmentATypeSubTlvIncorrectKey
+--- PASS: TestBgpSrteSegmentATypeSubTlvIncorrectKey (0.00s)
+=== RUN   TestBgpSrteSegmentBTypeSubTlvIncorrectKey
+--- PASS: TestBgpSrteSegmentBTypeSubTlvIncorrectKey (0.00s)
+=== RUN   TestBgpSrteSegmentCTypeSubTlvIncorrectKey
+--- PASS: TestBgpSrteSegmentCTypeSubTlvIncorrectKey (0.00s)
+=== RUN   TestBgpSrteSegmentDTypeSubTlvIncorrectKey
+--- PASS: TestBgpSrteSegmentDTypeSubTlvIncorrectKey (0.00s)
+=== RUN   TestBgpSrteSegmentETypeSubTlvIncorrectKey
+--- PASS: TestBgpSrteSegmentETypeSubTlvIncorrectKey (0.00s)
+=== RUN   TestBgpSrteSegmentFTypeSubTlvIncorrectKey
+--- PASS: TestBgpSrteSegmentFTypeSubTlvIncorrectKey (0.00s)
+=== RUN   TestBgpSrteSegmentGTypeSubTlvIncorrectKey
+--- PASS: TestBgpSrteSegmentGTypeSubTlvIncorrectKey (0.00s)
+=== RUN   TestBgpSrteSegmentHTypeSubTlvIncorrectKey
+--- PASS: TestBgpSrteSegmentHTypeSubTlvIncorrectKey (0.00s)
+=== RUN   TestBgpSrteSegmentITypeSubTlvIncorrectKey
+--- PASS: TestBgpSrteSegmentITypeSubTlvIncorrectKey (0.00s)
+=== RUN   TestBgpSrteSegmentJTypeSubTlvIncorrectKey
+--- PASS: TestBgpSrteSegmentJTypeSubTlvIncorrectKey (0.00s)
+=== RUN   TestBgpSrteSegmentKTypeSubTlvIncorrectKey
+--- PASS: TestBgpSrteSegmentKTypeSubTlvIncorrectKey (0.00s)
+=== RUN   TestBgpSrteSRv6SIDEndpointBehaviorAndStructureIncorrectKey
+--- PASS: TestBgpSrteSRv6SIDEndpointBehaviorAndStructureIncorrectKey (0.00s)
+=== RUN   TestBgpSrteSrMplsSidIncorrectKey
+--- PASS: TestBgpSrteSrMplsSidIncorrectKey (0.00s)
+=== RUN   TestPortRequired
+--- PASS: TestPortRequired (0.00s)
+=== RUN   TestLagRequired
+--- PASS: TestLagRequired (0.00s)
+=== RUN   TestLayer1Required
+--- PASS: TestLayer1Required (0.00s)
+=== RUN   TestCaptureRequired
+[WARNING]: Capture is under review, Information TBD
+[WARNING]: Capture is under review, Information TBD
+[WARNING]: Capture is under review, Information TBD
+--- PASS: TestCaptureRequired (0.00s)
+=== RUN   TestDeviceRequired
+--- PASS: TestDeviceRequired (0.00s)
+=== RUN   TestFlowRequired
+--- PASS: TestFlowRequired (0.00s)
+=== RUN   TestTransmitStateRequired
+[WARNING]: TransmitState is deprecated, Please use `StateTrafficFlowTransmit` instead
+[WARNING]: TransmitState is deprecated, Please use `StateTrafficFlowTransmit` instead
+[WARNING]: TransmitState is deprecated, Please use `StateTrafficFlowTransmit` instead
+--- PASS: TestTransmitStateRequired (0.00s)
+=== RUN   TestLinkStateRequired
+[WARNING]: LinkState is deprecated, Please use `StatePortLink` instead
+[WARNING]: LinkState is deprecated, Please use `StatePortLink` instead
+[WARNING]: LinkState is deprecated, Please use `StatePortLink` instead
+--- PASS: TestLinkStateRequired (0.00s)
+=== RUN   TestCaptureStateRequired
+[WARNING]: CaptureState is deprecated, Please use `StatePortCapture` instead
+[WARNING]: CaptureState is deprecated, Please use `StatePortCapture` instead
+[WARNING]: CaptureState is deprecated, Please use `StatePortCapture` instead
+--- PASS: TestCaptureStateRequired (0.00s)
+=== RUN   TestRouteStateRequired
+[WARNING]: RouteState is deprecated, Please use `StateProtocolRoute` instead
+[WARNING]: RouteState is deprecated, Please use `StateProtocolRoute` instead
+[WARNING]: RouteState is deprecated, Please use `StateProtocolRoute` instead
+--- PASS: TestRouteStateRequired (0.00s)
+=== RUN   TestProtocolStateRequired
+[WARNING]: ProtocolState is deprecated, Please use `StateProtocolAll` instead
+[WARNING]: ProtocolState is deprecated, Please use `StateProtocolAll` instead
+[WARNING]: ProtocolState is deprecated, Please use `StateProtocolAll` instead
+--- PASS: TestProtocolStateRequired (0.00s)
+=== RUN   TestCaptureRequestRequired
+--- PASS: TestCaptureRequestRequired (0.00s)
+=== RUN   TestLagPortRequired
+--- PASS: TestLagPortRequired (0.00s)
+=== RUN   TestDeviceEthernetRequired
+--- PASS: TestDeviceEthernetRequired (0.00s)
+=== RUN   TestDeviceIpv4LoopbackRequired
+--- PASS: TestDeviceIpv4LoopbackRequired (0.00s)
+=== RUN   TestDeviceIpv6LoopbackRequired
+--- PASS: TestDeviceIpv6LoopbackRequired (0.00s)
+=== RUN   TestDeviceIsisRouterRequired
+--- PASS: TestDeviceIsisRouterRequired (0.00s)
+=== RUN   TestDeviceBgpRouterRequired
+--- PASS: TestDeviceBgpRouterRequired (0.00s)
+=== RUN   TestNeighborsv4StateRequired
+--- PASS: TestNeighborsv4StateRequired (0.00s)
+=== RUN   TestNeighborsv6StateRequired
+--- PASS: TestNeighborsv6StateRequired (0.00s)
+=== RUN   TestDeviceEthernetBaseRequired
+--- PASS: TestDeviceEthernetBaseRequired (0.00s)
+=== RUN   TestDeviceIpv4Required
+--- PASS: TestDeviceIpv4Required (0.00s)
+=== RUN   TestDeviceIpv6Required
+--- PASS: TestDeviceIpv6Required (0.00s)
+=== RUN   TestDeviceVlanRequired
+--- PASS: TestDeviceVlanRequired (0.00s)
+=== RUN   TestIsisInterfaceRequired
+--- PASS: TestIsisInterfaceRequired (0.00s)
+=== RUN   TestIsisV4RouteRangeRequired
+--- PASS: TestIsisV4RouteRangeRequired (0.00s)
+=== RUN   TestIsisV6RouteRangeRequired
+--- PASS: TestIsisV6RouteRangeRequired (0.00s)
+=== RUN   TestBgpV4InterfaceRequired
+--- PASS: TestBgpV4InterfaceRequired (0.00s)
+=== RUN   TestBgpV6InterfaceRequired
+--- PASS: TestBgpV6InterfaceRequired (0.00s)
+=== RUN   TestFlowPortRequired
+--- PASS: TestFlowPortRequired (0.00s)
+=== RUN   TestFlowCustomRequired
+--- PASS: TestFlowCustomRequired (0.00s)
+=== RUN   TestIsisInterfaceAuthenticationRequired
+--- PASS: TestIsisInterfaceAuthenticationRequired (0.00s)
+=== RUN   TestIsisAuthenticationBaseRequired
+--- PASS: TestIsisAuthenticationBaseRequired (0.00s)
+=== RUN   TestV4RouteAddressRequired
+--- PASS: TestV4RouteAddressRequired (0.00s)
+=== RUN   TestV6RouteAddressRequired
+--- PASS: TestV6RouteAddressRequired (0.00s)
+=== RUN   TestBgpV4PeerRequired
+--- PASS: TestBgpV4PeerRequired (0.00s)
+=== RUN   TestBgpV6PeerRequired
+--- PASS: TestBgpV6PeerRequired (0.00s)
+=== RUN   TestBgpV4RouteRangeRequired
+--- PASS: TestBgpV4RouteRangeRequired (0.00s)
+=== RUN   TestBgpV6RouteRangeRequired
+--- PASS: TestBgpV6RouteRangeRequired (0.00s)
+=== RUN   TestBgpSrteV4PolicyRequired
+--- PASS: TestBgpSrteV4PolicyRequired (0.00s)
+=== RUN   TestBgpSrteV6PolicyRequired
+--- PASS: TestBgpSrteV6PolicyRequired (0.00s)
+=== RUN   TestBgpSrteV4TunnelTlvRequired
+--- PASS: TestBgpSrteV4TunnelTlvRequired (0.00s)
+=== RUN   TestBgpSrteV6TunnelTlvRequired
+--- PASS: TestBgpSrteV6TunnelTlvRequired (0.00s)
+=== RUN   TestBgpSrteSegmentListRequired
+--- PASS: TestBgpSrteSegmentListRequired (0.00s)
+=== RUN   TestBgpSrteSegmentRequired
+--- PASS: TestBgpSrteSegmentRequired (0.00s)
+=== RUN   TestBgpSrteSegmentBTypeSubTlvRequired
+--- PASS: TestBgpSrteSegmentBTypeSubTlvRequired (0.00s)
+=== RUN   TestBgpSrteSegmentCTypeSubTlvRequired
+--- PASS: TestBgpSrteSegmentCTypeSubTlvRequired (0.00s)
+=== RUN   TestBgpSrteSegmentDTypeSubTlvRequired
+--- PASS: TestBgpSrteSegmentDTypeSubTlvRequired (0.00s)
+=== RUN   TestBgpSrteSegmentETypeSubTlvRequired
+--- PASS: TestBgpSrteSegmentETypeSubTlvRequired (0.00s)
+=== RUN   TestBgpSrteSegmentFTypeSubTlvRequired
+--- PASS: TestBgpSrteSegmentFTypeSubTlvRequired (0.00s)
+=== RUN   TestBgpSrteSegmentGTypeSubTlvRequired
+--- PASS: TestBgpSrteSegmentGTypeSubTlvRequired (0.00s)
+=== RUN   TestBgpSrteSegmentHTypeSubTlvRequired
+--- PASS: TestBgpSrteSegmentHTypeSubTlvRequired (0.00s)
+=== RUN   TestBgpSrteSegmentITypeSubTlvRequired
+--- PASS: TestBgpSrteSegmentITypeSubTlvRequired (0.00s)
+=== RUN   TestBgpSrteSegmentJTypeSubTlvRequired
+--- PASS: TestBgpSrteSegmentJTypeSubTlvRequired (0.00s)
+=== RUN   TestBgpSrteSegmentKTypeSubTlvRequired
+--- PASS: TestBgpSrteSegmentKTypeSubTlvRequired (0.00s)
+=== RUN   TestConfigGenerated
+[WARNING]: Capture is under review, Information TBD
+[WARNING]: Capture is under review, Information TBD
+[WARNING]: Capture is under review, Information TBD
+[WARNING]: Capture is under review, Information TBD
+[WARNING]: Capture is under review, Information TBD
+[WARNING]: Capture is under review, Information TBD
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+[WARNING]: Capture is under review, Information TBD
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+[WARNING]: Capture is under review, Information TBD
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+[WARNING]: Capture is under review, Information TBD
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+[WARNING]: Capture is under review, Information TBD
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+[WARNING]: Capture is under review, Information TBD
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+[WARNING]: Capture is under review, Information TBD
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+--- PASS: TestConfigGenerated (0.21s)
+=== RUN   TestConfigGeneratedValidate
+[WARNING]: Capture is under review, Information TBD
+--- PASS: TestConfigGeneratedValidate (0.06s)
+=== RUN   TestSnappiServer
+{
+  "ports":  [
+    {
+      "location":  "location1",
+      "name":  "port1"
+    },
+    {
+      "location":  "location2",
+      "name":  "port2"
+    }
+  ],
+  "flows":  [
+    {
+      "tx_rx":  {
+        "choice":  "port",
+        "port":  {
+          "tx_name":  "port1",
+          "rx_name":  "port2"
+        }
+      },
+      "rate":  {
+        "choice":  "pps",
+        "pps":  "1000"
+      },
+      "metrics":  {
+        "enable":  true,
+        "loss":  false,
+        "timestamps":  false
+      },
+      "name":  "f1"
+    },
+    {
+      "tx_rx":  {
+        "choice":  "port",
+        "port":  {
+          "tx_name":  "port2"
+        }
+      },
+      "metrics":  {
+        "enable":  true,
+        "loss":  false,
+        "timestamps":  false
+      },
+      "name":  "f2"
+    }
+  ]
+} <nil>
+SetConfig: We need to put our business logic ...
+state :  {}
+err:  <nil>
+--- PASS: TestSnappiServer (0.00s)
+=== RUN   TestIngressEgress
+flows:
+- duration:
+    choice: fixed_packets
+    fixed_packets:
+      gap: 12
+      packets: 100
+  egress_packet:
+  - choice: ethernet
+    ethernet:
+      src:
+        choice: value
+        value: "00:00:01:01:01:44"
+  - choice: ipv4
+    ipv4:
+      src:
+        choice: value
+        value: 1.1.2.2
+  metrics:
+    enable: true
+    loss: false
+    timestamps: false
+  name: f1
+  packet:
+  - choice: ethernet
+    ethernet:
+      src:
+        choice: value
+        value: "00:00:01:01:01:01"
+  - choice: ipv4
+    ipv4:
+      src:
+        choice: value
+        value: 1.1.1.1
+  tx_rx:
+    choice: port
+    port:
+      rx_name: port2
+      tx_name: port1
+ports:
+- location: location1
+  name: port1
+- location: location2
+  name: port2
+
+--- PASS: TestIngressEgress (0.00s)
+=== RUN   TestGrpcApi
+{
+  "ports":  [
+    {
+      "location":  "location1",
+      "name":  "port1"
+    },
+    {
+      "location":  "location2",
+      "name":  "port2"
+    }
+  ],
+  "flows":  [
+    {
+      "tx_rx":  {
+        "choice":  "port",
+        "port":  {
+          "tx_name":  "port1",
+          "rx_name":  "port2"
+        }
+      },
+      "rate":  {
+        "choice":  "pps",
+        "pps":  "1000"
+      },
+      "metrics":  {
+        "enable":  true,
+        "loss":  false,
+        "timestamps":  false
+      },
+      "name":  "f1"
+    },
+    {
+      "tx_rx":  {
+        "choice":  "port",
+        "port":  {
+          "tx_name":  "port2"
+        }
+      },
+      "metrics":  {
+        "enable":  true,
+        "loss":  false,
+        "timestamps":  false
+      },
+      "name":  "f2"
+    }
+  ]
+} <nil>
+2023/04/29 16:33:59 Got config: ports:{location:"location1"  name:"port1"}  ports:{location:"location2"  name:"port2"}  flows:{tx_rx:{choice:port  port:{tx_name:"port1"  rx_name:"port2"}}  rate:{choice:pps  pps:1000}  metrics:{enable:true  loss:false  timestamps:false}  name:"f1"}  flows:{tx_rx:{choice:port  port:{tx_name:"port2"}}  metrics:{enable:true  loss:false  timestamps:false}  name:"f2"}
+--- PASS: TestGrpcApi (0.00s)
+=== RUN   TestGrpcClientConnection
+{
+  "ports":  [
+    {
+      "location":  "location1",
+      "name":  "port1"
+    },
+    {
+      "location":  "location2",
+      "name":  "port2"
+    }
+  ],
+  "flows":  [
+    {
+      "tx_rx":  {
+        "choice":  "port",
+        "port":  {
+          "tx_name":  "port1",
+          "rx_name":  "port2"
+        }
+      },
+      "rate":  {
+        "choice":  "pps",
+        "pps":  "1000"
+      },
+      "metrics":  {
+        "enable":  true,
+        "loss":  false,
+        "timestamps":  false
+      },
+      "name":  "f1"
+    },
+    {
+      "tx_rx":  {
+        "choice":  "port",
+        "port":  {
+          "tx_name":  "port2"
+        }
+      },
+      "metrics":  {
+        "enable":  true,
+        "loss":  false,
+        "timestamps":  false
+      },
+      "name":  "f2"
+    }
+  ]
+} <nil>
+2023/04/29 16:33:59 Got config: ports:{location:"location1"  name:"port1"}  ports:{location:"location2"  name:"port2"}  flows:{tx_rx:{choice:port  port:{tx_name:"port1"  rx_name:"port2"}}  rate:{choice:pps  pps:1000}  metrics:{enable:true  loss:false  timestamps:false}  name:"f1"}  flows:{tx_rx:{choice:port  port:{tx_name:"port2"}}  metrics:{enable:true  loss:false  timestamps:false}  name:"f2"}
+--- PASS: TestGrpcClientConnection (0.00s)
+=== RUN   TestHttpApi
+{
+  "ports":  [
+    {
+      "location":  "location1",
+      "name":  "port1"
+    },
+    {
+      "location":  "location2",
+      "name":  "port2"
+    }
+  ],
+  "flows":  [
+    {
+      "tx_rx":  {
+        "choice":  "port",
+        "port":  {
+          "tx_name":  "port1",
+          "rx_name":  "port2"
+        }
+      },
+      "rate":  {
+        "choice":  "pps",
+        "pps":  "1000"
+      },
+      "metrics":  {
+        "enable":  true,
+        "loss":  false,
+        "timestamps":  false
+      },
+      "name":  "f1"
+    },
+    {
+      "tx_rx":  {
+        "choice":  "port",
+        "port":  {
+          "tx_name":  "port2"
+        }
+      },
+      "metrics":  {
+        "enable":  true,
+        "loss":  false,
+        "timestamps":  false
+      },
+      "name":  "f2"
+    }
+  ]
+} <nil>
+--- PASS: TestHttpApi (0.00s)
+=== RUN   TestGrpcGetMetricsFlowResponse
+2023/04/29 16:33:59 {
+  "flow_names":  [
+    "f1",
+    "f2"
+  ]
+}flow_names:
+- f1
+- f2
+2023/04/29 16:33:59 grpc flow response :choice: port_metrics
+flow_metrics:
+- frames_tx: "100"
+--- PASS: TestGrpcGetMetricsFlowResponse (0.00s)
+=== RUN   TestHttpGetMetricsFlowResponse
+HTTP flow response : {
+  "choice":  "flow_metrics",
+  "flow_metrics":  [
+    {
+      "name":  "f1",
+      "bytes_tx":  "1000",
+      "bytes_rx":  "1000"
+    },
+    {
+      "name":  "f2",
+      "bytes_tx":  "1000",
+      "bytes_rx":  "1000"
+    }
+  ]
+}
+--- PASS: TestHttpGetMetricsFlowResponse (0.00s)
+=== RUN   TestSetNewConfig
+{
+  "ports":  [
+    {
+      "location":  "location1",
+      "name":  "port1"
+    },
+    {
+      "location":  "location2",
+      "name":  "port2"
+    }
+  ],
+  "flows":  [
+    {
+      "tx_rx":  {
+        "choice":  "port",
+        "port":  {
+          "tx_name":  "port1",
+          "rx_name":  "port2"
+        }
+      },
+      "rate":  {
+        "choice":  "pps",
+        "pps":  "1000"
+      },
+      "metrics":  {
+        "enable":  true,
+        "loss":  false,
+        "timestamps":  false
+      },
+      "name":  "f1"
+    },
+    {
+      "tx_rx":  {
+        "choice":  "port",
+        "port":  {
+          "tx_name":  "port2"
+        }
+      },
+      "metrics":  {
+        "enable":  true,
+        "loss":  false,
+        "timestamps":  false
+      },
+      "name":  "f2"
+    }
+  ]
+} <nil>
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+2023/04/29 16:33:59 Got config: ports:{location:"location1"  name:"port1"}  ports:{location:"location2"  name:"port2"}  devices:{ethernets:{port_name:"port1"  ipv4_addresses:{gateway:"10.10.0.2"  address:"10.10.0.1"  prefix:24  name:"IPv41"}  mac:"00:11:01:00:00:03"  mtu:1500  name:"Ethernet1"}  bgp:{router_id:"1.1.1.1"  ipv4_interfaces:{ipv4_name:"IPv41"  peers:{peer_address:"2.2.2.2"  as_type:ibgp  as_number:3  as_number_width:four  v4_routes:{next_hop_mode:local_ip  next_hop_address_type:ipv4  next_hop_ipv4_address:"0.0.0.0"  next_hop_ipv6_address:"::0"  name:"RR-1"}  name:"BGP-1"}}}  name:"d1"}  flows:{tx_rx:{choice:port  port:{tx_name:"port1"  rx_name:"port2"}}  rate:{choice:pps  pps:1000}  metrics:{enable:true  loss:false  timestamps:false}  name:"f1"}  flows:{tx_rx:{choice:port  port:{tx_name:"port2"}}  metrics:{enable:true  loss:false  timestamps:false}  name:"f2"}
+--- PASS: TestSetNewConfig (0.00s)
+=== RUN   TestGetMetrics400FlowResponseError
+{
+  "ports":  [
+    {
+      "location":  "location1",
+      "name":  "port1"
+    },
+    {
+      "location":  "location2",
+      "name":  "port2"
+    }
+  ],
+  "flows":  [
+    {
+      "tx_rx":  {
+        "choice":  "port",
+        "port":  {
+          "tx_name":  "port1",
+          "rx_name":  "port2"
+        }
+      },
+      "rate":  {
+        "choice":  "pps",
+        "pps":  "1000"
+      },
+      "metrics":  {
+        "enable":  true,
+        "loss":  false,
+        "timestamps":  false
+      },
+      "name":  "f1"
+    },
+    {
+      "tx_rx":  {
+        "choice":  "port",
+        "port":  {
+          "tx_name":  "port2"
+        }
+      },
+      "metrics":  {
+        "enable":  true,
+        "loss":  false,
+        "timestamps":  false
+      },
+      "name":  "f2"
+    }
+  ]
+} <nil>
+2023/04/29 16:33:59 Got config: ports:{location:"location1"  name:"port1"}  ports:{location:"location2"  name:"port2"}  flows:{tx_rx:{choice:port  port:{tx_name:"port1"  rx_name:"port2"}}  rate:{choice:pps  pps:1000}  metrics:{enable:false  loss:false  timestamps:false}  name:"f1"}  flows:{tx_rx:{choice:port  port:{tx_name:"port2"}}  metrics:{enable:true  loss:false  timestamps:false}  name:"f2"}
+--- PASS: TestGetMetrics400FlowResponseError (0.00s)
+=== RUN   TestGetMetrics500FlowResponseError
+2023/04/29 16:33:59 true
+--- PASS: TestGetMetrics500FlowResponseError (0.00s)
+=== RUN   TestGrpcGetMetricsPortResponse
+2023/04/29 16:33:59 {
+  "port_names":  [
+    "port1"
+  ]
+}port_names:
+- port1
+--- PASS: TestGrpcGetMetricsPortResponse (0.00s)
+=== RUN   TestHttpGetMetricsPortResponse
+HTTP Port Response : {
+  "choice":  "port_metrics",
+  "port_metrics":  [
+    {
+      "name":  "port1",
+      "bytes_tx":  "2000",
+      "bytes_rx":  "2000"
+    }
+  ]
+}
+--- PASS: TestHttpGetMetricsPortResponse (0.00s)
+=== RUN   TestGetMetricsPortResponseError
+{
+  "ports":  [
+    {
+      "location":  "location1",
+      "name":  "port1"
+    },
+    {
+      "location":  "location2",
+      "name":  "port2"
+    }
+  ],
+  "flows":  [
+    {
+      "tx_rx":  {
+        "choice":  "port",
+        "port":  {
+          "tx_name":  "port1",
+          "rx_name":  "port2"
+        }
+      },
+      "rate":  {
+        "choice":  "pps",
+        "pps":  "1000"
+      },
+      "metrics":  {
+        "enable":  true,
+        "loss":  false,
+        "timestamps":  false
+      },
+      "name":  "f1"
+    },
+    {
+      "tx_rx":  {
+        "choice":  "port",
+        "port":  {
+          "tx_name":  "port2"
+        }
+      },
+      "metrics":  {
+        "enable":  true,
+        "loss":  false,
+        "timestamps":  false
+      },
+      "name":  "f2"
+    }
+  ]
+} <nil>
+2023/04/29 16:33:59 Got config: ports:{location:"location1"  name:"port1"}  ports:{location:"location2"  name:"port2"}  flows:{tx_rx:{choice:port  port:{tx_name:"port1"  rx_name:"port2"}}  rate:{choice:pps  pps:1000}  metrics:{enable:false  loss:false  timestamps:false}  name:"f1"}  flows:{tx_rx:{choice:port  port:{tx_name:"port2"}}  metrics:{enable:true  loss:false  timestamps:false}  name:"f2"}
+--- PASS: TestGetMetricsPortResponseError (0.00s)
+=== RUN   TestGrpcGetMetricsBgpv4Response
+{
+  "ports":  [
+    {
+      "location":  "location1",
+      "name":  "port1"
+    },
+    {
+      "location":  "location2",
+      "name":  "port2"
+    }
+  ],
+  "flows":  [
+    {
+      "tx_rx":  {
+        "choice":  "port",
+        "port":  {
+          "tx_name":  "port1",
+          "rx_name":  "port2"
+        }
+      },
+      "rate":  {
+        "choice":  "pps",
+        "pps":  "1000"
+      },
+      "metrics":  {
+        "enable":  true,
+        "loss":  false,
+        "timestamps":  false
+      },
+      "name":  "f1"
+    },
+    {
+      "tx_rx":  {
+        "choice":  "port",
+        "port":  {
+          "tx_name":  "port2"
+        }
+      },
+      "metrics":  {
+        "enable":  true,
+        "loss":  false,
+        "timestamps":  false
+      },
+      "name":  "f2"
+    }
+  ]
+} <nil>
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+2023/04/29 16:33:59 Got config: ports:{location:"location1"  name:"port1"}  ports:{location:"location2"  name:"port2"}  devices:{ethernets:{port_name:"port1"  ipv4_addresses:{gateway:"10.10.0.2"  address:"10.10.0.1"  prefix:24  name:"IPv41"}  mac:"00:11:01:00:00:03"  mtu:1500  name:"Ethernet1"}  bgp:{router_id:"1.1.1.1"  ipv4_interfaces:{ipv4_name:"IPv41"  peers:{peer_address:"2.2.2.2"  as_type:ibgp  as_number:3  as_number_width:four  v4_routes:{next_hop_mode:local_ip  next_hop_address_type:ipv4  next_hop_ipv4_address:"0.0.0.0"  next_hop_ipv6_address:"::0"  name:"RR-1"}  name:"BGP-1"}}}  name:"d1"}  flows:{tx_rx:{choice:port  port:{tx_name:"port1"  rx_name:"port2"}}  rate:{choice:pps  pps:1000}  metrics:{enable:true  loss:false  timestamps:false}  name:"f1"}  flows:{tx_rx:{choice:port  port:{tx_name:"port2"}}  metrics:{enable:true  loss:false  timestamps:false}  name:"f2"}
+--- PASS: TestGrpcGetMetricsBgpv4Response (0.00s)
+=== RUN   TestHttpGetMetricsBgpv4Response
+2023/04/29 16:33:59 {
+  "choice":  "bgpv4_metrics",
+  "bgpv4_metrics":  [
+    {
+      "name":  "BGP-1",
+      "routes_advertised":  80
+    }
+  ]
+}<nil>
+--- PASS: TestHttpGetMetricsBgpv4Response (0.00s)
+=== RUN   TestGetMetricsBgpv4ResponseError
+2023/04/29 16:33:59 {
+  "code":  2,
+  "errors":  [
+    "d2 is not a valid BGPv4 device"
+  ]
+}
+--- PASS: TestGetMetricsBgpv4ResponseError (0.00s)
+=== RUN   TestSetTransmitStateResponse
+[WARNING]: TransmitState is deprecated, Please use `StateTrafficFlowTransmit` instead
+[WARNING]: TransmitState is deprecated, Please use `StateTrafficFlowTransmit` instead
+2023/04/29 16:33:59 {
+  "flow_names":  [
+    "f1",
+    "f2"
+  ],
+  "state":  "start"
+}flow_names:
+- f1
+- f2
+state: start
+[WARNING]: SetTransmitState api is deprecated, Please use `set_control_state` with `traffic.flow_transmit` choice instead
+[WARNING]: TransmitState is deprecated, Please use `StateTrafficFlowTransmit` instead
+--- PASS: TestSetTransmitStateResponse (0.00s)
+=== RUN   TestSetTransmitStateResponseError
+[WARNING]: SetTransmitState api is deprecated, Please use `set_control_state` with `traffic.flow_transmit` choice instead
+[WARNING]: TransmitState is deprecated, Please use `StateTrafficFlowTransmit` instead
+2023/04/29 16:33:59 {
+  "code":  2,
+  "errors":  [
+    "requested flow is not available in configured flows to start"
+  ]
+}
+--- PASS: TestSetTransmitStateResponseError (0.00s)
+=== RUN   TestSetLinkStateResponse
+[WARNING]: LinkState is deprecated, Please use `StatePortLink` instead
+[WARNING]: LinkState is deprecated, Please use `StatePortLink` instead
+2023/04/29 16:33:59 {
+  "port_names":  [
+    "port1"
+  ],
+  "state":  "down"
+}port_names:
+- port1
+state: down
+[WARNING]: SetLinkState api is deprecated, Please use `set_control_state` with `port.link` choice instead
+[WARNING]: LinkState is deprecated, Please use `StatePortLink` instead
+--- PASS: TestSetLinkStateResponse (0.00s)
+=== RUN   TestSetLinkStateResponseError
+[WARNING]: SetLinkState api is deprecated, Please use `set_control_state` with `port.link` choice instead
+[WARNING]: LinkState is deprecated, Please use `StatePortLink` instead
+2023/04/29 16:33:59 {
+  "code":  2,
+  "errors":  [
+    "requested port is not available in configured ports to do link down"
+  ]
+}
+--- PASS: TestSetLinkStateResponseError (0.00s)
+=== RUN   TestSetCaptureStateResponse
+[WARNING]: CaptureState is deprecated, Please use `StatePortCapture` instead
+[WARNING]: CaptureState is deprecated, Please use `StatePortCapture` instead
+2023/04/29 16:33:59 {
+  "port_names":  [
+    "port1"
+  ],
+  "state":  "start"
+}port_names:
+- port1
+state: start
+[WARNING]: SetCaptureState api is deprecated, Please use `set_control_state` with `port.capture` choice instead
+[WARNING]: CaptureState is deprecated, Please use `StatePortCapture` instead
+--- PASS: TestSetCaptureStateResponse (0.00s)
+=== RUN   TestSetCaptureStateResponseError
+[WARNING]: SetCaptureState api is deprecated, Please use `set_control_state` with `port.capture` choice instead
+[WARNING]: CaptureState is deprecated, Please use `StatePortCapture` instead
+2023/04/29 16:33:59 {
+  "code":  2,
+  "errors":  [
+    "requested port is not available in configured ports to start capture"
+  ]
+}
+--- PASS: TestSetCaptureStateResponseError (0.00s)
+=== RUN   TestSetRouteStateResponse
+{
+  "ports":  [
+    {
+      "location":  "location1",
+      "name":  "port1"
+    },
+    {
+      "location":  "location2",
+      "name":  "port2"
+    }
+  ],
+  "flows":  [
+    {
+      "tx_rx":  {
+        "choice":  "port",
+        "port":  {
+          "tx_name":  "port1",
+          "rx_name":  "port2"
+        }
+      },
+      "rate":  {
+        "choice":  "pps",
+        "pps":  "1000"
+      },
+      "metrics":  {
+        "enable":  true,
+        "loss":  false,
+        "timestamps":  false
+      },
+      "name":  "f1"
+    },
+    {
+      "tx_rx":  {
+        "choice":  "port",
+        "port":  {
+          "tx_name":  "port2"
+        }
+      },
+      "metrics":  {
+        "enable":  true,
+        "loss":  false,
+        "timestamps":  false
+      },
+      "name":  "f2"
+    }
+  ]
+} <nil>
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+2023/04/29 16:33:59 Got config: ports:{location:"location1"  name:"port1"}  ports:{location:"location2"  name:"port2"}  devices:{ethernets:{port_name:"port1"  ipv4_addresses:{gateway:"10.10.0.2"  address:"10.10.0.1"  prefix:24  name:"IPv41"}  mac:"00:11:01:00:00:03"  mtu:1500  name:"Ethernet1"}  bgp:{router_id:"1.1.1.1"  ipv4_interfaces:{ipv4_name:"IPv41"  peers:{peer_address:"2.2.2.2"  as_type:ibgp  as_number:3  as_number_width:four  v4_routes:{next_hop_mode:local_ip  next_hop_address_type:ipv4  next_hop_ipv4_address:"0.0.0.0"  next_hop_ipv6_address:"::0"  name:"RR-1"}  name:"BGP-1"}}}  name:"d1"}  flows:{tx_rx:{choice:port  port:{tx_name:"port1"  rx_name:"port2"}}  rate:{choice:pps  pps:1000}  metrics:{enable:true  loss:false  timestamps:false}  name:"f1"}  flows:{tx_rx:{choice:port  port:{tx_name:"port2"}}  metrics:{enable:true  loss:false  timestamps:false}  name:"f2"}
+[WARNING]: RouteState is deprecated, Please use `StateProtocolRoute` instead
+[WARNING]: RouteState is deprecated, Please use `StateProtocolRoute` instead
+2023/04/29 16:33:59 {
+  "names":  [
+    "RR-1"
+  ],
+  "state":  "advertise"
+}names:
+- RR-1
+state: advertise
+[WARNING]: SetRouteState api is deprecated, Please use `set_control_state` with `protocol.route` choice instead
+[WARNING]: RouteState is deprecated, Please use `StateProtocolRoute` instead
+--- PASS: TestSetRouteStateResponse (0.00s)
+=== RUN   TestSetRouteStateResponseError
+[WARNING]: SetRouteState api is deprecated, Please use `set_control_state` with `protocol.route` choice instead
+[WARNING]: RouteState is deprecated, Please use `StateProtocolRoute` instead
+2023/04/29 16:33:59 {
+  "code":  2,
+  "errors":  [
+    "requested route is not available in configured routes to advertise"
+  ]
+}
+--- PASS: TestSetRouteStateResponseError (0.00s)
+=== RUN   TestPorts
+--- PASS: TestPorts (0.00s)
+=== RUN   TestDevices
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+--- PASS: TestDevices (0.00s)
+=== RUN   TestFlows
+2023/04/29 16:33:59 flows:
+- duration:
+    choice: fixed_packets
+    fixed_packets:
+      delay:
+        bytes: 8
+        choice: bytes
+      gap: 2
+      packets: 10000
+  name: f1
+  packet:
+  - choice: ethernet
+    ethernet:
+      dst:
+        choice: value
+        value: 6e:d2:47:65:aa:69
+      src:
+        choice: value
+        value: a2:71:d4:59:b3:b8
+  - choice: ipv4
+    ipv4:
+      dst:
+        choice: value
+        value: 10.10.10.2
+      src:
+        choice: value
+        value: 10.10.10.1
+  - choice: udp
+    udp:
+      checksum:
+        choice: custom
+        custom: 1
+        generated: unspecified
+      dst_port:
+        choice: value
+        value: 4000
+      src_port:
+        choice: value
+        value: 3000
+  rate:
+    choice: pps
+    pps: "1000"
+  tx_rx:
+    choice: port
+    port:
+      rx_name: p2
+      tx_name: p1
+- name: f2
+  tx_rx:
+    choice: port
+    port:
+      rx_name: p2
+      tx_name: p1
+ports:
+- name: p1
+- name: p2
+<nil>
+--- PASS: TestFlows (0.00s)
+=== RUN   TestValidation
+Invalid Mac address 10.1.1.1 on DeviceEthernet.Mac
+Invalid mac addresses at indices 0 on PatternFlowEthernetSrc.Values
+Invalid ipv4 addresses at indices 0 on PatternFlowIpv4Src.Values
+Name is required field on interface Port
+Invalid Ipv4 address at 1st octet in ff.1.1.1 ipv4 on DeviceIpv4.Address
+Invalid ipv6 address 10.1.1.1 on DeviceIpv6.Gateway
+Invalid ipv6 address abcd:::abcd on DeviceIpv6.Address
+Invalid Mac address 10.1.1.1 on DeviceEthernet.Mac
+Invalid mac addresses at indices 0 on PatternFlowEthernetSrc.Values
+Invalid ipv4 addresses at indices 0 on PatternFlowIpv4Src.Values
+Invalid ipv6 addresses at indices 2 on PatternFlowIpv6Dst.Values
+    snappigo_test.go:764: 
+        	Error Trace:	/home/dipendu/git/open_traffic_generator/snappi/gosnappi/snappigo_test.go:764
+        	Error:      	"Name is required field on interface Port\nInvalid Ipv4 address at 1st octet in ff.1.1.1 ipv4 on DeviceIpv4.Address\nInvalid ipv6 address 10.1.1.1 on DeviceIpv6.Gateway\nInvalid ipv6 address abcd:::abcd on DeviceIpv6.Address\nInvalid Mac address 10.1.1.1 on DeviceEthernet.Mac\nInvalid mac addresses at indices 0 on PatternFlowEthernetSrc.Values\nInvalid ipv4 addresses at indices 0 on PatternFlowIpv4Src.Values\nInvalid ipv6 addresses at indices 2 on PatternFlowIpv6Dst.Values" does not contain "validation errors"
+        	Test:       	TestValidation
+--- FAIL: TestValidation (0.00s)
+=== RUN   TestDefaultsDevice
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+--- PASS: TestDefaultsDevice (0.00s)
+=== RUN   TestDefaultsDeviceFromJson
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+[WARNING]: PortName property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name
+--- PASS: TestDefaultsDeviceFromJson (0.00s)
+=== RUN   TestDefaultsFlow
+--- PASS: TestDefaultsFlow (0.00s)
+=== RUN   TestFromJsonUnmarshalError
+--- PASS: TestFromJsonUnmarshalError (0.00s)
+FAIL
+coverage: 46.2% of statements
+FAIL	github.com/open-traffic-generator/snappi/gosnappi	0.706s
+?   	github.com/open-traffic-generator/snappi/gosnappi/httpapi	[no test files]
+?   	github.com/open-traffic-generator/snappi/gosnappi/httpapi/controllers	[no test files]
+?   	github.com/open-traffic-generator/snappi/gosnappi/httpapi/interfaces	[no test files]
+?   	github.com/open-traffic-generator/snappi/gosnappi/otg	[no test files]
+FAIL

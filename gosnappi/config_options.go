@@ -19,6 +19,7 @@ type configOptions struct {
 	portOptionsHolder     PortOptions
 	protocolOptionsHolder ProtocolOptions
 	perPortOptionsHolder  ConfigOptionsPerPortOptionsIter
+	flowOptionsHolder     FlowOptions
 }
 
 func NewConfigOptions() ConfigOptions {
@@ -249,6 +250,7 @@ func (obj *configOptions) setNil() {
 	obj.portOptionsHolder = nil
 	obj.protocolOptionsHolder = nil
 	obj.perPortOptionsHolder = nil
+	obj.flowOptionsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -294,6 +296,14 @@ type ConfigOptions interface {
 	HasProtocolOptions() bool
 	// PerPortOptions returns ConfigOptionsPerPortOptionsIterIter, set in ConfigOptions
 	PerPortOptions() ConfigOptionsPerPortOptionsIter
+	// FlowOptions returns FlowOptions, set in ConfigOptions.
+	// FlowOptions is common flow options that apply to all configured Flow objects.
+	FlowOptions() FlowOptions
+	// SetFlowOptions assigns FlowOptions provided by user to ConfigOptions.
+	// FlowOptions is common flow options that apply to all configured Flow objects.
+	SetFlowOptions(value FlowOptions) ConfigOptions
+	// HasFlowOptions checks if FlowOptions has been set in ConfigOptions
+	HasFlowOptions() bool
 	setNil()
 }
 
@@ -440,6 +450,34 @@ func (obj *configOptionsPerPortOptionsIter) appendHolderSlice(item PerPortOption
 	return obj
 }
 
+// description is TBD
+// FlowOptions returns a FlowOptions
+func (obj *configOptions) FlowOptions() FlowOptions {
+	if obj.obj.FlowOptions == nil {
+		obj.obj.FlowOptions = NewFlowOptions().msg()
+	}
+	if obj.flowOptionsHolder == nil {
+		obj.flowOptionsHolder = &flowOptions{obj: obj.obj.FlowOptions}
+	}
+	return obj.flowOptionsHolder
+}
+
+// description is TBD
+// FlowOptions returns a FlowOptions
+func (obj *configOptions) HasFlowOptions() bool {
+	return obj.obj.FlowOptions != nil
+}
+
+// description is TBD
+// SetFlowOptions sets the FlowOptions value in the ConfigOptions object
+func (obj *configOptions) SetFlowOptions(value FlowOptions) ConfigOptions {
+
+	obj.flowOptionsHolder = nil
+	obj.obj.FlowOptions = value.msg()
+
+	return obj
+}
+
 func (obj *configOptions) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -467,6 +505,11 @@ func (obj *configOptions) validateObj(vObj *validation, set_default bool) {
 			item.validateObj(vObj, set_default)
 		}
 
+	}
+
+	if obj.obj.FlowOptions != nil {
+
+		obj.FlowOptions().validateObj(vObj, set_default)
 	}
 
 }

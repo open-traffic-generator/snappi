@@ -530,7 +530,7 @@ func (obj *macsecMetric) SetInPktsOk(value uint64) MacsecMetric {
 	return obj
 }
 
-// The total number of received bad packets that failed atleast one validation check.
+// The total number of received bad packets that failed atleast one validation check. Either ICV could not be verified or the packet is late.
 // InPktsBad returns a uint64
 func (obj *macsecMetric) InPktsBad() uint64 {
 
@@ -538,13 +538,13 @@ func (obj *macsecMetric) InPktsBad() uint64 {
 
 }
 
-// The total number of received bad packets that failed atleast one validation check.
+// The total number of received bad packets that failed atleast one validation check. Either ICV could not be verified or the packet is late.
 // InPktsBad returns a uint64
 func (obj *macsecMetric) HasInPktsBad() bool {
 	return obj.obj.InPktsBad != nil
 }
 
-// The total number of received bad packets that failed atleast one validation check.
+// The total number of received bad packets that failed atleast one validation check. Either ICV could not be verified or the packet is late.
 // SetInPktsBad sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetInPktsBad(value uint64) MacsecMetric {
 
@@ -596,7 +596,7 @@ func (obj *macsecMetric) SetInPktsLate(value uint64) MacsecMetric {
 	return obj
 }
 
-// InPktsNoSCI,the number of packets discarded due to unknown SCI.
+// InPktsNoSCI,the number of packets discarded due to unknown SCI. MACsec validate frames mode is strict.
 // InPktsNoSci returns a uint64
 func (obj *macsecMetric) InPktsNoSci() uint64 {
 
@@ -604,13 +604,13 @@ func (obj *macsecMetric) InPktsNoSci() uint64 {
 
 }
 
-// InPktsNoSCI,the number of packets discarded due to unknown SCI.
+// InPktsNoSCI,the number of packets discarded due to unknown SCI. MACsec validate frames mode is strict.
 // InPktsNoSci returns a uint64
 func (obj *macsecMetric) HasInPktsNoSci() bool {
 	return obj.obj.InPktsNoSci != nil
 }
 
-// InPktsNoSCI,the number of packets discarded due to unknown SCI.
+// InPktsNoSCI,the number of packets discarded due to unknown SCI. MACsec validate frames mode is strict.
 // SetInPktsNoSci sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetInPktsNoSci(value uint64) MacsecMetric {
 
@@ -618,7 +618,7 @@ func (obj *macsecMetric) SetInPktsNoSci(value uint64) MacsecMetric {
 	return obj
 }
 
-// InPktsNotUsingSA, the number of packets discarded due to unused SA.
+// InPktsNotUsingSA, the number of packets discarded due to unused SA. MACsec validate frames mode is strict.
 // InPktsNotUsingSa returns a uint64
 func (obj *macsecMetric) InPktsNotUsingSa() uint64 {
 
@@ -626,13 +626,13 @@ func (obj *macsecMetric) InPktsNotUsingSa() uint64 {
 
 }
 
-// InPktsNotUsingSA, the number of packets discarded due to unused SA.
+// InPktsNotUsingSA, the number of packets discarded due to unused SA. MACsec validate frames mode is strict.
 // InPktsNotUsingSa returns a uint64
 func (obj *macsecMetric) HasInPktsNotUsingSa() bool {
 	return obj.obj.InPktsNotUsingSa != nil
 }
 
-// InPktsNotUsingSA, the number of packets discarded due to unused SA.
+// InPktsNotUsingSA, the number of packets discarded due to unused SA. MACsec validate frames mode is strict.
 // SetInPktsNotUsingSa sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetInPktsNotUsingSa(value uint64) MacsecMetric {
 
@@ -640,7 +640,7 @@ func (obj *macsecMetric) SetInPktsNotUsingSa(value uint64) MacsecMetric {
 	return obj
 }
 
-// InPktsNotValid, the number of packets discarded due to invalid ICV.
+// InPktsNotValid, the number of packets discarded due to invalid ICV. MACsec validate frames mode is strict or confidentiality in enabled.
 // InPktsNotValid returns a uint64
 func (obj *macsecMetric) InPktsNotValid() uint64 {
 
@@ -648,13 +648,13 @@ func (obj *macsecMetric) InPktsNotValid() uint64 {
 
 }
 
-// InPktsNotValid, the number of packets discarded due to invalid ICV.
+// InPktsNotValid, the number of packets discarded due to invalid ICV. MACsec validate frames mode is strict or confidentiality in enabled.
 // InPktsNotValid returns a uint64
 func (obj *macsecMetric) HasInPktsNotValid() bool {
 	return obj.obj.InPktsNotValid != nil
 }
 
-// InPktsNotValid, the number of packets discarded due to invalid ICV.
+// InPktsNotValid, the number of packets discarded due to invalid ICV. MACsec validate frames mode is strict or confidentiality in enabled.
 // SetInPktsNotValid sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetInPktsNotValid(value uint64) MacsecMetric {
 
@@ -662,7 +662,7 @@ func (obj *macsecMetric) SetInPktsNotValid(value uint64) MacsecMetric {
 	return obj
 }
 
-// InPktsUnknownSCI, the number of packets received with unknown SCI.
+// InPktsUnknownSCI, the number of packets received with unknown SCI. MACsec validate frames mode is not strict.
 // InPktsUnknownSci returns a uint64
 func (obj *macsecMetric) InPktsUnknownSci() uint64 {
 
@@ -670,13 +670,13 @@ func (obj *macsecMetric) InPktsUnknownSci() uint64 {
 
 }
 
-// InPktsUnknownSCI, the number of packets received with unknown SCI.
+// InPktsUnknownSCI, the number of packets received with unknown SCI. MACsec validate frames mode is not strict.
 // InPktsUnknownSci returns a uint64
 func (obj *macsecMetric) HasInPktsUnknownSci() bool {
 	return obj.obj.InPktsUnknownSci != nil
 }
 
-// InPktsUnknownSCI, the number of packets received with unknown SCI.
+// InPktsUnknownSCI, the number of packets received with unknown SCI. MACsec validate frames mode is not strict.
 // SetInPktsUnknownSci sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetInPktsUnknownSci(value uint64) MacsecMetric {
 
@@ -684,7 +684,7 @@ func (obj *macsecMetric) SetInPktsUnknownSci(value uint64) MacsecMetric {
 	return obj
 }
 
-// InPktsUnusedSA, the number of packets received with unused SA.
+// InPktsUnusedSA, the number of packets received with unused SA. MACsec validate frames mode is not strict.
 // InPktsUnusedSa returns a uint64
 func (obj *macsecMetric) InPktsUnusedSa() uint64 {
 
@@ -692,13 +692,13 @@ func (obj *macsecMetric) InPktsUnusedSa() uint64 {
 
 }
 
-// InPktsUnusedSA, the number of packets received with unused SA.
+// InPktsUnusedSA, the number of packets received with unused SA. MACsec validate frames mode is not strict.
 // InPktsUnusedSa returns a uint64
 func (obj *macsecMetric) HasInPktsUnusedSa() bool {
 	return obj.obj.InPktsUnusedSa != nil
 }
 
-// InPktsUnusedSA, the number of packets received with unused SA.
+// InPktsUnusedSA, the number of packets received with unused SA. MACsec validate frames mode is not strict.
 // SetInPktsUnusedSa sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetInPktsUnusedSa(value uint64) MacsecMetric {
 
@@ -706,7 +706,7 @@ func (obj *macsecMetric) SetInPktsUnusedSa(value uint64) MacsecMetric {
 	return obj
 }
 
-// InPktsInvalid, the number of packets received with invalid ICV.
+// InPktsInvalid, the number of packets received with invalid ICV. MACsec validate frames mode is check.
 // InPktsInvalid returns a uint64
 func (obj *macsecMetric) InPktsInvalid() uint64 {
 
@@ -714,13 +714,13 @@ func (obj *macsecMetric) InPktsInvalid() uint64 {
 
 }
 
-// InPktsInvalid, the number of packets received with invalid ICV.
+// InPktsInvalid, the number of packets received with invalid ICV. MACsec validate frames mode is check.
 // InPktsInvalid returns a uint64
 func (obj *macsecMetric) HasInPktsInvalid() bool {
 	return obj.obj.InPktsInvalid != nil
 }
 
-// InPktsInvalid, the number of packets received with invalid ICV.
+// InPktsInvalid, the number of packets received with invalid ICV. MACsec validate frames mode is check.
 // SetInPktsInvalid sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetInPktsInvalid(value uint64) MacsecMetric {
 

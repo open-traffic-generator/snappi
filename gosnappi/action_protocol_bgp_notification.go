@@ -350,6 +350,12 @@ type ActionProtocolBgpNotification interface {
 	SetCustom(value DeviceBgpCustomError) ActionProtocolBgpNotification
 	// HasCustom checks if Custom has been set in ActionProtocolBgpNotification
 	HasCustom() bool
+	// FinDelay returns uint32, set in ActionProtocolBgpNotification.
+	FinDelay() uint32
+	// SetFinDelay assigns uint32 provided by user to ActionProtocolBgpNotification
+	SetFinDelay(value uint32) ActionProtocolBgpNotification
+	// HasFinDelay checks if FinDelay has been set in ActionProtocolBgpNotification
+	HasFinDelay() bool
 	setNil()
 }
 
@@ -666,6 +672,34 @@ func (obj *actionProtocolBgpNotification) SetCustom(value DeviceBgpCustomError) 
 	return obj
 }
 
+// Delay (in milliseconds) between generation of the Notification and transmission of FIN to close the
+// TCP socket by the implementation. This is useful to ensure that the remote end has received and processed
+// the Notification before closing the BGP session.
+// FinDelay returns a uint32
+func (obj *actionProtocolBgpNotification) FinDelay() uint32 {
+
+	return *obj.obj.FinDelay
+
+}
+
+// Delay (in milliseconds) between generation of the Notification and transmission of FIN to close the
+// TCP socket by the implementation. This is useful to ensure that the remote end has received and processed
+// the Notification before closing the BGP session.
+// FinDelay returns a uint32
+func (obj *actionProtocolBgpNotification) HasFinDelay() bool {
+	return obj.obj.FinDelay != nil
+}
+
+// Delay (in milliseconds) between generation of the Notification and transmission of FIN to close the
+// TCP socket by the implementation. This is useful to ensure that the remote end has received and processed
+// the Notification before closing the BGP session.
+// SetFinDelay sets the uint32 value in the ActionProtocolBgpNotification object
+func (obj *actionProtocolBgpNotification) SetFinDelay(value uint32) ActionProtocolBgpNotification {
+
+	obj.obj.FinDelay = &value
+	return obj
+}
+
 func (obj *actionProtocolBgpNotification) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -704,6 +738,16 @@ func (obj *actionProtocolBgpNotification) validateObj(vObj *validation, set_defa
 	if obj.obj.Custom != nil {
 
 		obj.Custom().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.FinDelay != nil {
+
+		if *obj.obj.FinDelay > 10000 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("0 <= ActionProtocolBgpNotification.FinDelay <= 10000 but Got %d", *obj.obj.FinDelay))
+		}
+
 	}
 
 }
@@ -762,6 +806,10 @@ func (obj *actionProtocolBgpNotification) setDefault() {
 			enumValue := otg.ActionProtocolBgpNotification_Choice_Enum(intVal)
 			obj.obj.Choice = &enumValue
 		}
+	}
+
+	if obj.obj.FinDelay == nil {
+		obj.SetFinDelay(0)
 	}
 
 }

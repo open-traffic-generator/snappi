@@ -256,7 +256,7 @@ func (obj *patternFlowIpv6Dst) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowIpv6Dst is destination address
+// PatternFlowIpv6Dst is destination address in IPv6 packet header. If dst_usids is configured, the locator and usids provided in that should be used to construct the IPv6 destination address instead of this field.
 type PatternFlowIpv6Dst interface {
 	Validation
 	// msg marshals PatternFlowIpv6Dst to protobuf object *otg.PatternFlowIpv6Dst

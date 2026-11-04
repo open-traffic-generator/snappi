@@ -327,7 +327,7 @@ func (obj *mkaBasicKeySourcePsk) SetCakValue(value string) MkaBasicKeySourcePsk 
 	return obj
 }
 
-// Connectivity association key(CAK) name.
+// Connectivity association key(CAK) name. The value should be in sync with CAK name in DUT.
 // CakName returns a string
 func (obj *mkaBasicKeySourcePsk) CakName() string {
 
@@ -335,13 +335,13 @@ func (obj *mkaBasicKeySourcePsk) CakName() string {
 
 }
 
-// Connectivity association key(CAK) name.
+// Connectivity association key(CAK) name. The value should be in sync with CAK name in DUT.
 // CakName returns a string
 func (obj *mkaBasicKeySourcePsk) HasCakName() bool {
 	return obj.obj.CakName != nil
 }
 
-// Connectivity association key(CAK) name.
+// Connectivity association key(CAK) name. The value should be in sync with CAK name in DUT.
 // SetCakName sets the string value in the MkaBasicKeySourcePsk object
 func (obj *mkaBasicKeySourcePsk) SetCakName(value string) MkaBasicKeySourcePsk {
 
@@ -445,7 +445,7 @@ func (obj *mkaBasicKeySourcePsk) setDefault() {
 		obj.SetCakValue("F123456789ABCDEF0123456789ABCDEF")
 	}
 	if obj.obj.CakName == nil {
-		obj.SetCakName("F123456789ABCDEF0123456789ABCDEFF123456789ABCDEF0123456789ABCDEF")
+		obj.SetCakName("ABCD")
 	}
 
 }
