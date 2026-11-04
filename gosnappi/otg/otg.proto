@@ -2329,6 +2329,7 @@ message Layer1 {
       mode_macsec_128 = 3;
       mode_macsec_256 = 4;
       mode_high_stream = 5;
+      mode_rocev2 = 6;
     }
   }
   // Set the mode of the test interface if supported, in addition to the speed.
@@ -2340,6 +2341,8 @@ message Layer1 {
   // MACsec encryption respectively.
   // Use mode_high_stream to switch the test interface to the high stream mode
   // of the configured speed.
+  // Use mode_rocev2 to switch the test interface to the RoCEv2 mode of the
+  // configured speed.
   // If the requested mode is not supported for the configured speed or by the
   // underlying test interface, an error shall be returned. If the current mode
   // differs from the requested mode, the test interface shall be switched to the

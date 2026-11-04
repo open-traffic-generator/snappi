@@ -666,12 +666,14 @@ var Layer1Mode = struct {
 	MODE_MACSEC_128  Layer1ModeEnum
 	MODE_MACSEC_256  Layer1ModeEnum
 	MODE_HIGH_STREAM Layer1ModeEnum
+	MODE_ROCEV2      Layer1ModeEnum
 }{
 	MODE_NO_CHANGE:   Layer1ModeEnum("mode_no_change"),
 	MODE_DEFAULT:     Layer1ModeEnum("mode_default"),
 	MODE_MACSEC_128:  Layer1ModeEnum("mode_macsec_128"),
 	MODE_MACSEC_256:  Layer1ModeEnum("mode_macsec_256"),
 	MODE_HIGH_STREAM: Layer1ModeEnum("mode_high_stream"),
+	MODE_ROCEV2:      Layer1ModeEnum("mode_rocev2"),
 }
 
 func (obj *layer1) Mode() Layer1ModeEnum {
@@ -687,6 +689,8 @@ func (obj *layer1) Mode() Layer1ModeEnum {
 // MACsec encryption respectively.
 // Use mode_high_stream to switch the test interface to the high stream mode
 // of the configured speed.
+// Use mode_rocev2 to switch the test interface to the RoCEv2 mode of the
+// configured speed.
 // If the requested mode is not supported for the configured speed or by the
 // underlying test interface, an error shall be returned. If the current mode
 // differs from the requested mode, the test interface shall be switched to the
