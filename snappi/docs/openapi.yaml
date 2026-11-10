@@ -34597,19 +34597,19 @@ components:
           x-field-uid: 1
           default: 0
           format: uint32
-          maximum: 31
+          maximum: 8191
         step:
           type: integer
           x-field-uid: 2
           default: 1
           format: uint32
-          maximum: 31
+          maximum: 8191
         count:
           type: integer
           x-field-uid: 3
           default: 1
           format: uint32
-          maximum: 32
+          maximum: 8192
     Pattern.Flow.Ipv4.FragmentOffset.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -34628,16 +34628,16 @@ components:
           type: integer
           format: uint32
           default: 0
-          maximum: 4
+          maximum: 12
           x-field-uid: 2
         length:
           description: |-
             Number of bits to track for metrics starting from configured offset of corresponding header field
           type: integer
           format: uint32
-          default: 5
+          default: 13
           minimum: 1
-          maximum: 5
+          maximum: 13
           x-field-uid: 3
     Pattern.Flow.Ipv4.FragmentOffset:
       description: |-
@@ -34667,13 +34667,13 @@ components:
           x-field-uid: 2
           default: 0
           format: uint32
-          maximum: 31
+          maximum: 8191
         values:
           type: array
           items:
             type: integer
             format: uint32
-            maximum: 31
+            maximum: 8191
           x-field-uid: 3
           default:
           - 0

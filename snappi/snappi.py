@@ -68551,13 +68551,13 @@ class PatternFlowIpv4FragmentOffset(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "maximum": 31,
+            "maximum": 8191,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "maximum": 31,
+            "maximum": 8191,
         },
         "increment": {"type": "PatternFlowIpv4FragmentOffsetCounter"},
         "decrement": {"type": "PatternFlowIpv4FragmentOffsetCounter"},
@@ -68711,17 +68711,17 @@ class PatternFlowIpv4FragmentOffsetCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "maximum": 31,
+            "maximum": 8191,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "maximum": 31,
+            "maximum": 8191,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "maximum": 32,
+            "maximum": 8192,
         },
     }  # type: Dict[str, str]
 
@@ -68819,13 +68819,13 @@ class PatternFlowIpv4FragmentOffsetMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "maximum": 4,
+            "maximum": 12,
         },
         "length": {
             "type": int,
             "format": "uint32",
             "minimum": 1,
-            "maximum": 5,
+            "maximum": 13,
         },
     }  # type: Dict[str, str]
 
@@ -68833,12 +68833,12 @@ class PatternFlowIpv4FragmentOffsetMetricTag(OpenApiObject):
 
     _DEFAULTS = {
         "offset": 0,
-        "length": 5,
+        "length": 13,
     }  # type: Dict[str, Union(type)]
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, name=None, offset=0, length=5):
+    def __init__(self, parent=None, name=None, offset=0, length=13):
         super(PatternFlowIpv4FragmentOffsetMetricTag, self).__init__()
         self._parent = parent
         self._set_property("name", name)
@@ -68948,7 +68948,7 @@ class PatternFlowIpv4FragmentOffsetMetricTagIter(OpenApiIter):
                 "Item is not an instance of PatternFlowIpv4FragmentOffsetMetricTag"
             )
 
-    def metrictag(self, name=None, offset=0, length=5):
+    def metrictag(self, name=None, offset=0, length=13):
         # type: (str,int,int) -> PatternFlowIpv4FragmentOffsetMetricTagIter
         """Factory method that creates an instance of the PatternFlowIpv4FragmentOffsetMetricTag class
 
@@ -68962,7 +68962,7 @@ class PatternFlowIpv4FragmentOffsetMetricTagIter(OpenApiIter):
         self._add(item)
         return self
 
-    def add(self, name=None, offset=0, length=5):
+    def add(self, name=None, offset=0, length=13):
         # type: (str,int,int) -> PatternFlowIpv4FragmentOffsetMetricTag
         """Add method that creates and returns an instance of the PatternFlowIpv4FragmentOffsetMetricTag class
 

@@ -25431,7 +25431,7 @@ message PatternFlowIpv4FragmentOffsetMetricTag {
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
-  // default = 5
+  // default = 13
   optional uint32 length = 3;
 }
 

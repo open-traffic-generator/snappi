@@ -572,10 +572,10 @@ func (obj *patternFlowIpv4FragmentOffset) validateObj(vObj *validation, set_defa
 
 	if obj.obj.Value != nil {
 
-		if *obj.obj.Value > 31 {
+		if *obj.obj.Value > 8191 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= PatternFlowIpv4FragmentOffset.Value <= 31 but Got %d", *obj.obj.Value))
+				fmt.Sprintf("0 <= PatternFlowIpv4FragmentOffset.Value <= 8191 but Got %d", *obj.obj.Value))
 		}
 
 	}
@@ -583,10 +583,10 @@ func (obj *patternFlowIpv4FragmentOffset) validateObj(vObj *validation, set_defa
 	if obj.obj.Values != nil {
 
 		for _, item := range obj.obj.Values {
-			if item > 31 {
+			if item > 8191 {
 				vObj.validationErrors = append(
 					vObj.validationErrors,
-					fmt.Sprintf("min(uint32) <= PatternFlowIpv4FragmentOffset.Values <= 31 but Got %d", item))
+					fmt.Sprintf("min(uint32) <= PatternFlowIpv4FragmentOffset.Values <= 8191 but Got %d", item))
 			}
 
 		}

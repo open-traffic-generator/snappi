@@ -115676,7 +115676,7 @@ type PatternFlowIpv4FragmentOffsetMetricTag struct {
 	Offset *uint32 `protobuf:"varint,2,opt,name=offset,proto3,oneof" json:"offset,omitempty"`
 	// Number of bits to track for metrics starting from configured offset of corresponding
 	// header field
-	// default = 5
+	// default = 13
 	Length *uint32 `protobuf:"varint,3,opt,name=length,proto3,oneof" json:"length,omitempty"`
 }
 
