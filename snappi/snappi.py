@@ -115375,9 +115375,11 @@ class FlowIcmpv6(OpenApiObject):
             "type": str,
             "enum": [
                 "echo",
+                "neighbor_solicitation",
             ],
         },
         "echo": {"type": "FlowIcmpv6Echo"},
+        "neighbor_solicitation": {"type": "FlowIcmpv6NeighborSolicitation"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -115387,6 +115389,7 @@ class FlowIcmpv6(OpenApiObject):
     }  # type: Dict[str, Union(type)]
 
     ECHO = "echo"  # type: str
+    NEIGHBOR_SOLICITATION = "neighbor_solicitation"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -115414,13 +115417,29 @@ class FlowIcmpv6(OpenApiObject):
         return self._get_property("echo", FlowIcmpv6Echo, self, "echo")
 
     @property
+    def neighbor_solicitation(self):
+        # type: () -> FlowIcmpv6NeighborSolicitation
+        """Factory property that returns an instance of the FlowIcmpv6NeighborSolicitation class
+
+        Packet Header for ICMPv6 NDP Neighbor Solicitation (Type 135, RFC 4861 Section 4.3).
+
+        Returns: FlowIcmpv6NeighborSolicitation
+        """
+        return self._get_property(
+            "neighbor_solicitation",
+            FlowIcmpv6NeighborSolicitation,
+            self,
+            "neighbor_solicitation",
+        )
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["echo"]]
+        # type: () -> Union[Literal["echo"], Literal["neighbor_solicitation"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["echo"]]
+        Returns: Union[Literal["echo"], Literal["neighbor_solicitation"]]
         """
         return self._get_property("choice")
 
@@ -115430,7 +115449,7 @@ class FlowIcmpv6(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["echo"]]
+        value: Union[Literal["echo"], Literal["neighbor_solicitation"]]
         """
         self._set_property("choice", value)
 
@@ -117409,6 +117428,6797 @@ class PatternFlowIcmpv6EchoChecksum(OpenApiObject):
         value: int
         """
         self._set_property("custom", value, "custom")
+
+
+class FlowIcmpv6NeighborSolicitation(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "type": {"type": "PatternFlowIcmpv6NeighborSolicitationType"},
+        "code": {"type": "PatternFlowIcmpv6NeighborSolicitationCode"},
+        "checksum": {"type": "PatternFlowIcmpv6NeighborSolicitationChecksum"},
+        "reserved": {"type": "PatternFlowIcmpv6NeighborSolicitationReserved"},
+        "target_address": {
+            "type": "PatternFlowIcmpv6NeighborSolicitationTargetAddress"
+        },
+        "options": {"type": "FlowIcmpv6NdpOptionIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowIcmpv6NeighborSolicitation, self).__init__()
+        self._parent = parent
+
+    @property
+    def type(self):
+        # type: () -> PatternFlowIcmpv6NeighborSolicitationType
+        """type getter
+
+        ICMPv6 message type. Fixed at 135 for Neighbor Solicitation.ICMPv6 message type. Fixed at 135 for Neighbor Solicitation.ICMPv6 message type. Fixed at 135 for Neighbor Solicitation.ICMPv6 message type. Fixed at 135 for Neighbor Solicitation.
+
+        Returns: PatternFlowIcmpv6NeighborSolicitationType
+        """
+        return self._get_property("type", PatternFlowIcmpv6NeighborSolicitationType)
+
+    @property
+    def code(self):
+        # type: () -> PatternFlowIcmpv6NeighborSolicitationCode
+        """code getter
+
+        ICMPv6 message code. Must be for Neighbor Solicitation.ICMPv6 message code. Must be for Neighbor Solicitation.ICMPv6 message code. Must be for Neighbor Solicitation.ICMPv6 message code. Must be for Neighbor Solicitation.
+
+        Returns: PatternFlowIcmpv6NeighborSolicitationCode
+        """
+        return self._get_property("code", PatternFlowIcmpv6NeighborSolicitationCode)
+
+    @property
+    def checksum(self):
+        # type: () -> PatternFlowIcmpv6NeighborSolicitationChecksum
+        """checksum getter
+
+        ICMPv6 checksumICMPv6 checksumICMPv6 checksumICMPv6 checksum
+
+        Returns: PatternFlowIcmpv6NeighborSolicitationChecksum
+        """
+        return self._get_property(
+            "checksum", PatternFlowIcmpv6NeighborSolicitationChecksum
+        )
+
+    @property
+    def reserved(self):
+        # type: () -> PatternFlowIcmpv6NeighborSolicitationReserved
+        """reserved getter
+
+        Reserved field. Must be initialized to zero by the sender and must be ignored by the receiver.Reserved field. Must be initialized to zero by the sender and must be ignored by the receiver.Reserved field. Must be initialized to zero by the sender and must be ignored by the receiver.Reserved field. Must be initialized to zero by the sender and must be ignored by the receiver.
+
+        Returns: PatternFlowIcmpv6NeighborSolicitationReserved
+        """
+        return self._get_property(
+            "reserved", PatternFlowIcmpv6NeighborSolicitationReserved
+        )
+
+    @property
+    def target_address(self):
+        # type: () -> PatternFlowIcmpv6NeighborSolicitationTargetAddress
+        """target_address getter
+
+        The IPv6 address of the target of the solicitation. Must not be multicast address.The IPv6 address of the target of the solicitation. Must not be multicast address.The IPv6 address of the target of the solicitation. Must not be multicast address.The IPv6 address of the target of the solicitation. Must not be multicast address.
+
+        Returns: PatternFlowIcmpv6NeighborSolicitationTargetAddress
+        """
+        return self._get_property(
+            "target_address", PatternFlowIcmpv6NeighborSolicitationTargetAddress
+        )
+
+    @property
+    def options(self):
+        # type: () -> FlowIcmpv6NdpOptionIter
+        """options getter
+
+        Optional list of NDP options. Source Link-Layer Address SHOULD be included when sent from unicast address (RFC 4861 Section 4.3).
+
+        Returns: FlowIcmpv6NdpOptionIter
+        """
+        return self._get_property(
+            "options", FlowIcmpv6NdpOptionIter, self._parent, self._choice
+        )
+
+
+class PatternFlowIcmpv6NeighborSolicitationType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "increment": {"type": "PatternFlowIcmpv6NeighborSolicitationTypeCounter"},
+        "decrement": {"type": "PatternFlowIcmpv6NeighborSolicitationTypeCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 135,
+        "values": [135],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=135, values=[135]):
+        super(PatternFlowIcmpv6NeighborSolicitationType, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIcmpv6NeighborSolicitationTypeCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NeighborSolicitationTypeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NeighborSolicitationTypeCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIcmpv6NeighborSolicitationTypeCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIcmpv6NeighborSolicitationTypeCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NeighborSolicitationTypeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NeighborSolicitationTypeCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIcmpv6NeighborSolicitationTypeCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIcmpv6NeighborSolicitationTypeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 135,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=135, step=1, count=1):
+        super(PatternFlowIcmpv6NeighborSolicitationTypeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIcmpv6NeighborSolicitationCode(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "increment": {"type": "PatternFlowIcmpv6NeighborSolicitationCodeCounter"},
+        "decrement": {"type": "PatternFlowIcmpv6NeighborSolicitationCodeCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowIcmpv6NeighborSolicitationCode, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIcmpv6NeighborSolicitationCodeCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NeighborSolicitationCodeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NeighborSolicitationCodeCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIcmpv6NeighborSolicitationCodeCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIcmpv6NeighborSolicitationCodeCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NeighborSolicitationCodeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NeighborSolicitationCodeCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIcmpv6NeighborSolicitationCodeCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIcmpv6NeighborSolicitationCodeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIcmpv6NeighborSolicitationCodeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIcmpv6NeighborSolicitationChecksum(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "generated",
+                "custom",
+            ],
+        },
+        "generated": {
+            "type": str,
+            "enum": [
+                "good",
+                "bad",
+            ],
+        },
+        "custom": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "generated",
+        "generated": "good",
+    }  # type: Dict[str, Union(type)]
+
+    GENERATED = "generated"  # type: str
+    CUSTOM = "custom"  # type: str
+
+    GOOD = "good"  # type: str
+    BAD = "bad"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, generated="good", custom=None):
+        super(PatternFlowIcmpv6NeighborSolicitationChecksum, self).__init__()
+        self._parent = parent
+        self._set_property("generated", generated)
+        self._set_property("custom", custom)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, generated=None, custom=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["custom"], Literal["generated"]]
+        """choice getter
+
+        The type of checksum
+
+        Returns: Union[Literal["custom"], Literal["generated"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The type of checksum
+
+        value: Union[Literal["custom"], Literal["generated"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def generated(self):
+        # type: () -> Union[Literal["bad"], Literal["good"]]
+        """generated getter
+
+        A system generated checksum value
+
+        Returns: Union[Literal["bad"], Literal["good"]]
+        """
+        return self._get_property("generated")
+
+    @generated.setter
+    def generated(self, value):
+        """generated setter
+
+        A system generated checksum value
+
+        value: Union[Literal["bad"], Literal["good"]]
+        """
+        self._set_property("generated", value, "generated")
+
+    @property
+    def custom(self):
+        # type: () -> int
+        """custom getter
+
+        A custom checksum value
+
+        Returns: int
+        """
+        return self._get_property("custom")
+
+    @custom.setter
+    def custom(self, value):
+        """custom setter
+
+        A custom checksum value
+
+        value: int
+        """
+        self._set_property("custom", value, "custom")
+
+
+class PatternFlowIcmpv6NeighborSolicitationReserved(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "increment": {"type": "PatternFlowIcmpv6NeighborSolicitationReservedCounter"},
+        "decrement": {"type": "PatternFlowIcmpv6NeighborSolicitationReservedCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowIcmpv6NeighborSolicitationReserved, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIcmpv6NeighborSolicitationReservedCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NeighborSolicitationReservedCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NeighborSolicitationReservedCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIcmpv6NeighborSolicitationReservedCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIcmpv6NeighborSolicitationReservedCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NeighborSolicitationReservedCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NeighborSolicitationReservedCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIcmpv6NeighborSolicitationReservedCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIcmpv6NeighborSolicitationReservedCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIcmpv6NeighborSolicitationReservedCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIcmpv6NeighborSolicitationTargetAddress(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "values": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "ipv6",
+        },
+        "increment": {
+            "type": "PatternFlowIcmpv6NeighborSolicitationTargetAddressCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowIcmpv6NeighborSolicitationTargetAddressCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": "::1",
+        "values": ["::1"],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value="::1", values=["::1"]):
+        super(PatternFlowIcmpv6NeighborSolicitationTargetAddress, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIcmpv6NeighborSolicitationTargetAddressCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NeighborSolicitationTargetAddressCounter class
+
+        ipv6 counter pattern
+
+        Returns: PatternFlowIcmpv6NeighborSolicitationTargetAddressCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIcmpv6NeighborSolicitationTargetAddressCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIcmpv6NeighborSolicitationTargetAddressCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NeighborSolicitationTargetAddressCounter class
+
+        ipv6 counter pattern
+
+        Returns: PatternFlowIcmpv6NeighborSolicitationTargetAddressCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIcmpv6NeighborSolicitationTargetAddressCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[str]
+        """values getter
+
+        TBD
+
+        Returns: List[str]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[str]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIcmpv6NeighborSolicitationTargetAddressCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "step": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "::1",
+        "step": "::1",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start="::1", step="::1", count=1):
+        super(
+            PatternFlowIcmpv6NeighborSolicitationTargetAddressCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowIcmpv6NdpOption(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "source_link_layer_address",
+                "target_link_layer_address",
+                "prefix_information",
+                "redirected_header",
+                "mtu",
+            ],
+        },
+        "source_link_layer_address": {"type": "FlowIcmpv6NdpLinkLayerAddressOption"},
+        "target_link_layer_address": {"type": "FlowIcmpv6NdpLinkLayerAddressOption"},
+        "prefix_information": {"type": "FlowIcmpv6NdpPrefixInformationOption"},
+        "redirected_header": {"type": "FlowIcmpv6NdpRedirectedHeaderOption"},
+        "mtu": {"type": "FlowIcmpv6NdpMtuOption"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "source_link_layer_address",
+    }  # type: Dict[str, Union(type)]
+
+    SOURCE_LINK_LAYER_ADDRESS = "source_link_layer_address"  # type: str
+    TARGET_LINK_LAYER_ADDRESS = "target_link_layer_address"  # type: str
+    PREFIX_INFORMATION = "prefix_information"  # type: str
+    REDIRECTED_HEADER = "redirected_header"  # type: str
+    MTU = "mtu"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowIcmpv6NdpOption, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def source_link_layer_address(self):
+        # type: () -> FlowIcmpv6NdpLinkLayerAddressOption
+        """Factory property that returns an instance of the FlowIcmpv6NdpLinkLayerAddressOption class
+
+        NDP Source Link-Layer Address (Type 1) or Target Link-Layer Address (Type 2) option (RFC 4861 Section 4.6.1). The option Type byte is set from the parent choice.
+
+        Returns: FlowIcmpv6NdpLinkLayerAddressOption
+        """
+        return self._get_property(
+            "source_link_layer_address",
+            FlowIcmpv6NdpLinkLayerAddressOption,
+            self,
+            "source_link_layer_address",
+        )
+
+    @property
+    def target_link_layer_address(self):
+        # type: () -> FlowIcmpv6NdpLinkLayerAddressOption
+        """Factory property that returns an instance of the FlowIcmpv6NdpLinkLayerAddressOption class
+
+        NDP Source Link-Layer Address (Type 1) or Target Link-Layer Address (Type 2) option (RFC 4861 Section 4.6.1). The option Type byte is set from the parent choice.
+
+        Returns: FlowIcmpv6NdpLinkLayerAddressOption
+        """
+        return self._get_property(
+            "target_link_layer_address",
+            FlowIcmpv6NdpLinkLayerAddressOption,
+            self,
+            "target_link_layer_address",
+        )
+
+    @property
+    def prefix_information(self):
+        # type: () -> FlowIcmpv6NdpPrefixInformationOption
+        """Factory property that returns an instance of the FlowIcmpv6NdpPrefixInformationOption class
+
+        NDP Prefix Information option (Type 3). Defined in RFC 4861 Section 4.6.2 and extended for Mobile IPv6 Home Agent by RFC 6275 Section 7.2 (R flag). Provides hosts with on-link prefixes and prefixes for address autoconfiguration.
+
+        Returns: FlowIcmpv6NdpPrefixInformationOption
+        """
+        return self._get_property(
+            "prefix_information",
+            FlowIcmpv6NdpPrefixInformationOption,
+            self,
+            "prefix_information",
+        )
+
+    @property
+    def redirected_header(self):
+        # type: () -> FlowIcmpv6NdpRedirectedHeaderOption
+        """Factory property that returns an instance of the FlowIcmpv6NdpRedirectedHeaderOption class
+
+        NDP Redirected Header option (Type 4). Defined in RFC 4861 Section 4.6.3. Used in Redirect messages to include as much as possible of the IP packet that triggered the Redirect, without exceeding the minimum IPv6 MTU.
+
+        Returns: FlowIcmpv6NdpRedirectedHeaderOption
+        """
+        return self._get_property(
+            "redirected_header",
+            FlowIcmpv6NdpRedirectedHeaderOption,
+            self,
+            "redirected_header",
+        )
+
+    @property
+    def mtu(self):
+        # type: () -> FlowIcmpv6NdpMtuOption
+        """Factory property that returns an instance of the FlowIcmpv6NdpMtuOption class
+
+        NDP MTU option (Type 5). Defined in RFC 4861 Section 4.6.4. Used in Router Advertisement messages to ensure that all nodes on link use the same MTU value in those cases where the link MTU is not well known.
+
+        Returns: FlowIcmpv6NdpMtuOption
+        """
+        return self._get_property("mtu", FlowIcmpv6NdpMtuOption, self, "mtu")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["mtu"], Literal["prefix_information"], Literal["redirected_header"], Literal["source_link_layer_address"], Literal["target_link_layer_address"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["mtu"], Literal["prefix_information"], Literal["redirected_header"], Literal["source_link_layer_address"], Literal["target_link_layer_address"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["mtu"], Literal["prefix_information"], Literal["redirected_header"], Literal["source_link_layer_address"], Literal["target_link_layer_address"]]
+        """
+        self._set_property("choice", value)
+
+
+class FlowIcmpv6NdpLinkLayerAddressOption(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "PatternFlowIcmpv6NdpLinkLayerAddressOptionLength"},
+        "link_layer_address": {
+            "type": "PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddress"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowIcmpv6NdpLinkLayerAddressOption, self).__init__()
+        self._parent = parent
+
+    @property
+    def length(self):
+        # type: () -> PatternFlowIcmpv6NdpLinkLayerAddressOptionLength
+        """length getter
+
+        Option length in units of octets, including the type and length bytes. For 6-octet Ethernet address this is 1.Option length in units of octets, including the type and length bytes. For 6-octet Ethernet address this is 1.Option length in units of octets, including the type and length bytes. For 6-octet Ethernet address this is 1.Option length in units of octets, including the type and length bytes. For 6-octet Ethernet address this is 1.Option length in units of octets, including the type and length bytes. For 6-octet Ethernet address this is 1.
+
+        Returns: PatternFlowIcmpv6NdpLinkLayerAddressOptionLength
+        """
+        return self._get_property(
+            "length", PatternFlowIcmpv6NdpLinkLayerAddressOptionLength
+        )
+
+    @property
+    def link_layer_address(self):
+        # type: () -> PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddress
+        """link_layer_address getter
+
+        Link-layer address of the sender (source option) or target (target option).Link-layer address of the sender (source option) or target (target option).Link-layer address of the sender (source option) or target (target option).Link-layer address of the sender (source option) or target (target option).Link-layer address of the sender (source option) or target (target option).
+
+        Returns: PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddress
+        """
+        return self._get_property(
+            "link_layer_address",
+            PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddress,
+        )
+
+
+class PatternFlowIcmpv6NdpLinkLayerAddressOptionLength(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "auto",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "auto": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "increment": {
+            "type": "PatternFlowIcmpv6NdpLinkLayerAddressOptionLengthCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowIcmpv6NdpLinkLayerAddressOptionLengthCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "auto",
+        "value": 1,
+        "values": [1],
+        "auto": 1,
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    AUTO = "auto"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=1, values=[1], auto=1):
+        super(PatternFlowIcmpv6NdpLinkLayerAddressOptionLength, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        self._set_property("auto", auto)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None, auto=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIcmpv6NdpLinkLayerAddressOptionLengthCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpLinkLayerAddressOptionLengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpLinkLayerAddressOptionLengthCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIcmpv6NdpLinkLayerAddressOptionLengthCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIcmpv6NdpLinkLayerAddressOptionLengthCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpLinkLayerAddressOptionLengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpLinkLayerAddressOptionLengthCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIcmpv6NdpLinkLayerAddressOptionLengthCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+    @property
+    def auto(self):
+        # type: () -> int
+        """auto getter
+
+        The OTG implementation can provide system generated. value for this property. If the OTG is unable to generate value. the default value must be used.
+
+        Returns: int
+        """
+        return self._get_property("auto")
+
+
+class PatternFlowIcmpv6NdpLinkLayerAddressOptionLengthCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 1,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=1, step=1, count=1):
+        super(PatternFlowIcmpv6NdpLinkLayerAddressOptionLengthCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddress(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": str,
+            "format": "mac",
+        },
+        "values": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "mac",
+        },
+        "increment": {
+            "type": "PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddressCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddressCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": "00:00:00:00:00:00",
+        "values": ["00:00:00:00:00:00"],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        choice=None,
+        value="00:00:00:00:00:00",
+        values=["00:00:00:00:00:00"],
+    ):
+        super(
+            PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddress, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddressCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddressCounter class
+
+        mac counter pattern
+
+        Returns: PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddressCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddressCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddressCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddressCounter class
+
+        mac counter pattern
+
+        Returns: PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddressCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddressCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[str]
+        """values getter
+
+        TBD
+
+        Returns: List[str]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[str]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddressCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "mac",
+        },
+        "step": {
+            "type": str,
+            "format": "mac",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "00:00:00:00:00:00",
+        "step": "00:00:00:00:00:01",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, start="00:00:00:00:00:00", step="00:00:00:00:00:01", count=1
+    ):
+        super(
+            PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddressCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowIcmpv6NdpPrefixInformationOption(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "PatternFlowIcmpv6NdpPrefixInformationOptionLength"},
+        "prefix_length": {
+            "type": "PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLength"
+        },
+        "l_flag": {"type": "PatternFlowIcmpv6NdpPrefixInformationOptionLFlag"},
+        "a_flag": {"type": "PatternFlowIcmpv6NdpPrefixInformationOptionAFlag"},
+        "r_flag": {"type": "PatternFlowIcmpv6NdpPrefixInformationOptionRFlag"},
+        "reserved1": {"type": "PatternFlowIcmpv6NdpPrefixInformationOptionReserved1"},
+        "valid_lifetime": {
+            "type": "PatternFlowIcmpv6NdpPrefixInformationOptionValidLifetime"
+        },
+        "preferred_lifetime": {
+            "type": "PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetime"
+        },
+        "reserved2": {"type": "PatternFlowIcmpv6NdpPrefixInformationOptionReserved2"},
+        "prefix": {"type": "PatternFlowIcmpv6NdpPrefixInformationOptionPrefix"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowIcmpv6NdpPrefixInformationOption, self).__init__()
+        self._parent = parent
+
+    @property
+    def length(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionLength
+        """length getter
+
+        Option length in units of octets. Fixed at for the Prefix Information option.Option length in units of octets. Fixed at for the Prefix Information option.Option length in units of octets. Fixed at for the Prefix Information option.Option length in units of octets. Fixed at for the Prefix Information option.
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionLength
+        """
+        return self._get_property(
+            "length", PatternFlowIcmpv6NdpPrefixInformationOptionLength
+        )
+
+    @property
+    def prefix_length(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLength
+        """prefix_length getter
+
+        Number of leading bits of the Prefix field that are valid. Range 0..128.Number of leading bits of the Prefix field that are valid. Range 0..128.Number of leading bits of the Prefix field that are valid. Range 0..128.Number of leading bits of the Prefix field that are valid. Range 0..128.
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLength
+        """
+        return self._get_property(
+            "prefix_length", PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLength
+        )
+
+    @property
+    def l_flag(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionLFlag
+        """l_flag getter
+
+        On-link (L) flag. When set, the prefix can be used for on-link determination. RFC 4861 Section 4.6.2.On-link (L) flag. When set, the prefix can be used for on-link determination. RFC 4861 Section 4.6.2.On-link (L) flag. When set, the prefix can be used for on-link determination. RFC 4861 Section 4.6.2.On-link (L) flag. When set, the prefix can be used for on-link determination. RFC 4861 Section 4.6.2.
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionLFlag
+        """
+        return self._get_property(
+            "l_flag", PatternFlowIcmpv6NdpPrefixInformationOptionLFlag
+        )
+
+    @property
+    def a_flag(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionAFlag
+        """a_flag getter
+
+        Autonomous address-configuration (A) flag. When set, the prefix can be used for stateless address autoconfiguration. RFC 4861 Section 4.6.2.Autonomous address-configuration (A) flag. When set, the prefix can be used for stateless address autoconfiguration. RFC 4861 Section 4.6.2.Autonomous address-configuration (A) flag. When set, the prefix can be used for stateless address autoconfiguration. RFC 4861 Section 4.6.2.Autonomous address-configuration (A) flag. When set, the prefix can be used for stateless address autoconfiguration. RFC 4861 Section 4.6.2.
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionAFlag
+        """
+        return self._get_property(
+            "a_flag", PatternFlowIcmpv6NdpPrefixInformationOptionAFlag
+        )
+
+    @property
+    def r_flag(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionRFlag
+        """r_flag getter
+
+        Router address (R) flag. When set, the Prefix field contains complete IP address assigned to the sending router. Used by Mobile IPv6 (RFC 6275 Section 7.2).Router address (R) flag. When set, the Prefix field contains complete IP address assigned to the sending router. Used by Mobile IPv6 (RFC 6275 Section 7.2).Router address (R) flag. When set, the Prefix field contains complete IP address assigned to the sending router. Used by Mobile IPv6 (RFC 6275 Section 7.2).Router address (R) flag. When set, the Prefix field contains complete IP address assigned to the sending router. Used by Mobile IPv6 (RFC 6275 Section 7.2).
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionRFlag
+        """
+        return self._get_property(
+            "r_flag", PatternFlowIcmpv6NdpPrefixInformationOptionRFlag
+        )
+
+    @property
+    def reserved1(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionReserved1
+        """reserved1 getter
+
+        Reserved. Must be initialized to zero by the sender.Reserved. Must be initialized to zero by the sender.Reserved. Must be initialized to zero by the sender.Reserved. Must be initialized to zero by the sender.
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionReserved1
+        """
+        return self._get_property(
+            "reserved1", PatternFlowIcmpv6NdpPrefixInformationOptionReserved1
+        )
+
+    @property
+    def valid_lifetime(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionValidLifetime
+        """valid_lifetime getter
+
+        Length of time in seconds that the prefix is valid for on-link determination. value of 0xffffffff represents infinity.Length of time in seconds that the prefix is valid for on-link determination. value of 0xffffffff represents infinity.Length of time in seconds that the prefix is valid for on-link determination. value of 0xffffffff represents infinity.Length of time in seconds that the prefix is valid for on-link determination. value of 0xffffffff represents infinity.
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionValidLifetime
+        """
+        return self._get_property(
+            "valid_lifetime", PatternFlowIcmpv6NdpPrefixInformationOptionValidLifetime
+        )
+
+    @property
+    def preferred_lifetime(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetime
+        """preferred_lifetime getter
+
+        Length of time in seconds that addresses generated from the prefix via stateless address autoconfiguration remain preferred. Must be less than or equal to valid_lifetime.Length of time in seconds that addresses generated from the prefix via stateless address autoconfiguration remain preferred. Must be less than or equal to valid_lifetime.Length of time in seconds that addresses generated from the prefix via stateless address autoconfiguration remain preferred. Must be less than or equal to valid_lifetime.Length of time in seconds that addresses generated from the prefix via stateless address autoconfiguration remain preferred. Must be less than or equal to valid_lifetime.
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetime
+        """
+        return self._get_property(
+            "preferred_lifetime",
+            PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetime,
+        )
+
+    @property
+    def reserved2(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionReserved2
+        """reserved2 getter
+
+        Reserved. Must be initialized to zero by the sender.Reserved. Must be initialized to zero by the sender.Reserved. Must be initialized to zero by the sender.Reserved. Must be initialized to zero by the sender.
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionReserved2
+        """
+        return self._get_property(
+            "reserved2", PatternFlowIcmpv6NdpPrefixInformationOptionReserved2
+        )
+
+    @property
+    def prefix(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionPrefix
+        """prefix getter
+
+        IP address or prefix of an IP address. The Prefix Length field contains the number of valid leading bits.IP address or prefix of an IP address. The Prefix Length field contains the number of valid leading bits.IP address or prefix of an IP address. The Prefix Length field contains the number of valid leading bits.IP address or prefix of an IP address. The Prefix Length field contains the number of valid leading bits.
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionPrefix
+        """
+        return self._get_property(
+            "prefix", PatternFlowIcmpv6NdpPrefixInformationOptionPrefix
+        )
+
+
+class PatternFlowIcmpv6NdpPrefixInformationOptionLength(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "auto",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "auto": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "increment": {
+            "type": "PatternFlowIcmpv6NdpPrefixInformationOptionLengthCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowIcmpv6NdpPrefixInformationOptionLengthCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "auto",
+        "value": 4,
+        "values": [4],
+        "auto": 4,
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    AUTO = "auto"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=4, values=[4], auto=4):
+        super(PatternFlowIcmpv6NdpPrefixInformationOptionLength, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        self._set_property("auto", auto)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None, auto=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionLengthCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpPrefixInformationOptionLengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionLengthCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIcmpv6NdpPrefixInformationOptionLengthCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionLengthCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpPrefixInformationOptionLengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionLengthCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIcmpv6NdpPrefixInformationOptionLengthCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+    @property
+    def auto(self):
+        # type: () -> int
+        """auto getter
+
+        The OTG implementation can provide system generated. value for this property. If the OTG is unable to generate value. the default value must be used.
+
+        Returns: int
+        """
+        return self._get_property("auto")
+
+
+class PatternFlowIcmpv6NdpPrefixInformationOptionLengthCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 4,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=4, step=1, count=1):
+        super(PatternFlowIcmpv6NdpPrefixInformationOptionLengthCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLength(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "increment": {
+            "type": "PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLengthCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLengthCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 64,
+        "values": [64],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=64, values=[64]):
+        super(PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLength, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLengthCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLengthCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLengthCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLengthCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLengthCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLengthCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLengthCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 64,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=64, step=1, count=1):
+        super(
+            PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLengthCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIcmpv6NdpPrefixInformationOptionLFlag(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 1,
+        },
+        "increment": {
+            "type": "PatternFlowIcmpv6NdpPrefixInformationOptionLFlagCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowIcmpv6NdpPrefixInformationOptionLFlagCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowIcmpv6NdpPrefixInformationOptionLFlag, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionLFlagCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpPrefixInformationOptionLFlagCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionLFlagCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIcmpv6NdpPrefixInformationOptionLFlagCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionLFlagCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpPrefixInformationOptionLFlagCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionLFlagCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIcmpv6NdpPrefixInformationOptionLFlagCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIcmpv6NdpPrefixInformationOptionLFlagCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 2,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIcmpv6NdpPrefixInformationOptionLFlagCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIcmpv6NdpPrefixInformationOptionAFlag(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 1,
+        },
+        "increment": {
+            "type": "PatternFlowIcmpv6NdpPrefixInformationOptionAFlagCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowIcmpv6NdpPrefixInformationOptionAFlagCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowIcmpv6NdpPrefixInformationOptionAFlag, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionAFlagCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpPrefixInformationOptionAFlagCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionAFlagCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIcmpv6NdpPrefixInformationOptionAFlagCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionAFlagCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpPrefixInformationOptionAFlagCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionAFlagCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIcmpv6NdpPrefixInformationOptionAFlagCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIcmpv6NdpPrefixInformationOptionAFlagCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 2,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIcmpv6NdpPrefixInformationOptionAFlagCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIcmpv6NdpPrefixInformationOptionRFlag(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 1,
+        },
+        "increment": {
+            "type": "PatternFlowIcmpv6NdpPrefixInformationOptionRFlagCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowIcmpv6NdpPrefixInformationOptionRFlagCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowIcmpv6NdpPrefixInformationOptionRFlag, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionRFlagCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpPrefixInformationOptionRFlagCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionRFlagCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIcmpv6NdpPrefixInformationOptionRFlagCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionRFlagCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpPrefixInformationOptionRFlagCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionRFlagCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIcmpv6NdpPrefixInformationOptionRFlagCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIcmpv6NdpPrefixInformationOptionRFlagCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 2,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIcmpv6NdpPrefixInformationOptionRFlagCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIcmpv6NdpPrefixInformationOptionReserved1(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 31,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 31,
+        },
+        "increment": {
+            "type": "PatternFlowIcmpv6NdpPrefixInformationOptionReserved1Counter"
+        },
+        "decrement": {
+            "type": "PatternFlowIcmpv6NdpPrefixInformationOptionReserved1Counter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowIcmpv6NdpPrefixInformationOptionReserved1, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionReserved1Counter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpPrefixInformationOptionReserved1Counter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionReserved1Counter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIcmpv6NdpPrefixInformationOptionReserved1Counter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionReserved1Counter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpPrefixInformationOptionReserved1Counter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionReserved1Counter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIcmpv6NdpPrefixInformationOptionReserved1Counter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIcmpv6NdpPrefixInformationOptionReserved1Counter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 31,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 31,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 32,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(
+            PatternFlowIcmpv6NdpPrefixInformationOptionReserved1Counter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIcmpv6NdpPrefixInformationOptionValidLifetime(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "increment": {
+            "type": "PatternFlowIcmpv6NdpPrefixInformationOptionValidLifetimeCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowIcmpv6NdpPrefixInformationOptionValidLifetimeCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 4294967295,
+        "values": [4294967295],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=4294967295, values=[4294967295]):
+        super(PatternFlowIcmpv6NdpPrefixInformationOptionValidLifetime, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionValidLifetimeCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpPrefixInformationOptionValidLifetimeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionValidLifetimeCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIcmpv6NdpPrefixInformationOptionValidLifetimeCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionValidLifetimeCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpPrefixInformationOptionValidLifetimeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionValidLifetimeCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIcmpv6NdpPrefixInformationOptionValidLifetimeCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIcmpv6NdpPrefixInformationOptionValidLifetimeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 4294967295,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=4294967295, step=1, count=1):
+        super(
+            PatternFlowIcmpv6NdpPrefixInformationOptionValidLifetimeCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetime(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "increment": {
+            "type": "PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetimeCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetimeCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 604800,
+        "values": [604800],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=604800, values=[604800]):
+        super(
+            PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetime, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetimeCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetimeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetimeCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetimeCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetimeCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetimeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetimeCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetimeCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetimeCounter(
+    OpenApiObject
+):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 604800,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=604800, step=1, count=1):
+        super(
+            PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetimeCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIcmpv6NdpPrefixInformationOptionReserved2(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "increment": {
+            "type": "PatternFlowIcmpv6NdpPrefixInformationOptionReserved2Counter"
+        },
+        "decrement": {
+            "type": "PatternFlowIcmpv6NdpPrefixInformationOptionReserved2Counter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowIcmpv6NdpPrefixInformationOptionReserved2, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionReserved2Counter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpPrefixInformationOptionReserved2Counter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionReserved2Counter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIcmpv6NdpPrefixInformationOptionReserved2Counter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionReserved2Counter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpPrefixInformationOptionReserved2Counter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionReserved2Counter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIcmpv6NdpPrefixInformationOptionReserved2Counter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIcmpv6NdpPrefixInformationOptionReserved2Counter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(
+            PatternFlowIcmpv6NdpPrefixInformationOptionReserved2Counter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIcmpv6NdpPrefixInformationOptionPrefix(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "values": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "ipv6",
+        },
+        "increment": {
+            "type": "PatternFlowIcmpv6NdpPrefixInformationOptionPrefixCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowIcmpv6NdpPrefixInformationOptionPrefixCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": "::",
+        "values": ["::"],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value="::", values=["::"]):
+        super(PatternFlowIcmpv6NdpPrefixInformationOptionPrefix, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionPrefixCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpPrefixInformationOptionPrefixCounter class
+
+        ipv6 counter pattern
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionPrefixCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIcmpv6NdpPrefixInformationOptionPrefixCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIcmpv6NdpPrefixInformationOptionPrefixCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpPrefixInformationOptionPrefixCounter class
+
+        ipv6 counter pattern
+
+        Returns: PatternFlowIcmpv6NdpPrefixInformationOptionPrefixCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIcmpv6NdpPrefixInformationOptionPrefixCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[str]
+        """values getter
+
+        TBD
+
+        Returns: List[str]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[str]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIcmpv6NdpPrefixInformationOptionPrefixCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "step": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "::",
+        "step": "::1",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start="::", step="::1", count=1):
+        super(PatternFlowIcmpv6NdpPrefixInformationOptionPrefixCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowIcmpv6NdpRedirectedHeaderOption(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "PatternFlowIcmpv6NdpRedirectedHeaderOptionLength"},
+        "reserved1": {"type": "PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved1"},
+        "reserved2": {"type": "PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved2"},
+        "data": {
+            "type": str,
+            "format": "hex",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "data": "00",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, data="00"):
+        super(FlowIcmpv6NdpRedirectedHeaderOption, self).__init__()
+        self._parent = parent
+        self._set_property("data", data)
+
+    def set(self, data=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def length(self):
+        # type: () -> PatternFlowIcmpv6NdpRedirectedHeaderOptionLength
+        """length getter
+
+        Option length in units of octets, including type/length bytes, reserved bytes and the truncated original packet.Option length in units of octets, including type/length bytes, reserved bytes and the truncated original packet.Option length in units of octets, including type/length bytes, reserved bytes and the truncated original packet.Option length in units of octets, including type/length bytes, reserved bytes and the truncated original packet.
+
+        Returns: PatternFlowIcmpv6NdpRedirectedHeaderOptionLength
+        """
+        return self._get_property(
+            "length", PatternFlowIcmpv6NdpRedirectedHeaderOptionLength
+        )
+
+    @property
+    def reserved1(self):
+        # type: () -> PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved1
+        """reserved1 getter
+
+        Reserved. Must be initialized to zero by the sender.Reserved. Must be initialized to zero by the sender.Reserved. Must be initialized to zero by the sender.Reserved. Must be initialized to zero by the sender.
+
+        Returns: PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved1
+        """
+        return self._get_property(
+            "reserved1", PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved1
+        )
+
+    @property
+    def reserved2(self):
+        # type: () -> PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved2
+        """reserved2 getter
+
+        Reserved. Must be initialized to zero by the sender.Reserved. Must be initialized to zero by the sender.Reserved. Must be initialized to zero by the sender.Reserved. Must be initialized to zero by the sender.
+
+        Returns: PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved2
+        """
+        return self._get_property(
+            "reserved2", PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved2
+        )
+
+    @property
+    def data(self):
+        # type: () -> str
+        """data getter
+
+        As much as possible of the original IP packet that triggered the Redirect, without the Redirect IP packet exceeding the minimum IPv6 MTU. Hex string.
+
+        Returns: str
+        """
+        return self._get_property("data")
+
+    @data.setter
+    def data(self, value):
+        """data setter
+
+        As much as possible of the original IP packet that triggered the Redirect, without the Redirect IP packet exceeding the minimum IPv6 MTU. Hex string.
+
+        value: str
+        """
+        self._set_property("data", value)
+
+
+class PatternFlowIcmpv6NdpRedirectedHeaderOptionLength(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "auto",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "auto": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "increment": {
+            "type": "PatternFlowIcmpv6NdpRedirectedHeaderOptionLengthCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowIcmpv6NdpRedirectedHeaderOptionLengthCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "auto",
+        "value": 1,
+        "values": [1],
+        "auto": 1,
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    AUTO = "auto"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=1, values=[1], auto=1):
+        super(PatternFlowIcmpv6NdpRedirectedHeaderOptionLength, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        self._set_property("auto", auto)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None, auto=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIcmpv6NdpRedirectedHeaderOptionLengthCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpRedirectedHeaderOptionLengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpRedirectedHeaderOptionLengthCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIcmpv6NdpRedirectedHeaderOptionLengthCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIcmpv6NdpRedirectedHeaderOptionLengthCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpRedirectedHeaderOptionLengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpRedirectedHeaderOptionLengthCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIcmpv6NdpRedirectedHeaderOptionLengthCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+    @property
+    def auto(self):
+        # type: () -> int
+        """auto getter
+
+        The OTG implementation can provide system generated. value for this property. If the OTG is unable to generate value. the default value must be used.
+
+        Returns: int
+        """
+        return self._get_property("auto")
+
+
+class PatternFlowIcmpv6NdpRedirectedHeaderOptionLengthCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 1,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=1, step=1, count=1):
+        super(PatternFlowIcmpv6NdpRedirectedHeaderOptionLengthCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved1(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 65535,
+        },
+        "increment": {
+            "type": "PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved1Counter"
+        },
+        "decrement": {
+            "type": "PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved1Counter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved1, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved1Counter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved1Counter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved1Counter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved1Counter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved1Counter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved1Counter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved1Counter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved1Counter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved1Counter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65536,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(
+            PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved1Counter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved2(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "increment": {
+            "type": "PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved2Counter"
+        },
+        "decrement": {
+            "type": "PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved2Counter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved2, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved2Counter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved2Counter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved2Counter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved2Counter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved2Counter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved2Counter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved2Counter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved2Counter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved2Counter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(
+            PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved2Counter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowIcmpv6NdpMtuOption(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "PatternFlowIcmpv6NdpMtuOptionLength"},
+        "reserved": {"type": "PatternFlowIcmpv6NdpMtuOptionReserved"},
+        "mtu": {"type": "PatternFlowIcmpv6NdpMtuOptionMtu"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowIcmpv6NdpMtuOption, self).__init__()
+        self._parent = parent
+
+    @property
+    def length(self):
+        # type: () -> PatternFlowIcmpv6NdpMtuOptionLength
+        """length getter
+
+        Option length in units of octets. Fixed at for the MTU option.Option length in units of octets. Fixed at for the MTU option.Option length in units of octets. Fixed at for the MTU option.Option length in units of octets. Fixed at for the MTU option.
+
+        Returns: PatternFlowIcmpv6NdpMtuOptionLength
+        """
+        return self._get_property("length", PatternFlowIcmpv6NdpMtuOptionLength)
+
+    @property
+    def reserved(self):
+        # type: () -> PatternFlowIcmpv6NdpMtuOptionReserved
+        """reserved getter
+
+        Reserved. Must be initialized to zero by the sender.Reserved. Must be initialized to zero by the sender.Reserved. Must be initialized to zero by the sender.Reserved. Must be initialized to zero by the sender.
+
+        Returns: PatternFlowIcmpv6NdpMtuOptionReserved
+        """
+        return self._get_property("reserved", PatternFlowIcmpv6NdpMtuOptionReserved)
+
+    @property
+    def mtu(self):
+        # type: () -> PatternFlowIcmpv6NdpMtuOptionMtu
+        """mtu getter
+
+        Recommended MTU for the link, in octets.Recommended MTU for the link, in octets.Recommended MTU for the link, in octets.Recommended MTU for the link, in octets.
+
+        Returns: PatternFlowIcmpv6NdpMtuOptionMtu
+        """
+        return self._get_property("mtu", PatternFlowIcmpv6NdpMtuOptionMtu)
+
+
+class PatternFlowIcmpv6NdpMtuOptionLength(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "auto",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "auto": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "increment": {"type": "PatternFlowIcmpv6NdpMtuOptionLengthCounter"},
+        "decrement": {"type": "PatternFlowIcmpv6NdpMtuOptionLengthCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "auto",
+        "value": 1,
+        "values": [1],
+        "auto": 1,
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    AUTO = "auto"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=1, values=[1], auto=1):
+        super(PatternFlowIcmpv6NdpMtuOptionLength, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        self._set_property("auto", auto)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None, auto=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIcmpv6NdpMtuOptionLengthCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpMtuOptionLengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpMtuOptionLengthCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowIcmpv6NdpMtuOptionLengthCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIcmpv6NdpMtuOptionLengthCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpMtuOptionLengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpMtuOptionLengthCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowIcmpv6NdpMtuOptionLengthCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+    @property
+    def auto(self):
+        # type: () -> int
+        """auto getter
+
+        The OTG implementation can provide system generated. value for this property. If the OTG is unable to generate value. the default value must be used.
+
+        Returns: int
+        """
+        return self._get_property("auto")
+
+
+class PatternFlowIcmpv6NdpMtuOptionLengthCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 1,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=1, step=1, count=1):
+        super(PatternFlowIcmpv6NdpMtuOptionLengthCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIcmpv6NdpMtuOptionReserved(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 65535,
+        },
+        "increment": {"type": "PatternFlowIcmpv6NdpMtuOptionReservedCounter"},
+        "decrement": {"type": "PatternFlowIcmpv6NdpMtuOptionReservedCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowIcmpv6NdpMtuOptionReserved, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIcmpv6NdpMtuOptionReservedCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpMtuOptionReservedCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpMtuOptionReservedCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowIcmpv6NdpMtuOptionReservedCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIcmpv6NdpMtuOptionReservedCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpMtuOptionReservedCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpMtuOptionReservedCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowIcmpv6NdpMtuOptionReservedCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIcmpv6NdpMtuOptionReservedCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65536,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIcmpv6NdpMtuOptionReservedCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIcmpv6NdpMtuOptionMtu(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "increment": {"type": "PatternFlowIcmpv6NdpMtuOptionMtuCounter"},
+        "decrement": {"type": "PatternFlowIcmpv6NdpMtuOptionMtuCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 1500,
+        "values": [1500],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=1500, values=[1500]):
+        super(PatternFlowIcmpv6NdpMtuOptionMtu, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIcmpv6NdpMtuOptionMtuCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpMtuOptionMtuCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpMtuOptionMtuCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowIcmpv6NdpMtuOptionMtuCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIcmpv6NdpMtuOptionMtuCounter
+        """Factory property that returns an instance of the PatternFlowIcmpv6NdpMtuOptionMtuCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIcmpv6NdpMtuOptionMtuCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowIcmpv6NdpMtuOptionMtuCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIcmpv6NdpMtuOptionMtuCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 1500,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=1500, step=1, count=1):
+        super(PatternFlowIcmpv6NdpMtuOptionMtuCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowIcmpv6NdpOptionIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = True
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowIcmpv6NdpOptionIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[FlowIcmpv6NdpLinkLayerAddressOption, FlowIcmpv6NdpMtuOption, FlowIcmpv6NdpOption, FlowIcmpv6NdpPrefixInformationOption, FlowIcmpv6NdpRedirectedHeaderOption]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> FlowIcmpv6NdpOptionIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> FlowIcmpv6NdpOption
+        return self._next()
+
+    def next(self):
+        # type: () -> FlowIcmpv6NdpOption
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, FlowIcmpv6NdpOption):
+            raise Exception("Item is not an instance of FlowIcmpv6NdpOption")
+
+    def ndpoption(self):
+        # type: () -> FlowIcmpv6NdpOptionIter
+        """Factory method that creates an instance of the FlowIcmpv6NdpOption class
+
+        NDP option (RFC 4861 Section 4.6) carried in NDP messages. The option Length is in units of octets including the type and length bytes themselves.
+
+        Returns: FlowIcmpv6NdpOptionIter
+        """
+        item = FlowIcmpv6NdpOption(parent=self._parent, choice=self._choice)
+        self._add(item)
+        return self
+
+    def add(self):
+        # type: () -> FlowIcmpv6NdpOption
+        """Add method that creates and returns an instance of the FlowIcmpv6NdpOption class
+
+        NDP option (RFC 4861 Section 4.6) carried in NDP messages. The option Length is in units of octets including the type and length bytes themselves.
+
+        Returns: FlowIcmpv6NdpOption
+        """
+        item = FlowIcmpv6NdpOption(parent=self._parent, choice=self._choice)
+        self._add(item)
+        return item
+
+    def source_link_layer_address(self):
+        # type: () -> FlowIcmpv6NdpOptionIter
+        """Factory method that creates an instance of the FlowIcmpv6NdpLinkLayerAddressOption class
+
+        NDP Source Link-Layer Address (Type 1) or Target Link-Layer Address (Type 2) option (RFC 4861 Section 4.6.1). The option Type byte is set from the parent choice.
+
+        Returns: FlowIcmpv6NdpOptionIter
+        """
+        item = FlowIcmpv6NdpOption()
+        item.source_link_layer_address
+        item.choice = "source_link_layer_address"
+        self._add(item)
+        return self
+
+    def target_link_layer_address(self):
+        # type: () -> FlowIcmpv6NdpOptionIter
+        """Factory method that creates an instance of the FlowIcmpv6NdpLinkLayerAddressOption class
+
+        NDP Source Link-Layer Address (Type 1) or Target Link-Layer Address (Type 2) option (RFC 4861 Section 4.6.1). The option Type byte is set from the parent choice.
+
+        Returns: FlowIcmpv6NdpOptionIter
+        """
+        item = FlowIcmpv6NdpOption()
+        item.target_link_layer_address
+        item.choice = "target_link_layer_address"
+        self._add(item)
+        return self
+
+    def prefix_information(self):
+        # type: () -> FlowIcmpv6NdpOptionIter
+        """Factory method that creates an instance of the FlowIcmpv6NdpPrefixInformationOption class
+
+        NDP Prefix Information option (Type 3). Defined in RFC 4861 Section 4.6.2 and extended for Mobile IPv6 Home Agent by RFC 6275 Section 7.2 (R flag). Provides hosts with on-link prefixes and prefixes for address autoconfiguration.
+
+        Returns: FlowIcmpv6NdpOptionIter
+        """
+        item = FlowIcmpv6NdpOption()
+        item.prefix_information
+        item.choice = "prefix_information"
+        self._add(item)
+        return self
+
+    def redirected_header(self, data="00"):
+        # type: (str) -> FlowIcmpv6NdpOptionIter
+        """Factory method that creates an instance of the FlowIcmpv6NdpRedirectedHeaderOption class
+
+        NDP Redirected Header option (Type 4). Defined in RFC 4861 Section 4.6.3. Used in Redirect messages to include as much as possible of the IP packet that triggered the Redirect, without exceeding the minimum IPv6 MTU.
+
+        Returns: FlowIcmpv6NdpOptionIter
+        """
+        item = FlowIcmpv6NdpOption()
+        item.redirected_header
+        item.choice = "redirected_header"
+        self._add(item)
+        return self
+
+    def mtu(self):
+        # type: () -> FlowIcmpv6NdpOptionIter
+        """Factory method that creates an instance of the FlowIcmpv6NdpMtuOption class
+
+        NDP MTU option (Type 5). Defined in RFC 4861 Section 4.6.4. Used in Router Advertisement messages to ensure that all nodes on link use the same MTU value in those cases where the link MTU is not well known.
+
+        Returns: FlowIcmpv6NdpOptionIter
+        """
+        item = FlowIcmpv6NdpOption()
+        item.mtu
+        item.choice = "mtu"
+        self._add(item)
+        return self
 
 
 class FlowPpp(OpenApiObject):

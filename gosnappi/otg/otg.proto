@@ -12068,6 +12068,7 @@ message FlowIcmpv6 {
     enum Enum {
       unspecified = 0;
       echo = 1;
+      neighbor_solicitation = 2;
     }
   }
   // Description missing in models
@@ -12076,6 +12077,9 @@ message FlowIcmpv6 {
 
   // Description missing in models
   FlowIcmpv6Echo echo = 2;
+
+  // Description missing in models
+  FlowIcmpv6NeighborSolicitation neighbor_solicitation = 3;
 }
 
 // Packet Header for ICMPv6 Echo
@@ -12095,6 +12099,145 @@ message FlowIcmpv6Echo {
 
   // Description missing in models
   PatternFlowIcmpv6EchoChecksum checksum = 5;
+}
+
+// Packet Header for ICMPv6 NDP Neighbor Solicitation (Type 135, RFC 4861 Section 4.3).
+message FlowIcmpv6NeighborSolicitation {
+
+  // Description missing in models
+  PatternFlowIcmpv6NeighborSolicitationType type = 1;
+
+  // Description missing in models
+  PatternFlowIcmpv6NeighborSolicitationCode code = 2;
+
+  // Description missing in models
+  PatternFlowIcmpv6NeighborSolicitationChecksum checksum = 3;
+
+  // Description missing in models
+  PatternFlowIcmpv6NeighborSolicitationReserved reserved = 4;
+
+  // Description missing in models
+  PatternFlowIcmpv6NeighborSolicitationTargetAddress target_address = 5;
+
+  // Optional list of NDP options. Source Link-Layer Address SHOULD be included when sent
+  // from a unicast address (RFC 4861 Section 4.3).
+  repeated FlowIcmpv6NdpOption options = 6;
+}
+
+// NDP option (RFC 4861 Section 4.6) carried in NDP messages. The option Length is in
+// units of 8 octets including the type and length bytes themselves.
+message FlowIcmpv6NdpOption {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      source_link_layer_address = 1;
+      target_link_layer_address = 2;
+      prefix_information = 3;
+      redirected_header = 4;
+      mtu = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.source_link_layer_address
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowIcmpv6NdpLinkLayerAddressOption source_link_layer_address = 2;
+
+  // Description missing in models
+  FlowIcmpv6NdpLinkLayerAddressOption target_link_layer_address = 3;
+
+  // Description missing in models
+  FlowIcmpv6NdpPrefixInformationOption prefix_information = 4;
+
+  // Description missing in models
+  FlowIcmpv6NdpRedirectedHeaderOption redirected_header = 5;
+
+  // Description missing in models
+  FlowIcmpv6NdpMtuOption mtu = 6;
+}
+
+// NDP Source Link-Layer Address (Type 1) or Target Link-Layer Address (Type 2) option
+// (RFC 4861 Section 4.6.1). The option Type byte is set from the parent choice.
+message FlowIcmpv6NdpLinkLayerAddressOption {
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpLinkLayerAddressOptionLength length = 1;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddress link_layer_address = 2;
+}
+
+// NDP Prefix Information option (Type 3). Defined in RFC 4861 Section 4.6.2 and extended
+// for Mobile IPv6 Home Agent by RFC 6275 Section 7.2 (R flag). Provides hosts with
+// on-link prefixes and prefixes for address autoconfiguration.
+message FlowIcmpv6NdpPrefixInformationOption {
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionLength length = 1;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLength prefix_length = 2;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionLFlag l_flag = 3;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionAFlag a_flag = 4;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionRFlag r_flag = 5;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionReserved1 reserved1 = 6;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionValidLifetime valid_lifetime = 7;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetime preferred_lifetime = 8;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionReserved2 reserved2 = 9;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionPrefix prefix = 10;
+}
+
+// NDP Redirected Header option (Type 4). Defined in RFC 4861 Section 4.6.3. Used in
+// Redirect messages to include as much as possible of the IP packet that triggered
+// the Redirect, without exceeding the minimum IPv6 MTU.
+message FlowIcmpv6NdpRedirectedHeaderOption {
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpRedirectedHeaderOptionLength length = 1;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved1 reserved1 = 2;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved2 reserved2 = 3;
+
+  // As much as possible of the original IP packet that triggered the Redirect, without
+  // the Redirect IP packet exceeding the minimum IPv6 MTU. Hex string.
+  // default = 00
+  optional string data = 4;
+}
+
+// NDP MTU option (Type 5). Defined in RFC 4861 Section 4.6.4. Used in Router Advertisement
+// messages to ensure that all nodes on a link use the same MTU value in those cases
+// where the link MTU is not well known.
+message FlowIcmpv6NdpMtuOption {
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpMtuOptionLength length = 1;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpMtuOptionReserved reserved = 2;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpMtuOptionMtu mtu = 3;
 }
 
 // PPP packet header
@@ -33918,6 +34061,1106 @@ message PatternFlowIcmpv6EchoChecksum {
 
   // A custom checksum value
   optional uint32 custom = 3;
+}
+
+// integer counter pattern
+message PatternFlowIcmpv6NeighborSolicitationTypeCounter {
+
+  // Description missing in models
+  // default = 135
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// ICMPv6 message type. Fixed at 135 for Neighbor Solicitation.
+message PatternFlowIcmpv6NeighborSolicitationType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 135
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [135]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIcmpv6NeighborSolicitationTypeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIcmpv6NeighborSolicitationTypeCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIcmpv6NeighborSolicitationCodeCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// ICMPv6 message code. Must be 0 for Neighbor Solicitation.
+message PatternFlowIcmpv6NeighborSolicitationCode {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIcmpv6NeighborSolicitationCodeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIcmpv6NeighborSolicitationCodeCounter decrement = 6;
+}
+
+// ICMPv6 checksum
+message PatternFlowIcmpv6NeighborSolicitationChecksum {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      generated = 1;
+      custom = 2;
+    }
+  }
+  // The type of checksum
+  // default = Choice.Enum.generated
+  optional Choice.Enum choice = 1;
+
+  message Generated {
+    enum Enum {
+      unspecified = 0;
+      good = 1;
+      bad = 2;
+    }
+  }
+  // A system generated checksum value
+  // default = Generated.Enum.good
+  optional Generated.Enum generated = 2;
+
+  // A custom checksum value
+  optional uint32 custom = 3;
+}
+
+// integer counter pattern
+message PatternFlowIcmpv6NeighborSolicitationReservedCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Reserved field. Must be initialized to zero by the sender and must be ignored by
+// the receiver.
+message PatternFlowIcmpv6NeighborSolicitationReserved {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIcmpv6NeighborSolicitationReservedCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIcmpv6NeighborSolicitationReservedCounter decrement = 6;
+}
+
+// ipv6 counter pattern
+message PatternFlowIcmpv6NeighborSolicitationTargetAddressCounter {
+
+  // Description missing in models
+  // default = ::1
+  optional string start = 1;
+
+  // Description missing in models
+  // default = ::1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The IPv6 address of the target of the solicitation. Must not be a multicast address.
+message PatternFlowIcmpv6NeighborSolicitationTargetAddress {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = ::1
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['::1']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowIcmpv6NeighborSolicitationTargetAddressCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIcmpv6NeighborSolicitationTargetAddressCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIcmpv6NdpLinkLayerAddressOptionLengthCounter {
+
+  // Description missing in models
+  // default = 1
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Option length in units of 8 octets, including the type and length bytes. For a 6-octet
+// Ethernet address this is 1.
+message PatternFlowIcmpv6NdpLinkLayerAddressOptionLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [1]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 1
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpLinkLayerAddressOptionLengthCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpLinkLayerAddressOptionLengthCounter decrement = 7;
+}
+
+// mac counter pattern
+message PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddressCounter {
+
+  // Description missing in models
+  // default = 00:00:00:00:00:00
+  optional string start = 1;
+
+  // Description missing in models
+  // default = 00:00:00:00:00:01
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Link-layer address of the sender (source option) or target (target option).
+message PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddress {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 00:00:00:00:00:00
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['00:00:00:00:00:00']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddressCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddressCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIcmpv6NdpPrefixInformationOptionLengthCounter {
+
+  // Description missing in models
+  // default = 4
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Option length in units of 8 octets. Fixed at 4 for the Prefix Information option.
+message PatternFlowIcmpv6NdpPrefixInformationOptionLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 4
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [4]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 4
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionLengthCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionLengthCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLengthCounter {
+
+  // Description missing in models
+  // default = 64
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Number of leading bits of the Prefix field that are valid. Range 0..128.
+message PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 64
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [64]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLengthCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLengthCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIcmpv6NdpPrefixInformationOptionLFlagCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// On-link (L) flag. When set, the prefix can be used for on-link determination. RFC
+// 4861 Section 4.6.2.
+message PatternFlowIcmpv6NdpPrefixInformationOptionLFlag {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionLFlagCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionLFlagCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIcmpv6NdpPrefixInformationOptionAFlagCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Autonomous address-configuration (A) flag. When set, the prefix can be used for stateless
+// address autoconfiguration. RFC 4861 Section 4.6.2.
+message PatternFlowIcmpv6NdpPrefixInformationOptionAFlag {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionAFlagCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionAFlagCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIcmpv6NdpPrefixInformationOptionRFlagCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Router address (R) flag. When set, the Prefix field contains a complete IP address
+// assigned to the sending router. Used by Mobile IPv6 (RFC 6275 Section 7.2).
+message PatternFlowIcmpv6NdpPrefixInformationOptionRFlag {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionRFlagCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionRFlagCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIcmpv6NdpPrefixInformationOptionReserved1Counter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Reserved. Must be initialized to zero by the sender.
+message PatternFlowIcmpv6NdpPrefixInformationOptionReserved1 {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionReserved1Counter increment = 5;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionReserved1Counter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIcmpv6NdpPrefixInformationOptionValidLifetimeCounter {
+
+  // Description missing in models
+  // default = 4294967295
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Length of time in seconds that the prefix is valid for on-link determination. A value
+// of 0xffffffff represents infinity.
+message PatternFlowIcmpv6NdpPrefixInformationOptionValidLifetime {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 4294967295
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [4294967295]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionValidLifetimeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionValidLifetimeCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetimeCounter {
+
+  // Description missing in models
+  // default = 604800
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Length of time in seconds that addresses generated from the prefix via stateless
+// address autoconfiguration remain preferred. Must be less than or equal to valid_lifetime.
+message PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetime {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 604800
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [604800]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetimeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetimeCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIcmpv6NdpPrefixInformationOptionReserved2Counter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Reserved. Must be initialized to zero by the sender.
+message PatternFlowIcmpv6NdpPrefixInformationOptionReserved2 {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionReserved2Counter increment = 5;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionReserved2Counter decrement = 6;
+}
+
+// ipv6 counter pattern
+message PatternFlowIcmpv6NdpPrefixInformationOptionPrefixCounter {
+
+  // Description missing in models
+  // default = ::
+  optional string start = 1;
+
+  // Description missing in models
+  // default = ::1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// IP address or prefix of an IP address. The Prefix Length field contains the number
+// of valid leading bits.
+message PatternFlowIcmpv6NdpPrefixInformationOptionPrefix {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = ::
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['::']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionPrefixCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpPrefixInformationOptionPrefixCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIcmpv6NdpRedirectedHeaderOptionLengthCounter {
+
+  // Description missing in models
+  // default = 1
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Option length in units of 8 octets, including type/length bytes, reserved bytes and
+// the truncated original packet.
+message PatternFlowIcmpv6NdpRedirectedHeaderOptionLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [1]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 1
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpRedirectedHeaderOptionLengthCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpRedirectedHeaderOptionLengthCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved1Counter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Reserved. Must be initialized to zero by the sender.
+message PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved1 {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved1Counter increment = 5;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved1Counter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved2Counter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Reserved. Must be initialized to zero by the sender.
+message PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved2 {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved2Counter increment = 5;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpRedirectedHeaderOptionReserved2Counter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIcmpv6NdpMtuOptionLengthCounter {
+
+  // Description missing in models
+  // default = 1
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Option length in units of 8 octets. Fixed at 1 for the MTU option.
+message PatternFlowIcmpv6NdpMtuOptionLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [1]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 1
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpMtuOptionLengthCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpMtuOptionLengthCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIcmpv6NdpMtuOptionReservedCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Reserved. Must be initialized to zero by the sender.
+message PatternFlowIcmpv6NdpMtuOptionReserved {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpMtuOptionReservedCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpMtuOptionReservedCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIcmpv6NdpMtuOptionMtuCounter {
+
+  // Description missing in models
+  // default = 1500
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Recommended MTU for the link, in octets.
+message PatternFlowIcmpv6NdpMtuOptionMtu {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 1500
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [1500]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpMtuOptionMtuCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIcmpv6NdpMtuOptionMtuCounter decrement = 6;
 }
 
 // ICMPv6 checksum

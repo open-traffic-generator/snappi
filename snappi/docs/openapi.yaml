@@ -15811,11 +15811,17 @@ components:
           x-enum:
             echo:
               x-field-uid: 1
+            neighbor_solicitation:
+              x-field-uid: 2
           enum:
           - echo
+          - neighbor_solicitation
         echo:
           $ref: '#/components/schemas/Flow.Icmpv6.Echo'
           x-field-uid: 2
+        neighbor_solicitation:
+          $ref: '#/components/schemas/Flow.Icmpv6.NeighborSolicitation'
+          x-field-uid: 3
     Flow.Icmpv6.Echo:
       description: |-
         Packet Header for ICMPv6 Echo
@@ -15836,6 +15842,155 @@ components:
         checksum:
           x-field-uid: 5
           $ref: '#/components/schemas/Pattern.Flow.Icmpv6.Echo.Checksum'
+    Flow.Icmpv6.NeighborSolicitation:
+      description: |-
+        Packet Header for ICMPv6 NDP Neighbor Solicitation (Type 135, RFC 4861 Section 4.3).
+      type: object
+      properties:
+        type:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.Type'
+        code:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.Code'
+        checksum:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.Checksum'
+        reserved:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.Reserved'
+        target_address:
+          x-field-uid: 5
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.TargetAddress'
+        options:
+          description: |-
+            Optional list of NDP options. Source Link-Layer Address SHOULD be included when sent from a unicast address (RFC 4861 Section 4.3).
+          type: array
+          items:
+            $ref: '#/components/schemas/Flow.Icmpv6.NdpOption'
+          x-field-uid: 6
+    Flow.Icmpv6.NdpOption:
+      description: |-
+        NDP option (RFC 4861 Section 4.6) carried in NDP messages. The option Length is in units of 8 octets including the type and length bytes themselves.
+      type: object
+      properties:
+        choice:
+          type: string
+          default: source_link_layer_address
+          x-field-uid: 1
+          x-enum:
+            source_link_layer_address:
+              x-field-uid: 1
+            target_link_layer_address:
+              x-field-uid: 2
+            prefix_information:
+              x-field-uid: 3
+            redirected_header:
+              x-field-uid: 4
+            mtu:
+              x-field-uid: 5
+          enum:
+          - source_link_layer_address
+          - target_link_layer_address
+          - prefix_information
+          - redirected_header
+          - mtu
+        source_link_layer_address:
+          $ref: '#/components/schemas/Flow.Icmpv6.NdpLinkLayerAddressOption'
+          x-field-uid: 2
+        target_link_layer_address:
+          $ref: '#/components/schemas/Flow.Icmpv6.NdpLinkLayerAddressOption'
+          x-field-uid: 3
+        prefix_information:
+          $ref: '#/components/schemas/Flow.Icmpv6.NdpPrefixInformationOption'
+          x-field-uid: 4
+        redirected_header:
+          $ref: '#/components/schemas/Flow.Icmpv6.NdpRedirectedHeaderOption'
+          x-field-uid: 5
+        mtu:
+          $ref: '#/components/schemas/Flow.Icmpv6.NdpMtuOption'
+          x-field-uid: 6
+    Flow.Icmpv6.NdpLinkLayerAddressOption:
+      description: |-
+        NDP Source Link-Layer Address (Type 1) or Target Link-Layer Address (Type 2) option (RFC 4861 Section 4.6.1). The option Type byte is set from the parent choice.
+      type: object
+      properties:
+        length:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpLinkLayerAddressOption.Length'
+        link_layer_address:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpLinkLayerAddressOption.LinkLayerAddress'
+    Flow.Icmpv6.NdpPrefixInformationOption:
+      description: |-
+        NDP Prefix Information option (Type 3). Defined in RFC 4861 Section 4.6.2 and extended for Mobile IPv6 Home Agent by RFC 6275 Section 7.2 (R flag). Provides hosts with on-link prefixes and prefixes for address autoconfiguration.
+      type: object
+      properties:
+        length:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Length'
+        prefix_length:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.PrefixLength'
+        l_flag:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.LFlag'
+        a_flag:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.AFlag'
+        r_flag:
+          x-field-uid: 5
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.RFlag'
+        reserved1:
+          x-field-uid: 6
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Reserved1'
+        valid_lifetime:
+          x-field-uid: 7
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.ValidLifetime'
+        preferred_lifetime:
+          x-field-uid: 8
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.PreferredLifetime'
+        reserved2:
+          x-field-uid: 9
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Reserved2'
+        prefix:
+          x-field-uid: 10
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Prefix'
+    Flow.Icmpv6.NdpRedirectedHeaderOption:
+      description: |-
+        NDP Redirected Header option (Type 4). Defined in RFC 4861 Section 4.6.3. Used in Redirect messages to include as much as possible of the IP packet that triggered the Redirect, without exceeding the minimum IPv6 MTU.
+      type: object
+      properties:
+        length:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Length'
+        reserved1:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Reserved1'
+        reserved2:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Reserved2'
+        data:
+          description: |-
+            As much as possible of the original IP packet that triggered the Redirect, without the Redirect IP packet exceeding the minimum IPv6 MTU. Hex string.
+          type: string
+          format: hex
+          default: '00'
+          x-field-uid: 4
+    Flow.Icmpv6.NdpMtuOption:
+      description: |-
+        NDP MTU option (Type 5). Defined in RFC 4861 Section 4.6.4. Used in Router Advertisement messages to ensure that all nodes on a link use the same MTU value in those cases where the link MTU is not well known.
+      type: object
+      properties:
+        length:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpMtuOption.Length'
+        reserved:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpMtuOption.Reserved'
+        mtu:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpMtuOption.Mtu'
     Flow.Ppp:
       description: |-
         PPP packet header
@@ -17648,7 +17803,6 @@ components:
           description: |-
             List of 128-bit SRv6 SID addresses (RFC 8754 Section 2.1), encoded in reverse path order: Segment[0] is the last segment of the SR Policy, Segment[n-1] is the first segment to visit.
           type: array
-          minItems: 1
           items:
             $ref: '#/components/schemas/Flow.Ipv6SegmentRouting.Segment'
           x-field-uid: 5
@@ -46819,6 +46973,1527 @@ components:
           format: uint32
           maximum: 65535
           x-field-uid: 3
+    Pattern.Flow.Icmpv6.NeighborSolicitation.Type.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 135
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Icmpv6.NeighborSolicitation.Type:
+      description: |-
+        ICMPv6 message type. Fixed at 135 for Neighbor Solicitation.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 135
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 135
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.Type.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.Type.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NeighborSolicitation.Code.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Icmpv6.NeighborSolicitation.Code:
+      description: |-
+        ICMPv6 message code. Must be 0 for Neighbor Solicitation.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.Code.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.Code.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NeighborSolicitation.Checksum:
+      description: |-
+        ICMPv6 checksum
+      type: object
+      properties:
+        choice:
+          description: |-
+            The type of checksum
+          type: string
+          x-enum:
+            generated:
+              x-field-uid: 1
+            custom:
+              x-field-uid: 2
+          default: generated
+          x-field-uid: 1
+          enum:
+          - generated
+          - custom
+        generated:
+          description: |-
+            A system generated checksum value
+          type: string
+          x-enum:
+            good:
+              x-field-uid: 1
+            bad:
+              x-field-uid: 2
+          default: good
+          x-field-uid: 2
+          enum:
+          - good
+          - bad
+        custom:
+          description: |-
+            A custom checksum value
+          type: integer
+          format: uint32
+          maximum: 65535
+          x-field-uid: 3
+    Pattern.Flow.Icmpv6.NeighborSolicitation.Reserved.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Icmpv6.NeighborSolicitation.Reserved:
+      description: |-
+        Reserved field. Must be initialized to zero by the sender and must be ignored by the receiver.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.Reserved.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.Reserved.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NeighborSolicitation.TargetAddress.Counter:
+      description: |-
+        ipv6 counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: ::1
+          format: ipv6
+        step:
+          type: string
+          x-field-uid: 2
+          default: ::1
+          format: ipv6
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Icmpv6.NeighborSolicitation.TargetAddress:
+      description: |-
+        The IPv6 address of the target of the solicitation. Must not be a multicast address.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: ::1
+          format: ipv6
+        values:
+          type: array
+          items:
+            type: string
+            format: ipv6
+          x-field-uid: 3
+          default:
+          - ::1
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.TargetAddress.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.TargetAddress.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpLinkLayerAddressOption.Length.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 1
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Icmpv6.NdpLinkLayerAddressOption.Length:
+      description: |-
+        Option length in units of 8 octets, including the type and length bytes. For a 6-octet Ethernet address this is 1.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 1
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 1
+          format: uint32
+          maximum: 255
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpLinkLayerAddressOption.Length.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpLinkLayerAddressOption.Length.Counter'
+          x-field-uid: 7
+    Pattern.Flow.Icmpv6.NdpLinkLayerAddressOption.LinkLayerAddress.Counter:
+      description: |-
+        mac counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: 00:00:00:00:00:00
+          format: mac
+        step:
+          type: string
+          x-field-uid: 2
+          default: 00:00:00:00:00:01
+          format: mac
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Icmpv6.NdpLinkLayerAddressOption.LinkLayerAddress:
+      description: |-
+        Link-layer address of the sender (source option) or target (target option).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: 00:00:00:00:00:00
+          format: mac
+        values:
+          type: array
+          items:
+            type: string
+            format: mac
+          x-field-uid: 3
+          default:
+          - 00:00:00:00:00:00
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpLinkLayerAddressOption.LinkLayerAddress.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpLinkLayerAddressOption.LinkLayerAddress.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Length.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 4
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Length:
+      description: |-
+        Option length in units of 8 octets. Fixed at 4 for the Prefix Information option.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 4
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 4
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 4
+          format: uint32
+          maximum: 255
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Length.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Length.Counter'
+          x-field-uid: 7
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.PrefixLength.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 64
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.PrefixLength:
+      description: |-
+        Number of leading bits of the Prefix field that are valid. Range 0..128.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 64
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 64
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.PrefixLength.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.PrefixLength.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.LFlag.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 2
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.LFlag:
+      description: |-
+        On-link (L) flag. When set, the prefix can be used for on-link determination. RFC 4861 Section 4.6.2.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.LFlag.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.LFlag.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.AFlag.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 2
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.AFlag:
+      description: |-
+        Autonomous address-configuration (A) flag. When set, the prefix can be used for stateless address autoconfiguration. RFC 4861 Section 4.6.2.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.AFlag.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.AFlag.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.RFlag.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 2
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.RFlag:
+      description: |-
+        Router address (R) flag. When set, the Prefix field contains a complete IP address assigned to the sending router. Used by Mobile IPv6 (RFC 6275 Section 7.2).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.RFlag.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.RFlag.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Reserved1.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 31
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 31
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 32
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Reserved1:
+      description: |-
+        Reserved. Must be initialized to zero by the sender.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 31
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 31
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Reserved1.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Reserved1.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.ValidLifetime.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 4294967295
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.ValidLifetime:
+      description: |-
+        Length of time in seconds that the prefix is valid for on-link determination. A value of 0xffffffff represents infinity.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 4294967295
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 4294967295
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.ValidLifetime.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.ValidLifetime.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.PreferredLifetime.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 604800
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.PreferredLifetime:
+      description: |-
+        Length of time in seconds that addresses generated from the prefix via stateless address autoconfiguration remain preferred. Must be less than or equal to valid_lifetime.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 604800
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 604800
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.PreferredLifetime.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.PreferredLifetime.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Reserved2.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Reserved2:
+      description: |-
+        Reserved. Must be initialized to zero by the sender.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Reserved2.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Reserved2.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Prefix.Counter:
+      description: |-
+        ipv6 counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: '::'
+          format: ipv6
+        step:
+          type: string
+          x-field-uid: 2
+          default: ::1
+          format: ipv6
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Prefix:
+      description: |-
+        IP address or prefix of an IP address. The Prefix Length field contains the number of valid leading bits.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: '::'
+          format: ipv6
+        values:
+          type: array
+          items:
+            type: string
+            format: ipv6
+          x-field-uid: 3
+          default:
+          - '::'
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Prefix.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Prefix.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Length.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 1
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Length:
+      description: |-
+        Option length in units of 8 octets, including type/length bytes, reserved bytes and the truncated original packet.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 1
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 1
+          format: uint32
+          maximum: 255
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Length.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Length.Counter'
+          x-field-uid: 7
+    Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Reserved1.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65536
+    Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Reserved1:
+      description: |-
+        Reserved. Must be initialized to zero by the sender.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Reserved1.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Reserved1.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Reserved2.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Reserved2:
+      description: |-
+        Reserved. Must be initialized to zero by the sender.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Reserved2.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Reserved2.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpMtuOption.Length.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 1
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Icmpv6.NdpMtuOption.Length:
+      description: |-
+        Option length in units of 8 octets. Fixed at 1 for the MTU option.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 1
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 1
+          format: uint32
+          maximum: 255
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpMtuOption.Length.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpMtuOption.Length.Counter'
+          x-field-uid: 7
+    Pattern.Flow.Icmpv6.NdpMtuOption.Reserved.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65536
+    Pattern.Flow.Icmpv6.NdpMtuOption.Reserved:
+      description: |-
+        Reserved. Must be initialized to zero by the sender.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpMtuOption.Reserved.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpMtuOption.Reserved.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpMtuOption.Mtu.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 1500
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Icmpv6.NdpMtuOption.Mtu:
+      description: |-
+        Recommended MTU for the link, in octets.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 1500
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 1500
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpMtuOption.Mtu.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpMtuOption.Mtu.Counter'
+          x-field-uid: 6
     Pattern.Flow.Icmpv6.Common.Checksum:
       description: |-
         ICMPv6 checksum
