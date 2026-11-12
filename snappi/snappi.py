@@ -156286,7 +156286,7 @@ class FlowCfm(OpenApiObject):
         # type: () -> FlowCfmSelectOpCode
         """op_code getter
 
-        Select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7. Currently only Continuity Check Message (CCM), Loopback Message (LBM) and Loopback Reply (LBR) are supported.Select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7. Currently only Continuity Check Message (CCM), Loopback Message (LBM) and Loopback Reply (LBR) are supported.Select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7. Currently only Continuity Check Message (CCM), Loopback Message (LBM) and Loopback Reply (LBR) are supported.Select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7. Currently only Continuity Check Message (CCM), Loopback Message (LBM) and Loopback Reply (LBR) are supported.
+        Select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7 and ITU-T Y.1731. Currently supported choices are Continuity Check Message (CCM), Loopback Message (LBM), Loopback Reply (LBR) and Delay Measurement Message (DMM).Select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7 and ITU-T Y.1731. Currently supported choices are Continuity Check Message (CCM), Loopback Message (LBM), Loopback Reply (LBR) and Delay Measurement Message (DMM).Select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7 and ITU-T Y.1731. Currently supported choices are Continuity Check Message (CCM), Loopback Message (LBM), Loopback Reply (LBR) and Delay Measurement Message (DMM).Select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7 and ITU-T Y.1731. Currently supported choices are Continuity Check Message (CCM), Loopback Message (LBM), Loopback Reply (LBR) and Delay Measurement Message (DMM).
 
         Returns: FlowCfmSelectOpCode
         """
@@ -156303,11 +156303,13 @@ class FlowCfmSelectOpCode(OpenApiObject):
                 "ccm",
                 "lbm",
                 "lbr",
+                "dmm",
             ],
         },
         "ccm": {"type": "FlowCfmCcm"},
         "lbm": {"type": "FlowCfmLbm"},
         "lbr": {"type": "FlowCfmLbr"},
+        "dmm": {"type": "FlowCfmDmm"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -156319,6 +156321,7 @@ class FlowCfmSelectOpCode(OpenApiObject):
     CCM = "ccm"  # type: str
     LBM = "lbm"  # type: str
     LBR = "lbr"  # type: str
+    DMM = "dmm"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -156368,13 +156371,24 @@ class FlowCfmSelectOpCode(OpenApiObject):
         return self._get_property("lbr", FlowCfmLbr, self, "lbr")
 
     @property
+    def dmm(self):
+        # type: () -> FlowCfmDmm
+        """Factory property that returns an instance of the FlowCfmDmm class
+
+        Delay Measurement Message (DMM) is diagnostic frame sent by Maintenance End Point (MEP) to peer MEP to measure one-way or two-way frame delay, as defined in ITU-T Y.1731 Section 8.2. DMM flag bits are reserved and set to zero.
+
+        Returns: FlowCfmDmm
+        """
+        return self._get_property("dmm", FlowCfmDmm, self, "dmm")
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["ccm"], Literal["lbm"], Literal["lbr"]]
+        # type: () -> Union[Literal["ccm"], Literal["dmm"], Literal["lbm"], Literal["lbr"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["ccm"], Literal["lbm"], Literal["lbr"]]
+        Returns: Union[Literal["ccm"], Literal["dmm"], Literal["lbm"], Literal["lbr"]]
         """
         return self._get_property("choice")
 
@@ -156384,7 +156398,7 @@ class FlowCfmSelectOpCode(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["ccm"], Literal["lbm"], Literal["lbr"]]
+        value: Union[Literal["ccm"], Literal["dmm"], Literal["lbm"], Literal["lbr"]]
         """
         self._set_property("choice", value)
 
@@ -159484,6 +159498,1149 @@ class PatternFlowCfmLbrTransactionIdCounter(OpenApiObject):
 
     def __init__(self, parent=None, start=0, step=1, count=1):
         super(PatternFlowCfmLbrTransactionIdCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowCfmDmm(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "tx_timestamp_f": {"type": "PatternFlowCfmDmmTxTimestampF"},
+        "reserved_for_dmm_receiver": {
+            "type": "PatternFlowCfmDmmReservedForDmmReceiver"
+        },
+        "reserved_for_dmr": {"type": "PatternFlowCfmDmmReservedForDmr"},
+        "reserved_for_dmr_receiver": {
+            "type": "PatternFlowCfmDmmReservedForDmrReceiver"
+        },
+        "tlvs": {"type": "FlowCfmTlvsIter"},
+        "append_end_tlv": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "append_end_tlv": True,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, append_end_tlv=True):
+        super(FlowCfmDmm, self).__init__()
+        self._parent = parent
+        self._set_property("append_end_tlv", append_end_tlv)
+
+    def set(self, append_end_tlv=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def tx_timestamp_f(self):
+        # type: () -> PatternFlowCfmDmmTxTimestampF
+        """tx_timestamp_f getter
+
+        The timestamp at which the DMM frame is transmitted by the originating MEP (ITU-T Y.1731 Section 8.2).The timestamp at which the DMM frame is transmitted by the originating MEP (ITU-T Y.1731 Section 8.2).The timestamp at which the DMM frame is transmitted by the originating MEP (ITU-T Y.1731 Section 8.2).The timestamp at which the DMM frame is transmitted by the originating MEP (ITU-T Y.1731 Section 8.2).
+
+        Returns: PatternFlowCfmDmmTxTimestampF
+        """
+        return self._get_property("tx_timestamp_f", PatternFlowCfmDmmTxTimestampF)
+
+    @property
+    def reserved_for_dmm_receiver(self):
+        # type: () -> PatternFlowCfmDmmReservedForDmmReceiver
+        """reserved_for_dmm_receiver getter
+
+        Reserved for the DMM receiving equipment to record its receive timestamp when forming the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).Reserved for the DMM receiving equipment to record its receive timestamp when forming the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).Reserved for the DMM receiving equipment to record its receive timestamp when forming the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).Reserved for the DMM receiving equipment to record its receive timestamp when forming the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).
+
+        Returns: PatternFlowCfmDmmReservedForDmmReceiver
+        """
+        return self._get_property(
+            "reserved_for_dmm_receiver", PatternFlowCfmDmmReservedForDmmReceiver
+        )
+
+    @property
+    def reserved_for_dmr(self):
+        # type: () -> PatternFlowCfmDmmReservedForDmr
+        """reserved_for_dmr getter
+
+        Reserved for the DMM receiving equipment to record its transmit timestamp when forming the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).Reserved for the DMM receiving equipment to record its transmit timestamp when forming the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).Reserved for the DMM receiving equipment to record its transmit timestamp when forming the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).Reserved for the DMM receiving equipment to record its transmit timestamp when forming the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).
+
+        Returns: PatternFlowCfmDmmReservedForDmr
+        """
+        return self._get_property("reserved_for_dmr", PatternFlowCfmDmmReservedForDmr)
+
+    @property
+    def reserved_for_dmr_receiver(self):
+        # type: () -> PatternFlowCfmDmmReservedForDmrReceiver
+        """reserved_for_dmr_receiver getter
+
+        Reserved for the DMR receiving equipment to record its receive timestamp when the DMR arrives back at the originating MEP. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).Reserved for the DMR receiving equipment to record its receive timestamp when the DMR arrives back at the originating MEP. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).Reserved for the DMR receiving equipment to record its receive timestamp when the DMR arrives back at the originating MEP. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).Reserved for the DMR receiving equipment to record its receive timestamp when the DMR arrives back at the originating MEP. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).
+
+        Returns: PatternFlowCfmDmmReservedForDmrReceiver
+        """
+        return self._get_property(
+            "reserved_for_dmr_receiver", PatternFlowCfmDmmReservedForDmrReceiver
+        )
+
+    @property
+    def tlvs(self):
+        # type: () -> FlowCfmTlvsIter
+        """tlvs getter
+
+        TBD
+
+        Returns: FlowCfmTlvsIter
+        """
+        return self._get_property("tlvs", FlowCfmTlvsIter, self._parent, self._choice)
+
+    @property
+    def append_end_tlv(self):
+        # type: () -> bool
+        """append_end_tlv getter
+
+        When true, the implementation appends an End TLV (Type 0, IEEE 802.1Q-2018 Table 21-17) after all TLVs in the tlvs list. Set to false only when testing DUT behaviour with deliberately missing End TLV.
+
+        Returns: bool
+        """
+        return self._get_property("append_end_tlv")
+
+    @append_end_tlv.setter
+    def append_end_tlv(self, value):
+        """append_end_tlv setter
+
+        When true, the implementation appends an End TLV (Type 0, IEEE 802.1Q-2018 Table 21-17) after all TLVs in the tlvs list. Set to false only when testing DUT behaviour with deliberately missing End TLV.
+
+        value: bool
+        """
+        self._set_property("append_end_tlv", value)
+
+
+class PatternFlowCfmDmmTxTimestampF(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint64",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint64",
+        },
+        "increment": {"type": "PatternFlowCfmDmmTxTimestampFCounter"},
+        "decrement": {"type": "PatternFlowCfmDmmTxTimestampFCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowCfmDmmTxTimestampF, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowCfmDmmTxTimestampFCounter
+        """Factory property that returns an instance of the PatternFlowCfmDmmTxTimestampFCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowCfmDmmTxTimestampFCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowCfmDmmTxTimestampFCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowCfmDmmTxTimestampFCounter
+        """Factory property that returns an instance of the PatternFlowCfmDmmTxTimestampFCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowCfmDmmTxTimestampFCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowCfmDmmTxTimestampFCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowCfmDmmTxTimestampFCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint64",
+        },
+        "step": {
+            "type": int,
+            "format": "uint64",
+        },
+        "count": {
+            "type": int,
+            "format": "uint64",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowCfmDmmTxTimestampFCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowCfmDmmReservedForDmmReceiver(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint64",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint64",
+        },
+        "increment": {"type": "PatternFlowCfmDmmReservedForDmmReceiverCounter"},
+        "decrement": {"type": "PatternFlowCfmDmmReservedForDmmReceiverCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowCfmDmmReservedForDmmReceiver, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowCfmDmmReservedForDmmReceiverCounter
+        """Factory property that returns an instance of the PatternFlowCfmDmmReservedForDmmReceiverCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowCfmDmmReservedForDmmReceiverCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowCfmDmmReservedForDmmReceiverCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowCfmDmmReservedForDmmReceiverCounter
+        """Factory property that returns an instance of the PatternFlowCfmDmmReservedForDmmReceiverCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowCfmDmmReservedForDmmReceiverCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowCfmDmmReservedForDmmReceiverCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowCfmDmmReservedForDmmReceiverCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint64",
+        },
+        "step": {
+            "type": int,
+            "format": "uint64",
+        },
+        "count": {
+            "type": int,
+            "format": "uint64",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowCfmDmmReservedForDmmReceiverCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowCfmDmmReservedForDmr(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint64",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint64",
+        },
+        "increment": {"type": "PatternFlowCfmDmmReservedForDmrCounter"},
+        "decrement": {"type": "PatternFlowCfmDmmReservedForDmrCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowCfmDmmReservedForDmr, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowCfmDmmReservedForDmrCounter
+        """Factory property that returns an instance of the PatternFlowCfmDmmReservedForDmrCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowCfmDmmReservedForDmrCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowCfmDmmReservedForDmrCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowCfmDmmReservedForDmrCounter
+        """Factory property that returns an instance of the PatternFlowCfmDmmReservedForDmrCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowCfmDmmReservedForDmrCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowCfmDmmReservedForDmrCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowCfmDmmReservedForDmrCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint64",
+        },
+        "step": {
+            "type": int,
+            "format": "uint64",
+        },
+        "count": {
+            "type": int,
+            "format": "uint64",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowCfmDmmReservedForDmrCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowCfmDmmReservedForDmrReceiver(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint64",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint64",
+        },
+        "increment": {"type": "PatternFlowCfmDmmReservedForDmrReceiverCounter"},
+        "decrement": {"type": "PatternFlowCfmDmmReservedForDmrReceiverCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowCfmDmmReservedForDmrReceiver, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowCfmDmmReservedForDmrReceiverCounter
+        """Factory property that returns an instance of the PatternFlowCfmDmmReservedForDmrReceiverCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowCfmDmmReservedForDmrReceiverCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowCfmDmmReservedForDmrReceiverCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowCfmDmmReservedForDmrReceiverCounter
+        """Factory property that returns an instance of the PatternFlowCfmDmmReservedForDmrReceiverCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowCfmDmmReservedForDmrReceiverCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowCfmDmmReservedForDmrReceiverCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowCfmDmmReservedForDmrReceiverCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint64",
+        },
+        "step": {
+            "type": int,
+            "format": "uint64",
+        },
+        "count": {
+            "type": int,
+            "format": "uint64",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowCfmDmmReservedForDmrReceiverCounter, self).__init__()
         self._parent = parent
         self._set_property("start", start)
         self._set_property("step", step)

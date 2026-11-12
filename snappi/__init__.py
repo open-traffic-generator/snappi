@@ -1441,6 +1441,15 @@ from .snappi import PatternFlowCfmLbmTransactionIdCounter
 from .snappi import FlowCfmLbr
 from .snappi import PatternFlowCfmLbrTransactionId
 from .snappi import PatternFlowCfmLbrTransactionIdCounter
+from .snappi import FlowCfmDmm
+from .snappi import PatternFlowCfmDmmTxTimestampF
+from .snappi import PatternFlowCfmDmmTxTimestampFCounter
+from .snappi import PatternFlowCfmDmmReservedForDmmReceiver
+from .snappi import PatternFlowCfmDmmReservedForDmmReceiverCounter
+from .snappi import PatternFlowCfmDmmReservedForDmr
+from .snappi import PatternFlowCfmDmmReservedForDmrCounter
+from .snappi import PatternFlowCfmDmmReservedForDmrReceiver
+from .snappi import PatternFlowCfmDmmReservedForDmrReceiverCounter
 from .snappi import FlowHeaderIter
 from .snappi import FlowSize
 from .snappi import FlowSizeIncrement

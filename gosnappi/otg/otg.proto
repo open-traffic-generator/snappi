@@ -13841,9 +13841,9 @@ message FlowCfm {
 }
 
 // Select message header. The opcode byte in the CFM Common Header is automatically
-// set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7. Currently only
-// Continuity Check Message (CCM), Loopback Message (LBM) and Loopback Reply (LBR) are
-// supported.
+// set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7 and ITU-T Y.1731.
+// Currently supported choices are Continuity Check Message (CCM), Loopback Message
+// (LBM), Loopback Reply (LBR) and Delay Measurement Message (DMM).
 message FlowCfmSelectOpCode {
 
   message Choice {
@@ -13852,6 +13852,7 @@ message FlowCfmSelectOpCode {
       ccm = 1;
       lbm = 2;
       lbr = 3;
+      dmm = 4;
     }
   }
   // Description missing in models
@@ -13866,6 +13867,9 @@ message FlowCfmSelectOpCode {
 
   // Description missing in models
   FlowCfmLbr lbr = 4;
+
+  // Description missing in models
+  FlowCfmDmm dmm = 5;
 }
 
 // CCM is a multicast PDU used to detect continuity and configuration errors within
@@ -14066,6 +14070,33 @@ message FlowCfmLbr {
   // with a deliberately missing End TLV.
   // default = True
   optional bool append_end_tlv = 3;
+}
+
+// Delay Measurement Message (DMM) is a diagnostic frame sent by a Maintenance End Point
+// (MEP) to a peer MEP to measure one-way or two-way frame delay, as defined in ITU-T
+// Y.1731 Section 8.2. DMM flag bits are reserved and set to zero.
+message FlowCfmDmm {
+
+  // Description missing in models
+  PatternFlowCfmDmmTxTimestampF tx_timestamp_f = 1;
+
+  // Description missing in models
+  PatternFlowCfmDmmReservedForDmmReceiver reserved_for_dmm_receiver = 2;
+
+  // Description missing in models
+  PatternFlowCfmDmmReservedForDmr reserved_for_dmr = 3;
+
+  // Description missing in models
+  PatternFlowCfmDmmReservedForDmrReceiver reserved_for_dmr_receiver = 4;
+
+  // Description missing in models
+  repeated FlowCfmTlvs tlvs = 5;
+
+  // When true, the implementation appends an End TLV (Type 0, IEEE 802.1Q-2018 Table
+  // 21-17) after all TLVs in the tlvs list. Set to false only when testing DUT behaviour
+  // with a deliberately missing End TLV.
+  // default = True
+  optional bool append_end_tlv = 6;
 }
 
 // CFM TLV entry. The Type byte (IEEE 802.1Q-2018 Table 21-17) is set automatically
@@ -39923,6 +39954,199 @@ message PatternFlowCfmLbrTransactionId {
 
   // Description missing in models
   PatternFlowCfmLbrTransactionIdCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowCfmDmmTxTimestampFCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint64 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint64 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint64 count = 3;
+}
+
+// The timestamp at which the DMM frame is transmitted by the originating MEP (ITU-T
+// Y.1731 Section 8.2).
+message PatternFlowCfmDmmTxTimestampF {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint64 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint64 values = 3;
+
+  // Description missing in models
+  PatternFlowCfmDmmTxTimestampFCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowCfmDmmTxTimestampFCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowCfmDmmReservedForDmmReceiverCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint64 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint64 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint64 count = 3;
+}
+
+// Reserved for the DMM receiving equipment to record its receive timestamp when forming
+// the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).
+message PatternFlowCfmDmmReservedForDmmReceiver {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint64 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint64 values = 3;
+
+  // Description missing in models
+  PatternFlowCfmDmmReservedForDmmReceiverCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowCfmDmmReservedForDmmReceiverCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowCfmDmmReservedForDmrCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint64 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint64 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint64 count = 3;
+}
+
+// Reserved for the DMM receiving equipment to record its transmit timestamp when forming
+// the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).
+message PatternFlowCfmDmmReservedForDmr {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint64 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint64 values = 3;
+
+  // Description missing in models
+  PatternFlowCfmDmmReservedForDmrCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowCfmDmmReservedForDmrCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowCfmDmmReservedForDmrReceiverCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint64 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint64 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint64 count = 3;
+}
+
+// Reserved for the DMR receiving equipment to record its receive timestamp when the
+// DMR arrives back at the originating MEP. Set to zero by the DMM originator (ITU-T
+// Y.1731 Section 8.2).
+message PatternFlowCfmDmmReservedForDmrReceiver {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint64 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint64 values = 3;
+
+  // Description missing in models
+  PatternFlowCfmDmmReservedForDmrReceiverCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowCfmDmmReservedForDmrReceiverCounter decrement = 6;
 }
 
 // integer counter pattern

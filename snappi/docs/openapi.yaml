@@ -17844,7 +17844,7 @@ components:
           x-field-uid: 3
     Flow.Cfm.SelectOpCode:
       description: |-
-        Select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7. Currently only Continuity Check Message (CCM), Loopback Message (LBM) and Loopback Reply (LBR) are supported.
+        Select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7 and ITU-T Y.1731. Currently supported choices are Continuity Check Message (CCM), Loopback Message (LBM), Loopback Reply (LBR) and Delay Measurement Message (DMM).
       type: object
       properties:
         choice:
@@ -17858,10 +17858,13 @@ components:
               x-field-uid: 2
             lbr:
               x-field-uid: 3
+            dmm:
+              x-field-uid: 4
           enum:
           - ccm
           - lbm
           - lbr
+          - dmm
         ccm:
           $ref: '#/components/schemas/Flow.Cfm.Ccm'
           x-field-uid: 2
@@ -17871,6 +17874,9 @@ components:
         lbr:
           $ref: '#/components/schemas/Flow.Cfm.Lbr'
           x-field-uid: 4
+        dmm:
+          $ref: '#/components/schemas/Flow.Cfm.Dmm'
+          x-field-uid: 5
     Flow.Cfm.Ccm:
       description: |-
         CCM is a multicast PDU used to detect continuity and configuration errors within a Maintenance Association (MA). As defined in IEEE 802.1Q-2018 Section 12.14.6.
@@ -18108,6 +18114,34 @@ components:
           type: boolean
           default: true
           x-field-uid: 3
+    Flow.Cfm.Dmm:
+      description: |-
+        Delay Measurement Message (DMM) is a diagnostic frame sent by a Maintenance End Point (MEP) to a peer MEP to measure one-way or two-way frame delay, as defined in ITU-T Y.1731 Section 8.2. DMM flag bits are reserved and set to zero.
+      type: object
+      properties:
+        tx_timestamp_f:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmm.TxTimestampF'
+        reserved_for_dmm_receiver:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmm.ReservedForDmmReceiver'
+        reserved_for_dmr:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmm.ReservedForDmr'
+        reserved_for_dmr_receiver:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmm.ReservedForDmrReceiver'
+        tlvs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Flow.Cfm.Tlvs'
+          x-field-uid: 5
+        append_end_tlv:
+          description: |-
+            When true, the implementation appends an End TLV (Type 0, IEEE 802.1Q-2018 Table 21-17) after all TLVs in the tlvs list. Set to false only when testing DUT behaviour with a deliberately missing End TLV.
+          type: boolean
+          default: true
+          x-field-uid: 6
     Flow.Cfm.Tlvs:
       description: |-
         CFM TLV entry. The Type byte (IEEE 802.1Q-2018 Table 21-17) is set automatically from the choice: Sender ID=1, Port Status=2, Data=3, Interface Status=4. Length (2 octets) and Value are defined per TLV type.
@@ -55205,6 +55239,254 @@ components:
           x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Cfm.Lbr.TransactionId.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Cfm.Dmm.TxTimestampF.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint64
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint64
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint64
+    Pattern.Flow.Cfm.Dmm.TxTimestampF:
+      description: |-
+        The timestamp at which the DMM frame is transmitted by the originating MEP (ITU-T Y.1731 Section 8.2).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint64
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint64
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmm.TxTimestampF.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmm.TxTimestampF.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Cfm.Dmm.ReservedForDmmReceiver.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint64
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint64
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint64
+    Pattern.Flow.Cfm.Dmm.ReservedForDmmReceiver:
+      description: |-
+        Reserved for the DMM receiving equipment to record its receive timestamp when forming the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint64
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint64
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmm.ReservedForDmmReceiver.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmm.ReservedForDmmReceiver.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Cfm.Dmm.ReservedForDmr.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint64
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint64
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint64
+    Pattern.Flow.Cfm.Dmm.ReservedForDmr:
+      description: |-
+        Reserved for the DMM receiving equipment to record its transmit timestamp when forming the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint64
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint64
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmm.ReservedForDmr.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmm.ReservedForDmr.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Cfm.Dmm.ReservedForDmrReceiver.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint64
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint64
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint64
+    Pattern.Flow.Cfm.Dmm.ReservedForDmrReceiver:
+      description: |-
+        Reserved for the DMR receiving equipment to record its receive timestamp when the DMR arrives back at the originating MEP. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint64
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint64
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmm.ReservedForDmrReceiver.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmm.ReservedForDmrReceiver.Counter'
           x-field-uid: 6
     Pattern.Flow.Cfm.Tlvs.Length.Counter:
       description: |-
