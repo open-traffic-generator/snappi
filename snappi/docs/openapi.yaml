@@ -14868,6 +14868,8 @@ components:
               x-field-uid: 24
             cfm:
               x-field-uid: 25
+            igmpv2:
+              x-field-uid: 26
           enum:
           - custom
           - ethernet
@@ -14894,6 +14896,7 @@ components:
           - lacp
           - ipv6_extension_header
           - cfm
+          - igmpv2
         custom:
           $ref: '#/components/schemas/Flow.Custom'
           x-field-uid: 2
@@ -14969,6 +14972,9 @@ components:
         cfm:
           $ref: '#/components/schemas/Flow.Cfm'
           x-field-uid: 26
+        igmpv2:
+          $ref: '#/components/schemas/Flow.Igmpv2'
+          x-field-uid: 27
     Flow.Custom:
       type: object
       description: |-
@@ -18406,6 +18412,23 @@ components:
           maximum: 255
           default: 1
           x-field-uid: 3
+    Flow.Igmpv2:
+      description: |-
+        IGMPv2 packet header (RFC 2236)
+      type: object
+      properties:
+        type:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv2.Type'
+        max_response_time:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv2.MaxResponseTime'
+        checksum:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv2.Checksum'
+        group_address:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv2.GroupAddress'
     Flow.Size:
       description: |-
         The frame size which overrides the total length of the packet
@@ -55286,6 +55309,252 @@ components:
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Cfm.Tlvs.Length.Counter'
           x-field-uid: 7
+    Pattern.Flow.Igmpv2.Type.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 17
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+      x-constants:
+        membership_query: 17
+        v1_membership_report: 18
+        v2_membership_report: 22
+        leave_group: 23
+    Pattern.Flow.Igmpv2.Type:
+      description: |-
+        IGMPv2 message type
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 17
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 17
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv2.Type.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv2.Type.Counter'
+          x-field-uid: 6
+      x-constants:
+        membership_query: 17
+        v1_membership_report: 18
+        v2_membership_report: 22
+        leave_group: 23
+    Pattern.Flow.Igmpv2.MaxResponseTime.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 100
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Igmpv2.MaxResponseTime:
+      description: |-
+        Maximum response time in units of 1/10 second. Meaningful only in Membership Query messages; ignored in Reports and Leave Group (RFC 2236 Section 2.2).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 100
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 100
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv2.MaxResponseTime.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv2.MaxResponseTime.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Igmpv2.Checksum:
+      description: |-
+        Checksum
+      type: object
+      properties:
+        choice:
+          description: |-
+            The type of checksum
+          type: string
+          x-enum:
+            generated:
+              x-field-uid: 1
+            custom:
+              x-field-uid: 2
+          default: generated
+          x-field-uid: 1
+          enum:
+          - generated
+          - custom
+        generated:
+          description: |-
+            A system generated checksum value
+          type: string
+          x-enum:
+            good:
+              x-field-uid: 1
+            bad:
+              x-field-uid: 2
+          default: good
+          x-field-uid: 2
+          enum:
+          - good
+          - bad
+        custom:
+          description: |-
+            A custom checksum value
+          type: integer
+          format: uint32
+          maximum: 65535
+          x-field-uid: 3
+    Pattern.Flow.Igmpv2.GroupAddress.Counter:
+      description: |-
+        ipv4 counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: 0.0.0.0
+          format: ipv4
+        step:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.1
+          format: ipv4
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Igmpv2.GroupAddress:
+      description: |-
+        Group address is zero in a general Membership Query. It is set to the group being reported/left in Reports and Leave Group messages (RFC 2236 Section 2.4).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.0
+          format: ipv4
+        values:
+          type: array
+          items:
+            type: string
+            format: ipv4
+          x-field-uid: 3
+          default:
+          - 0.0.0.0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv2.GroupAddress.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv2.GroupAddress.Counter'
+          x-field-uid: 6
     Version:
       description: |-
         Version details

@@ -1441,6 +1441,14 @@ from .snappi import PatternFlowCfmLbmTransactionIdCounter
 from .snappi import FlowCfmLbr
 from .snappi import PatternFlowCfmLbrTransactionId
 from .snappi import PatternFlowCfmLbrTransactionIdCounter
+from .snappi import FlowIgmpv2
+from .snappi import PatternFlowIgmpv2Type
+from .snappi import PatternFlowIgmpv2TypeCounter
+from .snappi import PatternFlowIgmpv2MaxResponseTime
+from .snappi import PatternFlowIgmpv2MaxResponseTimeCounter
+from .snappi import PatternFlowIgmpv2Checksum
+from .snappi import PatternFlowIgmpv2GroupAddress
+from .snappi import PatternFlowIgmpv2GroupAddressCounter
 from .snappi import FlowHeaderIter
 from .snappi import FlowSize
 from .snappi import FlowSizeIncrement

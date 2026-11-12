@@ -11212,6 +11212,7 @@ message FlowHeader {
       lacp = 23;
       ipv6_extension_header = 24;
       cfm = 25;
+      igmpv2 = 26;
     }
   }
   // The available types of flow headers. If one is not provided the
@@ -11293,6 +11294,9 @@ message FlowHeader {
 
   // Description missing in models
   FlowCfm cfm = 26;
+
+  // Description missing in models
+  FlowIgmpv2 igmpv2 = 27;
 }
 
 // Custom packet header
@@ -14292,6 +14296,22 @@ message FlowCfmLength {
   // Description missing in models
   // default = 1
   optional uint32 value = 3;
+}
+
+// IGMPv2 packet header (RFC 2236)
+message FlowIgmpv2 {
+
+  // Description missing in models
+  PatternFlowIgmpv2Type type = 1;
+
+  // Description missing in models
+  PatternFlowIgmpv2MaxResponseTime max_response_time = 2;
+
+  // Description missing in models
+  PatternFlowIgmpv2Checksum checksum = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv2GroupAddress group_address = 4;
 }
 
 // The frame size which overrides the total length of the packet
@@ -39978,6 +39998,178 @@ message PatternFlowCfmTlvsLength {
 
   // Description missing in models
   PatternFlowCfmTlvsLengthCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv2TypeCounter {
+
+  // Description missing in models
+  // default = 17
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// IGMPv2 message type
+message PatternFlowIgmpv2Type {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 17
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [17]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv2TypeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv2TypeCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv2MaxResponseTimeCounter {
+
+  // Description missing in models
+  // default = 100
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Maximum response time in units of 1/10 second. Meaningful only in Membership Query
+// messages; ignored in Reports and Leave Group (RFC 2236 Section 2.2).
+message PatternFlowIgmpv2MaxResponseTime {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 100
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [100]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv2MaxResponseTimeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv2MaxResponseTimeCounter decrement = 6;
+}
+
+// Checksum
+message PatternFlowIgmpv2Checksum {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      generated = 1;
+      custom = 2;
+    }
+  }
+  // The type of checksum
+  // default = Choice.Enum.generated
+  optional Choice.Enum choice = 1;
+
+  message Generated {
+    enum Enum {
+      unspecified = 0;
+      good = 1;
+      bad = 2;
+    }
+  }
+  // A system generated checksum value
+  // default = Generated.Enum.good
+  optional Generated.Enum generated = 2;
+
+  // A custom checksum value
+  optional uint32 custom = 3;
+}
+
+// ipv4 counter pattern
+message PatternFlowIgmpv2GroupAddressCounter {
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string start = 1;
+
+  // Description missing in models
+  // default = 0.0.0.1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Group address is zero in a general Membership Query. It is set to the group being
+// reported/left in Reports and Leave Group messages (RFC 2236 Section 2.4).
+message PatternFlowIgmpv2GroupAddress {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['0.0.0.0']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv2GroupAddressCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv2GroupAddressCounter decrement = 6;
 }
 
 // Version details
