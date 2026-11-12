@@ -351,12 +351,12 @@ func (obj *patternFlowIcmpv6NdpPrefixInformationOptionPrefixLength) setChoice(va
 	obj.obj.Value = nil
 
 	if value == PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLengthChoice.VALUE {
-		defaultValue := uint32(64)
+		defaultValue := uint32(0)
 		obj.obj.Value = &defaultValue
 	}
 
 	if value == PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLengthChoice.VALUES {
-		defaultValue := []uint32{64}
+		defaultValue := []uint32{0}
 		obj.obj.Values = defaultValue
 	}
 
@@ -401,7 +401,7 @@ func (obj *patternFlowIcmpv6NdpPrefixInformationOptionPrefixLength) SetValue(val
 // Values returns a []uint32
 func (obj *patternFlowIcmpv6NdpPrefixInformationOptionPrefixLength) Values() []uint32 {
 	if obj.obj.Values == nil {
-		obj.SetValues([]uint32{64})
+		obj.SetValues([]uint32{0})
 	}
 	return obj.obj.Values
 }

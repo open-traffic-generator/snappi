@@ -389,7 +389,7 @@ func (obj *patternFlowIcmpv6NdpPrefixInformationOptionPrefixLengthCounter) valid
 
 func (obj *patternFlowIcmpv6NdpPrefixInformationOptionPrefixLengthCounter) setDefault() {
 	if obj.obj.Start == nil {
-		obj.SetStart(64)
+		obj.SetStart(0)
 	}
 	if obj.obj.Step == nil {
 		obj.SetStep(1)

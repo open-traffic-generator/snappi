@@ -147139,7 +147139,7 @@ type PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLengthCounter struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Description missing in models
-	// default = 64
+	// default = 0
 	Start *uint32 `protobuf:"varint,1,opt,name=start,proto3,oneof" json:"start,omitempty"`
 	// Description missing in models
 	// default = 1
@@ -147212,10 +147212,10 @@ type PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLength struct {
 	// default = Choice.Enum.value
 	Choice *PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLength_Choice_Enum `protobuf:"varint,1,opt,name=choice,proto3,enum=otg.PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLength_Choice_Enum,oneof" json:"choice,omitempty"`
 	// Description missing in models
-	// default = 64
+	// default = 0
 	Value *uint32 `protobuf:"varint,2,opt,name=value,proto3,oneof" json:"value,omitempty"`
 	// Description missing in models
-	// default = [64]
+	// default = [0]
 	Values []uint32 `protobuf:"varint,3,rep,packed,name=values,proto3" json:"values,omitempty"`
 	// Description missing in models
 	Increment *PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLengthCounter `protobuf:"bytes,5,opt,name=increment,proto3" json:"increment,omitempty"`
@@ -148091,7 +148091,7 @@ type PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetimeCounter struct 
 	unknownFields protoimpl.UnknownFields
 
 	// Description missing in models
-	// default = 604800
+	// default = 10
 	Start *uint32 `protobuf:"varint,1,opt,name=start,proto3,oneof" json:"start,omitempty"`
 	// Description missing in models
 	// default = 1
@@ -148165,10 +148165,10 @@ type PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetime struct {
 	// default = Choice.Enum.value
 	Choice *PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetime_Choice_Enum `protobuf:"varint,1,opt,name=choice,proto3,enum=otg.PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetime_Choice_Enum,oneof" json:"choice,omitempty"`
 	// Description missing in models
-	// default = 604800
+	// default = 10
 	Value *uint32 `protobuf:"varint,2,opt,name=value,proto3,oneof" json:"value,omitempty"`
 	// Description missing in models
-	// default = [604800]
+	// default = [10]
 	Values []uint32 `protobuf:"varint,3,rep,packed,name=values,proto3" json:"values,omitempty"`
 	// Description missing in models
 	Increment *PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetimeCounter `protobuf:"bytes,5,opt,name=increment,proto3" json:"increment,omitempty"`
@@ -148408,7 +148408,7 @@ type PatternFlowIcmpv6NdpPrefixInformationOptionPrefixCounter struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Description missing in models
-	// default = ::
+	// default = 0::1
 	Start *string `protobuf:"bytes,1,opt,name=start,proto3,oneof" json:"start,omitempty"`
 	// Description missing in models
 	// default = ::1
@@ -148482,10 +148482,10 @@ type PatternFlowIcmpv6NdpPrefixInformationOptionPrefix struct {
 	// default = Choice.Enum.value
 	Choice *PatternFlowIcmpv6NdpPrefixInformationOptionPrefix_Choice_Enum `protobuf:"varint,1,opt,name=choice,proto3,enum=otg.PatternFlowIcmpv6NdpPrefixInformationOptionPrefix_Choice_Enum,oneof" json:"choice,omitempty"`
 	// Description missing in models
-	// default = ::
+	// default = 0::1
 	Value *string `protobuf:"bytes,2,opt,name=value,proto3,oneof" json:"value,omitempty"`
 	// Description missing in models
-	// default = ['::']
+	// default = ['0::1']
 	Values []string `protobuf:"bytes,3,rep,name=values,proto3" json:"values,omitempty"`
 	// Description missing in models
 	Increment *PatternFlowIcmpv6NdpPrefixInformationOptionPrefixCounter `protobuf:"bytes,5,opt,name=increment,proto3" json:"increment,omitempty"`

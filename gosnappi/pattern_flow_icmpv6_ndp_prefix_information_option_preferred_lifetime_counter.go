@@ -359,7 +359,7 @@ func (obj *patternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetimeCounter) 
 
 func (obj *patternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetimeCounter) setDefault() {
 	if obj.obj.Start == nil {
-		obj.SetStart(604800)
+		obj.SetStart(10)
 	}
 	if obj.obj.Step == nil {
 		obj.SetStep(1)

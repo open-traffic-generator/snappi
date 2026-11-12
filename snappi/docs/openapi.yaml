@@ -47501,7 +47501,7 @@ components:
         start:
           type: integer
           x-field-uid: 1
-          default: 64
+          default: 0
           format: uint32
           maximum: 255
         step:
@@ -47542,7 +47542,7 @@ components:
         value:
           type: integer
           x-field-uid: 2
-          default: 64
+          default: 0
           format: uint32
           maximum: 255
         values:
@@ -47553,7 +47553,7 @@ components:
             maximum: 255
           x-field-uid: 3
           default:
-          - 64
+          - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.PrefixLength.Counter'
           x-field-uid: 5
@@ -47898,7 +47898,7 @@ components:
         start:
           type: integer
           x-field-uid: 1
-          default: 604800
+          default: 10
           format: uint32
         step:
           type: integer
@@ -47936,7 +47936,7 @@ components:
         value:
           type: integer
           x-field-uid: 2
-          default: 604800
+          default: 10
           format: uint32
         values:
           type: array
@@ -47945,7 +47945,7 @@ components:
             format: uint32
           x-field-uid: 3
           default:
-          - 604800
+          - 10
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.PreferredLifetime.Counter'
           x-field-uid: 5
@@ -48022,7 +48022,7 @@ components:
         start:
           type: string
           x-field-uid: 1
-          default: '::'
+          default: 0::1
           format: ipv6
         step:
           type: string
@@ -48060,7 +48060,7 @@ components:
         value:
           type: string
           x-field-uid: 2
-          default: '::'
+          default: 0::1
           format: ipv6
         values:
           type: array
@@ -48069,7 +48069,7 @@ components:
             format: ipv6
           x-field-uid: 3
           default:
-          - '::'
+          - 0::1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Prefix.Counter'
           x-field-uid: 5

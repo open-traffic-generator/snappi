@@ -34441,7 +34441,7 @@ message PatternFlowIcmpv6NdpPrefixInformationOptionLength {
 message PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLengthCounter {
 
   // Description missing in models
-  // default = 64
+  // default = 0
   optional uint32 start = 1;
 
   // Description missing in models
@@ -34470,11 +34470,11 @@ message PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLength {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  // default = 64
+  // default = 0
   optional uint32 value = 2;
 
   // Description missing in models
-  // default = [64]
+  // default = [0]
   repeated uint32 values = 3;
 
   // Description missing in models
@@ -34727,7 +34727,7 @@ message PatternFlowIcmpv6NdpPrefixInformationOptionValidLifetime {
 message PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetimeCounter {
 
   // Description missing in models
-  // default = 604800
+  // default = 10
   optional uint32 start = 1;
 
   // Description missing in models
@@ -34757,11 +34757,11 @@ message PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetime {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  // default = 604800
+  // default = 10
   optional uint32 value = 2;
 
   // Description missing in models
-  // default = [604800]
+  // default = [10]
   repeated uint32 values = 3;
 
   // Description missing in models
@@ -34822,7 +34822,7 @@ message PatternFlowIcmpv6NdpPrefixInformationOptionReserved2 {
 message PatternFlowIcmpv6NdpPrefixInformationOptionPrefixCounter {
 
   // Description missing in models
-  // default = ::
+  // default = 0::1
   optional string start = 1;
 
   // Description missing in models
@@ -34852,11 +34852,11 @@ message PatternFlowIcmpv6NdpPrefixInformationOptionPrefix {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  // default = ::
+  // default = 0::1
   optional string value = 2;
 
   // Description missing in models
-  // default = ['::']
+  // default = ['0::1']
   repeated string values = 3;
 
   // Description missing in models

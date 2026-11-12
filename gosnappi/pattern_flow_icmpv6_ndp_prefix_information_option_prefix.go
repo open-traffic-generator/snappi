@@ -351,12 +351,12 @@ func (obj *patternFlowIcmpv6NdpPrefixInformationOptionPrefix) setChoice(value Pa
 	obj.obj.Value = nil
 
 	if value == PatternFlowIcmpv6NdpPrefixInformationOptionPrefixChoice.VALUE {
-		defaultValue := "::"
+		defaultValue := "0::1"
 		obj.obj.Value = &defaultValue
 	}
 
 	if value == PatternFlowIcmpv6NdpPrefixInformationOptionPrefixChoice.VALUES {
-		defaultValue := []string{"::"}
+		defaultValue := []string{"0::1"}
 		obj.obj.Values = defaultValue
 	}
 
@@ -401,7 +401,7 @@ func (obj *patternFlowIcmpv6NdpPrefixInformationOptionPrefix) SetValue(value str
 // Values returns a []string
 func (obj *patternFlowIcmpv6NdpPrefixInformationOptionPrefix) Values() []string {
 	if obj.obj.Values == nil {
-		obj.SetValues([]string{"::"})
+		obj.SetValues([]string{"0::1"})
 	}
 	return obj.obj.Values
 }
