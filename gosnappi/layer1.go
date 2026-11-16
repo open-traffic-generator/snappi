@@ -338,6 +338,12 @@ type Layer1 interface {
 	Name() string
 	// SetName assigns string provided by user to Layer1
 	SetName(value string) Layer1
+	// Mode returns Layer1ModeEnum, set in Layer1
+	Mode() Layer1ModeEnum
+	// SetMode assigns Layer1ModeEnum provided by user to Layer1
+	SetMode(value Layer1ModeEnum) Layer1
+	// HasMode checks if Mode has been set in Layer1
+	HasMode() bool
 	setNil()
 }
 
@@ -651,6 +657,79 @@ func (obj *layer1) SetName(value string) Layer1 {
 	return obj
 }
 
+type Layer1ModeEnum string
+
+// Enum of Mode on Layer1
+var Layer1Mode = struct {
+	MODE_NO_CHANGE   Layer1ModeEnum
+	MODE_DEFAULT     Layer1ModeEnum
+	MODE_MACSEC_128  Layer1ModeEnum
+	MODE_MACSEC_256  Layer1ModeEnum
+	MODE_HIGH_STREAM Layer1ModeEnum
+	MODE_ROCEV2      Layer1ModeEnum
+}{
+	MODE_NO_CHANGE:   Layer1ModeEnum("mode_no_change"),
+	MODE_DEFAULT:     Layer1ModeEnum("mode_default"),
+	MODE_MACSEC_128:  Layer1ModeEnum("mode_macsec_128"),
+	MODE_MACSEC_256:  Layer1ModeEnum("mode_macsec_256"),
+	MODE_HIGH_STREAM: Layer1ModeEnum("mode_high_stream"),
+	MODE_ROCEV2:      Layer1ModeEnum("mode_rocev2"),
+}
+
+func (obj *layer1) Mode() Layer1ModeEnum {
+	return Layer1ModeEnum(obj.obj.Mode.Enum().String())
+}
+
+// Set the mode of the test interface, in addition to the speed.
+// When no mode is explicitly set, mode_no_change applies i.e. the current
+// mode of the underlying test interface shall be retained.
+// The modes are mutually exclusive; a combination of modes, if ever needed,
+// shall be introduced as a separate value.
+// Supported modes:
+// - mode_no_change: retain the current mode of the test interface (default).
+// - mode_default: switch the test interface to the default mode of the
+// configured speed i.e. the mode to which the hardware port boots up.
+// - mode_macsec_128: switch the test interface to a mode that supports
+// MACsec with a 128-bit cipher. MACsec itself is not configured by this
+// field.
+// - mode_macsec_256: switch the test interface to a mode that supports
+// MACsec with a 256-bit cipher. MACsec itself is not configured by this
+// field.
+// - mode_high_stream: switch the test interface to a mode of the configured
+// speed that supports a larger number of transmit flows than the default
+// mode, typically at the expense of other capabilities of the test
+// interface (e.g. per flow statistics or capture). Use this mode only
+// when a test requires more flows than the test interface supports in
+// its default mode. The number of flows supported and the capabilities
+// traded off are implementation specific.
+// - mode_rocev2: switch the test interface to a mode of the configured
+// speed that supports RoCEv2 (RDMA over Converged Ethernet v2). RoCEv2
+// itself is not configured by this field.
+// If the requested mode is not supported for the configured speed or by the
+// underlying test interface, an error shall be returned. This applies to
+// every port in port_names; if any of them cannot be set to the requested
+// mode, the configuration shall be rejected.
+// If the current mode differs from the requested mode, the test interface
+// shall be switched to the requested mode before the remaining layer1
+// settings are applied.
+// Mode returns a string
+func (obj *layer1) HasMode() bool {
+	return obj.obj.Mode != nil
+}
+
+func (obj *layer1) SetMode(value Layer1ModeEnum) Layer1 {
+	intValue, ok := otg.Layer1_Mode_Enum_value[string(value)]
+	if !ok {
+		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
+			"%s is not a valid choice on Layer1ModeEnum", string(value)))
+		return obj
+	}
+	enumValue := otg.Layer1_Mode_Enum(intValue)
+	obj.obj.Mode = &enumValue
+
+	return obj
+}
+
 func (obj *layer1) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -698,6 +777,10 @@ func (obj *layer1) setDefault() {
 	}
 	if obj.obj.Mtu == nil {
 		obj.SetMtu(1500)
+	}
+	if obj.obj.Mode == nil {
+		obj.SetMode(Layer1Mode.MODE_NO_CHANGE)
+
 	}
 
 }
