@@ -254,7 +254,7 @@ func (obj *patternFlowIpv4MoreFragments) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowIpv4MoreFragments is more fragments flag
+// PatternFlowIpv4MoreFragments is more fragments flag (RFC 791 Section 3.1). Set on every fragment of a datagram except the last one. Interaction with packet size: the IPv4 payload carried by this packet is total_length - (header_length x 4) bytes, and total_length follows the flow size. For a conformant fragment, the payload of every fragment that has more_fragments set should be a multiple of 8 bytes. The last fragment (more_fragments = 0) can have any payload length.
 type PatternFlowIpv4MoreFragments interface {
 	Validation
 	// msg marshals PatternFlowIpv4MoreFragments to protobuf object *otg.PatternFlowIpv4MoreFragments
