@@ -288,9 +288,21 @@ type BgpLearnedInformationFilter interface {
 	SetIpv6MplsUnicastPrefix(value bool) BgpLearnedInformationFilter
 	// HasIpv6MplsUnicastPrefix checks if Ipv6MplsUnicastPrefix has been set in BgpLearnedInformationFilter
 	HasIpv6MplsUnicastPrefix() bool
+	// Ipv4VpnUnicastPrefix returns bool, set in BgpLearnedInformationFilter.
+	Ipv4VpnUnicastPrefix() bool
+	// SetIpv4VpnUnicastPrefix assigns bool provided by user to BgpLearnedInformationFilter
+	SetIpv4VpnUnicastPrefix(value bool) BgpLearnedInformationFilter
+	// HasIpv4VpnUnicastPrefix checks if Ipv4VpnUnicastPrefix has been set in BgpLearnedInformationFilter
+	HasIpv4VpnUnicastPrefix() bool
+	// Ipv6VpnUnicastPrefix returns bool, set in BgpLearnedInformationFilter.
+	Ipv6VpnUnicastPrefix() bool
+	// SetIpv6VpnUnicastPrefix assigns bool provided by user to BgpLearnedInformationFilter
+	SetIpv6VpnUnicastPrefix(value bool) BgpLearnedInformationFilter
+	// HasIpv6VpnUnicastPrefix checks if Ipv6VpnUnicastPrefix has been set in BgpLearnedInformationFilter
+	HasIpv6VpnUnicastPrefix() bool
 }
 
-// If enabled, will store the information related to Unicast IPv4 Prefixes recieved from the peer.
+// If enabled, will store the information related to Unicast IPv4 Prefixes received from the peer.
 // UnicastIpv4Prefix returns a bool
 func (obj *bgpLearnedInformationFilter) UnicastIpv4Prefix() bool {
 
@@ -298,13 +310,13 @@ func (obj *bgpLearnedInformationFilter) UnicastIpv4Prefix() bool {
 
 }
 
-// If enabled, will store the information related to Unicast IPv4 Prefixes recieved from the peer.
+// If enabled, will store the information related to Unicast IPv4 Prefixes received from the peer.
 // UnicastIpv4Prefix returns a bool
 func (obj *bgpLearnedInformationFilter) HasUnicastIpv4Prefix() bool {
 	return obj.obj.UnicastIpv4Prefix != nil
 }
 
-// If enabled, will store the information related to Unicast IPv4 Prefixes recieved from the peer.
+// If enabled, will store the information related to Unicast IPv4 Prefixes received from the peer.
 // SetUnicastIpv4Prefix sets the bool value in the BgpLearnedInformationFilter object
 func (obj *bgpLearnedInformationFilter) SetUnicastIpv4Prefix(value bool) BgpLearnedInformationFilter {
 
@@ -312,7 +324,7 @@ func (obj *bgpLearnedInformationFilter) SetUnicastIpv4Prefix(value bool) BgpLear
 	return obj
 }
 
-// If enabled, will store the information related to Unicast IPv6 Prefixes recieved from the peer.
+// If enabled, will store the information related to Unicast IPv6 Prefixes received from the peer.
 // UnicastIpv6Prefix returns a bool
 func (obj *bgpLearnedInformationFilter) UnicastIpv6Prefix() bool {
 
@@ -320,13 +332,13 @@ func (obj *bgpLearnedInformationFilter) UnicastIpv6Prefix() bool {
 
 }
 
-// If enabled, will store the information related to Unicast IPv6 Prefixes recieved from the peer.
+// If enabled, will store the information related to Unicast IPv6 Prefixes received from the peer.
 // UnicastIpv6Prefix returns a bool
 func (obj *bgpLearnedInformationFilter) HasUnicastIpv6Prefix() bool {
 	return obj.obj.UnicastIpv6Prefix != nil
 }
 
-// If enabled, will store the information related to Unicast IPv6 Prefixes recieved from the peer.
+// If enabled, will store the information related to Unicast IPv6 Prefixes received from the peer.
 // SetUnicastIpv6Prefix sets the bool value in the BgpLearnedInformationFilter object
 func (obj *bgpLearnedInformationFilter) SetUnicastIpv6Prefix(value bool) BgpLearnedInformationFilter {
 
@@ -334,7 +346,7 @@ func (obj *bgpLearnedInformationFilter) SetUnicastIpv6Prefix(value bool) BgpLear
 	return obj
 }
 
-// If enabled, will store the information related to MPLS Unicast IPv4 Prefixes recieved from the peer.
+// If enabled, will store the information related to MPLS Unicast IPv4 Prefixes received from the peer.
 // Ipv4MplsUnicastPrefix returns a bool
 func (obj *bgpLearnedInformationFilter) Ipv4MplsUnicastPrefix() bool {
 
@@ -342,13 +354,13 @@ func (obj *bgpLearnedInformationFilter) Ipv4MplsUnicastPrefix() bool {
 
 }
 
-// If enabled, will store the information related to MPLS Unicast IPv4 Prefixes recieved from the peer.
+// If enabled, will store the information related to MPLS Unicast IPv4 Prefixes received from the peer.
 // Ipv4MplsUnicastPrefix returns a bool
 func (obj *bgpLearnedInformationFilter) HasIpv4MplsUnicastPrefix() bool {
 	return obj.obj.Ipv4MplsUnicastPrefix != nil
 }
 
-// If enabled, will store the information related to MPLS Unicast IPv4 Prefixes recieved from the peer.
+// If enabled, will store the information related to MPLS Unicast IPv4 Prefixes received from the peer.
 // SetIpv4MplsUnicastPrefix sets the bool value in the BgpLearnedInformationFilter object
 func (obj *bgpLearnedInformationFilter) SetIpv4MplsUnicastPrefix(value bool) BgpLearnedInformationFilter {
 
@@ -356,7 +368,7 @@ func (obj *bgpLearnedInformationFilter) SetIpv4MplsUnicastPrefix(value bool) Bgp
 	return obj
 }
 
-// If enabled, will store the information related to MPLS Unicast IPv6 Prefixes recieved from the peer.
+// If enabled, will store the information related to MPLS Unicast IPv6 Prefixes received from the peer.
 // Ipv6MplsUnicastPrefix returns a bool
 func (obj *bgpLearnedInformationFilter) Ipv6MplsUnicastPrefix() bool {
 
@@ -364,17 +376,61 @@ func (obj *bgpLearnedInformationFilter) Ipv6MplsUnicastPrefix() bool {
 
 }
 
-// If enabled, will store the information related to MPLS Unicast IPv6 Prefixes recieved from the peer.
+// If enabled, will store the information related to MPLS Unicast IPv6 Prefixes received from the peer.
 // Ipv6MplsUnicastPrefix returns a bool
 func (obj *bgpLearnedInformationFilter) HasIpv6MplsUnicastPrefix() bool {
 	return obj.obj.Ipv6MplsUnicastPrefix != nil
 }
 
-// If enabled, will store the information related to MPLS Unicast IPv6 Prefixes recieved from the peer.
+// If enabled, will store the information related to MPLS Unicast IPv6 Prefixes received from the peer.
 // SetIpv6MplsUnicastPrefix sets the bool value in the BgpLearnedInformationFilter object
 func (obj *bgpLearnedInformationFilter) SetIpv6MplsUnicastPrefix(value bool) BgpLearnedInformationFilter {
 
 	obj.obj.Ipv6MplsUnicastPrefix = &value
+	return obj
+}
+
+// If enabled, will store the information related to IPv4 VPN Unicast Prefixes received from the peer.
+// Ipv4VpnUnicastPrefix returns a bool
+func (obj *bgpLearnedInformationFilter) Ipv4VpnUnicastPrefix() bool {
+
+	return *obj.obj.Ipv4VpnUnicastPrefix
+
+}
+
+// If enabled, will store the information related to IPv4 VPN Unicast Prefixes received from the peer.
+// Ipv4VpnUnicastPrefix returns a bool
+func (obj *bgpLearnedInformationFilter) HasIpv4VpnUnicastPrefix() bool {
+	return obj.obj.Ipv4VpnUnicastPrefix != nil
+}
+
+// If enabled, will store the information related to IPv4 VPN Unicast Prefixes received from the peer.
+// SetIpv4VpnUnicastPrefix sets the bool value in the BgpLearnedInformationFilter object
+func (obj *bgpLearnedInformationFilter) SetIpv4VpnUnicastPrefix(value bool) BgpLearnedInformationFilter {
+
+	obj.obj.Ipv4VpnUnicastPrefix = &value
+	return obj
+}
+
+// If enabled, will store the information related to IPv6 VPN Unicast Prefixes received from the peer.
+// Ipv6VpnUnicastPrefix returns a bool
+func (obj *bgpLearnedInformationFilter) Ipv6VpnUnicastPrefix() bool {
+
+	return *obj.obj.Ipv6VpnUnicastPrefix
+
+}
+
+// If enabled, will store the information related to IPv6 VPN Unicast Prefixes received from the peer.
+// Ipv6VpnUnicastPrefix returns a bool
+func (obj *bgpLearnedInformationFilter) HasIpv6VpnUnicastPrefix() bool {
+	return obj.obj.Ipv6VpnUnicastPrefix != nil
+}
+
+// If enabled, will store the information related to IPv6 VPN Unicast Prefixes received from the peer.
+// SetIpv6VpnUnicastPrefix sets the bool value in the BgpLearnedInformationFilter object
+func (obj *bgpLearnedInformationFilter) SetIpv6VpnUnicastPrefix(value bool) BgpLearnedInformationFilter {
+
+	obj.obj.Ipv6VpnUnicastPrefix = &value
 	return obj
 }
 
@@ -397,6 +453,12 @@ func (obj *bgpLearnedInformationFilter) setDefault() {
 	}
 	if obj.obj.Ipv6MplsUnicastPrefix == nil {
 		obj.SetIpv6MplsUnicastPrefix(false)
+	}
+	if obj.obj.Ipv4VpnUnicastPrefix == nil {
+		obj.SetIpv4VpnUnicastPrefix(false)
+	}
+	if obj.obj.Ipv6VpnUnicastPrefix == nil {
+		obj.SetIpv6VpnUnicastPrefix(false)
 	}
 
 }
