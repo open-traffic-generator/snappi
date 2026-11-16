@@ -338,12 +338,6 @@ type Layer1 interface {
 	Name() string
 	// SetName assigns string provided by user to Layer1
 	SetName(value string) Layer1
-	// Mode returns Layer1ModeEnum, set in Layer1
-	Mode() Layer1ModeEnum
-	// SetMode assigns Layer1ModeEnum provided by user to Layer1
-	SetMode(value Layer1ModeEnum) Layer1
-	// HasMode checks if Mode has been set in Layer1
-	HasMode() bool
 	setNil()
 }
 
@@ -657,62 +651,6 @@ func (obj *layer1) SetName(value string) Layer1 {
 	return obj
 }
 
-type Layer1ModeEnum string
-
-// Enum of Mode on Layer1
-var Layer1Mode = struct {
-	MODE_NO_CHANGE   Layer1ModeEnum
-	MODE_DEFAULT     Layer1ModeEnum
-	MODE_MACSEC_128  Layer1ModeEnum
-	MODE_MACSEC_256  Layer1ModeEnum
-	MODE_HIGH_STREAM Layer1ModeEnum
-	MODE_ROCEV2      Layer1ModeEnum
-}{
-	MODE_NO_CHANGE:   Layer1ModeEnum("mode_no_change"),
-	MODE_DEFAULT:     Layer1ModeEnum("mode_default"),
-	MODE_MACSEC_128:  Layer1ModeEnum("mode_macsec_128"),
-	MODE_MACSEC_256:  Layer1ModeEnum("mode_macsec_256"),
-	MODE_HIGH_STREAM: Layer1ModeEnum("mode_high_stream"),
-	MODE_ROCEV2:      Layer1ModeEnum("mode_rocev2"),
-}
-
-func (obj *layer1) Mode() Layer1ModeEnum {
-	return Layer1ModeEnum(obj.obj.Mode.Enum().String())
-}
-
-// Set the mode of the test interface if supported, in addition to the speed.
-// When no mode is explicitly set, mode_no_change applies i.e. the current
-// mode of the underlying test interface shall be retained.
-// Use mode_default to switch the test interface to the default mode of the
-// configured speed i.e. the mode to which the hardware port boots up.
-// Use mode_macsec_128 or mode_macsec_256 to choose 128-bit or 256-bit
-// MACsec encryption respectively.
-// Use mode_high_stream to switch the test interface to the high stream mode
-// of the configured speed.
-// Use mode_rocev2 to switch the test interface to the RoCEv2 mode of the
-// configured speed.
-// If the requested mode is not supported for the configured speed or by the
-// underlying test interface, an error shall be returned. If the current mode
-// differs from the requested mode, the test interface shall be switched to the
-// requested mode before the remaining layer1 settings are applied.
-// Mode returns a string
-func (obj *layer1) HasMode() bool {
-	return obj.obj.Mode != nil
-}
-
-func (obj *layer1) SetMode(value Layer1ModeEnum) Layer1 {
-	intValue, ok := otg.Layer1_Mode_Enum_value[string(value)]
-	if !ok {
-		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
-			"%s is not a valid choice on Layer1ModeEnum", string(value)))
-		return obj
-	}
-	enumValue := otg.Layer1_Mode_Enum(intValue)
-	obj.obj.Mode = &enumValue
-
-	return obj
-}
-
 func (obj *layer1) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -760,10 +698,6 @@ func (obj *layer1) setDefault() {
 	}
 	if obj.obj.Mtu == nil {
 		obj.SetMtu(1500)
-	}
-	if obj.obj.Mode == nil {
-		obj.SetMode(Layer1Mode.MODE_NO_CHANGE)
-
 	}
 
 }
