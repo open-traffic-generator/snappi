@@ -252,7 +252,7 @@ func (obj *patternFlowIcmpv6NeighborSolicitationType) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowIcmpv6NeighborSolicitationType is iCMPv6 message type. Fixed at 135 for Neighbor Solicitation.
+// PatternFlowIcmpv6NeighborSolicitationType is iCMPv6 message type. Default 135 for Neighbor Solicitation.
 type PatternFlowIcmpv6NeighborSolicitationType interface {
 	Validation
 	// msg marshals PatternFlowIcmpv6NeighborSolicitationType to protobuf object *otg.PatternFlowIcmpv6NeighborSolicitationType

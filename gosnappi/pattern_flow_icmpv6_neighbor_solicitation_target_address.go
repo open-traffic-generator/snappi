@@ -252,7 +252,7 @@ func (obj *patternFlowIcmpv6NeighborSolicitationTargetAddress) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowIcmpv6NeighborSolicitationTargetAddress is the IPv6 address of the target of the solicitation. Must not be a multicast address.
+// PatternFlowIcmpv6NeighborSolicitationTargetAddress is the IPv6 address of the target of the solicitation (RFC 4861 Section 4.3). In a conforming packet it is not a multicast address.
 type PatternFlowIcmpv6NeighborSolicitationTargetAddress interface {
 	Validation
 	// msg marshals PatternFlowIcmpv6NeighborSolicitationTargetAddress to protobuf object *otg.PatternFlowIcmpv6NeighborSolicitationTargetAddress

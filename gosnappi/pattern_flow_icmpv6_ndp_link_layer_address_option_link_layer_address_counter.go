@@ -377,7 +377,7 @@ func (obj *patternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddressCounter) va
 
 func (obj *patternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddressCounter) setDefault() {
 	if obj.obj.Start == nil {
-		obj.SetStart("00:00:00:00:00:00")
+		obj.SetStart("00:00:00:00:00:01")
 	}
 	if obj.obj.Step == nil {
 		obj.SetStep("00:00:00:00:00:01")

@@ -260,7 +260,20 @@ func (obj *flowIcmpv6NeighborSolicitation) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// FlowIcmpv6NeighborSolicitation is packet Header for ICMPv6 NDP Neighbor Solicitation (Type 135, RFC 4861 Section 4.3).
+// FlowIcmpv6NeighborSolicitation is packet Header for ICMPv6 NDP Neighbor Solicitation (Type 135, RFC 4861 Section 4.3). A conforming NS is sent with IPv6 Hop Limit 255 (RFC 4861 Section 7.1.1).
+// RFC requirements described for this header (MUST / MUST NOT) apply to a conforming packet. The model does not enforce them, so any value the fields can encode may be configured for conformance and negative testing.
+// The IPv6 and Ethernet destinations are set in their own headers. Use these values, where T is target_address and "low 24 bits" are the last 3 octets of T (RFC 4291 Section 2.7.1, RFC 2464 Section 7):
+// Multicast NS (address resolution, duplicate address detection):
+// IPv6 dst     = ff02::1:ff + low 24 bits of T
+// Ethernet dst = 33:33:ff + low 24 bits of T
+// Example: T = 2001:db8::5 gives IPv6 dst ff02::1:ff00:5 and
+// Ethernet dst 33:33:ff:00:00:05.
+//
+// Unicast NS (neighbor reachability check):
+// IPv6 dst     = T
+// Ethernet dst = MAC address of the target
+//
+// In a conforming duplicate address detection packet the IPv6 source is :: and the Source Link-Layer Address option is omitted.
 type FlowIcmpv6NeighborSolicitation interface {
 	Validation
 	// msg marshals FlowIcmpv6NeighborSolicitation to protobuf object *otg.FlowIcmpv6NeighborSolicitation
@@ -283,18 +296,18 @@ type FlowIcmpv6NeighborSolicitation interface {
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
 	// Type returns PatternFlowIcmpv6NeighborSolicitationType, set in FlowIcmpv6NeighborSolicitation.
-	// PatternFlowIcmpv6NeighborSolicitationType is iCMPv6 message type. Fixed at 135 for Neighbor Solicitation.
+	// PatternFlowIcmpv6NeighborSolicitationType is iCMPv6 message type. Default 135 for Neighbor Solicitation.
 	Type() PatternFlowIcmpv6NeighborSolicitationType
 	// SetType assigns PatternFlowIcmpv6NeighborSolicitationType provided by user to FlowIcmpv6NeighborSolicitation.
-	// PatternFlowIcmpv6NeighborSolicitationType is iCMPv6 message type. Fixed at 135 for Neighbor Solicitation.
+	// PatternFlowIcmpv6NeighborSolicitationType is iCMPv6 message type. Default 135 for Neighbor Solicitation.
 	SetType(value PatternFlowIcmpv6NeighborSolicitationType) FlowIcmpv6NeighborSolicitation
 	// HasType checks if Type has been set in FlowIcmpv6NeighborSolicitation
 	HasType() bool
 	// Code returns PatternFlowIcmpv6NeighborSolicitationCode, set in FlowIcmpv6NeighborSolicitation.
-	// PatternFlowIcmpv6NeighborSolicitationCode is iCMPv6 message code. Must be 0 for Neighbor Solicitation.
+	// PatternFlowIcmpv6NeighborSolicitationCode is iCMPv6 message code. Default 0 for Neighbor Solicitation.
 	Code() PatternFlowIcmpv6NeighborSolicitationCode
 	// SetCode assigns PatternFlowIcmpv6NeighborSolicitationCode provided by user to FlowIcmpv6NeighborSolicitation.
-	// PatternFlowIcmpv6NeighborSolicitationCode is iCMPv6 message code. Must be 0 for Neighbor Solicitation.
+	// PatternFlowIcmpv6NeighborSolicitationCode is iCMPv6 message code. Default 0 for Neighbor Solicitation.
 	SetCode(value PatternFlowIcmpv6NeighborSolicitationCode) FlowIcmpv6NeighborSolicitation
 	// HasCode checks if Code has been set in FlowIcmpv6NeighborSolicitation
 	HasCode() bool
@@ -307,18 +320,18 @@ type FlowIcmpv6NeighborSolicitation interface {
 	// HasChecksum checks if Checksum has been set in FlowIcmpv6NeighborSolicitation
 	HasChecksum() bool
 	// Reserved returns PatternFlowIcmpv6NeighborSolicitationReserved, set in FlowIcmpv6NeighborSolicitation.
-	// PatternFlowIcmpv6NeighborSolicitationReserved is reserved field. Must be initialized to zero by the sender and must be ignored by the receiver.
+	// PatternFlowIcmpv6NeighborSolicitationReserved is reserved (RFC 4861 Section 4.3). Zero in a conforming packet: the sender initializes it to zero and the receiver ignores it.
 	Reserved() PatternFlowIcmpv6NeighborSolicitationReserved
 	// SetReserved assigns PatternFlowIcmpv6NeighborSolicitationReserved provided by user to FlowIcmpv6NeighborSolicitation.
-	// PatternFlowIcmpv6NeighborSolicitationReserved is reserved field. Must be initialized to zero by the sender and must be ignored by the receiver.
+	// PatternFlowIcmpv6NeighborSolicitationReserved is reserved (RFC 4861 Section 4.3). Zero in a conforming packet: the sender initializes it to zero and the receiver ignores it.
 	SetReserved(value PatternFlowIcmpv6NeighborSolicitationReserved) FlowIcmpv6NeighborSolicitation
 	// HasReserved checks if Reserved has been set in FlowIcmpv6NeighborSolicitation
 	HasReserved() bool
 	// TargetAddress returns PatternFlowIcmpv6NeighborSolicitationTargetAddress, set in FlowIcmpv6NeighborSolicitation.
-	// PatternFlowIcmpv6NeighborSolicitationTargetAddress is the IPv6 address of the target of the solicitation. Must not be a multicast address.
+	// PatternFlowIcmpv6NeighborSolicitationTargetAddress is the IPv6 address of the target of the solicitation (RFC 4861 Section 4.3). In a conforming packet it is not a multicast address.
 	TargetAddress() PatternFlowIcmpv6NeighborSolicitationTargetAddress
 	// SetTargetAddress assigns PatternFlowIcmpv6NeighborSolicitationTargetAddress provided by user to FlowIcmpv6NeighborSolicitation.
-	// PatternFlowIcmpv6NeighborSolicitationTargetAddress is the IPv6 address of the target of the solicitation. Must not be a multicast address.
+	// PatternFlowIcmpv6NeighborSolicitationTargetAddress is the IPv6 address of the target of the solicitation (RFC 4861 Section 4.3). In a conforming packet it is not a multicast address.
 	SetTargetAddress(value PatternFlowIcmpv6NeighborSolicitationTargetAddress) FlowIcmpv6NeighborSolicitation
 	// HasTargetAddress checks if TargetAddress has been set in FlowIcmpv6NeighborSolicitation
 	HasTargetAddress() bool
@@ -467,7 +480,7 @@ func (obj *flowIcmpv6NeighborSolicitation) SetTargetAddress(value PatternFlowIcm
 	return obj
 }
 
-// Optional list of NDP options. Source Link-Layer Address SHOULD be included when sent from a unicast address (RFC 4861 Section 4.3).
+// Optional list of NDP options (RFC 4861 Section 4.6). In a conforming packet (RFC 4861 Section 4.3) the Source Link-Layer Address option is omitted when the IPv6 source is the unspecified address (DAD), is included in multicast solicitations and should be included in unicast solicitations. It is the only option RFC 4861 defines for Neighbor Solicitation. Other option types, and combinations that differ from the above, can be configured for conformance and negative testing; a conforming receiver silently ignores options not defined for the message (RFC 4861 Section 4.6).
 // Options returns a []FlowIcmpv6NdpOption
 func (obj *flowIcmpv6NeighborSolicitation) Options() FlowIcmpv6NeighborSolicitationFlowIcmpv6NdpOptionIter {
 	if len(obj.obj.Options) == 0 {

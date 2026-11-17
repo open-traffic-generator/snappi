@@ -277,10 +277,10 @@ type FlowIcmpv6NdpRedirectedHeaderOption interface {
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
 	// Length returns PatternFlowIcmpv6NdpRedirectedHeaderOptionLength, set in FlowIcmpv6NdpRedirectedHeaderOption.
-	// PatternFlowIcmpv6NdpRedirectedHeaderOptionLength is option length in units of 8 octets, including type/length bytes, reserved bytes and the truncated original packet.
+	// PatternFlowIcmpv6NdpRedirectedHeaderOptionLength is option length in units of 8 octets (RFC 4861 Section 4.6), covering the type, length and reserved octets (8 octets in total) plus the data. When auto, it is computed as ceil((8 + octets of data) / 8) and the data is padded with zero octets to a multiple of 8 octets.
 	Length() PatternFlowIcmpv6NdpRedirectedHeaderOptionLength
 	// SetLength assigns PatternFlowIcmpv6NdpRedirectedHeaderOptionLength provided by user to FlowIcmpv6NdpRedirectedHeaderOption.
-	// PatternFlowIcmpv6NdpRedirectedHeaderOptionLength is option length in units of 8 octets, including type/length bytes, reserved bytes and the truncated original packet.
+	// PatternFlowIcmpv6NdpRedirectedHeaderOptionLength is option length in units of 8 octets (RFC 4861 Section 4.6), covering the type, length and reserved octets (8 octets in total) plus the data. When auto, it is computed as ceil((8 + octets of data) / 8) and the data is padded with zero octets to a multiple of 8 octets.
 	SetLength(value PatternFlowIcmpv6NdpRedirectedHeaderOptionLength) FlowIcmpv6NdpRedirectedHeaderOption
 	// HasLength checks if Length has been set in FlowIcmpv6NdpRedirectedHeaderOption
 	HasLength() bool
@@ -393,7 +393,7 @@ func (obj *flowIcmpv6NdpRedirectedHeaderOption) SetReserved2(value PatternFlowIc
 	return obj
 }
 
-// As much as possible of the original IP packet that triggered the Redirect, without the Redirect IP packet exceeding the minimum IPv6 MTU. Hex string.
+// Leading part of the original IP packet (IP header + data) that triggered the Redirect, truncated so the Redirect message does not exceed the minimum IPv6 MTU (RFC 4861 Section 4.6.3). Hex string. The option is padded with zero octets to a multiple of 8 octets.
 // Data returns a string
 func (obj *flowIcmpv6NdpRedirectedHeaderOption) Data() string {
 
@@ -401,13 +401,13 @@ func (obj *flowIcmpv6NdpRedirectedHeaderOption) Data() string {
 
 }
 
-// As much as possible of the original IP packet that triggered the Redirect, without the Redirect IP packet exceeding the minimum IPv6 MTU. Hex string.
+// Leading part of the original IP packet (IP header + data) that triggered the Redirect, truncated so the Redirect message does not exceed the minimum IPv6 MTU (RFC 4861 Section 4.6.3). Hex string. The option is padded with zero octets to a multiple of 8 octets.
 // Data returns a string
 func (obj *flowIcmpv6NdpRedirectedHeaderOption) HasData() bool {
 	return obj.obj.Data != nil
 }
 
-// As much as possible of the original IP packet that triggered the Redirect, without the Redirect IP packet exceeding the minimum IPv6 MTU. Hex string.
+// Leading part of the original IP packet (IP header + data) that triggered the Redirect, truncated so the Redirect message does not exceed the minimum IPv6 MTU (RFC 4861 Section 4.6.3). Hex string. The option is padded with zero octets to a multiple of 8 octets.
 // SetData sets the string value in the FlowIcmpv6NdpRedirectedHeaderOption object
 func (obj *flowIcmpv6NdpRedirectedHeaderOption) SetData(value string) FlowIcmpv6NdpRedirectedHeaderOption {
 

@@ -252,7 +252,7 @@ func (obj *patternFlowIcmpv6NeighborSolicitationReserved) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowIcmpv6NeighborSolicitationReserved is reserved field. Must be initialized to zero by the sender and must be ignored by the receiver.
+// PatternFlowIcmpv6NeighborSolicitationReserved is reserved (RFC 4861 Section 4.3). Zero in a conforming packet: the sender initializes it to zero and the receiver ignores it.
 type PatternFlowIcmpv6NeighborSolicitationReserved interface {
 	Validation
 	// msg marshals PatternFlowIcmpv6NeighborSolicitationReserved to protobuf object *otg.PatternFlowIcmpv6NeighborSolicitationReserved

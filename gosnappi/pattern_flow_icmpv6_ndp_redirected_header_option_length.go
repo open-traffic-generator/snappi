@@ -252,7 +252,7 @@ func (obj *patternFlowIcmpv6NdpRedirectedHeaderOptionLength) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowIcmpv6NdpRedirectedHeaderOptionLength is option length in units of 8 octets, including type/length bytes, reserved bytes and the truncated original packet.
+// PatternFlowIcmpv6NdpRedirectedHeaderOptionLength is option length in units of 8 octets (RFC 4861 Section 4.6), covering the type, length and reserved octets (8 octets in total) plus the data. When auto, it is computed as ceil((8 + octets of data) / 8) and the data is padded with zero octets to a multiple of 8 octets.
 type PatternFlowIcmpv6NdpRedirectedHeaderOptionLength interface {
 	Validation
 	// msg marshals PatternFlowIcmpv6NdpRedirectedHeaderOptionLength to protobuf object *otg.PatternFlowIcmpv6NdpRedirectedHeaderOptionLength

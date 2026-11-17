@@ -258,7 +258,7 @@ func (obj *flowIcmpv6NdpOption) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// FlowIcmpv6NdpOption is nDP option (RFC 4861 Section 4.6) carried in NDP messages. The option Length is in units of 8 octets including the type and length bytes themselves.
+// FlowIcmpv6NdpOption is nDP option (RFC 4861 Section 4.6) carried in NDP messages. The option Length is in units of 8 octets including the type and length bytes themselves. The option type is not validated against the message it is carried in; a conforming receiver silently ignores an option that is not defined for the message (RFC 4861 Section 4.6). RFC requirements stated for options describe a conforming packet; the model does not enforce them, so other values can be configured for conformance and negative testing.
 type FlowIcmpv6NdpOption interface {
 	Validation
 	// msg marshals FlowIcmpv6NdpOption to protobuf object *otg.FlowIcmpv6NdpOption

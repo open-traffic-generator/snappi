@@ -289,10 +289,36 @@ type FlowIcmpv6 interface {
 	// HasEcho checks if Echo has been set in FlowIcmpv6
 	HasEcho() bool
 	// NeighborSolicitation returns FlowIcmpv6NeighborSolicitation, set in FlowIcmpv6.
-	// FlowIcmpv6NeighborSolicitation is packet Header for ICMPv6 NDP Neighbor Solicitation (Type 135, RFC 4861 Section 4.3).
+	// FlowIcmpv6NeighborSolicitation is packet Header for ICMPv6 NDP Neighbor Solicitation (Type 135, RFC 4861 Section 4.3). A conforming NS is sent with IPv6 Hop Limit 255 (RFC 4861 Section 7.1.1).
+	// RFC requirements described for this header (MUST / MUST NOT) apply to a conforming packet. The model does not enforce them, so any value the fields can encode may be configured for conformance and negative testing.
+	// The IPv6 and Ethernet destinations are set in their own headers. Use these values, where T is target_address and "low 24 bits" are the last 3 octets of T (RFC 4291 Section 2.7.1, RFC 2464 Section 7):
+	// Multicast NS (address resolution, duplicate address detection):
+	// IPv6 dst     = ff02::1:ff + low 24 bits of T
+	// Ethernet dst = 33:33:ff + low 24 bits of T
+	// Example: T = 2001:db8::5 gives IPv6 dst ff02::1:ff00:5 and
+	// Ethernet dst 33:33:ff:00:00:05.
+	//
+	// Unicast NS (neighbor reachability check):
+	// IPv6 dst     = T
+	// Ethernet dst = MAC address of the target
+	//
+	// In a conforming duplicate address detection packet the IPv6 source is :: and the Source Link-Layer Address option is omitted.
 	NeighborSolicitation() FlowIcmpv6NeighborSolicitation
 	// SetNeighborSolicitation assigns FlowIcmpv6NeighborSolicitation provided by user to FlowIcmpv6.
-	// FlowIcmpv6NeighborSolicitation is packet Header for ICMPv6 NDP Neighbor Solicitation (Type 135, RFC 4861 Section 4.3).
+	// FlowIcmpv6NeighborSolicitation is packet Header for ICMPv6 NDP Neighbor Solicitation (Type 135, RFC 4861 Section 4.3). A conforming NS is sent with IPv6 Hop Limit 255 (RFC 4861 Section 7.1.1).
+	// RFC requirements described for this header (MUST / MUST NOT) apply to a conforming packet. The model does not enforce them, so any value the fields can encode may be configured for conformance and negative testing.
+	// The IPv6 and Ethernet destinations are set in their own headers. Use these values, where T is target_address and "low 24 bits" are the last 3 octets of T (RFC 4291 Section 2.7.1, RFC 2464 Section 7):
+	// Multicast NS (address resolution, duplicate address detection):
+	// IPv6 dst     = ff02::1:ff + low 24 bits of T
+	// Ethernet dst = 33:33:ff + low 24 bits of T
+	// Example: T = 2001:db8::5 gives IPv6 dst ff02::1:ff00:5 and
+	// Ethernet dst 33:33:ff:00:00:05.
+	//
+	// Unicast NS (neighbor reachability check):
+	// IPv6 dst     = T
+	// Ethernet dst = MAC address of the target
+	//
+	// In a conforming duplicate address detection packet the IPv6 source is :: and the Source Link-Layer Address option is omitted.
 	SetNeighborSolicitation(value FlowIcmpv6NeighborSolicitation) FlowIcmpv6
 	// HasNeighborSolicitation checks if NeighborSolicitation has been set in FlowIcmpv6
 	HasNeighborSolicitation() bool

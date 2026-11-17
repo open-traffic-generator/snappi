@@ -252,7 +252,7 @@ func (obj *patternFlowIcmpv6NeighborSolicitationCode) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowIcmpv6NeighborSolicitationCode is iCMPv6 message code. Must be 0 for Neighbor Solicitation.
+// PatternFlowIcmpv6NeighborSolicitationCode is iCMPv6 message code. Default 0 for Neighbor Solicitation.
 type PatternFlowIcmpv6NeighborSolicitationCode interface {
 	Validation
 	// msg marshals PatternFlowIcmpv6NeighborSolicitationCode to protobuf object *otg.PatternFlowIcmpv6NeighborSolicitationCode

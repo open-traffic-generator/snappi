@@ -357,30 +357,30 @@ func (obj *patternFlowIpv4FragmentOffsetCounter) validateObj(vObj *validation, s
 
 	if obj.obj.Start != nil {
 
-		if *obj.obj.Start > 31 {
+		if *obj.obj.Start > 8191 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= PatternFlowIpv4FragmentOffsetCounter.Start <= 31 but Got %d", *obj.obj.Start))
+				fmt.Sprintf("0 <= PatternFlowIpv4FragmentOffsetCounter.Start <= 8191 but Got %d", *obj.obj.Start))
 		}
 
 	}
 
 	if obj.obj.Step != nil {
 
-		if *obj.obj.Step > 31 {
+		if *obj.obj.Step > 8191 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= PatternFlowIpv4FragmentOffsetCounter.Step <= 31 but Got %d", *obj.obj.Step))
+				fmt.Sprintf("0 <= PatternFlowIpv4FragmentOffsetCounter.Step <= 8191 but Got %d", *obj.obj.Step))
 		}
 
 	}
 
 	if obj.obj.Count != nil {
 
-		if *obj.obj.Count > 32 {
+		if *obj.obj.Count > 8192 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= PatternFlowIpv4FragmentOffsetCounter.Count <= 32 but Got %d", *obj.obj.Count))
+				fmt.Sprintf("0 <= PatternFlowIpv4FragmentOffsetCounter.Count <= 8192 but Got %d", *obj.obj.Count))
 		}
 
 	}

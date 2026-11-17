@@ -351,12 +351,12 @@ func (obj *patternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddress) setChoice
 	obj.obj.Value = nil
 
 	if value == PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddressChoice.VALUE {
-		defaultValue := "00:00:00:00:00:00"
+		defaultValue := "00:00:00:00:00:01"
 		obj.obj.Value = &defaultValue
 	}
 
 	if value == PatternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddressChoice.VALUES {
-		defaultValue := []string{"00:00:00:00:00:00"}
+		defaultValue := []string{"00:00:00:00:00:01"}
 		obj.obj.Values = defaultValue
 	}
 
@@ -401,7 +401,7 @@ func (obj *patternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddress) SetValue(
 // Values returns a []string
 func (obj *patternFlowIcmpv6NdpLinkLayerAddressOptionLinkLayerAddress) Values() []string {
 	if obj.obj.Values == nil {
-		obj.SetValues([]string{"00:00:00:00:00:00"})
+		obj.SetValues([]string{"00:00:00:00:00:01"})
 	}
 	return obj.obj.Values
 }
