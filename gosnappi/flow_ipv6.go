@@ -345,10 +345,10 @@ type FlowIpv6 interface {
 	// HasSrc checks if Src has been set in FlowIpv6
 	HasSrc() bool
 	// Dst returns PatternFlowIpv6Dst, set in FlowIpv6.
-	// PatternFlowIpv6Dst is destination address in IPv6 packet header. If dst_usids is configured, the locator and usids provided in that should be used to construct the IPv6 destination address instead of this field.
+	// PatternFlowIpv6Dst is destination address in IPv6 packet header. If dst_usids is configured, the locator and usids provided in that should be used to construct the IPv6 destination address instead of this field. When this is a multicast address, the Ethernet destination should be 33:33 followed by the last 4 octets of this address (RFC 2464 Section 7), for example ff02::1:ff00:5 maps to 33:33:ff:00:00:05.
 	Dst() PatternFlowIpv6Dst
 	// SetDst assigns PatternFlowIpv6Dst provided by user to FlowIpv6.
-	// PatternFlowIpv6Dst is destination address in IPv6 packet header. If dst_usids is configured, the locator and usids provided in that should be used to construct the IPv6 destination address instead of this field.
+	// PatternFlowIpv6Dst is destination address in IPv6 packet header. If dst_usids is configured, the locator and usids provided in that should be used to construct the IPv6 destination address instead of this field. When this is a multicast address, the Ethernet destination should be 33:33 followed by the last 4 octets of this address (RFC 2464 Section 7), for example ff02::1:ff00:5 maps to 33:33:ff:00:00:05.
 	SetDst(value PatternFlowIpv6Dst) FlowIpv6
 	// HasDst checks if Dst has been set in FlowIpv6
 	HasDst() bool
