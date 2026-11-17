@@ -377,7 +377,7 @@ func (obj *patternFlowIcmpv6NdpPrefixInformationOptionPrefixCounter) validateObj
 
 func (obj *patternFlowIcmpv6NdpPrefixInformationOptionPrefixCounter) setDefault() {
 	if obj.obj.Start == nil {
-		obj.SetStart("::")
+		obj.SetStart("0::1")
 	}
 	if obj.obj.Step == nil {
 		obj.SetStep("::1")

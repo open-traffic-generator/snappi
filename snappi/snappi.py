@@ -119954,8 +119954,8 @@ class PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLength(OpenApiObject):
 
     _DEFAULTS = {
         "choice": "value",
-        "value": 64,
-        "values": [64],
+        "value": 0,
+        "values": [0],
     }  # type: Dict[str, Union(type)]
 
     VALUE = "value"  # type: str
@@ -119965,7 +119965,7 @@ class PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLength(OpenApiObject):
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, choice=None, value=64, values=[64]):
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
         super(PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLength, self).__init__()
         self._parent = parent
         self._set_property("value", value)
@@ -120104,14 +120104,14 @@ class PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLengthCounter(OpenApiObje
     _REQUIRED = ()  # type: tuple(str)
 
     _DEFAULTS = {
-        "start": 64,
+        "start": 0,
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, start=64, step=1, count=1):
+    def __init__(self, parent=None, start=0, step=1, count=1):
         super(
             PatternFlowIcmpv6NdpPrefixInformationOptionPrefixLengthCounter, self
         ).__init__()
@@ -121567,8 +121567,8 @@ class PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetime(OpenApiObject
 
     _DEFAULTS = {
         "choice": "value",
-        "value": 604800,
-        "values": [604800],
+        "value": 10,
+        "values": [10],
     }  # type: Dict[str, Union(type)]
 
     VALUE = "value"  # type: str
@@ -121578,7 +121578,7 @@ class PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetime(OpenApiObject
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, choice=None, value=604800, values=[604800]):
+    def __init__(self, parent=None, choice=None, value=10, values=[10]):
         super(
             PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetime, self
         ).__init__()
@@ -121718,14 +121718,14 @@ class PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetimeCounter(
     _REQUIRED = ()  # type: tuple(str)
 
     _DEFAULTS = {
-        "start": 604800,
+        "start": 10,
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, start=604800, step=1, count=1):
+    def __init__(self, parent=None, start=10, step=1, count=1):
         super(
             PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetimeCounter, self
         ).__init__()
@@ -122103,8 +122103,8 @@ class PatternFlowIcmpv6NdpPrefixInformationOptionPrefix(OpenApiObject):
 
     _DEFAULTS = {
         "choice": "value",
-        "value": "::",
-        "values": ["::"],
+        "value": "0::1",
+        "values": ["0::1"],
     }  # type: Dict[str, Union(type)]
 
     VALUE = "value"  # type: str
@@ -122114,7 +122114,7 @@ class PatternFlowIcmpv6NdpPrefixInformationOptionPrefix(OpenApiObject):
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, choice=None, value="::", values=["::"]):
+    def __init__(self, parent=None, choice=None, value="0::1", values=["0::1"]):
         super(PatternFlowIcmpv6NdpPrefixInformationOptionPrefix, self).__init__()
         self._parent = parent
         self._set_property("value", value)
@@ -122250,14 +122250,14 @@ class PatternFlowIcmpv6NdpPrefixInformationOptionPrefixCounter(OpenApiObject):
     _REQUIRED = ()  # type: tuple(str)
 
     _DEFAULTS = {
-        "start": "::",
+        "start": "0::1",
         "step": "::1",
         "count": 1,
     }  # type: Dict[str, Union(type)]
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, start="::", step="::1", count=1):
+    def __init__(self, parent=None, start="0::1", step="::1", count=1):
         super(PatternFlowIcmpv6NdpPrefixInformationOptionPrefixCounter, self).__init__()
         self._parent = parent
         self._set_property("start", start)

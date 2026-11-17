@@ -351,12 +351,12 @@ func (obj *patternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetime) setChoi
 	obj.obj.Value = nil
 
 	if value == PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetimeChoice.VALUE {
-		defaultValue := uint32(604800)
+		defaultValue := uint32(10)
 		obj.obj.Value = &defaultValue
 	}
 
 	if value == PatternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetimeChoice.VALUES {
-		defaultValue := []uint32{604800}
+		defaultValue := []uint32{10}
 		obj.obj.Values = defaultValue
 	}
 
@@ -401,7 +401,7 @@ func (obj *patternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetime) SetValu
 // Values returns a []uint32
 func (obj *patternFlowIcmpv6NdpPrefixInformationOptionPreferredLifetime) Values() []uint32 {
 	if obj.obj.Values == nil {
-		obj.SetValues([]uint32{604800})
+		obj.SetValues([]uint32{10})
 	}
 	return obj.obj.Values
 }
