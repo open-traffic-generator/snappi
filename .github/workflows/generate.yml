@@ -43,7 +43,7 @@ jobs:
           git add --force gosnappi/\*
           git add --force snappi/\*
           git add --force requirements.txt
-          if git status --porcelain | grep .
+          if ! git diff --staged --quiet
             then
               git commit -m "Update auto generated go snappi"
               git push

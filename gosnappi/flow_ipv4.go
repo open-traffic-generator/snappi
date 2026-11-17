@@ -357,18 +357,18 @@ type FlowIpv4 interface {
 	// HasDontFragment checks if DontFragment has been set in FlowIpv4
 	HasDontFragment() bool
 	// MoreFragments returns PatternFlowIpv4MoreFragments, set in FlowIpv4.
-	// PatternFlowIpv4MoreFragments is more fragments flag
+	// PatternFlowIpv4MoreFragments is more fragments flag (RFC 791 Section 3.1). Set on every fragment of a datagram except the last one. Interaction with packet size: the IPv4 payload carried by this packet is total_length - (header_length x 4) bytes, and total_length follows the flow size. For a conformant fragment, the payload of every fragment that has more_fragments set should be a multiple of 8 bytes. The last fragment (more_fragments = 0) can have any payload length.
 	MoreFragments() PatternFlowIpv4MoreFragments
 	// SetMoreFragments assigns PatternFlowIpv4MoreFragments provided by user to FlowIpv4.
-	// PatternFlowIpv4MoreFragments is more fragments flag
+	// PatternFlowIpv4MoreFragments is more fragments flag (RFC 791 Section 3.1). Set on every fragment of a datagram except the last one. Interaction with packet size: the IPv4 payload carried by this packet is total_length - (header_length x 4) bytes, and total_length follows the flow size. For a conformant fragment, the payload of every fragment that has more_fragments set should be a multiple of 8 bytes. The last fragment (more_fragments = 0) can have any payload length.
 	SetMoreFragments(value PatternFlowIpv4MoreFragments) FlowIpv4
 	// HasMoreFragments checks if MoreFragments has been set in FlowIpv4
 	HasMoreFragments() bool
 	// FragmentOffset returns PatternFlowIpv4FragmentOffset, set in FlowIpv4.
-	// PatternFlowIpv4FragmentOffset is fragment offset
+	// PatternFlowIpv4FragmentOffset is fragment offset (RFC 791 Section 3.1). 13-bit value that gives the position of this fragment's data in the original datagram, measured in units of 8 bytes (not bytes). Byte offset = fragment_offset x 8, so the range 0..8191 covers byte offsets 0..65528. See more_fragments for how the flow size affects whether a fragment is conformant.
 	FragmentOffset() PatternFlowIpv4FragmentOffset
 	// SetFragmentOffset assigns PatternFlowIpv4FragmentOffset provided by user to FlowIpv4.
-	// PatternFlowIpv4FragmentOffset is fragment offset
+	// PatternFlowIpv4FragmentOffset is fragment offset (RFC 791 Section 3.1). 13-bit value that gives the position of this fragment's data in the original datagram, measured in units of 8 bytes (not bytes). Byte offset = fragment_offset x 8, so the range 0..8191 covers byte offsets 0..65528. See more_fragments for how the flow size affects whether a fragment is conformant.
 	SetFragmentOffset(value PatternFlowIpv4FragmentOffset) FlowIpv4
 	// HasFragmentOffset checks if FragmentOffset has been set in FlowIpv4
 	HasFragmentOffset() bool

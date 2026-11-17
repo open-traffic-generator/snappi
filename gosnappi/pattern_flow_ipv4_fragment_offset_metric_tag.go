@@ -354,20 +354,20 @@ func (obj *patternFlowIpv4FragmentOffsetMetricTag) validateObj(vObj *validation,
 
 	if obj.obj.Offset != nil {
 
-		if *obj.obj.Offset > 4 {
+		if *obj.obj.Offset > 12 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= PatternFlowIpv4FragmentOffsetMetricTag.Offset <= 4 but Got %d", *obj.obj.Offset))
+				fmt.Sprintf("0 <= PatternFlowIpv4FragmentOffsetMetricTag.Offset <= 12 but Got %d", *obj.obj.Offset))
 		}
 
 	}
 
 	if obj.obj.Length != nil {
 
-		if *obj.obj.Length < 1 || *obj.obj.Length > 5 {
+		if *obj.obj.Length < 1 || *obj.obj.Length > 13 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("1 <= PatternFlowIpv4FragmentOffsetMetricTag.Length <= 5 but Got %d", *obj.obj.Length))
+				fmt.Sprintf("1 <= PatternFlowIpv4FragmentOffsetMetricTag.Length <= 13 but Got %d", *obj.obj.Length))
 		}
 
 	}
@@ -379,7 +379,7 @@ func (obj *patternFlowIpv4FragmentOffsetMetricTag) setDefault() {
 		obj.SetOffset(0)
 	}
 	if obj.obj.Length == nil {
-		obj.SetLength(5)
+		obj.SetLength(13)
 	}
 
 }
