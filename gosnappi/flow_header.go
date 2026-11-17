@@ -41,6 +41,7 @@ type flowHeader struct {
 	lacpHolder                FlowLacp
 	ipv6ExtensionHeaderHolder FlowIpv6ExtHeader
 	cfmHolder                 FlowCfm
+	igmpv3Holder              FlowIgmpv3
 }
 
 func NewFlowHeader() FlowHeader {
@@ -293,6 +294,7 @@ func (obj *flowHeader) setNil() {
 	obj.lacpHolder = nil
 	obj.ipv6ExtensionHeaderHolder = nil
 	obj.cfmHolder = nil
+	obj.igmpv3Holder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -524,6 +526,14 @@ type FlowHeader interface {
 	SetCfm(value FlowCfm) FlowHeader
 	// HasCfm checks if Cfm has been set in FlowHeader
 	HasCfm() bool
+	// Igmpv3 returns FlowIgmpv3, set in FlowHeader.
+	// FlowIgmpv3 is iGMPv3 packet header (RFC 9776, which obsoletes RFC 3376). The choice selects the Membership Query or the Version 3 Membership Report message layout.
+	Igmpv3() FlowIgmpv3
+	// SetIgmpv3 assigns FlowIgmpv3 provided by user to FlowHeader.
+	// FlowIgmpv3 is iGMPv3 packet header (RFC 9776, which obsoletes RFC 3376). The choice selects the Membership Query or the Version 3 Membership Report message layout.
+	SetIgmpv3(value FlowIgmpv3) FlowHeader
+	// HasIgmpv3 checks if Igmpv3 has been set in FlowHeader
+	HasIgmpv3() bool
 	setNil()
 }
 
@@ -556,6 +566,7 @@ var FlowHeaderChoice = struct {
 	LACP                  FlowHeaderChoiceEnum
 	IPV6_EXTENSION_HEADER FlowHeaderChoiceEnum
 	CFM                   FlowHeaderChoiceEnum
+	IGMPV3                FlowHeaderChoiceEnum
 }{
 	CUSTOM:                FlowHeaderChoiceEnum("custom"),
 	ETHERNET:              FlowHeaderChoiceEnum("ethernet"),
@@ -582,6 +593,7 @@ var FlowHeaderChoice = struct {
 	LACP:                  FlowHeaderChoiceEnum("lacp"),
 	IPV6_EXTENSION_HEADER: FlowHeaderChoiceEnum("ipv6_extension_header"),
 	CFM:                   FlowHeaderChoiceEnum("cfm"),
+	IGMPV3:                FlowHeaderChoiceEnum("igmpv3"),
 }
 
 func (obj *flowHeader) Choice() FlowHeaderChoiceEnum {
@@ -604,6 +616,8 @@ func (obj *flowHeader) setChoice(value FlowHeaderChoiceEnum) FlowHeader {
 	}
 	enumValue := otg.FlowHeader_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Igmpv3 = nil
+	obj.igmpv3Holder = nil
 	obj.obj.Cfm = nil
 	obj.cfmHolder = nil
 	obj.obj.Ipv6ExtensionHeader = nil
@@ -753,6 +767,10 @@ func (obj *flowHeader) setChoice(value FlowHeaderChoiceEnum) FlowHeader {
 
 	if value == FlowHeaderChoice.CFM {
 		obj.obj.Cfm = NewFlowCfm().msg()
+	}
+
+	if value == FlowHeaderChoice.IGMPV3 {
+		obj.obj.Igmpv3 = NewFlowIgmpv3().msg()
 	}
 
 	return obj
@@ -1458,6 +1476,34 @@ func (obj *flowHeader) SetCfm(value FlowCfm) FlowHeader {
 	return obj
 }
 
+// description is TBD
+// Igmpv3 returns a FlowIgmpv3
+func (obj *flowHeader) Igmpv3() FlowIgmpv3 {
+	if obj.obj.Igmpv3 == nil {
+		obj.setChoice(FlowHeaderChoice.IGMPV3)
+	}
+	if obj.igmpv3Holder == nil {
+		obj.igmpv3Holder = &flowIgmpv3{obj: obj.obj.Igmpv3}
+	}
+	return obj.igmpv3Holder
+}
+
+// description is TBD
+// Igmpv3 returns a FlowIgmpv3
+func (obj *flowHeader) HasIgmpv3() bool {
+	return obj.obj.Igmpv3 != nil
+}
+
+// description is TBD
+// SetIgmpv3 sets the FlowIgmpv3 value in the FlowHeader object
+func (obj *flowHeader) SetIgmpv3(value FlowIgmpv3) FlowHeader {
+	obj.setChoice(FlowHeaderChoice.IGMPV3)
+	obj.igmpv3Holder = nil
+	obj.obj.Igmpv3 = value.msg()
+
+	return obj
+}
+
 func (obj *flowHeader) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1586,6 +1632,11 @@ func (obj *flowHeader) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Cfm != nil {
 
 		obj.Cfm().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Igmpv3 != nil {
+
+		obj.Igmpv3().validateObj(vObj, set_default)
 	}
 
 }
@@ -1717,6 +1768,11 @@ func (obj *flowHeader) setDefault() {
 	if obj.obj.Cfm != nil {
 		choices_set += 1
 		choice = FlowHeaderChoice.CFM
+	}
+
+	if obj.obj.Igmpv3 != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.IGMPV3
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

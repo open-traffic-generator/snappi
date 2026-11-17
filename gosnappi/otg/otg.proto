@@ -11528,6 +11528,7 @@ message FlowHeader {
       lacp = 23;
       ipv6_extension_header = 24;
       cfm = 25;
+      igmpv3 = 27;
     }
   }
   // The available types of flow headers. If one is not provided the
@@ -11609,6 +11610,9 @@ message FlowHeader {
 
   // Description missing in models
   FlowCfm cfm = 26;
+
+  // Description missing in models
+  FlowIgmpv3 igmpv3 = 28;
 }
 
 // Custom packet header
@@ -14608,6 +14612,116 @@ message FlowCfmLength {
   // Description missing in models
   // default = 1
   optional uint32 value = 3;
+}
+
+// IGMPv3 packet header (RFC 9776, which obsoletes RFC 3376). The choice selects the
+// Membership Query or the Version 3 Membership Report message layout.
+message FlowIgmpv3 {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      membership_query = 1;
+      membership_report = 2;
+    }
+  }
+  // Selects the IGMPv3 message, default is membership_query.
+  // default = Choice.Enum.membership_query
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowIgmpv3MembershipQuery membership_query = 2;
+
+  // Description missing in models
+  FlowIgmpv3MembershipReport membership_report = 3;
+}
+
+// IGMPv3 Membership Query message (RFC 9776 Section 4.1).
+message FlowIgmpv3MembershipQuery {
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryType type = 1;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryMaxRespCode max_resp_code = 2;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryChecksum checksum = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryGroupAddress group_address = 4;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryFlags flags = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQuerySFlag s_flag = 6;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryQrv qrv = 7;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryQqic qqic = 8;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryNumberOfSources number_of_sources = 9;
+
+  // List of unicast source addresses of a group-and-source-specific query.
+  repeated FlowIgmpv3Source sources = 10;
+}
+
+// IGMPv3 Version 3 Membership Report message (RFC 9776 Section 4.2).
+message FlowIgmpv3MembershipReport {
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportType type = 1;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportReserved reserved = 2;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportChecksum checksum = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportFlags flags = 4;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportNumberOfGroupRecords number_of_group_records = 5;
+
+  // List of group records, each one reports the membership state of one multicast group.
+  repeated FlowIgmpv3GroupRecord group_records = 6;
+}
+
+// A group record of the Version 3 Membership Report (RFC 9776 Section 4.2.5).
+message FlowIgmpv3GroupRecord {
+
+  // Description missing in models
+  PatternFlowIgmpv3GroupRecordRecordType record_type = 1;
+
+  // Description missing in models
+  PatternFlowIgmpv3GroupRecordAuxDataLength aux_data_length = 2;
+
+  // Description missing in models
+  PatternFlowIgmpv3GroupRecordNumberOfSources number_of_sources = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3GroupRecordMulticastAddress multicast_address = 4;
+
+  // List of unicast source addresses of this record.
+  repeated FlowIgmpv3Source sources = 5;
+
+  // Auxiliary data in hex, a multiple of 4 octets (maximum 255 32-bit words). IGMPv3
+  // does not define any auxiliary data, so a conforming sender omits it (RFC 9776 Section
+  // 4.2.11).
+  optional string aux_data = 6;
+}
+
+// A source address entry. The entries form a vector of IPv4 unicast addresses, one
+// per source, and their number is given by number_of_sources.
+message FlowIgmpv3Source {
+
+  // Description missing in models
+  PatternFlowIgmpv3SourceAddress address = 1;
 }
 
 // The frame size which overrides the total length of the packet
@@ -40541,6 +40655,904 @@ message PatternFlowCfmTlvsLength {
 
   // Description missing in models
   PatternFlowCfmTlvsLengthCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3MembershipQueryTypeCounter {
+
+  // Description missing in models
+  // default = 17
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// IGMP message type, 17 (0x11) for a Membership Query.
+message PatternFlowIgmpv3MembershipQueryType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 17
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [17]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryTypeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryTypeCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3MembershipQueryMaxRespCodeCounter {
+
+  // Description missing in models
+  // default = 100
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Maximum time in units of 1/10 second within which hosts must respond to the query,
+// so the default 100 is 10 seconds. Values of 128 or more use the exponent and mantissa
+// encoding of RFC 9776 Section 4.1.1.
+message PatternFlowIgmpv3MembershipQueryMaxRespCode {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 100
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [100]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryMaxRespCodeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryMaxRespCodeCounter decrement = 6;
+}
+
+// Checksum of the whole IGMP message, a 16-bit one's complement sum with no pseudo-header.
+message PatternFlowIgmpv3MembershipQueryChecksum {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      generated = 1;
+      custom = 2;
+    }
+  }
+  // The type of checksum
+  // default = Choice.Enum.generated
+  optional Choice.Enum choice = 1;
+
+  message Generated {
+    enum Enum {
+      unspecified = 0;
+      good = 1;
+      bad = 2;
+    }
+  }
+  // A system generated checksum value
+  // default = Generated.Enum.good
+  optional Generated.Enum generated = 2;
+
+  // A custom checksum value
+  optional uint32 custom = 3;
+}
+
+// ipv4 counter pattern
+message PatternFlowIgmpv3MembershipQueryGroupAddressCounter {
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string start = 1;
+
+  // Description missing in models
+  // default = 0.0.0.1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Group address, zero for a general query and the group being queried for a group-specific
+// or group-and-source-specific query.
+message PatternFlowIgmpv3MembershipQueryGroupAddress {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['0.0.0.0']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryGroupAddressCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryGroupAddressCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3MembershipQueryFlagsCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Flags field of the query, 4 bits that are managed by IANA and are set to zero by
+// a conforming sender.
+message PatternFlowIgmpv3MembershipQueryFlags {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryFlagsCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryFlagsCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3MembershipQuerySFlagCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Suppress router-side processing flag, when set receiving routers do not update their
+// timers.
+message PatternFlowIgmpv3MembershipQuerySFlag {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQuerySFlagCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQuerySFlagCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3MembershipQueryQrvCounter {
+
+  // Description missing in models
+  // default = 2
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Querier's robustness variable. Zero means the receiver uses its own value, otherwise
+// it is the value used by the querier.
+message PatternFlowIgmpv3MembershipQueryQrv {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 2
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [2]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryQrvCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryQrvCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3MembershipQueryQqicCounter {
+
+  // Description missing in models
+  // default = 125
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Querier's query interval code in seconds, so the default 125 is 125 seconds. Values
+// of 128 or more use the exponent and mantissa encoding of RFC 9776 Section 4.1.7.
+message PatternFlowIgmpv3MembershipQueryQqic {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 125
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [125]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryQqicCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryQqicCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3MembershipQueryNumberOfSourcesCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Number of source addresses in the query, zero for a general and a group-specific
+// query. When auto, it is set to the number of entries in sources.
+message PatternFlowIgmpv3MembershipQueryNumberOfSources {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryNumberOfSourcesCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryNumberOfSourcesCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3MembershipReportTypeCounter {
+
+  // Description missing in models
+  // default = 34
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// IGMP message type, 34 (0x22) for a Version 3 Membership Report.
+message PatternFlowIgmpv3MembershipReportType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 34
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [34]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportTypeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportTypeCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3MembershipReportReservedCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Reserved field, set to zero by the sender and ignored by the receiver.
+message PatternFlowIgmpv3MembershipReportReserved {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportReservedCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportReservedCounter decrement = 6;
+}
+
+// Checksum of the whole IGMP message, a 16-bit one's complement sum with no pseudo-header.
+message PatternFlowIgmpv3MembershipReportChecksum {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      generated = 1;
+      custom = 2;
+    }
+  }
+  // The type of checksum
+  // default = Choice.Enum.generated
+  optional Choice.Enum choice = 1;
+
+  message Generated {
+    enum Enum {
+      unspecified = 0;
+      good = 1;
+      bad = 2;
+    }
+  }
+  // A system generated checksum value
+  // default = Generated.Enum.good
+  optional Generated.Enum generated = 2;
+
+  // A custom checksum value
+  optional uint32 custom = 3;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3MembershipReportFlagsCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Flags field of the report, 16 bits that are managed by IANA and are set to zero by
+// a conforming sender.
+message PatternFlowIgmpv3MembershipReportFlags {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportFlagsCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportFlagsCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3MembershipReportNumberOfGroupRecordsCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Number of group records. When auto, it is set to the number of entries in group_records.
+message PatternFlowIgmpv3MembershipReportNumberOfGroupRecords {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportNumberOfGroupRecordsCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportNumberOfGroupRecordsCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3GroupRecordRecordTypeCounter {
+
+  // Description missing in models
+  // default = 1
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Record type, which tells whether the record reports the current state, a filter mode
+// change or a source list change of the group.
+message PatternFlowIgmpv3GroupRecordRecordType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [1]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3GroupRecordRecordTypeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3GroupRecordRecordTypeCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3GroupRecordAuxDataLengthCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Length of aux_data in 32-bit words (RFC 9776 Section 4.2.7). When auto, it is set
+// to the length of aux_data in 32-bit words, so zero when aux_data is omitted. A conforming
+// sender uses zero.
+message PatternFlowIgmpv3GroupRecordAuxDataLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIgmpv3GroupRecordAuxDataLengthCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIgmpv3GroupRecordAuxDataLengthCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3GroupRecordNumberOfSourcesCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Number of source addresses in this record. When auto, it is set to the number of
+// entries in sources.
+message PatternFlowIgmpv3GroupRecordNumberOfSources {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIgmpv3GroupRecordNumberOfSourcesCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIgmpv3GroupRecordNumberOfSourcesCounter decrement = 7;
+}
+
+// ipv4 counter pattern
+message PatternFlowIgmpv3GroupRecordMulticastAddressCounter {
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string start = 1;
+
+  // Description missing in models
+  // default = 0.0.0.1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Multicast group address that this record reports on.
+message PatternFlowIgmpv3GroupRecordMulticastAddress {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['0.0.0.0']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3GroupRecordMulticastAddressCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3GroupRecordMulticastAddressCounter decrement = 6;
+}
+
+// ipv4 counter pattern
+message PatternFlowIgmpv3SourceAddressCounter {
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string start = 1;
+
+  // Description missing in models
+  // default = 0.0.0.1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Unicast IPv4 source address, use a counter to send a range of sources.
+message PatternFlowIgmpv3SourceAddress {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['0.0.0.0']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3SourceAddressCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3SourceAddressCounter decrement = 6;
 }
 
 // Version details

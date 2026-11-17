@@ -15244,6 +15244,8 @@ components:
               x-field-uid: 24
             cfm:
               x-field-uid: 25
+            igmpv3:
+              x-field-uid: 27
           enum:
           - custom
           - ethernet
@@ -15270,6 +15272,7 @@ components:
           - lacp
           - ipv6_extension_header
           - cfm
+          - igmpv3
         custom:
           $ref: '#/components/schemas/Flow.Custom'
           x-field-uid: 2
@@ -15345,6 +15348,9 @@ components:
         cfm:
           $ref: '#/components/schemas/Flow.Cfm'
           x-field-uid: 26
+        igmpv3:
+          $ref: '#/components/schemas/Flow.Igmpv3'
+          x-field-uid: 28
     Flow.Custom:
       type: object
       description: |-
@@ -18782,6 +18788,136 @@ components:
           maximum: 255
           default: 1
           x-field-uid: 3
+    Flow.Igmpv3:
+      description: |-
+        IGMPv3 packet header (RFC 9776, which obsoletes RFC 3376). The choice selects the Membership Query or the Version 3 Membership Report message layout.
+      type: object
+      properties:
+        choice:
+          description: |-
+            Selects the IGMPv3 message, default is membership_query.
+          type: string
+          default: membership_query
+          x-field-uid: 1
+          x-enum:
+            membership_query:
+              x-field-uid: 1
+            membership_report:
+              x-field-uid: 2
+          enum:
+          - membership_query
+          - membership_report
+        membership_query:
+          $ref: '#/components/schemas/Flow.Igmpv3.MembershipQuery'
+          x-field-uid: 2
+        membership_report:
+          $ref: '#/components/schemas/Flow.Igmpv3.MembershipReport'
+          x-field-uid: 3
+    Flow.Igmpv3.MembershipQuery:
+      description: |-
+        IGMPv3 Membership Query message (RFC 9776 Section 4.1).
+      type: object
+      properties:
+        type:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.Type'
+        max_resp_code:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.MaxRespCode'
+        checksum:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.Checksum'
+        group_address:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.GroupAddress'
+        flags:
+          x-field-uid: 5
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.Flags'
+        s_flag:
+          x-field-uid: 6
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.SFlag'
+        qrv:
+          x-field-uid: 7
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.Qrv'
+        qqic:
+          x-field-uid: 8
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.Qqic'
+        number_of_sources:
+          x-field-uid: 9
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.NumberOfSources'
+        sources:
+          description: |-
+            List of unicast source addresses of a group-and-source-specific query.
+          type: array
+          items:
+            $ref: '#/components/schemas/Flow.Igmpv3.Source'
+          x-field-uid: 10
+    Flow.Igmpv3.MembershipReport:
+      description: |-
+        IGMPv3 Version 3 Membership Report message (RFC 9776 Section 4.2).
+      type: object
+      properties:
+        type:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipReport.Type'
+        reserved:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipReport.Reserved'
+        checksum:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipReport.Checksum'
+        flags:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipReport.Flags'
+        number_of_group_records:
+          x-field-uid: 5
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipReport.NumberOfGroupRecords'
+        group_records:
+          description: |-
+            List of group records, each one reports the membership state of one multicast group.
+          type: array
+          items:
+            $ref: '#/components/schemas/Flow.Igmpv3.GroupRecord'
+          x-field-uid: 6
+    Flow.Igmpv3.GroupRecord:
+      description: |-
+        A group record of the Version 3 Membership Report (RFC 9776 Section 4.2.5).
+      type: object
+      properties:
+        record_type:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.GroupRecord.RecordType'
+        aux_data_length:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.GroupRecord.AuxDataLength'
+        number_of_sources:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.GroupRecord.NumberOfSources'
+        multicast_address:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.GroupRecord.MulticastAddress'
+        sources:
+          description: |-
+            List of unicast source addresses of this record.
+          type: array
+          items:
+            $ref: '#/components/schemas/Flow.Igmpv3.Source'
+          x-field-uid: 5
+        aux_data:
+          description: |-
+            Auxiliary data in hex, a multiple of 4 octets (maximum 255 32-bit words). IGMPv3 does not define any auxiliary data, so a conforming sender omits it (RFC 9776 Section 4.2.11).
+          type: string
+          format: hex
+          maxLength: 2040
+          x-field-uid: 6
+    Flow.Igmpv3.Source:
+      description: |-
+        A source address entry. The entries form a vector of IPv4 unicast addresses, one per source, and their number is given by number_of_sources.
+      type: object
+      properties:
+        address:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.Source.Address'
     Flow.Size:
       description: |-
         The frame size which overrides the total length of the packet
@@ -55983,6 +56119,1276 @@ components:
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Cfm.Tlvs.Length.Counter'
           x-field-uid: 7
+    Pattern.Flow.Igmpv3.MembershipQuery.Type.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 17
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Igmpv3.MembershipQuery.Type:
+      description: |-
+        IGMP message type, 17 (0x11) for a Membership Query.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 17
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 17
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.Type.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.Type.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Igmpv3.MembershipQuery.MaxRespCode.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 100
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Igmpv3.MembershipQuery.MaxRespCode:
+      description: |-
+        Maximum time in units of 1/10 second within which hosts must respond to the query, so the default 100 is 10 seconds. Values of 128 or more use the exponent and mantissa encoding of RFC 9776 Section 4.1.1.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 100
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 100
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.MaxRespCode.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.MaxRespCode.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Igmpv3.MembershipQuery.Checksum:
+      description: |-
+        Checksum of the whole IGMP message, a 16-bit one's complement sum with no pseudo-header.
+      type: object
+      properties:
+        choice:
+          description: |-
+            The type of checksum
+          type: string
+          x-enum:
+            generated:
+              x-field-uid: 1
+            custom:
+              x-field-uid: 2
+          default: generated
+          x-field-uid: 1
+          enum:
+          - generated
+          - custom
+        generated:
+          description: |-
+            A system generated checksum value
+          type: string
+          x-enum:
+            good:
+              x-field-uid: 1
+            bad:
+              x-field-uid: 2
+          default: good
+          x-field-uid: 2
+          enum:
+          - good
+          - bad
+        custom:
+          description: |-
+            A custom checksum value
+          type: integer
+          format: uint32
+          maximum: 65535
+          x-field-uid: 3
+    Pattern.Flow.Igmpv3.MembershipQuery.GroupAddress.Counter:
+      description: |-
+        ipv4 counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: 0.0.0.0
+          format: ipv4
+        step:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.1
+          format: ipv4
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Igmpv3.MembershipQuery.GroupAddress:
+      description: |-
+        Group address, zero for a general query and the group being queried for a group-specific or group-and-source-specific query.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.0
+          format: ipv4
+        values:
+          type: array
+          items:
+            type: string
+            format: ipv4
+          x-field-uid: 3
+          default:
+          - 0.0.0.0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.GroupAddress.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.GroupAddress.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Igmpv3.MembershipQuery.Flags.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 15
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 15
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 16
+    Pattern.Flow.Igmpv3.MembershipQuery.Flags:
+      description: |-
+        Flags field of the query, 4 bits that are managed by IANA and are set to zero by a conforming sender.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 15
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 15
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.Flags.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.Flags.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Igmpv3.MembershipQuery.SFlag.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 2
+    Pattern.Flow.Igmpv3.MembershipQuery.SFlag:
+      description: |-
+        Suppress router-side processing flag, when set receiving routers do not update their timers.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.SFlag.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.SFlag.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Igmpv3.MembershipQuery.Qrv.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 2
+          format: uint32
+          maximum: 7
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 7
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 8
+    Pattern.Flow.Igmpv3.MembershipQuery.Qrv:
+      description: |-
+        Querier's robustness variable. Zero means the receiver uses its own value, otherwise it is the value used by the querier.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 2
+          format: uint32
+          maximum: 7
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 7
+          x-field-uid: 3
+          default:
+          - 2
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.Qrv.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.Qrv.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Igmpv3.MembershipQuery.Qqic.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 125
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Igmpv3.MembershipQuery.Qqic:
+      description: |-
+        Querier's query interval code in seconds, so the default 125 is 125 seconds. Values of 128 or more use the exponent and mantissa encoding of RFC 9776 Section 4.1.7.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 125
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 125
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.Qqic.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.Qqic.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Igmpv3.MembershipQuery.NumberOfSources.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65536
+    Pattern.Flow.Igmpv3.MembershipQuery.NumberOfSources:
+      description: |-
+        Number of source addresses in the query, zero for a general and a group-specific query. When auto, it is set to the number of entries in sources.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 0
+          format: uint32
+          maximum: 65535
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.NumberOfSources.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipQuery.NumberOfSources.Counter'
+          x-field-uid: 7
+    Pattern.Flow.Igmpv3.MembershipReport.Type.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 34
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Igmpv3.MembershipReport.Type:
+      description: |-
+        IGMP message type, 34 (0x22) for a Version 3 Membership Report.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 34
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 34
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipReport.Type.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipReport.Type.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Igmpv3.MembershipReport.Reserved.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Igmpv3.MembershipReport.Reserved:
+      description: |-
+        Reserved field, set to zero by the sender and ignored by the receiver.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipReport.Reserved.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipReport.Reserved.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Igmpv3.MembershipReport.Checksum:
+      description: |-
+        Checksum of the whole IGMP message, a 16-bit one's complement sum with no pseudo-header.
+      type: object
+      properties:
+        choice:
+          description: |-
+            The type of checksum
+          type: string
+          x-enum:
+            generated:
+              x-field-uid: 1
+            custom:
+              x-field-uid: 2
+          default: generated
+          x-field-uid: 1
+          enum:
+          - generated
+          - custom
+        generated:
+          description: |-
+            A system generated checksum value
+          type: string
+          x-enum:
+            good:
+              x-field-uid: 1
+            bad:
+              x-field-uid: 2
+          default: good
+          x-field-uid: 2
+          enum:
+          - good
+          - bad
+        custom:
+          description: |-
+            A custom checksum value
+          type: integer
+          format: uint32
+          maximum: 65535
+          x-field-uid: 3
+    Pattern.Flow.Igmpv3.MembershipReport.Flags.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65536
+    Pattern.Flow.Igmpv3.MembershipReport.Flags:
+      description: |-
+        Flags field of the report, 16 bits that are managed by IANA and are set to zero by a conforming sender.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipReport.Flags.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipReport.Flags.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Igmpv3.MembershipReport.NumberOfGroupRecords.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65536
+    Pattern.Flow.Igmpv3.MembershipReport.NumberOfGroupRecords:
+      description: |-
+        Number of group records. When auto, it is set to the number of entries in group_records.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 0
+          format: uint32
+          maximum: 65535
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipReport.NumberOfGroupRecords.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.MembershipReport.NumberOfGroupRecords.Counter'
+          x-field-uid: 7
+    Pattern.Flow.Igmpv3.GroupRecord.RecordType.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 1
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+      x-constants:
+        mode_is_include: 1
+        mode_is_exclude: 2
+        change_to_include_mode: 3
+        change_to_exclude_mode: 4
+        allow_new_sources: 5
+        block_old_sources: 6
+    Pattern.Flow.Igmpv3.GroupRecord.RecordType:
+      description: |-
+        Record type, which tells whether the record reports the current state, a filter mode change or a source list change of the group.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 1
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.GroupRecord.RecordType.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.GroupRecord.RecordType.Counter'
+          x-field-uid: 6
+      x-constants:
+        mode_is_include: 1
+        mode_is_exclude: 2
+        change_to_include_mode: 3
+        change_to_exclude_mode: 4
+        allow_new_sources: 5
+        block_old_sources: 6
+    Pattern.Flow.Igmpv3.GroupRecord.AuxDataLength.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Igmpv3.GroupRecord.AuxDataLength:
+      description: |-
+        Length of aux_data in 32-bit words (RFC 9776 Section 4.2.7). When auto, it is set to the length of aux_data in 32-bit words, so zero when aux_data is omitted. A conforming sender uses zero.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 0
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 0
+          format: uint32
+          maximum: 255
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.GroupRecord.AuxDataLength.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.GroupRecord.AuxDataLength.Counter'
+          x-field-uid: 7
+    Pattern.Flow.Igmpv3.GroupRecord.NumberOfSources.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65536
+    Pattern.Flow.Igmpv3.GroupRecord.NumberOfSources:
+      description: |-
+        Number of source addresses in this record. When auto, it is set to the number of entries in sources.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 0
+          format: uint32
+          maximum: 65535
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.GroupRecord.NumberOfSources.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.GroupRecord.NumberOfSources.Counter'
+          x-field-uid: 7
+    Pattern.Flow.Igmpv3.GroupRecord.MulticastAddress.Counter:
+      description: |-
+        ipv4 counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: 0.0.0.0
+          format: ipv4
+        step:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.1
+          format: ipv4
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Igmpv3.GroupRecord.MulticastAddress:
+      description: |-
+        Multicast group address that this record reports on.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.0
+          format: ipv4
+        values:
+          type: array
+          items:
+            type: string
+            format: ipv4
+          x-field-uid: 3
+          default:
+          - 0.0.0.0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.GroupRecord.MulticastAddress.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.GroupRecord.MulticastAddress.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Igmpv3.Source.Address.Counter:
+      description: |-
+        ipv4 counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: 0.0.0.0
+          format: ipv4
+        step:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.1
+          format: ipv4
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Igmpv3.Source.Address:
+      description: |-
+        Unicast IPv4 source address, use a counter to send a range of sources.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.0
+          format: ipv4
+        values:
+          type: array
+          items:
+            type: string
+            format: ipv4
+          x-field-uid: 3
+          default:
+          - 0.0.0.0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.Source.Address.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv3.Source.Address.Counter'
+          x-field-uid: 6
     Version:
       description: |-
         Version details
