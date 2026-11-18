@@ -256,7 +256,7 @@ func (obj *patternFlowIpv6Dst) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowIpv6Dst is destination address in IPv6 packet header. If dst_usids is configured, the locator and usids provided in that should be used to construct the IPv6 destination address instead of this field.
+// PatternFlowIpv6Dst is destination address in IPv6 packet header. If dst_usids is configured, the locator and usids provided in that should be used to construct the IPv6 destination address instead of this field. When this is a multicast address, the Ethernet destination should be 33:33 followed by the last 4 octets of this address (RFC 2464 Section 7), for example ff02::1:ff00:5 maps to 33:33:ff:00:00:05.
 type PatternFlowIpv6Dst interface {
 	Validation
 	// msg marshals PatternFlowIpv6Dst to protobuf object *otg.PatternFlowIpv6Dst
