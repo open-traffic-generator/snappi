@@ -337,21 +337,6 @@ func (obj *dhcpv6ClientOptionsMessageType) Rebind() {
 	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.REBIND)
 }
 
-// getter for Request to set choice
-func (obj *dhcpv6ClientOptionsMessageType) Request() {
-	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.REQUEST)
-}
-
-// getter for Rebind to set choice
-func (obj *dhcpv6ClientOptionsMessageType) Rebind() {
-	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.REBIND)
-}
-
-// getter for Solicit to set choice
-func (obj *dhcpv6ClientOptionsMessageType) Solicit() {
-	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.SOLICIT)
-}
-
 // The client message name where the option is included, by default it is all.
 // Choice returns a string
 func (obj *dhcpv6ClientOptionsMessageType) HasChoice() bool {

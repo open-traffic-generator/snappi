@@ -15032,11 +15032,8 @@ components:
           type: string
           x-unique: global
         ipv4_name:
-          description: |
+          description: |-
             The globally unique name of the IPv4 interface on which Link Hellos are sent. It must match the "name" field of an entry in "ipv4_addresses". A loopback cannot be used, because Link Hellos are sent on a link.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -15103,12 +15100,8 @@ components:
           type: string
           x-unique: global
         ipv4_name:
-          description: |
+          description: |-
             The globally unique name of the local IPv4 interface or IPv4 loopback from which Targeted Hellos are sent. It must match the "name" field of an entry in "ipv4_addresses" or "ipv4_loopbacks".
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -21809,6 +21802,7 @@ components:
           - /components/schemas/Isis.V6RouteRange/properties/name
           - /components/schemas/Ospfv2.V4RouteRange/properties/name
           - /components/schemas/Ospfv3.V6RouteRange/properties/name
+          - /components/schemas/Ldp.Ipv4FecRange/properties/name
           - /components/schemas/Bgp.L3vpn.V4RouteRange/properties/name
           - /components/schemas/Bgp.L3vpn.V6RouteRange/properties/name
           x-field-uid: 1
@@ -22290,11 +22284,8 @@ components:
       - state
       properties:
         router_names:
-          description: |
+          description: |-
             The names of LDP routers for which the state has to be applied. An empty or null list will control all LDP routers.
-
-            x-constraint:
-            - /components/schemas/Device.LdpRouter/properties/name
           type: array
           items:
             type: string
@@ -23065,11 +23056,8 @@ components:
       type: object
       properties:
         router_names:
-          description: |
+          description: |-
             The names of LDP routers to restart.
-
-            x-constraint:
-            - /components/schemas/Device.LdpRouter/properties/name
           type: array
           items:
             type: string
@@ -28295,11 +28283,8 @@ components:
       type: object
       properties:
         router_names:
-          description: |
+          description: |-
             The names of LDP routers to return results for. An empty list will return results for all LDP routers.
-
-            x-constraint:
-            - /components/schemas/Device.LdpRouter/properties/name
           type: array
           items:
             type: string
@@ -34017,11 +34002,8 @@ components:
       type: object
       properties:
         ldp_router_names:
-          description: |
+          description: |-
             The names of LDP routers for which received label bindings are requested. An empty list will return results for all LDP routers.
-
-            x-constraint:
-            - /components/schemas/Device.LdpRouter/properties/name
           type: array
           items:
             type: string

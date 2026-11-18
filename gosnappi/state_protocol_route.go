@@ -283,6 +283,7 @@ type StateProtocolRoute interface {
 // - /components/schemas/Isis.V6RouteRange/properties/name
 // - /components/schemas/Ospfv2.V4RouteRange/properties/name
 // - /components/schemas/Ospfv3.V6RouteRange/properties/name
+// - /components/schemas/Ldp.Ipv4FecRange/properties/name
 // - /components/schemas/Bgp.L3vpn.V4RouteRange/properties/name
 // - /components/schemas/Bgp.L3vpn.V6RouteRange/properties/name
 //
@@ -303,6 +304,7 @@ func (obj *stateProtocolRoute) Names() []string {
 // - /components/schemas/Isis.V6RouteRange/properties/name
 // - /components/schemas/Ospfv2.V4RouteRange/properties/name
 // - /components/schemas/Ospfv3.V6RouteRange/properties/name
+// - /components/schemas/Ldp.Ipv4FecRange/properties/name
 // - /components/schemas/Bgp.L3vpn.V4RouteRange/properties/name
 // - /components/schemas/Bgp.L3vpn.V6RouteRange/properties/name
 //

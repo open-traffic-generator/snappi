@@ -330,11 +330,6 @@ func (obj *bgpAttributesSrPolicyExplicitNullPolicy) DonotPush() {
 	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.DONOT_PUSH)
 }
 
-// getter for PushIpv4AndIpv6 to set choice
-func (obj *bgpAttributesSrPolicyExplicitNullPolicy) PushIpv4AndIpv6() {
-	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.PUSH_IPV4_AND_IPV6)
-}
-
 // The Explicit NULL Label policy.
 // Choice returns a string
 func (obj *bgpAttributesSrPolicyExplicitNullPolicy) HasChoice() bool {

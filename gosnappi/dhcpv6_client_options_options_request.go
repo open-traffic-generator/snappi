@@ -342,16 +342,6 @@ func (obj *dhcpv6ClientOptionsOptionsRequest) BootfileUrl() {
 	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.BOOTFILE_URL)
 }
 
-// getter for NameServers to set choice
-func (obj *dhcpv6ClientOptionsOptionsRequest) NameServers() {
-	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.NAME_SERVERS)
-}
-
-// getter for BootfileUrl to set choice
-func (obj *dhcpv6ClientOptionsOptionsRequest) BootfileUrl() {
-	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.BOOTFILE_URL)
-}
-
 // getter for Sztp to set choice
 func (obj *dhcpv6ClientOptionsOptionsRequest) Sztp() {
 	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.SZTP)

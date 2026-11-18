@@ -328,9 +328,9 @@ func (obj *ospfv3V6RRRouteOrigin) InterArea() {
 	obj.setChoice(Ospfv3V6RRRouteOriginChoice.INTER_AREA)
 }
 
-// getter for IntraArea to set choice
-func (obj *ospfv3V6RRRouteOrigin) IntraArea() {
-	obj.setChoice(Ospfv3V6RRRouteOriginChoice.INTRA_AREA)
+// getter for ExternalType_1 to set choice
+func (obj *ospfv3V6RRRouteOrigin) ExternalType_1() {
+	obj.setChoice(Ospfv3V6RRRouteOriginChoice.EXTERNAL_TYPE_1)
 }
 
 // getter for ExternalType_2 to set choice

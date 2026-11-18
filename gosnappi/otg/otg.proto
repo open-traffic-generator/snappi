@@ -9817,6 +9817,10 @@ message Ospfv2Interface {
   // simulated topology). This is how OSPFv2 simulated topologies are built - a simulated
   // router is an ordinary Device running ospfv2 whose Ethernets use simulated_link connections.
   // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv4/properties/name
+  // 
   // required = true
   optional string ipv4_name = 2;
 
@@ -11711,6 +11715,7 @@ message FlowRouter {
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // - /components/schemas/Ospfv2.V4RouteRange/properties/name
   // - /components/schemas/Ospfv3.V6RouteRange/properties/name
+  // - /components/schemas/Ldp.Ipv4FecRange/properties/name
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
@@ -11731,6 +11736,7 @@ message FlowRouter {
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // - /components/schemas/Ospfv2.V4RouteRange/properties/name
   // - /components/schemas/Ospfv3.V6RouteRange/properties/name
+  // - /components/schemas/Ldp.Ipv4FecRange/properties/name
   // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
   repeated string rx_names = 3;
@@ -17078,6 +17084,7 @@ message StateProtocolRoute {
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // - /components/schemas/Ospfv2.V4RouteRange/properties/name
   // - /components/schemas/Ospfv3.V6RouteRange/properties/name
+  // - /components/schemas/Ldp.Ipv4FecRange/properties/name
   // - /components/schemas/Bgp.L3vpn.V4RouteRange/properties/name
   // - /components/schemas/Bgp.L3vpn.V6RouteRange/properties/name
   // 
