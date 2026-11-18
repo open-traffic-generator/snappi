@@ -321,7 +321,7 @@ func (obj *stateProtocolIsisSimLinks) State() StateProtocolIsisSimLinksStateEnum
 }
 
 // Sets the Control State of one or more Simulated Links to UP or DOWN.
-// The state change is applied bidirectionally — a link between IS-IS Routers A and B is affected
+// The state change is applied bidirectionally - a link between IS-IS Routers A and B is affected
 // in both directions simultaneously.
 // Setting Control State to DOWN transitions the selected Simulated Links to a disconnected state.
 // Both the Simulated/Emulated Router hosting the link and the neighboring router at the far end

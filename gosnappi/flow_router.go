@@ -346,7 +346,7 @@ func (obj *flowRouter) SetMode(value FlowRouterModeEnum) FlowRouter {
 	return obj
 }
 
-// TBD
+// description is TBD
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
@@ -372,7 +372,7 @@ func (obj *flowRouter) TxNames() []string {
 	return obj.obj.TxNames
 }
 
-// TBD
+// description is TBD
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
@@ -401,7 +401,7 @@ func (obj *flowRouter) SetTxNames(value []string) FlowRouter {
 	return obj
 }
 
-// TBD
+// description is TBD
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
@@ -427,7 +427,7 @@ func (obj *flowRouter) RxNames() []string {
 	return obj.obj.RxNames
 }
 
-// TBD
+// description is TBD
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
@@ -457,7 +457,7 @@ func (obj *flowRouter) SetRxNames(value []string) FlowRouter {
 }
 
 // Allows traffic sub-flow(s) to be created on both forward and reverse directions between the device endpoint pairs.
-// When enabled, traffic is sent from <b>tx_names → rx_names</b> as well as from <b>rx_names → tx_names</b>.
+// When enabled, traffic is sent from <b>tx_names to rx_names</b> as well as from <b>rx_names to tx_names</b>.
 // The bidirectional option creates two separate sub-flows under the same flow name, Only the flow endpoints are reversed automatically for the reverse sub-flow.
 //
 // The implementation should create two sub-flows with full endpoint source and
@@ -477,7 +477,7 @@ func (obj *flowRouter) Bidirectional() bool {
 }
 
 // Allows traffic sub-flow(s) to be created on both forward and reverse directions between the device endpoint pairs.
-// When enabled, traffic is sent from <b>tx_names → rx_names</b> as well as from <b>rx_names → tx_names</b>.
+// When enabled, traffic is sent from <b>tx_names to rx_names</b> as well as from <b>rx_names to tx_names</b>.
 // The bidirectional option creates two separate sub-flows under the same flow name, Only the flow endpoints are reversed automatically for the reverse sub-flow.
 //
 // The implementation should create two sub-flows with full endpoint source and
@@ -495,7 +495,7 @@ func (obj *flowRouter) HasBidirectional() bool {
 }
 
 // Allows traffic sub-flow(s) to be created on both forward and reverse directions between the device endpoint pairs.
-// When enabled, traffic is sent from <b>tx_names → rx_names</b> as well as from <b>rx_names → tx_names</b>.
+// When enabled, traffic is sent from <b>tx_names to rx_names</b> as well as from <b>rx_names to tx_names</b>.
 // The bidirectional option creates two separate sub-flows under the same flow name, Only the flow endpoints are reversed automatically for the reverse sub-flow.
 //
 // The implementation should create two sub-flows with full endpoint source and

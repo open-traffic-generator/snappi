@@ -278,10 +278,10 @@ type SecureEntityStaticKeyRekeyMode interface {
 	setChoice(value SecureEntityStaticKeyRekeyModeChoiceEnum) SecureEntityStaticKeyRekeyMode
 	// HasChoice checks if Choice has been set in SecureEntityStaticKeyRekeyMode
 	HasChoice() bool
-	// getter for PnBased to set choice.
-	PnBased()
 	// getter for DontRekey to set choice.
 	DontRekey()
+	// getter for PnBased to set choice.
+	PnBased()
 	// TimerBased returns SecureEntityStaticKeyRekeyModeTimerBased, set in SecureEntityStaticKeyRekeyMode.
 	// SecureEntityStaticKeyRekeyModeTimerBased is timer based periodic rekey properties.
 	TimerBased() SecureEntityStaticKeyRekeyModeTimerBased
@@ -310,14 +310,14 @@ func (obj *secureEntityStaticKeyRekeyMode) Choice() SecureEntityStaticKeyRekeyMo
 	return SecureEntityStaticKeyRekeyModeChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for PnBased to set choice
-func (obj *secureEntityStaticKeyRekeyMode) PnBased() {
-	obj.setChoice(SecureEntityStaticKeyRekeyModeChoice.PN_BASED)
-}
-
 // getter for DontRekey to set choice
 func (obj *secureEntityStaticKeyRekeyMode) DontRekey() {
 	obj.setChoice(SecureEntityStaticKeyRekeyModeChoice.DONT_REKEY)
+}
+
+// getter for PnBased to set choice
+func (obj *secureEntityStaticKeyRekeyMode) PnBased() {
+	obj.setChoice(SecureEntityStaticKeyRekeyModeChoice.PN_BASED)
 }
 
 // Rekey mode choices.
