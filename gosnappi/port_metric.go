@@ -372,6 +372,54 @@ type PortMetric interface {
 	SetSpeed(value uint64) PortMetric
 	// HasSpeed checks if Speed has been set in PortMetric
 	HasSpeed() bool
+	// PfcClass0FramesRx returns uint64, set in PortMetric.
+	PfcClass0FramesRx() uint64
+	// SetPfcClass0FramesRx assigns uint64 provided by user to PortMetric
+	SetPfcClass0FramesRx(value uint64) PortMetric
+	// HasPfcClass0FramesRx checks if PfcClass0FramesRx has been set in PortMetric
+	HasPfcClass0FramesRx() bool
+	// PfcClass1FramesRx returns uint64, set in PortMetric.
+	PfcClass1FramesRx() uint64
+	// SetPfcClass1FramesRx assigns uint64 provided by user to PortMetric
+	SetPfcClass1FramesRx(value uint64) PortMetric
+	// HasPfcClass1FramesRx checks if PfcClass1FramesRx has been set in PortMetric
+	HasPfcClass1FramesRx() bool
+	// PfcClass2FramesRx returns uint64, set in PortMetric.
+	PfcClass2FramesRx() uint64
+	// SetPfcClass2FramesRx assigns uint64 provided by user to PortMetric
+	SetPfcClass2FramesRx(value uint64) PortMetric
+	// HasPfcClass2FramesRx checks if PfcClass2FramesRx has been set in PortMetric
+	HasPfcClass2FramesRx() bool
+	// PfcClass3FramesRx returns uint64, set in PortMetric.
+	PfcClass3FramesRx() uint64
+	// SetPfcClass3FramesRx assigns uint64 provided by user to PortMetric
+	SetPfcClass3FramesRx(value uint64) PortMetric
+	// HasPfcClass3FramesRx checks if PfcClass3FramesRx has been set in PortMetric
+	HasPfcClass3FramesRx() bool
+	// PfcClass4FramesRx returns uint64, set in PortMetric.
+	PfcClass4FramesRx() uint64
+	// SetPfcClass4FramesRx assigns uint64 provided by user to PortMetric
+	SetPfcClass4FramesRx(value uint64) PortMetric
+	// HasPfcClass4FramesRx checks if PfcClass4FramesRx has been set in PortMetric
+	HasPfcClass4FramesRx() bool
+	// PfcClass5FramesRx returns uint64, set in PortMetric.
+	PfcClass5FramesRx() uint64
+	// SetPfcClass5FramesRx assigns uint64 provided by user to PortMetric
+	SetPfcClass5FramesRx(value uint64) PortMetric
+	// HasPfcClass5FramesRx checks if PfcClass5FramesRx has been set in PortMetric
+	HasPfcClass5FramesRx() bool
+	// PfcClass6FramesRx returns uint64, set in PortMetric.
+	PfcClass6FramesRx() uint64
+	// SetPfcClass6FramesRx assigns uint64 provided by user to PortMetric
+	SetPfcClass6FramesRx(value uint64) PortMetric
+	// HasPfcClass6FramesRx checks if PfcClass6FramesRx has been set in PortMetric
+	HasPfcClass6FramesRx() bool
+	// PfcClass7FramesRx returns uint64, set in PortMetric.
+	PfcClass7FramesRx() uint64
+	// SetPfcClass7FramesRx assigns uint64 provided by user to PortMetric
+	SetPfcClass7FramesRx(value uint64) PortMetric
+	// HasPfcClass7FramesRx checks if PfcClass7FramesRx has been set in PortMetric
+	HasPfcClass7FramesRx() bool
 	setNil()
 }
 
@@ -790,6 +838,182 @@ func (obj *portMetric) HasSpeed() bool {
 func (obj *portMetric) SetSpeed(value uint64) PortMetric {
 
 	obj.obj.Speed = &value
+	return obj
+}
+
+// The total number of PFC class 0 frames received
+// PfcClass0FramesRx returns a uint64
+func (obj *portMetric) PfcClass0FramesRx() uint64 {
+
+	return *obj.obj.PfcClass_0FramesRx
+
+}
+
+// The total number of PFC class 0 frames received
+// PfcClass0FramesRx returns a uint64
+func (obj *portMetric) HasPfcClass0FramesRx() bool {
+	return obj.obj.PfcClass_0FramesRx != nil
+}
+
+// The total number of PFC class 0 frames received
+// SetPfcClass0FramesRx sets the uint64 value in the PortMetric object
+func (obj *portMetric) SetPfcClass0FramesRx(value uint64) PortMetric {
+
+	obj.obj.PfcClass_0FramesRx = &value
+	return obj
+}
+
+// The total number of PFC class 1 frames received
+// PfcClass1FramesRx returns a uint64
+func (obj *portMetric) PfcClass1FramesRx() uint64 {
+
+	return *obj.obj.PfcClass_1FramesRx
+
+}
+
+// The total number of PFC class 1 frames received
+// PfcClass1FramesRx returns a uint64
+func (obj *portMetric) HasPfcClass1FramesRx() bool {
+	return obj.obj.PfcClass_1FramesRx != nil
+}
+
+// The total number of PFC class 1 frames received
+// SetPfcClass1FramesRx sets the uint64 value in the PortMetric object
+func (obj *portMetric) SetPfcClass1FramesRx(value uint64) PortMetric {
+
+	obj.obj.PfcClass_1FramesRx = &value
+	return obj
+}
+
+// The total number of PFC class 2 frames received
+// PfcClass2FramesRx returns a uint64
+func (obj *portMetric) PfcClass2FramesRx() uint64 {
+
+	return *obj.obj.PfcClass_2FramesRx
+
+}
+
+// The total number of PFC class 2 frames received
+// PfcClass2FramesRx returns a uint64
+func (obj *portMetric) HasPfcClass2FramesRx() bool {
+	return obj.obj.PfcClass_2FramesRx != nil
+}
+
+// The total number of PFC class 2 frames received
+// SetPfcClass2FramesRx sets the uint64 value in the PortMetric object
+func (obj *portMetric) SetPfcClass2FramesRx(value uint64) PortMetric {
+
+	obj.obj.PfcClass_2FramesRx = &value
+	return obj
+}
+
+// The total number of PFC class 3 frames received
+// PfcClass3FramesRx returns a uint64
+func (obj *portMetric) PfcClass3FramesRx() uint64 {
+
+	return *obj.obj.PfcClass_3FramesRx
+
+}
+
+// The total number of PFC class 3 frames received
+// PfcClass3FramesRx returns a uint64
+func (obj *portMetric) HasPfcClass3FramesRx() bool {
+	return obj.obj.PfcClass_3FramesRx != nil
+}
+
+// The total number of PFC class 3 frames received
+// SetPfcClass3FramesRx sets the uint64 value in the PortMetric object
+func (obj *portMetric) SetPfcClass3FramesRx(value uint64) PortMetric {
+
+	obj.obj.PfcClass_3FramesRx = &value
+	return obj
+}
+
+// The total number of PFC class 4 frames received
+// PfcClass4FramesRx returns a uint64
+func (obj *portMetric) PfcClass4FramesRx() uint64 {
+
+	return *obj.obj.PfcClass_4FramesRx
+
+}
+
+// The total number of PFC class 4 frames received
+// PfcClass4FramesRx returns a uint64
+func (obj *portMetric) HasPfcClass4FramesRx() bool {
+	return obj.obj.PfcClass_4FramesRx != nil
+}
+
+// The total number of PFC class 4 frames received
+// SetPfcClass4FramesRx sets the uint64 value in the PortMetric object
+func (obj *portMetric) SetPfcClass4FramesRx(value uint64) PortMetric {
+
+	obj.obj.PfcClass_4FramesRx = &value
+	return obj
+}
+
+// The total number of PFC class 5 frames received
+// PfcClass5FramesRx returns a uint64
+func (obj *portMetric) PfcClass5FramesRx() uint64 {
+
+	return *obj.obj.PfcClass_5FramesRx
+
+}
+
+// The total number of PFC class 5 frames received
+// PfcClass5FramesRx returns a uint64
+func (obj *portMetric) HasPfcClass5FramesRx() bool {
+	return obj.obj.PfcClass_5FramesRx != nil
+}
+
+// The total number of PFC class 5 frames received
+// SetPfcClass5FramesRx sets the uint64 value in the PortMetric object
+func (obj *portMetric) SetPfcClass5FramesRx(value uint64) PortMetric {
+
+	obj.obj.PfcClass_5FramesRx = &value
+	return obj
+}
+
+// The total number of PFC class 6 frames received
+// PfcClass6FramesRx returns a uint64
+func (obj *portMetric) PfcClass6FramesRx() uint64 {
+
+	return *obj.obj.PfcClass_6FramesRx
+
+}
+
+// The total number of PFC class 6 frames received
+// PfcClass6FramesRx returns a uint64
+func (obj *portMetric) HasPfcClass6FramesRx() bool {
+	return obj.obj.PfcClass_6FramesRx != nil
+}
+
+// The total number of PFC class 6 frames received
+// SetPfcClass6FramesRx sets the uint64 value in the PortMetric object
+func (obj *portMetric) SetPfcClass6FramesRx(value uint64) PortMetric {
+
+	obj.obj.PfcClass_6FramesRx = &value
+	return obj
+}
+
+// The total number of PFC class 7 frames received
+// PfcClass7FramesRx returns a uint64
+func (obj *portMetric) PfcClass7FramesRx() uint64 {
+
+	return *obj.obj.PfcClass_7FramesRx
+
+}
+
+// The total number of PFC class 7 frames received
+// PfcClass7FramesRx returns a uint64
+func (obj *portMetric) HasPfcClass7FramesRx() bool {
+	return obj.obj.PfcClass_7FramesRx != nil
+}
+
+// The total number of PFC class 7 frames received
+// SetPfcClass7FramesRx sets the uint64 value in the PortMetric object
+func (obj *portMetric) SetPfcClass7FramesRx(value uint64) PortMetric {
+
+	obj.obj.PfcClass_7FramesRx = &value
 	return obj
 }
 

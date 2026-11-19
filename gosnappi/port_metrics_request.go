@@ -307,35 +307,51 @@ type PortMetricsRequestColumnNamesEnum string
 
 // Enum of ColumnNames on PortMetricsRequest
 var PortMetricsRequestColumnNames = struct {
-	TRANSMIT       PortMetricsRequestColumnNamesEnum
-	LOCATION       PortMetricsRequestColumnNamesEnum
-	LINK           PortMetricsRequestColumnNamesEnum
-	CAPTURE        PortMetricsRequestColumnNamesEnum
-	FRAMES_TX      PortMetricsRequestColumnNamesEnum
-	FRAMES_RX      PortMetricsRequestColumnNamesEnum
-	BYTES_TX       PortMetricsRequestColumnNamesEnum
-	BYTES_RX       PortMetricsRequestColumnNamesEnum
-	FRAMES_TX_RATE PortMetricsRequestColumnNamesEnum
-	FRAMES_RX_RATE PortMetricsRequestColumnNamesEnum
-	BYTES_TX_RATE  PortMetricsRequestColumnNamesEnum
-	BYTES_RX_RATE  PortMetricsRequestColumnNamesEnum
-	LAST_CHANGE    PortMetricsRequestColumnNamesEnum
-	SPEED          PortMetricsRequestColumnNamesEnum
+	TRANSMIT              PortMetricsRequestColumnNamesEnum
+	LOCATION              PortMetricsRequestColumnNamesEnum
+	LINK                  PortMetricsRequestColumnNamesEnum
+	CAPTURE               PortMetricsRequestColumnNamesEnum
+	FRAMES_TX             PortMetricsRequestColumnNamesEnum
+	FRAMES_RX             PortMetricsRequestColumnNamesEnum
+	BYTES_TX              PortMetricsRequestColumnNamesEnum
+	BYTES_RX              PortMetricsRequestColumnNamesEnum
+	FRAMES_TX_RATE        PortMetricsRequestColumnNamesEnum
+	FRAMES_RX_RATE        PortMetricsRequestColumnNamesEnum
+	BYTES_TX_RATE         PortMetricsRequestColumnNamesEnum
+	BYTES_RX_RATE         PortMetricsRequestColumnNamesEnum
+	LAST_CHANGE           PortMetricsRequestColumnNamesEnum
+	SPEED                 PortMetricsRequestColumnNamesEnum
+	PFC_CLASS_0_FRAMES_RX PortMetricsRequestColumnNamesEnum
+	PFC_CLASS_1_FRAMES_RX PortMetricsRequestColumnNamesEnum
+	PFC_CLASS_2_FRAMES_RX PortMetricsRequestColumnNamesEnum
+	PFC_CLASS_3_FRAMES_RX PortMetricsRequestColumnNamesEnum
+	PFC_CLASS_4_FRAMES_RX PortMetricsRequestColumnNamesEnum
+	PFC_CLASS_5_FRAMES_RX PortMetricsRequestColumnNamesEnum
+	PFC_CLASS_6_FRAMES_RX PortMetricsRequestColumnNamesEnum
+	PFC_CLASS_7_FRAMES_RX PortMetricsRequestColumnNamesEnum
 }{
-	TRANSMIT:       PortMetricsRequestColumnNamesEnum("transmit"),
-	LOCATION:       PortMetricsRequestColumnNamesEnum("location"),
-	LINK:           PortMetricsRequestColumnNamesEnum("link"),
-	CAPTURE:        PortMetricsRequestColumnNamesEnum("capture"),
-	FRAMES_TX:      PortMetricsRequestColumnNamesEnum("frames_tx"),
-	FRAMES_RX:      PortMetricsRequestColumnNamesEnum("frames_rx"),
-	BYTES_TX:       PortMetricsRequestColumnNamesEnum("bytes_tx"),
-	BYTES_RX:       PortMetricsRequestColumnNamesEnum("bytes_rx"),
-	FRAMES_TX_RATE: PortMetricsRequestColumnNamesEnum("frames_tx_rate"),
-	FRAMES_RX_RATE: PortMetricsRequestColumnNamesEnum("frames_rx_rate"),
-	BYTES_TX_RATE:  PortMetricsRequestColumnNamesEnum("bytes_tx_rate"),
-	BYTES_RX_RATE:  PortMetricsRequestColumnNamesEnum("bytes_rx_rate"),
-	LAST_CHANGE:    PortMetricsRequestColumnNamesEnum("last_change"),
-	SPEED:          PortMetricsRequestColumnNamesEnum("speed"),
+	TRANSMIT:              PortMetricsRequestColumnNamesEnum("transmit"),
+	LOCATION:              PortMetricsRequestColumnNamesEnum("location"),
+	LINK:                  PortMetricsRequestColumnNamesEnum("link"),
+	CAPTURE:               PortMetricsRequestColumnNamesEnum("capture"),
+	FRAMES_TX:             PortMetricsRequestColumnNamesEnum("frames_tx"),
+	FRAMES_RX:             PortMetricsRequestColumnNamesEnum("frames_rx"),
+	BYTES_TX:              PortMetricsRequestColumnNamesEnum("bytes_tx"),
+	BYTES_RX:              PortMetricsRequestColumnNamesEnum("bytes_rx"),
+	FRAMES_TX_RATE:        PortMetricsRequestColumnNamesEnum("frames_tx_rate"),
+	FRAMES_RX_RATE:        PortMetricsRequestColumnNamesEnum("frames_rx_rate"),
+	BYTES_TX_RATE:         PortMetricsRequestColumnNamesEnum("bytes_tx_rate"),
+	BYTES_RX_RATE:         PortMetricsRequestColumnNamesEnum("bytes_rx_rate"),
+	LAST_CHANGE:           PortMetricsRequestColumnNamesEnum("last_change"),
+	SPEED:                 PortMetricsRequestColumnNamesEnum("speed"),
+	PFC_CLASS_0_FRAMES_RX: PortMetricsRequestColumnNamesEnum("pfc_class_0_frames_rx"),
+	PFC_CLASS_1_FRAMES_RX: PortMetricsRequestColumnNamesEnum("pfc_class_1_frames_rx"),
+	PFC_CLASS_2_FRAMES_RX: PortMetricsRequestColumnNamesEnum("pfc_class_2_frames_rx"),
+	PFC_CLASS_3_FRAMES_RX: PortMetricsRequestColumnNamesEnum("pfc_class_3_frames_rx"),
+	PFC_CLASS_4_FRAMES_RX: PortMetricsRequestColumnNamesEnum("pfc_class_4_frames_rx"),
+	PFC_CLASS_5_FRAMES_RX: PortMetricsRequestColumnNamesEnum("pfc_class_5_frames_rx"),
+	PFC_CLASS_6_FRAMES_RX: PortMetricsRequestColumnNamesEnum("pfc_class_6_frames_rx"),
+	PFC_CLASS_7_FRAMES_RX: PortMetricsRequestColumnNamesEnum("pfc_class_7_frames_rx"),
 }
 
 func (obj *portMetricsRequest) ColumnNames() []PortMetricsRequestColumnNamesEnum {

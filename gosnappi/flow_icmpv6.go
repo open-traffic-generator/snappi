@@ -13,11 +13,10 @@ import (
 // ***** FlowIcmpv6 *****
 type flowIcmpv6 struct {
 	validation
-	obj                        *otg.FlowIcmpv6
-	marshaller                 marshalFlowIcmpv6
-	unMarshaller               unMarshalFlowIcmpv6
-	echoHolder                 FlowIcmpv6Echo
-	neighborSolicitationHolder FlowIcmpv6NeighborSolicitation
+	obj          *otg.FlowIcmpv6
+	marshaller   marshalFlowIcmpv6
+	unMarshaller unMarshalFlowIcmpv6
+	echoHolder   FlowIcmpv6Echo
 }
 
 func NewFlowIcmpv6() FlowIcmpv6 {
@@ -246,7 +245,6 @@ func (obj *flowIcmpv6) Clone() (FlowIcmpv6, error) {
 
 func (obj *flowIcmpv6) setNil() {
 	obj.echoHolder = nil
-	obj.neighborSolicitationHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -288,40 +286,6 @@ type FlowIcmpv6 interface {
 	SetEcho(value FlowIcmpv6Echo) FlowIcmpv6
 	// HasEcho checks if Echo has been set in FlowIcmpv6
 	HasEcho() bool
-	// NeighborSolicitation returns FlowIcmpv6NeighborSolicitation, set in FlowIcmpv6.
-	// FlowIcmpv6NeighborSolicitation is packet Header for ICMPv6 NDP Neighbor Solicitation (Type 135, RFC 4861 Section 4.3). A conforming NS is sent with IPv6 Hop Limit 255 (RFC 4861 Section 7.1.1).
-	// RFC requirements described for this header (MUST / MUST NOT) apply to a conforming packet. The model does not enforce them, so any value the fields can encode may be configured for conformance and negative testing.
-	// The IPv6 and Ethernet destinations are set in their own headers. Use these values, where T is target_address and "low 24 bits" are the last 3 octets of T (RFC 4291 Section 2.7.1, RFC 2464 Section 7):
-	// Multicast NS (address resolution, duplicate address detection):
-	// IPv6 dst     = ff02::1:ff + low 24 bits of T
-	// Ethernet dst = 33:33:ff + low 24 bits of T
-	// Example: T = 2001:db8::5 gives IPv6 dst ff02::1:ff00:5 and
-	// Ethernet dst 33:33:ff:00:00:05.
-	//
-	// Unicast NS (neighbor reachability check):
-	// IPv6 dst     = T
-	// Ethernet dst = MAC address of the target
-	//
-	// In a conforming duplicate address detection packet the IPv6 source is :: and the Source Link-Layer Address option is omitted.
-	NeighborSolicitation() FlowIcmpv6NeighborSolicitation
-	// SetNeighborSolicitation assigns FlowIcmpv6NeighborSolicitation provided by user to FlowIcmpv6.
-	// FlowIcmpv6NeighborSolicitation is packet Header for ICMPv6 NDP Neighbor Solicitation (Type 135, RFC 4861 Section 4.3). A conforming NS is sent with IPv6 Hop Limit 255 (RFC 4861 Section 7.1.1).
-	// RFC requirements described for this header (MUST / MUST NOT) apply to a conforming packet. The model does not enforce them, so any value the fields can encode may be configured for conformance and negative testing.
-	// The IPv6 and Ethernet destinations are set in their own headers. Use these values, where T is target_address and "low 24 bits" are the last 3 octets of T (RFC 4291 Section 2.7.1, RFC 2464 Section 7):
-	// Multicast NS (address resolution, duplicate address detection):
-	// IPv6 dst     = ff02::1:ff + low 24 bits of T
-	// Ethernet dst = 33:33:ff + low 24 bits of T
-	// Example: T = 2001:db8::5 gives IPv6 dst ff02::1:ff00:5 and
-	// Ethernet dst 33:33:ff:00:00:05.
-	//
-	// Unicast NS (neighbor reachability check):
-	// IPv6 dst     = T
-	// Ethernet dst = MAC address of the target
-	//
-	// In a conforming duplicate address detection packet the IPv6 source is :: and the Source Link-Layer Address option is omitted.
-	SetNeighborSolicitation(value FlowIcmpv6NeighborSolicitation) FlowIcmpv6
-	// HasNeighborSolicitation checks if NeighborSolicitation has been set in FlowIcmpv6
-	HasNeighborSolicitation() bool
 	setNil()
 }
 
@@ -329,11 +293,9 @@ type FlowIcmpv6ChoiceEnum string
 
 // Enum of Choice on FlowIcmpv6
 var FlowIcmpv6Choice = struct {
-	ECHO                  FlowIcmpv6ChoiceEnum
-	NEIGHBOR_SOLICITATION FlowIcmpv6ChoiceEnum
+	ECHO FlowIcmpv6ChoiceEnum
 }{
-	ECHO:                  FlowIcmpv6ChoiceEnum("echo"),
-	NEIGHBOR_SOLICITATION: FlowIcmpv6ChoiceEnum("neighbor_solicitation"),
+	ECHO: FlowIcmpv6ChoiceEnum("echo"),
 }
 
 func (obj *flowIcmpv6) Choice() FlowIcmpv6ChoiceEnum {
@@ -355,17 +317,11 @@ func (obj *flowIcmpv6) setChoice(value FlowIcmpv6ChoiceEnum) FlowIcmpv6 {
 	}
 	enumValue := otg.FlowIcmpv6_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
-	obj.obj.NeighborSolicitation = nil
-	obj.neighborSolicitationHolder = nil
 	obj.obj.Echo = nil
 	obj.echoHolder = nil
 
 	if value == FlowIcmpv6Choice.ECHO {
 		obj.obj.Echo = NewFlowIcmpv6Echo().msg()
-	}
-
-	if value == FlowIcmpv6Choice.NEIGHBOR_SOLICITATION {
-		obj.obj.NeighborSolicitation = NewFlowIcmpv6NeighborSolicitation().msg()
 	}
 
 	return obj
@@ -399,34 +355,6 @@ func (obj *flowIcmpv6) SetEcho(value FlowIcmpv6Echo) FlowIcmpv6 {
 	return obj
 }
 
-// description is TBD
-// NeighborSolicitation returns a FlowIcmpv6NeighborSolicitation
-func (obj *flowIcmpv6) NeighborSolicitation() FlowIcmpv6NeighborSolicitation {
-	if obj.obj.NeighborSolicitation == nil {
-		obj.setChoice(FlowIcmpv6Choice.NEIGHBOR_SOLICITATION)
-	}
-	if obj.neighborSolicitationHolder == nil {
-		obj.neighborSolicitationHolder = &flowIcmpv6NeighborSolicitation{obj: obj.obj.NeighborSolicitation}
-	}
-	return obj.neighborSolicitationHolder
-}
-
-// description is TBD
-// NeighborSolicitation returns a FlowIcmpv6NeighborSolicitation
-func (obj *flowIcmpv6) HasNeighborSolicitation() bool {
-	return obj.obj.NeighborSolicitation != nil
-}
-
-// description is TBD
-// SetNeighborSolicitation sets the FlowIcmpv6NeighborSolicitation value in the FlowIcmpv6 object
-func (obj *flowIcmpv6) SetNeighborSolicitation(value FlowIcmpv6NeighborSolicitation) FlowIcmpv6 {
-	obj.setChoice(FlowIcmpv6Choice.NEIGHBOR_SOLICITATION)
-	obj.neighborSolicitationHolder = nil
-	obj.obj.NeighborSolicitation = value.msg()
-
-	return obj
-}
-
 func (obj *flowIcmpv6) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -435,11 +363,6 @@ func (obj *flowIcmpv6) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Echo != nil {
 
 		obj.Echo().validateObj(vObj, set_default)
-	}
-
-	if obj.obj.NeighborSolicitation != nil {
-
-		obj.NeighborSolicitation().validateObj(vObj, set_default)
 	}
 
 }
@@ -451,11 +374,6 @@ func (obj *flowIcmpv6) setDefault() {
 	if obj.obj.Echo != nil {
 		choices_set += 1
 		choice = FlowIcmpv6Choice.ECHO
-	}
-
-	if obj.obj.NeighborSolicitation != nil {
-		choices_set += 1
-		choice = FlowIcmpv6Choice.NEIGHBOR_SOLICITATION
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
