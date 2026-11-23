@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.62.0
+  version: 1.65.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -3446,6 +3446,63 @@ components:
             Globally unique name of an object. It also serves as the primary key for arrays of objects.
           type: string
           x-unique: global
+        mode:
+          description: |-
+            Set the mode of the test interface, in addition to the speed.
+            When no mode is explicitly set, mode_no_change applies i.e. the current
+            mode of the underlying test interface shall be retained.
+            The modes are mutually exclusive; a combination of modes, if ever needed,
+            shall be introduced as a separate value.
+            Supported modes:
+              - mode_no_change: retain the current mode of the test interface (default).
+              - mode_default: switch the test interface to the default mode of the
+                configured speed i.e. the mode to which the hardware port boots up.
+              - mode_macsec_128: switch the test interface to a mode that supports
+                MACsec with a 128-bit cipher. MACsec itself is not configured by this
+                field.
+              - mode_macsec_256: switch the test interface to a mode that supports
+                MACsec with a 256-bit cipher. MACsec itself is not configured by this
+                field.
+              - mode_high_stream: switch the test interface to a mode of the configured
+                speed that supports a larger number of transmit flows than the default
+                mode, typically at the expense of other capabilities of the test
+                interface (e.g. per flow statistics or capture). Use this mode only
+                when a test requires more flows than the test interface supports in
+                its default mode. The number of flows supported and the capabilities
+                traded off are implementation specific.
+              - mode_rocev2: switch the test interface to a mode of the configured
+                speed that supports RoCEv2 (RDMA over Converged Ethernet v2). RoCEv2
+                itself is not configured by this field.
+            If the requested mode is not supported for the configured speed or by the
+            underlying test interface, an error shall be returned. This applies to
+            every port in port_names; if any of them cannot be set to the requested
+            mode, the configuration shall be rejected.
+            If the current mode differs from the requested mode, the test interface
+            shall be switched to the requested mode before the remaining layer1
+            settings are applied.
+          type: string
+          default: mode_no_change
+          x-field-uid: 11
+          x-enum:
+            mode_no_change:
+              x-field-uid: 1
+            mode_default:
+              x-field-uid: 2
+            mode_macsec_128:
+              x-field-uid: 3
+            mode_macsec_256:
+              x-field-uid: 4
+            mode_high_stream:
+              x-field-uid: 5
+            mode_rocev2:
+              x-field-uid: 6
+          enum:
+          - mode_no_change
+          - mode_default
+          - mode_macsec_128
+          - mode_macsec_256
+          - mode_high_stream
+          - mode_rocev2
     Layer1.AutoNegotiation:
       description: |-
         Configuration for auto negotiation settings
@@ -6245,10 +6302,17 @@ components:
           x-field-uid: 14
           $ref: '#/components/schemas/Bgp.GracefulRestart'
         replay_updates:
-          description: "BGP Updates to be sent to the peer as specified after the\
-            \ session is established. "
+          description: |-
+            BGP Updates to be sent to the peer as specified after the session is established.
           $ref: '#/components/schemas/Bgp.UpdateReplay'
           x-field-uid: 15
+        l3vpn_vrfs:
+          description: |-
+            BGP/MPLS Layer 3 VPN VRFs (RFC 4364) advertised over this peer. Each VRF's route ranges are advertised as VPN-IPv4 NLRI, distinct from the plain IPv4 unicast route ranges in v4_routes. Requires device.bgp.capability.ipv4_mpls_vpn to be enabled.
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.L3vpn.Vrf'
+          x-field-uid: 17
     Bgp.V4Interface:
       description: |-
         Configuration for emulated BGPv4 peers and routes on a single IPv4 interface.
@@ -7148,28 +7212,40 @@ components:
       properties:
         unicast_ipv4_prefix:
           description: |-
-            If enabled, will store the information related to Unicast IPv4 Prefixes recieved from the peer.
+            If enabled, will store the information related to Unicast IPv4 Prefixes received from the peer.
           type: boolean
           default: false
           x-field-uid: 1
         unicast_ipv6_prefix:
           description: |-
-            If enabled, will store the information related to Unicast IPv6 Prefixes recieved from the peer.
+            If enabled, will store the information related to Unicast IPv6 Prefixes received from the peer.
           type: boolean
           default: false
           x-field-uid: 2
         ipv4_mpls_unicast_prefix:
           description: |-
-            If enabled, will store the information related to MPLS Unicast IPv4 Prefixes recieved from the peer.
+            If enabled, will store the information related to MPLS Unicast IPv4 Prefixes received from the peer.
           type: boolean
           default: false
           x-field-uid: 3
         ipv6_mpls_unicast_prefix:
           description: |-
-            If enabled, will store the information related to MPLS Unicast IPv6 Prefixes recieved from the peer.
+            If enabled, will store the information related to MPLS Unicast IPv6 Prefixes received from the peer.
           type: boolean
           default: false
           x-field-uid: 4
+        ipv4_vpn_unicast_prefix:
+          description: |-
+            If enabled, will store the information related to IPv4 VPN Unicast Prefixes received from the peer.
+          type: boolean
+          default: false
+          x-field-uid: 5
+        ipv6_vpn_unicast_prefix:
+          description: |-
+            If enabled, will store the information related to IPv6 VPN Unicast Prefixes received from the peer.
+          type: boolean
+          default: false
+          x-field-uid: 6
     Bgp.V4RouteRange:
       description: |-
         Emulated BGPv4 route range.
@@ -7754,6 +7830,7 @@ components:
           - labels
         labels:
           type: array
+          maxItems: 255
           items:
             $ref: '#/components/schemas/RouteMplsLabelValue'
           x-field-uid: 2
@@ -10734,6 +10811,298 @@ components:
           format: uint32
           default: 1
           x-field-uid: 1
+    Bgp.L3vpn.Vrf:
+      description: |-
+        A BGP/MPLS Layer 3 VPN VRF (RFC 4364). Groups a Route Target
+        import/export policy with a set of customer (PE-CE learned or locally
+        originated) IPv4/IPv6 route ranges. Each route range carries its own
+        Route Distinguisher (RFC 4364 Section 4.1), so its prefixes are
+        advertised as VPN-IPv4 NLRI (AFI 1, SAFI 128) or VPN-IPv6 NLRI (AFI 2,
+        SAFI 128, RFC 4659) instead of plain unicast NLRI. The RD is carried
+        per route range - not once per VRF - matching RFC 4364's per-NLRI RD
+        semantics, so route ranges in the same VRF may advertise different
+        RDs (RFC 4364 Section 4.1 / 4.3.5, e.g. a multihomed CE).
+
+        The BGP capability device.bgp.capability.ipv4_mpls_vpn must be enabled
+        on the peer for VPN-IPv4 NLRI to be negotiated and advertised, and
+        device.bgp.capability.ipv6_mpls_vpn for VPN-IPv6 NLRI.
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          x-unique: global
+        route_target_export:
+          description: |-
+            List of Route Targets (RFC 4364 Section 4.3.1) attached as BGP Extended Communities to every route advertised from this VRF. A remote VRF imports the route only if one of its route_target_import values matches one of these.
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.RouteTarget'
+          x-field-uid: 2
+        route_target_import:
+          description: |-
+            List of Route Targets (RFC 4364 Section 4.3.1) used to filter which received VPN-IPv4 routes are imported into this VRF. A received route is imported if any of its Route Target Extended Communities matches one of these.
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.RouteTarget'
+          x-field-uid: 3
+        v4_routes:
+          description: |-
+            Emulated IPv4 customer route ranges belonging to this VRF. Each is advertised as VPN-IPv4 NLRI using its own route_distinguisher and this VRF's route_target_export.
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.L3vpn.V4RouteRange'
+          x-field-uid: 4
+        v6_routes:
+          description: |-
+            Emulated IPv6 customer route ranges belonging to this VRF (6VPE, RFC 4659). Each is advertised as VPN-IPv6 NLRI using its own route_distinguisher and this VRF's route_target_export. Each route range's dataplane binding is selected via its own service_binding, currently a VPN MPLS label (RFC 4364 Section 3); the choice structure keeps room for an additional binding (for example an SRv6 Service SID, RFC 9252) to be added later without a breaking change.
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.L3vpn.V6RouteRange'
+          x-field-uid: 5
+    Bgp.L3vpn.V4RouteRange:
+      description: |-
+        Emulated VPN-IPv4 customer route range belonging to a Bgp.L3vpn.Vrf (RFC 4364). Same shape as the plain Bgp.V4RouteRange, plus a per route range route_distinguisher. The Route Distinguisher (RFC 4364 Section 4.1) is carried here, on the route range, rather than once on the parent VRF - matching RFC 4364's per-NLRI RD semantics. This lets different route ranges in the same VRF advertise different RDs (RFC 4364 Section 4.1 / 4.3.5, e.g. a multihomed CE whose prefix must stay distinct per PE). The VPN dataplane label is the existing mpls_labels field (RFC 4364 Section 3). The route range is kept independent of the shared Bgp.V4RouteRange so the VPN-only route_distinguisher does not leak into plain (non-VPN) BGP route ranges.
+      type: object
+      required:
+      - name
+      - route_distinguisher
+      - mpls_labels
+      properties:
+        addresses:
+          x-field-uid: 1
+          description: |-
+            A list of group of IPv4 route addresses.
+          type: array
+          items:
+            $ref: '#/components/schemas/V4RouteAddress'
+        next_hop_mode:
+          x-field-uid: 2
+          description: "Specify the NextHop in MP REACH NLRI. The mode for setting\
+            \ the IP address  of the NextHop in the MP REACH NLRI can be one of the\
+            \ following:\n  Local IP: Automatically fills the Nexthop with the Local\
+            \ IP of the BGP\npeer.\n  If BGP peer is of type IPv6, Nexthop Encoding\
+            \ capability should be enabled.\n  Manual: Override the Nexthop with any\
+            \ arbitrary IPv4/IPv6 address.   "
+          type: string
+          default: local_ip
+          x-enum:
+            local_ip:
+              x-field-uid: 1
+            manual:
+              x-field-uid: 2
+          enum:
+          - local_ip
+          - manual
+        next_hop_address_type:
+          x-field-uid: 3
+          description: |-
+            If the Nexthop Mode is Manual, it sets the type of the NextHop IP address.
+          type: string
+          default: ipv4
+          x-enum:
+            ipv4:
+              x-field-uid: 1
+            ipv6:
+              x-field-uid: 2
+          enum:
+          - ipv4
+          - ipv6
+        next_hop_ipv4_address:
+          x-field-uid: 4
+          description: |-
+            The IPv4 address of the next hop if the Nexthop Mode is manual and the Nexthop type is IPv4. If BGP peer is of type IPv6, Nexthop Encoding capability should be enabled.
+          type: string
+          format: ipv4
+          default: 0.0.0.0
+        next_hop_ipv6_address:
+          x-field-uid: 5
+          description: "The IPv6 address of the next hop if the Nexthop Mode is manual\
+            \ and the Nexthop type is IPv6. "
+          type: string
+          format: ipv6
+          default: ::0
+        advanced:
+          x-field-uid: 6
+          $ref: '#/components/schemas/Bgp.RouteAdvanced'
+        communities:
+          x-field-uid: 7
+          description: |-
+            Optional community settings.
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.Community'
+        as_path:
+          x-field-uid: 8
+          $ref: '#/components/schemas/Bgp.AsPath'
+        add_path:
+          x-field-uid: 9
+          $ref: '#/components/schemas/Bgp.AddPath'
+        name:
+          x-field-uid: 10
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          x-unique: global
+        extended_communities:
+          x-field-uid: 11
+          description: "Optional Extended Community settings. The Extended Communities\
+            \ Attribute is a transitive optional BGP attribute, with the Type Code\
+            \ 16. Community and Extended Communities  attributes are utilized to trigger\
+            \ routing decisions, such as acceptance, rejection,  preference, or redistribution.\
+            \ An extended community is an eight byte value. It is divided into two\
+            \ main parts. The first two bytes of the community encode a type and sub-type\
+            \ fields and the last six bytes carry a unique set of data in a format\
+            \ defined by the type and sub-type field. Extended communities provide\
+            \ a larger range for grouping or categorizing communities.            "
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.ExtendedCommunity'
+        mpls_labels:
+          description: |-
+            The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv4 prefix in this route range. RFC 4364 assigns exactly one label per route - Section 4.3.2 only discusses whether that value is shared across routes in a VRF or attachment circuit, not stacking multiple labels per route.
+          $ref: '#/components/schemas/RouteMplsLabelValue'
+          x-field-uid: 12
+        route_distinguisher:
+          description: |-
+            The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv4 prefix in this route range, forming the VPN-IPv4 NLRI (AFI 1, SAFI 128). Carried per route range to match RFC 4364's per-NLRI RD semantics; route ranges in the same VRF may use different RDs.
+          $ref: '#/components/schemas/Bgp.RouteDistinguisher'
+          x-field-uid: 13
+    Bgp.L3vpn.V6RouteRange:
+      description: |-
+        Emulated VPN-IPv6 customer route range belonging to a Bgp.L3vpn.Vrf (RFC 4659, 6VPE). Same shape as the plain Bgp.V6RouteRange, except the dataplane binding is selected via service_binding, a choice that currently offers only a VPN MPLS label (RFC 4364 Section 3). The Route Distinguisher (RFC 4364 Section 4.1) is carried per route range via route_distinguisher - matching RFC 4364's per-NLRI RD semantics - rather than once on the parent VRF, so different route ranges in the same VRF may advertise different RDs.
+      type: object
+      required:
+      - name
+      - route_distinguisher
+      - service_binding
+      properties:
+        addresses:
+          x-field-uid: 1
+          description: |-
+            A list of group of IPv6 route addresses.
+          type: array
+          items:
+            $ref: '#/components/schemas/V6RouteAddress'
+        next_hop_mode:
+          x-field-uid: 2
+          description: "Specify the NextHop in MP REACH NLRI. The mode for setting\
+            \ the IP address  of the NextHop in the MP REACH NLRI can be one of the\
+            \ following:\n  Local IP: Automatically fills the Nexthop with the Local\
+            \ IP of the BGP\npeer.\n  If BGP peer is of type IPv6, Nexthop Encoding\
+            \ capability should be enabled.\n  Manual: Override the Nexthop with any\
+            \ arbitrary IPv4/IPv6 address.   "
+          type: string
+          default: local_ip
+          x-enum:
+            local_ip:
+              x-field-uid: 1
+            manual:
+              x-field-uid: 2
+          enum:
+          - local_ip
+          - manual
+        next_hop_address_type:
+          x-field-uid: 3
+          description: |-
+            If the Nexthop Mode is Manual, it sets the type of the NextHop IP address.
+          type: string
+          default: ipv6
+          x-enum:
+            ipv4:
+              x-field-uid: 1
+            ipv6:
+              x-field-uid: 2
+          enum:
+          - ipv4
+          - ipv6
+        next_hop_ipv4_address:
+          x-field-uid: 4
+          description: |-
+            The IPv4 address of the next hop if the Nexthop Mode is manual and the Nexthop type is IPv4. If BGP peer is of type IPv6, Nexthop Encoding capability should be enabled.
+          type: string
+          format: ipv4
+          default: 0.0.0.0
+        next_hop_ipv6_address:
+          x-field-uid: 5
+          description: "The IPv6 address of the next hop if the Nexthop Mode is manual\
+            \ and the Nexthop type is IPv6. "
+          type: string
+          format: ipv6
+          default: ::0
+        advanced:
+          x-field-uid: 6
+          $ref: '#/components/schemas/Bgp.RouteAdvanced'
+        communities:
+          x-field-uid: 7
+          description: |-
+            Optional community settings.
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.Community'
+        as_path:
+          x-field-uid: 8
+          $ref: '#/components/schemas/Bgp.AsPath'
+        add_path:
+          x-field-uid: 9
+          $ref: '#/components/schemas/Bgp.AddPath'
+        name:
+          x-field-uid: 10
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          x-unique: global
+        extended_communities:
+          x-field-uid: 11
+          description: "Optional Extended Community settings. The Extended Communities\
+            \ Attribute is a transitive optional BGP attribute, with the Type Code\
+            \ 16. Community and Extended Communities  attributes are utilized to trigger\
+            \ routing decisions, such as acceptance, rejection,  preference, or redistribution.\
+            \ An extended community is an eight byte value. It is divided into two\
+            \ main parts. The first two bytes of the community encode a type and sub-type\
+            \ fields and the last six bytes carry a unique set of data in a format\
+            \ defined by the type and sub-type field. Extended communities provide\
+            \ a larger range for grouping or categorizing communities.            "
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.ExtendedCommunity'
+        service_binding:
+          description: |-
+            Selects and configures this route range's VPN dataplane binding. Only the VPN MPLS label is currently supported; the choice structure exists so that an additional dataplane binding can be added later without breaking this field.
+          $ref: '#/components/schemas/Bgp.L3vpn.V6ServiceBinding'
+          x-field-uid: 12
+        route_distinguisher:
+          description: |-
+            The Route Distinguisher (RFC 4364 Section 4.1) prepended to every IPv6 prefix in this route range, forming the VPN-IPv6 NLRI (AFI 2, SAFI 128, RFC 4659). Carried per route range to match RFC 4364's per-NLRI RD semantics; route ranges in the same VRF may use different RDs.
+          $ref: '#/components/schemas/Bgp.RouteDistinguisher'
+          x-field-uid: 13
+    Bgp.L3vpn.V6ServiceBinding:
+      description: |-
+        Selects how a VPN-IPv6 route range's dataplane binding is advertised. Currently the only defined choice is the traditional VPN MPLS label (RFC 4364 Section 3); the choice discriminator is kept independent of the shared Bgp.MplsLabelBindings schema so a future dataplane binding (for example an SRv6 Service SID, RFC 9252) can be added as a new sibling choice value without restructuring this schema or affecting existing mpls_labels configs.
+      type: object
+      required:
+      - mpls_labels
+      properties:
+        choice:
+          description: |-
+            The VPN dataplane encoding advertised for this route range's routes.
+          type: string
+          default: mpls_labels
+          x-enum:
+            mpls_labels:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - mpls_labels
+        mpls_labels:
+          description: |-
+            The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to every IPv6 prefix in this route range. RFC 4364 assigns exactly one label per route - Section 4.3.2 only discusses whether that value is shared across routes in a VRF or attachment circuit.
+          $ref: '#/components/schemas/RouteMplsLabelValue'
+          x-field-uid: 2
     Bgp.V6Peer:
       description: |-
         Configuration for BGPv6 peer settings and routes.
@@ -10852,10 +11221,17 @@ components:
           x-field-uid: 15
           $ref: '#/components/schemas/Bgp.GracefulRestart'
         replay_updates:
-          description: "BGP Updates to be sent to the peer as specified after the\
-            \ session is established. "
+          description: |-
+            BGP Updates to be sent to the peer as specified after the session is established.
           $ref: '#/components/schemas/Bgp.UpdateReplay'
           x-field-uid: 16
+        l3vpn_vrfs:
+          description: |-
+            BGP/MPLS Layer 3 VPN VRFs (RFC 4364/4659) advertised over this peer. Each VRF's route ranges are advertised as VPN-IPv6 NLRI, distinct from the plain IPv6 unicast route ranges in v6_routes. Requires device.bgp.capability.ipv6_mpls_vpn to be enabled.
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.L3vpn.Vrf'
+          x-field-uid: 17
     Bgp.V6Interface:
       description: |-
         Configuration for emulated BGPv6 peers and routes on a single IPv6 interface.
@@ -15811,11 +16187,17 @@ components:
           x-enum:
             echo:
               x-field-uid: 1
+            neighbor_solicitation:
+              x-field-uid: 2
           enum:
           - echo
+          - neighbor_solicitation
         echo:
           $ref: '#/components/schemas/Flow.Icmpv6.Echo'
           x-field-uid: 2
+        neighbor_solicitation:
+          $ref: '#/components/schemas/Flow.Icmpv6.NeighborSolicitation'
+          x-field-uid: 3
     Flow.Icmpv6.Echo:
       description: |-
         Packet Header for ICMPv6 Echo
@@ -15836,6 +16218,168 @@ components:
         checksum:
           x-field-uid: 5
           $ref: '#/components/schemas/Pattern.Flow.Icmpv6.Echo.Checksum'
+    Flow.Icmpv6.NeighborSolicitation:
+      description: |-
+        Packet Header for ICMPv6 NDP Neighbor Solicitation (Type 135, RFC 4861 Section 4.3). A conforming NS is sent with IPv6 Hop Limit 255 (RFC 4861 Section 7.1.1).
+        RFC requirements described for this header (MUST / MUST NOT) apply to a conforming packet. The model does not enforce them, so any value the fields can encode may be configured for conformance and negative testing.
+        The IPv6 and Ethernet destinations are set in their own headers. Use these values, where T is target_address and "low 24 bits" are the last 3 octets of T (RFC 4291 Section 2.7.1, RFC 2464 Section 7):
+        Multicast NS (address resolution, duplicate address detection):
+          IPv6 dst     = ff02::1:ff + low 24 bits of T
+          Ethernet dst = 33:33:ff + low 24 bits of T
+          Example: T = 2001:db8::5 gives IPv6 dst ff02::1:ff00:5 and
+          Ethernet dst 33:33:ff:00:00:05.
+
+        Unicast NS (neighbor reachability check):
+          IPv6 dst     = T
+          Ethernet dst = MAC address of the target
+
+        In a conforming duplicate address detection packet the IPv6 source is :: and the Source Link-Layer Address option is omitted.
+      type: object
+      properties:
+        type:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.Type'
+        code:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.Code'
+        checksum:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.Checksum'
+        reserved:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.Reserved'
+        target_address:
+          x-field-uid: 5
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.TargetAddress'
+        options:
+          description: |-
+            Optional list of NDP options (RFC 4861 Section 4.6). In a conforming packet (RFC 4861 Section 4.3) the Source Link-Layer Address option is omitted when the IPv6 source is the unspecified address (DAD), is included in multicast solicitations and should be included in unicast solicitations. It is the only option RFC 4861 defines for Neighbor Solicitation. Other option types, and combinations that differ from the above, can be configured for conformance and negative testing; a conforming receiver silently ignores options not defined for the message (RFC 4861 Section 4.6).
+          type: array
+          items:
+            $ref: '#/components/schemas/Flow.Icmpv6.NdpOption'
+          x-field-uid: 6
+    Flow.Icmpv6.NdpOption:
+      description: |-
+        NDP option (RFC 4861 Section 4.6) carried in NDP messages. The option Length is in units of 8 octets including the type and length bytes themselves. The option type is not validated against the message it is carried in; a conforming receiver silently ignores an option that is not defined for the message (RFC 4861 Section 4.6). RFC requirements stated for options describe a conforming packet; the model does not enforce them, so other values can be configured for conformance and negative testing.
+      type: object
+      properties:
+        choice:
+          type: string
+          default: source_link_layer_address
+          x-field-uid: 1
+          x-enum:
+            source_link_layer_address:
+              x-field-uid: 1
+            target_link_layer_address:
+              x-field-uid: 2
+            prefix_information:
+              x-field-uid: 3
+            redirected_header:
+              x-field-uid: 4
+            mtu:
+              x-field-uid: 5
+          enum:
+          - source_link_layer_address
+          - target_link_layer_address
+          - prefix_information
+          - redirected_header
+          - mtu
+        source_link_layer_address:
+          $ref: '#/components/schemas/Flow.Icmpv6.NdpLinkLayerAddressOption'
+          x-field-uid: 2
+        target_link_layer_address:
+          $ref: '#/components/schemas/Flow.Icmpv6.NdpLinkLayerAddressOption'
+          x-field-uid: 3
+        prefix_information:
+          $ref: '#/components/schemas/Flow.Icmpv6.NdpPrefixInformationOption'
+          x-field-uid: 4
+        redirected_header:
+          $ref: '#/components/schemas/Flow.Icmpv6.NdpRedirectedHeaderOption'
+          x-field-uid: 5
+        mtu:
+          $ref: '#/components/schemas/Flow.Icmpv6.NdpMtuOption'
+          x-field-uid: 6
+    Flow.Icmpv6.NdpLinkLayerAddressOption:
+      description: |-
+        NDP Source Link-Layer Address (Type 1) or Target Link-Layer Address (Type 2) option (RFC 4861 Section 4.6.1). The option Type byte is set from the parent choice.
+      type: object
+      properties:
+        length:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpLinkLayerAddressOption.Length'
+        link_layer_address:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpLinkLayerAddressOption.LinkLayerAddress'
+    Flow.Icmpv6.NdpPrefixInformationOption:
+      description: |-
+        NDP Prefix Information option (Type 3). Defined in RFC 4861 Section 4.6.2 and extended for Mobile IPv6 Home Agent by RFC 6275 Section 7.2 (R flag). Provides hosts with on-link prefixes and prefixes for address autoconfiguration.
+      type: object
+      properties:
+        length:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Length'
+        prefix_length:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.PrefixLength'
+        l_flag:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.LFlag'
+        a_flag:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.AFlag'
+        r_flag:
+          x-field-uid: 5
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.RFlag'
+        reserved1:
+          x-field-uid: 6
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Reserved1'
+        valid_lifetime:
+          x-field-uid: 7
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.ValidLifetime'
+        preferred_lifetime:
+          x-field-uid: 8
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.PreferredLifetime'
+        reserved2:
+          x-field-uid: 9
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Reserved2'
+        prefix:
+          x-field-uid: 10
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Prefix'
+    Flow.Icmpv6.NdpRedirectedHeaderOption:
+      description: |-
+        NDP Redirected Header option (Type 4). Defined in RFC 4861 Section 4.6.3. Used in Redirect messages to include as much as possible of the IP packet that triggered the Redirect, without exceeding the minimum IPv6 MTU.
+      type: object
+      properties:
+        length:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Length'
+        reserved1:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Reserved1'
+        reserved2:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Reserved2'
+        data:
+          description: |-
+            Leading part of the original IP packet (IP header + data) that triggered the Redirect, truncated so the Redirect message does not exceed the minimum IPv6 MTU (RFC 4861 Section 4.6.3). Hex string. The option is padded with zero octets to a multiple of 8 octets.
+          type: string
+          format: hex
+          default: '00'
+          x-field-uid: 4
+    Flow.Icmpv6.NdpMtuOption:
+      description: |-
+        NDP MTU option (Type 5). Defined in RFC 4861 Section 4.6.4. Used in Router Advertisement messages to ensure that all nodes on a link use the same MTU value in those cases where the link MTU is not well known.
+      type: object
+      properties:
+        length:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpMtuOption.Length'
+        reserved:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpMtuOption.Reserved'
+        mtu:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpMtuOption.Mtu'
     Flow.Ppp:
       description: |-
         PPP packet header
@@ -17648,7 +18192,6 @@ components:
           description: |-
             List of 128-bit SRv6 SID addresses (RFC 8754 Section 2.1), encoded in reverse path order: Segment[0] is the last segment of the SR Policy, Segment[n-1] is the first segment to visit.
           type: array
-          minItems: 1
           items:
             $ref: '#/components/schemas/Flow.Ipv6SegmentRouting.Segment'
           x-field-uid: 5
@@ -17844,7 +18387,7 @@ components:
           x-field-uid: 3
     Flow.Cfm.SelectOpCode:
       description: |-
-        Select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7 and ITU-T Y.1731. Currently supported choices are Continuity Check Message (CCM), Loopback Message (LBM), Loopback Reply (LBR) and Delay Measurement Message (DMM).
+        Select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7 and ITU-T Y.1731. Currently supported choices are Continuity Check Message (CCM), Loopback Message (LBM), Loopback Reply (LBR), Delay Measurement Message (DMM) and Delay Measurement Reply (DMR).
       type: object
       properties:
         choice:
@@ -17860,11 +18403,14 @@ components:
               x-field-uid: 3
             dmm:
               x-field-uid: 4
+            dmr:
+              x-field-uid: 5
           enum:
           - ccm
           - lbm
           - lbr
           - dmm
+          - dmr
         ccm:
           $ref: '#/components/schemas/Flow.Cfm.Ccm'
           x-field-uid: 2
@@ -17877,6 +18423,9 @@ components:
         dmm:
           $ref: '#/components/schemas/Flow.Cfm.Dmm'
           x-field-uid: 5
+        dmr:
+          $ref: '#/components/schemas/Flow.Cfm.Dmr'
+          x-field-uid: 6
     Flow.Cfm.Ccm:
       description: |-
         CCM is a multicast PDU used to detect continuity and configuration errors within a Maintenance Association (MA). As defined in IEEE 802.1Q-2018 Section 12.14.6.
@@ -18131,6 +18680,34 @@ components:
         reserved_for_dmr_receiver:
           x-field-uid: 4
           $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmm.ReservedForDmrReceiver'
+        tlvs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Flow.Cfm.Tlvs'
+          x-field-uid: 5
+        append_end_tlv:
+          description: |-
+            When true, the implementation appends an End TLV (Type 0, IEEE 802.1Q-2018 Table 21-17) after all TLVs in the tlvs list. Set to false only when testing DUT behaviour with a deliberately missing End TLV.
+          type: boolean
+          default: true
+          x-field-uid: 6
+    Flow.Cfm.Dmr:
+      description: |-
+        Delay Measurement Reply (DMR) is the response frame sent by a peer Maintenance End Point (MEP) back to the originating MEP in reply to a Delay Measurement Message (DMM), as defined in ITU-T Y.1731 Section 8.2. DMR flag bits are reserved and set to zero.
+      type: object
+      properties:
+        tx_timestamp_f:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmr.TxTimestampF'
+        rx_timestamp_f:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmr.RxTimestampF'
+        tx_timestamp_b:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmr.TxTimestampB'
+        reserved_for_dmr_receiver:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmr.ReservedForDmrReceiver'
         tlvs:
           type: array
           items:
@@ -20983,6 +21560,8 @@ components:
           - /components/schemas/Isis.V6RouteRange/properties/name
           - /components/schemas/Ospfv2.V4RouteRange/properties/name
           - /components/schemas/Ospfv3.V6RouteRange/properties/name
+          - /components/schemas/Bgp.L3vpn.V4RouteRange/properties/name
+          - /components/schemas/Bgp.L3vpn.V6RouteRange/properties/name
           x-field-uid: 1
         state:
           description: |-
@@ -27666,11 +28245,17 @@ components:
                 x-field-uid: 3
               ipv6_mpls_unicast:
                 x-field-uid: 4
+              ipv4_mpls_vpn_unicast:
+                x-field-uid: 5
+              ipv6_mpls_vpn_unicast:
+                x-field-uid: 6
             enum:
             - ipv4_unicast
             - ipv6_unicast
             - ipv4_mpls_unicast
             - ipv6_mpls_unicast
+            - ipv4_mpls_vpn_unicast
+            - ipv6_mpls_vpn_unicast
           x-field-uid: 2
         ipv4_unicast_filters:
           description: |-
@@ -27796,6 +28381,20 @@ components:
           items:
             $ref: '#/components/schemas/BgpPrefixIpv6MplsUnicast.State'
           x-field-uid: 5
+        ipv4_mpls_vpn_unicast_prefixes:
+          description: |-
+            BGP/MPLS L3VPN (RFC 4364) VPN-IPv4 learned prefixes.
+          type: array
+          items:
+            $ref: '#/components/schemas/BgpPrefixIpv4MplsVpnUnicast.State'
+          x-field-uid: 6
+        ipv6_mpls_vpn_unicast_prefixes:
+          description: |-
+            BGP/MPLS L3VPN (RFC 4659) VPN-IPv6 (6VPE) learned prefixes.
+          type: array
+          items:
+            $ref: '#/components/schemas/BgpPrefixIpv6MplsVpnUnicast.State'
+          x-field-uid: 7
     BgpPrefixIpv4Unicast.State:
       description: |-
         IPv4 unicast prefix.
@@ -28490,6 +29089,305 @@ components:
             The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
           type: integer
           format: uint32
+    BgpPrefixIpv4MplsVpnUnicast.State:
+      description: |-
+        BGP/MPLS L3VPN (RFC 4364) VPN-IPv4 learned prefix, received under the VPN-IPv4 AFI/SAFI (AFI 1, SAFI 128).
+      type: object
+      properties:
+        choice:
+          description: |-
+            Selects how this received VPN-IPv4 NLRI is reported. Currently the only supported view groups the prefix by the local VRF(s) (RFC 4364 Section 4.3.1 Route Target import) it was matched into.
+          type: string
+          default: matched_vrf_routes
+          x-enum:
+            matched_vrf_routes:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - matched_vrf_routes
+        matched_vrf_routes:
+          $ref: '#/components/schemas/BgpPrefixIpv4MplsVpnUnicast.MatchedVrfRoutes'
+          x-field-uid: 2
+    BgpPrefixIpv4MplsVpnUnicast.MatchedVrfRoutes:
+      description: |-
+        The local VRFs that received VPN-IPv4 NLRIs were imported into via Route Target matching (RFC 4364 Section 4.3.1), each with its own list of matched routes.
+      type: object
+      properties:
+        vrfs:
+          description: |-
+            One entry per local VRF (Bgp.L3vpn.Vrf) that imported one or more VPN-IPv4 routes. The same VPN-IPv4 NLRI can be imported into more than one VRF when multiple VRFs' route_target_import values match one of the route's Route Target Extended Communities, in which case it appears under each matching VRF's routes.
+          type: array
+          items:
+            $ref: '#/components/schemas/BgpPrefixIpv4MplsVpnUnicast.Vrf'
+          x-field-uid: 1
+    BgpPrefixIpv4MplsVpnUnicast.Vrf:
+      description: |-
+        A single local VRF (Bgp.L3vpn.Vrf) and the VPN-IPv4 routes that were imported into it.
+      type: object
+      properties:
+        name:
+          description: |-
+            The name of the local VRF (Bgp.L3vpn.Vrf) that imported these routes.
+          type: string
+          x-field-uid: 1
+        routes:
+          description: |-
+            The VPN-IPv4 routes imported into this VRF.
+          type: array
+          items:
+            $ref: '#/components/schemas/BgpPrefixIpv4MplsVpnUnicast.Route'
+          x-field-uid: 2
+    BgpPrefixIpv4MplsVpnUnicast.Route:
+      description: |-
+        A VPN-IPv4 prefix imported into a VRF, with the path attributes received for that NLRI (RFC 4364).
+      type: object
+      properties:
+        route_distinguisher:
+          description: |-
+            The Route Distinguisher (RFC 4364 Section 4.1) received as part of the VPN-IPv4 NLRI, formatted as a colon separated value, for example "60005:100" or "1.1.1.1:100".
+          type: string
+          x-field-uid: 1
+        ipv4_address:
+          description: |-
+            An IPv4 unicast address.
+          type: string
+          x-field-uid: 2
+        prefix_length:
+          type: integer
+          format: uint32
+          maximum: 32
+          x-field-uid: 3
+        origin:
+          x-field-uid: 4
+          description: |-
+            The origin of the prefix.
+          type: string
+          x-enum:
+            igp:
+              x-field-uid: 1
+            egp:
+              x-field-uid: 2
+            incomplete:
+              x-field-uid: 3
+          enum:
+          - igp
+          - egp
+          - incomplete
+        path_id:
+          x-field-uid: 5
+          description: |-
+            The path id.
+          type: integer
+          format: uint32
+        ipv4_next_hop:
+          x-field-uid: 6
+          description: |-
+            The IPv4 address of the egress interface.
+          type: string
+          format: ipv4
+        ipv6_next_hop:
+          x-field-uid: 7
+          description: |-
+            The IPv6 address of the egress interface.
+          type: string
+          format: ipv6
+        label:
+          description: |-
+            The single VPN dataplane MPLS label (RFC 4364 Section 3) bound to this VPN-IPv4 prefix. RFC 4364 assigns exactly one label per route, matching the configured mpls_labels range on Bgp.L3vpn.V4RouteRange.
+          type: integer
+          format: uint32
+          minimum: 0
+          maximum: 1048575
+          x-field-uid: 8
+        communities:
+          x-field-uid: 9
+          description: |-
+            Optional community attributes.
+          type: array
+          items:
+            $ref: '#/components/schemas/Result.BgpCommunity'
+        extended_communities:
+          description: |-
+            Optional received Extended Community attributes, including the Route Target(s) (RFC 4360) attached to this VPN-IPv4 route. Each received Extended Community attribute is available for retrieval in two forms. Support of the 'raw' format in which all 8 bytes (16 hex characters) is always present and available for use. In addition, if supported by the implementation, the Extended Community attribute may also be retrieved in the 'structured' format which is an optional field.
+          type: array
+          items:
+            $ref: '#/components/schemas/Result.ExtendedCommunity'
+          x-field-uid: 10
+        as_path:
+          x-field-uid: 11
+          $ref: '#/components/schemas/Result.BgpAsPath'
+        local_preference:
+          x-field-uid: 12
+          description: |-
+            The local preference is a well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+          type: integer
+          format: uint32
+        multi_exit_discriminator:
+          x-field-uid: 13
+          description: |-
+            The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+          type: integer
+          format: uint32
+    BgpPrefixIpv6MplsVpnUnicast.State:
+      description: |-
+        BGP/MPLS L3VPN (RFC 4659) VPN-IPv6 (6VPE) learned prefix, received under the VPN-IPv6 AFI/SAFI (AFI 2, SAFI 128).
+      type: object
+      properties:
+        choice:
+          description: |-
+            Selects how this received VPN-IPv6 NLRI is reported. Currently the only supported view groups the prefix by the local VRF(s) (RFC 4364 Section 4.3.1 Route Target import) it was matched into.
+          type: string
+          default: matched_vrf_routes
+          x-enum:
+            matched_vrf_routes:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - matched_vrf_routes
+        matched_vrf_routes:
+          $ref: '#/components/schemas/BgpPrefixIpv6MplsVpnUnicast.MatchedVrfRoutes'
+          x-field-uid: 2
+    BgpPrefixIpv6MplsVpnUnicast.MatchedVrfRoutes:
+      description: |-
+        The local VRFs that received VPN-IPv6 NLRIs were imported into via Route Target matching (RFC 4364 Section 4.3.1), each with its own list of matched routes.
+      type: object
+      properties:
+        vrfs:
+          description: |-
+            One entry per local VRF (Bgp.L3vpn.Vrf) that imported one or more VPN-IPv6 routes. The same VPN-IPv6 NLRI can be imported into more than one VRF when multiple VRFs' route_target_import values match one of the route's Route Target Extended Communities, in which case it appears under each matching VRF's routes.
+          type: array
+          items:
+            $ref: '#/components/schemas/BgpPrefixIpv6MplsVpnUnicast.Vrf'
+          x-field-uid: 1
+    BgpPrefixIpv6MplsVpnUnicast.Vrf:
+      description: |-
+        A single local VRF (Bgp.L3vpn.Vrf) and the VPN-IPv6 routes that were imported into it.
+      type: object
+      properties:
+        name:
+          description: |-
+            The name of the local VRF (Bgp.L3vpn.Vrf) that imported these routes.
+          type: string
+          x-field-uid: 1
+        routes:
+          description: |-
+            The VPN-IPv6 routes imported into this VRF.
+          type: array
+          items:
+            $ref: '#/components/schemas/BgpPrefixIpv6MplsVpnUnicast.Route'
+          x-field-uid: 2
+    BgpPrefixIpv6MplsVpnUnicast.Route:
+      description: |-
+        A VPN-IPv6 prefix imported into a VRF, with the path attributes received for that NLRI (RFC 4364, RFC 4659).
+      type: object
+      properties:
+        route_distinguisher:
+          description: |-
+            The Route Distinguisher (RFC 4364 Section 4.1) received as part of the VPN-IPv6 NLRI, formatted as a colon separated value, for example "60005:100" or "1.1.1.1:100".
+          type: string
+          x-field-uid: 1
+        ipv6_address:
+          description: |-
+            An IPv6 unicast address.
+          type: string
+          x-field-uid: 2
+        prefix_length:
+          type: integer
+          format: uint32
+          maximum: 128
+          x-field-uid: 3
+        origin:
+          x-field-uid: 4
+          description: |-
+            The origin of the prefix.
+          type: string
+          x-enum:
+            igp:
+              x-field-uid: 1
+            egp:
+              x-field-uid: 2
+            incomplete:
+              x-field-uid: 3
+          enum:
+          - igp
+          - egp
+          - incomplete
+        path_id:
+          x-field-uid: 5
+          description: |-
+            The path id.
+          type: integer
+          format: uint32
+        ipv4_next_hop:
+          x-field-uid: 6
+          description: |-
+            The IPv4 address of the egress interface.
+          type: string
+          format: ipv4
+        ipv6_next_hop:
+          x-field-uid: 7
+          description: |-
+            The IPv6 address of the egress interface.
+          type: string
+          format: ipv6
+        service_binding:
+          description: |-
+            The VPN dataplane binding received for this VPN-IPv6 prefix.
+          $ref: '#/components/schemas/BgpPrefixIpv6MplsVpnUnicast.ServiceBinding'
+          x-field-uid: 8
+        communities:
+          x-field-uid: 9
+          description: |-
+            Optional community attributes.
+          type: array
+          items:
+            $ref: '#/components/schemas/Result.BgpCommunity'
+        extended_communities:
+          description: |-
+            Optional received Extended Community attributes, including the Route Target(s) (RFC 4360) attached to this VPN-IPv6 route. Each received Extended Community attribute is available for retrieval in two forms. Support of the 'raw' format in which all 8 bytes (16 hex characters) is always present and available for use. In addition, if supported by the implementation, the Extended Community attribute may also be retrieved in the 'structured' format which is an optional field.
+          type: array
+          items:
+            $ref: '#/components/schemas/Result.ExtendedCommunity'
+          x-field-uid: 10
+        as_path:
+          x-field-uid: 11
+          $ref: '#/components/schemas/Result.BgpAsPath'
+        local_preference:
+          x-field-uid: 12
+          description: |-
+            The local preference is a well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+          type: integer
+          format: uint32
+        multi_exit_discriminator:
+          x-field-uid: 13
+          description: |-
+            The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+          type: integer
+          format: uint32
+    BgpPrefixIpv6MplsVpnUnicast.ServiceBinding:
+      description: |-
+        The VPN dataplane binding received for a VPN-IPv6 route, mirroring the Bgp.L3vpn.V6ServiceBinding choice on the configured route range. Currently the only defined choice is the VPN MPLS label (RFC 4364 Section 3, RFC 4659); kept as a choice, independent of the shared label field, so a future dataplane binding (for example an SRv6 Service SID, RFC 9252) can be reported as a new sibling choice value without restructuring this schema.
+      type: object
+      properties:
+        choice:
+          description: |-
+            The VPN dataplane encoding received for this route.
+          type: string
+          default: label
+          x-enum:
+            label:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - label
+        label:
+          description: |-
+            The single VPN dataplane MPLS label (RFC 4364 Section 3, RFC 4659) bound to this VPN-IPv6 prefix. RFC 4364 assigns exactly one label per route, matching the configured mpls_labels range on Bgp.L3vpn.V6RouteRange.
+          type: integer
+          format: uint32
+          minimum: 0
+          maximum: 1048575
+          x-field-uid: 2
     Result.BgpCommunity:
       description: |-
         BGP communities provide additional capability for tagging routes and  for modifying BGP routing policy on upstream and downstream routers. BGP community is a 32-bit number which is broken into 16-bit AS number and  a 16-bit custom value.
@@ -34572,7 +35470,7 @@ components:
           x-field-uid: 3
     Pattern.Flow.Ipv4.MoreFragments:
       description: |-
-        More fragments flag
+        More fragments flag (RFC 791 Section 3.1). Set on every fragment of a datagram except the last one. Interaction with packet size: the IPv4 payload carried by this packet is total_length - (header_length x 4) bytes, and total_length follows the flow size. For a conformant fragment, the payload of every fragment that has more_fragments set should be a multiple of 8 bytes. The last fragment (more_fragments = 0) can have any payload length.
       type: object
       properties:
         choice:
@@ -34631,19 +35529,19 @@ components:
           x-field-uid: 1
           default: 0
           format: uint32
-          maximum: 31
+          maximum: 8191
         step:
           type: integer
           x-field-uid: 2
           default: 1
           format: uint32
-          maximum: 31
+          maximum: 8191
         count:
           type: integer
           x-field-uid: 3
           default: 1
           format: uint32
-          maximum: 32
+          maximum: 8192
     Pattern.Flow.Ipv4.FragmentOffset.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -34662,20 +35560,20 @@ components:
           type: integer
           format: uint32
           default: 0
-          maximum: 4
+          maximum: 12
           x-field-uid: 2
         length:
           description: |-
             Number of bits to track for metrics starting from configured offset of corresponding header field
           type: integer
           format: uint32
-          default: 5
+          default: 13
           minimum: 1
-          maximum: 5
+          maximum: 13
           x-field-uid: 3
     Pattern.Flow.Ipv4.FragmentOffset:
       description: |-
-        Fragment offset
+        Fragment offset (RFC 791 Section 3.1). 13-bit value that gives the position of this fragment's data in the original datagram, measured in units of 8 bytes (not bytes). Byte offset = fragment_offset x 8, so the range 0..8191 covers byte offsets 0..65528. See more_fragments for how the flow size affects whether a fragment is conformant.
       type: object
       properties:
         choice:
@@ -34701,13 +35599,13 @@ components:
           x-field-uid: 2
           default: 0
           format: uint32
-          maximum: 31
+          maximum: 8191
         values:
           type: array
           items:
             type: integer
             format: uint32
-            maximum: 31
+            maximum: 8191
           x-field-uid: 3
           default:
           - 0
@@ -37624,7 +38522,7 @@ components:
           x-field-uid: 3
     Pattern.Flow.Ipv6.Dst:
       description: |-
-        Destination address in IPv6 packet header. If dst_usids is configured, the locator and usids provided in that should be used to construct the IPv6 destination address instead of this field.
+        Destination address in IPv6 packet header. If dst_usids is configured, the locator and usids provided in that should be used to construct the IPv6 destination address instead of this field. When this is a multicast address, the Ethernet destination should be 33:33 followed by the last 4 octets of this address (RFC 2464 Section 7), for example ff02::1:ff00:5 maps to 33:33:ff:00:00:05.
       type: object
       properties:
         choice:
@@ -46853,6 +47751,1527 @@ components:
           format: uint32
           maximum: 65535
           x-field-uid: 3
+    Pattern.Flow.Icmpv6.NeighborSolicitation.Type.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 135
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Icmpv6.NeighborSolicitation.Type:
+      description: |-
+        ICMPv6 message type. Default 135 for Neighbor Solicitation.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 135
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 135
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.Type.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.Type.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NeighborSolicitation.Code.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Icmpv6.NeighborSolicitation.Code:
+      description: |-
+        ICMPv6 message code. Default 0 for Neighbor Solicitation.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.Code.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.Code.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NeighborSolicitation.Checksum:
+      description: |-
+        ICMPv6 checksum
+      type: object
+      properties:
+        choice:
+          description: |-
+            The type of checksum
+          type: string
+          x-enum:
+            generated:
+              x-field-uid: 1
+            custom:
+              x-field-uid: 2
+          default: generated
+          x-field-uid: 1
+          enum:
+          - generated
+          - custom
+        generated:
+          description: |-
+            A system generated checksum value
+          type: string
+          x-enum:
+            good:
+              x-field-uid: 1
+            bad:
+              x-field-uid: 2
+          default: good
+          x-field-uid: 2
+          enum:
+          - good
+          - bad
+        custom:
+          description: |-
+            A custom checksum value
+          type: integer
+          format: uint32
+          maximum: 65535
+          x-field-uid: 3
+    Pattern.Flow.Icmpv6.NeighborSolicitation.Reserved.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Icmpv6.NeighborSolicitation.Reserved:
+      description: |-
+        Reserved (RFC 4861 Section 4.3). Zero in a conforming packet: the sender initializes it to zero and the receiver ignores it.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.Reserved.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.Reserved.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NeighborSolicitation.TargetAddress.Counter:
+      description: |-
+        ipv6 counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: ::1
+          format: ipv6
+        step:
+          type: string
+          x-field-uid: 2
+          default: ::1
+          format: ipv6
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Icmpv6.NeighborSolicitation.TargetAddress:
+      description: |-
+        The IPv6 address of the target of the solicitation (RFC 4861 Section 4.3). In a conforming packet it is not a multicast address.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: ::1
+          format: ipv6
+        values:
+          type: array
+          items:
+            type: string
+            format: ipv6
+          x-field-uid: 3
+          default:
+          - ::1
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.TargetAddress.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NeighborSolicitation.TargetAddress.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpLinkLayerAddressOption.Length.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 1
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Icmpv6.NdpLinkLayerAddressOption.Length:
+      description: |-
+        Option length in units of 8 octets, including the type and length bytes. For a 6-octet Ethernet address this is 1.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 1
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 1
+          format: uint32
+          maximum: 255
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpLinkLayerAddressOption.Length.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpLinkLayerAddressOption.Length.Counter'
+          x-field-uid: 7
+    Pattern.Flow.Icmpv6.NdpLinkLayerAddressOption.LinkLayerAddress.Counter:
+      description: |-
+        mac counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: 00:00:00:00:00:01
+          format: mac
+        step:
+          type: string
+          x-field-uid: 2
+          default: 00:00:00:00:00:01
+          format: mac
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Icmpv6.NdpLinkLayerAddressOption.LinkLayerAddress:
+      description: |-
+        Link-layer address of the sender (source option) or target (target option).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: 00:00:00:00:00:01
+          format: mac
+        values:
+          type: array
+          items:
+            type: string
+            format: mac
+          x-field-uid: 3
+          default:
+          - 00:00:00:00:00:01
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpLinkLayerAddressOption.LinkLayerAddress.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpLinkLayerAddressOption.LinkLayerAddress.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Length.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 4
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Length:
+      description: |-
+        Option length in units of 8 octets. Fixed at 4 for the Prefix Information option.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 4
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 4
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 4
+          format: uint32
+          maximum: 255
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Length.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Length.Counter'
+          x-field-uid: 7
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.PrefixLength.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.PrefixLength:
+      description: |-
+        Number of leading bits of the Prefix field that are valid. Range 0..128.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.PrefixLength.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.PrefixLength.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.LFlag.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 2
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.LFlag:
+      description: |-
+        On-link (L) flag. When set, the prefix can be used for on-link determination. RFC 4861 Section 4.6.2.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.LFlag.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.LFlag.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.AFlag.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 2
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.AFlag:
+      description: |-
+        Autonomous address-configuration (A) flag. When set, the prefix can be used for stateless address autoconfiguration. RFC 4861 Section 4.6.2.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.AFlag.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.AFlag.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.RFlag.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 2
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.RFlag:
+      description: |-
+        Router address (R) flag. When set, the Prefix field contains a complete IP address assigned to the sending router. Used by Mobile IPv6 (RFC 6275 Section 7.2).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.RFlag.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.RFlag.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Reserved1.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 31
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 31
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 32
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Reserved1:
+      description: |-
+        Reserved. Must be initialized to zero by the sender.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 31
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 31
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Reserved1.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Reserved1.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.ValidLifetime.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 4294967295
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.ValidLifetime:
+      description: |-
+        Length of time in seconds that the prefix is valid for on-link determination. A value of 0xffffffff represents infinity.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 4294967295
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 4294967295
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.ValidLifetime.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.ValidLifetime.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.PreferredLifetime.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 10
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.PreferredLifetime:
+      description: |-
+        Length of time in seconds that addresses generated from the prefix via stateless address autoconfiguration remain preferred. Must be less than or equal to valid_lifetime.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 10
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 10
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.PreferredLifetime.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.PreferredLifetime.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Reserved2.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Reserved2:
+      description: |-
+        Reserved. Must be initialized to zero by the sender.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Reserved2.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Reserved2.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Prefix.Counter:
+      description: |-
+        ipv6 counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: 0::1
+          format: ipv6
+        step:
+          type: string
+          x-field-uid: 2
+          default: ::1
+          format: ipv6
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Prefix:
+      description: |-
+        IP address or prefix of an IP address. The Prefix Length field contains the number of valid leading bits.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: 0::1
+          format: ipv6
+        values:
+          type: array
+          items:
+            type: string
+            format: ipv6
+          x-field-uid: 3
+          default:
+          - 0::1
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Prefix.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpPrefixInformationOption.Prefix.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Length.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 1
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Length:
+      description: |-
+        Option length in units of 8 octets (RFC 4861 Section 4.6), covering the type, length and reserved octets (8 octets in total) plus the data. When auto, it is computed as ceil((8 + octets of data) / 8) and the data is padded with zero octets to a multiple of 8 octets.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 1
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 1
+          format: uint32
+          maximum: 255
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Length.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Length.Counter'
+          x-field-uid: 7
+    Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Reserved1.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65536
+    Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Reserved1:
+      description: |-
+        Reserved. Must be initialized to zero by the sender.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Reserved1.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Reserved1.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Reserved2.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Reserved2:
+      description: |-
+        Reserved. Must be initialized to zero by the sender.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Reserved2.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpRedirectedHeaderOption.Reserved2.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpMtuOption.Length.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 1
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Icmpv6.NdpMtuOption.Length:
+      description: |-
+        Option length in units of 8 octets. Fixed at 1 for the MTU option.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 1
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 1
+          format: uint32
+          maximum: 255
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpMtuOption.Length.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpMtuOption.Length.Counter'
+          x-field-uid: 7
+    Pattern.Flow.Icmpv6.NdpMtuOption.Reserved.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65536
+    Pattern.Flow.Icmpv6.NdpMtuOption.Reserved:
+      description: |-
+        Reserved. Must be initialized to zero by the sender.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpMtuOption.Reserved.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpMtuOption.Reserved.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Icmpv6.NdpMtuOption.Mtu.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 1500
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Icmpv6.NdpMtuOption.Mtu:
+      description: |-
+        Recommended MTU for the link, in octets.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 1500
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 1500
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpMtuOption.Mtu.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Icmpv6.NdpMtuOption.Mtu.Counter'
+          x-field-uid: 6
     Pattern.Flow.Icmpv6.Common.Checksum:
       description: |-
         ICMPv6 checksum
@@ -55487,6 +57906,254 @@ components:
           x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmm.ReservedForDmrReceiver.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Cfm.Dmr.TxTimestampF.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint64
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint64
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint64
+    Pattern.Flow.Cfm.Dmr.TxTimestampF:
+      description: |-
+        Transmit timestamp recorded by the DMM originator, copied verbatim by the responder from the received DMM into the DMR (ITU-T Y.1731 Section 8.2).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint64
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint64
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmr.TxTimestampF.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmr.TxTimestampF.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Cfm.Dmr.RxTimestampF.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint64
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint64
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint64
+    Pattern.Flow.Cfm.Dmr.RxTimestampF:
+      description: |-
+        Receive timestamp recorded by the responder when the DMM frame arrived (ITU-T Y.1731 Section 8.2).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint64
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint64
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmr.RxTimestampF.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmr.RxTimestampF.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Cfm.Dmr.TxTimestampB.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint64
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint64
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint64
+    Pattern.Flow.Cfm.Dmr.TxTimestampB:
+      description: |-
+        Transmit timestamp recorded by the responder when the DMR frame is transmitted back to the originating MEP (ITU-T Y.1731 Section 8.2).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint64
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint64
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmr.TxTimestampB.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmr.TxTimestampB.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Cfm.Dmr.ReservedForDmrReceiver.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint64
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint64
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint64
+    Pattern.Flow.Cfm.Dmr.ReservedForDmrReceiver:
+      description: |-
+        Reserved for the DMR receiving equipment (the originating MEP) to record its receive timestamp when the DMR arrives. Set to zero by the DMR originator (ITU-T Y.1731 Section 8.2).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint64
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint64
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmr.ReservedForDmrReceiver.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Dmr.ReservedForDmrReceiver.Counter'
           x-field-uid: 6
     Pattern.Flow.Cfm.Tlvs.Length.Counter:
       description: |-

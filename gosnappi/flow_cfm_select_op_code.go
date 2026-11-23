@@ -20,6 +20,7 @@ type flowCfmSelectOpCode struct {
 	lbmHolder    FlowCfmLbm
 	lbrHolder    FlowCfmLbr
 	dmmHolder    FlowCfmDmm
+	dmrHolder    FlowCfmDmr
 }
 
 func NewFlowCfmSelectOpCode() FlowCfmSelectOpCode {
@@ -251,12 +252,13 @@ func (obj *flowCfmSelectOpCode) setNil() {
 	obj.lbmHolder = nil
 	obj.lbrHolder = nil
 	obj.dmmHolder = nil
+	obj.dmrHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// FlowCfmSelectOpCode is select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7 and ITU-T Y.1731. Currently supported choices are Continuity Check Message (CCM), Loopback Message (LBM), Loopback Reply (LBR) and Delay Measurement Message (DMM).
+// FlowCfmSelectOpCode is select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7 and ITU-T Y.1731. Currently supported choices are Continuity Check Message (CCM), Loopback Message (LBM), Loopback Reply (LBR), Delay Measurement Message (DMM) and Delay Measurement Reply (DMR).
 type FlowCfmSelectOpCode interface {
 	Validation
 	// msg marshals FlowCfmSelectOpCode to protobuf object *otg.FlowCfmSelectOpCode
@@ -316,6 +318,14 @@ type FlowCfmSelectOpCode interface {
 	SetDmm(value FlowCfmDmm) FlowCfmSelectOpCode
 	// HasDmm checks if Dmm has been set in FlowCfmSelectOpCode
 	HasDmm() bool
+	// Dmr returns FlowCfmDmr, set in FlowCfmSelectOpCode.
+	// FlowCfmDmr is delay Measurement Reply (DMR) is the response frame sent by a peer Maintenance End Point (MEP) back to the originating MEP in reply to a Delay Measurement Message (DMM), as defined in ITU-T Y.1731 Section 8.2. DMR flag bits are reserved and set to zero.
+	Dmr() FlowCfmDmr
+	// SetDmr assigns FlowCfmDmr provided by user to FlowCfmSelectOpCode.
+	// FlowCfmDmr is delay Measurement Reply (DMR) is the response frame sent by a peer Maintenance End Point (MEP) back to the originating MEP in reply to a Delay Measurement Message (DMM), as defined in ITU-T Y.1731 Section 8.2. DMR flag bits are reserved and set to zero.
+	SetDmr(value FlowCfmDmr) FlowCfmSelectOpCode
+	// HasDmr checks if Dmr has been set in FlowCfmSelectOpCode
+	HasDmr() bool
 	setNil()
 }
 
@@ -327,11 +337,13 @@ var FlowCfmSelectOpCodeChoice = struct {
 	LBM FlowCfmSelectOpCodeChoiceEnum
 	LBR FlowCfmSelectOpCodeChoiceEnum
 	DMM FlowCfmSelectOpCodeChoiceEnum
+	DMR FlowCfmSelectOpCodeChoiceEnum
 }{
 	CCM: FlowCfmSelectOpCodeChoiceEnum("ccm"),
 	LBM: FlowCfmSelectOpCodeChoiceEnum("lbm"),
 	LBR: FlowCfmSelectOpCodeChoiceEnum("lbr"),
 	DMM: FlowCfmSelectOpCodeChoiceEnum("dmm"),
+	DMR: FlowCfmSelectOpCodeChoiceEnum("dmr"),
 }
 
 func (obj *flowCfmSelectOpCode) Choice() FlowCfmSelectOpCodeChoiceEnum {
@@ -353,6 +365,8 @@ func (obj *flowCfmSelectOpCode) setChoice(value FlowCfmSelectOpCodeChoiceEnum) F
 	}
 	enumValue := otg.FlowCfmSelectOpCode_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Dmr = nil
+	obj.dmrHolder = nil
 	obj.obj.Dmm = nil
 	obj.dmmHolder = nil
 	obj.obj.Lbr = nil
@@ -376,6 +390,10 @@ func (obj *flowCfmSelectOpCode) setChoice(value FlowCfmSelectOpCodeChoiceEnum) F
 
 	if value == FlowCfmSelectOpCodeChoice.DMM {
 		obj.obj.Dmm = NewFlowCfmDmm().msg()
+	}
+
+	if value == FlowCfmSelectOpCodeChoice.DMR {
+		obj.obj.Dmr = NewFlowCfmDmr().msg()
 	}
 
 	return obj
@@ -493,6 +511,34 @@ func (obj *flowCfmSelectOpCode) SetDmm(value FlowCfmDmm) FlowCfmSelectOpCode {
 	return obj
 }
 
+// description is TBD
+// Dmr returns a FlowCfmDmr
+func (obj *flowCfmSelectOpCode) Dmr() FlowCfmDmr {
+	if obj.obj.Dmr == nil {
+		obj.setChoice(FlowCfmSelectOpCodeChoice.DMR)
+	}
+	if obj.dmrHolder == nil {
+		obj.dmrHolder = &flowCfmDmr{obj: obj.obj.Dmr}
+	}
+	return obj.dmrHolder
+}
+
+// description is TBD
+// Dmr returns a FlowCfmDmr
+func (obj *flowCfmSelectOpCode) HasDmr() bool {
+	return obj.obj.Dmr != nil
+}
+
+// description is TBD
+// SetDmr sets the FlowCfmDmr value in the FlowCfmSelectOpCode object
+func (obj *flowCfmSelectOpCode) SetDmr(value FlowCfmDmr) FlowCfmSelectOpCode {
+	obj.setChoice(FlowCfmSelectOpCodeChoice.DMR)
+	obj.dmrHolder = nil
+	obj.obj.Dmr = value.msg()
+
+	return obj
+}
+
 func (obj *flowCfmSelectOpCode) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -516,6 +562,11 @@ func (obj *flowCfmSelectOpCode) validateObj(vObj *validation, set_default bool) 
 	if obj.obj.Dmm != nil {
 
 		obj.Dmm().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Dmr != nil {
+
+		obj.Dmr().validateObj(vObj, set_default)
 	}
 
 }
@@ -542,6 +593,11 @@ func (obj *flowCfmSelectOpCode) setDefault() {
 	if obj.obj.Dmm != nil {
 		choices_set += 1
 		choice = FlowCfmSelectOpCodeChoice.DMM
+	}
+
+	if obj.obj.Dmr != nil {
+		choices_set += 1
+		choice = FlowCfmSelectOpCodeChoice.DMR
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
