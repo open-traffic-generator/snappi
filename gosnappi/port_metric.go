@@ -841,7 +841,7 @@ func (obj *portMetric) SetSpeed(value uint64) PortMetric {
 	return obj
 }
 
-// The total number of PFC class 0 frames received
+// The total number of Priority Flow Control (PFC) class 0 (priority 0) pause frames received on this port, as defined by IEEE 802.1Qbb.
 // PfcClass0FramesRx returns a uint64
 func (obj *portMetric) PfcClass0FramesRx() uint64 {
 
@@ -849,13 +849,13 @@ func (obj *portMetric) PfcClass0FramesRx() uint64 {
 
 }
 
-// The total number of PFC class 0 frames received
+// The total number of Priority Flow Control (PFC) class 0 (priority 0) pause frames received on this port, as defined by IEEE 802.1Qbb.
 // PfcClass0FramesRx returns a uint64
 func (obj *portMetric) HasPfcClass0FramesRx() bool {
 	return obj.obj.PfcClass_0FramesRx != nil
 }
 
-// The total number of PFC class 0 frames received
+// The total number of Priority Flow Control (PFC) class 0 (priority 0) pause frames received on this port, as defined by IEEE 802.1Qbb.
 // SetPfcClass0FramesRx sets the uint64 value in the PortMetric object
 func (obj *portMetric) SetPfcClass0FramesRx(value uint64) PortMetric {
 
@@ -863,7 +863,7 @@ func (obj *portMetric) SetPfcClass0FramesRx(value uint64) PortMetric {
 	return obj
 }
 
-// The total number of PFC class 1 frames received
+// The total number of Priority Flow Control (PFC) class 1 (priority 1) pause frames received on this port, as defined by IEEE 802.1Qbb.
 // PfcClass1FramesRx returns a uint64
 func (obj *portMetric) PfcClass1FramesRx() uint64 {
 
@@ -871,13 +871,13 @@ func (obj *portMetric) PfcClass1FramesRx() uint64 {
 
 }
 
-// The total number of PFC class 1 frames received
+// The total number of Priority Flow Control (PFC) class 1 (priority 1) pause frames received on this port, as defined by IEEE 802.1Qbb.
 // PfcClass1FramesRx returns a uint64
 func (obj *portMetric) HasPfcClass1FramesRx() bool {
 	return obj.obj.PfcClass_1FramesRx != nil
 }
 
-// The total number of PFC class 1 frames received
+// The total number of Priority Flow Control (PFC) class 1 (priority 1) pause frames received on this port, as defined by IEEE 802.1Qbb.
 // SetPfcClass1FramesRx sets the uint64 value in the PortMetric object
 func (obj *portMetric) SetPfcClass1FramesRx(value uint64) PortMetric {
 
@@ -885,7 +885,7 @@ func (obj *portMetric) SetPfcClass1FramesRx(value uint64) PortMetric {
 	return obj
 }
 
-// The total number of PFC class 2 frames received
+// The total number of Priority Flow Control (PFC) class 2 (priority 2) pause frames received on this port, as defined by IEEE 802.1Qbb.
 // PfcClass2FramesRx returns a uint64
 func (obj *portMetric) PfcClass2FramesRx() uint64 {
 
@@ -893,13 +893,13 @@ func (obj *portMetric) PfcClass2FramesRx() uint64 {
 
 }
 
-// The total number of PFC class 2 frames received
+// The total number of Priority Flow Control (PFC) class 2 (priority 2) pause frames received on this port, as defined by IEEE 802.1Qbb.
 // PfcClass2FramesRx returns a uint64
 func (obj *portMetric) HasPfcClass2FramesRx() bool {
 	return obj.obj.PfcClass_2FramesRx != nil
 }
 
-// The total number of PFC class 2 frames received
+// The total number of Priority Flow Control (PFC) class 2 (priority 2) pause frames received on this port, as defined by IEEE 802.1Qbb.
 // SetPfcClass2FramesRx sets the uint64 value in the PortMetric object
 func (obj *portMetric) SetPfcClass2FramesRx(value uint64) PortMetric {
 
@@ -907,7 +907,7 @@ func (obj *portMetric) SetPfcClass2FramesRx(value uint64) PortMetric {
 	return obj
 }
 
-// The total number of PFC class 3 frames received
+// The total number of Priority Flow Control (PFC) class 3 (priority 3) pause frames received on this port, as defined by IEEE 802.1Qbb.
 // PfcClass3FramesRx returns a uint64
 func (obj *portMetric) PfcClass3FramesRx() uint64 {
 
@@ -915,13 +915,13 @@ func (obj *portMetric) PfcClass3FramesRx() uint64 {
 
 }
 
-// The total number of PFC class 3 frames received
+// The total number of Priority Flow Control (PFC) class 3 (priority 3) pause frames received on this port, as defined by IEEE 802.1Qbb.
 // PfcClass3FramesRx returns a uint64
 func (obj *portMetric) HasPfcClass3FramesRx() bool {
 	return obj.obj.PfcClass_3FramesRx != nil
 }
 
-// The total number of PFC class 3 frames received
+// The total number of Priority Flow Control (PFC) class 3 (priority 3) pause frames received on this port, as defined by IEEE 802.1Qbb.
 // SetPfcClass3FramesRx sets the uint64 value in the PortMetric object
 func (obj *portMetric) SetPfcClass3FramesRx(value uint64) PortMetric {
 
@@ -929,7 +929,7 @@ func (obj *portMetric) SetPfcClass3FramesRx(value uint64) PortMetric {
 	return obj
 }
 
-// The total number of PFC class 4 frames received
+// The total number of Priority Flow Control (PFC) class 4 (priority 4) pause frames received on this port, as defined by IEEE 802.1Qbb.
 // PfcClass4FramesRx returns a uint64
 func (obj *portMetric) PfcClass4FramesRx() uint64 {
 
@@ -937,13 +937,13 @@ func (obj *portMetric) PfcClass4FramesRx() uint64 {
 
 }
 
-// The total number of PFC class 4 frames received
+// The total number of Priority Flow Control (PFC) class 4 (priority 4) pause frames received on this port, as defined by IEEE 802.1Qbb.
 // PfcClass4FramesRx returns a uint64
 func (obj *portMetric) HasPfcClass4FramesRx() bool {
 	return obj.obj.PfcClass_4FramesRx != nil
 }
 
-// The total number of PFC class 4 frames received
+// The total number of Priority Flow Control (PFC) class 4 (priority 4) pause frames received on this port, as defined by IEEE 802.1Qbb.
 // SetPfcClass4FramesRx sets the uint64 value in the PortMetric object
 func (obj *portMetric) SetPfcClass4FramesRx(value uint64) PortMetric {
 
@@ -951,7 +951,7 @@ func (obj *portMetric) SetPfcClass4FramesRx(value uint64) PortMetric {
 	return obj
 }
 
-// The total number of PFC class 5 frames received
+// The total number of Priority Flow Control (PFC) class 5 (priority 5) pause frames received on this port, as defined by IEEE 802.1Qbb.
 // PfcClass5FramesRx returns a uint64
 func (obj *portMetric) PfcClass5FramesRx() uint64 {
 
@@ -959,13 +959,13 @@ func (obj *portMetric) PfcClass5FramesRx() uint64 {
 
 }
 
-// The total number of PFC class 5 frames received
+// The total number of Priority Flow Control (PFC) class 5 (priority 5) pause frames received on this port, as defined by IEEE 802.1Qbb.
 // PfcClass5FramesRx returns a uint64
 func (obj *portMetric) HasPfcClass5FramesRx() bool {
 	return obj.obj.PfcClass_5FramesRx != nil
 }
 
-// The total number of PFC class 5 frames received
+// The total number of Priority Flow Control (PFC) class 5 (priority 5) pause frames received on this port, as defined by IEEE 802.1Qbb.
 // SetPfcClass5FramesRx sets the uint64 value in the PortMetric object
 func (obj *portMetric) SetPfcClass5FramesRx(value uint64) PortMetric {
 
@@ -973,7 +973,7 @@ func (obj *portMetric) SetPfcClass5FramesRx(value uint64) PortMetric {
 	return obj
 }
 
-// The total number of PFC class 6 frames received
+// The total number of Priority Flow Control (PFC) class 6 (priority 6) pause frames received on this port, as defined by IEEE 802.1Qbb.
 // PfcClass6FramesRx returns a uint64
 func (obj *portMetric) PfcClass6FramesRx() uint64 {
 
@@ -981,13 +981,13 @@ func (obj *portMetric) PfcClass6FramesRx() uint64 {
 
 }
 
-// The total number of PFC class 6 frames received
+// The total number of Priority Flow Control (PFC) class 6 (priority 6) pause frames received on this port, as defined by IEEE 802.1Qbb.
 // PfcClass6FramesRx returns a uint64
 func (obj *portMetric) HasPfcClass6FramesRx() bool {
 	return obj.obj.PfcClass_6FramesRx != nil
 }
 
-// The total number of PFC class 6 frames received
+// The total number of Priority Flow Control (PFC) class 6 (priority 6) pause frames received on this port, as defined by IEEE 802.1Qbb.
 // SetPfcClass6FramesRx sets the uint64 value in the PortMetric object
 func (obj *portMetric) SetPfcClass6FramesRx(value uint64) PortMetric {
 
@@ -995,7 +995,7 @@ func (obj *portMetric) SetPfcClass6FramesRx(value uint64) PortMetric {
 	return obj
 }
 
-// The total number of PFC class 7 frames received
+// The total number of Priority Flow Control (PFC) class 7 (priority 7) pause frames received on this port, as defined by IEEE 802.1Qbb.
 // PfcClass7FramesRx returns a uint64
 func (obj *portMetric) PfcClass7FramesRx() uint64 {
 
@@ -1003,13 +1003,13 @@ func (obj *portMetric) PfcClass7FramesRx() uint64 {
 
 }
 
-// The total number of PFC class 7 frames received
+// The total number of Priority Flow Control (PFC) class 7 (priority 7) pause frames received on this port, as defined by IEEE 802.1Qbb.
 // PfcClass7FramesRx returns a uint64
 func (obj *portMetric) HasPfcClass7FramesRx() bool {
 	return obj.obj.PfcClass_7FramesRx != nil
 }
 
-// The total number of PFC class 7 frames received
+// The total number of Priority Flow Control (PFC) class 7 (priority 7) pause frames received on this port, as defined by IEEE 802.1Qbb.
 // SetPfcClass7FramesRx sets the uint64 value in the PortMetric object
 func (obj *portMetric) SetPfcClass7FramesRx(value uint64) PortMetric {
 

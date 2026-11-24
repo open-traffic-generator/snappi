@@ -94401,21 +94401,29 @@ type PortMetric struct {
 	// (high performance devices) is 1.6 * 1000 * 1000 * 1000 / 8 = 200000000 KBps, (iii)
 	// 10 Mbps (legacy devices) is 10 * 1000 / 8 = 1250 KBps
 	Speed *uint64 `protobuf:"varint,16,opt,name=speed,proto3,oneof" json:"speed,omitempty"`
-	// The total number of PFC class 0 frames received
+	// The total number of Priority Flow Control (PFC) class 0 (priority 0) pause frames
+	// received on this port, as defined by IEEE 802.1Qbb.
 	PfcClass_0FramesRx *uint64 `protobuf:"varint,17,opt,name=pfc_class_0_frames_rx,json=pfcClass0FramesRx,proto3,oneof" json:"pfc_class_0_frames_rx,omitempty"`
-	// The total number of PFC class 1 frames received
+	// The total number of Priority Flow Control (PFC) class 1 (priority 1) pause frames
+	// received on this port, as defined by IEEE 802.1Qbb.
 	PfcClass_1FramesRx *uint64 `protobuf:"varint,18,opt,name=pfc_class_1_frames_rx,json=pfcClass1FramesRx,proto3,oneof" json:"pfc_class_1_frames_rx,omitempty"`
-	// The total number of PFC class 2 frames received
+	// The total number of Priority Flow Control (PFC) class 2 (priority 2) pause frames
+	// received on this port, as defined by IEEE 802.1Qbb.
 	PfcClass_2FramesRx *uint64 `protobuf:"varint,19,opt,name=pfc_class_2_frames_rx,json=pfcClass2FramesRx,proto3,oneof" json:"pfc_class_2_frames_rx,omitempty"`
-	// The total number of PFC class 3 frames received
+	// The total number of Priority Flow Control (PFC) class 3 (priority 3) pause frames
+	// received on this port, as defined by IEEE 802.1Qbb.
 	PfcClass_3FramesRx *uint64 `protobuf:"varint,20,opt,name=pfc_class_3_frames_rx,json=pfcClass3FramesRx,proto3,oneof" json:"pfc_class_3_frames_rx,omitempty"`
-	// The total number of PFC class 4 frames received
+	// The total number of Priority Flow Control (PFC) class 4 (priority 4) pause frames
+	// received on this port, as defined by IEEE 802.1Qbb.
 	PfcClass_4FramesRx *uint64 `protobuf:"varint,21,opt,name=pfc_class_4_frames_rx,json=pfcClass4FramesRx,proto3,oneof" json:"pfc_class_4_frames_rx,omitempty"`
-	// The total number of PFC class 5 frames received
+	// The total number of Priority Flow Control (PFC) class 5 (priority 5) pause frames
+	// received on this port, as defined by IEEE 802.1Qbb.
 	PfcClass_5FramesRx *uint64 `protobuf:"varint,22,opt,name=pfc_class_5_frames_rx,json=pfcClass5FramesRx,proto3,oneof" json:"pfc_class_5_frames_rx,omitempty"`
-	// The total number of PFC class 6 frames received
+	// The total number of Priority Flow Control (PFC) class 6 (priority 6) pause frames
+	// received on this port, as defined by IEEE 802.1Qbb.
 	PfcClass_6FramesRx *uint64 `protobuf:"varint,23,opt,name=pfc_class_6_frames_rx,json=pfcClass6FramesRx,proto3,oneof" json:"pfc_class_6_frames_rx,omitempty"`
-	// The total number of PFC class 7 frames received
+	// The total number of Priority Flow Control (PFC) class 7 (priority 7) pause frames
+	// received on this port, as defined by IEEE 802.1Qbb.
 	PfcClass_7FramesRx *uint64 `protobuf:"varint,24,opt,name=pfc_class_7_frames_rx,json=pfcClass7FramesRx,proto3,oneof" json:"pfc_class_7_frames_rx,omitempty"`
 }
 

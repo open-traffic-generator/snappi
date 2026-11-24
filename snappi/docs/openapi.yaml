@@ -23210,49 +23210,49 @@ components:
           x-field-uid: 16
         pfc_class_0_frames_rx:
           description: |-
-            The total number of PFC class 0 frames received
+            The total number of Priority Flow Control (PFC) class 0 (priority 0) pause frames received on this port, as defined by IEEE 802.1Qbb.
           type: integer
           format: uint64
           x-field-uid: 17
         pfc_class_1_frames_rx:
           description: |-
-            The total number of PFC class 1 frames received
+            The total number of Priority Flow Control (PFC) class 1 (priority 1) pause frames received on this port, as defined by IEEE 802.1Qbb.
           type: integer
           format: uint64
           x-field-uid: 18
         pfc_class_2_frames_rx:
           description: |-
-            The total number of PFC class 2 frames received
+            The total number of Priority Flow Control (PFC) class 2 (priority 2) pause frames received on this port, as defined by IEEE 802.1Qbb.
           type: integer
           format: uint64
           x-field-uid: 19
         pfc_class_3_frames_rx:
           description: |-
-            The total number of PFC class 3 frames received
+            The total number of Priority Flow Control (PFC) class 3 (priority 3) pause frames received on this port, as defined by IEEE 802.1Qbb.
           type: integer
           format: uint64
           x-field-uid: 20
         pfc_class_4_frames_rx:
           description: |-
-            The total number of PFC class 4 frames received
+            The total number of Priority Flow Control (PFC) class 4 (priority 4) pause frames received on this port, as defined by IEEE 802.1Qbb.
           type: integer
           format: uint64
           x-field-uid: 21
         pfc_class_5_frames_rx:
           description: |-
-            The total number of PFC class 5 frames received
+            The total number of Priority Flow Control (PFC) class 5 (priority 5) pause frames received on this port, as defined by IEEE 802.1Qbb.
           type: integer
           format: uint64
           x-field-uid: 22
         pfc_class_6_frames_rx:
           description: |-
-            The total number of PFC class 6 frames received
+            The total number of Priority Flow Control (PFC) class 6 (priority 6) pause frames received on this port, as defined by IEEE 802.1Qbb.
           type: integer
           format: uint64
           x-field-uid: 23
         pfc_class_7_frames_rx:
           description: |-
-            The total number of PFC class 7 frames received
+            The total number of Priority Flow Control (PFC) class 7 (priority 7) pause frames received on this port, as defined by IEEE 802.1Qbb.
           type: integer
           format: uint64
           x-field-uid: 24

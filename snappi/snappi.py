@@ -185644,7 +185644,7 @@ class PortMetric(OpenApiObject):
         # type: () -> int
         """pfc_class_0_frames_rx getter
 
-        The total number of PFC class frames received
+        The total number of Priority Flow Control (PFC) class (priority 0) pause frames received on this port, as defined by IEEE 802.1Qbb.
 
         Returns: int
         """
@@ -185654,7 +185654,7 @@ class PortMetric(OpenApiObject):
     def pfc_class_0_frames_rx(self, value):
         """pfc_class_0_frames_rx setter
 
-        The total number of PFC class frames received
+        The total number of Priority Flow Control (PFC) class (priority 0) pause frames received on this port, as defined by IEEE 802.1Qbb.
 
         value: int
         """
@@ -185665,7 +185665,7 @@ class PortMetric(OpenApiObject):
         # type: () -> int
         """pfc_class_1_frames_rx getter
 
-        The total number of PFC class frames received
+        The total number of Priority Flow Control (PFC) class (priority 1) pause frames received on this port, as defined by IEEE 802.1Qbb.
 
         Returns: int
         """
@@ -185675,7 +185675,7 @@ class PortMetric(OpenApiObject):
     def pfc_class_1_frames_rx(self, value):
         """pfc_class_1_frames_rx setter
 
-        The total number of PFC class frames received
+        The total number of Priority Flow Control (PFC) class (priority 1) pause frames received on this port, as defined by IEEE 802.1Qbb.
 
         value: int
         """
@@ -185686,7 +185686,7 @@ class PortMetric(OpenApiObject):
         # type: () -> int
         """pfc_class_2_frames_rx getter
 
-        The total number of PFC class frames received
+        The total number of Priority Flow Control (PFC) class (priority 2) pause frames received on this port, as defined by IEEE 802.1Qbb.
 
         Returns: int
         """
@@ -185696,7 +185696,7 @@ class PortMetric(OpenApiObject):
     def pfc_class_2_frames_rx(self, value):
         """pfc_class_2_frames_rx setter
 
-        The total number of PFC class frames received
+        The total number of Priority Flow Control (PFC) class (priority 2) pause frames received on this port, as defined by IEEE 802.1Qbb.
 
         value: int
         """
@@ -185707,7 +185707,7 @@ class PortMetric(OpenApiObject):
         # type: () -> int
         """pfc_class_3_frames_rx getter
 
-        The total number of PFC class frames received
+        The total number of Priority Flow Control (PFC) class (priority 3) pause frames received on this port, as defined by IEEE 802.1Qbb.
 
         Returns: int
         """
@@ -185717,7 +185717,7 @@ class PortMetric(OpenApiObject):
     def pfc_class_3_frames_rx(self, value):
         """pfc_class_3_frames_rx setter
 
-        The total number of PFC class frames received
+        The total number of Priority Flow Control (PFC) class (priority 3) pause frames received on this port, as defined by IEEE 802.1Qbb.
 
         value: int
         """
@@ -185728,7 +185728,7 @@ class PortMetric(OpenApiObject):
         # type: () -> int
         """pfc_class_4_frames_rx getter
 
-        The total number of PFC class frames received
+        The total number of Priority Flow Control (PFC) class (priority 4) pause frames received on this port, as defined by IEEE 802.1Qbb.
 
         Returns: int
         """
@@ -185738,7 +185738,7 @@ class PortMetric(OpenApiObject):
     def pfc_class_4_frames_rx(self, value):
         """pfc_class_4_frames_rx setter
 
-        The total number of PFC class frames received
+        The total number of Priority Flow Control (PFC) class (priority 4) pause frames received on this port, as defined by IEEE 802.1Qbb.
 
         value: int
         """
@@ -185749,7 +185749,7 @@ class PortMetric(OpenApiObject):
         # type: () -> int
         """pfc_class_5_frames_rx getter
 
-        The total number of PFC class frames received
+        The total number of Priority Flow Control (PFC) class (priority 5) pause frames received on this port, as defined by IEEE 802.1Qbb.
 
         Returns: int
         """
@@ -185759,7 +185759,7 @@ class PortMetric(OpenApiObject):
     def pfc_class_5_frames_rx(self, value):
         """pfc_class_5_frames_rx setter
 
-        The total number of PFC class frames received
+        The total number of Priority Flow Control (PFC) class (priority 5) pause frames received on this port, as defined by IEEE 802.1Qbb.
 
         value: int
         """
@@ -185770,7 +185770,7 @@ class PortMetric(OpenApiObject):
         # type: () -> int
         """pfc_class_6_frames_rx getter
 
-        The total number of PFC class frames received
+        The total number of Priority Flow Control (PFC) class (priority 6) pause frames received on this port, as defined by IEEE 802.1Qbb.
 
         Returns: int
         """
@@ -185780,7 +185780,7 @@ class PortMetric(OpenApiObject):
     def pfc_class_6_frames_rx(self, value):
         """pfc_class_6_frames_rx setter
 
-        The total number of PFC class frames received
+        The total number of Priority Flow Control (PFC) class (priority 6) pause frames received on this port, as defined by IEEE 802.1Qbb.
 
         value: int
         """
@@ -185791,7 +185791,7 @@ class PortMetric(OpenApiObject):
         # type: () -> int
         """pfc_class_7_frames_rx getter
 
-        The total number of PFC class frames received
+        The total number of Priority Flow Control (PFC) class (priority 7) pause frames received on this port, as defined by IEEE 802.1Qbb.
 
         Returns: int
         """
@@ -185801,7 +185801,7 @@ class PortMetric(OpenApiObject):
     def pfc_class_7_frames_rx(self, value):
         """pfc_class_7_frames_rx setter
 
-        The total number of PFC class frames received
+        The total number of Priority Flow Control (PFC) class (priority 7) pause frames received on this port, as defined by IEEE 802.1Qbb.
 
         value: int
         """
