@@ -11528,6 +11528,7 @@ message FlowHeader {
       lacp = 23;
       ipv6_extension_header = 24;
       cfm = 25;
+      igmpv2 = 26;
     }
   }
   // The available types of flow headers. If one is not provided the
@@ -11609,6 +11610,9 @@ message FlowHeader {
 
   // Description missing in models
   FlowCfm cfm = 26;
+
+  // Description missing in models
+  FlowIgmpv2 igmpv2 = 27;
 }
 
 // Custom packet header
@@ -14781,6 +14785,39 @@ message FlowCfmLength {
   // Description missing in models
   // default = 1
   optional uint32 value = 3;
+}
+
+// Packet Header for IGMP version 2 (RFC 2236 Section 2): an 8 octet message carried
+// directly in IPv4. A conforming message is sent with IP protocol 2, TTL 1, IP precedence
+// Internetwork Control (ToS 0xc0) and the IP Router Alert option (RFC 2236 Section
+// 2, RFC 2113).
+// RFC requirements described for this header (MUST / MUST NOT) apply to a conforming
+// packet. The model does not enforce them, so any value the fields can encode may be
+// configured for conformance and negative testing.
+// The IPv4 and Ethernet destinations are set in their own headers. Use these values
+// (RFC 2236 Section 3):
+// 
+// General Query:        IPv4 dst 224.0.0.1, group_address 0.0.0.0
+// Group-Specific Query: IPv4 dst = group, group_address = group
+// v2 Membership Report: IPv4 dst = group, group_address = group
+// Leave Group:          IPv4 dst 224.0.0.2, group_address = group
+// 
+// Ethernet dst = 01:00:5e + the low 23 bits of the IPv4 destination (RFC 1112 Section
+// 6.4). Example: 224.0.0.1 gives 01:00:5e:00:00:01 and 239.1.2.3 gives 01:00:5e:01:02:03.
+// Only 23 bits are used, so 239.129.2.3 maps to the same MAC as 239.1.2.3.
+message FlowIgmpv2 {
+
+  // Description missing in models
+  PatternFlowIgmpv2Type type = 1;
+
+  // Description missing in models
+  PatternFlowIgmpv2MaxResponseTime max_response_time = 2;
+
+  // Description missing in models
+  PatternFlowIgmpv2Checksum checksum = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv2GroupAddress group_address = 4;
 }
 
 // The frame size which overrides the total length of the packet
@@ -26315,7 +26352,11 @@ message PatternFlowIpv4ProtocolMetricTag {
   optional uint32 length = 3;
 }
 
-// Protocol, default is 61 any host internal protocol
+// Protocol number of the payload (IANA Assigned Internet Protocol Numbers). When auto,
+// the implementation should set it from the next header in the packet (for example
+// igmp 2, tcp 6, udp 17). If it cannot be derived, for example the next header is custom
+// or there is none, the value 61 (any host internal protocol) is used. Choose value
+// to override auto.
 message PatternFlowIpv4Protocol {
 
   message Choice {
@@ -26549,7 +26590,9 @@ message PatternFlowIpv4DstRandom {
   optional uint32 count = 4;
 }
 
-// Destination address
+// Destination address. When this is a multicast address, the Ethernet destination should
+// be 01:00:5e followed by the low 23 bits of this address (RFC 1112 Section 6.4), for
+// example 224.0.0.1 maps to 01:00:5e:00:00:01.
 message PatternFlowIpv4Dst {
 
   message Choice {
@@ -41819,6 +41862,193 @@ message PatternFlowCfmTlvsLength {
 
   // Description missing in models
   PatternFlowCfmTlvsLengthCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv2TypeCounter {
+
+  // Description missing in models
+  // default = 17
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// IGMP message type (RFC 2236 Section 2.1). Default 17 (0x11) is a Membership Query,
+// general or group-specific depending on group_address. 18 (0x12) is the IGMPv1 Membership
+// Report, accepted by IGMPv2 for backward compatibility. 22 (0x16) is the IGMPv2 Membership
+// Report and 23 (0x17) is Leave Group.
+message PatternFlowIgmpv2Type {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 17
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [17]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv2TypeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv2TypeCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv2MaxResponseTimeCounter {
+
+  // Description missing in models
+  // default = 100
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Maximum response time in units of 1/10 second (RFC 2236 Section 2.2), so 100 is 10
+// seconds and 255 is 25.5 seconds. Meaningful only in Membership Query messages. In
+// a conforming Membership Report or Leave Group it is set to zero by the sender and
+// ignored by the receiver; the default is 100, so set 0 explicitly when building those
+// messages.
+message PatternFlowIgmpv2MaxResponseTime {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 100
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [100]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv2MaxResponseTimeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv2MaxResponseTimeCounter decrement = 6;
+}
+
+// IGMP checksum (RFC 2236 Section 2.3): the 16-bit one's complement of the one's complement
+// sum of the entire IGMP message (the IP payload). Unlike ICMPv6 there is no pseudo-header,
+// so it depends only on the fields of this header. The generated choice is computed
+// for every packet, so the value differs between packets when type, max_response_time
+// or group_address vary across the flow; bad is a deliberately incorrect value. The
+// custom choice is one fixed value sent in every packet and is not updated when other
+// fields vary. An implementation that cannot generate the checksum for a configuration
+// should reject it with an error rather than send a different value.
+message PatternFlowIgmpv2Checksum {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      generated = 1;
+      custom = 2;
+    }
+  }
+  // The type of checksum
+  // default = Choice.Enum.generated
+  optional Choice.Enum choice = 1;
+
+  message Generated {
+    enum Enum {
+      unspecified = 0;
+      good = 1;
+      bad = 2;
+    }
+  }
+  // A system generated checksum value
+  // default = Generated.Enum.good
+  optional Generated.Enum generated = 2;
+
+  // A custom checksum value
+  optional uint32 custom = 3;
+}
+
+// ipv4 counter pattern
+message PatternFlowIgmpv2GroupAddressCounter {
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string start = 1;
+
+  // Description missing in models
+  // default = 0.0.0.1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Group address (RFC 2236 Section 2.4). Zero in a general Membership Query; the group
+// being queried in a Group-Specific Query; the group being reported or left in a Membership
+// Report or Leave Group. In a conforming packet a non-zero value is a multicast group
+// address.
+message PatternFlowIgmpv2GroupAddress {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['0.0.0.0']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv2GroupAddressCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv2GroupAddressCounter decrement = 6;
 }
 
 // Version details

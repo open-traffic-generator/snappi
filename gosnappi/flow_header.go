@@ -41,6 +41,7 @@ type flowHeader struct {
 	lacpHolder                FlowLacp
 	ipv6ExtensionHeaderHolder FlowIpv6ExtHeader
 	cfmHolder                 FlowCfm
+	igmpv2Holder              FlowIgmpv2
 }
 
 func NewFlowHeader() FlowHeader {
@@ -293,6 +294,7 @@ func (obj *flowHeader) setNil() {
 	obj.lacpHolder = nil
 	obj.ipv6ExtensionHeaderHolder = nil
 	obj.cfmHolder = nil
+	obj.igmpv2Holder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -524,6 +526,32 @@ type FlowHeader interface {
 	SetCfm(value FlowCfm) FlowHeader
 	// HasCfm checks if Cfm has been set in FlowHeader
 	HasCfm() bool
+	// Igmpv2 returns FlowIgmpv2, set in FlowHeader.
+	// FlowIgmpv2 is packet Header for IGMP version 2 (RFC 2236 Section 2): an 8 octet message carried directly in IPv4. A conforming message is sent with IP protocol 2, TTL 1, IP precedence Internetwork Control (ToS 0xc0) and the IP Router Alert option (RFC 2236 Section 2, RFC 2113).
+	// RFC requirements described for this header (MUST / MUST NOT) apply to a conforming packet. The model does not enforce them, so any value the fields can encode may be configured for conformance and negative testing.
+	// The IPv4 and Ethernet destinations are set in their own headers. Use these values (RFC 2236 Section 3):
+	//
+	// General Query:        IPv4 dst 224.0.0.1, group_address 0.0.0.0
+	// Group-Specific Query: IPv4 dst = group, group_address = group
+	// v2 Membership Report: IPv4 dst = group, group_address = group
+	// Leave Group:          IPv4 dst 224.0.0.2, group_address = group
+	//
+	// Ethernet dst = 01:00:5e + the low 23 bits of the IPv4 destination (RFC 1112 Section 6.4). Example: 224.0.0.1 gives 01:00:5e:00:00:01 and 239.1.2.3 gives 01:00:5e:01:02:03. Only 23 bits are used, so 239.129.2.3 maps to the same MAC as 239.1.2.3.
+	Igmpv2() FlowIgmpv2
+	// SetIgmpv2 assigns FlowIgmpv2 provided by user to FlowHeader.
+	// FlowIgmpv2 is packet Header for IGMP version 2 (RFC 2236 Section 2): an 8 octet message carried directly in IPv4. A conforming message is sent with IP protocol 2, TTL 1, IP precedence Internetwork Control (ToS 0xc0) and the IP Router Alert option (RFC 2236 Section 2, RFC 2113).
+	// RFC requirements described for this header (MUST / MUST NOT) apply to a conforming packet. The model does not enforce them, so any value the fields can encode may be configured for conformance and negative testing.
+	// The IPv4 and Ethernet destinations are set in their own headers. Use these values (RFC 2236 Section 3):
+	//
+	// General Query:        IPv4 dst 224.0.0.1, group_address 0.0.0.0
+	// Group-Specific Query: IPv4 dst = group, group_address = group
+	// v2 Membership Report: IPv4 dst = group, group_address = group
+	// Leave Group:          IPv4 dst 224.0.0.2, group_address = group
+	//
+	// Ethernet dst = 01:00:5e + the low 23 bits of the IPv4 destination (RFC 1112 Section 6.4). Example: 224.0.0.1 gives 01:00:5e:00:00:01 and 239.1.2.3 gives 01:00:5e:01:02:03. Only 23 bits are used, so 239.129.2.3 maps to the same MAC as 239.1.2.3.
+	SetIgmpv2(value FlowIgmpv2) FlowHeader
+	// HasIgmpv2 checks if Igmpv2 has been set in FlowHeader
+	HasIgmpv2() bool
 	setNil()
 }
 
@@ -556,6 +584,7 @@ var FlowHeaderChoice = struct {
 	LACP                  FlowHeaderChoiceEnum
 	IPV6_EXTENSION_HEADER FlowHeaderChoiceEnum
 	CFM                   FlowHeaderChoiceEnum
+	IGMPV2                FlowHeaderChoiceEnum
 }{
 	CUSTOM:                FlowHeaderChoiceEnum("custom"),
 	ETHERNET:              FlowHeaderChoiceEnum("ethernet"),
@@ -582,6 +611,7 @@ var FlowHeaderChoice = struct {
 	LACP:                  FlowHeaderChoiceEnum("lacp"),
 	IPV6_EXTENSION_HEADER: FlowHeaderChoiceEnum("ipv6_extension_header"),
 	CFM:                   FlowHeaderChoiceEnum("cfm"),
+	IGMPV2:                FlowHeaderChoiceEnum("igmpv2"),
 }
 
 func (obj *flowHeader) Choice() FlowHeaderChoiceEnum {
@@ -604,6 +634,8 @@ func (obj *flowHeader) setChoice(value FlowHeaderChoiceEnum) FlowHeader {
 	}
 	enumValue := otg.FlowHeader_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Igmpv2 = nil
+	obj.igmpv2Holder = nil
 	obj.obj.Cfm = nil
 	obj.cfmHolder = nil
 	obj.obj.Ipv6ExtensionHeader = nil
@@ -753,6 +785,10 @@ func (obj *flowHeader) setChoice(value FlowHeaderChoiceEnum) FlowHeader {
 
 	if value == FlowHeaderChoice.CFM {
 		obj.obj.Cfm = NewFlowCfm().msg()
+	}
+
+	if value == FlowHeaderChoice.IGMPV2 {
+		obj.obj.Igmpv2 = NewFlowIgmpv2().msg()
 	}
 
 	return obj
@@ -1458,6 +1494,34 @@ func (obj *flowHeader) SetCfm(value FlowCfm) FlowHeader {
 	return obj
 }
 
+// description is TBD
+// Igmpv2 returns a FlowIgmpv2
+func (obj *flowHeader) Igmpv2() FlowIgmpv2 {
+	if obj.obj.Igmpv2 == nil {
+		obj.setChoice(FlowHeaderChoice.IGMPV2)
+	}
+	if obj.igmpv2Holder == nil {
+		obj.igmpv2Holder = &flowIgmpv2{obj: obj.obj.Igmpv2}
+	}
+	return obj.igmpv2Holder
+}
+
+// description is TBD
+// Igmpv2 returns a FlowIgmpv2
+func (obj *flowHeader) HasIgmpv2() bool {
+	return obj.obj.Igmpv2 != nil
+}
+
+// description is TBD
+// SetIgmpv2 sets the FlowIgmpv2 value in the FlowHeader object
+func (obj *flowHeader) SetIgmpv2(value FlowIgmpv2) FlowHeader {
+	obj.setChoice(FlowHeaderChoice.IGMPV2)
+	obj.igmpv2Holder = nil
+	obj.obj.Igmpv2 = value.msg()
+
+	return obj
+}
+
 func (obj *flowHeader) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1586,6 +1650,11 @@ func (obj *flowHeader) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Cfm != nil {
 
 		obj.Cfm().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Igmpv2 != nil {
+
+		obj.Igmpv2().validateObj(vObj, set_default)
 	}
 
 }
@@ -1717,6 +1786,11 @@ func (obj *flowHeader) setDefault() {
 	if obj.obj.Cfm != nil {
 		choices_set += 1
 		choice = FlowHeaderChoice.CFM
+	}
+
+	if obj.obj.Igmpv2 != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.IGMPV2
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

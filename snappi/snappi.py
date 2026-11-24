@@ -55822,6 +55822,7 @@ class FlowHeader(OpenApiObject):
                 "lacp",
                 "ipv6_extension_header",
                 "cfm",
+                "igmpv2",
             ],
         },
         "custom": {"type": "FlowCustom"},
@@ -55849,6 +55850,7 @@ class FlowHeader(OpenApiObject):
         "lacp": {"type": "FlowLacp"},
         "ipv6_extension_header": {"type": "FlowIpv6ExtHeader"},
         "cfm": {"type": "FlowCfm"},
+        "igmpv2": {"type": "FlowIgmpv2"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -55882,6 +55884,7 @@ class FlowHeader(OpenApiObject):
     LACP = "lacp"  # type: str
     IPV6_EXTENSION_HEADER = "ipv6_extension_header"  # type: str
     CFM = "cfm"  # type: str
+    IGMPV2 = "igmpv2"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -56177,13 +56180,24 @@ class FlowHeader(OpenApiObject):
         return self._get_property("cfm", FlowCfm, self, "cfm")
 
     @property
+    def igmpv2(self):
+        # type: () -> FlowIgmpv2
+        """Factory property that returns an instance of the FlowIgmpv2 class
+
+        Packet Header for IGMP version (RFC 2236 Section 2): an octet message carried directly in IPv4. conforming message is sent with IP protocol 2, TTL 1, IP precedence Internetwork Control (ToS 0xc0) and the IP Router Alert option (RFC 2236 Section 2, RFC 2113).. RFC requirements described for this header (MUST MUST NOT) apply to conforming packet. The model does not enforce them, so any value the fields can encode may be configured for conformance and negative testing.. The IPv4 and Ethernet destinations are set in their own headers. Use these values (RFC 2236 Section 3):. General Query: IPv4 dst 224.0.0.1, group_address 0.0.0.0. Group-Specific Query: IPv4 dst group, group_address group. v2 Membership Report: IPv4 dst group, group_address group. Leave Group: IPv4 dst 224.0.0.2, group_address group. Ethernet dst 01:00:5e the low 23 bits of the IPv4 destination (RFC 1112 Section 6.4). Example: 224.0.0.1 gives 01:00:5e:00:00:01 and 239.1.2.3 gives 01:00:5e:01:02:03. Only 23 bits are used, so 239.129.2.3 maps to the same MAC as 239.1.2.3.
+
+        Returns: FlowIgmpv2
+        """
+        return self._get_property("igmpv2", FlowIgmpv2, self, "igmpv2")
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["arp"], Literal["cfm"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["ipv6_extension_header"], Literal["lacp"], Literal["macsec"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["rsvp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
+        # type: () -> Union[Literal["arp"], Literal["cfm"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["igmpv2"], Literal["ipv4"], Literal["ipv6"], Literal["ipv6_extension_header"], Literal["lacp"], Literal["macsec"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["rsvp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
         """choice getter
 
         The available types of flow headers. If one is not provided the default ethernet packet header MUST be provided.
 
-        Returns: Union[Literal["arp"], Literal["cfm"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["ipv6_extension_header"], Literal["lacp"], Literal["macsec"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["rsvp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
+        Returns: Union[Literal["arp"], Literal["cfm"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["igmpv2"], Literal["ipv4"], Literal["ipv6"], Literal["ipv6_extension_header"], Literal["lacp"], Literal["macsec"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["rsvp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
         """
         return self._get_property("choice")
 
@@ -56193,7 +56207,7 @@ class FlowHeader(OpenApiObject):
 
         The available types of flow headers. If one is not provided the default ethernet packet header MUST be provided.
 
-        value: Union[Literal["arp"], Literal["cfm"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["ipv6_extension_header"], Literal["lacp"], Literal["macsec"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["rsvp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
+        value: Union[Literal["arp"], Literal["cfm"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["igmpv2"], Literal["ipv4"], Literal["ipv6"], Literal["ipv6_extension_header"], Literal["lacp"], Literal["macsec"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["rsvp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
         """
         self._set_property("choice", value)
 
@@ -62139,7 +62153,7 @@ class FlowIpv4(OpenApiObject):
         # type: () -> PatternFlowIpv4Protocol
         """protocol getter
 
-        Protocol, default is 61 any host internal protocolProtocol, default is 61 any host internal protocolProtocol, default is 61 any host internal protocolProtocol, default is 61 any host internal protocol
+        Protocol number of the payload (IANA Assigned Internet Protocol Numbers). When auto, the implementation should set it from the next header in the packet (for example igmp 2, tcp 6, udp 17). If it cannot be derived, for example the next header is custom or there is none, the value 61 (any host internal protocol) is used. Choose value to override auto.Protocol number of the payload (IANA Assigned Internet Protocol Numbers). When auto, the implementation should set it from the next header in the packet (for example igmp 2, tcp 6, udp 17). If it cannot be derived, for example the next header is custom or there is none, the value 61 (any host internal protocol) is used. Choose value to override auto.Protocol number of the payload (IANA Assigned Internet Protocol Numbers). When auto, the implementation should set it from the next header in the packet (for example igmp 2, tcp 6, udp 17). If it cannot be derived, for example the next header is custom or there is none, the value 61 (any host internal protocol) is used. Choose value to override auto.Protocol number of the payload (IANA Assigned Internet Protocol Numbers). When auto, the implementation should set it from the next header in the packet (for example igmp 2, tcp 6, udp 17). If it cannot be derived, for example the next header is custom or there is none, the value 61 (any host internal protocol) is used. Choose value to override auto.
 
         Returns: PatternFlowIpv4Protocol
         """
@@ -62172,7 +62186,7 @@ class FlowIpv4(OpenApiObject):
         # type: () -> PatternFlowIpv4Dst
         """dst getter
 
-        Destination addressDestination addressDestination addressDestination address
+        Destination address. When this is multicast address, the Ethernet destination should be 01:00:5e followed by the low 23 bits of this address (RFC 1112 Section 6.4), for example 224.0.0.1 maps to 01:00:5e:00:00:01.Destination address. When this is multicast address, the Ethernet destination should be 01:00:5e followed by the low 23 bits of this address (RFC 1112 Section 6.4), for example 224.0.0.1 maps to 01:00:5e:00:00:01.Destination address. When this is multicast address, the Ethernet destination should be 01:00:5e followed by the low 23 bits of this address (RFC 1112 Section 6.4), for example 224.0.0.1 maps to 01:00:5e:00:00:01.Destination address. When this is multicast address, the Ethernet destination should be 01:00:5e followed by the low 23 bits of this address (RFC 1112 Section 6.4), for example 224.0.0.1 maps to 01:00:5e:00:00:01.
 
         Returns: PatternFlowIpv4Dst
         """
@@ -70554,6 +70568,15 @@ class PatternFlowIpv4Protocol(OpenApiObject):
         "auto": 61,
     }  # type: Dict[str, Union(type)]
 
+    ICMP = 1  #
+    IGMP = 2  #
+    IP_IN_IP = 4  #
+    TCP = 6  #
+    UDP = 17  #
+    IPV6 = 41  #
+    RSVP = 46  #
+    GRE = 47  #
+
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
     AUTO = "auto"  # type: str
@@ -70727,6 +70750,15 @@ class PatternFlowIpv4ProtocolCounter(OpenApiObject):
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
+
+    ICMP = 1  #
+    IGMP = 2  #
+    IP_IN_IP = 4  #
+    TCP = 6  #
+    UDP = 17  #
+    IPV6 = 41  #
+    RSVP = 46  #
+    GRE = 47  #
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -167459,6 +167491,976 @@ class PatternFlowCfmLbrTransactionIdCounter(OpenApiObject):
         self._set_property("count", value)
 
 
+class FlowIgmpv2(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "type": {"type": "PatternFlowIgmpv2Type"},
+        "max_response_time": {"type": "PatternFlowIgmpv2MaxResponseTime"},
+        "checksum": {"type": "PatternFlowIgmpv2Checksum"},
+        "group_address": {"type": "PatternFlowIgmpv2GroupAddress"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowIgmpv2, self).__init__()
+        self._parent = parent
+
+    @property
+    def type(self):
+        # type: () -> PatternFlowIgmpv2Type
+        """type getter
+
+        IGMP message type (RFC 2236 Section 2.1). Default 17 (0x11) is Membership Query, general or group-specific depending on group_address. 18 (0x12) is the IGMPv1 Membership Report, accepted by IGMPv2 for backward compatibility. 22 (0x16) is the IGMPv2 Membership Report and 23 (0x17) is Leave Group.IGMP message type (RFC 2236 Section 2.1). Default 17 (0x11) is Membership Query, general or group-specific depending on group_address. 18 (0x12) is the IGMPv1 Membership Report, accepted by IGMPv2 for backward compatibility. 22 (0x16) is the IGMPv2 Membership Report and 23 (0x17) is Leave Group.IGMP message type (RFC 2236 Section 2.1). Default 17 (0x11) is Membership Query, general or group-specific depending on group_address. 18 (0x12) is the IGMPv1 Membership Report, accepted by IGMPv2 for backward compatibility. 22 (0x16) is the IGMPv2 Membership Report and 23 (0x17) is Leave Group.IGMP message type (RFC 2236 Section 2.1). Default 17 (0x11) is Membership Query, general or group-specific depending on group_address. 18 (0x12) is the IGMPv1 Membership Report, accepted by IGMPv2 for backward compatibility. 22 (0x16) is the IGMPv2 Membership Report and 23 (0x17) is Leave Group.
+
+        Returns: PatternFlowIgmpv2Type
+        """
+        return self._get_property("type", PatternFlowIgmpv2Type)
+
+    @property
+    def max_response_time(self):
+        # type: () -> PatternFlowIgmpv2MaxResponseTime
+        """max_response_time getter
+
+        Maximum response time in units of 1/10 second (RFC 2236 Section 2.2), so 100 is 10 seconds and 255 is 25.5 seconds. Meaningful only in Membership Query messages. In conforming Membership Report or Leave Group it is set to zero by the sender and ignored by the receiver; the default is 100, so set explicitly when building those messages.Maximum response time in units of 1/10 second (RFC 2236 Section 2.2), so 100 is 10 seconds and 255 is 25.5 seconds. Meaningful only in Membership Query messages. In conforming Membership Report or Leave Group it is set to zero by the sender and ignored by the receiver; the default is 100, so set explicitly when building those messages.Maximum response time in units of 1/10 second (RFC 2236 Section 2.2), so 100 is 10 seconds and 255 is 25.5 seconds. Meaningful only in Membership Query messages. In conforming Membership Report or Leave Group it is set to zero by the sender and ignored by the receiver; the default is 100, so set explicitly when building those messages.Maximum response time in units of 1/10 second (RFC 2236 Section 2.2), so 100 is 10 seconds and 255 is 25.5 seconds. Meaningful only in Membership Query messages. In conforming Membership Report or Leave Group it is set to zero by the sender and ignored by the receiver; the default is 100, so set explicitly when building those messages.
+
+        Returns: PatternFlowIgmpv2MaxResponseTime
+        """
+        return self._get_property("max_response_time", PatternFlowIgmpv2MaxResponseTime)
+
+    @property
+    def checksum(self):
+        # type: () -> PatternFlowIgmpv2Checksum
+        """checksum getter
+
+        IGMP checksum (RFC 2236 Section 2.3): the 16-bit one's complement of the one's complement sum of the entire IGMP message (the IP payload). Unlike ICMPv6 there is no pseudo-header, so it depends only on the fields of this header. The generated choice is computed for every packet, so the value differs between packets when type, max_response_time or group_address vary across the flow; bad is deliberately incorrect value. The custom choice is one fixed value sent in every packet and is not updated when other fields vary. An implementation that cannot generate the checksum for configuration should reject it with an error rather than send different value.IGMP checksum (RFC 2236 Section 2.3): the 16-bit one's complement of the one's complement sum of the entire IGMP message (the IP payload). Unlike ICMPv6 there is no pseudo-header, so it depends only on the fields of this header. The generated choice is computed for every packet, so the value differs between packets when type, max_response_time or group_address vary across the flow; bad is deliberately incorrect value. The custom choice is one fixed value sent in every packet and is not updated when other fields vary. An implementation that cannot generate the checksum for configuration should reject it with an error rather than send different value.IGMP checksum (RFC 2236 Section 2.3): the 16-bit one's complement of the one's complement sum of the entire IGMP message (the IP payload). Unlike ICMPv6 there is no pseudo-header, so it depends only on the fields of this header. The generated choice is computed for every packet, so the value differs between packets when type, max_response_time or group_address vary across the flow; bad is deliberately incorrect value. The custom choice is one fixed value sent in every packet and is not updated when other fields vary. An implementation that cannot generate the checksum for configuration should reject it with an error rather than send different value.IGMP checksum (RFC 2236 Section 2.3): the 16-bit one's complement of the one's complement sum of the entire IGMP message (the IP payload). Unlike ICMPv6 there is no pseudo-header, so it depends only on the fields of this header. The generated choice is computed for every packet, so the value differs between packets when type, max_response_time or group_address vary across the flow; bad is deliberately incorrect value. The custom choice is one fixed value sent in every packet and is not updated when other fields vary. An implementation that cannot generate the checksum for configuration should reject it with an error rather than send different value.
+
+        Returns: PatternFlowIgmpv2Checksum
+        """
+        return self._get_property("checksum", PatternFlowIgmpv2Checksum)
+
+    @property
+    def group_address(self):
+        # type: () -> PatternFlowIgmpv2GroupAddress
+        """group_address getter
+
+        Group address (RFC 2236 Section 2.4). Zero in general Membership Query; the group being queried in Group-Specific Query; the group being reported or left in Membership Report or Leave Group. In conforming packet non-zero value is multicast group address.Group address (RFC 2236 Section 2.4). Zero in general Membership Query; the group being queried in Group-Specific Query; the group being reported or left in Membership Report or Leave Group. In conforming packet non-zero value is multicast group address.Group address (RFC 2236 Section 2.4). Zero in general Membership Query; the group being queried in Group-Specific Query; the group being reported or left in Membership Report or Leave Group. In conforming packet non-zero value is multicast group address.Group address (RFC 2236 Section 2.4). Zero in general Membership Query; the group being queried in Group-Specific Query; the group being reported or left in Membership Report or Leave Group. In conforming packet non-zero value is multicast group address.
+
+        Returns: PatternFlowIgmpv2GroupAddress
+        """
+        return self._get_property("group_address", PatternFlowIgmpv2GroupAddress)
+
+
+class PatternFlowIgmpv2Type(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "increment": {"type": "PatternFlowIgmpv2TypeCounter"},
+        "decrement": {"type": "PatternFlowIgmpv2TypeCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 17,
+        "values": [17],
+    }  # type: Dict[str, Union(type)]
+
+    MEMBERSHIP_QUERY = 17  #
+    V1_MEMBERSHIP_REPORT = 18  #
+    V2_MEMBERSHIP_REPORT = 22  #
+    LEAVE_GROUP = 23  #
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=17, values=[17]):
+        super(PatternFlowIgmpv2Type, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIgmpv2TypeCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv2TypeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv2TypeCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowIgmpv2TypeCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIgmpv2TypeCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv2TypeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv2TypeCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowIgmpv2TypeCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIgmpv2TypeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 17,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    MEMBERSHIP_QUERY = 17  #
+    V1_MEMBERSHIP_REPORT = 18  #
+    V2_MEMBERSHIP_REPORT = 22  #
+    LEAVE_GROUP = 23  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=17, step=1, count=1):
+        super(PatternFlowIgmpv2TypeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIgmpv2MaxResponseTime(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "increment": {"type": "PatternFlowIgmpv2MaxResponseTimeCounter"},
+        "decrement": {"type": "PatternFlowIgmpv2MaxResponseTimeCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 100,
+        "values": [100],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=100, values=[100]):
+        super(PatternFlowIgmpv2MaxResponseTime, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIgmpv2MaxResponseTimeCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv2MaxResponseTimeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv2MaxResponseTimeCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowIgmpv2MaxResponseTimeCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIgmpv2MaxResponseTimeCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv2MaxResponseTimeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv2MaxResponseTimeCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowIgmpv2MaxResponseTimeCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIgmpv2MaxResponseTimeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 100,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=100, step=1, count=1):
+        super(PatternFlowIgmpv2MaxResponseTimeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIgmpv2Checksum(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "generated",
+                "custom",
+            ],
+        },
+        "generated": {
+            "type": str,
+            "enum": [
+                "good",
+                "bad",
+            ],
+        },
+        "custom": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "generated",
+        "generated": "good",
+    }  # type: Dict[str, Union(type)]
+
+    GENERATED = "generated"  # type: str
+    CUSTOM = "custom"  # type: str
+
+    GOOD = "good"  # type: str
+    BAD = "bad"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, generated="good", custom=None):
+        super(PatternFlowIgmpv2Checksum, self).__init__()
+        self._parent = parent
+        self._set_property("generated", generated)
+        self._set_property("custom", custom)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, generated=None, custom=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["custom"], Literal["generated"]]
+        """choice getter
+
+        The type of checksum
+
+        Returns: Union[Literal["custom"], Literal["generated"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The type of checksum
+
+        value: Union[Literal["custom"], Literal["generated"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def generated(self):
+        # type: () -> Union[Literal["bad"], Literal["good"]]
+        """generated getter
+
+        A system generated checksum value
+
+        Returns: Union[Literal["bad"], Literal["good"]]
+        """
+        return self._get_property("generated")
+
+    @generated.setter
+    def generated(self, value):
+        """generated setter
+
+        A system generated checksum value
+
+        value: Union[Literal["bad"], Literal["good"]]
+        """
+        self._set_property("generated", value, "generated")
+
+    @property
+    def custom(self):
+        # type: () -> int
+        """custom getter
+
+        A custom checksum value
+
+        Returns: int
+        """
+        return self._get_property("custom")
+
+    @custom.setter
+    def custom(self, value):
+        """custom setter
+
+        A custom checksum value
+
+        value: int
+        """
+        self._set_property("custom", value, "custom")
+
+
+class PatternFlowIgmpv2GroupAddress(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "values": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "ipv4",
+        },
+        "increment": {"type": "PatternFlowIgmpv2GroupAddressCounter"},
+        "decrement": {"type": "PatternFlowIgmpv2GroupAddressCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": "0.0.0.0",
+        "values": ["0.0.0.0"],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value="0.0.0.0", values=["0.0.0.0"]):
+        super(PatternFlowIgmpv2GroupAddress, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIgmpv2GroupAddressCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv2GroupAddressCounter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowIgmpv2GroupAddressCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowIgmpv2GroupAddressCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIgmpv2GroupAddressCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv2GroupAddressCounter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowIgmpv2GroupAddressCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowIgmpv2GroupAddressCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[str]
+        """values getter
+
+        TBD
+
+        Returns: List[str]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[str]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIgmpv2GroupAddressCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "step": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "0.0.0.0",
+        "step": "0.0.0.1",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start="0.0.0.0", step="0.0.0.1", count=1):
+        super(PatternFlowIgmpv2GroupAddressCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
 class FlowHeaderIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
@@ -167470,7 +168472,7 @@ class FlowHeaderIter(OpenApiIter):
         self._choice = choice
 
     def __getitem__(self, key):
-        # type: (str) -> Union[FlowArp, FlowCfm, FlowCustom, FlowEthernet, FlowEthernetPause, FlowGre, FlowGtpv1, FlowGtpv2, FlowHeader, FlowIcmp, FlowIcmpv6, FlowIgmpv1, FlowIpv4, FlowIpv6, FlowIpv6ExtHeader, FlowLacp, FlowMacsec, FlowMpls, FlowPfcPause, FlowPpp, FlowRsvp, FlowSnmpv2c, FlowTcp, FlowUdp, FlowVlan, FlowVxlan]
+        # type: (str) -> Union[FlowArp, FlowCfm, FlowCustom, FlowEthernet, FlowEthernetPause, FlowGre, FlowGtpv1, FlowGtpv2, FlowHeader, FlowIcmp, FlowIcmpv6, FlowIgmpv1, FlowIgmpv2, FlowIpv4, FlowIpv6, FlowIpv6ExtHeader, FlowLacp, FlowMacsec, FlowMpls, FlowPfcPause, FlowPpp, FlowRsvp, FlowSnmpv2c, FlowTcp, FlowUdp, FlowVlan, FlowVxlan]
         return self._getitem(key)
 
     def __iter__(self):
@@ -167860,6 +168862,20 @@ class FlowHeaderIter(OpenApiIter):
         item = FlowHeader()
         item.cfm
         item.choice = "cfm"
+        self._add(item)
+        return self
+
+    def igmpv2(self):
+        # type: () -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowIgmpv2 class
+
+        Packet Header for IGMP version (RFC 2236 Section 2): an octet message carried directly in IPv4. conforming message is sent with IP protocol 2, TTL 1, IP precedence Internetwork Control (ToS 0xc0) and the IP Router Alert option (RFC 2236 Section 2, RFC 2113).. RFC requirements described for this header (MUST MUST NOT) apply to conforming packet. The model does not enforce them, so any value the fields can encode may be configured for conformance and negative testing.. The IPv4 and Ethernet destinations are set in their own headers. Use these values (RFC 2236 Section 3):. General Query: IPv4 dst 224.0.0.1, group_address 0.0.0.0. Group-Specific Query: IPv4 dst group, group_address group. v2 Membership Report: IPv4 dst group, group_address group. Leave Group: IPv4 dst 224.0.0.2, group_address group. Ethernet dst 01:00:5e the low 23 bits of the IPv4 destination (RFC 1112 Section 6.4). Example: 224.0.0.1 gives 01:00:5e:00:00:01 and 239.1.2.3 gives 01:00:5e:01:02:03. Only 23 bits are used, so 239.129.2.3 maps to the same MAC as 239.1.2.3.
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.igmpv2
+        item.choice = "igmpv2"
         self._add(item)
         return self
 

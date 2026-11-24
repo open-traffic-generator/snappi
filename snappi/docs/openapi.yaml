@@ -15244,6 +15244,8 @@ components:
               x-field-uid: 24
             cfm:
               x-field-uid: 25
+            igmpv2:
+              x-field-uid: 26
           enum:
           - custom
           - ethernet
@@ -15270,6 +15272,7 @@ components:
           - lacp
           - ipv6_extension_header
           - cfm
+          - igmpv2
         custom:
           $ref: '#/components/schemas/Flow.Custom'
           x-field-uid: 2
@@ -15345,6 +15348,9 @@ components:
         cfm:
           $ref: '#/components/schemas/Flow.Cfm'
           x-field-uid: 26
+        igmpv2:
+          $ref: '#/components/schemas/Flow.Igmpv2'
+          x-field-uid: 27
     Flow.Custom:
       type: object
       description: |-
@@ -18949,6 +18955,32 @@ components:
           maximum: 255
           default: 1
           x-field-uid: 3
+    Flow.Igmpv2:
+      description: |-
+        Packet Header for IGMP version 2 (RFC 2236 Section 2): an 8 octet message carried directly in IPv4. A conforming message is sent with IP protocol 2, TTL 1, IP precedence Internetwork Control (ToS 0xc0) and the IP Router Alert option (RFC 2236 Section 2, RFC 2113).
+        RFC requirements described for this header (MUST / MUST NOT) apply to a conforming packet. The model does not enforce them, so any value the fields can encode may be configured for conformance and negative testing.
+        The IPv4 and Ethernet destinations are set in their own headers. Use these values (RFC 2236 Section 3):
+
+          General Query:        IPv4 dst 224.0.0.1, group_address 0.0.0.0
+          Group-Specific Query: IPv4 dst = group, group_address = group
+          v2 Membership Report: IPv4 dst = group, group_address = group
+          Leave Group:          IPv4 dst 224.0.0.2, group_address = group
+
+        Ethernet dst = 01:00:5e + the low 23 bits of the IPv4 destination (RFC 1112 Section 6.4). Example: 224.0.0.1 gives 01:00:5e:00:00:01 and 239.1.2.3 gives 01:00:5e:01:02:03. Only 23 bits are used, so 239.129.2.3 maps to the same MAC as 239.1.2.3.
+      type: object
+      properties:
+        type:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv2.Type'
+        max_response_time:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv2.MaxResponseTime'
+        checksum:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv2.Checksum'
+        group_address:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv2.GroupAddress'
     Flow.Size:
       description: |-
         The frame size which overrides the total length of the packet
@@ -35680,6 +35712,15 @@ components:
           default: 1
           format: uint32
           maximum: 256
+      x-constants:
+        icmp: 1
+        igmp: 2
+        ip_in_ip: 4
+        tcp: 6
+        udp: 17
+        ipv6: 41
+        rsvp: 46
+        gre: 47
     Pattern.Flow.Ipv4.Protocol.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -35711,7 +35752,7 @@ components:
           x-field-uid: 3
     Pattern.Flow.Ipv4.Protocol:
       description: |-
-        Protocol, default is 61 any host internal protocol
+        Protocol number of the payload (IANA Assigned Internet Protocol Numbers). When auto, the implementation should set it from the next header in the packet (for example igmp 2, tcp 6, udp 17). If it cannot be derived, for example the next header is custom or there is none, the value 61 (any host internal protocol) is used. Choose value to override auto.
       type: object
       properties:
         choice:
@@ -35773,6 +35814,15 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Protocol.MetricTag'
           x-field-uid: 8
+      x-constants:
+        icmp: 1
+        igmp: 2
+        ip_in_ip: 4
+        tcp: 6
+        udp: 17
+        ipv6: 41
+        rsvp: 46
+        gre: 47
     Pattern.Flow.Ipv4.HeaderChecksum:
       description: |-
         Header checksum
@@ -36040,7 +36090,7 @@ components:
           x-field-uid: 4
     Pattern.Flow.Ipv4.Dst:
       description: |-
-        Destination address
+        Destination address. When this is a multicast address, the Ethernet destination should be 01:00:5e followed by the low 23 bits of this address (RFC 1112 Section 6.4), for example 224.0.0.1 maps to 01:00:5e:00:00:01.
       type: object
       properties:
         choice:
@@ -57671,6 +57721,252 @@ components:
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Cfm.Tlvs.Length.Counter'
           x-field-uid: 7
+    Pattern.Flow.Igmpv2.Type.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 17
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+      x-constants:
+        membership_query: 17
+        v1_membership_report: 18
+        v2_membership_report: 22
+        leave_group: 23
+    Pattern.Flow.Igmpv2.Type:
+      description: |-
+        IGMP message type (RFC 2236 Section 2.1). Default 17 (0x11) is a Membership Query, general or group-specific depending on group_address. 18 (0x12) is the IGMPv1 Membership Report, accepted by IGMPv2 for backward compatibility. 22 (0x16) is the IGMPv2 Membership Report and 23 (0x17) is Leave Group.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 17
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 17
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv2.Type.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv2.Type.Counter'
+          x-field-uid: 6
+      x-constants:
+        membership_query: 17
+        v1_membership_report: 18
+        v2_membership_report: 22
+        leave_group: 23
+    Pattern.Flow.Igmpv2.MaxResponseTime.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 100
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Igmpv2.MaxResponseTime:
+      description: |-
+        Maximum response time in units of 1/10 second (RFC 2236 Section 2.2), so 100 is 10 seconds and 255 is 25.5 seconds. Meaningful only in Membership Query messages. In a conforming Membership Report or Leave Group it is set to zero by the sender and ignored by the receiver; the default is 100, so set 0 explicitly when building those messages.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 100
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 100
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv2.MaxResponseTime.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv2.MaxResponseTime.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Igmpv2.Checksum:
+      description: |-
+        IGMP checksum (RFC 2236 Section 2.3): the 16-bit one's complement of the one's complement sum of the entire IGMP message (the IP payload). Unlike ICMPv6 there is no pseudo-header, so it depends only on the fields of this header. The generated choice is computed for every packet, so the value differs between packets when type, max_response_time or group_address vary across the flow; bad is a deliberately incorrect value. The custom choice is one fixed value sent in every packet and is not updated when other fields vary. An implementation that cannot generate the checksum for a configuration should reject it with an error rather than send a different value.
+      type: object
+      properties:
+        choice:
+          description: |-
+            The type of checksum
+          type: string
+          x-enum:
+            generated:
+              x-field-uid: 1
+            custom:
+              x-field-uid: 2
+          default: generated
+          x-field-uid: 1
+          enum:
+          - generated
+          - custom
+        generated:
+          description: |-
+            A system generated checksum value
+          type: string
+          x-enum:
+            good:
+              x-field-uid: 1
+            bad:
+              x-field-uid: 2
+          default: good
+          x-field-uid: 2
+          enum:
+          - good
+          - bad
+        custom:
+          description: |-
+            A custom checksum value
+          type: integer
+          format: uint32
+          maximum: 65535
+          x-field-uid: 3
+    Pattern.Flow.Igmpv2.GroupAddress.Counter:
+      description: |-
+        ipv4 counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: 0.0.0.0
+          format: ipv4
+        step:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.1
+          format: ipv4
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Igmpv2.GroupAddress:
+      description: |-
+        Group address (RFC 2236 Section 2.4). Zero in a general Membership Query; the group being queried in a Group-Specific Query; the group being reported or left in a Membership Report or Leave Group. In a conforming packet a non-zero value is a multicast group address.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.0
+          format: ipv4
+        values:
+          type: array
+          items:
+            type: string
+            format: ipv4
+          x-field-uid: 3
+          default:
+          - 0.0.0.0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv2.GroupAddress.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Igmpv2.GroupAddress.Counter'
+          x-field-uid: 6
     Version:
       description: |-
         Version details
