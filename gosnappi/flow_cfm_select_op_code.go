@@ -258,7 +258,7 @@ func (obj *flowCfmSelectOpCode) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// FlowCfmSelectOpCode is select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7 and ITU-T Y.1731. Currently supported choices are Continuity Check Message (CCM), Loopback Message (LBM), Loopback Reply (LBR), Delay Measurement Message (DMM) and Delay Measurement Reply (DMR).
+// FlowCfmSelectOpCode is select the CFM PDU. The OpCode byte in the CFM common header is set automatically from the choice: ccm 1, lbr 2, lbm 3 (IEEE 802.1Q-2018 Clause 21), dmr 46 and dmm 47 (ITU-T G.8013/Y.1731 clause 9.15). OpCodes 1-31 are assigned by IEEE 802.1 and 32-63 by ITU-T G.8013/Y.1731.
 type FlowCfmSelectOpCode interface {
 	Validation
 	// msg marshals FlowCfmSelectOpCode to protobuf object *otg.FlowCfmSelectOpCode
@@ -311,18 +311,22 @@ type FlowCfmSelectOpCode interface {
 	// HasLbr checks if Lbr has been set in FlowCfmSelectOpCode
 	HasLbr() bool
 	// Dmm returns FlowCfmDmm, set in FlowCfmSelectOpCode.
-	// FlowCfmDmm is delay Measurement Message (DMM) is a diagnostic frame sent by a Maintenance End Point (MEP) to a peer MEP to measure one-way or two-way frame delay, as defined in ITU-T Y.1731 Section 8.2. DMM flag bits are reserved and set to zero.
+	// FlowCfmDmm is delay Measurement Message (DMM, OpCode 47) is sent by a MEP to a peer MEP to measure two-way frame delay and frame delay variation (ITU-T G.8013/Y.1731 clause 8.2, PDU format clause 9.15). The peer answers with a Delay Measurement Reply (DMR, OpCode 46). One-way delay uses the separate 1DM PDU (OpCode 45). The implementation sets OpCode 47 and TLV Offset 32 in the CFM common header.
+	// A conforming DMM is sent in an Ethernet frame with EtherType 0x8902, normally to the unicast MAC address of the peer MEP; set both in the Ethernet header. RFC-style requirements (MUST / MUST NOT) described for this PDU apply to a conforming frame. The model does not enforce them, so any value the fields can encode may be configured for conformance and negative testing.
 	Dmm() FlowCfmDmm
 	// SetDmm assigns FlowCfmDmm provided by user to FlowCfmSelectOpCode.
-	// FlowCfmDmm is delay Measurement Message (DMM) is a diagnostic frame sent by a Maintenance End Point (MEP) to a peer MEP to measure one-way or two-way frame delay, as defined in ITU-T Y.1731 Section 8.2. DMM flag bits are reserved and set to zero.
+	// FlowCfmDmm is delay Measurement Message (DMM, OpCode 47) is sent by a MEP to a peer MEP to measure two-way frame delay and frame delay variation (ITU-T G.8013/Y.1731 clause 8.2, PDU format clause 9.15). The peer answers with a Delay Measurement Reply (DMR, OpCode 46). One-way delay uses the separate 1DM PDU (OpCode 45). The implementation sets OpCode 47 and TLV Offset 32 in the CFM common header.
+	// A conforming DMM is sent in an Ethernet frame with EtherType 0x8902, normally to the unicast MAC address of the peer MEP; set both in the Ethernet header. RFC-style requirements (MUST / MUST NOT) described for this PDU apply to a conforming frame. The model does not enforce them, so any value the fields can encode may be configured for conformance and negative testing.
 	SetDmm(value FlowCfmDmm) FlowCfmSelectOpCode
 	// HasDmm checks if Dmm has been set in FlowCfmSelectOpCode
 	HasDmm() bool
 	// Dmr returns FlowCfmDmr, set in FlowCfmSelectOpCode.
-	// FlowCfmDmr is delay Measurement Reply (DMR) is the response frame sent by a peer Maintenance End Point (MEP) back to the originating MEP in reply to a Delay Measurement Message (DMM), as defined in ITU-T Y.1731 Section 8.2. DMR flag bits are reserved and set to zero.
+	// FlowCfmDmr is delay Measurement Reply (DMR, OpCode 46) is sent by a MEP in reply to a Delay Measurement Message (DMM, OpCode 47) (ITU-T G.8013/Y.1731 clause 8.2, PDU format clause 9.16). The implementation sets OpCode 46 and TLV Offset 32 in the CFM common header.
+	// A conforming DMR is sent in an Ethernet frame with EtherType 0x8902 to the unicast MAC address of the MEP that sent the DMM; set both in the Ethernet header. All fields are sent as configured: a DMR flow does not answer received DMMs, so it is for testing how a DUT that sends DMMs handles replies with known timestamps. RFC-style requirements (MUST / MUST NOT) described for this PDU apply to a conforming frame. The model does not enforce them, so any value the fields can encode may be configured for conformance and negative testing.
 	Dmr() FlowCfmDmr
 	// SetDmr assigns FlowCfmDmr provided by user to FlowCfmSelectOpCode.
-	// FlowCfmDmr is delay Measurement Reply (DMR) is the response frame sent by a peer Maintenance End Point (MEP) back to the originating MEP in reply to a Delay Measurement Message (DMM), as defined in ITU-T Y.1731 Section 8.2. DMR flag bits are reserved and set to zero.
+	// FlowCfmDmr is delay Measurement Reply (DMR, OpCode 46) is sent by a MEP in reply to a Delay Measurement Message (DMM, OpCode 47) (ITU-T G.8013/Y.1731 clause 8.2, PDU format clause 9.16). The implementation sets OpCode 46 and TLV Offset 32 in the CFM common header.
+	// A conforming DMR is sent in an Ethernet frame with EtherType 0x8902 to the unicast MAC address of the MEP that sent the DMM; set both in the Ethernet header. All fields are sent as configured: a DMR flow does not answer received DMMs, so it is for testing how a DUT that sends DMMs handles replies with known timestamps. RFC-style requirements (MUST / MUST NOT) described for this PDU apply to a conforming frame. The model does not enforce them, so any value the fields can encode may be configured for conformance and negative testing.
 	SetDmr(value FlowCfmDmr) FlowCfmSelectOpCode
 	// HasDmr checks if Dmr has been set in FlowCfmSelectOpCode
 	HasDmr() bool

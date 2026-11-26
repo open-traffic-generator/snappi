@@ -252,7 +252,7 @@ func (obj *patternFlowCfmDmmTxTimestampF) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowCfmDmmTxTimestampF is the timestamp at which the DMM frame is transmitted by the originating MEP (ITU-T Y.1731 Section 8.2).
+// PatternFlowCfmDmmTxTimestampF is txTimeStampf: the transmit time of the DMM (ITU-T G.8013/Y.1731 clause 9.15), in the IEEE 1588 timestamp format: the upper 32 bits are seconds and the lower 32 bits are nanoseconds (0 to 999999999). For example 1.5 seconds is (1 << 32) + 500000000. The configured value is sent as is; the implementation does not replace it with the actual transmit time. increment and decrement act on the 64-bit value, so keep the nanoseconds part below 1000000000 across the count for valid timestamps.
 type PatternFlowCfmDmmTxTimestampF interface {
 	Validation
 	// msg marshals PatternFlowCfmDmmTxTimestampF to protobuf object *otg.PatternFlowCfmDmmTxTimestampF

@@ -381,10 +381,10 @@ type FlowIpv4 interface {
 	// HasTimeToLive checks if TimeToLive has been set in FlowIpv4
 	HasTimeToLive() bool
 	// Protocol returns PatternFlowIpv4Protocol, set in FlowIpv4.
-	// PatternFlowIpv4Protocol is protocol, default is 61 any host internal protocol
+	// PatternFlowIpv4Protocol is protocol number of the payload (IANA Assigned Internet Protocol Numbers). When auto, the implementation should set it from the next header in the packet (for example igmp 2, tcp 6, udp 17). If it cannot be derived, for example the next header is custom or there is none, the value 61 (any host internal protocol) is used. Choose value to override auto.
 	Protocol() PatternFlowIpv4Protocol
 	// SetProtocol assigns PatternFlowIpv4Protocol provided by user to FlowIpv4.
-	// PatternFlowIpv4Protocol is protocol, default is 61 any host internal protocol
+	// PatternFlowIpv4Protocol is protocol number of the payload (IANA Assigned Internet Protocol Numbers). When auto, the implementation should set it from the next header in the packet (for example igmp 2, tcp 6, udp 17). If it cannot be derived, for example the next header is custom or there is none, the value 61 (any host internal protocol) is used. Choose value to override auto.
 	SetProtocol(value PatternFlowIpv4Protocol) FlowIpv4
 	// HasProtocol checks if Protocol has been set in FlowIpv4
 	HasProtocol() bool
@@ -405,10 +405,10 @@ type FlowIpv4 interface {
 	// HasSrc checks if Src has been set in FlowIpv4
 	HasSrc() bool
 	// Dst returns PatternFlowIpv4Dst, set in FlowIpv4.
-	// PatternFlowIpv4Dst is destination address
+	// PatternFlowIpv4Dst is destination address. When this is a multicast address, the Ethernet destination should be 01:00:5e followed by the low 23 bits of this address (RFC 1112 Section 6.4), for example 224.0.0.1 maps to 01:00:5e:00:00:01.
 	Dst() PatternFlowIpv4Dst
 	// SetDst assigns PatternFlowIpv4Dst provided by user to FlowIpv4.
-	// PatternFlowIpv4Dst is destination address
+	// PatternFlowIpv4Dst is destination address. When this is a multicast address, the Ethernet destination should be 01:00:5e followed by the low 23 bits of this address (RFC 1112 Section 6.4), for example 224.0.0.1 maps to 01:00:5e:00:00:01.
 	SetDst(value PatternFlowIpv4Dst) FlowIpv4
 	// HasDst checks if Dst has been set in FlowIpv4
 	HasDst() bool

@@ -252,7 +252,7 @@ func (obj *patternFlowCfmDmrRxTimestampF) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowCfmDmrRxTimestampF is receive timestamp recorded by the responder when the DMM frame arrived (ITU-T Y.1731 Section 8.2).
+// PatternFlowCfmDmrRxTimestampF is rxTimeStampf (ITU-T G.8013/Y.1731 clause 9.16): the time the responder received the DMM, in the responder's clock. IEEE 1588 timestamp format as for tx_timestamp_f.
 type PatternFlowCfmDmrRxTimestampF interface {
 	Validation
 	// msg marshals PatternFlowCfmDmrRxTimestampF to protobuf object *otg.PatternFlowCfmDmrRxTimestampF

@@ -16,6 +16,7 @@ type flowCfmDmm struct {
 	obj                          *otg.FlowCfmDmm
 	marshaller                   marshalFlowCfmDmm
 	unMarshaller                 unMarshalFlowCfmDmm
+	flagsHolder                  FlowCfmPmFlags
 	txTimestampFHolder           PatternFlowCfmDmmTxTimestampF
 	reservedForDmmReceiverHolder PatternFlowCfmDmmReservedForDmmReceiver
 	reservedForDmrHolder         PatternFlowCfmDmmReservedForDmr
@@ -248,6 +249,7 @@ func (obj *flowCfmDmm) Clone() (FlowCfmDmm, error) {
 }
 
 func (obj *flowCfmDmm) setNil() {
+	obj.flagsHolder = nil
 	obj.txTimestampFHolder = nil
 	obj.reservedForDmmReceiverHolder = nil
 	obj.reservedForDmrHolder = nil
@@ -258,7 +260,8 @@ func (obj *flowCfmDmm) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// FlowCfmDmm is delay Measurement Message (DMM) is a diagnostic frame sent by a Maintenance End Point (MEP) to a peer MEP to measure one-way or two-way frame delay, as defined in ITU-T Y.1731 Section 8.2. DMM flag bits are reserved and set to zero.
+// FlowCfmDmm is delay Measurement Message (DMM, OpCode 47) is sent by a MEP to a peer MEP to measure two-way frame delay and frame delay variation (ITU-T G.8013/Y.1731 clause 8.2, PDU format clause 9.15). The peer answers with a Delay Measurement Reply (DMR, OpCode 46). One-way delay uses the separate 1DM PDU (OpCode 45). The implementation sets OpCode 47 and TLV Offset 32 in the CFM common header.
+// A conforming DMM is sent in an Ethernet frame with EtherType 0x8902, normally to the unicast MAC address of the peer MEP; set both in the Ethernet header. RFC-style requirements (MUST / MUST NOT) described for this PDU apply to a conforming frame. The model does not enforce them, so any value the fields can encode may be configured for conformance and negative testing.
 type FlowCfmDmm interface {
 	Validation
 	// msg marshals FlowCfmDmm to protobuf object *otg.FlowCfmDmm
@@ -280,35 +283,43 @@ type FlowCfmDmm interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
+	// Flags returns FlowCfmPmFlags, set in FlowCfmDmm.
+	// FlowCfmPmFlags is flags byte of a performance-monitoring PDU (1DM, DMM, DMR, LMM, LMR): bit 1 (least significant) is Type, bits 8-2 are reserved and sent as zero (ITU-T G.8013/Y.1731 clauses 9.12-9.16).
+	Flags() FlowCfmPmFlags
+	// SetFlags assigns FlowCfmPmFlags provided by user to FlowCfmDmm.
+	// FlowCfmPmFlags is flags byte of a performance-monitoring PDU (1DM, DMM, DMR, LMM, LMR): bit 1 (least significant) is Type, bits 8-2 are reserved and sent as zero (ITU-T G.8013/Y.1731 clauses 9.12-9.16).
+	SetFlags(value FlowCfmPmFlags) FlowCfmDmm
+	// HasFlags checks if Flags has been set in FlowCfmDmm
+	HasFlags() bool
 	// TxTimestampF returns PatternFlowCfmDmmTxTimestampF, set in FlowCfmDmm.
-	// PatternFlowCfmDmmTxTimestampF is the timestamp at which the DMM frame is transmitted by the originating MEP (ITU-T Y.1731 Section 8.2).
+	// PatternFlowCfmDmmTxTimestampF is txTimeStampf: the transmit time of the DMM (ITU-T G.8013/Y.1731 clause 9.15), in the IEEE 1588 timestamp format: the upper 32 bits are seconds and the lower 32 bits are nanoseconds (0 to 999999999). For example 1.5 seconds is (1 << 32) + 500000000. The configured value is sent as is; the implementation does not replace it with the actual transmit time. increment and decrement act on the 64-bit value, so keep the nanoseconds part below 1000000000 across the count for valid timestamps.
 	TxTimestampF() PatternFlowCfmDmmTxTimestampF
 	// SetTxTimestampF assigns PatternFlowCfmDmmTxTimestampF provided by user to FlowCfmDmm.
-	// PatternFlowCfmDmmTxTimestampF is the timestamp at which the DMM frame is transmitted by the originating MEP (ITU-T Y.1731 Section 8.2).
+	// PatternFlowCfmDmmTxTimestampF is txTimeStampf: the transmit time of the DMM (ITU-T G.8013/Y.1731 clause 9.15), in the IEEE 1588 timestamp format: the upper 32 bits are seconds and the lower 32 bits are nanoseconds (0 to 999999999). For example 1.5 seconds is (1 << 32) + 500000000. The configured value is sent as is; the implementation does not replace it with the actual transmit time. increment and decrement act on the 64-bit value, so keep the nanoseconds part below 1000000000 across the count for valid timestamps.
 	SetTxTimestampF(value PatternFlowCfmDmmTxTimestampF) FlowCfmDmm
 	// HasTxTimestampF checks if TxTimestampF has been set in FlowCfmDmm
 	HasTxTimestampF() bool
 	// ReservedForDmmReceiver returns PatternFlowCfmDmmReservedForDmmReceiver, set in FlowCfmDmm.
-	// PatternFlowCfmDmmReservedForDmmReceiver is reserved for the DMM receiving equipment to record its receive timestamp when forming the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).
+	// PatternFlowCfmDmmReservedForDmmReceiver is reserved for the DMM receiving equipment (ITU-T G.8013/Y.1731 clause 9.15): the responder records RxTimeStampf, its receive time of this DMM, here when it forms the DMR. Zero in a conforming DMM; a non-zero value is sent as configured.
 	ReservedForDmmReceiver() PatternFlowCfmDmmReservedForDmmReceiver
 	// SetReservedForDmmReceiver assigns PatternFlowCfmDmmReservedForDmmReceiver provided by user to FlowCfmDmm.
-	// PatternFlowCfmDmmReservedForDmmReceiver is reserved for the DMM receiving equipment to record its receive timestamp when forming the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).
+	// PatternFlowCfmDmmReservedForDmmReceiver is reserved for the DMM receiving equipment (ITU-T G.8013/Y.1731 clause 9.15): the responder records RxTimeStampf, its receive time of this DMM, here when it forms the DMR. Zero in a conforming DMM; a non-zero value is sent as configured.
 	SetReservedForDmmReceiver(value PatternFlowCfmDmmReservedForDmmReceiver) FlowCfmDmm
 	// HasReservedForDmmReceiver checks if ReservedForDmmReceiver has been set in FlowCfmDmm
 	HasReservedForDmmReceiver() bool
 	// ReservedForDmr returns PatternFlowCfmDmmReservedForDmr, set in FlowCfmDmm.
-	// PatternFlowCfmDmmReservedForDmr is reserved for the DMM receiving equipment to record its transmit timestamp when forming the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).
+	// PatternFlowCfmDmmReservedForDmr is reserved for the DMR (ITU-T G.8013/Y.1731 clause 9.15): the responder records TxTimeStampb, its transmit time of the DMR, here. Zero in a conforming DMM; a non-zero value is sent as configured.
 	ReservedForDmr() PatternFlowCfmDmmReservedForDmr
 	// SetReservedForDmr assigns PatternFlowCfmDmmReservedForDmr provided by user to FlowCfmDmm.
-	// PatternFlowCfmDmmReservedForDmr is reserved for the DMM receiving equipment to record its transmit timestamp when forming the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).
+	// PatternFlowCfmDmmReservedForDmr is reserved for the DMR (ITU-T G.8013/Y.1731 clause 9.15): the responder records TxTimeStampb, its transmit time of the DMR, here. Zero in a conforming DMM; a non-zero value is sent as configured.
 	SetReservedForDmr(value PatternFlowCfmDmmReservedForDmr) FlowCfmDmm
 	// HasReservedForDmr checks if ReservedForDmr has been set in FlowCfmDmm
 	HasReservedForDmr() bool
 	// ReservedForDmrReceiver returns PatternFlowCfmDmmReservedForDmrReceiver, set in FlowCfmDmm.
-	// PatternFlowCfmDmmReservedForDmrReceiver is reserved for the DMR receiving equipment to record its receive timestamp when the DMR arrives back at the originating MEP. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).
+	// PatternFlowCfmDmmReservedForDmrReceiver is reserved for the DMR receiving equipment (ITU-T G.8013/Y.1731 clause 9.15): the originating MEP may record RxTimeStampb, its receive time of the DMR, here. Zero in a conforming DMM; a non-zero value is sent as configured.
 	ReservedForDmrReceiver() PatternFlowCfmDmmReservedForDmrReceiver
 	// SetReservedForDmrReceiver assigns PatternFlowCfmDmmReservedForDmrReceiver provided by user to FlowCfmDmm.
-	// PatternFlowCfmDmmReservedForDmrReceiver is reserved for the DMR receiving equipment to record its receive timestamp when the DMR arrives back at the originating MEP. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).
+	// PatternFlowCfmDmmReservedForDmrReceiver is reserved for the DMR receiving equipment (ITU-T G.8013/Y.1731 clause 9.15): the originating MEP may record RxTimeStampb, its receive time of the DMR, here. Zero in a conforming DMM; a non-zero value is sent as configured.
 	SetReservedForDmrReceiver(value PatternFlowCfmDmmReservedForDmrReceiver) FlowCfmDmm
 	// HasReservedForDmrReceiver checks if ReservedForDmrReceiver has been set in FlowCfmDmm
 	HasReservedForDmrReceiver() bool
@@ -321,6 +332,34 @@ type FlowCfmDmm interface {
 	// HasAppendEndTlv checks if AppendEndTlv has been set in FlowCfmDmm
 	HasAppendEndTlv() bool
 	setNil()
+}
+
+// description is TBD
+// Flags returns a FlowCfmPmFlags
+func (obj *flowCfmDmm) Flags() FlowCfmPmFlags {
+	if obj.obj.Flags == nil {
+		obj.obj.Flags = NewFlowCfmPmFlags().msg()
+	}
+	if obj.flagsHolder == nil {
+		obj.flagsHolder = &flowCfmPmFlags{obj: obj.obj.Flags}
+	}
+	return obj.flagsHolder
+}
+
+// description is TBD
+// Flags returns a FlowCfmPmFlags
+func (obj *flowCfmDmm) HasFlags() bool {
+	return obj.obj.Flags != nil
+}
+
+// description is TBD
+// SetFlags sets the FlowCfmPmFlags value in the FlowCfmDmm object
+func (obj *flowCfmDmm) SetFlags(value FlowCfmPmFlags) FlowCfmDmm {
+
+	obj.flagsHolder = nil
+	obj.obj.Flags = value.msg()
+
+	return obj
 }
 
 // description is TBD
@@ -435,7 +474,7 @@ func (obj *flowCfmDmm) SetReservedForDmrReceiver(value PatternFlowCfmDmmReserved
 	return obj
 }
 
-// description is TBD
+// Optional TLVs placed after the DMM fields. In a conforming DMM the Data TLV is used to pad the frame to the size under test; other TLV types can be added for negative testing. Note the default TLV choice is sender_id, so choose data explicitly.
 // Tlvs returns a []FlowCfmTlvs
 func (obj *flowCfmDmm) Tlvs() FlowCfmDmmFlowCfmTlvsIter {
 	if len(obj.obj.Tlvs) == 0 {
@@ -547,6 +586,11 @@ func (obj *flowCfmDmm) SetAppendEndTlv(value bool) FlowCfmDmm {
 func (obj *flowCfmDmm) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
+	}
+
+	if obj.obj.Flags != nil {
+
+		obj.Flags().validateObj(vObj, set_default)
 	}
 
 	if obj.obj.TxTimestampF != nil {

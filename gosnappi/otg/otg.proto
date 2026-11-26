@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.65.0
+/* Open Traffic Generator API 1.66.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -11528,6 +11528,8 @@ message FlowHeader {
       lacp = 23;
       ipv6_extension_header = 24;
       cfm = 25;
+      igmpv2 = 26;
+      igmpv3 = 27;
     }
   }
   // The available types of flow headers. If one is not provided the
@@ -11609,6 +11611,12 @@ message FlowHeader {
 
   // Description missing in models
   FlowCfm cfm = 26;
+
+  // Description missing in models
+  FlowIgmpv2 igmpv2 = 27;
+
+  // Description missing in models
+  FlowIgmpv3 igmpv3 = 28;
 }
 
 // Custom packet header
@@ -14329,11 +14337,10 @@ message FlowCfm {
   FlowCfmSelectOpCode op_code = 3;
 }
 
-// Select message header. The opcode byte in the CFM Common Header is automatically
-// set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7 and ITU-T Y.1731.
-// Currently supported choices are Continuity Check Message (CCM), Loopback Message
-// (LBM), Loopback Reply (LBR), Delay Measurement Message (DMM) and Delay Measurement
-// Reply (DMR).
+// Select the CFM PDU. The OpCode byte in the CFM common header is set automatically
+// from the choice: ccm 1, lbr 2, lbm 3 (IEEE 802.1Q-2018 Clause 21), dmr 46 and dmm
+// 47 (ITU-T G.8013/Y.1731 clause 9.15). OpCodes 1-31 are assigned by IEEE 802.1 and
+// 32-63 by ITU-T G.8013/Y.1731.
 message FlowCfmSelectOpCode {
 
   message Choice {
@@ -14566,58 +14573,93 @@ message FlowCfmLbr {
   optional bool append_end_tlv = 3;
 }
 
-// Delay Measurement Message (DMM) is a diagnostic frame sent by a Maintenance End Point
-// (MEP) to a peer MEP to measure one-way or two-way frame delay, as defined in ITU-T
-// Y.1731 Section 8.2. DMM flag bits are reserved and set to zero.
+// Delay Measurement Message (DMM, OpCode 47) is sent by a MEP to a peer MEP to measure
+// two-way frame delay and frame delay variation (ITU-T G.8013/Y.1731 clause 8.2, PDU
+// format clause 9.15). The peer answers with a Delay Measurement Reply (DMR, OpCode
+// 46). One-way delay uses the separate 1DM PDU (OpCode 45). The implementation sets
+// OpCode 47 and TLV Offset 32 in the CFM common header.
+// A conforming DMM is sent in an Ethernet frame with EtherType 0x8902, normally to
+// the unicast MAC address of the peer MEP; set both in the Ethernet header. RFC-style
+// requirements (MUST / MUST NOT) described for this PDU apply to a conforming frame.
+// The model does not enforce them, so any value the fields can encode may be configured
+// for conformance and negative testing.
 message FlowCfmDmm {
 
   // Description missing in models
-  PatternFlowCfmDmmTxTimestampF tx_timestamp_f = 1;
+  FlowCfmPmFlags flags = 1;
 
   // Description missing in models
-  PatternFlowCfmDmmReservedForDmmReceiver reserved_for_dmm_receiver = 2;
+  PatternFlowCfmDmmTxTimestampF tx_timestamp_f = 2;
 
   // Description missing in models
-  PatternFlowCfmDmmReservedForDmr reserved_for_dmr = 3;
+  PatternFlowCfmDmmReservedForDmmReceiver reserved_for_dmm_receiver = 3;
 
   // Description missing in models
-  PatternFlowCfmDmmReservedForDmrReceiver reserved_for_dmr_receiver = 4;
+  PatternFlowCfmDmmReservedForDmr reserved_for_dmr = 4;
 
   // Description missing in models
-  repeated FlowCfmTlvs tlvs = 5;
+  PatternFlowCfmDmmReservedForDmrReceiver reserved_for_dmr_receiver = 5;
+
+  // Optional TLVs placed after the DMM fields. In a conforming DMM the Data TLV is used
+  // to pad the frame to the size under test; other TLV types can be added for negative
+  // testing. Note the default TLV choice is sender_id, so choose data explicitly.
+  repeated FlowCfmTlvs tlvs = 6;
 
   // When true, the implementation appends an End TLV (Type 0, IEEE 802.1Q-2018 Table
   // 21-17) after all TLVs in the tlvs list. Set to false only when testing DUT behaviour
   // with a deliberately missing End TLV.
   // default = True
-  optional bool append_end_tlv = 6;
+  optional bool append_end_tlv = 7;
 }
 
-// Delay Measurement Reply (DMR) is the response frame sent by a peer Maintenance End
-// Point (MEP) back to the originating MEP in reply to a Delay Measurement Message (DMM),
-// as defined in ITU-T Y.1731 Section 8.2. DMR flag bits are reserved and set to zero.
+// Delay Measurement Reply (DMR, OpCode 46) is sent by a MEP in reply to a Delay Measurement
+// Message (DMM, OpCode 47) (ITU-T G.8013/Y.1731 clause 8.2, PDU format clause 9.16).
+// The implementation sets OpCode 46 and TLV Offset 32 in the CFM common header.
+// A conforming DMR is sent in an Ethernet frame with EtherType 0x8902 to the unicast
+// MAC address of the MEP that sent the DMM; set both in the Ethernet header. All fields
+// are sent as configured: a DMR flow does not answer received DMMs, so it is for testing
+// how a DUT that sends DMMs handles replies with known timestamps. RFC-style requirements
+// (MUST / MUST NOT) described for this PDU apply to a conforming frame. The model does
+// not enforce them, so any value the fields can encode may be configured for conformance
+// and negative testing.
 message FlowCfmDmr {
 
   // Description missing in models
-  PatternFlowCfmDmrTxTimestampF tx_timestamp_f = 1;
+  FlowCfmPmFlags flags = 1;
 
   // Description missing in models
-  PatternFlowCfmDmrRxTimestampF rx_timestamp_f = 2;
+  PatternFlowCfmDmrTxTimestampF tx_timestamp_f = 2;
 
   // Description missing in models
-  PatternFlowCfmDmrTxTimestampB tx_timestamp_b = 3;
+  PatternFlowCfmDmrRxTimestampF rx_timestamp_f = 3;
 
   // Description missing in models
-  PatternFlowCfmDmrReservedForDmrReceiver reserved_for_dmr_receiver = 4;
+  PatternFlowCfmDmrTxTimestampB tx_timestamp_b = 4;
 
   // Description missing in models
-  repeated FlowCfmTlvs tlvs = 5;
+  PatternFlowCfmDmrReservedForDmrReceiver reserved_for_dmr_receiver = 5;
+
+  // Optional TLVs placed after the DMR fields. A responder normally returns the Data
+  // TLV of the DMM it answers, so set the same Data TLV as the DMM to build a realistic
+  // reply. Note the default TLV choice is sender_id, so choose data explicitly.
+  repeated FlowCfmTlvs tlvs = 6;
 
   // When true, the implementation appends an End TLV (Type 0, IEEE 802.1Q-2018 Table
   // 21-17) after all TLVs in the tlvs list. Set to false only when testing DUT behaviour
   // with a deliberately missing End TLV.
   // default = True
-  optional bool append_end_tlv = 6;
+  optional bool append_end_tlv = 7;
+}
+
+// Flags byte of a performance-monitoring PDU (1DM, DMM, DMR, LMM, LMR): bit 1 (least
+// significant) is Type, bits 8-2 are reserved and sent as zero (ITU-T G.8013/Y.1731
+// clauses 9.12-9.16).
+message FlowCfmPmFlags {
+
+  // Type flag. When true the PDU is sent as part of proactive measurement (Type = 1);
+  // when false, on-demand (Type = 0).
+  // default = False
+  optional bool proactive = 1;
 }
 
 // CFM TLV entry. The Type byte (IEEE 802.1Q-2018 Table 21-17) is set automatically
@@ -14844,6 +14886,177 @@ message FlowCfmLength {
   // Description missing in models
   // default = 1
   optional uint32 value = 3;
+}
+
+// Packet Header for IGMP version 2 (RFC 2236 Section 2): an 8 octet message carried
+// directly in IPv4. A conforming message is sent with IP protocol 2, TTL 1, IP precedence
+// Internetwork Control (ToS 0xc0) and the IP Router Alert option (RFC 2236 Section
+// 2, RFC 2113).
+// RFC requirements described for this header (MUST / MUST NOT) apply to a conforming
+// packet. The model does not enforce them, so any value the fields can encode may be
+// configured for conformance and negative testing.
+// The IPv4 and Ethernet destinations are set in their own headers. Use these values
+// (RFC 2236 Section 3):
+// 
+// General Query:        IPv4 dst 224.0.0.1, group_address 0.0.0.0
+// Group-Specific Query: IPv4 dst = group, group_address = group
+// v2 Membership Report: IPv4 dst = group, group_address = group
+// Leave Group:          IPv4 dst 224.0.0.2, group_address = group
+// 
+// Ethernet dst = 01:00:5e + the low 23 bits of the IPv4 destination (RFC 1112 Section
+// 6.4). Example: 224.0.0.1 gives 01:00:5e:00:00:01 and 239.1.2.3 gives 01:00:5e:01:02:03.
+// Only 23 bits are used, so 239.129.2.3 maps to the same MAC as 239.1.2.3.
+message FlowIgmpv2 {
+
+  // Description missing in models
+  PatternFlowIgmpv2Type type = 1;
+
+  // Description missing in models
+  PatternFlowIgmpv2MaxResponseTime max_response_time = 2;
+
+  // Description missing in models
+  PatternFlowIgmpv2Checksum checksum = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv2GroupAddress group_address = 4;
+}
+
+// Packet Header for IGMPv3 (RFC 9776, which obsoletes RFC 3376), carried directly in
+// IPv4. The choice selects the Membership Query or the IGMPv3 Membership Report. A
+// conforming message is sent with IP protocol number two, TTL one, IP precedence Internetwork
+// Control (ToS 0xc0) and the IP Router Alert option (RFC 2113). The model does not
+// enforce these requirements, so any value the fields can encode may be configured
+// for negative testing.
+// A Query of eight octets is IGMPv1 or IGMPv2 and a Query of twelve or more octets
+// is IGMPv3 (RFC 9776 Section 7.1), so membership_query always builds an IGMPv3 Query.
+// The eight octet messages use the igmpv1 and igmpv2 headers.
+// The IPv4 and Ethernet destinations are set in their own headers. Use these values
+// (RFC 9776 Sections 4.1.12 and 4.2.15):
+// General Query:
+// IPv4 dst = 224.0.0.1
+// Group-Specific and Group-and-Source Specific Query:
+// IPv4 dst = group_address
+// IGMPv3 Membership Report:
+// IPv4 dst = 224.0.0.22, IPv4 src = a unicast address or 0.0.0.0
+// 
+// Ethernet dst = 01:00:5e + low 23 bits of the IPv4 dst (RFC 1112 Section 6.4), for
+// example 224.0.0.22 gives 01:00:5e:00:00:16.
+// The flow size overrides the packet length, so set it large enough for the whole message.
+// A Query is twelve octets plus four per source. A Report is eight octets plus, per
+// group record, eight octets plus four per source plus four per aux_data_length word.
+// Ethernet, IPv4 with Router Alert and the FCS add 42 octets. The default flow size
+// of 64 fits a Query with up to two sources or a Report with one record of up to one
+// source.
+message FlowIgmpv3 {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      membership_query = 1;
+      membership_report = 2;
+    }
+  }
+  // Selects the IGMPv3 message, default is membership_query.
+  // default = Choice.Enum.membership_query
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowIgmpv3MembershipQuery membership_query = 2;
+
+  // Description missing in models
+  FlowIgmpv3MembershipReport membership_report = 3;
+}
+
+// IGMPv3 Membership Query message (RFC 9776 Section 4.1).
+message FlowIgmpv3MembershipQuery {
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryType type = 1;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryMaxRespCode max_resp_code = 2;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryChecksum checksum = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryGroupAddress group_address = 4;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryFlags flags = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQuerySFlag s_flag = 6;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryQrv qrv = 7;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryQqic qqic = 8;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryNumberOfSources number_of_sources = 9;
+
+  // List of unicast source addresses of a group-and-source-specific query. RFC 9776 Section
+  // 4.1.8 gives the example that 366 sources fit in a Query on an Ethernet MTU of 1500
+  // octets.
+  repeated FlowIgmpv3Source sources = 10;
+}
+
+// IGMPv3 Membership Report message (RFC 9776 Section 4.2).
+message FlowIgmpv3MembershipReport {
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportType type = 1;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportReserved reserved = 2;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportChecksum checksum = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportFlags flags = 4;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportNumberOfGroupRecords number_of_group_records = 5;
+
+  // List of group records, each one reports the membership state of one multicast group.
+  repeated FlowIgmpv3GroupRecord group_records = 6;
+}
+
+// A group record of the Version 3 Membership Report (RFC 9776 Section 4.2.5).
+message FlowIgmpv3GroupRecord {
+
+  // Description missing in models
+  PatternFlowIgmpv3GroupRecordRecordType record_type = 1;
+
+  // Description missing in models
+  PatternFlowIgmpv3GroupRecordAuxDataLength aux_data_length = 2;
+
+  // Description missing in models
+  PatternFlowIgmpv3GroupRecordNumberOfSources number_of_sources = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3GroupRecordMulticastAddress multicast_address = 4;
+
+  // List of unicast source addresses of this record.
+  repeated FlowIgmpv3Source sources = 5;
+
+  // Auxiliary Data (RFC 9776 Section 4.2.11) as a hex string of whole 32-bit words, so
+  // a multiple of eight hex characters, up to 255 words. IGMPv3 defines no auxiliary
+  // data, so a conforming sender omits it and a receiver ignores it. Other lengths are
+  // not valid and the result is implementation specific.
+  optional string aux_data = 6;
+}
+
+// One source address entry of a Query (RFC 9776 Section 4.1.9) or of a group record
+// (RFC 9776 Section 4.2.10). Each entry is one IPv4 address in the message, so add
+// one entry per source to carry several sources.
+message FlowIgmpv3Source {
+
+  // Description missing in models
+  PatternFlowIgmpv3SourceAddress address = 1;
 }
 
 // The frame size which overrides the total length of the packet
@@ -26378,7 +26591,11 @@ message PatternFlowIpv4ProtocolMetricTag {
   optional uint32 length = 3;
 }
 
-// Protocol, default is 61 any host internal protocol
+// Protocol number of the payload (IANA Assigned Internet Protocol Numbers). When auto,
+// the implementation should set it from the next header in the packet (for example
+// igmp 2, tcp 6, udp 17). If it cannot be derived, for example the next header is custom
+// or there is none, the value 61 (any host internal protocol) is used. Choose value
+// to override auto.
 message PatternFlowIpv4Protocol {
 
   message Choice {
@@ -26612,7 +26829,9 @@ message PatternFlowIpv4DstRandom {
   optional uint32 count = 4;
 }
 
-// Destination address
+// Destination address. When this is a multicast address, the Ethernet destination should
+// be 01:00:5e followed by the low 23 bits of this address (RFC 1112 Section 6.4), for
+// example 224.0.0.1 maps to 01:00:5e:00:00:01.
 message PatternFlowIpv4Dst {
 
   message Choice {
@@ -41845,8 +42064,12 @@ message PatternFlowCfmDmmTxTimestampFCounter {
   optional uint64 count = 3;
 }
 
-// The timestamp at which the DMM frame is transmitted by the originating MEP (ITU-T
-// Y.1731 Section 8.2).
+// TxTimeStampf: the transmit time of the DMM (ITU-T G.8013/Y.1731 clause 9.15), in
+// the IEEE 1588 timestamp format: the upper 32 bits are seconds and the lower 32 bits
+// are nanoseconds (0 to 999999999). For example 1.5 seconds is (1 << 32) + 500000000.
+// The configured value is sent as is; the implementation does not replace it with the
+// actual transmit time. increment and decrement act on the 64-bit value, so keep the
+// nanoseconds part below 1000000000 across the count for valid timestamps.
 message PatternFlowCfmDmmTxTimestampF {
 
   message Choice {
@@ -41893,8 +42116,9 @@ message PatternFlowCfmDmmReservedForDmmReceiverCounter {
   optional uint64 count = 3;
 }
 
-// Reserved for the DMM receiving equipment to record its receive timestamp when forming
-// the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).
+// Reserved for the DMM receiving equipment (ITU-T G.8013/Y.1731 clause 9.15): the responder
+// records RxTimeStampf, its receive time of this DMM, here when it forms the DMR. Zero
+// in a conforming DMM; a non-zero value is sent as configured.
 message PatternFlowCfmDmmReservedForDmmReceiver {
 
   message Choice {
@@ -41941,8 +42165,9 @@ message PatternFlowCfmDmmReservedForDmrCounter {
   optional uint64 count = 3;
 }
 
-// Reserved for the DMM receiving equipment to record its transmit timestamp when forming
-// the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).
+// Reserved for the DMR (ITU-T G.8013/Y.1731 clause 9.15): the responder records TxTimeStampb,
+// its transmit time of the DMR, here. Zero in a conforming DMM; a non-zero value is
+// sent as configured.
 message PatternFlowCfmDmmReservedForDmr {
 
   message Choice {
@@ -41989,9 +42214,9 @@ message PatternFlowCfmDmmReservedForDmrReceiverCounter {
   optional uint64 count = 3;
 }
 
-// Reserved for the DMR receiving equipment to record its receive timestamp when the
-// DMR arrives back at the originating MEP. Set to zero by the DMM originator (ITU-T
-// Y.1731 Section 8.2).
+// Reserved for the DMR receiving equipment (ITU-T G.8013/Y.1731 clause 9.15): the originating
+// MEP may record RxTimeStampb, its receive time of the DMR, here. Zero in a conforming
+// DMM; a non-zero value is sent as configured.
 message PatternFlowCfmDmmReservedForDmrReceiver {
 
   message Choice {
@@ -42038,8 +42263,10 @@ message PatternFlowCfmDmrTxTimestampFCounter {
   optional uint64 count = 3;
 }
 
-// Transmit timestamp recorded by the DMM originator, copied verbatim by the responder
-// from the received DMM into the DMR (ITU-T Y.1731 Section 8.2).
+// TxTimeStampf (ITU-T G.8013/Y.1731 clause 9.16): the transmit time of the DMM this
+// DMR answers. A responder copies it from the DMM. IEEE 1588 timestamp format: upper
+// 32 bits seconds, lower 32 bits nanoseconds (0 to 999999999); 1.5 seconds is (1 <<
+// 32) + 500000000.
 message PatternFlowCfmDmrTxTimestampF {
 
   message Choice {
@@ -42086,8 +42313,8 @@ message PatternFlowCfmDmrRxTimestampFCounter {
   optional uint64 count = 3;
 }
 
-// Receive timestamp recorded by the responder when the DMM frame arrived (ITU-T Y.1731
-// Section 8.2).
+// RxTimeStampf (ITU-T G.8013/Y.1731 clause 9.16): the time the responder received the
+// DMM, in the responder's clock. IEEE 1588 timestamp format as for tx_timestamp_f.
 message PatternFlowCfmDmrRxTimestampF {
 
   message Choice {
@@ -42134,8 +42361,10 @@ message PatternFlowCfmDmrTxTimestampBCounter {
   optional uint64 count = 3;
 }
 
-// Transmit timestamp recorded by the responder when the DMR frame is transmitted back
-// to the originating MEP (ITU-T Y.1731 Section 8.2).
+// TxTimeStampb (ITU-T G.8013/Y.1731 clause 9.16): the time the responder transmits
+// the DMR, in the responder's clock. IEEE 1588 timestamp format as for tx_timestamp_f.
+// The receiver subtracts tx_timestamp_b - rx_timestamp_f (responder processing time)
+// from the round trip, so a realistic reply has tx_timestamp_b not earlier than rx_timestamp_f.
 message PatternFlowCfmDmrTxTimestampB {
 
   message Choice {
@@ -42182,9 +42411,9 @@ message PatternFlowCfmDmrReservedForDmrReceiverCounter {
   optional uint64 count = 3;
 }
 
-// Reserved for the DMR receiving equipment (the originating MEP) to record its receive
-// timestamp when the DMR arrives. Set to zero by the DMR originator (ITU-T Y.1731 Section
-// 8.2).
+// Reserved for the DMR receiving equipment (ITU-T G.8013/Y.1731 clause 9.16): the originating
+// MEP may record RxTimeStampb, its receive time of the DMR, here. Zero in a conforming
+// DMR; a non-zero value is sent as configured.
 message PatternFlowCfmDmrReservedForDmrReceiver {
 
   message Choice {
@@ -42268,6 +42497,1125 @@ message PatternFlowCfmTlvsLength {
 
   // Description missing in models
   PatternFlowCfmTlvsLengthCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv2TypeCounter {
+
+  // Description missing in models
+  // default = 17
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// IGMP message type (RFC 2236 Section 2.1). Default 17 (0x11) is a Membership Query,
+// general or group-specific depending on group_address. 18 (0x12) is the IGMPv1 Membership
+// Report, accepted by IGMPv2 for backward compatibility. 22 (0x16) is the IGMPv2 Membership
+// Report and 23 (0x17) is Leave Group.
+message PatternFlowIgmpv2Type {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 17
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [17]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv2TypeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv2TypeCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv2MaxResponseTimeCounter {
+
+  // Description missing in models
+  // default = 100
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Maximum response time in units of 1/10 second (RFC 2236 Section 2.2), so 100 is 10
+// seconds and 255 is 25.5 seconds. Meaningful only in Membership Query messages. In
+// a conforming Membership Report or Leave Group it is set to zero by the sender and
+// ignored by the receiver; the default is 100, so set 0 explicitly when building those
+// messages.
+message PatternFlowIgmpv2MaxResponseTime {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 100
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [100]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv2MaxResponseTimeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv2MaxResponseTimeCounter decrement = 6;
+}
+
+// IGMP checksum (RFC 2236 Section 2.3): the 16-bit one's complement of the one's complement
+// sum of the entire IGMP message (the IP payload). Unlike ICMPv6 there is no pseudo-header,
+// so it depends only on the fields of this header. The generated choice is computed
+// for every packet, so the value differs between packets when type, max_response_time
+// or group_address vary across the flow; bad is a deliberately incorrect value. The
+// custom choice is one fixed value sent in every packet and is not updated when other
+// fields vary. An implementation that cannot generate the checksum for a configuration
+// should reject it with an error rather than send a different value.
+message PatternFlowIgmpv2Checksum {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      generated = 1;
+      custom = 2;
+    }
+  }
+  // The type of checksum
+  // default = Choice.Enum.generated
+  optional Choice.Enum choice = 1;
+
+  message Generated {
+    enum Enum {
+      unspecified = 0;
+      good = 1;
+      bad = 2;
+    }
+  }
+  // A system generated checksum value
+  // default = Generated.Enum.good
+  optional Generated.Enum generated = 2;
+
+  // A custom checksum value
+  optional uint32 custom = 3;
+}
+
+// ipv4 counter pattern
+message PatternFlowIgmpv2GroupAddressCounter {
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string start = 1;
+
+  // Description missing in models
+  // default = 0.0.0.1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Group address (RFC 2236 Section 2.4). Zero in a general Membership Query; the group
+// being queried in a Group-Specific Query; the group being reported or left in a Membership
+// Report or Leave Group. In a conforming packet a non-zero value is a multicast group
+// address.
+message PatternFlowIgmpv2GroupAddress {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['0.0.0.0']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv2GroupAddressCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv2GroupAddressCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3MembershipQueryTypeCounter {
+
+  // Description missing in models
+  // default = 17
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// IGMP message type (RFC 9776 Section 4.1). Default 17 (0x11), Membership Query. This
+// header always sends the IGMPv3 layout, the eight octet IGMPv1 and IGMPv2 messages
+// use the igmpv1 and igmpv2 headers. Another value sends this layout with that type
+// for negative testing, receivers silently ignore unrecognized types.
+message PatternFlowIgmpv3MembershipQueryType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 17
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [17]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryTypeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryTypeCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3MembershipQueryMaxRespCodeCounter {
+
+  // Description missing in models
+  // default = 100
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Max Resp Code (RFC 9776 Section 4.1.1), the maximum time hosts may wait before they
+// report, in units of 1/10 second. Below 128 it is the time itself, so the default
+// 100 is 10 seconds (Section 8.3). From 128 up it is floating point: the high bit is
+// set, the next three bits are exp and the low four bits are mant, and the time is
+// (mant OR 0x10) shifted left by (exp plus three), so 128 is 12.8 seconds and 255 is
+// 3174.4 seconds. The value is sent as configured. Group-Specific and Group-and-Source
+// Specific Queries normally use 10 (Section 8.8).
+message PatternFlowIgmpv3MembershipQueryMaxRespCode {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 100
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [100]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryMaxRespCodeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryMaxRespCodeCounter decrement = 6;
+}
+
+// Checksum (RFC 9776 Section 4.1.2), the 16-bit one's complement of the one's complement
+// sum of the whole IGMP message, which is the entire IP payload including every source
+// address. There is no pseudo-header.
+message PatternFlowIgmpv3MembershipQueryChecksum {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      generated = 1;
+      custom = 2;
+    }
+  }
+  // The type of checksum
+  // default = Choice.Enum.generated
+  optional Choice.Enum choice = 1;
+
+  message Generated {
+    enum Enum {
+      unspecified = 0;
+      good = 1;
+      bad = 2;
+    }
+  }
+  // A system generated checksum value
+  // default = Generated.Enum.good
+  optional Generated.Enum generated = 2;
+
+  // A custom checksum value
+  optional uint32 custom = 3;
+}
+
+// ipv4 counter pattern
+message PatternFlowIgmpv3MembershipQueryGroupAddressCounter {
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string start = 1;
+
+  // Description missing in models
+  // default = 0.0.0.1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Group Address (RFC 9776 Section 4.1.3), zero for a General Query and the group being
+// queried for a Group-Specific or Group-and-Source Specific Query.
+message PatternFlowIgmpv3MembershipQueryGroupAddress {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['0.0.0.0']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryGroupAddressCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryGroupAddressCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3MembershipQueryFlagsCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Flags (RFC 9776 Section 4.1.4), four bits managed by IANA (RFC 9778 Section 2.2).
+// The most significant bit (value eight) is E, Extension (RFC 9279 Section 3.3), which
+// is set only when an extension follows the sources, the other bits are unassigned.
+// This header does not model the extension, so a conforming message from it has flags
+// zero.
+message PatternFlowIgmpv3MembershipQueryFlags {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryFlagsCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryFlagsCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3MembershipQuerySFlagCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// S flag, Suppress Router-Side Processing (RFC 9776 Section 4.1.5). When set to one,
+// receiving routers skip their normal timer updates for this Query, Querier election
+// and host-side processing still happen. Queriers use it in repeated Group-Specific
+// and Group-and-Source Specific Queries (Section 6.6.3).
+message PatternFlowIgmpv3MembershipQuerySFlag {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQuerySFlagCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQuerySFlagCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3MembershipQueryQrvCounter {
+
+  // Description missing in models
+  // default = 2
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// QRV, Querier's Robustness Variable (RFC 9776 Section 4.1.6). A querier whose Robustness
+// Variable is above seven sends zero, and a receiver of zero uses its own value. The
+// Robustness Variable itself is never zero (Section 8.1). The default is the RFC default
+// of two (Section 8.1).
+message PatternFlowIgmpv3MembershipQueryQrv {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 2
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [2]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryQrvCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryQrvCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3MembershipQueryQqicCounter {
+
+  // Description missing in models
+  // default = 125
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// QQIC, Querier's Query Interval Code (RFC 9776 Section 4.1.7), in seconds. Below 128
+// it is the interval itself, so the default 125 is the RFC default Query Interval (Section
+// 8.2). From 128 up it uses the floating point form of max_resp_code, so 255 is 31744
+// seconds. Zero tells receivers to use their own default. The value is sent as configured.
+message PatternFlowIgmpv3MembershipQueryQqic {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 125
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [125]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryQqicCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryQqicCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3MembershipQueryNumberOfSourcesCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Number of source addresses in the query, zero for a general and a group-specific
+// query. When auto, it is set to the number of entries in sources.
+message PatternFlowIgmpv3MembershipQueryNumberOfSources {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryNumberOfSourcesCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipQueryNumberOfSourcesCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3MembershipReportTypeCounter {
+
+  // Description missing in models
+  // default = 34
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// IGMP message type (RFC 9776 Section 4.2). Default 34 (0x22), IGMPv3 Membership Report.
+// Another value sends this layout with that type for negative testing, receivers silently
+// ignore unrecognized types.
+message PatternFlowIgmpv3MembershipReportType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 34
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [34]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportTypeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportTypeCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3MembershipReportReservedCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Reserved field, set to zero by the sender and ignored by the receiver.
+message PatternFlowIgmpv3MembershipReportReserved {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportReservedCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportReservedCounter decrement = 6;
+}
+
+// Checksum (RFC 9776 Section 4.2.2), the 16-bit one's complement of the one's complement
+// sum of the whole IGMP message, which is the entire IP payload including every group
+// record and any aux_data. There is no pseudo-header.
+message PatternFlowIgmpv3MembershipReportChecksum {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      generated = 1;
+      custom = 2;
+    }
+  }
+  // The type of checksum
+  // default = Choice.Enum.generated
+  optional Choice.Enum choice = 1;
+
+  message Generated {
+    enum Enum {
+      unspecified = 0;
+      good = 1;
+      bad = 2;
+    }
+  }
+  // A system generated checksum value
+  // default = Generated.Enum.good
+  optional Generated.Enum generated = 2;
+
+  // A custom checksum value
+  optional uint32 custom = 3;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3MembershipReportFlagsCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Flags (RFC 9776 Section 4.2.3), sixteen bits managed by IANA (RFC 9778 Section 2.3).
+// The most significant bit (value 0x8000) is E, Extension (RFC 9279 Section 3.4), which
+// is set only when an extension follows the last group record, the other bits are unassigned.
+// This header does not model the extension, so a conforming message from it has flags
+// zero.
+message PatternFlowIgmpv3MembershipReportFlags {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportFlagsCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportFlagsCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3MembershipReportNumberOfGroupRecordsCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Number of group records. When auto, it is set to the number of entries in group_records.
+message PatternFlowIgmpv3MembershipReportNumberOfGroupRecords {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportNumberOfGroupRecordsCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIgmpv3MembershipReportNumberOfGroupRecordsCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3GroupRecordRecordTypeCounter {
+
+  // Description missing in models
+  // default = 1
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Record Type (RFC 9776 Section 4.2.13). Current-State records, sent in reply to a
+// Query, are mode_is_include and mode_is_exclude. Filter-Mode-Change records are change_to_include_mode
+// and change_to_exclude_mode. Source-List-Change records are allow_new_sources and
+// block_old_sources. A change_to_include_mode record with no sources is how a host
+// leaves a group. Receivers silently ignore other values, so any value up to 255 may
+// be sent for negative testing. For a group in the SSM range 232/8 a host should not
+// send mode_is_exclude or change_to_exclude_mode (RFC 4604).
+message PatternFlowIgmpv3GroupRecordRecordType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [1]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3GroupRecordRecordTypeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3GroupRecordRecordTypeCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3GroupRecordAuxDataLengthCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Aux Data Len (RFC 9776 Section 4.2.7), the length of aux_data in 32-bit words. When
+// auto, it is the length of aux_data in octets divided by four, so zero when aux_data
+// is omitted. A conforming sender uses zero (Section 4.2.11), set a value to make it
+// disagree with aux_data for negative testing.
+message PatternFlowIgmpv3GroupRecordAuxDataLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIgmpv3GroupRecordAuxDataLengthCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIgmpv3GroupRecordAuxDataLengthCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIgmpv3GroupRecordNumberOfSourcesCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Number of source addresses in this record. When auto, it is set to the number of
+// entries in sources.
+message PatternFlowIgmpv3GroupRecordNumberOfSources {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIgmpv3GroupRecordNumberOfSourcesCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIgmpv3GroupRecordNumberOfSourcesCounter decrement = 7;
+}
+
+// ipv4 counter pattern
+message PatternFlowIgmpv3GroupRecordMulticastAddressCounter {
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string start = 1;
+
+  // Description missing in models
+  // default = 0.0.0.1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Multicast Address (RFC 9776 Section 4.2.9), the IPv4 multicast group this record
+// reports on. Several records may name the same group, for example one allow_new_sources
+// and one block_old_sources record (RFC 9776 Section 4.2.13).
+message PatternFlowIgmpv3GroupRecordMulticastAddress {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['0.0.0.0']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3GroupRecordMulticastAddressCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3GroupRecordMulticastAddressCounter decrement = 6;
+}
+
+// ipv4 counter pattern
+message PatternFlowIgmpv3SourceAddressCounter {
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string start = 1;
+
+  // Description missing in models
+  // default = 0.0.0.1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Unicast IPv4 source address. A counter or a values list changes the address from
+// packet to packet across the flow, it does not add sources to the message.
+message PatternFlowIgmpv3SourceAddress {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['0.0.0.0']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowIgmpv3SourceAddressCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIgmpv3SourceAddressCounter decrement = 6;
 }
 
 // Version details

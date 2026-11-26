@@ -258,7 +258,7 @@ func (obj *patternFlowIpv4Dst) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowIpv4Dst is destination address
+// PatternFlowIpv4Dst is destination address. When this is a multicast address, the Ethernet destination should be 01:00:5e followed by the low 23 bits of this address (RFC 1112 Section 6.4), for example 224.0.0.1 maps to 01:00:5e:00:00:01.
 type PatternFlowIpv4Dst interface {
 	Validation
 	// msg marshals PatternFlowIpv4Dst to protobuf object *otg.PatternFlowIpv4Dst

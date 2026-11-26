@@ -252,7 +252,7 @@ func (obj *patternFlowCfmDmrReservedForDmrReceiver) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowCfmDmrReservedForDmrReceiver is reserved for the DMR receiving equipment (the originating MEP) to record its receive timestamp when the DMR arrives. Set to zero by the DMR originator (ITU-T Y.1731 Section 8.2).
+// PatternFlowCfmDmrReservedForDmrReceiver is reserved for the DMR receiving equipment (ITU-T G.8013/Y.1731 clause 9.16): the originating MEP may record RxTimeStampb, its receive time of the DMR, here. Zero in a conforming DMR; a non-zero value is sent as configured.
 type PatternFlowCfmDmrReservedForDmrReceiver interface {
 	Validation
 	// msg marshals PatternFlowCfmDmrReservedForDmrReceiver to protobuf object *otg.PatternFlowCfmDmrReservedForDmrReceiver

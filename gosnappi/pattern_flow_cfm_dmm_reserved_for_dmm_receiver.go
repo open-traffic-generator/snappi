@@ -252,7 +252,7 @@ func (obj *patternFlowCfmDmmReservedForDmmReceiver) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowCfmDmmReservedForDmmReceiver is reserved for the DMM receiving equipment to record its receive timestamp when forming the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).
+// PatternFlowCfmDmmReservedForDmmReceiver is reserved for the DMM receiving equipment (ITU-T G.8013/Y.1731 clause 9.15): the responder records RxTimeStampf, its receive time of this DMM, here when it forms the DMR. Zero in a conforming DMM; a non-zero value is sent as configured.
 type PatternFlowCfmDmmReservedForDmmReceiver interface {
 	Validation
 	// msg marshals PatternFlowCfmDmmReservedForDmmReceiver to protobuf object *otg.PatternFlowCfmDmmReservedForDmmReceiver

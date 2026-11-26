@@ -254,7 +254,7 @@ func (obj *patternFlowIpv4Protocol) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowIpv4Protocol is protocol, default is 61 any host internal protocol
+// PatternFlowIpv4Protocol is protocol number of the payload (IANA Assigned Internet Protocol Numbers). When auto, the implementation should set it from the next header in the packet (for example igmp 2, tcp 6, udp 17). If it cannot be derived, for example the next header is custom or there is none, the value 61 (any host internal protocol) is used. Choose value to override auto.
 type PatternFlowIpv4Protocol interface {
 	Validation
 	// msg marshals PatternFlowIpv4Protocol to protobuf object *otg.PatternFlowIpv4Protocol

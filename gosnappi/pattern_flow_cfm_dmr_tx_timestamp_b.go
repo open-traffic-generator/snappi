@@ -252,7 +252,7 @@ func (obj *patternFlowCfmDmrTxTimestampB) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowCfmDmrTxTimestampB is transmit timestamp recorded by the responder when the DMR frame is transmitted back to the originating MEP (ITU-T Y.1731 Section 8.2).
+// PatternFlowCfmDmrTxTimestampB is txTimeStampb (ITU-T G.8013/Y.1731 clause 9.16): the time the responder transmits the DMR, in the responder's clock. IEEE 1588 timestamp format as for tx_timestamp_f. The receiver subtracts tx_timestamp_b - rx_timestamp_f (responder processing time) from the round trip, so a realistic reply has tx_timestamp_b not earlier than rx_timestamp_f.
 type PatternFlowCfmDmrTxTimestampB interface {
 	Validation
 	// msg marshals PatternFlowCfmDmrTxTimestampB to protobuf object *otg.PatternFlowCfmDmrTxTimestampB

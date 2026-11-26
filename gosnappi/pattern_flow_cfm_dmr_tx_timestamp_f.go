@@ -252,7 +252,7 @@ func (obj *patternFlowCfmDmrTxTimestampF) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowCfmDmrTxTimestampF is transmit timestamp recorded by the DMM originator, copied verbatim by the responder from the received DMM into the DMR (ITU-T Y.1731 Section 8.2).
+// PatternFlowCfmDmrTxTimestampF is txTimeStampf (ITU-T G.8013/Y.1731 clause 9.16): the transmit time of the DMM this DMR answers. A responder copies it from the DMM. IEEE 1588 timestamp format: upper 32 bits seconds, lower 32 bits nanoseconds (0 to 999999999); 1.5 seconds is (1 << 32) + 500000000.
 type PatternFlowCfmDmrTxTimestampF interface {
 	Validation
 	// msg marshals PatternFlowCfmDmrTxTimestampF to protobuf object *otg.PatternFlowCfmDmrTxTimestampF

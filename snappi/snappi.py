@@ -1,4 +1,4 @@
-# Open Traffic Generator API 1.65.0
+# Open Traffic Generator API 1.66.0
 # License: MIT
 
 import importlib
@@ -55822,6 +55822,8 @@ class FlowHeader(OpenApiObject):
                 "lacp",
                 "ipv6_extension_header",
                 "cfm",
+                "igmpv2",
+                "igmpv3",
             ],
         },
         "custom": {"type": "FlowCustom"},
@@ -55849,6 +55851,8 @@ class FlowHeader(OpenApiObject):
         "lacp": {"type": "FlowLacp"},
         "ipv6_extension_header": {"type": "FlowIpv6ExtHeader"},
         "cfm": {"type": "FlowCfm"},
+        "igmpv2": {"type": "FlowIgmpv2"},
+        "igmpv3": {"type": "FlowIgmpv3"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -55882,6 +55886,8 @@ class FlowHeader(OpenApiObject):
     LACP = "lacp"  # type: str
     IPV6_EXTENSION_HEADER = "ipv6_extension_header"  # type: str
     CFM = "cfm"  # type: str
+    IGMPV2 = "igmpv2"  # type: str
+    IGMPV3 = "igmpv3"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -56177,13 +56183,35 @@ class FlowHeader(OpenApiObject):
         return self._get_property("cfm", FlowCfm, self, "cfm")
 
     @property
+    def igmpv2(self):
+        # type: () -> FlowIgmpv2
+        """Factory property that returns an instance of the FlowIgmpv2 class
+
+        Packet Header for IGMP version (RFC 2236 Section 2): an octet message carried directly in IPv4. conforming message is sent with IP protocol 2, TTL 1, IP precedence Internetwork Control (ToS 0xc0) and the IP Router Alert option (RFC 2236 Section 2, RFC 2113).. RFC requirements described for this header (MUST MUST NOT) apply to conforming packet. The model does not enforce them, so any value the fields can encode may be configured for conformance and negative testing.. The IPv4 and Ethernet destinations are set in their own headers. Use these values (RFC 2236 Section 3):. General Query: IPv4 dst 224.0.0.1, group_address 0.0.0.0. Group-Specific Query: IPv4 dst group, group_address group. v2 Membership Report: IPv4 dst group, group_address group. Leave Group: IPv4 dst 224.0.0.2, group_address group. Ethernet dst 01:00:5e the low 23 bits of the IPv4 destination (RFC 1112 Section 6.4). Example: 224.0.0.1 gives 01:00:5e:00:00:01 and 239.1.2.3 gives 01:00:5e:01:02:03. Only 23 bits are used, so 239.129.2.3 maps to the same MAC as 239.1.2.3.
+
+        Returns: FlowIgmpv2
+        """
+        return self._get_property("igmpv2", FlowIgmpv2, self, "igmpv2")
+
+    @property
+    def igmpv3(self):
+        # type: () -> FlowIgmpv3
+        """Factory property that returns an instance of the FlowIgmpv3 class
+
+        Packet Header for IGMPv3 (RFC 9776, which obsoletes RFC 3376), carried directly in IPv4. The choice selects the Membership Query or the IGMPv3 Membership Report. conforming message is sent with IP protocol number two, TTL one, IP precedence Internetwork Control (ToS 0xc0) and the IP Router Alert option (RFC 2113). The model does not enforce these requirements, so any value the fields can encode may be configured for negative testing.. Query of eight octets is IGMPv1 or IGMPv2 and Query of twelve or more octets is IGMPv3 (RFC 9776 Section 7.1), so membership_query always builds an IGMPv3 Query. The eight octet messages use the igmpv1 and igmpv2 headers.. The IPv4 and Ethernet destinations are set in their own headers. Use these values (RFC 9776 Sections 4.1.12 and 4.2.15):. General Query:. IPv4 dst 224.0.0.1. Group-Specific and Group-and-Source Specific Query:. IPv4 dst group_address. IGMPv3 Membership Report:. IPv4 dst 224.0.0.22, IPv4 src a unicast address or 0.0.0.0. Ethernet dst 01:00:5e low 23 bits of the IPv4 dst (RFC 1112 Section 6.4), for example 224.0.0.22 gives 01:00:5e:00:00:16.. The flow size overrides the packet length, so set it large enough for the whole message. Query is twelve octets plus four per source. Report is eight octets plus, per group record, eight octets plus four per source plus four per aux_data_length word. Ethernet, IPv4 with Router Alert and the FCS add 42 octets. The default flow size of 64 fits Query with up to two sources or Report with one record of up to one source.
+
+        Returns: FlowIgmpv3
+        """
+        return self._get_property("igmpv3", FlowIgmpv3, self, "igmpv3")
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["arp"], Literal["cfm"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["ipv6_extension_header"], Literal["lacp"], Literal["macsec"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["rsvp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
+        # type: () -> Union[Literal["arp"], Literal["cfm"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["igmpv2"], Literal["igmpv3"], Literal["ipv4"], Literal["ipv6"], Literal["ipv6_extension_header"], Literal["lacp"], Literal["macsec"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["rsvp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
         """choice getter
 
         The available types of flow headers. If one is not provided the default ethernet packet header MUST be provided.
 
-        Returns: Union[Literal["arp"], Literal["cfm"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["ipv6_extension_header"], Literal["lacp"], Literal["macsec"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["rsvp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
+        Returns: Union[Literal["arp"], Literal["cfm"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["igmpv2"], Literal["igmpv3"], Literal["ipv4"], Literal["ipv6"], Literal["ipv6_extension_header"], Literal["lacp"], Literal["macsec"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["rsvp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
         """
         return self._get_property("choice")
 
@@ -56193,7 +56221,7 @@ class FlowHeader(OpenApiObject):
 
         The available types of flow headers. If one is not provided the default ethernet packet header MUST be provided.
 
-        value: Union[Literal["arp"], Literal["cfm"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["ipv6_extension_header"], Literal["lacp"], Literal["macsec"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["rsvp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
+        value: Union[Literal["arp"], Literal["cfm"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["igmpv2"], Literal["igmpv3"], Literal["ipv4"], Literal["ipv6"], Literal["ipv6_extension_header"], Literal["lacp"], Literal["macsec"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["rsvp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
         """
         self._set_property("choice", value)
 
@@ -62139,7 +62167,7 @@ class FlowIpv4(OpenApiObject):
         # type: () -> PatternFlowIpv4Protocol
         """protocol getter
 
-        Protocol, default is 61 any host internal protocolProtocol, default is 61 any host internal protocolProtocol, default is 61 any host internal protocolProtocol, default is 61 any host internal protocol
+        Protocol number of the payload (IANA Assigned Internet Protocol Numbers). When auto, the implementation should set it from the next header in the packet (for example igmp 2, tcp 6, udp 17). If it cannot be derived, for example the next header is custom or there is none, the value 61 (any host internal protocol) is used. Choose value to override auto.Protocol number of the payload (IANA Assigned Internet Protocol Numbers). When auto, the implementation should set it from the next header in the packet (for example igmp 2, tcp 6, udp 17). If it cannot be derived, for example the next header is custom or there is none, the value 61 (any host internal protocol) is used. Choose value to override auto.Protocol number of the payload (IANA Assigned Internet Protocol Numbers). When auto, the implementation should set it from the next header in the packet (for example igmp 2, tcp 6, udp 17). If it cannot be derived, for example the next header is custom or there is none, the value 61 (any host internal protocol) is used. Choose value to override auto.Protocol number of the payload (IANA Assigned Internet Protocol Numbers). When auto, the implementation should set it from the next header in the packet (for example igmp 2, tcp 6, udp 17). If it cannot be derived, for example the next header is custom or there is none, the value 61 (any host internal protocol) is used. Choose value to override auto.
 
         Returns: PatternFlowIpv4Protocol
         """
@@ -62172,7 +62200,7 @@ class FlowIpv4(OpenApiObject):
         # type: () -> PatternFlowIpv4Dst
         """dst getter
 
-        Destination addressDestination addressDestination addressDestination address
+        Destination address. When this is multicast address, the Ethernet destination should be 01:00:5e followed by the low 23 bits of this address (RFC 1112 Section 6.4), for example 224.0.0.1 maps to 01:00:5e:00:00:01.Destination address. When this is multicast address, the Ethernet destination should be 01:00:5e followed by the low 23 bits of this address (RFC 1112 Section 6.4), for example 224.0.0.1 maps to 01:00:5e:00:00:01.Destination address. When this is multicast address, the Ethernet destination should be 01:00:5e followed by the low 23 bits of this address (RFC 1112 Section 6.4), for example 224.0.0.1 maps to 01:00:5e:00:00:01.Destination address. When this is multicast address, the Ethernet destination should be 01:00:5e followed by the low 23 bits of this address (RFC 1112 Section 6.4), for example 224.0.0.1 maps to 01:00:5e:00:00:01.
 
         Returns: PatternFlowIpv4Dst
         """
@@ -70554,6 +70582,15 @@ class PatternFlowIpv4Protocol(OpenApiObject):
         "auto": 61,
     }  # type: Dict[str, Union(type)]
 
+    ICMP = 1  #
+    IGMP = 2  #
+    IP_IN_IP = 4  #
+    TCP = 6  #
+    UDP = 17  #
+    IPV6 = 41  #
+    RSVP = 46  #
+    GRE = 47  #
+
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
     AUTO = "auto"  # type: str
@@ -70727,6 +70764,15 @@ class PatternFlowIpv4ProtocolCounter(OpenApiObject):
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
+
+    ICMP = 1  #
+    IGMP = 2  #
+    IP_IN_IP = 4  #
+    TCP = 6  #
+    UDP = 17  #
+    IPV6 = 41  #
+    RSVP = 46  #
+    GRE = 47  #
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -164187,7 +164233,7 @@ class FlowCfm(OpenApiObject):
         # type: () -> FlowCfmSelectOpCode
         """op_code getter
 
-        Select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7 and ITU-T Y.1731. Currently supported choices are Continuity Check Message (CCM), Loopback Message (LBM), Loopback Reply (LBR), Delay Measurement Message (DMM) and Delay Measurement Reply (DMR).Select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7 and ITU-T Y.1731. Currently supported choices are Continuity Check Message (CCM), Loopback Message (LBM), Loopback Reply (LBR), Delay Measurement Message (DMM) and Delay Measurement Reply (DMR).Select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7 and ITU-T Y.1731. Currently supported choices are Continuity Check Message (CCM), Loopback Message (LBM), Loopback Reply (LBR), Delay Measurement Message (DMM) and Delay Measurement Reply (DMR).Select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7 and ITU-T Y.1731. Currently supported choices are Continuity Check Message (CCM), Loopback Message (LBM), Loopback Reply (LBR), Delay Measurement Message (DMM) and Delay Measurement Reply (DMR).
+        Select the CFM PDU. The OpCode byte in the CFM common header is set automatically from the choice: ccm 1, lbr 2, lbm (IEEE 802.1Q-2018 Clause 21), dmr 46 and dmm 47 (ITU-T G.8013/Y.1731 clause 9.15). OpCodes 1-31 are assigned by IEEE 802.1 and 32-63 by ITU-T G.8013/Y.1731.Select the CFM PDU. The OpCode byte in the CFM common header is set automatically from the choice: ccm 1, lbr 2, lbm (IEEE 802.1Q-2018 Clause 21), dmr 46 and dmm 47 (ITU-T G.8013/Y.1731 clause 9.15). OpCodes 1-31 are assigned by IEEE 802.1 and 32-63 by ITU-T G.8013/Y.1731.Select the CFM PDU. The OpCode byte in the CFM common header is set automatically from the choice: ccm 1, lbr 2, lbm (IEEE 802.1Q-2018 Clause 21), dmr 46 and dmm 47 (ITU-T G.8013/Y.1731 clause 9.15). OpCodes 1-31 are assigned by IEEE 802.1 and 32-63 by ITU-T G.8013/Y.1731.Select the CFM PDU. The OpCode byte in the CFM common header is set automatically from the choice: ccm 1, lbr 2, lbm (IEEE 802.1Q-2018 Clause 21), dmr 46 and dmm 47 (ITU-T G.8013/Y.1731 clause 9.15). OpCodes 1-31 are assigned by IEEE 802.1 and 32-63 by ITU-T G.8013/Y.1731.
 
         Returns: FlowCfmSelectOpCode
         """
@@ -164279,7 +164325,7 @@ class FlowCfmSelectOpCode(OpenApiObject):
         # type: () -> FlowCfmDmm
         """Factory property that returns an instance of the FlowCfmDmm class
 
-        Delay Measurement Message (DMM) is diagnostic frame sent by Maintenance End Point (MEP) to peer MEP to measure one-way or two-way frame delay, as defined in ITU-T Y.1731 Section 8.2. DMM flag bits are reserved and set to zero.
+        Delay Measurement Message (DMM, OpCode 47) is sent by MEP to peer MEP to measure two-way frame delay and frame delay variation (ITU-T G.8013/Y.1731 clause 8.2, PDU format clause 9.15). The peer answers with Delay Measurement Reply (DMR, OpCode 46). One-way delay uses the separate 1DM PDU (OpCode 45). The implementation sets OpCode 47 and TLV Offset 32 in the CFM common header.. conforming DMM is sent in an Ethernet frame with EtherType 0x8902, normally to the unicast MAC address of the peer MEP; set both in the Ethernet header. RFC-style requirements (MUST MUST NOT) described for this PDU apply to conforming frame. The model does not enforce them, so any value the fields can encode may be configured for conformance and negative testing.
 
         Returns: FlowCfmDmm
         """
@@ -164290,7 +164336,7 @@ class FlowCfmSelectOpCode(OpenApiObject):
         # type: () -> FlowCfmDmr
         """Factory property that returns an instance of the FlowCfmDmr class
 
-        Delay Measurement Reply (DMR) is the response frame sent by peer Maintenance End Point (MEP) back to the originating MEP in reply to Delay Measurement Message (DMM), as defined in ITU-T Y.1731 Section 8.2. DMR flag bits are reserved and set to zero.
+        Delay Measurement Reply (DMR, OpCode 46) is sent by MEP in reply to Delay Measurement Message (DMM, OpCode 47) (ITU-T G.8013/Y.1731 clause 8.2, PDU format clause 9.16). The implementation sets OpCode 46 and TLV Offset 32 in the CFM common header.. conforming DMR is sent in an Ethernet frame with EtherType 0x8902 to the unicast MAC address of the MEP that sent the DMM; set both in the Ethernet header. All fields are sent as configured: DMR flow does not answer received DMMs, so it is for testing how DUT that sends DMMs handles replies with known timestamps. RFC-style requirements (MUST MUST NOT) described for this PDU apply to conforming frame. The model does not enforce them, so any value the fields can encode may be configured for conformance and negative testing.
 
         Returns: FlowCfmDmr
         """
@@ -167491,6 +167537,7 @@ class FlowCfmDmm(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
+        "flags": {"type": "FlowCfmPmFlags"},
         "tx_timestamp_f": {"type": "PatternFlowCfmDmmTxTimestampF"},
         "reserved_for_dmm_receiver": {
             "type": "PatternFlowCfmDmmReservedForDmmReceiver"
@@ -167522,11 +167569,22 @@ class FlowCfmDmm(OpenApiObject):
                 self._set_property(property_name, property_value)
 
     @property
+    def flags(self):
+        # type: () -> FlowCfmPmFlags
+        """flags getter
+
+        Flags byte of performance-monitoring PDU (1DM, DMM, DMR, LMM, LMR): bit (least significant) is Type, bits 8-2 are reserved and sent as zero (ITU-T G.8013/Y.1731 clauses 9.12-9.16).Flags byte of performance-monitoring PDU (1DM, DMM, DMR, LMM, LMR): bit (least significant) is Type, bits 8-2 are reserved and sent as zero (ITU-T G.8013/Y.1731 clauses 9.12-9.16).Flags byte of performance-monitoring PDU (1DM, DMM, DMR, LMM, LMR): bit (least significant) is Type, bits 8-2 are reserved and sent as zero (ITU-T G.8013/Y.1731 clauses 9.12-9.16).Flags byte of performance-monitoring PDU (1DM, DMM, DMR, LMM, LMR): bit (least significant) is Type, bits 8-2 are reserved and sent as zero (ITU-T G.8013/Y.1731 clauses 9.12-9.16).
+
+        Returns: FlowCfmPmFlags
+        """
+        return self._get_property("flags", FlowCfmPmFlags)
+
+    @property
     def tx_timestamp_f(self):
         # type: () -> PatternFlowCfmDmmTxTimestampF
         """tx_timestamp_f getter
 
-        The timestamp at which the DMM frame is transmitted by the originating MEP (ITU-T Y.1731 Section 8.2).The timestamp at which the DMM frame is transmitted by the originating MEP (ITU-T Y.1731 Section 8.2).The timestamp at which the DMM frame is transmitted by the originating MEP (ITU-T Y.1731 Section 8.2).The timestamp at which the DMM frame is transmitted by the originating MEP (ITU-T Y.1731 Section 8.2).
+        TxTimeStampf: the transmit time of the DMM (ITU-T G.8013/Y.1731 clause 9.15), in the IEEE 1588 timestamp format: the upper 32 bits are seconds and the lower 32 bits are nanoseconds (0 to 999999999). For example 1.5 seconds is (1 << 32) 500000000. The configured value is sent as is; the implementation does not replace it with the actual transmit time. increment and decrement act on the 64-bit value, so keep the nanoseconds part below 1000000000 across the count for valid timestamps.TxTimeStampf: the transmit time of the DMM (ITU-T G.8013/Y.1731 clause 9.15), in the IEEE 1588 timestamp format: the upper 32 bits are seconds and the lower 32 bits are nanoseconds (0 to 999999999). For example 1.5 seconds is (1 << 32) 500000000. The configured value is sent as is; the implementation does not replace it with the actual transmit time. increment and decrement act on the 64-bit value, so keep the nanoseconds part below 1000000000 across the count for valid timestamps.TxTimeStampf: the transmit time of the DMM (ITU-T G.8013/Y.1731 clause 9.15), in the IEEE 1588 timestamp format: the upper 32 bits are seconds and the lower 32 bits are nanoseconds (0 to 999999999). For example 1.5 seconds is (1 << 32) 500000000. The configured value is sent as is; the implementation does not replace it with the actual transmit time. increment and decrement act on the 64-bit value, so keep the nanoseconds part below 1000000000 across the count for valid timestamps.TxTimeStampf: the transmit time of the DMM (ITU-T G.8013/Y.1731 clause 9.15), in the IEEE 1588 timestamp format: the upper 32 bits are seconds and the lower 32 bits are nanoseconds (0 to 999999999). For example 1.5 seconds is (1 << 32) 500000000. The configured value is sent as is; the implementation does not replace it with the actual transmit time. increment and decrement act on the 64-bit value, so keep the nanoseconds part below 1000000000 across the count for valid timestamps.
 
         Returns: PatternFlowCfmDmmTxTimestampF
         """
@@ -167537,7 +167595,7 @@ class FlowCfmDmm(OpenApiObject):
         # type: () -> PatternFlowCfmDmmReservedForDmmReceiver
         """reserved_for_dmm_receiver getter
 
-        Reserved for the DMM receiving equipment to record its receive timestamp when forming the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).Reserved for the DMM receiving equipment to record its receive timestamp when forming the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).Reserved for the DMM receiving equipment to record its receive timestamp when forming the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).Reserved for the DMM receiving equipment to record its receive timestamp when forming the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).
+        Reserved for the DMM receiving equipment (ITU-T G.8013/Y.1731 clause 9.15): the responder records RxTimeStampf, its receive time of this DMM, here when it forms the DMR. Zero in conforming DMM; non-zero value is sent as configured.Reserved for the DMM receiving equipment (ITU-T G.8013/Y.1731 clause 9.15): the responder records RxTimeStampf, its receive time of this DMM, here when it forms the DMR. Zero in conforming DMM; non-zero value is sent as configured.Reserved for the DMM receiving equipment (ITU-T G.8013/Y.1731 clause 9.15): the responder records RxTimeStampf, its receive time of this DMM, here when it forms the DMR. Zero in conforming DMM; non-zero value is sent as configured.Reserved for the DMM receiving equipment (ITU-T G.8013/Y.1731 clause 9.15): the responder records RxTimeStampf, its receive time of this DMM, here when it forms the DMR. Zero in conforming DMM; non-zero value is sent as configured.
 
         Returns: PatternFlowCfmDmmReservedForDmmReceiver
         """
@@ -167550,7 +167608,7 @@ class FlowCfmDmm(OpenApiObject):
         # type: () -> PatternFlowCfmDmmReservedForDmr
         """reserved_for_dmr getter
 
-        Reserved for the DMM receiving equipment to record its transmit timestamp when forming the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).Reserved for the DMM receiving equipment to record its transmit timestamp when forming the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).Reserved for the DMM receiving equipment to record its transmit timestamp when forming the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).Reserved for the DMM receiving equipment to record its transmit timestamp when forming the DMR. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).
+        Reserved for the DMR (ITU-T G.8013/Y.1731 clause 9.15): the responder records TxTimeStampb, its transmit time of the DMR, here. Zero in conforming DMM; non-zero value is sent as configured.Reserved for the DMR (ITU-T G.8013/Y.1731 clause 9.15): the responder records TxTimeStampb, its transmit time of the DMR, here. Zero in conforming DMM; non-zero value is sent as configured.Reserved for the DMR (ITU-T G.8013/Y.1731 clause 9.15): the responder records TxTimeStampb, its transmit time of the DMR, here. Zero in conforming DMM; non-zero value is sent as configured.Reserved for the DMR (ITU-T G.8013/Y.1731 clause 9.15): the responder records TxTimeStampb, its transmit time of the DMR, here. Zero in conforming DMM; non-zero value is sent as configured.
 
         Returns: PatternFlowCfmDmmReservedForDmr
         """
@@ -167561,7 +167619,7 @@ class FlowCfmDmm(OpenApiObject):
         # type: () -> PatternFlowCfmDmmReservedForDmrReceiver
         """reserved_for_dmr_receiver getter
 
-        Reserved for the DMR receiving equipment to record its receive timestamp when the DMR arrives back at the originating MEP. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).Reserved for the DMR receiving equipment to record its receive timestamp when the DMR arrives back at the originating MEP. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).Reserved for the DMR receiving equipment to record its receive timestamp when the DMR arrives back at the originating MEP. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).Reserved for the DMR receiving equipment to record its receive timestamp when the DMR arrives back at the originating MEP. Set to zero by the DMM originator (ITU-T Y.1731 Section 8.2).
+        Reserved for the DMR receiving equipment (ITU-T G.8013/Y.1731 clause 9.15): the originating MEP may record RxTimeStampb, its receive time of the DMR, here. Zero in conforming DMM; non-zero value is sent as configured.Reserved for the DMR receiving equipment (ITU-T G.8013/Y.1731 clause 9.15): the originating MEP may record RxTimeStampb, its receive time of the DMR, here. Zero in conforming DMM; non-zero value is sent as configured.Reserved for the DMR receiving equipment (ITU-T G.8013/Y.1731 clause 9.15): the originating MEP may record RxTimeStampb, its receive time of the DMR, here. Zero in conforming DMM; non-zero value is sent as configured.Reserved for the DMR receiving equipment (ITU-T G.8013/Y.1731 clause 9.15): the originating MEP may record RxTimeStampb, its receive time of the DMR, here. Zero in conforming DMM; non-zero value is sent as configured.
 
         Returns: PatternFlowCfmDmmReservedForDmrReceiver
         """
@@ -167574,7 +167632,7 @@ class FlowCfmDmm(OpenApiObject):
         # type: () -> FlowCfmTlvsIter
         """tlvs getter
 
-        TBD
+        Optional TLVs placed after the DMM fields. In conforming DMM the Data TLV is used to pad the frame to the size under test; other TLV types can be added for negative testing. Note the default TLV choice is sender_id, so choose data explicitly.
 
         Returns: FlowCfmTlvsIter
         """
@@ -167600,6 +167658,53 @@ class FlowCfmDmm(OpenApiObject):
         value: bool
         """
         self._set_property("append_end_tlv", value)
+
+
+class FlowCfmPmFlags(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "proactive": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "proactive": False,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, proactive=False):
+        super(FlowCfmPmFlags, self).__init__()
+        self._parent = parent
+        self._set_property("proactive", proactive)
+
+    def set(self, proactive=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def proactive(self):
+        # type: () -> bool
+        """proactive getter
+
+        Type flag. When true the PDU is sent as part of proactive measurement (Type 1); when false, on-demand (Type 0).
+
+        Returns: bool
+        """
+        return self._get_property("proactive")
+
+    @proactive.setter
+    def proactive(self, value):
+        """proactive setter
+
+        Type flag. When true the PDU is sent as part of proactive measurement (Type 1); when false, on-demand (Type 0).
+
+        value: bool
+        """
+        self._set_property("proactive", value)
 
 
 class PatternFlowCfmDmmTxTimestampF(OpenApiObject):
@@ -168634,6 +168739,7 @@ class FlowCfmDmr(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
+        "flags": {"type": "FlowCfmPmFlags"},
         "tx_timestamp_f": {"type": "PatternFlowCfmDmrTxTimestampF"},
         "rx_timestamp_f": {"type": "PatternFlowCfmDmrRxTimestampF"},
         "tx_timestamp_b": {"type": "PatternFlowCfmDmrTxTimestampB"},
@@ -168663,11 +168769,22 @@ class FlowCfmDmr(OpenApiObject):
                 self._set_property(property_name, property_value)
 
     @property
+    def flags(self):
+        # type: () -> FlowCfmPmFlags
+        """flags getter
+
+        Flags byte of performance-monitoring PDU (1DM, DMM, DMR, LMM, LMR): bit (least significant) is Type, bits 8-2 are reserved and sent as zero (ITU-T G.8013/Y.1731 clauses 9.12-9.16).Flags byte of performance-monitoring PDU (1DM, DMM, DMR, LMM, LMR): bit (least significant) is Type, bits 8-2 are reserved and sent as zero (ITU-T G.8013/Y.1731 clauses 9.12-9.16).Flags byte of performance-monitoring PDU (1DM, DMM, DMR, LMM, LMR): bit (least significant) is Type, bits 8-2 are reserved and sent as zero (ITU-T G.8013/Y.1731 clauses 9.12-9.16).Flags byte of performance-monitoring PDU (1DM, DMM, DMR, LMM, LMR): bit (least significant) is Type, bits 8-2 are reserved and sent as zero (ITU-T G.8013/Y.1731 clauses 9.12-9.16).
+
+        Returns: FlowCfmPmFlags
+        """
+        return self._get_property("flags", FlowCfmPmFlags)
+
+    @property
     def tx_timestamp_f(self):
         # type: () -> PatternFlowCfmDmrTxTimestampF
         """tx_timestamp_f getter
 
-        Transmit timestamp recorded by the DMM originator, copied verbatim by the responder from the received DMM into the DMR (ITU-T Y.1731 Section 8.2).Transmit timestamp recorded by the DMM originator, copied verbatim by the responder from the received DMM into the DMR (ITU-T Y.1731 Section 8.2).Transmit timestamp recorded by the DMM originator, copied verbatim by the responder from the received DMM into the DMR (ITU-T Y.1731 Section 8.2).Transmit timestamp recorded by the DMM originator, copied verbatim by the responder from the received DMM into the DMR (ITU-T Y.1731 Section 8.2).
+        TxTimeStampf (ITU-T G.8013/Y.1731 clause 9.16): the transmit time of the DMM this DMR answers. responder copies it from the DMM. IEEE 1588 timestamp format: upper 32 bits seconds, lower 32 bits nanoseconds (0 to 999999999); 1.5 seconds is (1 << 32) 500000000.TxTimeStampf (ITU-T G.8013/Y.1731 clause 9.16): the transmit time of the DMM this DMR answers. responder copies it from the DMM. IEEE 1588 timestamp format: upper 32 bits seconds, lower 32 bits nanoseconds (0 to 999999999); 1.5 seconds is (1 << 32) 500000000.TxTimeStampf (ITU-T G.8013/Y.1731 clause 9.16): the transmit time of the DMM this DMR answers. responder copies it from the DMM. IEEE 1588 timestamp format: upper 32 bits seconds, lower 32 bits nanoseconds (0 to 999999999); 1.5 seconds is (1 << 32) 500000000.TxTimeStampf (ITU-T G.8013/Y.1731 clause 9.16): the transmit time of the DMM this DMR answers. responder copies it from the DMM. IEEE 1588 timestamp format: upper 32 bits seconds, lower 32 bits nanoseconds (0 to 999999999); 1.5 seconds is (1 << 32) 500000000.
 
         Returns: PatternFlowCfmDmrTxTimestampF
         """
@@ -168678,7 +168795,7 @@ class FlowCfmDmr(OpenApiObject):
         # type: () -> PatternFlowCfmDmrRxTimestampF
         """rx_timestamp_f getter
 
-        Receive timestamp recorded by the responder when the DMM frame arrived (ITU-T Y.1731 Section 8.2).Receive timestamp recorded by the responder when the DMM frame arrived (ITU-T Y.1731 Section 8.2).Receive timestamp recorded by the responder when the DMM frame arrived (ITU-T Y.1731 Section 8.2).Receive timestamp recorded by the responder when the DMM frame arrived (ITU-T Y.1731 Section 8.2).
+        RxTimeStampf (ITU-T G.8013/Y.1731 clause 9.16): the time the responder received the DMM, in the responder's clock. IEEE 1588 timestamp format as for tx_timestamp_f.RxTimeStampf (ITU-T G.8013/Y.1731 clause 9.16): the time the responder received the DMM, in the responder's clock. IEEE 1588 timestamp format as for tx_timestamp_f.RxTimeStampf (ITU-T G.8013/Y.1731 clause 9.16): the time the responder received the DMM, in the responder's clock. IEEE 1588 timestamp format as for tx_timestamp_f.RxTimeStampf (ITU-T G.8013/Y.1731 clause 9.16): the time the responder received the DMM, in the responder's clock. IEEE 1588 timestamp format as for tx_timestamp_f.
 
         Returns: PatternFlowCfmDmrRxTimestampF
         """
@@ -168689,7 +168806,7 @@ class FlowCfmDmr(OpenApiObject):
         # type: () -> PatternFlowCfmDmrTxTimestampB
         """tx_timestamp_b getter
 
-        Transmit timestamp recorded by the responder when the DMR frame is transmitted back to the originating MEP (ITU-T Y.1731 Section 8.2).Transmit timestamp recorded by the responder when the DMR frame is transmitted back to the originating MEP (ITU-T Y.1731 Section 8.2).Transmit timestamp recorded by the responder when the DMR frame is transmitted back to the originating MEP (ITU-T Y.1731 Section 8.2).Transmit timestamp recorded by the responder when the DMR frame is transmitted back to the originating MEP (ITU-T Y.1731 Section 8.2).
+        TxTimeStampb (ITU-T G.8013/Y.1731 clause 9.16): the time the responder transmits the DMR, in the responder's clock. IEEE 1588 timestamp format as for tx_timestamp_f. The receiver subtracts tx_timestamp_b rx_timestamp_f (responder processing time) from the round trip, so realistic reply has tx_timestamp_b not earlier than rx_timestamp_f.TxTimeStampb (ITU-T G.8013/Y.1731 clause 9.16): the time the responder transmits the DMR, in the responder's clock. IEEE 1588 timestamp format as for tx_timestamp_f. The receiver subtracts tx_timestamp_b rx_timestamp_f (responder processing time) from the round trip, so realistic reply has tx_timestamp_b not earlier than rx_timestamp_f.TxTimeStampb (ITU-T G.8013/Y.1731 clause 9.16): the time the responder transmits the DMR, in the responder's clock. IEEE 1588 timestamp format as for tx_timestamp_f. The receiver subtracts tx_timestamp_b rx_timestamp_f (responder processing time) from the round trip, so realistic reply has tx_timestamp_b not earlier than rx_timestamp_f.TxTimeStampb (ITU-T G.8013/Y.1731 clause 9.16): the time the responder transmits the DMR, in the responder's clock. IEEE 1588 timestamp format as for tx_timestamp_f. The receiver subtracts tx_timestamp_b rx_timestamp_f (responder processing time) from the round trip, so realistic reply has tx_timestamp_b not earlier than rx_timestamp_f.
 
         Returns: PatternFlowCfmDmrTxTimestampB
         """
@@ -168700,7 +168817,7 @@ class FlowCfmDmr(OpenApiObject):
         # type: () -> PatternFlowCfmDmrReservedForDmrReceiver
         """reserved_for_dmr_receiver getter
 
-        Reserved for the DMR receiving equipment (the originating MEP) to record its receive timestamp when the DMR arrives. Set to zero by the DMR originator (ITU-T Y.1731 Section 8.2).Reserved for the DMR receiving equipment (the originating MEP) to record its receive timestamp when the DMR arrives. Set to zero by the DMR originator (ITU-T Y.1731 Section 8.2).Reserved for the DMR receiving equipment (the originating MEP) to record its receive timestamp when the DMR arrives. Set to zero by the DMR originator (ITU-T Y.1731 Section 8.2).Reserved for the DMR receiving equipment (the originating MEP) to record its receive timestamp when the DMR arrives. Set to zero by the DMR originator (ITU-T Y.1731 Section 8.2).
+        Reserved for the DMR receiving equipment (ITU-T G.8013/Y.1731 clause 9.16): the originating MEP may record RxTimeStampb, its receive time of the DMR, here. Zero in conforming DMR; non-zero value is sent as configured.Reserved for the DMR receiving equipment (ITU-T G.8013/Y.1731 clause 9.16): the originating MEP may record RxTimeStampb, its receive time of the DMR, here. Zero in conforming DMR; non-zero value is sent as configured.Reserved for the DMR receiving equipment (ITU-T G.8013/Y.1731 clause 9.16): the originating MEP may record RxTimeStampb, its receive time of the DMR, here. Zero in conforming DMR; non-zero value is sent as configured.Reserved for the DMR receiving equipment (ITU-T G.8013/Y.1731 clause 9.16): the originating MEP may record RxTimeStampb, its receive time of the DMR, here. Zero in conforming DMR; non-zero value is sent as configured.
 
         Returns: PatternFlowCfmDmrReservedForDmrReceiver
         """
@@ -168713,7 +168830,7 @@ class FlowCfmDmr(OpenApiObject):
         # type: () -> FlowCfmTlvsIter
         """tlvs getter
 
-        TBD
+        Optional TLVs placed after the DMR fields. responder normally returns the Data TLV of the DMM it answers, so set the same Data TLV as the DMM to build realistic reply. Note the default TLV choice is sender_id, so choose data explicitly.
 
         Returns: FlowCfmTlvsIter
         """
@@ -169763,6 +169880,6355 @@ class PatternFlowCfmDmrReservedForDmrReceiverCounter(OpenApiObject):
         self._set_property("count", value)
 
 
+class FlowIgmpv2(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "type": {"type": "PatternFlowIgmpv2Type"},
+        "max_response_time": {"type": "PatternFlowIgmpv2MaxResponseTime"},
+        "checksum": {"type": "PatternFlowIgmpv2Checksum"},
+        "group_address": {"type": "PatternFlowIgmpv2GroupAddress"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowIgmpv2, self).__init__()
+        self._parent = parent
+
+    @property
+    def type(self):
+        # type: () -> PatternFlowIgmpv2Type
+        """type getter
+
+        IGMP message type (RFC 2236 Section 2.1). Default 17 (0x11) is Membership Query, general or group-specific depending on group_address. 18 (0x12) is the IGMPv1 Membership Report, accepted by IGMPv2 for backward compatibility. 22 (0x16) is the IGMPv2 Membership Report and 23 (0x17) is Leave Group.IGMP message type (RFC 2236 Section 2.1). Default 17 (0x11) is Membership Query, general or group-specific depending on group_address. 18 (0x12) is the IGMPv1 Membership Report, accepted by IGMPv2 for backward compatibility. 22 (0x16) is the IGMPv2 Membership Report and 23 (0x17) is Leave Group.IGMP message type (RFC 2236 Section 2.1). Default 17 (0x11) is Membership Query, general or group-specific depending on group_address. 18 (0x12) is the IGMPv1 Membership Report, accepted by IGMPv2 for backward compatibility. 22 (0x16) is the IGMPv2 Membership Report and 23 (0x17) is Leave Group.IGMP message type (RFC 2236 Section 2.1). Default 17 (0x11) is Membership Query, general or group-specific depending on group_address. 18 (0x12) is the IGMPv1 Membership Report, accepted by IGMPv2 for backward compatibility. 22 (0x16) is the IGMPv2 Membership Report and 23 (0x17) is Leave Group.
+
+        Returns: PatternFlowIgmpv2Type
+        """
+        return self._get_property("type", PatternFlowIgmpv2Type)
+
+    @property
+    def max_response_time(self):
+        # type: () -> PatternFlowIgmpv2MaxResponseTime
+        """max_response_time getter
+
+        Maximum response time in units of 1/10 second (RFC 2236 Section 2.2), so 100 is 10 seconds and 255 is 25.5 seconds. Meaningful only in Membership Query messages. In conforming Membership Report or Leave Group it is set to zero by the sender and ignored by the receiver; the default is 100, so set explicitly when building those messages.Maximum response time in units of 1/10 second (RFC 2236 Section 2.2), so 100 is 10 seconds and 255 is 25.5 seconds. Meaningful only in Membership Query messages. In conforming Membership Report or Leave Group it is set to zero by the sender and ignored by the receiver; the default is 100, so set explicitly when building those messages.Maximum response time in units of 1/10 second (RFC 2236 Section 2.2), so 100 is 10 seconds and 255 is 25.5 seconds. Meaningful only in Membership Query messages. In conforming Membership Report or Leave Group it is set to zero by the sender and ignored by the receiver; the default is 100, so set explicitly when building those messages.Maximum response time in units of 1/10 second (RFC 2236 Section 2.2), so 100 is 10 seconds and 255 is 25.5 seconds. Meaningful only in Membership Query messages. In conforming Membership Report or Leave Group it is set to zero by the sender and ignored by the receiver; the default is 100, so set explicitly when building those messages.
+
+        Returns: PatternFlowIgmpv2MaxResponseTime
+        """
+        return self._get_property("max_response_time", PatternFlowIgmpv2MaxResponseTime)
+
+    @property
+    def checksum(self):
+        # type: () -> PatternFlowIgmpv2Checksum
+        """checksum getter
+
+        IGMP checksum (RFC 2236 Section 2.3): the 16-bit one's complement of the one's complement sum of the entire IGMP message (the IP payload). Unlike ICMPv6 there is no pseudo-header, so it depends only on the fields of this header. The generated choice is computed for every packet, so the value differs between packets when type, max_response_time or group_address vary across the flow; bad is deliberately incorrect value. The custom choice is one fixed value sent in every packet and is not updated when other fields vary. An implementation that cannot generate the checksum for configuration should reject it with an error rather than send different value.IGMP checksum (RFC 2236 Section 2.3): the 16-bit one's complement of the one's complement sum of the entire IGMP message (the IP payload). Unlike ICMPv6 there is no pseudo-header, so it depends only on the fields of this header. The generated choice is computed for every packet, so the value differs between packets when type, max_response_time or group_address vary across the flow; bad is deliberately incorrect value. The custom choice is one fixed value sent in every packet and is not updated when other fields vary. An implementation that cannot generate the checksum for configuration should reject it with an error rather than send different value.IGMP checksum (RFC 2236 Section 2.3): the 16-bit one's complement of the one's complement sum of the entire IGMP message (the IP payload). Unlike ICMPv6 there is no pseudo-header, so it depends only on the fields of this header. The generated choice is computed for every packet, so the value differs between packets when type, max_response_time or group_address vary across the flow; bad is deliberately incorrect value. The custom choice is one fixed value sent in every packet and is not updated when other fields vary. An implementation that cannot generate the checksum for configuration should reject it with an error rather than send different value.IGMP checksum (RFC 2236 Section 2.3): the 16-bit one's complement of the one's complement sum of the entire IGMP message (the IP payload). Unlike ICMPv6 there is no pseudo-header, so it depends only on the fields of this header. The generated choice is computed for every packet, so the value differs between packets when type, max_response_time or group_address vary across the flow; bad is deliberately incorrect value. The custom choice is one fixed value sent in every packet and is not updated when other fields vary. An implementation that cannot generate the checksum for configuration should reject it with an error rather than send different value.
+
+        Returns: PatternFlowIgmpv2Checksum
+        """
+        return self._get_property("checksum", PatternFlowIgmpv2Checksum)
+
+    @property
+    def group_address(self):
+        # type: () -> PatternFlowIgmpv2GroupAddress
+        """group_address getter
+
+        Group address (RFC 2236 Section 2.4). Zero in general Membership Query; the group being queried in Group-Specific Query; the group being reported or left in Membership Report or Leave Group. In conforming packet non-zero value is multicast group address.Group address (RFC 2236 Section 2.4). Zero in general Membership Query; the group being queried in Group-Specific Query; the group being reported or left in Membership Report or Leave Group. In conforming packet non-zero value is multicast group address.Group address (RFC 2236 Section 2.4). Zero in general Membership Query; the group being queried in Group-Specific Query; the group being reported or left in Membership Report or Leave Group. In conforming packet non-zero value is multicast group address.Group address (RFC 2236 Section 2.4). Zero in general Membership Query; the group being queried in Group-Specific Query; the group being reported or left in Membership Report or Leave Group. In conforming packet non-zero value is multicast group address.
+
+        Returns: PatternFlowIgmpv2GroupAddress
+        """
+        return self._get_property("group_address", PatternFlowIgmpv2GroupAddress)
+
+
+class PatternFlowIgmpv2Type(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "increment": {"type": "PatternFlowIgmpv2TypeCounter"},
+        "decrement": {"type": "PatternFlowIgmpv2TypeCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 17,
+        "values": [17],
+    }  # type: Dict[str, Union(type)]
+
+    MEMBERSHIP_QUERY = 17  #
+    V1_MEMBERSHIP_REPORT = 18  #
+    V2_MEMBERSHIP_REPORT = 22  #
+    LEAVE_GROUP = 23  #
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=17, values=[17]):
+        super(PatternFlowIgmpv2Type, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIgmpv2TypeCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv2TypeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv2TypeCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowIgmpv2TypeCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIgmpv2TypeCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv2TypeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv2TypeCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowIgmpv2TypeCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIgmpv2TypeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 17,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    MEMBERSHIP_QUERY = 17  #
+    V1_MEMBERSHIP_REPORT = 18  #
+    V2_MEMBERSHIP_REPORT = 22  #
+    LEAVE_GROUP = 23  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=17, step=1, count=1):
+        super(PatternFlowIgmpv2TypeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIgmpv2MaxResponseTime(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "increment": {"type": "PatternFlowIgmpv2MaxResponseTimeCounter"},
+        "decrement": {"type": "PatternFlowIgmpv2MaxResponseTimeCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 100,
+        "values": [100],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=100, values=[100]):
+        super(PatternFlowIgmpv2MaxResponseTime, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIgmpv2MaxResponseTimeCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv2MaxResponseTimeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv2MaxResponseTimeCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowIgmpv2MaxResponseTimeCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIgmpv2MaxResponseTimeCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv2MaxResponseTimeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv2MaxResponseTimeCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowIgmpv2MaxResponseTimeCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIgmpv2MaxResponseTimeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 100,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=100, step=1, count=1):
+        super(PatternFlowIgmpv2MaxResponseTimeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIgmpv2Checksum(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "generated",
+                "custom",
+            ],
+        },
+        "generated": {
+            "type": str,
+            "enum": [
+                "good",
+                "bad",
+            ],
+        },
+        "custom": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "generated",
+        "generated": "good",
+    }  # type: Dict[str, Union(type)]
+
+    GENERATED = "generated"  # type: str
+    CUSTOM = "custom"  # type: str
+
+    GOOD = "good"  # type: str
+    BAD = "bad"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, generated="good", custom=None):
+        super(PatternFlowIgmpv2Checksum, self).__init__()
+        self._parent = parent
+        self._set_property("generated", generated)
+        self._set_property("custom", custom)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, generated=None, custom=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["custom"], Literal["generated"]]
+        """choice getter
+
+        The type of checksum
+
+        Returns: Union[Literal["custom"], Literal["generated"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The type of checksum
+
+        value: Union[Literal["custom"], Literal["generated"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def generated(self):
+        # type: () -> Union[Literal["bad"], Literal["good"]]
+        """generated getter
+
+        A system generated checksum value
+
+        Returns: Union[Literal["bad"], Literal["good"]]
+        """
+        return self._get_property("generated")
+
+    @generated.setter
+    def generated(self, value):
+        """generated setter
+
+        A system generated checksum value
+
+        value: Union[Literal["bad"], Literal["good"]]
+        """
+        self._set_property("generated", value, "generated")
+
+    @property
+    def custom(self):
+        # type: () -> int
+        """custom getter
+
+        A custom checksum value
+
+        Returns: int
+        """
+        return self._get_property("custom")
+
+    @custom.setter
+    def custom(self, value):
+        """custom setter
+
+        A custom checksum value
+
+        value: int
+        """
+        self._set_property("custom", value, "custom")
+
+
+class PatternFlowIgmpv2GroupAddress(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "values": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "ipv4",
+        },
+        "increment": {"type": "PatternFlowIgmpv2GroupAddressCounter"},
+        "decrement": {"type": "PatternFlowIgmpv2GroupAddressCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": "0.0.0.0",
+        "values": ["0.0.0.0"],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value="0.0.0.0", values=["0.0.0.0"]):
+        super(PatternFlowIgmpv2GroupAddress, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIgmpv2GroupAddressCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv2GroupAddressCounter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowIgmpv2GroupAddressCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowIgmpv2GroupAddressCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIgmpv2GroupAddressCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv2GroupAddressCounter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowIgmpv2GroupAddressCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowIgmpv2GroupAddressCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[str]
+        """values getter
+
+        TBD
+
+        Returns: List[str]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[str]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIgmpv2GroupAddressCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "step": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "0.0.0.0",
+        "step": "0.0.0.1",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start="0.0.0.0", step="0.0.0.1", count=1):
+        super(PatternFlowIgmpv2GroupAddressCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowIgmpv3(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "membership_query",
+                "membership_report",
+            ],
+        },
+        "membership_query": {"type": "FlowIgmpv3MembershipQuery"},
+        "membership_report": {"type": "FlowIgmpv3MembershipReport"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "membership_query",
+    }  # type: Dict[str, Union(type)]
+
+    MEMBERSHIP_QUERY = "membership_query"  # type: str
+    MEMBERSHIP_REPORT = "membership_report"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowIgmpv3, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def membership_query(self):
+        # type: () -> FlowIgmpv3MembershipQuery
+        """Factory property that returns an instance of the FlowIgmpv3MembershipQuery class
+
+        IGMPv3 Membership Query message (RFC 9776 Section 4.1).
+
+        Returns: FlowIgmpv3MembershipQuery
+        """
+        return self._get_property(
+            "membership_query", FlowIgmpv3MembershipQuery, self, "membership_query"
+        )
+
+    @property
+    def membership_report(self):
+        # type: () -> FlowIgmpv3MembershipReport
+        """Factory property that returns an instance of the FlowIgmpv3MembershipReport class
+
+        IGMPv3 Membership Report message (RFC 9776 Section 4.2).
+
+        Returns: FlowIgmpv3MembershipReport
+        """
+        return self._get_property(
+            "membership_report", FlowIgmpv3MembershipReport, self, "membership_report"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["membership_query"], Literal["membership_report"]]
+        """choice getter
+
+        Selects the IGMPv3 message, default is membership_query.
+
+        Returns: Union[Literal["membership_query"], Literal["membership_report"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Selects the IGMPv3 message, default is membership_query.
+
+        value: Union[Literal["membership_query"], Literal["membership_report"]]
+        """
+        self._set_property("choice", value)
+
+
+class FlowIgmpv3MembershipQuery(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "type": {"type": "PatternFlowIgmpv3MembershipQueryType"},
+        "max_resp_code": {"type": "PatternFlowIgmpv3MembershipQueryMaxRespCode"},
+        "checksum": {"type": "PatternFlowIgmpv3MembershipQueryChecksum"},
+        "group_address": {"type": "PatternFlowIgmpv3MembershipQueryGroupAddress"},
+        "flags": {"type": "PatternFlowIgmpv3MembershipQueryFlags"},
+        "s_flag": {"type": "PatternFlowIgmpv3MembershipQuerySFlag"},
+        "qrv": {"type": "PatternFlowIgmpv3MembershipQueryQrv"},
+        "qqic": {"type": "PatternFlowIgmpv3MembershipQueryQqic"},
+        "number_of_sources": {
+            "type": "PatternFlowIgmpv3MembershipQueryNumberOfSources"
+        },
+        "sources": {"type": "FlowIgmpv3SourceIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowIgmpv3MembershipQuery, self).__init__()
+        self._parent = parent
+
+    @property
+    def type(self):
+        # type: () -> PatternFlowIgmpv3MembershipQueryType
+        """type getter
+
+        IGMP message type (RFC 9776 Section 4.1). Default 17 (0x11), Membership Query. This header always sends the IGMPv3 layout, the eight octet IGMPv1 and IGMPv2 messages use the igmpv1 and igmpv2 headers. Another value sends this layout with that type for negative testing, receivers silently ignore unrecognized types.IGMP message type (RFC 9776 Section 4.1). Default 17 (0x11), Membership Query. This header always sends the IGMPv3 layout, the eight octet IGMPv1 and IGMPv2 messages use the igmpv1 and igmpv2 headers. Another value sends this layout with that type for negative testing, receivers silently ignore unrecognized types.IGMP message type (RFC 9776 Section 4.1). Default 17 (0x11), Membership Query. This header always sends the IGMPv3 layout, the eight octet IGMPv1 and IGMPv2 messages use the igmpv1 and igmpv2 headers. Another value sends this layout with that type for negative testing, receivers silently ignore unrecognized types.IGMP message type (RFC 9776 Section 4.1). Default 17 (0x11), Membership Query. This header always sends the IGMPv3 layout, the eight octet IGMPv1 and IGMPv2 messages use the igmpv1 and igmpv2 headers. Another value sends this layout with that type for negative testing, receivers silently ignore unrecognized types.
+
+        Returns: PatternFlowIgmpv3MembershipQueryType
+        """
+        return self._get_property("type", PatternFlowIgmpv3MembershipQueryType)
+
+    @property
+    def max_resp_code(self):
+        # type: () -> PatternFlowIgmpv3MembershipQueryMaxRespCode
+        """max_resp_code getter
+
+        Max Resp Code (RFC 9776 Section 4.1.1), the maximum time hosts may wait before they report, in units of 1/10 second. Below 128 it is the time itself, so the default 100 is 10 seconds (Section 8.3). From 128 up it is floating point: the high bit is set, the next three bits are exp and the low four bits are mant, and the time is (mant OR 0x10) shifted left by (exp plus three), so 128 is 12.8 seconds and 255 is 3174.4 seconds. The value is sent as configured. Group-Specific and Group-and-Source Specific Queries normally use 10 (Section 8.8).Max Resp Code (RFC 9776 Section 4.1.1), the maximum time hosts may wait before they report, in units of 1/10 second. Below 128 it is the time itself, so the default 100 is 10 seconds (Section 8.3). From 128 up it is floating point: the high bit is set, the next three bits are exp and the low four bits are mant, and the time is (mant OR 0x10) shifted left by (exp plus three), so 128 is 12.8 seconds and 255 is 3174.4 seconds. The value is sent as configured. Group-Specific and Group-and-Source Specific Queries normally use 10 (Section 8.8).Max Resp Code (RFC 9776 Section 4.1.1), the maximum time hosts may wait before they report, in units of 1/10 second. Below 128 it is the time itself, so the default 100 is 10 seconds (Section 8.3). From 128 up it is floating point: the high bit is set, the next three bits are exp and the low four bits are mant, and the time is (mant OR 0x10) shifted left by (exp plus three), so 128 is 12.8 seconds and 255 is 3174.4 seconds. The value is sent as configured. Group-Specific and Group-and-Source Specific Queries normally use 10 (Section 8.8).Max Resp Code (RFC 9776 Section 4.1.1), the maximum time hosts may wait before they report, in units of 1/10 second. Below 128 it is the time itself, so the default 100 is 10 seconds (Section 8.3). From 128 up it is floating point: the high bit is set, the next three bits are exp and the low four bits are mant, and the time is (mant OR 0x10) shifted left by (exp plus three), so 128 is 12.8 seconds and 255 is 3174.4 seconds. The value is sent as configured. Group-Specific and Group-and-Source Specific Queries normally use 10 (Section 8.8).
+
+        Returns: PatternFlowIgmpv3MembershipQueryMaxRespCode
+        """
+        return self._get_property(
+            "max_resp_code", PatternFlowIgmpv3MembershipQueryMaxRespCode
+        )
+
+    @property
+    def checksum(self):
+        # type: () -> PatternFlowIgmpv3MembershipQueryChecksum
+        """checksum getter
+
+        Checksum (RFC 9776 Section 4.1.2), the 16-bit one's complement of the one's complement sum of the whole IGMP message, which is the entire IP payload including every source address. There is no pseudo-header.Checksum (RFC 9776 Section 4.1.2), the 16-bit one's complement of the one's complement sum of the whole IGMP message, which is the entire IP payload including every source address. There is no pseudo-header.Checksum (RFC 9776 Section 4.1.2), the 16-bit one's complement of the one's complement sum of the whole IGMP message, which is the entire IP payload including every source address. There is no pseudo-header.Checksum (RFC 9776 Section 4.1.2), the 16-bit one's complement of the one's complement sum of the whole IGMP message, which is the entire IP payload including every source address. There is no pseudo-header.
+
+        Returns: PatternFlowIgmpv3MembershipQueryChecksum
+        """
+        return self._get_property("checksum", PatternFlowIgmpv3MembershipQueryChecksum)
+
+    @property
+    def group_address(self):
+        # type: () -> PatternFlowIgmpv3MembershipQueryGroupAddress
+        """group_address getter
+
+        Group Address (RFC 9776 Section 4.1.3), zero for General Query and the group being queried for Group-Specific or Group-and-Source Specific Query.Group Address (RFC 9776 Section 4.1.3), zero for General Query and the group being queried for Group-Specific or Group-and-Source Specific Query.Group Address (RFC 9776 Section 4.1.3), zero for General Query and the group being queried for Group-Specific or Group-and-Source Specific Query.Group Address (RFC 9776 Section 4.1.3), zero for General Query and the group being queried for Group-Specific or Group-and-Source Specific Query.
+
+        Returns: PatternFlowIgmpv3MembershipQueryGroupAddress
+        """
+        return self._get_property(
+            "group_address", PatternFlowIgmpv3MembershipQueryGroupAddress
+        )
+
+    @property
+    def flags(self):
+        # type: () -> PatternFlowIgmpv3MembershipQueryFlags
+        """flags getter
+
+        Flags (RFC 9776 Section 4.1.4), four bits managed by IANA (RFC 9778 Section 2.2). The most significant bit (value eight) is E, Extension (RFC 9279 Section 3.3), which is set only when an extension follows the sources, the other bits are unassigned. This header does not model the extension, so conforming message from it has flags zero.Flags (RFC 9776 Section 4.1.4), four bits managed by IANA (RFC 9778 Section 2.2). The most significant bit (value eight) is E, Extension (RFC 9279 Section 3.3), which is set only when an extension follows the sources, the other bits are unassigned. This header does not model the extension, so conforming message from it has flags zero.Flags (RFC 9776 Section 4.1.4), four bits managed by IANA (RFC 9778 Section 2.2). The most significant bit (value eight) is E, Extension (RFC 9279 Section 3.3), which is set only when an extension follows the sources, the other bits are unassigned. This header does not model the extension, so conforming message from it has flags zero.Flags (RFC 9776 Section 4.1.4), four bits managed by IANA (RFC 9778 Section 2.2). The most significant bit (value eight) is E, Extension (RFC 9279 Section 3.3), which is set only when an extension follows the sources, the other bits are unassigned. This header does not model the extension, so conforming message from it has flags zero.
+
+        Returns: PatternFlowIgmpv3MembershipQueryFlags
+        """
+        return self._get_property("flags", PatternFlowIgmpv3MembershipQueryFlags)
+
+    @property
+    def s_flag(self):
+        # type: () -> PatternFlowIgmpv3MembershipQuerySFlag
+        """s_flag getter
+
+        S flag, Suppress Router-Side Processing (RFC 9776 Section 4.1.5). When set to one, receiving routers skip their normal timer updates for this Query, Querier election and host-side processing still happen. Queriers use it in repeated Group-Specific and Group-and-Source Specific Queries (Section 6.6.3).S flag, Suppress Router-Side Processing (RFC 9776 Section 4.1.5). When set to one, receiving routers skip their normal timer updates for this Query, Querier election and host-side processing still happen. Queriers use it in repeated Group-Specific and Group-and-Source Specific Queries (Section 6.6.3).S flag, Suppress Router-Side Processing (RFC 9776 Section 4.1.5). When set to one, receiving routers skip their normal timer updates for this Query, Querier election and host-side processing still happen. Queriers use it in repeated Group-Specific and Group-and-Source Specific Queries (Section 6.6.3).S flag, Suppress Router-Side Processing (RFC 9776 Section 4.1.5). When set to one, receiving routers skip their normal timer updates for this Query, Querier election and host-side processing still happen. Queriers use it in repeated Group-Specific and Group-and-Source Specific Queries (Section 6.6.3).
+
+        Returns: PatternFlowIgmpv3MembershipQuerySFlag
+        """
+        return self._get_property("s_flag", PatternFlowIgmpv3MembershipQuerySFlag)
+
+    @property
+    def qrv(self):
+        # type: () -> PatternFlowIgmpv3MembershipQueryQrv
+        """qrv getter
+
+        QRV, Querier's Robustness Variable (RFC 9776 Section 4.1.6). querier whose Robustness Variable is above seven sends zero, and receiver of zero uses its own value. The Robustness Variable itself is never zero (Section 8.1). The default is the RFC default of two (Section 8.1).QRV, Querier's Robustness Variable (RFC 9776 Section 4.1.6). querier whose Robustness Variable is above seven sends zero, and receiver of zero uses its own value. The Robustness Variable itself is never zero (Section 8.1). The default is the RFC default of two (Section 8.1).QRV, Querier's Robustness Variable (RFC 9776 Section 4.1.6). querier whose Robustness Variable is above seven sends zero, and receiver of zero uses its own value. The Robustness Variable itself is never zero (Section 8.1). The default is the RFC default of two (Section 8.1).QRV, Querier's Robustness Variable (RFC 9776 Section 4.1.6). querier whose Robustness Variable is above seven sends zero, and receiver of zero uses its own value. The Robustness Variable itself is never zero (Section 8.1). The default is the RFC default of two (Section 8.1).
+
+        Returns: PatternFlowIgmpv3MembershipQueryQrv
+        """
+        return self._get_property("qrv", PatternFlowIgmpv3MembershipQueryQrv)
+
+    @property
+    def qqic(self):
+        # type: () -> PatternFlowIgmpv3MembershipQueryQqic
+        """qqic getter
+
+        QQIC, Querier's Query Interval Code (RFC 9776 Section 4.1.7), in seconds. Below 128 it is the interval itself, so the default 125 is the RFC default Query Interval (Section 8.2). From 128 up it uses the floating point form of max_resp_code, so 255 is 31744 seconds. Zero tells receivers to use their own default. The value is sent as configured.QQIC, Querier's Query Interval Code (RFC 9776 Section 4.1.7), in seconds. Below 128 it is the interval itself, so the default 125 is the RFC default Query Interval (Section 8.2). From 128 up it uses the floating point form of max_resp_code, so 255 is 31744 seconds. Zero tells receivers to use their own default. The value is sent as configured.QQIC, Querier's Query Interval Code (RFC 9776 Section 4.1.7), in seconds. Below 128 it is the interval itself, so the default 125 is the RFC default Query Interval (Section 8.2). From 128 up it uses the floating point form of max_resp_code, so 255 is 31744 seconds. Zero tells receivers to use their own default. The value is sent as configured.QQIC, Querier's Query Interval Code (RFC 9776 Section 4.1.7), in seconds. Below 128 it is the interval itself, so the default 125 is the RFC default Query Interval (Section 8.2). From 128 up it uses the floating point form of max_resp_code, so 255 is 31744 seconds. Zero tells receivers to use their own default. The value is sent as configured.
+
+        Returns: PatternFlowIgmpv3MembershipQueryQqic
+        """
+        return self._get_property("qqic", PatternFlowIgmpv3MembershipQueryQqic)
+
+    @property
+    def number_of_sources(self):
+        # type: () -> PatternFlowIgmpv3MembershipQueryNumberOfSources
+        """number_of_sources getter
+
+        Number of source addresses in the query, zero for general and group-specific query. When auto, it is set to the number of entries in sources.Number of source addresses in the query, zero for general and group-specific query. When auto, it is set to the number of entries in sources.Number of source addresses in the query, zero for general and group-specific query. When auto, it is set to the number of entries in sources.Number of source addresses in the query, zero for general and group-specific query. When auto, it is set to the number of entries in sources.
+
+        Returns: PatternFlowIgmpv3MembershipQueryNumberOfSources
+        """
+        return self._get_property(
+            "number_of_sources", PatternFlowIgmpv3MembershipQueryNumberOfSources
+        )
+
+    @property
+    def sources(self):
+        # type: () -> FlowIgmpv3SourceIter
+        """sources getter
+
+        List of unicast source addresses of group-and-source-specific query. RFC 9776 Section 4.1.8 gives the example that 366 sources fit in Query on an Ethernet MTU of 1500 octets.
+
+        Returns: FlowIgmpv3SourceIter
+        """
+        return self._get_property(
+            "sources", FlowIgmpv3SourceIter, self._parent, self._choice
+        )
+
+
+class PatternFlowIgmpv3MembershipQueryType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "increment": {"type": "PatternFlowIgmpv3MembershipQueryTypeCounter"},
+        "decrement": {"type": "PatternFlowIgmpv3MembershipQueryTypeCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 17,
+        "values": [17],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=17, values=[17]):
+        super(PatternFlowIgmpv3MembershipQueryType, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIgmpv3MembershipQueryTypeCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3MembershipQueryTypeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3MembershipQueryTypeCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowIgmpv3MembershipQueryTypeCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIgmpv3MembershipQueryTypeCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3MembershipQueryTypeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3MembershipQueryTypeCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowIgmpv3MembershipQueryTypeCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIgmpv3MembershipQueryTypeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 17,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=17, step=1, count=1):
+        super(PatternFlowIgmpv3MembershipQueryTypeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIgmpv3MembershipQueryMaxRespCode(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "increment": {"type": "PatternFlowIgmpv3MembershipQueryMaxRespCodeCounter"},
+        "decrement": {"type": "PatternFlowIgmpv3MembershipQueryMaxRespCodeCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 100,
+        "values": [100],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=100, values=[100]):
+        super(PatternFlowIgmpv3MembershipQueryMaxRespCode, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIgmpv3MembershipQueryMaxRespCodeCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3MembershipQueryMaxRespCodeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3MembershipQueryMaxRespCodeCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIgmpv3MembershipQueryMaxRespCodeCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIgmpv3MembershipQueryMaxRespCodeCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3MembershipQueryMaxRespCodeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3MembershipQueryMaxRespCodeCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIgmpv3MembershipQueryMaxRespCodeCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIgmpv3MembershipQueryMaxRespCodeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 100,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=100, step=1, count=1):
+        super(PatternFlowIgmpv3MembershipQueryMaxRespCodeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIgmpv3MembershipQueryChecksum(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "generated",
+                "custom",
+            ],
+        },
+        "generated": {
+            "type": str,
+            "enum": [
+                "good",
+                "bad",
+            ],
+        },
+        "custom": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "generated",
+        "generated": "good",
+    }  # type: Dict[str, Union(type)]
+
+    GENERATED = "generated"  # type: str
+    CUSTOM = "custom"  # type: str
+
+    GOOD = "good"  # type: str
+    BAD = "bad"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, generated="good", custom=None):
+        super(PatternFlowIgmpv3MembershipQueryChecksum, self).__init__()
+        self._parent = parent
+        self._set_property("generated", generated)
+        self._set_property("custom", custom)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, generated=None, custom=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["custom"], Literal["generated"]]
+        """choice getter
+
+        The type of checksum
+
+        Returns: Union[Literal["custom"], Literal["generated"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The type of checksum
+
+        value: Union[Literal["custom"], Literal["generated"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def generated(self):
+        # type: () -> Union[Literal["bad"], Literal["good"]]
+        """generated getter
+
+        A system generated checksum value
+
+        Returns: Union[Literal["bad"], Literal["good"]]
+        """
+        return self._get_property("generated")
+
+    @generated.setter
+    def generated(self, value):
+        """generated setter
+
+        A system generated checksum value
+
+        value: Union[Literal["bad"], Literal["good"]]
+        """
+        self._set_property("generated", value, "generated")
+
+    @property
+    def custom(self):
+        # type: () -> int
+        """custom getter
+
+        A custom checksum value
+
+        Returns: int
+        """
+        return self._get_property("custom")
+
+    @custom.setter
+    def custom(self, value):
+        """custom setter
+
+        A custom checksum value
+
+        value: int
+        """
+        self._set_property("custom", value, "custom")
+
+
+class PatternFlowIgmpv3MembershipQueryGroupAddress(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "values": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "ipv4",
+        },
+        "increment": {"type": "PatternFlowIgmpv3MembershipQueryGroupAddressCounter"},
+        "decrement": {"type": "PatternFlowIgmpv3MembershipQueryGroupAddressCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": "0.0.0.0",
+        "values": ["0.0.0.0"],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value="0.0.0.0", values=["0.0.0.0"]):
+        super(PatternFlowIgmpv3MembershipQueryGroupAddress, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIgmpv3MembershipQueryGroupAddressCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3MembershipQueryGroupAddressCounter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowIgmpv3MembershipQueryGroupAddressCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIgmpv3MembershipQueryGroupAddressCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIgmpv3MembershipQueryGroupAddressCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3MembershipQueryGroupAddressCounter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowIgmpv3MembershipQueryGroupAddressCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIgmpv3MembershipQueryGroupAddressCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[str]
+        """values getter
+
+        TBD
+
+        Returns: List[str]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[str]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIgmpv3MembershipQueryGroupAddressCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "step": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "0.0.0.0",
+        "step": "0.0.0.1",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start="0.0.0.0", step="0.0.0.1", count=1):
+        super(PatternFlowIgmpv3MembershipQueryGroupAddressCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIgmpv3MembershipQueryFlags(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 15,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 15,
+        },
+        "increment": {"type": "PatternFlowIgmpv3MembershipQueryFlagsCounter"},
+        "decrement": {"type": "PatternFlowIgmpv3MembershipQueryFlagsCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowIgmpv3MembershipQueryFlags, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIgmpv3MembershipQueryFlagsCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3MembershipQueryFlagsCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3MembershipQueryFlagsCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowIgmpv3MembershipQueryFlagsCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIgmpv3MembershipQueryFlagsCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3MembershipQueryFlagsCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3MembershipQueryFlagsCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowIgmpv3MembershipQueryFlagsCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIgmpv3MembershipQueryFlagsCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 15,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 15,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 16,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIgmpv3MembershipQueryFlagsCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIgmpv3MembershipQuerySFlag(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 1,
+        },
+        "increment": {"type": "PatternFlowIgmpv3MembershipQuerySFlagCounter"},
+        "decrement": {"type": "PatternFlowIgmpv3MembershipQuerySFlagCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowIgmpv3MembershipQuerySFlag, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIgmpv3MembershipQuerySFlagCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3MembershipQuerySFlagCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3MembershipQuerySFlagCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowIgmpv3MembershipQuerySFlagCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIgmpv3MembershipQuerySFlagCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3MembershipQuerySFlagCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3MembershipQuerySFlagCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowIgmpv3MembershipQuerySFlagCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIgmpv3MembershipQuerySFlagCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 2,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIgmpv3MembershipQuerySFlagCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIgmpv3MembershipQueryQrv(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 7,
+        },
+        "increment": {"type": "PatternFlowIgmpv3MembershipQueryQrvCounter"},
+        "decrement": {"type": "PatternFlowIgmpv3MembershipQueryQrvCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 2,
+        "values": [2],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=2, values=[2]):
+        super(PatternFlowIgmpv3MembershipQueryQrv, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIgmpv3MembershipQueryQrvCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3MembershipQueryQrvCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3MembershipQueryQrvCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowIgmpv3MembershipQueryQrvCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIgmpv3MembershipQueryQrvCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3MembershipQueryQrvCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3MembershipQueryQrvCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowIgmpv3MembershipQueryQrvCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIgmpv3MembershipQueryQrvCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 8,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 2,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=2, step=1, count=1):
+        super(PatternFlowIgmpv3MembershipQueryQrvCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIgmpv3MembershipQueryQqic(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "increment": {"type": "PatternFlowIgmpv3MembershipQueryQqicCounter"},
+        "decrement": {"type": "PatternFlowIgmpv3MembershipQueryQqicCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 125,
+        "values": [125],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=125, values=[125]):
+        super(PatternFlowIgmpv3MembershipQueryQqic, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIgmpv3MembershipQueryQqicCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3MembershipQueryQqicCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3MembershipQueryQqicCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowIgmpv3MembershipQueryQqicCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIgmpv3MembershipQueryQqicCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3MembershipQueryQqicCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3MembershipQueryQqicCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowIgmpv3MembershipQueryQqicCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIgmpv3MembershipQueryQqicCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 125,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=125, step=1, count=1):
+        super(PatternFlowIgmpv3MembershipQueryQqicCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIgmpv3MembershipQueryNumberOfSources(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "auto",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 65535,
+        },
+        "auto": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "increment": {"type": "PatternFlowIgmpv3MembershipQueryNumberOfSourcesCounter"},
+        "decrement": {"type": "PatternFlowIgmpv3MembershipQueryNumberOfSourcesCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "auto",
+        "value": 0,
+        "values": [0],
+        "auto": 0,
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    AUTO = "auto"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0], auto=0):
+        super(PatternFlowIgmpv3MembershipQueryNumberOfSources, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        self._set_property("auto", auto)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None, auto=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIgmpv3MembershipQueryNumberOfSourcesCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3MembershipQueryNumberOfSourcesCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3MembershipQueryNumberOfSourcesCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIgmpv3MembershipQueryNumberOfSourcesCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIgmpv3MembershipQueryNumberOfSourcesCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3MembershipQueryNumberOfSourcesCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3MembershipQueryNumberOfSourcesCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIgmpv3MembershipQueryNumberOfSourcesCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+    @property
+    def auto(self):
+        # type: () -> int
+        """auto getter
+
+        The OTG implementation can provide system generated. value for this property. If the OTG is unable to generate value. the default value must be used.
+
+        Returns: int
+        """
+        return self._get_property("auto")
+
+
+class PatternFlowIgmpv3MembershipQueryNumberOfSourcesCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65536,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIgmpv3MembershipQueryNumberOfSourcesCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowIgmpv3Source(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "address": {"type": "PatternFlowIgmpv3SourceAddress"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowIgmpv3Source, self).__init__()
+        self._parent = parent
+
+    @property
+    def address(self):
+        # type: () -> PatternFlowIgmpv3SourceAddress
+        """address getter
+
+        Unicast IPv4 source address. counter or values list changes the address from packet to packet across the flow, it does not add sources to the message.Unicast IPv4 source address. counter or values list changes the address from packet to packet across the flow, it does not add sources to the message.Unicast IPv4 source address. counter or values list changes the address from packet to packet across the flow, it does not add sources to the message.
+
+        Returns: PatternFlowIgmpv3SourceAddress
+        """
+        return self._get_property("address", PatternFlowIgmpv3SourceAddress)
+
+
+class PatternFlowIgmpv3SourceAddress(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "values": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "ipv4",
+        },
+        "increment": {"type": "PatternFlowIgmpv3SourceAddressCounter"},
+        "decrement": {"type": "PatternFlowIgmpv3SourceAddressCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": "0.0.0.0",
+        "values": ["0.0.0.0"],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value="0.0.0.0", values=["0.0.0.0"]):
+        super(PatternFlowIgmpv3SourceAddress, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIgmpv3SourceAddressCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3SourceAddressCounter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowIgmpv3SourceAddressCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowIgmpv3SourceAddressCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIgmpv3SourceAddressCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3SourceAddressCounter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowIgmpv3SourceAddressCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowIgmpv3SourceAddressCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[str]
+        """values getter
+
+        TBD
+
+        Returns: List[str]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[str]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIgmpv3SourceAddressCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "step": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "0.0.0.0",
+        "step": "0.0.0.1",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start="0.0.0.0", step="0.0.0.1", count=1):
+        super(PatternFlowIgmpv3SourceAddressCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowIgmpv3SourceIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowIgmpv3SourceIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[FlowIgmpv3Source]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> FlowIgmpv3SourceIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> FlowIgmpv3Source
+        return self._next()
+
+    def next(self):
+        # type: () -> FlowIgmpv3Source
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, FlowIgmpv3Source):
+            raise Exception("Item is not an instance of FlowIgmpv3Source")
+
+    def source(self):
+        # type: () -> FlowIgmpv3SourceIter
+        """Factory method that creates an instance of the FlowIgmpv3Source class
+
+        One source address entry of Query (RFC 9776 Section 4.1.9) or of group record (RFC 9776 Section 4.2.10). Each entry is one IPv4 address in the message, so add one entry per source to carry several sources.
+
+        Returns: FlowIgmpv3SourceIter
+        """
+        item = FlowIgmpv3Source(parent=self._parent)
+        self._add(item)
+        return self
+
+    def add(self):
+        # type: () -> FlowIgmpv3Source
+        """Add method that creates and returns an instance of the FlowIgmpv3Source class
+
+        One source address entry of Query (RFC 9776 Section 4.1.9) or of group record (RFC 9776 Section 4.2.10). Each entry is one IPv4 address in the message, so add one entry per source to carry several sources.
+
+        Returns: FlowIgmpv3Source
+        """
+        item = FlowIgmpv3Source(parent=self._parent)
+        self._add(item)
+        return item
+
+
+class FlowIgmpv3MembershipReport(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "type": {"type": "PatternFlowIgmpv3MembershipReportType"},
+        "reserved": {"type": "PatternFlowIgmpv3MembershipReportReserved"},
+        "checksum": {"type": "PatternFlowIgmpv3MembershipReportChecksum"},
+        "flags": {"type": "PatternFlowIgmpv3MembershipReportFlags"},
+        "number_of_group_records": {
+            "type": "PatternFlowIgmpv3MembershipReportNumberOfGroupRecords"
+        },
+        "group_records": {"type": "FlowIgmpv3GroupRecordIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowIgmpv3MembershipReport, self).__init__()
+        self._parent = parent
+
+    @property
+    def type(self):
+        # type: () -> PatternFlowIgmpv3MembershipReportType
+        """type getter
+
+        IGMP message type (RFC 9776 Section 4.2). Default 34 (0x22), IGMPv3 Membership Report. Another value sends this layout with that type for negative testing, receivers silently ignore unrecognized types.IGMP message type (RFC 9776 Section 4.2). Default 34 (0x22), IGMPv3 Membership Report. Another value sends this layout with that type for negative testing, receivers silently ignore unrecognized types.IGMP message type (RFC 9776 Section 4.2). Default 34 (0x22), IGMPv3 Membership Report. Another value sends this layout with that type for negative testing, receivers silently ignore unrecognized types.IGMP message type (RFC 9776 Section 4.2). Default 34 (0x22), IGMPv3 Membership Report. Another value sends this layout with that type for negative testing, receivers silently ignore unrecognized types.
+
+        Returns: PatternFlowIgmpv3MembershipReportType
+        """
+        return self._get_property("type", PatternFlowIgmpv3MembershipReportType)
+
+    @property
+    def reserved(self):
+        # type: () -> PatternFlowIgmpv3MembershipReportReserved
+        """reserved getter
+
+        Reserved field, set to zero by the sender and ignored by the receiver.Reserved field, set to zero by the sender and ignored by the receiver.Reserved field, set to zero by the sender and ignored by the receiver.Reserved field, set to zero by the sender and ignored by the receiver.
+
+        Returns: PatternFlowIgmpv3MembershipReportReserved
+        """
+        return self._get_property("reserved", PatternFlowIgmpv3MembershipReportReserved)
+
+    @property
+    def checksum(self):
+        # type: () -> PatternFlowIgmpv3MembershipReportChecksum
+        """checksum getter
+
+        Checksum (RFC 9776 Section 4.2.2), the 16-bit one's complement of the one's complement sum of the whole IGMP message, which is the entire IP payload including every group record and any aux_data. There is no pseudo-header.Checksum (RFC 9776 Section 4.2.2), the 16-bit one's complement of the one's complement sum of the whole IGMP message, which is the entire IP payload including every group record and any aux_data. There is no pseudo-header.Checksum (RFC 9776 Section 4.2.2), the 16-bit one's complement of the one's complement sum of the whole IGMP message, which is the entire IP payload including every group record and any aux_data. There is no pseudo-header.Checksum (RFC 9776 Section 4.2.2), the 16-bit one's complement of the one's complement sum of the whole IGMP message, which is the entire IP payload including every group record and any aux_data. There is no pseudo-header.
+
+        Returns: PatternFlowIgmpv3MembershipReportChecksum
+        """
+        return self._get_property("checksum", PatternFlowIgmpv3MembershipReportChecksum)
+
+    @property
+    def flags(self):
+        # type: () -> PatternFlowIgmpv3MembershipReportFlags
+        """flags getter
+
+        Flags (RFC 9776 Section 4.2.3), sixteen bits managed by IANA (RFC 9778 Section 2.3). The most significant bit (value 0x8000) is E, Extension (RFC 9279 Section 3.4), which is set only when an extension follows the last group record, the other bits are unassigned. This header does not model the extension, so conforming message from it has flags zero.Flags (RFC 9776 Section 4.2.3), sixteen bits managed by IANA (RFC 9778 Section 2.3). The most significant bit (value 0x8000) is E, Extension (RFC 9279 Section 3.4), which is set only when an extension follows the last group record, the other bits are unassigned. This header does not model the extension, so conforming message from it has flags zero.Flags (RFC 9776 Section 4.2.3), sixteen bits managed by IANA (RFC 9778 Section 2.3). The most significant bit (value 0x8000) is E, Extension (RFC 9279 Section 3.4), which is set only when an extension follows the last group record, the other bits are unassigned. This header does not model the extension, so conforming message from it has flags zero.Flags (RFC 9776 Section 4.2.3), sixteen bits managed by IANA (RFC 9778 Section 2.3). The most significant bit (value 0x8000) is E, Extension (RFC 9279 Section 3.4), which is set only when an extension follows the last group record, the other bits are unassigned. This header does not model the extension, so conforming message from it has flags zero.
+
+        Returns: PatternFlowIgmpv3MembershipReportFlags
+        """
+        return self._get_property("flags", PatternFlowIgmpv3MembershipReportFlags)
+
+    @property
+    def number_of_group_records(self):
+        # type: () -> PatternFlowIgmpv3MembershipReportNumberOfGroupRecords
+        """number_of_group_records getter
+
+        Number of group records. When auto, it is set to the number of entries in group_records.Number of group records. When auto, it is set to the number of entries in group_records.Number of group records. When auto, it is set to the number of entries in group_records.Number of group records. When auto, it is set to the number of entries in group_records.
+
+        Returns: PatternFlowIgmpv3MembershipReportNumberOfGroupRecords
+        """
+        return self._get_property(
+            "number_of_group_records",
+            PatternFlowIgmpv3MembershipReportNumberOfGroupRecords,
+        )
+
+    @property
+    def group_records(self):
+        # type: () -> FlowIgmpv3GroupRecordIter
+        """group_records getter
+
+        List of group records, each one reports the membership state of one multicast group.
+
+        Returns: FlowIgmpv3GroupRecordIter
+        """
+        return self._get_property(
+            "group_records", FlowIgmpv3GroupRecordIter, self._parent, self._choice
+        )
+
+
+class PatternFlowIgmpv3MembershipReportType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "increment": {"type": "PatternFlowIgmpv3MembershipReportTypeCounter"},
+        "decrement": {"type": "PatternFlowIgmpv3MembershipReportTypeCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 34,
+        "values": [34],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=34, values=[34]):
+        super(PatternFlowIgmpv3MembershipReportType, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIgmpv3MembershipReportTypeCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3MembershipReportTypeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3MembershipReportTypeCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowIgmpv3MembershipReportTypeCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIgmpv3MembershipReportTypeCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3MembershipReportTypeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3MembershipReportTypeCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowIgmpv3MembershipReportTypeCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIgmpv3MembershipReportTypeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 34,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=34, step=1, count=1):
+        super(PatternFlowIgmpv3MembershipReportTypeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIgmpv3MembershipReportReserved(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "increment": {"type": "PatternFlowIgmpv3MembershipReportReservedCounter"},
+        "decrement": {"type": "PatternFlowIgmpv3MembershipReportReservedCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowIgmpv3MembershipReportReserved, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIgmpv3MembershipReportReservedCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3MembershipReportReservedCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3MembershipReportReservedCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIgmpv3MembershipReportReservedCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIgmpv3MembershipReportReservedCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3MembershipReportReservedCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3MembershipReportReservedCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIgmpv3MembershipReportReservedCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIgmpv3MembershipReportReservedCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIgmpv3MembershipReportReservedCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIgmpv3MembershipReportChecksum(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "generated",
+                "custom",
+            ],
+        },
+        "generated": {
+            "type": str,
+            "enum": [
+                "good",
+                "bad",
+            ],
+        },
+        "custom": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "generated",
+        "generated": "good",
+    }  # type: Dict[str, Union(type)]
+
+    GENERATED = "generated"  # type: str
+    CUSTOM = "custom"  # type: str
+
+    GOOD = "good"  # type: str
+    BAD = "bad"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, generated="good", custom=None):
+        super(PatternFlowIgmpv3MembershipReportChecksum, self).__init__()
+        self._parent = parent
+        self._set_property("generated", generated)
+        self._set_property("custom", custom)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, generated=None, custom=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["custom"], Literal["generated"]]
+        """choice getter
+
+        The type of checksum
+
+        Returns: Union[Literal["custom"], Literal["generated"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The type of checksum
+
+        value: Union[Literal["custom"], Literal["generated"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def generated(self):
+        # type: () -> Union[Literal["bad"], Literal["good"]]
+        """generated getter
+
+        A system generated checksum value
+
+        Returns: Union[Literal["bad"], Literal["good"]]
+        """
+        return self._get_property("generated")
+
+    @generated.setter
+    def generated(self, value):
+        """generated setter
+
+        A system generated checksum value
+
+        value: Union[Literal["bad"], Literal["good"]]
+        """
+        self._set_property("generated", value, "generated")
+
+    @property
+    def custom(self):
+        # type: () -> int
+        """custom getter
+
+        A custom checksum value
+
+        Returns: int
+        """
+        return self._get_property("custom")
+
+    @custom.setter
+    def custom(self, value):
+        """custom setter
+
+        A custom checksum value
+
+        value: int
+        """
+        self._set_property("custom", value, "custom")
+
+
+class PatternFlowIgmpv3MembershipReportFlags(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 65535,
+        },
+        "increment": {"type": "PatternFlowIgmpv3MembershipReportFlagsCounter"},
+        "decrement": {"type": "PatternFlowIgmpv3MembershipReportFlagsCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowIgmpv3MembershipReportFlags, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIgmpv3MembershipReportFlagsCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3MembershipReportFlagsCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3MembershipReportFlagsCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIgmpv3MembershipReportFlagsCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIgmpv3MembershipReportFlagsCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3MembershipReportFlagsCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3MembershipReportFlagsCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIgmpv3MembershipReportFlagsCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIgmpv3MembershipReportFlagsCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65536,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIgmpv3MembershipReportFlagsCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIgmpv3MembershipReportNumberOfGroupRecords(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "auto",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 65535,
+        },
+        "auto": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "increment": {
+            "type": "PatternFlowIgmpv3MembershipReportNumberOfGroupRecordsCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowIgmpv3MembershipReportNumberOfGroupRecordsCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "auto",
+        "value": 0,
+        "values": [0],
+        "auto": 0,
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    AUTO = "auto"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0], auto=0):
+        super(PatternFlowIgmpv3MembershipReportNumberOfGroupRecords, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        self._set_property("auto", auto)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None, auto=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIgmpv3MembershipReportNumberOfGroupRecordsCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3MembershipReportNumberOfGroupRecordsCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3MembershipReportNumberOfGroupRecordsCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIgmpv3MembershipReportNumberOfGroupRecordsCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIgmpv3MembershipReportNumberOfGroupRecordsCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3MembershipReportNumberOfGroupRecordsCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3MembershipReportNumberOfGroupRecordsCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIgmpv3MembershipReportNumberOfGroupRecordsCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+    @property
+    def auto(self):
+        # type: () -> int
+        """auto getter
+
+        The OTG implementation can provide system generated. value for this property. If the OTG is unable to generate value. the default value must be used.
+
+        Returns: int
+        """
+        return self._get_property("auto")
+
+
+class PatternFlowIgmpv3MembershipReportNumberOfGroupRecordsCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65536,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(
+            PatternFlowIgmpv3MembershipReportNumberOfGroupRecordsCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowIgmpv3GroupRecord(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "record_type": {"type": "PatternFlowIgmpv3GroupRecordRecordType"},
+        "aux_data_length": {"type": "PatternFlowIgmpv3GroupRecordAuxDataLength"},
+        "number_of_sources": {"type": "PatternFlowIgmpv3GroupRecordNumberOfSources"},
+        "multicast_address": {"type": "PatternFlowIgmpv3GroupRecordMulticastAddress"},
+        "sources": {"type": "FlowIgmpv3SourceIter"},
+        "aux_data": {
+            "type": str,
+            "format": "hex",
+            "maxLength": 2040,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, aux_data=None):
+        super(FlowIgmpv3GroupRecord, self).__init__()
+        self._parent = parent
+        self._set_property("aux_data", aux_data)
+
+    def set(self, aux_data=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def record_type(self):
+        # type: () -> PatternFlowIgmpv3GroupRecordRecordType
+        """record_type getter
+
+        Record Type (RFC 9776 Section 4.2.13). Current-State records, sent in reply to Query, are mode_is_include and mode_is_exclude. Filter-Mode-Change records are change_to_include_mode and change_to_exclude_mode. Source-List-Change records are allow_new_sources and block_old_sources. change_to_include_mode record with no sources is how host leaves group. Receivers silently ignore other values, so any value up to 255 may be sent for negative testing. For group in the SSM range 232/8 host should not send mode_is_exclude or change_to_exclude_mode (RFC 4604).Record Type (RFC 9776 Section 4.2.13). Current-State records, sent in reply to Query, are mode_is_include and mode_is_exclude. Filter-Mode-Change records are change_to_include_mode and change_to_exclude_mode. Source-List-Change records are allow_new_sources and block_old_sources. change_to_include_mode record with no sources is how host leaves group. Receivers silently ignore other values, so any value up to 255 may be sent for negative testing. For group in the SSM range 232/8 host should not send mode_is_exclude or change_to_exclude_mode (RFC 4604).Record Type (RFC 9776 Section 4.2.13). Current-State records, sent in reply to Query, are mode_is_include and mode_is_exclude. Filter-Mode-Change records are change_to_include_mode and change_to_exclude_mode. Source-List-Change records are allow_new_sources and block_old_sources. change_to_include_mode record with no sources is how host leaves group. Receivers silently ignore other values, so any value up to 255 may be sent for negative testing. For group in the SSM range 232/8 host should not send mode_is_exclude or change_to_exclude_mode (RFC 4604).
+
+        Returns: PatternFlowIgmpv3GroupRecordRecordType
+        """
+        return self._get_property("record_type", PatternFlowIgmpv3GroupRecordRecordType)
+
+    @property
+    def aux_data_length(self):
+        # type: () -> PatternFlowIgmpv3GroupRecordAuxDataLength
+        """aux_data_length getter
+
+        Aux Data Len (RFC 9776 Section 4.2.7), the length of aux_data in 32-bit words. When auto, it is the length of aux_data in octets divided by four, so zero when aux_data is omitted. conforming sender uses zero (Section 4.2.11), set value to make it disagree with aux_data for negative testing.Aux Data Len (RFC 9776 Section 4.2.7), the length of aux_data in 32-bit words. When auto, it is the length of aux_data in octets divided by four, so zero when aux_data is omitted. conforming sender uses zero (Section 4.2.11), set value to make it disagree with aux_data for negative testing.Aux Data Len (RFC 9776 Section 4.2.7), the length of aux_data in 32-bit words. When auto, it is the length of aux_data in octets divided by four, so zero when aux_data is omitted. conforming sender uses zero (Section 4.2.11), set value to make it disagree with aux_data for negative testing.
+
+        Returns: PatternFlowIgmpv3GroupRecordAuxDataLength
+        """
+        return self._get_property(
+            "aux_data_length", PatternFlowIgmpv3GroupRecordAuxDataLength
+        )
+
+    @property
+    def number_of_sources(self):
+        # type: () -> PatternFlowIgmpv3GroupRecordNumberOfSources
+        """number_of_sources getter
+
+        Number of source addresses in this record. When auto, it is set to the number of entries in sources.Number of source addresses in this record. When auto, it is set to the number of entries in sources.Number of source addresses in this record. When auto, it is set to the number of entries in sources.
+
+        Returns: PatternFlowIgmpv3GroupRecordNumberOfSources
+        """
+        return self._get_property(
+            "number_of_sources", PatternFlowIgmpv3GroupRecordNumberOfSources
+        )
+
+    @property
+    def multicast_address(self):
+        # type: () -> PatternFlowIgmpv3GroupRecordMulticastAddress
+        """multicast_address getter
+
+        Multicast Address (RFC 9776 Section 4.2.9), the IPv4 multicast group this record reports on. Several records may name the same group, for example one allow_new_sources and one block_old_sources record (RFC 9776 Section 4.2.13).Multicast Address (RFC 9776 Section 4.2.9), the IPv4 multicast group this record reports on. Several records may name the same group, for example one allow_new_sources and one block_old_sources record (RFC 9776 Section 4.2.13).Multicast Address (RFC 9776 Section 4.2.9), the IPv4 multicast group this record reports on. Several records may name the same group, for example one allow_new_sources and one block_old_sources record (RFC 9776 Section 4.2.13).
+
+        Returns: PatternFlowIgmpv3GroupRecordMulticastAddress
+        """
+        return self._get_property(
+            "multicast_address", PatternFlowIgmpv3GroupRecordMulticastAddress
+        )
+
+    @property
+    def sources(self):
+        # type: () -> FlowIgmpv3SourceIter
+        """sources getter
+
+        List of unicast source addresses of this record.
+
+        Returns: FlowIgmpv3SourceIter
+        """
+        return self._get_property(
+            "sources", FlowIgmpv3SourceIter, self._parent, self._choice
+        )
+
+    @property
+    def aux_data(self):
+        # type: () -> str
+        """aux_data getter
+
+        Auxiliary Data (RFC 9776 Section 4.2.11) as hex string of whole 32-bit words, so multiple of eight hex characters, up to 255 words. IGMPv3 defines no auxiliary data, so conforming sender omits it and receiver ignores it. Other lengths are not valid and the result is implementation specific.
+
+        Returns: str
+        """
+        return self._get_property("aux_data")
+
+    @aux_data.setter
+    def aux_data(self, value):
+        """aux_data setter
+
+        Auxiliary Data (RFC 9776 Section 4.2.11) as hex string of whole 32-bit words, so multiple of eight hex characters, up to 255 words. IGMPv3 defines no auxiliary data, so conforming sender omits it and receiver ignores it. Other lengths are not valid and the result is implementation specific.
+
+        value: str
+        """
+        self._set_property("aux_data", value)
+
+
+class PatternFlowIgmpv3GroupRecordRecordType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "increment": {"type": "PatternFlowIgmpv3GroupRecordRecordTypeCounter"},
+        "decrement": {"type": "PatternFlowIgmpv3GroupRecordRecordTypeCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 1,
+        "values": [1],
+    }  # type: Dict[str, Union(type)]
+
+    MODE_IS_INCLUDE = 1  #
+    MODE_IS_EXCLUDE = 2  #
+    CHANGE_TO_INCLUDE_MODE = 3  #
+    CHANGE_TO_EXCLUDE_MODE = 4  #
+    ALLOW_NEW_SOURCES = 5  #
+    BLOCK_OLD_SOURCES = 6  #
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=1, values=[1]):
+        super(PatternFlowIgmpv3GroupRecordRecordType, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIgmpv3GroupRecordRecordTypeCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3GroupRecordRecordTypeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3GroupRecordRecordTypeCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIgmpv3GroupRecordRecordTypeCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIgmpv3GroupRecordRecordTypeCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3GroupRecordRecordTypeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3GroupRecordRecordTypeCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIgmpv3GroupRecordRecordTypeCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIgmpv3GroupRecordRecordTypeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 1,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    MODE_IS_INCLUDE = 1  #
+    MODE_IS_EXCLUDE = 2  #
+    CHANGE_TO_INCLUDE_MODE = 3  #
+    CHANGE_TO_EXCLUDE_MODE = 4  #
+    ALLOW_NEW_SOURCES = 5  #
+    BLOCK_OLD_SOURCES = 6  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=1, step=1, count=1):
+        super(PatternFlowIgmpv3GroupRecordRecordTypeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIgmpv3GroupRecordAuxDataLength(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "auto",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "auto": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "increment": {"type": "PatternFlowIgmpv3GroupRecordAuxDataLengthCounter"},
+        "decrement": {"type": "PatternFlowIgmpv3GroupRecordAuxDataLengthCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "auto",
+        "value": 0,
+        "values": [0],
+        "auto": 0,
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    AUTO = "auto"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0], auto=0):
+        super(PatternFlowIgmpv3GroupRecordAuxDataLength, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        self._set_property("auto", auto)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None, auto=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIgmpv3GroupRecordAuxDataLengthCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3GroupRecordAuxDataLengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3GroupRecordAuxDataLengthCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIgmpv3GroupRecordAuxDataLengthCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIgmpv3GroupRecordAuxDataLengthCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3GroupRecordAuxDataLengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3GroupRecordAuxDataLengthCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIgmpv3GroupRecordAuxDataLengthCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+    @property
+    def auto(self):
+        # type: () -> int
+        """auto getter
+
+        The OTG implementation can provide system generated. value for this property. If the OTG is unable to generate value. the default value must be used.
+
+        Returns: int
+        """
+        return self._get_property("auto")
+
+
+class PatternFlowIgmpv3GroupRecordAuxDataLengthCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIgmpv3GroupRecordAuxDataLengthCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIgmpv3GroupRecordNumberOfSources(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "auto",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 65535,
+        },
+        "auto": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "increment": {"type": "PatternFlowIgmpv3GroupRecordNumberOfSourcesCounter"},
+        "decrement": {"type": "PatternFlowIgmpv3GroupRecordNumberOfSourcesCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "auto",
+        "value": 0,
+        "values": [0],
+        "auto": 0,
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    AUTO = "auto"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0], auto=0):
+        super(PatternFlowIgmpv3GroupRecordNumberOfSources, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        self._set_property("auto", auto)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None, auto=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIgmpv3GroupRecordNumberOfSourcesCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3GroupRecordNumberOfSourcesCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3GroupRecordNumberOfSourcesCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIgmpv3GroupRecordNumberOfSourcesCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIgmpv3GroupRecordNumberOfSourcesCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3GroupRecordNumberOfSourcesCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIgmpv3GroupRecordNumberOfSourcesCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIgmpv3GroupRecordNumberOfSourcesCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["auto"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+    @property
+    def auto(self):
+        # type: () -> int
+        """auto getter
+
+        The OTG implementation can provide system generated. value for this property. If the OTG is unable to generate value. the default value must be used.
+
+        Returns: int
+        """
+        return self._get_property("auto")
+
+
+class PatternFlowIgmpv3GroupRecordNumberOfSourcesCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65536,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIgmpv3GroupRecordNumberOfSourcesCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIgmpv3GroupRecordMulticastAddress(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "values": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "ipv4",
+        },
+        "increment": {"type": "PatternFlowIgmpv3GroupRecordMulticastAddressCounter"},
+        "decrement": {"type": "PatternFlowIgmpv3GroupRecordMulticastAddressCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": "0.0.0.0",
+        "values": ["0.0.0.0"],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value="0.0.0.0", values=["0.0.0.0"]):
+        super(PatternFlowIgmpv3GroupRecordMulticastAddress, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIgmpv3GroupRecordMulticastAddressCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3GroupRecordMulticastAddressCounter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowIgmpv3GroupRecordMulticastAddressCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIgmpv3GroupRecordMulticastAddressCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIgmpv3GroupRecordMulticastAddressCounter
+        """Factory property that returns an instance of the PatternFlowIgmpv3GroupRecordMulticastAddressCounter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowIgmpv3GroupRecordMulticastAddressCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIgmpv3GroupRecordMulticastAddressCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[str]
+        """values getter
+
+        TBD
+
+        Returns: List[str]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[str]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIgmpv3GroupRecordMulticastAddressCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "step": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "0.0.0.0",
+        "step": "0.0.0.1",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start="0.0.0.0", step="0.0.0.1", count=1):
+        super(PatternFlowIgmpv3GroupRecordMulticastAddressCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowIgmpv3GroupRecordIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowIgmpv3GroupRecordIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[FlowIgmpv3GroupRecord]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> FlowIgmpv3GroupRecordIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> FlowIgmpv3GroupRecord
+        return self._next()
+
+    def next(self):
+        # type: () -> FlowIgmpv3GroupRecord
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, FlowIgmpv3GroupRecord):
+            raise Exception("Item is not an instance of FlowIgmpv3GroupRecord")
+
+    def grouprecord(self, aux_data=None):
+        # type: (str) -> FlowIgmpv3GroupRecordIter
+        """Factory method that creates an instance of the FlowIgmpv3GroupRecord class
+
+        A group record of the Version Membership Report (RFC 9776 Section 4.2.5).
+
+        Returns: FlowIgmpv3GroupRecordIter
+        """
+        item = FlowIgmpv3GroupRecord(parent=self._parent, aux_data=aux_data)
+        self._add(item)
+        return self
+
+    def add(self, aux_data=None):
+        # type: (str) -> FlowIgmpv3GroupRecord
+        """Add method that creates and returns an instance of the FlowIgmpv3GroupRecord class
+
+        A group record of the Version Membership Report (RFC 9776 Section 4.2.5).
+
+        Returns: FlowIgmpv3GroupRecord
+        """
+        item = FlowIgmpv3GroupRecord(parent=self._parent, aux_data=aux_data)
+        self._add(item)
+        return item
+
+
 class FlowHeaderIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
@@ -169774,7 +176240,7 @@ class FlowHeaderIter(OpenApiIter):
         self._choice = choice
 
     def __getitem__(self, key):
-        # type: (str) -> Union[FlowArp, FlowCfm, FlowCustom, FlowEthernet, FlowEthernetPause, FlowGre, FlowGtpv1, FlowGtpv2, FlowHeader, FlowIcmp, FlowIcmpv6, FlowIgmpv1, FlowIpv4, FlowIpv6, FlowIpv6ExtHeader, FlowLacp, FlowMacsec, FlowMpls, FlowPfcPause, FlowPpp, FlowRsvp, FlowSnmpv2c, FlowTcp, FlowUdp, FlowVlan, FlowVxlan]
+        # type: (str) -> Union[FlowArp, FlowCfm, FlowCustom, FlowEthernet, FlowEthernetPause, FlowGre, FlowGtpv1, FlowGtpv2, FlowHeader, FlowIcmp, FlowIcmpv6, FlowIgmpv1, FlowIgmpv2, FlowIgmpv3, FlowIpv4, FlowIpv6, FlowIpv6ExtHeader, FlowLacp, FlowMacsec, FlowMpls, FlowPfcPause, FlowPpp, FlowRsvp, FlowSnmpv2c, FlowTcp, FlowUdp, FlowVlan, FlowVxlan]
         return self._getitem(key)
 
     def __iter__(self):
@@ -170164,6 +176630,34 @@ class FlowHeaderIter(OpenApiIter):
         item = FlowHeader()
         item.cfm
         item.choice = "cfm"
+        self._add(item)
+        return self
+
+    def igmpv2(self):
+        # type: () -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowIgmpv2 class
+
+        Packet Header for IGMP version (RFC 2236 Section 2): an octet message carried directly in IPv4. conforming message is sent with IP protocol 2, TTL 1, IP precedence Internetwork Control (ToS 0xc0) and the IP Router Alert option (RFC 2236 Section 2, RFC 2113).. RFC requirements described for this header (MUST MUST NOT) apply to conforming packet. The model does not enforce them, so any value the fields can encode may be configured for conformance and negative testing.. The IPv4 and Ethernet destinations are set in their own headers. Use these values (RFC 2236 Section 3):. General Query: IPv4 dst 224.0.0.1, group_address 0.0.0.0. Group-Specific Query: IPv4 dst group, group_address group. v2 Membership Report: IPv4 dst group, group_address group. Leave Group: IPv4 dst 224.0.0.2, group_address group. Ethernet dst 01:00:5e the low 23 bits of the IPv4 destination (RFC 1112 Section 6.4). Example: 224.0.0.1 gives 01:00:5e:00:00:01 and 239.1.2.3 gives 01:00:5e:01:02:03. Only 23 bits are used, so 239.129.2.3 maps to the same MAC as 239.1.2.3.
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.igmpv2
+        item.choice = "igmpv2"
+        self._add(item)
+        return self
+
+    def igmpv3(self):
+        # type: () -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowIgmpv3 class
+
+        Packet Header for IGMPv3 (RFC 9776, which obsoletes RFC 3376), carried directly in IPv4. The choice selects the Membership Query or the IGMPv3 Membership Report. conforming message is sent with IP protocol number two, TTL one, IP precedence Internetwork Control (ToS 0xc0) and the IP Router Alert option (RFC 2113). The model does not enforce these requirements, so any value the fields can encode may be configured for negative testing.. Query of eight octets is IGMPv1 or IGMPv2 and Query of twelve or more octets is IGMPv3 (RFC 9776 Section 7.1), so membership_query always builds an IGMPv3 Query. The eight octet messages use the igmpv1 and igmpv2 headers.. The IPv4 and Ethernet destinations are set in their own headers. Use these values (RFC 9776 Sections 4.1.12 and 4.2.15):. General Query:. IPv4 dst 224.0.0.1. Group-Specific and Group-and-Source Specific Query:. IPv4 dst group_address. IGMPv3 Membership Report:. IPv4 dst 224.0.0.22, IPv4 src a unicast address or 0.0.0.0. Ethernet dst 01:00:5e low 23 bits of the IPv4 dst (RFC 1112 Section 6.4), for example 224.0.0.22 gives 01:00:5e:00:00:16.. The flow size overrides the packet length, so set it large enough for the whole message. Query is twelve octets plus four per source. Report is eight octets plus, per group record, eight octets plus four per source plus four per aux_data_length word. Ethernet, IPv4 with Router Alert and the FCS add 42 octets. The default flow size of 64 fits Query with up to two sources or Report with one record of up to one source.
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.igmpv3
+        item.choice = "igmpv3"
         self._add(item)
         return self
 
@@ -228780,7 +235274,7 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "1.65.0"
+        self._version_meta.api_spec_version = "1.66.0"
         self._version_meta.sdk_version = "1.65.0"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
