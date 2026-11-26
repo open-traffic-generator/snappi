@@ -285,10 +285,10 @@ type FlowCfm interface {
 	// HasVersion checks if Version has been set in FlowCfm
 	HasVersion() bool
 	// OpCode returns FlowCfmSelectOpCode, set in FlowCfm.
-	// FlowCfmSelectOpCode is select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7. Currently only Continuity Check Message (CCM), Loopback Message (LBM) and Loopback Reply (LBR) are supported.
+	// FlowCfmSelectOpCode is select the CFM PDU. The OpCode byte in the CFM common header is set automatically from the choice: ccm 1, lbr 2, lbm 3 (IEEE 802.1Q-2018 Clause 21), dmr 46 and dmm 47 (ITU-T G.8013/Y.1731 clause 9.15). OpCodes 1-31 are assigned by IEEE 802.1 and 32-63 by ITU-T G.8013/Y.1731.
 	OpCode() FlowCfmSelectOpCode
 	// SetOpCode assigns FlowCfmSelectOpCode provided by user to FlowCfm.
-	// FlowCfmSelectOpCode is select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7. Currently only Continuity Check Message (CCM), Loopback Message (LBM) and Loopback Reply (LBR) are supported.
+	// FlowCfmSelectOpCode is select the CFM PDU. The OpCode byte in the CFM common header is set automatically from the choice: ccm 1, lbr 2, lbm 3 (IEEE 802.1Q-2018 Clause 21), dmr 46 and dmm 47 (ITU-T G.8013/Y.1731 clause 9.15). OpCodes 1-31 are assigned by IEEE 802.1 and 32-63 by ITU-T G.8013/Y.1731.
 	SetOpCode(value FlowCfmSelectOpCode) FlowCfm
 	// HasOpCode checks if OpCode has been set in FlowCfm
 	HasOpCode() bool

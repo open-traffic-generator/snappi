@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.66.0
+/* Open Traffic Generator API 1.67.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -14337,10 +14337,10 @@ message FlowCfm {
   FlowCfmSelectOpCode op_code = 3;
 }
 
-// Select message header. The opcode byte in the CFM Common Header is automatically
-// set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7. Currently only
-// Continuity Check Message (CCM), Loopback Message (LBM) and Loopback Reply (LBR) are
-// supported.
+// Select the CFM PDU. The OpCode byte in the CFM common header is set automatically
+// from the choice: ccm 1, lbr 2, lbm 3 (IEEE 802.1Q-2018 Clause 21), dmr 46 and dmm
+// 47 (ITU-T G.8013/Y.1731 clause 9.15). OpCodes 1-31 are assigned by IEEE 802.1 and
+// 32-63 by ITU-T G.8013/Y.1731.
 message FlowCfmSelectOpCode {
 
   message Choice {
@@ -14349,6 +14349,8 @@ message FlowCfmSelectOpCode {
       ccm = 1;
       lbm = 2;
       lbr = 3;
+      dmm = 4;
+      dmr = 5;
     }
   }
   // Description missing in models
@@ -14363,6 +14365,12 @@ message FlowCfmSelectOpCode {
 
   // Description missing in models
   FlowCfmLbr lbr = 4;
+
+  // Description missing in models
+  FlowCfmDmm dmm = 5;
+
+  // Description missing in models
+  FlowCfmDmr dmr = 6;
 }
 
 // CCM is a multicast PDU used to detect continuity and configuration errors within
@@ -14563,6 +14571,95 @@ message FlowCfmLbr {
   // with a deliberately missing End TLV.
   // default = True
   optional bool append_end_tlv = 3;
+}
+
+// Delay Measurement Message (DMM, OpCode 47) is sent by a MEP to a peer MEP to measure
+// two-way frame delay and frame delay variation (ITU-T G.8013/Y.1731 clause 8.2, PDU
+// format clause 9.15). The peer answers with a Delay Measurement Reply (DMR, OpCode
+// 46). One-way delay uses the separate 1DM PDU (OpCode 45). The implementation sets
+// OpCode 47 and TLV Offset 32 in the CFM common header.
+// A conforming DMM is sent in an Ethernet frame with EtherType 0x8902, normally to
+// the unicast MAC address of the peer MEP; set both in the Ethernet header. RFC-style
+// requirements (MUST / MUST NOT) described for this PDU apply to a conforming frame.
+// The model does not enforce them, so any value the fields can encode may be configured
+// for conformance and negative testing.
+message FlowCfmDmm {
+
+  // Description missing in models
+  FlowCfmPmFlags flags = 1;
+
+  // Description missing in models
+  PatternFlowCfmDmmTxTimestampF tx_timestamp_f = 2;
+
+  // Description missing in models
+  PatternFlowCfmDmmReservedForDmmReceiver reserved_for_dmm_receiver = 3;
+
+  // Description missing in models
+  PatternFlowCfmDmmReservedForDmr reserved_for_dmr = 4;
+
+  // Description missing in models
+  PatternFlowCfmDmmReservedForDmrReceiver reserved_for_dmr_receiver = 5;
+
+  // Optional TLVs placed after the DMM fields. In a conforming DMM the Data TLV is used
+  // to pad the frame to the size under test; other TLV types can be added for negative
+  // testing. Note the default TLV choice is sender_id, so choose data explicitly.
+  repeated FlowCfmTlvs tlvs = 6;
+
+  // When true, the implementation appends an End TLV (Type 0, IEEE 802.1Q-2018 Table
+  // 21-17) after all TLVs in the tlvs list. Set to false only when testing DUT behaviour
+  // with a deliberately missing End TLV.
+  // default = True
+  optional bool append_end_tlv = 7;
+}
+
+// Delay Measurement Reply (DMR, OpCode 46) is sent by a MEP in reply to a Delay Measurement
+// Message (DMM, OpCode 47) (ITU-T G.8013/Y.1731 clause 8.2, PDU format clause 9.16).
+// The implementation sets OpCode 46 and TLV Offset 32 in the CFM common header.
+// A conforming DMR is sent in an Ethernet frame with EtherType 0x8902 to the unicast
+// MAC address of the MEP that sent the DMM; set both in the Ethernet header. All fields
+// are sent as configured: a DMR flow does not answer received DMMs, so it is for testing
+// how a DUT that sends DMMs handles replies with known timestamps. RFC-style requirements
+// (MUST / MUST NOT) described for this PDU apply to a conforming frame. The model does
+// not enforce them, so any value the fields can encode may be configured for conformance
+// and negative testing.
+message FlowCfmDmr {
+
+  // Description missing in models
+  FlowCfmPmFlags flags = 1;
+
+  // Description missing in models
+  PatternFlowCfmDmrTxTimestampF tx_timestamp_f = 2;
+
+  // Description missing in models
+  PatternFlowCfmDmrRxTimestampF rx_timestamp_f = 3;
+
+  // Description missing in models
+  PatternFlowCfmDmrTxTimestampB tx_timestamp_b = 4;
+
+  // Description missing in models
+  PatternFlowCfmDmrReservedForDmrReceiver reserved_for_dmr_receiver = 5;
+
+  // Optional TLVs placed after the DMR fields. A responder normally returns the Data
+  // TLV of the DMM it answers, so set the same Data TLV as the DMM to build a realistic
+  // reply. Note the default TLV choice is sender_id, so choose data explicitly.
+  repeated FlowCfmTlvs tlvs = 6;
+
+  // When true, the implementation appends an End TLV (Type 0, IEEE 802.1Q-2018 Table
+  // 21-17) after all TLVs in the tlvs list. Set to false only when testing DUT behaviour
+  // with a deliberately missing End TLV.
+  // default = True
+  optional bool append_end_tlv = 7;
+}
+
+// Flags byte of a performance-monitoring PDU (1DM, DMM, DMR, LMM, LMR): bit 1 (least
+// significant) is Type, bits 8-2 are reserved and sent as zero (ITU-T G.8013/Y.1731
+// clauses 9.12-9.16).
+message FlowCfmPmFlags {
+
+  // Type flag. When true the PDU is sent as part of proactive measurement (Type = 1);
+  // when false, on-demand (Type = 0).
+  // default = False
+  optional bool proactive = 1;
 }
 
 // CFM TLV entry. The Type byte (IEEE 802.1Q-2018 Table 21-17) is set automatically
@@ -41949,6 +42046,402 @@ message PatternFlowCfmLbrTransactionId {
 
   // Description missing in models
   PatternFlowCfmLbrTransactionIdCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowCfmDmmTxTimestampFCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint64 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint64 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint64 count = 3;
+}
+
+// TxTimeStampf: the transmit time of the DMM (ITU-T G.8013/Y.1731 clause 9.15), in
+// the IEEE 1588 timestamp format: the upper 32 bits are seconds and the lower 32 bits
+// are nanoseconds (0 to 999999999). For example 1.5 seconds is (1 << 32) + 500000000.
+// The configured value is sent as is; the implementation does not replace it with the
+// actual transmit time. increment and decrement act on the 64-bit value, so keep the
+// nanoseconds part below 1000000000 across the count for valid timestamps.
+message PatternFlowCfmDmmTxTimestampF {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint64 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint64 values = 3;
+
+  // Description missing in models
+  PatternFlowCfmDmmTxTimestampFCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowCfmDmmTxTimestampFCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowCfmDmmReservedForDmmReceiverCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint64 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint64 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint64 count = 3;
+}
+
+// Reserved for the DMM receiving equipment (ITU-T G.8013/Y.1731 clause 9.15): the responder
+// records RxTimeStampf, its receive time of this DMM, here when it forms the DMR. Zero
+// in a conforming DMM; a non-zero value is sent as configured.
+message PatternFlowCfmDmmReservedForDmmReceiver {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint64 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint64 values = 3;
+
+  // Description missing in models
+  PatternFlowCfmDmmReservedForDmmReceiverCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowCfmDmmReservedForDmmReceiverCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowCfmDmmReservedForDmrCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint64 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint64 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint64 count = 3;
+}
+
+// Reserved for the DMR (ITU-T G.8013/Y.1731 clause 9.15): the responder records TxTimeStampb,
+// its transmit time of the DMR, here. Zero in a conforming DMM; a non-zero value is
+// sent as configured.
+message PatternFlowCfmDmmReservedForDmr {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint64 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint64 values = 3;
+
+  // Description missing in models
+  PatternFlowCfmDmmReservedForDmrCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowCfmDmmReservedForDmrCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowCfmDmmReservedForDmrReceiverCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint64 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint64 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint64 count = 3;
+}
+
+// Reserved for the DMR receiving equipment (ITU-T G.8013/Y.1731 clause 9.15): the originating
+// MEP may record RxTimeStampb, its receive time of the DMR, here. Zero in a conforming
+// DMM; a non-zero value is sent as configured.
+message PatternFlowCfmDmmReservedForDmrReceiver {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint64 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint64 values = 3;
+
+  // Description missing in models
+  PatternFlowCfmDmmReservedForDmrReceiverCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowCfmDmmReservedForDmrReceiverCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowCfmDmrTxTimestampFCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint64 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint64 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint64 count = 3;
+}
+
+// TxTimeStampf (ITU-T G.8013/Y.1731 clause 9.16): the transmit time of the DMM this
+// DMR answers. A responder copies it from the DMM. IEEE 1588 timestamp format: upper
+// 32 bits seconds, lower 32 bits nanoseconds (0 to 999999999); 1.5 seconds is (1 <<
+// 32) + 500000000.
+message PatternFlowCfmDmrTxTimestampF {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint64 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint64 values = 3;
+
+  // Description missing in models
+  PatternFlowCfmDmrTxTimestampFCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowCfmDmrTxTimestampFCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowCfmDmrRxTimestampFCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint64 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint64 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint64 count = 3;
+}
+
+// RxTimeStampf (ITU-T G.8013/Y.1731 clause 9.16): the time the responder received the
+// DMM, in the responder's clock. IEEE 1588 timestamp format as for tx_timestamp_f.
+message PatternFlowCfmDmrRxTimestampF {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint64 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint64 values = 3;
+
+  // Description missing in models
+  PatternFlowCfmDmrRxTimestampFCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowCfmDmrRxTimestampFCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowCfmDmrTxTimestampBCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint64 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint64 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint64 count = 3;
+}
+
+// TxTimeStampb (ITU-T G.8013/Y.1731 clause 9.16): the time the responder transmits
+// the DMR, in the responder's clock. IEEE 1588 timestamp format as for tx_timestamp_f.
+// The receiver subtracts tx_timestamp_b - rx_timestamp_f (responder processing time)
+// from the round trip, so a realistic reply has tx_timestamp_b not earlier than rx_timestamp_f.
+message PatternFlowCfmDmrTxTimestampB {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint64 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint64 values = 3;
+
+  // Description missing in models
+  PatternFlowCfmDmrTxTimestampBCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowCfmDmrTxTimestampBCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowCfmDmrReservedForDmrReceiverCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint64 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint64 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint64 count = 3;
+}
+
+// Reserved for the DMR receiving equipment (ITU-T G.8013/Y.1731 clause 9.16): the originating
+// MEP may record RxTimeStampb, its receive time of the DMR, here. Zero in a conforming
+// DMR; a non-zero value is sent as configured.
+message PatternFlowCfmDmrReservedForDmrReceiver {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint64 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint64 values = 3;
+
+  // Description missing in models
+  PatternFlowCfmDmrReservedForDmrReceiverCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowCfmDmrReservedForDmrReceiverCounter decrement = 6;
 }
 
 // integer counter pattern

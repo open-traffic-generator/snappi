@@ -19,6 +19,8 @@ type flowCfmSelectOpCode struct {
 	ccmHolder    FlowCfmCcm
 	lbmHolder    FlowCfmLbm
 	lbrHolder    FlowCfmLbr
+	dmmHolder    FlowCfmDmm
+	dmrHolder    FlowCfmDmr
 }
 
 func NewFlowCfmSelectOpCode() FlowCfmSelectOpCode {
@@ -249,12 +251,14 @@ func (obj *flowCfmSelectOpCode) setNil() {
 	obj.ccmHolder = nil
 	obj.lbmHolder = nil
 	obj.lbrHolder = nil
+	obj.dmmHolder = nil
+	obj.dmrHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// FlowCfmSelectOpCode is select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7. Currently only Continuity Check Message (CCM), Loopback Message (LBM) and Loopback Reply (LBR) are supported.
+// FlowCfmSelectOpCode is select the CFM PDU. The OpCode byte in the CFM common header is set automatically from the choice: ccm 1, lbr 2, lbm 3 (IEEE 802.1Q-2018 Clause 21), dmr 46 and dmm 47 (ITU-T G.8013/Y.1731 clause 9.15). OpCodes 1-31 are assigned by IEEE 802.1 and 32-63 by ITU-T G.8013/Y.1731.
 type FlowCfmSelectOpCode interface {
 	Validation
 	// msg marshals FlowCfmSelectOpCode to protobuf object *otg.FlowCfmSelectOpCode
@@ -306,6 +310,26 @@ type FlowCfmSelectOpCode interface {
 	SetLbr(value FlowCfmLbr) FlowCfmSelectOpCode
 	// HasLbr checks if Lbr has been set in FlowCfmSelectOpCode
 	HasLbr() bool
+	// Dmm returns FlowCfmDmm, set in FlowCfmSelectOpCode.
+	// FlowCfmDmm is delay Measurement Message (DMM, OpCode 47) is sent by a MEP to a peer MEP to measure two-way frame delay and frame delay variation (ITU-T G.8013/Y.1731 clause 8.2, PDU format clause 9.15). The peer answers with a Delay Measurement Reply (DMR, OpCode 46). One-way delay uses the separate 1DM PDU (OpCode 45). The implementation sets OpCode 47 and TLV Offset 32 in the CFM common header.
+	// A conforming DMM is sent in an Ethernet frame with EtherType 0x8902, normally to the unicast MAC address of the peer MEP; set both in the Ethernet header. RFC-style requirements (MUST / MUST NOT) described for this PDU apply to a conforming frame. The model does not enforce them, so any value the fields can encode may be configured for conformance and negative testing.
+	Dmm() FlowCfmDmm
+	// SetDmm assigns FlowCfmDmm provided by user to FlowCfmSelectOpCode.
+	// FlowCfmDmm is delay Measurement Message (DMM, OpCode 47) is sent by a MEP to a peer MEP to measure two-way frame delay and frame delay variation (ITU-T G.8013/Y.1731 clause 8.2, PDU format clause 9.15). The peer answers with a Delay Measurement Reply (DMR, OpCode 46). One-way delay uses the separate 1DM PDU (OpCode 45). The implementation sets OpCode 47 and TLV Offset 32 in the CFM common header.
+	// A conforming DMM is sent in an Ethernet frame with EtherType 0x8902, normally to the unicast MAC address of the peer MEP; set both in the Ethernet header. RFC-style requirements (MUST / MUST NOT) described for this PDU apply to a conforming frame. The model does not enforce them, so any value the fields can encode may be configured for conformance and negative testing.
+	SetDmm(value FlowCfmDmm) FlowCfmSelectOpCode
+	// HasDmm checks if Dmm has been set in FlowCfmSelectOpCode
+	HasDmm() bool
+	// Dmr returns FlowCfmDmr, set in FlowCfmSelectOpCode.
+	// FlowCfmDmr is delay Measurement Reply (DMR, OpCode 46) is sent by a MEP in reply to a Delay Measurement Message (DMM, OpCode 47) (ITU-T G.8013/Y.1731 clause 8.2, PDU format clause 9.16). The implementation sets OpCode 46 and TLV Offset 32 in the CFM common header.
+	// A conforming DMR is sent in an Ethernet frame with EtherType 0x8902 to the unicast MAC address of the MEP that sent the DMM; set both in the Ethernet header. All fields are sent as configured: a DMR flow does not answer received DMMs, so it is for testing how a DUT that sends DMMs handles replies with known timestamps. RFC-style requirements (MUST / MUST NOT) described for this PDU apply to a conforming frame. The model does not enforce them, so any value the fields can encode may be configured for conformance and negative testing.
+	Dmr() FlowCfmDmr
+	// SetDmr assigns FlowCfmDmr provided by user to FlowCfmSelectOpCode.
+	// FlowCfmDmr is delay Measurement Reply (DMR, OpCode 46) is sent by a MEP in reply to a Delay Measurement Message (DMM, OpCode 47) (ITU-T G.8013/Y.1731 clause 8.2, PDU format clause 9.16). The implementation sets OpCode 46 and TLV Offset 32 in the CFM common header.
+	// A conforming DMR is sent in an Ethernet frame with EtherType 0x8902 to the unicast MAC address of the MEP that sent the DMM; set both in the Ethernet header. All fields are sent as configured: a DMR flow does not answer received DMMs, so it is for testing how a DUT that sends DMMs handles replies with known timestamps. RFC-style requirements (MUST / MUST NOT) described for this PDU apply to a conforming frame. The model does not enforce them, so any value the fields can encode may be configured for conformance and negative testing.
+	SetDmr(value FlowCfmDmr) FlowCfmSelectOpCode
+	// HasDmr checks if Dmr has been set in FlowCfmSelectOpCode
+	HasDmr() bool
 	setNil()
 }
 
@@ -316,10 +340,14 @@ var FlowCfmSelectOpCodeChoice = struct {
 	CCM FlowCfmSelectOpCodeChoiceEnum
 	LBM FlowCfmSelectOpCodeChoiceEnum
 	LBR FlowCfmSelectOpCodeChoiceEnum
+	DMM FlowCfmSelectOpCodeChoiceEnum
+	DMR FlowCfmSelectOpCodeChoiceEnum
 }{
 	CCM: FlowCfmSelectOpCodeChoiceEnum("ccm"),
 	LBM: FlowCfmSelectOpCodeChoiceEnum("lbm"),
 	LBR: FlowCfmSelectOpCodeChoiceEnum("lbr"),
+	DMM: FlowCfmSelectOpCodeChoiceEnum("dmm"),
+	DMR: FlowCfmSelectOpCodeChoiceEnum("dmr"),
 }
 
 func (obj *flowCfmSelectOpCode) Choice() FlowCfmSelectOpCodeChoiceEnum {
@@ -341,6 +369,10 @@ func (obj *flowCfmSelectOpCode) setChoice(value FlowCfmSelectOpCodeChoiceEnum) F
 	}
 	enumValue := otg.FlowCfmSelectOpCode_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Dmr = nil
+	obj.dmrHolder = nil
+	obj.obj.Dmm = nil
+	obj.dmmHolder = nil
 	obj.obj.Lbr = nil
 	obj.lbrHolder = nil
 	obj.obj.Lbm = nil
@@ -358,6 +390,14 @@ func (obj *flowCfmSelectOpCode) setChoice(value FlowCfmSelectOpCodeChoiceEnum) F
 
 	if value == FlowCfmSelectOpCodeChoice.LBR {
 		obj.obj.Lbr = NewFlowCfmLbr().msg()
+	}
+
+	if value == FlowCfmSelectOpCodeChoice.DMM {
+		obj.obj.Dmm = NewFlowCfmDmm().msg()
+	}
+
+	if value == FlowCfmSelectOpCodeChoice.DMR {
+		obj.obj.Dmr = NewFlowCfmDmr().msg()
 	}
 
 	return obj
@@ -447,6 +487,62 @@ func (obj *flowCfmSelectOpCode) SetLbr(value FlowCfmLbr) FlowCfmSelectOpCode {
 	return obj
 }
 
+// description is TBD
+// Dmm returns a FlowCfmDmm
+func (obj *flowCfmSelectOpCode) Dmm() FlowCfmDmm {
+	if obj.obj.Dmm == nil {
+		obj.setChoice(FlowCfmSelectOpCodeChoice.DMM)
+	}
+	if obj.dmmHolder == nil {
+		obj.dmmHolder = &flowCfmDmm{obj: obj.obj.Dmm}
+	}
+	return obj.dmmHolder
+}
+
+// description is TBD
+// Dmm returns a FlowCfmDmm
+func (obj *flowCfmSelectOpCode) HasDmm() bool {
+	return obj.obj.Dmm != nil
+}
+
+// description is TBD
+// SetDmm sets the FlowCfmDmm value in the FlowCfmSelectOpCode object
+func (obj *flowCfmSelectOpCode) SetDmm(value FlowCfmDmm) FlowCfmSelectOpCode {
+	obj.setChoice(FlowCfmSelectOpCodeChoice.DMM)
+	obj.dmmHolder = nil
+	obj.obj.Dmm = value.msg()
+
+	return obj
+}
+
+// description is TBD
+// Dmr returns a FlowCfmDmr
+func (obj *flowCfmSelectOpCode) Dmr() FlowCfmDmr {
+	if obj.obj.Dmr == nil {
+		obj.setChoice(FlowCfmSelectOpCodeChoice.DMR)
+	}
+	if obj.dmrHolder == nil {
+		obj.dmrHolder = &flowCfmDmr{obj: obj.obj.Dmr}
+	}
+	return obj.dmrHolder
+}
+
+// description is TBD
+// Dmr returns a FlowCfmDmr
+func (obj *flowCfmSelectOpCode) HasDmr() bool {
+	return obj.obj.Dmr != nil
+}
+
+// description is TBD
+// SetDmr sets the FlowCfmDmr value in the FlowCfmSelectOpCode object
+func (obj *flowCfmSelectOpCode) SetDmr(value FlowCfmDmr) FlowCfmSelectOpCode {
+	obj.setChoice(FlowCfmSelectOpCodeChoice.DMR)
+	obj.dmrHolder = nil
+	obj.obj.Dmr = value.msg()
+
+	return obj
+}
+
 func (obj *flowCfmSelectOpCode) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -465,6 +561,16 @@ func (obj *flowCfmSelectOpCode) validateObj(vObj *validation, set_default bool) 
 	if obj.obj.Lbr != nil {
 
 		obj.Lbr().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Dmm != nil {
+
+		obj.Dmm().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Dmr != nil {
+
+		obj.Dmr().validateObj(vObj, set_default)
 	}
 
 }
@@ -486,6 +592,16 @@ func (obj *flowCfmSelectOpCode) setDefault() {
 	if obj.obj.Lbr != nil {
 		choices_set += 1
 		choice = FlowCfmSelectOpCodeChoice.LBR
+	}
+
+	if obj.obj.Dmm != nil {
+		choices_set += 1
+		choice = FlowCfmSelectOpCodeChoice.DMM
+	}
+
+	if obj.obj.Dmr != nil {
+		choices_set += 1
+		choice = FlowCfmSelectOpCodeChoice.DMR
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
